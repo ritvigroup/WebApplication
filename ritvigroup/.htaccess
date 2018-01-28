@@ -1,0 +1,34 @@
+<IfModule mod_rewrite.c>
+	Options +FollowSymLinks
+	RewriteEngine On 
+	RewriteBase /homytapp/
+
+	#RewriteCond %{HTTP_HOST} ^localhost:81
+	#RewriteRule ^(.*)$ http://localhost:81/$1 [R=301]
+
+	RewriteEngine on
+	#
+	#URL Rewriting for pages
+
+	#For Login and Registration Through OTP
+	RewriteRule ^login_otp api/V1/login_otp.php [L]
+
+	#For Image Upload
+	RewriteRule ^imageupload api/V1/imageupload.php [L]
+
+	#RewriteRule ^product/(.*) product_description.php?name_id=$1 [L]
+
+
+
+	# 1. Set max upload file size. Most hosts will limit this and not allow it to be overridden but you can try.
+	php_value upload_max_filesize 999M
+
+	# 2. Set max post size. Uncomment this line if you have a lot of product options or are getting errors where forms are not saving all fields.
+	php_value post_max_size 999M
+
+	# 3. Set max time script can take. Uncomment this line if you have a lot of product options or are getting errors where forms are not saving all fields.
+	php_value max_execution_time 200
+
+	# 4. Set max time for input to be received. Uncomment this line if you have a lot of product options or are getting errors where forms are not saving all fields.
+	php_value max_input_time 200
+</IfModule>

@@ -1,0 +1,1 @@
+ALTER TABLE `user_group_members` ADD `added_by` BIGINT(20) NOT NULL ;
