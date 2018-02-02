@@ -36,8 +36,6 @@ if($login_request == "REGISTER_MOBILE" || $login_request == "REGENERATE_MOBILE_O
 			$upd_otp = "UPDATE `admin` SET 
 											`login_otp` 					= '".$otp."', 
 											`device_token` 					= '".$device_token."', 
-											`status` 						= '0',
-											`login_status` 					= '0',
 											`login_otp_valid_till` 			= '".$login_otp_valid_till."' 
 										WHERE 
 											`phone` = '".$mobile."'";
@@ -57,8 +55,6 @@ if($login_request == "REGISTER_MOBILE" || $login_request == "REGENERATE_MOBILE_O
 				$upd_otp = "UPDATE `admin` SET 
 											`login_otp` 					= '".$otp."', 
 											`device_token` 					= '".$device_token."', 
-											`status` 						= '0',
-											`login_status` 					= '0',
 											`login_otp_valid_till` 			= '".$login_otp_valid_till."' 
 										WHERE 
 											`phone` = '".$mobile."'";
@@ -119,7 +115,7 @@ if($login_request == "REGISTER_MOBILE" || $login_request == "REGENERATE_MOBILE_O
 
 				$user_id 			= $res_u['id'];
 
-				$user_detail['user_profile'] = return_admin_detail($res_u);
+				$user_detail['user_profile'] = return_user_detail($res_u);
 
 				$upd_u = "UPDATE `admin` SET `login_status`	= '0' WHERE `id` = '".$user_id."'";
 				$exe_u = execute_query($upd_u);
@@ -174,13 +170,13 @@ if($login_request == "REGISTER_MOBILE" || $login_request == "REGENERATE_MOBILE_O
 			$res_u 				= fetch_array($exe_u);
 			$user_id 			= $res_u['id'];
 			
-			$upd_u = "UPDATE `admin` SET `mpin` = '".$mpin."', `login_status`	= '1' WHERE `id` = '".$user_id."'";
+			$upd_u = "UPDATE `admin` SET `mpin` = '".$mpin."', `login_status`	= '1', `status` = '1' WHERE `id` = '".$user_id."'";
 			$exe_u = execute_query($upd_u);
 
-			$user_detail['user_profile'] = get_admin_detail($user_id);
+			$user_detail['user_profile'] = get_user_detail($user_id);
 
 
-			$upd_ud = "INSERT INTO `users_devices` 
+			$upd_ud = "INSERT INTO `admin_devices` 
 											SET 
 												`user_id` 			= '".$user_id."', 
 												`device_token_id` 	= '".$device_token."', 

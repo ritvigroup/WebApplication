@@ -54,7 +54,7 @@ if($request_action == "USER_PROFILE")
 		$array = array(
 		               "status" => 'success',
 		               "user_detail" => $user_detail,
-		               "message" => 'User found successfully',
+		               "message" => 'Admin found successfully',
 		               );
 	}
 } else {

@@ -16,6 +16,8 @@ $error_occured = false;
 $msg = '';
 
 if($login_request == "LOGIN_WITH_MPIN") {
+
+	$user_detail = array();
 	$mobile 	= trim($_POST['mobile']);
 	$mpin 		= trim($_POST['mpin']);
 	if($mobile == "") {
@@ -31,13 +33,13 @@ if($login_request == "LOGIN_WITH_MPIN") {
 		if($num_u > 0) {
 			$res_u = fetch_array($exe_u);
 			if($res_u['status'] == '1') {
-				$res_u 				= fetch_array($exe_u);
 				$user_id 			= $res_u['id'];
 				
 				$upd_u = "UPDATE `admin` SET `login_status`	= '1' WHERE `id` = '".$user_id."'";
 				$exe_u = execute_query($upd_u);
 
 				$user_detail['user_profile'] = get_admin_detail($user_id);
+				$msg = "User logged in successfully";
 			} else {
 				$msg = "You are not a valid user. Please send your detail to admin.";
 				$error_occured = true;
@@ -138,7 +140,7 @@ if($login_request == "LOGIN_WITH_MPIN") {
 
 				$user_id 			= $res_u['id'];
 
-				$user_detail['user_profile'] = return_admin_detail($res_u);
+				$user_detail['user_profile'] = return_user_detail($res_u);
 
 				$upd_u = "UPDATE `admin` SET `login_status`	= '1' WHERE `id` = '".$user_id."'";
 				$exe_u = execute_query($upd_u);
