@@ -136,6 +136,33 @@ function save_notifications($action_perform, $description = "", $open_url = "", 
 }
 
 
+function return_admin_detail_limited($user_id, $detail_to_show) {
+	$user_detail = array();
+	$sel = "SELECT ".implode(',', $detail_to_show)." FROM `admin` WHERE `id` = '".$user_id."'";
+	$exe = execute_query($sel);
+	$num = num_rows($exe);
+	if($num > 0) {
+		$i = 0;
+		while($res_u = fetch_array($exe)) {
+
+			foreach($detail_to_show AS $column) {
+				$show_detail = $res_u[$column];
+				if($column == "image") {
+					$show_detail = (($res_u['image'] != NULL) ? PROFILE_IMAGE_URL.$res_u['image'] : "");
+				} else if($column == "cover_image") {
+					$show_detail = (($res_u['cover_image'] != NULL) ? PROFILE_IMAGE_URL.$res_u['cover_image'] : "");
+				} else if($column == "created_on") {
+					$show_detail = return_time_ago($res_u['created_on']);
+				}
+				$user_detail['user_'.$column] = $show_detail;
+			}
+			$i++;
+		}
+	}
+	return $user_detail;
+}
+
+
 function return_user_detail_limited($user_id, $detail_to_show) {
 	$user_detail = array();
 	$sel = "SELECT ".implode(',', $detail_to_show)." FROM `users` WHERE `id` = '".$user_id."'";
