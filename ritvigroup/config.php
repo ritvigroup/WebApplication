@@ -1,8 +1,8 @@
 <?php
-set_time_limit(0);
-error_reporting(E_ALL & ~E_NOTICE);
-ini_set("display_errors", 0);
-date_default_timezone_set('Asia/Kolkata');
+@set_time_limit(0);
+@error_reporting(E_ALL & ~E_NOTICE);
+@ini_set("display_errors", 0);
+@date_default_timezone_set('Asia/Kolkata');
 
 if(!@session_start())
 {
@@ -18,7 +18,7 @@ ini_set('max_execution_time', 300);*/
 define('DEVELOPMENT_MODE', 0); // 1 = Development, 0 = Production
 
 define('APP_FOLDER', 'ritvigroup');
-define('API_FOLDER', 'api_folder');
+define('API_FOLDER', 'api');
 define('VERSON_FOLDER', 'V1');
 
 
@@ -30,9 +30,9 @@ if(DEVELOPMENT_MODE != 1) {
     define('WEBSITE_URL', 'http://www.ritvigroup.com/');
 
     $server_name	= "localhost";
-    $server_user	= "ritvis32_cmsdb";
-    $server_pass	= "Admin@123";
-    $server_db		= "ritvis32_cms";
+    $server_user	= "id4517558_rajesh";
+    $server_pass	= "rajesh@123";
+    $server_db		= "id4517558_ritvigroup";
     
 } else {
     $server_name    = "localhost";
