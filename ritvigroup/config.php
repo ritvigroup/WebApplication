@@ -27,12 +27,19 @@ define('LAST_24_HOUR', date("Y-m-d H:i:s", mktime(date("H"), date("i"), date("s"
 
 if(DEVELOPMENT_MODE != 1) {
     
-    define('WEBSITE_URL', 'http://www.ritvigroup.com/');
+    define('WEBSITE_URL', 'http://caprispine.in/ritvigroup.com');
 
     $server_name	= "localhost";
     $server_user	= "id4517558_rajesh";
     $server_pass	= "rajesh@123";
     $server_db		= "id4517558_ritvigroup";
+
+    $server_name    = "localhost";
+    $server_user    = "caprienn_ritvius";
+    $server_pass    = "R0bTEJxxE%R(";
+    $server_db      = "caprienn_ritvigroup";
+
+    
     
 } else {
     $server_name    = "localhost";
@@ -236,11 +243,4 @@ function getUserIP()
 
     return $ip;
 }
-
-/*$function_file = 'functions.php';
-if(file_exists($function_file)) {
-    include($function_file);
-} else {
-    include('../'.$function_file);
-}*/
 ?>

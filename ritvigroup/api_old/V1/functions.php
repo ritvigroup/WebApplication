@@ -1,10 +1,5 @@
 <?php
-require 'vendor/autoload.php';
-
 require 'class.qr_barcode.php'; // QR Code Generator
-
-use Aws\S3\S3Client;
-use Aws\Exception\AwsException;
 
 function get_auto_generate_code_live_key() {
 	$code = auto_generate_code_live_key();
@@ -19,30 +14,7 @@ function get_auto_generate_code_live_key() {
 
 
 function sendOTPMessage($phoneNumbers) {
-    // prep the bundle
-    return false;
-    $msg = array("success" => true, "type" => $type_of_notification, "result" => $notification_msg_with_key_array);
-    $fields = array
-    (
-        'registration_ids' => $friends_device_token_array,
-        'data' => $msg
-    );
-
-    $headers = array
-    (
-        'Authorization: key=' . API_ACCESS_KEY,
-        'Content-Type: application/json'
-    );
-
-    $ch = curl_init();
-    curl_setopt($ch, CURLOPT_URL, 'https://fcm.googleapis.com/fcm/send');
-    curl_setopt($ch, CURLOPT_POST, true);
-    curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-    curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($fields));
-    $result = curl_exec($ch);
-    curl_close($ch);
+    
 }
 
 
@@ -59,8 +31,7 @@ function sendPushNotificationAndroid($notification_msg_with_key_array, $friends_
 
     /*echo '<pre>';
     print_r($friends_device_token_array);
-    echo '</pre>';
-*/
+    echo '</pre>';*/
     $headers = array
     (
         'Authorization: key=' . API_ACCESS_KEY,
@@ -146,7 +117,7 @@ function return_admin_detail_limited($user_id, $detail_to_show) {
 		while($res_u = fetch_array($exe)) {
 
 			foreach($detail_to_show AS $column) {
-				$show_detail = $res_u[$column];
+				$show_detail = (($res_u[$column] != NULL) ? $res_u[$column] : "");
 				if($column == "image") {
 					$show_detail = (($res_u['image'] != NULL) ? PROFILE_IMAGE_URL.$res_u['image'] : "");
 				} else if($column == "cover_image") {
@@ -277,7 +248,7 @@ function return_admin_detail($res_u) {
 
 function uploads3($upload_path, $source){
 
-	$client = S3Client::factory(array(
+	/*$client = S3Client::factory(array(
 	    
 	    'version' => '2006-03-01',
 	    'region' => 'ap-south-1',
@@ -293,6 +264,26 @@ function uploads3($upload_path, $source){
 						    )
 	));
 	return $result;
+
+	$source_exp = explode("/", $source);
+	$new_folder_path = '';
+	for($i = 0; $i < (count($source_exp)); $i++) {
+		$new_folder_path .= $source_exp[$i].'/';
+		if(!is_dir($new_folder_path)) {
+			@mkdir($new_folder_path, 0777);
+		}
+	}*/
+}
+
+function generate_new_complaint_id() {
+	$complaint_id = strtoupper("C".md5(mt_rand().time()));
+	$sel = "SELECT id FROM `complaint` WHERE `complaint_id` = '".$complaint_id."'";
+	$exe = execute_query($sel);
+	$num = num_rows($exe);
+	if($num > 0) {
+		generate_new_complaint_id();
+	}
+	return $complaint_id;
 }
 
 
@@ -344,36 +335,10 @@ function auto_generate_admin_profile_id() {
 
 function sendmsg($phone, $message)
 {
-	$new_phone = $phone;
-
-	$paramsms = array(
-	    'credentials' => array(
-	        'key' => 'AKIAJMI2QQQCH7XUEE6A',
-	        'secret' => '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',
-	    ),
-	    'region' => 'us-east-1', 
-	    'version' => 'latest'
-	);
-	$sns = new \Aws\Sns\SnsClient($paramsms);
-
-	$argsms = array(
-				    "SenderID" 		=> "Ritvi Group",
-				    "SMSType" 		=> "Transactional",
-				    "Message" 		=> $message,
-				    "PhoneNumber" 	=> $new_phone
-					); 
-
-	$result = $sns->publish($argsms);
+	
 }
 
 function get_user_device_token($user_id) {
-	/*$my_user_device_token_list = array();
-	$user_detail = get_user_detail($user_id);
-	if($user_detail['user_device_token'] != '' && $user_detail['user_login_status'] == '1') {
-		$my_user_device_token_list[] = $user_detail['user_device_token'];
-	}
-	return $my_user_device_token_list;*/
-
 	$users_array = get_all_my_followers_users_list($user_id);
 
 	$my_user_device_token_list = array();
