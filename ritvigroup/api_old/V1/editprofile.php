@@ -431,6 +431,346 @@ if($request_action == "BLOCK_USER") {
 						"message" 		=> $msg,
 						);
 	}
+} else if($request_action == "GET_PROFILE_CITIZEN") {
+	$c_profile_id	= trim($_POST['c_profile_id']);
+
+	$user_detail = array();
+	if($c_profile_id == "") {
+		$msg = "Please enter user";
+		$error_occured = true;
+	} else {
+		$user_detail['user_profile'] = get_citizen_detail($c_profile_id);
+	}
+	if($error_occured == true) {
+		$array = array(
+						"status" 		=> 'failed',
+						"message" 		=> $msg,
+					);
+	} else {
+
+		$array = array(
+		               "status" 			=> 'success',
+		               "user_detail" 		=> $user_detail,
+					   "message"			=> $msg,
+		               );
+	}
+} else if($request_action == "UPDATE_PROFILE_CITIZEN") {
+	$fullname 		= real_escape_string($_POST['fullname']);
+	$gender     	= ($_POST['gender'] > 0) ? $_POST['gender'] : 0;
+	$date_of_birth 	= ($_POST['date_of_birth'] != '') ? $_POST['date_of_birth'] : '0000-00-00';
+	$state 			= real_escape_string($_POST['state']);
+	$email 			= real_escape_string($_POST['email']);
+	$mobile 		= real_escape_string($_POST['mobile']);
+	$alt_mobile 	= real_escape_string($_POST['alt_mobile']);
+	$c_profile_id	= trim($_POST['c_profile_id']);
+
+	if($c_profile_id == "") {
+		$msg = "Please enter user";
+		$error_occured = true;
+	} else if($fullname == "") {
+		$msg = "Please enter name";
+		$error_occured = true;
+	} else {
+
+		$sel_u = "SELECT * FROM `user_profiles` WHERE `email` = '".$email."' AND `user_type` = '1' AND `user_profile_id` != '".$c_profile_id."'";
+		$exe_u = execute_query($sel_u);
+		$num_u = num_rows($exe_u);
+		if($num_u > 0) {
+			$msg = "This email is already taken by someone else. Please choose another";
+			$error_occured = true;
+		}
+	}
+	
+	if($error_occured != true) {
+
+		$user_detail = array();
+
+		$sel_u = "SELECT * FROM `user_profiles` WHERE `user_profile_id` = '".$c_profile_id."'";
+		$exe_u = execute_query($sel_u);
+		$num_u = num_rows($exe_u);
+		if($num_u > 0) {
+
+			$upd_user = "UPDATE `user_profiles` SET 
+										`first_name` 	= '".$fullname."', 
+										`email` 		= '".$email."', 
+										`state` 		= '".$state."', ";
+						if($date_of_birth != '0000-00-00') {
+							$upd_user .= "`date_of_birth` = '".$date_of_birth."', ";
+						}
+						if($gender != '0') {
+							$upd_user .= "`gender` = '".$gender."', ";
+						}
+						$upd_user .= " `updated_on` 	= '".date('Y-m-d H:i:s')."' "; 
+						$upd_user .= " WHERE `user_profile_id` = '".$c_profile_id."'";
+			$exe_user = execute_query($upd_user);
+			
+			if(!$exe_user) {
+				$msg = "Error occured during update";
+				$error_occured = true;
+			} else {
+
+				$profile_file = basename($_FILES['profile_img']['name']);
+				if($profile_file != '') {
+					$profile_image = date('YmdHisA').'-'.time().'-PROFILE-'.mt_rand().'.'.end(explode('.', $profile_file));
+
+					$path = PROFILE_IMAGE_DIR.$profile_image;
+					$source = $_FILES["profile_img"]["tmp_name"];
+					$result = uploads3($path, $source);
+
+					$upd_user = "UPDATE `user_profiles` SET 
+												`image` 		= '".$profile_image."',
+												`updated_on` 	= '".date('Y-m-d H:i:s')."' 
+											WHERE 
+												`user_profile_id` = '".$c_profile_id."'";
+					$exe_user = execute_query($upd_user);
+
+					/*// Create album and save that photo
+					$album_id = create_album_for_user($user_id, 'Profile', 1);
+
+					$ins_p = "INSERT INTO `photoes` SET 
+												`post_story` 	= '0',
+												`user_id` 		= '".$user_id."',
+												`name` 			= 'Profile Photo',
+												`description` 	= 'Profile Photo',
+												`image_path` 	= '".$profile_image."',
+												`album_id` 		= '".$album_id."',
+												`added_on` 		= '".date('Y-m-d H:i:s')."',
+												`status` 		= '1',
+												`deleted_y_n` 	= '0'";
+					$exe_p = execute_query($ins_p);*/
+
+				}
+
+				$cover_profile_file = basename($_FILES['cover_profile_img']['name']);
+				if($cover_profile_file != '') {
+					$cover_profile_image = date('YmdHisA').'-'.time().'-COVER-PROFILE-'.mt_rand().'.'.end(explode('.', $cover_profile_file));
+
+					$path = PROFILE_IMAGE_DIR.$cover_profile_image;
+					$source = $_FILES["cover_profile_img"]["tmp_name"];
+					$result = uploads3($path, $source);
+
+					$upd_user = "UPDATE `users` SET 
+												`cover_image` 		= '".$cover_profile_image."',
+												`updated_on` 	= '".date('Y-m-d H:i:s')."' 
+											WHERE 
+												`user_profile_id` = '".$c_profile_id."'";
+					$exe_user = execute_query($upd_user);
+
+					/*// Create album and save that photo
+					$album_id = create_album_for_user($user_id, 'Cover', 1);
+
+					$ins_p = "INSERT INTO `photoes` SET 
+												`post_story` 	= '0',
+												`user_id` 		= '".$user_id."',
+												`name` 			= 'Cover Photo',
+												`description` 	= 'Cover Photo',
+												`image_path` 	= '".$profile_image."',
+												`album_id` 		= '".$album_id."',
+												`added_on` 		= '".date('Y-m-d H:i:s')."',
+												`status` 		= '1',
+												`deleted_y_n` 	= '0'";
+					$exe_p = execute_query($ins_p);*/
+				}
+
+				$msg = "Profile updated successfully";
+			}
+				
+			$user_detail['user_profile'] = get_citizen_detail($c_profile_id);
+			
+		} else {
+			$msg = "No user found";
+			$error_occured = true;
+		}
+
+		if($error_occured == true) {
+			$array = array(
+							"status" 		=> 'failed',
+							"message" 		=> $msg,
+						);
+		} else {
+
+			$array = array(
+			               "status" 			=> 'success',
+			               "user_detail" 		=> $user_detail,
+						   "message"			=> $msg,
+			               );
+		}
+	} else {
+		$array = array(
+						"status" 		=> 'failed',
+						"message" 		=> $msg,
+						);
+	}
+} else if($request_action == "GET_PROFILE_LEADER") {
+	$l_profile_id	= trim($_POST['l_profile_id']);
+
+	$user_detail = array();
+	if($l_profile_id == "") {
+		$msg = "Please enter user";
+		$error_occured = true;
+	} else {
+		$user_detail['user_profile'] = get_leader_detail($l_profile_id);
+	}
+	if($error_occured == true) {
+		$array = array(
+						"status" 		=> 'failed',
+						"message" 		=> $msg,
+					);
+	} else {
+
+		$array = array(
+		               "status" 			=> 'success',
+		               "user_detail" 		=> $user_detail,
+					   "message"			=> $msg,
+		               );
+	}
+} else if($request_action == "UPDATE_PROFILE_LEADER") {
+	$fullname 		= real_escape_string($_POST['fullname']);
+	$gender     	= ($_POST['gender'] > 0) ? $_POST['gender'] : 0;
+	$date_of_birth 	= ($_POST['date_of_birth'] != '') ? $_POST['date_of_birth'] : '0000-00-00';
+	$state 			= real_escape_string($_POST['state']);
+	$email 			= real_escape_string($_POST['email']);
+	$mobile 		= real_escape_string($_POST['mobile']);
+	$alt_mobile 	= real_escape_string($_POST['alt_mobile']);
+	$l_profile_id	= trim($_POST['l_profile_id']);
+
+	if($l_profile_id == "") {
+		$msg = "Please enter user";
+		$error_occured = true;
+	} else if($fullname == "") {
+		$msg = "Please enter name";
+		$error_occured = true;
+	} else {
+
+		$sel_u = "SELECT * FROM `user_profiles` WHERE `email` = '".$email."' AND `user_type` = '2' AND `user_profile_id` != '".$l_profile_id."'";
+		$exe_u = execute_query($sel_u);
+		$num_u = num_rows($exe_u);
+		if($num_u > 0) {
+			$msg = "This email is already taken by someone else. Please choose another";
+			$error_occured = true;
+		}
+	}
+	
+	if($error_occured != true) {
+
+		$user_detail = array();
+
+		$sel_u = "SELECT * FROM `user_profiles` WHERE `user_profile_id` = '".$l_profile_id."'";
+		$exe_u = execute_query($sel_u);
+		$num_u = num_rows($exe_u);
+		if($num_u > 0) {
+
+			$upd_user = "UPDATE `user_profiles` SET 
+										`first_name` 	= '".$fullname."', 
+										`email` 		= '".$email."', 
+										`state` 		= '".$state."', ";
+						if($date_of_birth != '0000-00-00') {
+							$upd_user .= "`date_of_birth` = '".$date_of_birth."', ";
+						}
+						if($gender != '0') {
+							$upd_user .= "`gender` = '".$gender."', ";
+						}
+						$upd_user .= " `updated_on` 	= '".date('Y-m-d H:i:s')."' "; 
+						$upd_user .= " WHERE `user_profile_id` = '".$l_profile_id."'";
+			$exe_user = execute_query($upd_user);
+			
+			if(!$exe_user) {
+				$msg = "Error occured during update";
+				$error_occured = true;
+			} else {
+
+				$profile_file = basename($_FILES['profile_img']['name']);
+				if($profile_file != '') {
+					$profile_image = date('YmdHisA').'-'.time().'-PROFILE-'.mt_rand().'.'.end(explode('.', $profile_file));
+
+					$path = PROFILE_IMAGE_DIR.$profile_image;
+					$source = $_FILES["profile_img"]["tmp_name"];
+					$result = uploads3($path, $source);
+
+					$upd_user = "UPDATE `user_profiles` SET 
+												`image` 		= '".$profile_image."',
+												`updated_on` 	= '".date('Y-m-d H:i:s')."' 
+											WHERE 
+												`user_profile_id` = '".$l_profile_id."'";
+					$exe_user = execute_query($upd_user);
+
+					/*// Create album and save that photo
+					$album_id = create_album_for_user($user_id, 'Profile', 1);
+
+					$ins_p = "INSERT INTO `photoes` SET 
+												`post_story` 	= '0',
+												`user_id` 		= '".$user_id."',
+												`name` 			= 'Profile Photo',
+												`description` 	= 'Profile Photo',
+												`image_path` 	= '".$profile_image."',
+												`album_id` 		= '".$album_id."',
+												`added_on` 		= '".date('Y-m-d H:i:s')."',
+												`status` 		= '1',
+												`deleted_y_n` 	= '0'";
+					$exe_p = execute_query($ins_p);*/
+
+				}
+
+				$cover_profile_file = basename($_FILES['cover_profile_img']['name']);
+				if($cover_profile_file != '') {
+					$cover_profile_image = date('YmdHisA').'-'.time().'-COVER-PROFILE-'.mt_rand().'.'.end(explode('.', $cover_profile_file));
+
+					$path = PROFILE_IMAGE_DIR.$cover_profile_image;
+					$source = $_FILES["cover_profile_img"]["tmp_name"];
+					$result = uploads3($path, $source);
+
+					$upd_user = "UPDATE `user_profiles` SET 
+												`cover_image` 		= '".$cover_profile_image."',
+												`updated_on` 	= '".date('Y-m-d H:i:s')."' 
+											WHERE 
+												`user_profile_id` = '".$l_profile_id."'";
+					$exe_user = execute_query($upd_user);
+
+					/*// Create album and save that photo
+					$album_id = create_album_for_user($user_id, 'Cover', 1);
+
+					$ins_p = "INSERT INTO `photoes` SET 
+												`post_story` 	= '0',
+												`user_id` 		= '".$user_id."',
+												`name` 			= 'Cover Photo',
+												`description` 	= 'Cover Photo',
+												`image_path` 	= '".$profile_image."',
+												`album_id` 		= '".$album_id."',
+												`added_on` 		= '".date('Y-m-d H:i:s')."',
+												`status` 		= '1',
+												`deleted_y_n` 	= '0'";
+					$exe_p = execute_query($ins_p);*/
+				}
+
+				$msg = "Profile updated successfully";
+			}
+				
+			$user_detail['user_profile'] = get_leader_detail($l_profile_id);
+			
+		} else {
+			$msg = "No user found";
+			$error_occured = true;
+		}
+
+		if($error_occured == true) {
+			$array = array(
+							"status" 		=> 'failed',
+							"message" 		=> $msg,
+						);
+		} else {
+
+			$array = array(
+			               "status" 			=> 'success',
+			               "user_detail" 		=> $user_detail,
+						   "message"			=> $msg,
+			               );
+		}
+	} else {
+		$array = array(
+						"status" 		=> 'failed',
+						"message" 		=> $msg,
+						);
+	}
 } else {
 	$array = array(
 						"status" 		=> 'failed',

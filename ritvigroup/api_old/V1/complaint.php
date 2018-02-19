@@ -40,8 +40,8 @@ if($request_action == "SAVE_COMPLAINT") {
 	$c_description 			= real_escape_string($_POST['c_description']);
 	$l_profile_id 			= real_escape_string($_POST['l_profile_id']);
 
-	if($user_id == "") {
-		$msg = "Please select your question";
+	if($c_profile_id == "") {
+		$msg = "Please select user";
 		$error_occured = true;
 	} else if($c_name == "") {
 		$msg = "Please enter your name";

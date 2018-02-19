@@ -12,19 +12,19 @@ $location_long 	= $_POST['location_long'];
 $device_name   	= $_POST['device_name'];
 $device_os 	  	= $_POST['device_os'];
 
-$admin_id 		= trim($_POST['admin_id']);
+$l_profile_id 		= trim($_POST['l_profile_id']);
 $complaint_id 	= trim($_POST['complaint_id']);
 
 $error_occured = false;
 $msg = '';
 
 if($request_action == "MY_DASHBOARD") {
-	if($admin_id == "") {
+	if($l_profile_id == "") {
 		$msg = "Sorry no user found";
 		$error_occured = true;
 	} else {
 
-		$sel_v = "SELECT id FROM `complaint_assigned_to` WHERE `assigned_to_admin` = '".$admin_id."' GROUP BY `complaint_id` ORDER BY `assigned_on` DESC";
+		$sel_v = "SELECT id FROM `complaint_assigned_to` WHERE `assigned_to_admin` = '".$l_profile_id."' GROUP BY `complaint_id` ORDER BY `assigned_on` DESC";
 		$exe_v = execute_query($sel_v);
 		$num_v = num_rows($exe_v);
 		if($num_v > 0) {
@@ -53,7 +53,7 @@ if($request_action == "MY_DASHBOARD") {
 		               );
 	}
 } else if($request_action == "ALL_COMPLAINTS") {
-	if($admin_id == "") {
+	if($l_profile_id == "") {
 		$msg = "Sorry no user found";
 		$error_occured = true;
 	} else {
@@ -62,7 +62,7 @@ if($request_action == "MY_DASHBOARD") {
 									LEFT JOIN `complaint_assigned_to` AS ca ON ca.complaint_id = c.id
 									WHERE 
 										1 = 1 
-									AND ca.assigned_to_admin = '".$admin_id."'
+									AND ca.assigned_to_admin = '".$l_profile_id."'
 									ORDER BY ca.`assigned_on` DESC";
 		$exe_v = execute_query($sel_v);
 		$num_v = num_rows($exe_v);
@@ -102,7 +102,7 @@ if($request_action == "MY_DASHBOARD") {
 		               );
 	}
 } else if($request_action == "COMPLAINT_VIEW") {
-	if($admin_id == "") {
+	if($l_profile_id == "") {
 		$msg = "Sorry no user found";
 		$error_occured = true;
 	} else if($complaint_id == "") {
@@ -118,7 +118,7 @@ if($request_action == "MY_DASHBOARD") {
 		$num_v = num_rows($exe_v);
 		if($num_v > 0) {
 			while($res_v = fetch_array($exe_v)) {
-				$all_complaints[] = array(
+				$all_complaints = array(
 											'id' 				=> $res_v['id'],
 											'complaint_id' 		=> $res_v['complaint_id'],
 											'c_name' 			=> $res_v['c_name'],

@@ -295,6 +295,70 @@ function return_admin_detail($res_u) {
 	return $user_data_array;
 }
 
+function return_citizen_detail($res_u) {
+	$user_id 			= $res_u['user_id'];
+	$user_profile_id	= $res_u['user_profile_id'];
+	$user_full_name 	= $res_u['fullname'];
+	$user_image 		= (($res_u['image'] != NULL) ? PROFILE_IMAGE_URL.$res_u['image'] : "");
+	$user_email 		= (($res_u['email'] != NULL) ? $res_u['email'] : "");
+	$user_status 		= $res_u['status'];
+	$user_mobile 		= $res_u['mobile'];
+	$user_alt_mobile	= $res_u['alt_mobile'];
+	$user_createdon 	= return_time_ago($res_u['created_on']);
+	$user_state 		= (($res_u['state'] != NULL && $res_u['state'] != '0') ? $res_u['state'] : "");
+	$user_date_of_birth	= (($res_u['date_of_birth'] != NULL && $res_u['date_of_birth'] != '') ? $res_u['date_of_birth'] : "");
+	$user_gender		= (($res_u['gender'] != NULL && $res_u['gender'] != '') ? $res_u['gender'] : "");
+
+	$user_data_array = array(
+							"user_id" 				=> $user_id,
+							"user_profile_id" 		=> $user_profile_id,
+			               	"user_full_name" 		=> $user_full_name,
+						   	"user_image" 			=> $user_image,
+						   	"user_email" 			=> $user_email,
+						   	"user_mobile" 			=> $user_mobile,
+						   	"user_alt_mobile" 		=> $user_alt_mobile,
+						   	"user_createdon" 		=> $user_createdon,
+						   	"user_status" 			=> $user_status,
+						   	"user_state" 			=> $user_state,
+						   	"user_date_of_birth" 	=> $user_date_of_birth,
+						   	"user_gender" 			=> $user_gender,
+							);
+	
+	return $user_data_array;
+}
+
+
+function return_leader_detail($res_u) {
+	$user_id 			= $res_u['user_id'];
+	$user_profile_id	= $res_u['user_profile_id'];
+	$user_full_name 	= $res_u['fullname'];
+	$user_image 		= (($res_u['image'] != NULL) ? PROFILE_IMAGE_URL.$res_u['image'] : "");
+	$user_email 		= (($res_u['email'] != NULL) ? $res_u['email'] : "");
+	$user_status 		= $res_u['status'];
+	$user_mobile 		= $res_u['mobile'];
+	$user_alt_mobile	= $res_u['alt_mobile'];
+	$user_createdon 	= return_time_ago($res_u['created_on']);
+	$user_state 		= (($res_u['state'] != NULL && $res_u['state'] != '0') ? $res_u['state'] : "");
+	$user_date_of_birth	= (($res_u['date_of_birth'] != NULL && $res_u['date_of_birth'] != '') ? $res_u['date_of_birth'] : "");
+	$user_gender		= (($res_u['gender'] != NULL && $res_u['gender'] != '') ? $res_u['gender'] : "");
+
+	$user_data_array = array(
+							"user_id" 				=> $user_id,
+							"user_profile_id" 		=> $user_profile_id,
+			               	"user_full_name" 		=> $user_full_name,
+						   	"user_image" 			=> $user_image,
+						   	"user_email" 			=> $user_email,
+						   	"user_mobile" 			=> $user_mobile,
+						   	"user_alt_mobile" 		=> $user_alt_mobile,
+						   	"user_createdon" 		=> $user_createdon,
+						   	"user_status" 			=> $user_status,
+						   	"user_state" 			=> $user_state,
+						   	"user_date_of_birth" 	=> $user_date_of_birth,
+						   	"user_gender" 			=> $user_gender,
+							);
+	
+	return $user_data_array;
+}
 
 function uploads3($upload_path, $source){
 
@@ -427,6 +491,33 @@ function get_admin_detail($user_id) {
 		$res = fetch_array($exe);
 
 		$user_detail = return_admin_detail($res);
+	} else {
+		$user_detail = array();
+	}
+	return $user_detail;
+}
+
+
+function get_citizen_detail($c_profile_id) {
+	if($c_profile_id > 0) {
+		$sel = "SELECT * FROM `user_profiles` WHERE `user_profile_id` = '".$c_profile_id."'";
+		$exe = execute_query($sel);
+		$res = fetch_array($exe);
+
+		$user_detail = get_user_detail($res['user_id']);
+	} else {
+		$user_detail = array();
+	}
+	return $user_detail;
+}
+
+function get_leader_detail($l_profile_id) {
+	if($l_profile_id > 0) {
+		$sel = "SELECT * FROM `user_profiles` WHERE `user_profile_id` = '".$l_profile_id."'";
+		$exe = execute_query($sel);
+		$res = fetch_array($exe);
+
+		$user_detail = get_user_detail($res['user_id']);
 	} else {
 		$user_detail = array();
 	}

@@ -79,8 +79,8 @@ if($request_action == "MY_FAVOURITE_LEADER") {
 				$l_profile_id = $res_v['user_profile_id'];
 			}
 		} else {
-			$ins = "INSERT INTO `user_profiles` (user_id, user_type, parent_user_id, user_role,first_name, middle_name, last_name, created_on, updated_on, status, device_token, image, cover_image, mobile, alt_mobile) 
-					SELECT user_id, '2', parent_user_id, '0',first_name, middle_name, last_name, '".date('Y-m-d H:i:s')."', '".date('Y-m-d H:i:s')."', '1', device_token, image, cover_image, mobile, alt_mobile FROM `user_profiles` WHERE `user_type` = '1' AND `user_id` = '".$user_id."'";
+			$ins = "INSERT INTO `user_profiles` (user_id, user_type, parent_user_id, user_role,first_name, middle_name, last_name, email, created_on, updated_on, status, device_token, image, cover_image, mobile, alt_mobile) 
+					SELECT user_id, '2', parent_user_id, '0',first_name, middle_name, last_name, email, '".date('Y-m-d H:i:s')."', '".date('Y-m-d H:i:s')."', '1', device_token, image, cover_image, mobile, alt_mobile FROM `user_profiles` WHERE `user_type` = '1' AND `user_id` = '".$user_id."'";
 			$exe = execute_query($ins);
 
 			$l_profile_id = insert_id();
@@ -158,31 +158,34 @@ if($request_action == "MY_FAVOURITE_LEADER") {
 														OR `last_name` LIKE '%".$search_text."%' ) 
 														ORDER BY `first_name` ASC 
 														LIMIT 0,50";
-			$exe_v = execute_query($sel_v);
-			$num_v = num_rows($exe_v);
-			if($num_v > 0) {
-				while($res_v = fetch_array($exe_v)) {
-					$my_favourite = 0;
-					$user_detail = return_leader_detail_limited($res_v['user_profile_id'], $detail_to_show);
-					$sel = "SELECT id FROM `user_fav_leader` WHERE `c_profile_id` = '".$c_profile_id."' AND `l_profile_id` = '".$res_v['user_profile_id']."'";
-					$exe = execute_query($sel);
-					$num = num_rows($exe);
-					if($num > 0) {
-						$my_favourite = 1;
-					}
-					$array = array(
-									'my_favourite' => $my_favourite,
-									);
-					$array_merge = array_merge($user_detail, $array);
-					$admin_view[] = $array_merge;
-				}
-				$msg = $num_v." leader found";
-			} else {
-				$msg = "No leader found";
-				$error_occured = true;
-			}
 		} else {
-			$msg = "Please enter something to search";
+			$sel_v = "SELECT * FROM `user_profiles` WHERE 1 = 1 
+														AND (`user_type` = '2' OR `user_type` = '3')
+														AND `status` = '1'  
+														ORDER BY RAND()  
+														LIMIT 0,50";
+		}
+		$exe_v = execute_query($sel_v);
+		$num_v = num_rows($exe_v);
+		if($num_v > 0) {
+			while($res_v = fetch_array($exe_v)) {
+				$my_favourite = 0;
+				$user_detail = return_leader_detail_limited($res_v['user_profile_id'], $detail_to_show);
+				$sel = "SELECT id FROM `user_fav_leader` WHERE `c_profile_id` = '".$c_profile_id."' AND `l_profile_id` = '".$res_v['user_profile_id']."'";
+				$exe = execute_query($sel);
+				$num = num_rows($exe);
+				if($num > 0) {
+					$my_favourite = 1;
+				}
+				$array = array(
+								'my_favourite' => $my_favourite,
+								);
+				$array_merge = array_merge($user_detail, $array);
+				$admin_view[] = $array_merge;
+			}
+			$msg = $num_v." leader found";
+		} else {
+			$msg = "No leader found";
 			$error_occured = true;
 		}
 	}
@@ -305,7 +308,7 @@ if($request_action == "MY_FAVOURITE_LEADER") {
 		$num_v = num_rows($exe_v);
 		if($num_v > 0) {
 			while($res_v = fetch_array($exe_v)) {
-				$all_complaints[] = array(
+				$all_complaints = array(
 											'id' 				=> $res_v['id'],
 											'complaint_id' 		=> $res_v['complaint_id'],
 											'c_name' 			=> $res_v['c_name'],
