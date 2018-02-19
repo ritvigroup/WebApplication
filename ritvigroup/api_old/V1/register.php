@@ -31,20 +31,17 @@ if($login_request == "REGISTER_MOBILE" || $login_request == "REGENERATE_MOBILE_O
 		$exe_u = execute_query($sel_u);
 		$num_u = num_rows($exe_u);
 		if($num_u > 0) {
-			$res_u 			= fetch_array($exe_u);
 
-			$upd_otp = "UPDATE `users` SET 
-											`login_otp` 					= '".$otp."', 
-											`device_token` 					= '".$device_token."', 
-											`login_otp_valid_till` 			= '".$login_otp_valid_till."' 
-										WHERE 
-											`phone` = '".$mobile."'";
-			$exe_otp = execute_query($upd_otp);
-			
-			$msg = "OTP sent to your mobile number";
+			$res_u = fetch_array($exe_u);
+			if($res_u['mpin'] > 0) {
+				$msg = "This mobile is already exist in our system. Please login.";
+				$error_occured = true;
+			}
 
-		} else {
+		} 
 
+
+		if($error_occured != true) {
 			$username = auto_generate_username();
 			$profile_id = auto_generate_profile_id();
 
@@ -172,6 +169,41 @@ if($login_request == "REGISTER_MOBILE" || $login_request == "REGENERATE_MOBILE_O
 			
 			$upd_u = "UPDATE `users` SET `mpin` = '".$mpin."', `login_status`	= '1', `status` = '1' WHERE `id` = '".$user_id."'";
 			$exe_u = execute_query($upd_u);
+
+			$sel_ufc = "SELECT user_profile_id FROM `user_profiles` WHERE 
+														`user_id` = '".$user_id."' 
+													AND `user_type` = '1'";
+			$exe_ufc = execute_query($sel_ufc);
+			$num_ufc = num_rows($exe_ufc);
+			if($num_ufc > 0) {
+				$res_ufc = fetch_array($exe_ufc);
+				$ins = "UPDATE `user_profiles` SET 
+												`alt_mobile` 		= '".$alt_mobile."',
+												`first_name` 		= '".$fullname_exp[0]."',
+												`middle_name` 		= '',
+												`last_name` 		= '".$fullname_exp[1]."',
+												`updated_on` 		= '".date('Y-m-d H:i:s')."',
+												`device_token` 		= '".$device_token."'
+											WHERE 
+												`user_profile_id` = '".$res_ufc['user_profile_id']."'";
+			} else {
+
+				$ins = "INSERT INTO `user_profiles` SET 
+												`user_id` 			= '".$user_id."',
+												`user_type` 		= '1',
+												`parent_user_id` 	= '".$user_id."',
+												`user_role` 		= '0',
+												`alt_mobile` 		= '".$alt_mobile."',
+												`first_name` 		= '".$fullname_exp[0]."',
+												`middle_name` 		= '',
+												`last_name` 		= '".$fullname_exp[1]."',
+												`created_on` 		= '".date('Y-m-d H:i:s')."',
+												`updated_on` 		= '".date('Y-m-d H:i:s')."',
+												`status` 			= '1',
+												`device_token` 		= '".$device_token."'";
+				
+			}
+			$exe = execute_query($ins);
 
 			$user_detail['user_profile'] = get_user_detail($user_id);
 

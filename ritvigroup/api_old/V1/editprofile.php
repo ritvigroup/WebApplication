@@ -245,12 +245,13 @@ if($request_action == "BLOCK_USER") {
 			               );
 		}
 	}
-} else if($request_action == "UPDATE_PROFILE") {
+} else if($request_action == "UPDATE_PROFILE_LOGIN") {
 	$fullname 		= real_escape_string($_POST['fullname']);
 	$gender     	= ($_POST['gender'] > 0) ? $_POST['gender'] : 0;
 	$date_of_birth 	= ($_POST['date_of_birth'] != '') ? $_POST['date_of_birth'] : '0000-00-00';
 	$state 			= real_escape_string($_POST['state']);
 	$email 			= real_escape_string($_POST['email']);
+	$mobile 		= real_escape_string($_POST['mobile']);
 	$alt_mobile 	= real_escape_string($_POST['alt_mobile']);
 	$user_id 		= trim($_POST['user_id']);
 
@@ -298,6 +299,46 @@ if($request_action == "BLOCK_USER") {
 				$msg = "Error occured during update";
 				$error_occured = true;
 			} else {
+
+				$fullname_exp = @explode(" ", $fullname);
+
+				$sel_ufc = "SELECT user_profile_id FROM `user_profiles` WHERE 
+														`user_id` = '".$user_id."' 
+													AND `user_type` = '1'";
+				$exe_ufc = execute_query($sel_ufc);
+				$num_ufc = num_rows($exe_ufc);
+				if($num_ufc > 0) {
+					$res_ufc = fetch_array($exe_ufc);
+					$ins = "UPDATE `user_profiles` SET 
+													`mobile` 			= '".$mobile."',
+													`alt_mobile` 		= '".$alt_mobile."',
+													`first_name` 		= '".$fullname_exp[0]."',
+													`middle_name` 		= '',
+													`last_name` 		= '".$fullname_exp[1]."',
+													`updated_on` 		= '".date('Y-m-d H:i:s')."',
+													`device_token` 		= '".$device_token."'
+												WHERE 
+													`user_profile_id` = '".$res_ufc['user_profile_id']."'";
+				} else {		
+
+					$ins = "INSERT INTO `user_profiles` SET 
+													`user_id` 			= '".$user_id."',
+													`user_type` 		= '1',
+													`parent_user_id` 	= '".$user_id."',
+													`user_role` 		= '0',
+													`mobile` 			= '".$mobile."',
+													`alt_mobile` 		= '".$alt_mobile."',
+													`first_name` 		= '".$fullname_exp[0]."',
+													`middle_name` 		= '',
+													`last_name` 		= '".$fullname_exp[1]."',
+													`created_on` 		= '".date('Y-m-d H:i:s')."',
+													`updated_on` 		= '".date('Y-m-d H:i:s')."',
+													`status` 			= '1',
+													`device_token` 		= '".$device_token."'";
+					
+				}
+				$exe = execute_query($ins);
+
 				$profile_file = basename($_FILES['profile_img']['name']);
 				if($profile_file != '') {
 					$profile_image = date('YmdHisA').'-'.time().'-PROFILE-'.mt_rand().'.'.end(explode('.', $profile_file));
@@ -359,15 +400,6 @@ if($request_action == "BLOCK_USER") {
 												`status` 		= '1',
 												`deleted_y_n` 	= '0'";
 					$exe_p = execute_query($ins_p);
-				}
-
-				if($password != '' && strlen($password) > 5) {
-					$upd_user = "UPDATE `users` SET 
-												`password` 		= '".$password."',
-												`updated_on` 	= '".date('Y-m-d H:i:s')."' 
-											WHERE 
-												`id` = '".$user_id."'";
-					$exe_user = execute_query($upd_user);
 				}
 
 				$msg = "Profile updated successfully";

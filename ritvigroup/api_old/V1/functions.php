@@ -107,6 +107,35 @@ function save_notifications($action_perform, $description = "", $open_url = "", 
 }
 
 
+
+function return_leader_detail_limited($user_profile_id, $detail_to_show) {
+	$user_detail = array();
+	$sel = "SELECT ".implode(',', $detail_to_show)." FROM `user_profiles` WHERE `user_profile_id` = '".$user_profile_id."'";
+	$exe = execute_query($sel);
+	$num = num_rows($exe);
+	if($num > 0) {
+		$i = 0;
+		while($res_u = fetch_array($exe)) {
+
+			foreach($detail_to_show AS $column) {
+				$show_detail = (($res_u[$column] != NULL) ? $res_u[$column] : "");
+				if($column == "image") {
+					$show_detail = (($res_u['image'] != NULL) ? PROFILE_IMAGE_URL.$res_u['image'] : "");
+				} else if($column == "cover_image") {
+					$show_detail = (($res_u['cover_image'] != NULL) ? PROFILE_IMAGE_URL.$res_u['cover_image'] : "");
+				} else if($column == "created_on") {
+					$show_detail = return_time_ago($res_u['created_on']);
+				}
+				$user_detail['up_'.$column] = $show_detail;
+			}
+			$i++;
+		}
+	}
+	return $user_detail;
+}
+
+
+
 function return_admin_detail_limited($user_id, $detail_to_show) {
 	$user_detail = array();
 	$sel = "SELECT ".implode(',', $detail_to_show)." FROM `admin` WHERE `id` = '".$user_id."'";
@@ -180,6 +209,24 @@ function return_user_detail($res_u) {
 	$user_date_of_birth	= (($res_u['date_of_birth'] != NULL && $res_u['date_of_birth'] != '') ? $res_u['date_of_birth'] : "");
 	$user_gender		= (($res_u['gender'] != NULL && $res_u['gender'] != '') ? $res_u['gender'] : "");
 
+	$detail_to_show = array('user_profile_id', 'user_role', 'first_name', 'middle_name', 'last_name', 'created_on', 'status', 'image', 'mobile', 'alt_mobile');
+
+	$user_profiles_array = array();
+	$sel_c = "SELECT * FROM `user_profiles` WHERE `user_id` = '".$user_id."'";
+	$exe_c = execute_query($sel_c);
+	$num_c = num_rows($exe_c);
+	if($num_c > 0) {
+		while($res_c = fetch_array($exe_c)) {
+			if($res_c['user_type'] == '1') {
+				$user_profiles_array['profiles']['c_profile_detail'] = return_leader_detail_limited($res_c['user_profile_id'], $detail_to_show); 
+			} else if($res_c['user_type'] == '2') {
+				$user_profiles_array['profiles']['l_profile_detail'] = return_leader_detail_limited($res_c['user_profile_id'], $detail_to_show); 
+			} else {
+				$user_profiles_array['profiles']['sl_profile_detail'][] = return_leader_detail_limited($res_c['user_profile_id'], $detail_to_show);  
+			}
+		}
+	}
+
 	$user_data_array = array(
 							"user_id" 				=> $user_id,
 							"user_profile_id" 		=> $user_profile_id,
@@ -200,7 +247,10 @@ function return_user_detail($res_u) {
 						   	"user_gender" 			=> $user_gender,
 						   	"user_login_status" 	=> $user_login_status,
 							);
-	return $user_data_array;
+
+	$array_merge = array_merge($user_data_array, $user_profiles_array);
+	
+	return $array_merge;
 }
 
 function return_admin_detail($res_u) {
@@ -275,8 +325,9 @@ function uploads3($upload_path, $source){
 	}*/
 }
 
-function generate_new_complaint_id() {
+function generate_new_complaint_id($length = 8) {
 	$complaint_id = strtoupper("C".md5(mt_rand().time()));
+	$complaint_id = substr( str_shuffle( $complaint_id ), 0, $length );
 	$sel = "SELECT id FROM `complaint` WHERE `complaint_id` = '".$complaint_id."'";
 	$exe = execute_query($sel);
 	$num = num_rows($exe);
@@ -606,24 +657,24 @@ function return_time_ago($datetime)
 	if($seconds <= 15) {  
 		return "Just Now";  
 	} else if($seconds > 15 && $minutes < 1) {
-		return $seconds."s";
+		return $seconds." sec ago";
 	} else if($minutes >= 1 && $minutes <= 60) {
 		if($minutes==1)  
 		{  
-			return "1m";  
+			return "1 min ago";  
 		}  
 		else  
 		{  
-			return $minutes."m";  
+			return $minutes." min ago";  
 		}  
 	} else if($hours <= 24) {  
 		if($hours == 1)  
 		{  
-			return "1h";  
+			return "1 hr ago";  
 		}  
 		else  
 		{  
-			return $hours."h";  
+			return $hours." hrs ago";  
 		}  
 	} else if($days <= 7) {  
 		if($days == 1)  

@@ -18,6 +18,7 @@ $msg = '';
 
 if($request_action == "SAVE_COMPLAINT") {
 	$user_id 				= $_POST['user_id'];
+	$c_profile_id			= $_POST['c_profile_id'];
 	$self_other_group 		= real_escape_string($_POST['self_other_group']);
 	$c_name 				= real_escape_string($_POST['c_name']);
 	$c_father_name 			= real_escape_string($_POST['c_father_name']);
@@ -37,6 +38,7 @@ if($request_action == "SAVE_COMPLAINT") {
 	$c_department 			= real_escape_string($_POST['c_department']);
 	$c_subject 				= real_escape_string($_POST['c_subject']);
 	$c_description 			= real_escape_string($_POST['c_description']);
+	$l_profile_id 			= real_escape_string($_POST['l_profile_id']);
 
 	if($user_id == "") {
 		$msg = "Please select your question";
@@ -72,7 +74,7 @@ if($request_action == "SAVE_COMPLAINT") {
 										`c_subject` 			= '".$c_subject."',
 										`c_description` 		= '".$c_description."',
 										`c_added_on` 			= '".date('Y-m-d H:i:s')."',
-										`c_added_by` 			= '".$user_id."'";
+										`c_added_by` 			= '".$c_profile_id."'";
 		$exe = execute_query($ins);
 
 		$c_id = insert_id();
@@ -85,6 +87,16 @@ if($request_action == "SAVE_COMPLAINT") {
 								WHERE 
 									`id` = '".$c_id."'";
 		$exe_c = execute_query($upd_c);
+
+		$assigned_status = "Initiate Complaint";
+		$ins_cd = "INSERT INTO `complaint_assigned_to` SET 
+												`complaint_id` 			= '".$c_id."',
+												`assigned_to_admin` 	= '".$l_profile_id."',
+												`assigned_from_user` 	= '".$c_profile_id."',
+												`assigned_status` 		= '".$assigned_status."',
+												`assigned_description` 	= '".$assigned_status."',
+												`assigned_on` 			= '".date('Y-m-d H:i:s')."'";
+		$exe_cd = execute_query($ins_cd);
 
 		for($i = 0; $i < count($_FILES['file']['tmp_name']); $i++) {
 			if($_FILES['file']['name'][$i] != '') {

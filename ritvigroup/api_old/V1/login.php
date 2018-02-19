@@ -26,27 +26,75 @@ if($login_request == "LOGIN_WITH_MPIN") {
 	} else if($mpin == "") {
 		$msg = "Please enter your mpin";
 		$error_occured = true;
+	} else if($mpin == 0) {
+		$msg = "Please enter valid mpin";
+		$error_occured = true;
 	} else {
-		$sel_u = "SELECT * FROM `users` WHERE `phone` = '".$mobile."' AND `mpin` = '".$mpin."'";
+
+		$sel_u = "SELECT * FROM `users` WHERE `phone` = '".$mobile."'";
 		$exe_u = execute_query($sel_u);
 		$num_u = num_rows($exe_u);
 		if($num_u > 0) {
-			$res_u = fetch_array($exe_u);
-			if($res_u['status'] == '1') {
-				$user_id 			= $res_u['id'];
-				
-				$upd_u = "UPDATE `users` SET `login_status`	= '1' WHERE `id` = '".$user_id."'";
-				$exe_u = execute_query($upd_u);
 
-				$user_detail['user_profile'] = get_user_detail($user_id);
-				$msg = "User logged in successfully";
+			$res_u = fetch_array($exe_u);
+			if($res_u['mpin'] > 0) {
 			} else {
-				$msg = "You are not a valid user. Please send your detail to admin.";
+				$msg = "This mobile is not registered with us. Please register first";
 				$error_occured = true;
 			}
-		} else {
-			$msg = "Mobile or Mpin incorrect";
-			$error_occured = true;
+
+		} 
+
+
+		if($error_occured != true) {
+
+			$sel_u = "SELECT * FROM `users` WHERE `phone` = '".$mobile."' AND `mpin` = '".$mpin."'";
+			$exe_u = execute_query($sel_u);
+			$num_u = num_rows($exe_u);
+			if($num_u > 0) {
+				$res_u = fetch_array($exe_u);
+				if($res_u['status'] == '1') {
+					$user_id 			= $res_u['id'];
+					
+					$upd_u = "UPDATE `users` SET `login_status`	= '1' WHERE `id` = '".$user_id."'";
+					$exe_u = execute_query($upd_u);
+
+					$sel_ufc = "SELECT user_profile_id FROM `user_profiles` WHERE 
+															`user_id` = '".$user_id."' 
+														AND `user_type` = '1'";
+					$exe_ufc = execute_query($sel_ufc);
+					$num_ufc = num_rows($exe_ufc);
+					if($num_ufc > 0) {
+						$res_ufc = fetch_array($exe_ufc);
+						$ins = "UPDATE `user_profiles` SET 
+														`device_token` 		= '".$device_token."'
+													WHERE 
+														`user_profile_id` = '".$res_ufc['user_profile_id']."'";
+					} else {		
+
+						$ins = "INSERT INTO `user_profiles` SET 
+														`user_id` 			= '".$user_id."',
+														`user_type` 		= '1',
+														`parent_user_id` 	= '".$user_id."',
+														`user_role` 		= '0',
+														`created_on` 		= '".date('Y-m-d H:i:s')."',
+														`updated_on` 		= '".date('Y-m-d H:i:s')."',
+														`status` 			= '1',
+														`device_token` 		= '".$device_token."'";
+						
+					}
+					$exe = execute_query($ins);
+
+					$user_detail['user_profile'] = get_user_detail($user_id);
+					$msg = "User logged in successfully";
+				} else {
+					$msg = "You are not a valid user. Please send your detail to admin.";
+					$error_occured = true;
+				}
+			} else {
+				$msg = "Mobile or Mpin incorrect";
+				$error_occured = true;
+			}
 		}
 	}
 
