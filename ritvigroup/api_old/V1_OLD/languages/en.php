@@ -1,0 +1,37 @@
+<?php
+$array = array(
+	'home' => 'Home',
+	'login' => 'Login',
+	'register' => 'Register',
+	'submit' => 'Submit',
+	'dashboard' => 'Dashboard',
+	'setting' => 'Setting',
+	'notification' => 'Notification',
+	'splash_1' => 'Control in your hands',
+	'splash_2' => 'Ease of Use',
+	'splash_3' => 'Power of One',
+	'splash_4' => 'Splash Last',
+	'login_mobile' => 'MOBILE',
+	'login_aadhar' => 'AADHAAR',
+	'placeholder_mobile' => 'Mobile Number',
+	'placeholder_mpin' => 'MPIN',
+	'login_with_otp' => 'Login with OTP',
+	'or_login_with' => 'OR LOGIN WITH',
+	'dont_have_account' => "Don't have account? Register Here",
+	'new_user' => 'NEW USER',
+	'placeholder_aadhaar' => 'Aadhaar Number',
+	'registration_header' => 'Registration',
+	'lets_start_by_mobile' => "Let's start by verifying your 10 digit mobile number",
+	'we_will_send_otp' => "We will send OTP  on this number for verification",
+	'remember_this_mobile' => "Remember this mobile number will be used for login",
+	'mobile_number_verification_header' => "Mobile Number verification",
+	'mobile_number_verification_subheader' => "Sit back & relax while we verify your mobile number",
+	'mobile_number_verification_subheader_2' => "(Enter the OTP below in case of if we fail to detect the SMS auto)",
+	'enter_digit_otp' => "Enter 6 digit OTP",
+	'waiting_for_sms' => "Waiting for SMS...",
+	'next' => "Next",
+	'set_mpin_header' => "Set MPIN",
+);
+
+echo json_encode($array);
+?>
