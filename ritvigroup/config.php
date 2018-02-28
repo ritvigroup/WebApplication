@@ -29,18 +29,10 @@ if(DEVELOPMENT_MODE != 1) {
     
     define('WEBSITE_URL', 'http://caprispine.in/ritvigroup.com');
 
-    $server_name	= "localhost";
-    $server_user	= "id4517558_rajesh";
-    $server_pass	= "rajesh@123";
-    $server_db		= "id4517558_ritvigroup";
-
     $server_name    = "localhost";
     $server_user    = "caprienn_ritvius";
     $server_pass    = "R0bTEJxxE%R(";
     $server_db      = "caprienn_ritvigroup";
-
-    
-    
 } else {
     $server_name    = "localhost";
     $server_user    = "root";
@@ -192,6 +184,7 @@ function insert_id() {
 
 function real_escape_string($string) {
     global $con;
+    $string = trim($string);
     if(DATABASE_TYPE == 'mysql') {
         return mysql_real_escape_string($string);
     } else if(DATABASE_TYPE == 'mysqli') {

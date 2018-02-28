@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Feb 08, 2018 at 07:44 AM
+-- Generation Time: Feb 28, 2018 at 10:32 AM
 -- Server version: 5.6.16
 -- PHP Version: 5.5.9
 
@@ -23,22 +23,137 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
--- Table structure for table `admin`
+-- Table structure for table `citizen`
 --
 
-CREATE TABLE IF NOT EXISTS `admin` (
+CREATE TABLE IF NOT EXISTS `citizen` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `profile_id` varchar(100) NOT NULL,
   `username` varchar(100) CHARACTER SET latin1 DEFAULT NULL,
   `password` varchar(200) CHARACTER SET latin1 DEFAULT NULL,
   `mpin` int(11) NOT NULL DEFAULT '0',
+  `email` varchar(150) CHARACTER SET latin1 DEFAULT NULL,
+  `mobile` varchar(20) CHARACTER SET latin1 DEFAULT NULL,
+  `status` int(11) NOT NULL DEFAULT '0',
+  `device_token` text,
+  `login_otp` varchar(100) DEFAULT NULL,
+  `login_status` int(11) NOT NULL DEFAULT '1',
+  `login_otp_valid_till` datetime NOT NULL,
+  `activation_code` varchar(100) DEFAULT NULL,
+  `lantitude` varchar(200) DEFAULT NULL,
+  `longitude` varchar(200) DEFAULT NULL,
+  `deactivated_on` datetime NOT NULL,
+  `created_on` datetime DEFAULT NULL,
+  `updated_on` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `mobile` (`mobile`),
+  KEY `mpin` (`mpin`),
+  KEY `email` (`email`),
+  KEY `login_status` (`login_status`),
+  KEY `profile_id` (`profile_id`),
+  KEY `login_otp` (`login_otp`),
+  KEY `login_otp_valid_till` (`login_otp_valid_till`),
+  KEY `activation_code` (`activation_code`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `citizen_album`
+--
+
+CREATE TABLE IF NOT EXISTS `citizen_album` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `citizen_id` bigint(20) unsigned NOT NULL,
+  `name` varchar(200) NOT NULL,
+  `description` text NOT NULL,
+  `show_for` int(11) NOT NULL DEFAULT '1',
+  `status` int(11) NOT NULL DEFAULT '0',
+  `created_on` datetime NOT NULL,
+  `updated_on` datetime NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `citizen_fav_citizen`
+--
+
+CREATE TABLE IF NOT EXISTS `citizen_fav_citizen` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `citizen_id` bigint(20) NOT NULL DEFAULT '0',
+  `friend_citizen_id` bigint(20) NOT NULL DEFAULT '0',
+  `fav_on` datetime NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `user_id` (`citizen_id`,`friend_citizen_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `citizen_fav_leader`
+--
+
+CREATE TABLE IF NOT EXISTS `citizen_fav_leader` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `citizen_id` bigint(20) NOT NULL DEFAULT '0',
+  `leader_profile_id` bigint(20) NOT NULL DEFAULT '0',
+  `fav_on` datetime NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `user_id` (`citizen_id`,`leader_profile_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `citizen_log`
+--
+
+CREATE TABLE IF NOT EXISTS `citizen_log` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `citizen_id` bigint(20) NOT NULL,
+  `device_token_id` text NOT NULL,
+  `device_name` text,
+  `device_os` varchar(200) DEFAULT NULL,
+  `longitude` varchar(200) DEFAULT NULL,
+  `lantitude` varchar(200) DEFAULT NULL,
+  `logged_in` datetime NOT NULL,
+  `logged_out` datetime NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `citizen_photo`
+--
+
+CREATE TABLE IF NOT EXISTS `citizen_photo` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `citizen_id` bigint(20) unsigned NOT NULL,
+  `album_id` bigint(20) unsigned NOT NULL,
+  `photo` varchar(255) NOT NULL,
+  `status` int(11) NOT NULL DEFAULT '0',
+  `added_on` datetime NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `citizen_profile`
+--
+
+CREATE TABLE IF NOT EXISTS `citizen_profile` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `citizen_id` bigint(20) unsigned NOT NULL,
   `firstname` varchar(100) DEFAULT NULL,
   `middlename` varchar(100) DEFAULT NULL,
   `lastname` varchar(100) DEFAULT NULL,
   `fullname` varchar(200) DEFAULT NULL,
   `email` varchar(150) CHARACTER SET latin1 DEFAULT NULL,
-  `phonecountry` varchar(20) CHARACTER SET latin1 DEFAULT NULL,
-  `phone` varchar(20) CHARACTER SET latin1 DEFAULT NULL,
+  `mobile` varchar(20) CHARACTER SET latin1 DEFAULT NULL,
   `alt_mobile` varchar(20) NOT NULL,
   `gender` int(11) NOT NULL DEFAULT '0',
   `date_of_birth` date NOT NULL,
@@ -48,43 +163,19 @@ CREATE TABLE IF NOT EXISTS `admin` (
   `country` varchar(200) DEFAULT NULL,
   `zipcode` varchar(20) CHARACTER SET latin1 DEFAULT NULL,
   `about_me` text NOT NULL,
+  `profile_photo_id` bigint(20) NOT NULL DEFAULT '0',
+  `cover_photo_id` bigint(20) NOT NULL DEFAULT '0',
   `status` int(11) NOT NULL DEFAULT '0',
-  `image` varchar(200) DEFAULT NULL,
-  `device_token` text,
-  `login_otp` varchar(100) DEFAULT NULL,
-  `login_status` int(11) NOT NULL DEFAULT '1',
-  `login_otp_valid_till` datetime NOT NULL,
-  `register_otp` varchar(100) DEFAULT NULL,
-  `register_otp_valid_till` datetime NOT NULL,
-  `password_reset_code` varchar(100) DEFAULT NULL,
-  `activation_code` varchar(100) DEFAULT NULL,
-  `created_on` datetime DEFAULT NULL,
   `updated_on` datetime DEFAULT NULL,
-  `lant` varchar(200) DEFAULT NULL,
-  `long` varchar(200) DEFAULT NULL,
-  `deactivated_on` datetime NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `admin_devices`
---
-
-CREATE TABLE IF NOT EXISTS `admin_devices` (
-  `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `user_id` bigint(20) NOT NULL,
-  `device_token_id` text NOT NULL,
-  `device_name` text,
-  `added_on` datetime NOT NULL,
-  `device_os` varchar(200) DEFAULT NULL,
-  `lant` varchar(200) DEFAULT NULL,
-  `long` varchar(200) DEFAULT NULL,
-  `status` int(11) NOT NULL DEFAULT '1',
-  `logged_in_on` datetime NOT NULL,
-  `logged_out_on` datetime NOT NULL,
-  PRIMARY KEY (`id`)
+  `facebook_profile_id` varchar(255) NOT NULL,
+  `google_profile_id` varchar(255) NOT NULL,
+  `twitter_profile_id` varchar(255) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `citizen_id` (`citizen_id`),
+  KEY `profile_photo_id` (`profile_photo_id`),
+  KEY `cover_photo_id` (`cover_photo_id`),
+  KEY `facebook_profile_id` (`facebook_profile_id`),
+  KEY `google_profile_id` (`google_profile_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
@@ -195,14 +286,141 @@ CREATE TABLE IF NOT EXISTS `feedbacks` (
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `leader`
+--
+
+CREATE TABLE IF NOT EXISTS `leader` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `profile_id` varchar(100) NOT NULL,
+  `username` varchar(100) CHARACTER SET latin1 DEFAULT NULL,
+  `password` varchar(200) CHARACTER SET latin1 DEFAULT NULL,
+  `mpin` int(11) NOT NULL DEFAULT '0',
+  `email` varchar(150) CHARACTER SET latin1 DEFAULT NULL,
+  `phone` varchar(20) CHARACTER SET latin1 DEFAULT NULL,
+  `status` int(11) NOT NULL DEFAULT '0',
+  `device_token` text,
+  `login_otp` varchar(100) DEFAULT NULL,
+  `login_status` int(11) NOT NULL DEFAULT '1',
+  `login_otp_valid_till` datetime NOT NULL,
+  `activation_code` varchar(100) DEFAULT NULL,
+  `created_on` datetime DEFAULT NULL,
+  `updated_on` datetime DEFAULT NULL,
+  `lantitude` varchar(200) DEFAULT NULL,
+  `longitude` varchar(200) DEFAULT NULL,
+  `deactivated_on` datetime NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `leader_album`
+--
+
+CREATE TABLE IF NOT EXISTS `leader_album` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `leader_profile_id` bigint(20) unsigned NOT NULL,
+  `name` varchar(200) NOT NULL,
+  `description` text NOT NULL,
+  `show_for` int(11) NOT NULL DEFAULT '1',
+  `status` int(11) NOT NULL DEFAULT '0',
+  `created_on` datetime NOT NULL,
+  `updated_on` datetime NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `leader_fav_leader`
+--
+
+CREATE TABLE IF NOT EXISTS `leader_fav_leader` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `leader_profile_id` bigint(20) NOT NULL DEFAULT '0',
+  `friend_leader_profile_id` bigint(20) NOT NULL DEFAULT '0',
+  `fav_on` datetime NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `user_id` (`friend_leader_profile_id`,`leader_profile_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `leader_log`
+--
+
+CREATE TABLE IF NOT EXISTS `leader_log` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `leader_id` bigint(20) NOT NULL,
+  `device_token_id` text NOT NULL,
+  `device_name` text,
+  `device_os` varchar(200) DEFAULT NULL,
+  `longitude` varchar(200) DEFAULT NULL,
+  `lantitude` varchar(200) DEFAULT NULL,
+  `logged_in` datetime NOT NULL,
+  `logged_out` datetime NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `leader_photo`
+--
+
+CREATE TABLE IF NOT EXISTS `leader_photo` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `leader_profile_id` bigint(20) unsigned NOT NULL,
+  `album_id` bigint(20) unsigned NOT NULL,
+  `photo` varchar(255) NOT NULL,
+  `status` int(11) NOT NULL DEFAULT '0',
+  `added_on` datetime NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `leader_profile`
+--
+
+CREATE TABLE IF NOT EXISTS `leader_profile` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `leader_id` bigint(20) NOT NULL,
+  `leader_type` enum('1','2') NOT NULL DEFAULT '1' COMMENT '1=Leader, 2=Subleader',
+  `parent_leader_id` bigint(20) NOT NULL,
+  `leader_role` bigint(20) NOT NULL,
+  `first_name` varchar(255) NOT NULL,
+  `middle_name` varchar(255) NOT NULL,
+  `last_name` varchar(255) NOT NULL,
+  `email` varchar(100) NOT NULL,
+  `device_token` text NOT NULL,
+  `date_of_birth` date NOT NULL,
+  `gender` varchar(50) NOT NULL,
+  `state` varchar(255) NOT NULL,
+  `mobile` varchar(20) NOT NULL,
+  `alt_mobile` varchar(20) NOT NULL,
+  `status` int(11) NOT NULL DEFAULT '0',
+  `image_id` bigint(20) NOT NULL,
+  `cover_image_id` bigint(20) NOT NULL,
+  `created_on` datetime NOT NULL,
+  `updated_on` datetime NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `user_id` (`leader_id`,`parent_leader_id`,`leader_role`,`first_name`,`middle_name`,`last_name`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `messages`
 --
 
 CREATE TABLE IF NOT EXISTS `messages` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `user_id` bigint(20) unsigned NOT NULL,
-  `friend_id` bigint(20) unsigned NOT NULL,
-  `group_id` bigint(20) unsigned NOT NULL,
+  `citizen_id` bigint(20) unsigned NOT NULL,
+  `friend_citizen_id` bigint(20) unsigned NOT NULL,
+  `citizen_group_id` bigint(20) unsigned NOT NULL,
   `message_type` varchar(50) DEFAULT NULL,
   `path` varchar(255) DEFAULT NULL,
   `thumbnail` varchar(255) DEFAULT NULL,
@@ -210,16 +428,38 @@ CREATE TABLE IF NOT EXISTS `messages` (
   `video_length` varchar(200) DEFAULT NULL,
   `message_text` text NOT NULL,
   `sent_on` datetime NOT NULL,
-  `server_added_on` datetime,
+  `server_added_on` datetime NOT NULL,
   `deleted_y_n` int(11) DEFAULT '0',
   `received_on` datetime NOT NULL,
   `seen_on` datetime NOT NULL,
   `received_y_n` int(11) NOT NULL DEFAULT '0',
   `seen_y_n` int(11) NOT NULL DEFAULT '0',
   `firekey` text NOT NULL,
-  `user_deleted_y_n` int(11) NOT NULL DEFAULT '0',
-  `friend_deleted_y_n` int(11) NOT NULL DEFAULT '0',
-  PRIMARY KEY (`id`)
+  `citizen_deleted_y_n` int(11) NOT NULL DEFAULT '0',
+  `friend_citizen_deleted_y_n` int(11) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`),
+  KEY `citizen_id` (`citizen_id`),
+  KEY `citizen_group_id` (`citizen_group_id`),
+  KEY `friend_citizen_id` (`friend_citizen_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `message_group`
+--
+
+CREATE TABLE IF NOT EXISTS `message_group` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `citizen_id` bigint(20) NOT NULL,
+  `group_name` varchar(200) NOT NULL,
+  `group_description` text NOT NULL,
+  `image` varchar(255) NOT NULL,
+  `status` int(11) NOT NULL DEFAULT '0',
+  `created_on` datetime NOT NULL,
+  `updated_on` datetime NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `citizen_id` (`citizen_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
@@ -364,11 +604,11 @@ CREATE TABLE IF NOT EXISTS `user_fav_citizen` (
 
 CREATE TABLE IF NOT EXISTS `user_fav_leader` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `user_id` bigint(20) NOT NULL,
-  `user_profile_id` bigint(20) NOT NULL,
+  `c_profile_id` bigint(20) NOT NULL,
+  `l_profile_id` bigint(20) NOT NULL,
   `fav_on` datetime NOT NULL,
   PRIMARY KEY (`id`),
-  KEY `user_id` (`user_id`,`user_profile_id`)
+  KEY `user_id` (`c_profile_id`,`l_profile_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
@@ -383,16 +623,34 @@ CREATE TABLE IF NOT EXISTS `user_profiles` (
   `user_type` enum('1','2','3') NOT NULL DEFAULT '1' COMMENT '1=Citizen, 2=Leader, 3=Subleader',
   `parent_user_id` bigint(20) NOT NULL,
   `user_role` bigint(20) NOT NULL,
-  `first_name` varchar(50) NOT NULL,
-  `middle_name` varchar(50) NOT NULL,
-  `last_name` varchar(50) NOT NULL,
+  `first_name` varchar(255) NOT NULL,
+  `middle_name` varchar(255) NOT NULL,
+  `last_name` varchar(255) NOT NULL,
+  `email` varchar(100) NOT NULL,
   `created_on` datetime NOT NULL,
   `updated_on` datetime NOT NULL,
   `status` int(11) NOT NULL DEFAULT '0' COMMENT '0=Waiting,1=Active, 2=In-Active, -1=Deleted',
   `device_token` text NOT NULL,
+  `image` varchar(255) NOT NULL,
+  `cover_image` varchar(255) NOT NULL,
+  `date_of_birth` date NOT NULL,
+  `gender` varchar(50) NOT NULL,
+  `state` varchar(255) NOT NULL,
+  `mobile` varchar(20) NOT NULL,
+  `alt_mobile` varchar(20) NOT NULL,
   PRIMARY KEY (`user_profile_id`),
   KEY `user_id` (`user_id`,`parent_user_id`,`user_role`,`first_name`,`middle_name`,`last_name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+
+--
+-- Constraints for dumped tables
+--
+
+--
+-- Constraints for table `citizen_profile`
+--
+ALTER TABLE `citizen_profile`
+  ADD CONSTRAINT `citizen_profile_ibfk_1` FOREIGN KEY (`citizen_id`) REFERENCES `citizen` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;

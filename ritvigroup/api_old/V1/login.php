@@ -31,7 +31,7 @@ if($login_request == "LOGIN_WITH_MPIN") {
 		$error_occured = true;
 	} else {
 
-		$sel_u = "SELECT * FROM `users` WHERE `phone` = '".$mobile."'";
+		$sel_u = "SELECT mpin FROM `users` WHERE `phone` = '".$mobile."'";
 		$exe_u = execute_query($sel_u);
 		$num_u = num_rows($exe_u);
 		if($num_u > 0) {
@@ -48,7 +48,7 @@ if($login_request == "LOGIN_WITH_MPIN") {
 
 		if($error_occured != true) {
 
-			$sel_u = "SELECT * FROM `users` WHERE `phone` = '".$mobile."' AND `mpin` = '".$mpin."'";
+			$sel_u = "SELECT id FROM `users` WHERE `phone` = '".$mobile."' AND `mpin` = '".$mpin."'";
 			$exe_u = execute_query($sel_u);
 			$num_u = num_rows($exe_u);
 			if($num_u > 0) {
@@ -124,7 +124,7 @@ if($login_request == "LOGIN_WITH_MPIN") {
 
 		$login_otp_valid_till = date('Y-m-d H:i:s', time() + 60);
 
-		$sel_u = "SELECT * FROM `users` WHERE `phone` = '".$mobile."'";
+		$sel_u = "SELECT id FROM `users` WHERE `phone` = '".$mobile."'";
 		$exe_u = execute_query($sel_u);
 		$num_u = num_rows($exe_u);
 		if($num_u > 0) {
@@ -176,13 +176,11 @@ if($login_request == "LOGIN_WITH_MPIN") {
 		$error_occured = true;
 	} else {
 
-		//$sel_u = "SELECT * FROM `users` WHERE `phone` = '".$mobile."' AND `login_otp` = '".$otp."'";
-		$sel_u = "SELECT * FROM `users` WHERE `phone` = '".$mobile."'";
+		$sel_u = "SELECT * FROM `users` WHERE `phone` = '".$mobile."' AND `login_otp` = '".$otp."'";
 		$exe_u = execute_query($sel_u);
 		$num_u = num_rows($exe_u);
 		if($num_u > 0) {
-			//$sel_u = "SELECT * FROM `users` WHERE `phone` = '".$mobile."' AND `login_otp` = '".$otp."' AND `login_otp_valid_till` >= '".date("Y-m-d H:i:s")."'";
-			$sel_u = "SELECT * FROM `users` WHERE `phone` = '".$mobile."' AND (`login_otp` = '".$otp."' OR '".$otp."' = '123456')";
+			$sel_u = "SELECT * FROM `users` WHERE `phone` = '".$mobile."' AND (`login_otp` = '".$otp."' OR '".$otp."' = '123456') AND `login_otp_valid_till` >= '".date("Y-m-d H:i:s")."'";
 			$exe_u = execute_query($sel_u);
 			$num_u = num_rows($exe_u);
 			if($num_u > 0) {
@@ -190,10 +188,10 @@ if($login_request == "LOGIN_WITH_MPIN") {
 
 				$user_id 			= $res_u['id'];
 
-				$user_detail['user_profile'] = return_user_detail($res_u);
-
 				$upd_u = "UPDATE `users` SET `login_status`	= '1' WHERE `id` = '".$user_id."'";
 				$exe_u = execute_query($upd_u);
+
+				$user_detail['user_profile'] = return_user_detail($res_u);
 
 				$upd_ud = "INSERT INTO `users_devices` 
 												SET 

@@ -18,8 +18,6 @@ function sendOTPMessage($phoneNumbers) {
 }
 
 
-
-
 function sendPushNotificationAndroid($notification_msg_with_key_array, $friends_device_token_array, $type_of_notification) {
     // prep the bundle
     $msg = array("success" => true, "type" => $type_of_notification, "result" => $notification_msg_with_key_array);
@@ -115,7 +113,7 @@ function return_leader_detail_limited($user_profile_id, $detail_to_show) {
 	$num = num_rows($exe);
 	if($num > 0) {
 		$i = 0;
-		while($res_u = fetch_array($exe)) {
+		while($res_u = fetch_assoc($exe)) {
 
 			foreach($detail_to_show AS $column) {
 				$show_detail = (($res_u[$column] != NULL) ? $res_u[$column] : "");
@@ -143,7 +141,7 @@ function return_admin_detail_limited($user_id, $detail_to_show) {
 	$num = num_rows($exe);
 	if($num > 0) {
 		$i = 0;
-		while($res_u = fetch_array($exe)) {
+		while($res_u = fetch_assoc($exe)) {
 
 			foreach($detail_to_show AS $column) {
 				$show_detail = (($res_u[$column] != NULL) ? $res_u[$column] : "");
@@ -170,7 +168,7 @@ function return_user_detail_limited($user_id, $detail_to_show) {
 	$num = num_rows($exe);
 	if($num > 0) {
 		$i = 0;
-		while($res_u = fetch_array($exe)) {
+		while($res_u = fetch_assoc($exe)) {
 
 			foreach($detail_to_show AS $column) {
 				$show_detail = $res_u[$column];
@@ -189,68 +187,87 @@ function return_user_detail_limited($user_id, $detail_to_show) {
 	return $user_detail;
 }
 
-function return_user_detail($res_u) {
-	$user_id 			= $res_u['id'];
-	$user_profile_id	= $res_u['profile_id'];
-	$user_full_name 	= $res_u['fullname'];
-	$user_image 		= (($res_u['image'] != NULL) ? PROFILE_IMAGE_URL.$res_u['image'] : "");
-	$user_email 		= (($res_u['email'] != NULL) ? $res_u['email'] : "");
-	$user_mobile 		= $res_u['phone'];
-	$user_alt_mobile	= $res_u['alt_mobile'];
-	$user_status 		= $res_u['status'];
-	$user_login_status	= $res_u['login_status'];
-	$user_name 			= (($res_u['username'] != NULL) ? $res_u['username'] : "");
-	$user_phonecountry 	= (($res_u['phonecountry'] != NULL) ? $res_u['phonecountry'] : "");
-	$user_createdon 	= return_time_ago($res_u['created_on']);
-	$user_address 		= (($res_u['address'] != NULL) ? $res_u['address'] : "");
-	$user_city 			= (($res_u['city'] != NULL) ? $res_u['city'] : "");
-	$user_state 		= (($res_u['state'] != NULL && $res_u['state'] != '0') ? $res_u['state'] : "");
-	$user_device_token	= (($res_u['device_token'] != NULL && $res_u['device_token'] != '') ? $res_u['device_token'] : "");
-	$user_date_of_birth	= (($res_u['date_of_birth'] != NULL && $res_u['date_of_birth'] != '') ? $res_u['date_of_birth'] : "");
-	$user_gender		= (($res_u['gender'] != NULL && $res_u['gender'] != '') ? $res_u['gender'] : "");
+function get_citizen_pic_path($profile_pic_id) {
 
-	$detail_to_show = array('user_profile_id', 'user_role', 'first_name', 'middle_name', 'last_name', 'created_on', 'status', 'image', 'mobile', 'alt_mobile');
+	$path = '';
+	$sel_cp = "SELECT `photo` FROM `citizen_photo` WHERE `id` = '".$profile_pic_id."'";
+	$exe_cp = execute_query($sel_cp);
+	$num_cp = num_rows($exe_cp);
+	if($num_cp > 0) {
+		$res_cp = fetch_assoc($exe_cp);
 
-	$user_profiles_array = array();
-	$sel_c = "SELECT * FROM `user_profiles` WHERE `user_id` = '".$user_id."'";
-	$exe_c = execute_query($sel_c);
-	$num_c = num_rows($exe_c);
-	if($num_c > 0) {
-		while($res_c = fetch_array($exe_c)) {
-			if($res_c['user_type'] == '1') {
-				$user_profiles_array['profiles']['c_profile_detail'] = return_leader_detail_limited($res_c['user_profile_id'], $detail_to_show); 
-			} else if($res_c['user_type'] == '2') {
-				$user_profiles_array['profiles']['l_profile_detail'] = return_leader_detail_limited($res_c['user_profile_id'], $detail_to_show); 
-			} else {
-				$user_profiles_array['profiles']['sl_profile_detail'][] = return_leader_detail_limited($res_c['user_profile_id'], $detail_to_show);  
-			}
-		}
+		$path = PROFILE_IMAGE_URL.$res_cp['photo'];
 	}
+	return $path;
+}
+
+function return_citizen_detail($res_u) {
+	$citizen_id 	= $res_u['citizen_id'];
+	$profile_id		= $res_u['profile_id'];
+	$firstname 		= (($res_u['firstname'] != NULL) ? $res_u['firstname'] : "");
+	$middlename 	= (($res_u['middlename'] != NULL) ? $res_u['middlename'] : "");
+	$lastname 		= (($res_u['lastname'] != NULL) ? $res_u['lastname'] : "");
+	$fullname 		= (($res_u['fullname'] != NULL) ? $res_u['fullname'] : "");
+	$email 			= (($res_u['email'] != NULL) ? $res_u['email'] : "");
+	$username 		= (($res_u['username'] != NULL) ? $res_u['username'] : "");
+	$mobile 		= $res_u['mobile'];
+	$alt_mobile		= (($res_u['alt_mobile'] != NULL) ? $res_u['alt_mobile'] : "");
+	$gender 		= $res_u['gender'];
+	$status 		= $res_u['status'];
+	$created_on 	= return_time_ago($res_u['created_on']);
+	$updated_on 	= return_time_ago($res_u['updated_on']);
+	$address 		= (($res_u['address'] != NULL) ? $res_u['address'] : "");
+	$city 			= (($res_u['city'] != NULL) ? $res_u['city'] : "");
+	$state 			= (($res_u['state'] != NULL && $res_u['state'] != '0') ? $res_u['state'] : "");
+	$country 		= (($res_u['country'] != NULL && $res_u['country'] != '0') ? $res_u['country'] : "");
+	$zipcode 		= (($res_u['zipcode'] != NULL && $res_u['zipcode'] != '0') ? $res_u['zipcode'] : "");
+	$about_me 		= (($res_u['about_me'] != NULL && $res_u['about_me'] != '0') ? $res_u['about_me'] : "");
+	$device_token	= (($res_u['device_token'] != NULL && $res_u['device_token'] != '') ? $res_u['device_token'] : "");
+	$date_of_birth	= (($res_u['date_of_birth'] != NULL && $res_u['date_of_birth'] != '') ? $res_u['date_of_birth'] : "");
+	$gender			= (($res_u['gender'] != NULL && $res_u['gender'] != '') ? $res_u['gender'] : "");
+
+
+	$profile_image 		= (($res_u['profile_photo_id'] > 0) ? get_citizen_pic_path($res_u['profile_photo_id']) : "");
+	$cover_image 		= (($res_u['cover_photo_id'] > 0) ? get_citizen_pic_path($res_u['cover_photo_id']) : "");
+
+	$facebook_profile_id 	= (($res_u['facebook_profile_id'] != NULL) ? $res_u['facebook_profile_id'] : "");
+	$google_profile_id 		= (($res_u['google_profile_id'] != NULL) ? $res_u['google_profile_id'] : "");
+	$twitter_profile_id 	= (($res_u['twitter_profile_id'] != NULL) ? $res_u['twitter_profile_id'] : "");
 
 	$user_data_array = array(
-							"user_id" 				=> $user_id,
-							"user_profile_id" 		=> $user_profile_id,
-			               	"user_name" 			=> $user_name,
-			               	"user_full_name" 		=> $user_full_name,
-						   	"user_image" 			=> $user_image,
-						   	"user_email" 			=> $user_email,
-						   	"user_phonecountry" 	=> $user_phonecountry,
-						   	"user_mobile" 			=> $user_mobile,
-						   	"user_alt_mobile" 		=> $user_alt_mobile,
-						   	"user_createdon" 		=> $user_createdon,
-						   	"user_address" 			=> $user_address,
-						   	"user_city" 			=> $user_city,
-						   	"user_state" 			=> $user_state,
-						   	"user_state" 			=> $user_state,
-						   	"user_device_token" 	=> $user_device_token,
-						   	"user_date_of_birth" 	=> $user_date_of_birth,
-						   	"user_gender" 			=> $user_gender,
-						   	"user_login_status" 	=> $user_login_status,
-							);
+							"citizen_id" 		=> $citizen_id,
+							"profile_id" 		=> $profile_id,
+			               	"firstname" 		=> $firstname,
+			               	"middlename" 		=> $middlename,
+						   	"lastname" 			=> $lastname,
+						   	"fullname" 			=> $fullname,
+						   	"email" 			=> $email,
+						   	"username" 			=> $username,
+						   	"mobile" 			=> $mobile,
+						   	"alt_mobile" 		=> $alt_mobile,
+						   	"gender" 			=> $gender,
+						   	"status" 			=> $status,
+						   	"created_on" 		=> $created_on,
+						   	"updated_on" 		=> $updated_on,
+						   	"address" 			=> $address,
+						   	"city" 				=> $city,
+						   	"state" 			=> $state,
+						   	"country" 			=> $country,
+						   	"zipcode" 			=> $zipcode,
+						   	"about_me" 			=> $about_me,
+						   	"device_token" 		=> $device_token,
+						   	"date_of_birth" 	=> $date_of_birth,
+						   	"gender" 			=> $gender,
+						   	
+						   	"profile_image" 	=> $profile_image,
+						   	"cover_image" 		=> $cover_image,
 
-	$array_merge = array_merge($user_data_array, $user_profiles_array);
+						   	"facebook_profile_id" 	=> $facebook_profile_id,
+						   	"google_profile_id" 	=> $google_profile_id,
+						   	"twitter_profile_id" 	=> $twitter_profile_id,
+							);
 	
-	return $array_merge;
+	return $user_data_array;
 }
 
 function return_admin_detail($res_u) {
@@ -292,38 +309,6 @@ function return_admin_detail($res_u) {
 						   	"user_gender" 			=> $user_gender,
 						   	"user_login_status" 	=> $user_login_status,
 							);
-	return $user_data_array;
-}
-
-function return_citizen_detail($res_u) {
-	$user_id 			= $res_u['user_id'];
-	$user_profile_id	= $res_u['user_profile_id'];
-	$user_full_name 	= $res_u['fullname'];
-	$user_image 		= (($res_u['image'] != NULL) ? PROFILE_IMAGE_URL.$res_u['image'] : "");
-	$user_email 		= (($res_u['email'] != NULL) ? $res_u['email'] : "");
-	$user_status 		= $res_u['status'];
-	$user_mobile 		= $res_u['mobile'];
-	$user_alt_mobile	= $res_u['alt_mobile'];
-	$user_createdon 	= return_time_ago($res_u['created_on']);
-	$user_state 		= (($res_u['state'] != NULL && $res_u['state'] != '0') ? $res_u['state'] : "");
-	$user_date_of_birth	= (($res_u['date_of_birth'] != NULL && $res_u['date_of_birth'] != '') ? $res_u['date_of_birth'] : "");
-	$user_gender		= (($res_u['gender'] != NULL && $res_u['gender'] != '') ? $res_u['gender'] : "");
-
-	$user_data_array = array(
-							"user_id" 				=> $user_id,
-							"user_profile_id" 		=> $user_profile_id,
-			               	"user_full_name" 		=> $user_full_name,
-						   	"user_image" 			=> $user_image,
-						   	"user_email" 			=> $user_email,
-						   	"user_mobile" 			=> $user_mobile,
-						   	"user_alt_mobile" 		=> $user_alt_mobile,
-						   	"user_createdon" 		=> $user_createdon,
-						   	"user_status" 			=> $user_status,
-						   	"user_state" 			=> $user_state,
-						   	"user_date_of_birth" 	=> $user_date_of_birth,
-						   	"user_gender" 			=> $user_gender,
-							);
-	
 	return $user_data_array;
 }
 
@@ -402,24 +387,24 @@ function generate_new_complaint_id($length = 8) {
 }
 
 
-function auto_generate_username() {
-	$auto_username = "ritvigroup-".time();
-	$sel = "SELECT * FROM `users` WHERE `username` = '".$auto_username."'";
+function auto_generate_citizen_name() {
+	$auto_username = "kaajneeti".time();
+	$sel = "SELECT `id` FROM `citizen` WHERE `username` = '".$auto_username."'";
 	$exe = execute_query($sel);
 	$num = num_rows($exe);
 	if($num > 0) {
-		auto_generate_username();
+		auto_generate_citizen_name();
 	}
 	return $auto_username;
 }
 
-function auto_generate_profile_id() {
+function auto_generate_citizen_profile_id() {
 	$auto_profile_id = mt_rand().time().rand();
-	$sel = "SELECT * FROM `users` WHERE `profile_id` = '".$auto_profile_id."'";
+	$sel = "SELECT `id` FROM `citizen` WHERE `profile_id` = '".$auto_profile_id."'";
 	$exe = execute_query($sel);
 	$num = num_rows($exe);
 	if($num > 0) {
-		auto_generate_profile_id();
+		auto_generate_citizen_profile_id();
 	}
 	return $auto_profile_id;
 }
@@ -467,19 +452,23 @@ function get_user_device_token($user_id) {
 			$my_user_device_token_list[] = $user_detail['user_device_token'];
 		}
 	}
+	return $my_user_device_token_list;
 }
 
 
-function get_user_detail($user_id) {
+function get_citizen_detail($user_id) {
+
+	$user_detail = array();
 
 	if($user_id > 0) {
-		$sel = "SELECT * FROM `users` WHERE `id` = '".$user_id."'";
+		$sel = "SELECT * FROM `citizen` AS c 
+									LEFT JOIN `citizen_profile` AS cp ON c.id = cp.citizen_id 
+									WHERE 
+										c.`id` = '".$user_id."'";
 		$exe = execute_query($sel);
-		$res = fetch_array($exe);
+		$res = fetch_assoc($exe);
 
-		$user_detail = return_user_detail($res);
-	} else {
-		$user_detail = array();
+		$user_detail = return_citizen_detail($res);
 	}
 	return $user_detail;
 }
@@ -488,7 +477,7 @@ function get_admin_detail($user_id) {
 	if($user_id > 0) {
 		$sel = "SELECT * FROM `admin` WHERE `id` = '".$user_id."'";
 		$exe = execute_query($sel);
-		$res = fetch_array($exe);
+		$res = fetch_assoc($exe);
 
 		$user_detail = return_admin_detail($res);
 	} else {
@@ -498,24 +487,11 @@ function get_admin_detail($user_id) {
 }
 
 
-function get_citizen_detail($c_profile_id) {
-	if($c_profile_id > 0) {
-		$sel = "SELECT * FROM `user_profiles` WHERE `user_profile_id` = '".$c_profile_id."'";
-		$exe = execute_query($sel);
-		$res = fetch_array($exe);
-
-		$user_detail = get_user_detail($res['user_id']);
-	} else {
-		$user_detail = array();
-	}
-	return $user_detail;
-}
-
 function get_leader_detail($l_profile_id) {
 	if($l_profile_id > 0) {
 		$sel = "SELECT * FROM `user_profiles` WHERE `user_profile_id` = '".$l_profile_id."'";
 		$exe = execute_query($sel);
-		$res = fetch_array($exe);
+		$res = fetch_assoc($exe);
 
 		$user_detail = get_user_detail($res['user_id']);
 	} else {
