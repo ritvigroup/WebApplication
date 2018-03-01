@@ -10,6 +10,43 @@ function return_unauthorise_access() {
 	return $array;
 }
 
+
+function create_album_for_citizen($citizen_id, $album_name, $album_description) {
+	$sel_ca = "SELECT `id` FROM `citizen_album` WHERE lower(`name`) = '".strtolower($album_name)."' AND `citizen_id` = '".$citizen_id."'";
+	$exe_ca = execute_query($sel_ca);
+	$num_ca = num_rows($exe_ca);
+	if($num_ca > 0) {
+		$res_ca = fetch_assoc($exe_ca);
+		$album_id = $res_ca['id'];
+	} else {
+		$ins_ca = "INSERT INTO `citizen_album` SET 
+													`citizen_id` 		= '".$citizen_id."',
+													`name` 				= '".$album_name."',
+													`description` 		= '".$album_description."',
+													`created_on` 		= '".date('Y-m-d H:i:s')."',
+													`updated_on` 		= '".date('Y-m-d H:i:s')."',
+													`status` 			= '1'";
+		$exe_ca = execute_query($ins_ca);
+		$album_id = insert_id();
+	}
+	return $album_id;
+}
+
+function insert_citizen_photo($citizen_id, $album_id, $profile_image, $photo_title, $photo_description) {
+	$ins_p = "INSERT INTO `citizen_photo` SET 
+												`citizen_id` 		= '".$citizen_id."',
+												`album_id` 			= '".$album_id."',
+												`photo` 			= '".$profile_image."',
+												`photo_title` 		= '".$photo_title."',
+												`photo_description` = '".$photo_description."',
+												`added_on` 			= '".date('Y-m-d H:i:s')."',
+												`status` 			= '1'";
+	$exe_p = execute_query($ins_p);
+	$photo_id = insert_id();
+
+	return $photo_id;
+
+}
 function get_citizen_home($citizen_id) {
 	$sel_tc = "SELECT COUNT(id) AS `total_complains` FROM `complaint` WHERE `c_added_by` = '".$citizen_id."'";
 	$exe_tc = execute_query($sel_tc);
@@ -390,7 +427,7 @@ function uploads3($upload_path, $source){
 						        'Baz' => '123'
 						    )
 	));
-	return $result;
+	return $result;*/
 
 	$source_exp = explode("/", $source);
 	$new_folder_path = '';
@@ -399,8 +436,9 @@ function uploads3($upload_path, $source){
 		if(!is_dir($new_folder_path)) {
 			@mkdir($new_folder_path, 0777);
 		}
-	}*/
+	}
 }
+
 
 function generate_new_complaint_id($length = 8) {
 	$complaint_id = strtoupper("C".md5(mt_rand().time()));

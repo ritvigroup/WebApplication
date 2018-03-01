@@ -48,18 +48,18 @@ if($request_action == "LOGIN_WITH_SOCIAL") {
 
 		if($error_occured != true) {
 
-			$sel_u = "SELECT id FROM `citizen` WHERE `mobile` = '".$mobile."' AND `mpin` = '".$mpin."'";
+			$sel_u = "SELECT `id`, `status` FROM `citizen` WHERE `mobile` = '".$mobile."' AND `mpin` = '".$mpin."'";
 			$exe_u = execute_query($sel_u);
 			$num_u = num_rows($exe_u);
 			if($num_u > 0) {
 				$res_u = fetch_array($exe_u);
 				if($res_u['status'] == '1') {
-					$user_id 			= $res_u['id'];
+					$citizen_id 			= $res_u['id'];
 					
-					$upd_u = "UPDATE `citizen` SET `login_status`	= '1' WHERE `id` = '".$user_id."'";
+					$upd_u = "UPDATE `citizen` SET `login_status`	= '1' WHERE `id` = '".$citizen_id."'";
 					$exe_u = execute_query($upd_u);
 
-					$user_detail['user_profile'] = get_citizen_detail($user_id);
+					$user_detail['user_profile'] = get_citizen_detail($citizen_id);
 					$msg = "User logged in successfully";
 				} else {
 					$msg = "You are not a valid user. Please send your detail to admin.";
@@ -118,18 +118,18 @@ if($request_action == "LOGIN_WITH_SOCIAL") {
 
 		if($error_occured != true) {
 
-			$sel_u = "SELECT id FROM `citizen` WHERE `mobile` = '".$mobile."' AND `mpin` = '".$mpin."'";
+			$sel_u = "SELECT `id`, `status` FROM `citizen` WHERE `mobile` = '".$mobile."' AND `mpin` = '".$mpin."'";
 			$exe_u = execute_query($sel_u);
 			$num_u = num_rows($exe_u);
 			if($num_u > 0) {
 				$res_u = fetch_array($exe_u);
 				if($res_u['status'] == '1') {
-					$user_id 			= $res_u['id'];
+					$citizen_id 			= $res_u['id'];
 					
-					$upd_u = "UPDATE `citizen` SET `login_status`	= '1' WHERE `id` = '".$user_id."'";
+					$upd_u = "UPDATE `citizen` SET `login_status` = '1' WHERE `id` = '".$citizen_id."'";
 					$exe_u = execute_query($upd_u);
 
-					$user_detail['user_profile'] = get_citizen_detail($user_id);
+					$user_detail['user_profile'] = get_citizen_detail($citizen_id);
 					$msg = "User logged in successfully";
 				} else {
 					$msg = "You are not a valid user. Please send your detail to admin.";
@@ -171,8 +171,6 @@ if($request_action == "LOGIN_WITH_SOCIAL") {
 		$exe_u = execute_query($sel_u);
 		$num_u = num_rows($exe_u);
 		if($num_u > 0) {
-			$res_u 			= fetch_array($exe_u);
-
 			$upd_otp = "UPDATE `citizen` SET 
 											`login_otp` 					= '".$otp."', 
 											`device_token` 					= '".$device_token."', 
@@ -227,16 +225,16 @@ if($request_action == "LOGIN_WITH_SOCIAL") {
 			if($num_u > 0) {
 				$res_u 	= fetch_array($exe_u);
 
-				$user_id = $res_u['id'];
+				$citizen_id = $res_u['id'];
 
-				$upd_u = "UPDATE `citizen` SET `login_status` = '1' WHERE `id` = '".$user_id."'";
+				$upd_u = "UPDATE `citizen` SET `login_status` = '1' WHERE `id` = '".$citizen_id."'";
 				$exe_u = execute_query($upd_u);
 
-				$user_detail['user_profile'] = get_citizen_detail($user_id);
+				$user_detail['user_profile'] = get_citizen_detail($citizen_id);
 
 				$upd_ud = "INSERT INTO `citizen_log` 
 												SET 
-													`citizen_id` 		= '".$user_id."', 
+													`citizen_id` 		= '".$citizen_id."', 
 													`device_token_id` 	= '".$device_token."', 
 													`device_name` 		= '".$device_name."', 
 													`device_os` 		= '".$device_os."', 

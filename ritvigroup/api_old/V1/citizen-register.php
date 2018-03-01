@@ -122,12 +122,12 @@ if($request_action == "REGISTER_MOBILE" || $request_action == "REGENERATE_MOBILE
 			$num_u = num_rows($exe_u);
 			if($num_u > 0) {
 				$res_u 		= fetch_assoc($exe_u);
-				$user_id 	= $res_u['id'];
+				$citizen_id 	= $res_u['id'];
 
-				$upd_u = "UPDATE `citizen` SET `login_status`	= '0' WHERE `id` = '".$user_id."'";
+				$upd_u = "UPDATE `citizen` SET `login_status`	= '0' WHERE `id` = '".$citizen_id."'";
 				$exe_u = execute_query($upd_u);
 
-				$user_detail['user_profile'] = get_citizen_detail($user_id);				
+				$user_detail['user_profile'] = get_citizen_detail($citizen_id);				
 
 			} else {
 				$msg = "Your OTP is expired. Please click regenerate OTP.";
@@ -177,17 +177,17 @@ if($request_action == "REGISTER_MOBILE" || $request_action == "REGENERATE_MOBILE
 		if($num_u > 0) {
 
 			$res_u 		= fetch_assoc($exe_u);
-			$user_id 	= $res_u['id'];
+			$citizen_id 	= $res_u['id'];
 			
-			$upd_u = "UPDATE `citizen` SET `mpin` = '".$mpin."', `login_status`	= '1', `status` = '1' WHERE `id` = '".$user_id."'";
+			$upd_u = "UPDATE `citizen` SET `mpin` = '".$mpin."', `login_status`	= '1', `status` = '1' WHERE `id` = '".$citizen_id."'";
 			$exe_u = execute_query($upd_u);
 
-			$user_detail['user_profile'] = get_citizen_detail($user_id);
+			$user_detail['user_profile'] = get_citizen_detail($citizen_id);
 
 
 			$upd_ud = "INSERT INTO `citizen_log` 
 											SET 
-												`citizen_id` 		= '".$user_id."', 
+												`citizen_id` 		= '".$citizen_id."', 
 												`device_token_id` 	= '".$device_token."', 
 												`device_name` 		= '".$device_name."', 
 												`device_os` 		= '".$device_os."', 
