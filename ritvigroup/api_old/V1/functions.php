@@ -1,6 +1,34 @@
 <?php
 require 'class.qr_barcode.php'; // QR Code Generator
 
+
+function return_unauthorise_access() {
+	$array = array(
+						"status" 		=> 'failed',
+						"message" 		=> 'Unauthourised page access',
+					);
+	return $array;
+}
+
+function get_citizen_home($citizen_id) {
+	$sel_tc = "SELECT COUNT(id) AS `total_complains` FROM `complaint` WHERE `c_added_by` = '".$citizen_id."'";
+	$exe_tc = execute_query($sel_tc);
+	$res_tc = fetch_assoc($exe_tc);
+
+	$sel_ts = "SELECT COUNT(id) AS `total_suggestions` FROM `suggestion` WHERE `c_added_by` = '".$citizen_id."'";
+	$exe_ts = execute_query($sel_ts);
+	$res_ts = fetch_assoc($exe_ts);	
+
+	$citizen_home = array(
+							'complains' 	=> $res_tc['total_complains'],
+							'suggestion' 	=> $res_ts['total_suggestions'],
+							'events' 		=> 0,
+							'my_polls' 		=> 0,
+								);
+	return $citizen_home;
+}
+
+
 function get_auto_generate_code_live_key() {
 	$code = auto_generate_code_live_key();
 	$sel = "SELECT * FROM `live_video` WHERE `live_video_key` = '".$code."'";

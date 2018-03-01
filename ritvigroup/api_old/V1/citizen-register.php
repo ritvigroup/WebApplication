@@ -216,10 +216,7 @@ if($request_action == "REGISTER_MOBILE" || $request_action == "REGENERATE_MOBILE
 		               );
 	}
 } else {
-	$array = array(
-						"status" 		=> 'failed',
-						"message" 		=> 'Unauthourised page access',
-					);
+	$array = return_unauthorise_access();
 }
 echo json_encode($array);
 

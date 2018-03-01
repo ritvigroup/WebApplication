@@ -270,10 +270,7 @@ if($request_action == "LOGIN_WITH_SOCIAL") {
 		               );
 	}
 } else {
-	$array = array(
-						"status" 		=> 'failed',
-						"message" 		=> 'Unauthourised page access',
-					);
+	$array = return_unauthorise_access();
 }
 echo json_encode($array);
 

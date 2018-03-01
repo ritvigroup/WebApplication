@@ -243,10 +243,7 @@ if($request_action == "FORGOT_MPIN_OLD") {
 		               );
 	}
 } else {
-	$array = array(
-						"status" 		=> 'failed',
-						"message" 		=> 'Unauthourised page access',
-					);
+	$array = return_unauthorise_access();
 }
 echo json_encode($array);
 
