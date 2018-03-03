@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Feb 28, 2018 at 10:32 AM
+-- Generation Time: Mar 03, 2018 at 08:35 AM
 -- Server version: 5.6.16
 -- PHP Version: 5.5.9
 
@@ -134,6 +134,8 @@ CREATE TABLE IF NOT EXISTS `citizen_photo` (
   `citizen_id` bigint(20) unsigned NOT NULL,
   `album_id` bigint(20) unsigned NOT NULL,
   `photo` varchar(255) NOT NULL,
+  `photo_title` varchar(255) NOT NULL,
+  `photo_description` text NOT NULL,
   `status` int(11) NOT NULL DEFAULT '0',
   `added_on` datetime NOT NULL,
   PRIMARY KEY (`id`)
@@ -235,6 +237,23 @@ CREATE TABLE IF NOT EXISTS `complaint_assigned_to` (
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `complaint_associated_member`
+--
+
+CREATE TABLE IF NOT EXISTS `complaint_associated_member` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `complaint_id` bigint(20) NOT NULL,
+  `associated_citizen_id` bigint(20) NOT NULL,
+  `associated_status` varchar(100) NOT NULL,
+  `associated_accept_status` int(11) NOT NULL DEFAULT '0',
+  `associated_on` datetime NOT NULL,
+  `associated_accepted_on` datetime NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `complaint_attachment`
 --
 
@@ -244,6 +263,7 @@ CREATE TABLE IF NOT EXISTS `complaint_attachment` (
   `c_type` varchar(20) NOT NULL,
   `c_filename` varchar(200) NOT NULL,
   `c_org_filename` varchar(200) NOT NULL,
+  `c_order` int(11) NOT NULL DEFAULT '0',
   `c_status` int(11) NOT NULL DEFAULT '0',
   `c_added_on` datetime NOT NULL,
   `c_deleted_on` datetime NOT NULL,
@@ -511,6 +531,41 @@ CREATE TABLE IF NOT EXISTS `reports` (
   `report_on` datetime NOT NULL,
   `report_video` bigint(20) NOT NULL,
   `report_user` bigint(20) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `suggestion`
+--
+
+CREATE TABLE IF NOT EXISTS `suggestion` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `suggestion_id` varchar(50) NOT NULL,
+  `c_name` varchar(100) NOT NULL,
+  `c_father_name` varchar(100) NOT NULL,
+  `c_gender` varchar(10) NOT NULL,
+  `c_mobile` varchar(20) NOT NULL,
+  `c_email` varchar(100) NOT NULL,
+  `c_aadhaar_number` varchar(100) NOT NULL,
+  `c_district` varchar(100) NOT NULL,
+  `c_tehsil` varchar(100) NOT NULL,
+  `c_thana` varchar(100) NOT NULL,
+  `c_block` varchar(100) NOT NULL,
+  `c_village_panchayat` varchar(100) NOT NULL,
+  `c_village` varchar(100) NOT NULL,
+  `c_town_area` varchar(100) NOT NULL,
+  `c_ward` varchar(100) NOT NULL,
+  `c_full_address` varchar(200) NOT NULL,
+  `c_department` varchar(100) NOT NULL,
+  `c_subject` varchar(200) NOT NULL,
+  `c_description` text NOT NULL,
+  `c_added_on` datetime NOT NULL,
+  `c_added_by` bigint(20) NOT NULL,
+  `c_updated_on` datetime NOT NULL,
+  `c_updated_by` bigint(20) NOT NULL,
+  `c_status` int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
