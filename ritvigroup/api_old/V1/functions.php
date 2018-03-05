@@ -10,6 +10,11 @@ function return_unauthorise_access() {
 	return $array;
 }
 
+function get_detail_to_show_for_leader() {
+	$detail_to_show = array('lp.leader_id', 'lp.leader_type', 'lp.parent_leader_id', 'lp.leader_role', 'lp.first_name', 'lp.middle_name', 'lp.last_name', 'lp.email', 'lp.date_of_birth', 'lp.gender', 'lp.state', 'lp.mobile', 'lp.alt_mobile', 'lp.image_id', 'lp.cover_image_id', 'lp.created_on', 'lp.updated_on', 'lp.status');
+	return $detail_to_show;
+}
+
 
 function create_album_for_citizen($citizen_id, $album_name, $album_description) {
 	$sel_ca = "SELECT `id` FROM `citizen_album` WHERE lower(`name`) = '".strtolower($album_name)."' AND `citizen_id` = '".$citizen_id."'";
@@ -171,9 +176,14 @@ function save_notifications($action_perform, $description = "", $open_url = "", 
 
 
 
-function return_leader_detail_limited($user_profile_id, $detail_to_show) {
+function return_leader_detail_limited($leader_profile_id, $detail_to_show) {
 	$user_detail = array();
-	$sel = "SELECT ".implode(',', $detail_to_show)." FROM `user_profiles` WHERE `user_profile_id` = '".$user_profile_id."'";
+	$sel = "SELECT ".implode(',', $detail_to_show).", lph_i.photo AS image, lph_c.photo AS cover_image  
+									FROM `leader_profile` AS lp 
+									LEFT JOIN `leader_photo` AS lph_i ON lp.image_id = lph_i.id 
+									LEFT JOIN `leader_photo` AS lph_c ON lp.cover_image_id = lph_c.id
+									 WHERE 
+									 	lp.`id` = '".$leader_profile_id."'";
 	$exe = execute_query($sel);
 	$num = num_rows($exe);
 	if($num > 0) {
@@ -181,15 +191,17 @@ function return_leader_detail_limited($user_profile_id, $detail_to_show) {
 		while($res_u = fetch_assoc($exe)) {
 
 			foreach($detail_to_show AS $column) {
-				$show_detail = (($res_u[$column] != NULL) ? $res_u[$column] : "");
-				if($column == "image") {
+
+				$column_name = str_replace('lp.','', $column);
+				$show_detail = (($res_u[$column_name] != NULL) ? $res_u[$column_name] : "");
+				if($column_name == "image") {
 					$show_detail = (($res_u['image'] != NULL) ? PROFILE_IMAGE_URL.$res_u['image'] : "");
-				} else if($column == "cover_image") {
+				} else if($column_name == "cover_image") {
 					$show_detail = (($res_u['cover_image'] != NULL) ? PROFILE_IMAGE_URL.$res_u['cover_image'] : "");
-				} else if($column == "created_on") {
+				} else if($column_name == "created_on") {
 					$show_detail = return_time_ago($res_u['created_on']);
 				}
-				$user_detail['up_'.$column] = $show_detail;
+				$user_detail['up_'.$column_name] = $show_detail;
 			}
 			$i++;
 		}

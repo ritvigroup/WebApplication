@@ -27,12 +27,19 @@ define('LAST_24_HOUR', date("Y-m-d H:i:s", mktime(date("H"), date("i"), date("s"
 
 if(DEVELOPMENT_MODE != 1) {
     
-    define('WEBSITE_URL', 'http://caprispine.in/ritvigroup.com');
+    define('WEBSITE_URL', 'http://ritvigroup.com/ritvigroup/');
 
     $server_name    = "localhost";
     $server_user    = "caprienn_ritvius";
     $server_pass    = "R0bTEJxxE%R(";
     $server_db      = "caprienn_ritvigroup";
+
+    $server_name    = "localhost";
+    $server_user    = "ritvis32_kuser";
+    $server_pass    = "loLZG!)F($HK";
+    $server_db      = "ritvis32_kaajneeti";
+
+    
 } else {
     $server_name    = "localhost";
     $server_user    = "root";
