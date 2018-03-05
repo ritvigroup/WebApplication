@@ -24,13 +24,12 @@ class Leader extends CI_Controller {
     
     public function index()
     {
-        if(!empty($this->session->userdata('userid')))
+        if(($this->session->userdata('leader_id')) > 0)
         {
             redirect(base_url());
         }
         $this->load->view('leader/login',$data);
     }
-        
     
     public function verify()
 	{
@@ -51,9 +50,49 @@ class Leader extends CI_Controller {
             redirect('leader/login');
         }
     }
-    
 
     public function login(){
+
+        if(($this->session->userdata('leader_id')) > 0)
+        {
+            redirect(base_url());
+        }
+
+        if($this->input->post('request_action') != '') {
+
+            $this->curl->create(API_CALL_PATH.'leader-login.php');
+            $this->curl->option('buffersize', 10);
+            //$this->curl->option('useragent', 'Mozilla/5.0 (Windows; U; Windows NT 6.1; en-US; rv:1.9.2.8) Gecko/20100722 Firefox/3.6.8 (.NET CLR 3.5.30729)');
+
+            $this->curl->option('returntransfer', 1);
+            $this->curl->option('followlocation', 1);
+            $this->curl->option('HEADER', false);
+            $this->curl->option('connecttimeout', 600);
+            $post_data = array(
+                                'request_action' => $this->input->post('request_action'),
+                                'mobile' => $this->input->post('mobile'),
+                                'mpin' => $this->input->post('mpin'),
+                                );
+
+            $this->curl->option('postfields', $post_data);
+            $data = $this->curl->execute();
+
+            $json_decode = json_decode($data);
+
+            header('Content-type: application/json');
+
+            if($json_decode->status == "success") {
+
+                $leader_id = $json_decode->user_detail->user_profile->leader_id;
+                if($leader_id > 0) {
+                    $this->session->set_userdata('leader_id', $leader_id);
+                    
+                }
+            }
+
+            echo $data;
+            return false;
+        }
         $data = array();
         $this->load->view('leader/login',$data);
     }
@@ -67,27 +106,115 @@ class Leader extends CI_Controller {
     public function logout()
 	{
 		$this->session->set_userdata(array(
-			'userid'		=> '',
-			'firstname'      => '',
-			'lastname'      => '',
-			'email'      => '',
-			'wishlist_total'      => '',
-			'product_id'      => '',
-			'product_price'      => '',
-			'cart_total'      => '',
-			'checkout_id'      => ''
+			'leader_id'		=> '',
 		));
             
-		$this->session->unset_userdata('userid');
-		$this->session->unset_userdata('firstname');
-		$this->session->unset_userdata('lastname');
-		$this->session->unset_userdata('email');
-		$this->session->unset_userdata('wishlist_total');
-		$this->session->unset_userdata('product_id');
-		$this->session->unset_userdata('product_price');
-		$this->session->unset_userdata('cart_total');
-		$this->session->unset_userdata('checkout_id');
+		$this->session->unset_userdata('leader_id');
 		$this->session->sess_destroy();
 		redirect('leader/login');
 	}
+
+    public function dashboard() {
+        $data = array();
+        $this->load->view('leader/dashboard',$data);
+    }
+    
+
+    public function profile() {
+        $data = array();
+        $this->load->view('leader/profile',$data);
+    }
+
+    public function team() {
+        $data = array();
+        $this->load->view('leader/team',$data);
+    }
+
+    public function citizen() {
+        $data = array();
+        $this->load->view('leader/citizen',$data);
+    }
+
+    public function chat() {
+        $data = array();
+        $this->load->view('leader/chat',$data);
+    }
+
+    public function call() {
+        $data = array();
+        $this->load->view('leader/call',$data);
+    }
+
+    public function email() {
+        $data = array();
+        $this->load->view('leader/email',$data);
+    }
+
+    public function sms() {
+        $data = array();
+        $this->load->view('leader/sms',$data);
+    }
+
+
+    public function notification() {
+        $data = array();
+        $this->load->view('leader/notification',$data);
+    }
+
+
+    public function livestreaming() {
+        $data = array();
+        $this->load->view('leader/livestreaming',$data);
+    }
+
+    public function event() {
+        $data = array();
+        $this->load->view('leader/event',$data);
+    }
+
+
+    public function issue() {
+        $data = array();
+        $this->load->view('leader/issue',$data);
+    }
+
+
+    public function poll() {
+        $data = array();
+        $this->load->view('leader/poll',$data);
+    }
+
+
+    public function social() {
+        $data = array();
+        $this->load->view('leader/social',$data);
+    }
+
+
+    public function voter_report() {
+        $data = array();
+        $this->load->view('leader/voter_report',$data);
+    }
+
+
+    public function team_report() {
+        $data = array();
+        $this->load->view('leader/team_report',$data);
+    }
+
+    public function geography_report() {
+        $data = array();
+        $this->load->view('leader/geography_report',$data);
+    }
+
+
+    public function setting() {
+        $data = array();
+        $this->load->view('leader/setting',$data);
+    }
+
+    public function switch_profile() {
+        $data = array();
+        $this->load->view('leader/switch_profile',$data);
+    }
 }

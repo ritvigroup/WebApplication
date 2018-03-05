@@ -29,48 +29,47 @@
 </head>
 <body id="signin-page">
 <div class="page-form">
-    <form action="index.html" class="form">
-        <div class="header-content"><h1>Log In</h1></div>
-        <div class="body-content"><p>Log in with a social network:</p>
+    <div class="header-content"><h1>Log In</h1></div>
+    <div class="body-content"><p>Log in with a social network:</p>
 
-            <div class="row mbm text-center">
-                <div class="col-md-4"><a href="#" class="btn btn-sm btn-twitter btn-block"><i
-                        class="fa fa-twitter fa-fw"></i>Twitter</a></div>
-                <div class="col-md-4"><a href="#" class="btn btn-sm btn-facebook btn-block"><i
-                        class="fa fa-facebook fa-fw"></i>Facebook</a></div>
-                <div class="col-md-4"><a href="#" class="btn btn-sm btn-google-plus btn-block"><i
-                        class="fa fa-google-plus fa-fw"></i>Google +</a></div>
+        <div class="row mbm text-center">
+            <div class="col-md-4"><a href="#" class="btn btn-sm btn-twitter btn-block"><i
+                    class="fa fa-twitter fa-fw"></i>Twitter</a></div>
+            <div class="col-md-4"><a href="#" class="btn btn-sm btn-facebook btn-block"><i
+                    class="fa fa-facebook fa-fw"></i>Facebook</a></div>
+            <div class="col-md-4"><a href="#" class="btn btn-sm btn-google-plus btn-block"><i
+                    class="fa fa-google-plus fa-fw"></i>Google +</a></div>
+        </div>
+        <div class="form-group">
+        
+            <label style="color: red;" class="signup_email_error_msg"></label>
+                            
+        </div>
+        <div class="form-group">
+            <div class="input-icon right"><i class="fa fa-user"></i><input type="text" placeholder="Phone Number"
+                                                                           name="mobile" class="form-control signin-mobile">
             </div>
-            <div class="form-group">
-            
-                <label style="color: red;" class="signup_email_error_msg"></label>
-                                
+        </div>
+        <div class="form-group">
+            <div class="input-icon right"><i class="fa fa-key"></i><input type="password" placeholder="Password"
+                                                                          name="mpin" class="form-control signin-mpin">
             </div>
-            <div class="form-group">
-                <div class="input-icon right"><i class="fa fa-user"></i><input type="text" placeholder="Phone Number"
-                                                                               name="mobile" class="form-control signin-mobile">
-                </div>
-            </div>
-            <div class="form-group">
-                <div class="input-icon right"><i class="fa fa-key"></i><input type="password" placeholder="Password"
-                                                                              name="mpin" class="form-control signin-mpin">
-                </div>
-            </div>
-            <div class="form-group pull-left">
-                <div class="checkbox-list"><label><input type="checkbox">&nbsp;
-                    Keep me signed in</label></div>
-            </div>
-            <div class="form-group pull-right">
-                <button type="submit" class="btn btn-success signin_button">Log In
-                    &nbsp;<i class="fa fa-chevron-circle-right"></i></button>
-            </div>
-            <div class="clearfix"></div>
-            <div class="forget-password"><h4>Forgotten MPIN?</h4>
+        </div>
+        <div class="form-group pull-left">
+            <div class="checkbox-list"><label><input type="checkbox">&nbsp;
+                Keep me signed in</label></div>
+        </div>
+        <div class="form-group pull-right">
+            <button type="submit" class="btn btn-success signin_button">Log In
+                &nbsp;<i class="fa fa-chevron-circle-right"></i></button>
+        </div>
+        <div class="clearfix"></div>
+        <div class="forget-password"><h4>Forgotten MPIN?</h4>
 
-                <p>no worries, click <a href='#' class='btn-forgot-pwd'>here</a> to reset your MPIN.</p></div>
-            <hr>
-            <p>Don't have an account? <a id="btn-register" href="<?=base_url();?>leader/register">Register Now</a></p></div>
-    </form>
+            <p>no worries, click <a href='#' class='btn-forgot-pwd'>here</a> to reset your MPIN.</p></div>
+        <hr>
+        <p>Don't have an account? <a id="btn-register" href="<?=base_url();?>leader/register">Register Now</a></p>
+    </div>
 </div>
 <script src="<?php echo base_url(); ?>assets/js/sweetalert-dev.js"></script> 
 <script src="<?php echo base_url(); ?>assets/js/sweetalert.min.js"></script> 
@@ -103,27 +102,28 @@ $('input[type="radio"]').iCheck({
         var signin_mobile = $(".signin-mobile").val();
         var signin_mpin = $(".signin-mpin").val();
 
-        //return false;
 
-        if (signin_mobile.length == 10 && signin_mpin == 4) {
+        if (signin_mobile.length >= 10 && signin_mpin >= 4) {
             //var pattern = /^\b[A-Z0-9._%-]+@[A-Z0-9.-]+\.[A-Z]{2,4}\b$/i;
 
-            $this.button('loading');
+            $this.button('Validating...');
 
-            $.post("<?php echo API_CALL_PATH; ?>leader-login.php", {mobile: signin_mobile, mpin: signin_mpin},
-                    function (data, status) {
-                        if (data === "failed") {
-                            sweetAlert("Oops...", "Mobile Number and MPIN does not matched with our record!", "error");
-                        } else { 
-                            $this.button('reset');
-                            if (data === "success") {
-                                
-                                swal("Congratulations and thank you for joining us!", "You will shortly receive a confirmation email that you need to complete the activation process.", "success");
-                            }
+            $.post("<?php echo base_url(); ?>leader/login", {mobile: signin_mobile, mpin: signin_mpin, request_action: 'LOGIN_WITH_MPIN'},
+                function (data, status) {
+                   
+                    if (data.status === "failed") {
+                        sweetAlert("Oops...", "Mobile Number and MPIN does not matched with our record!", "error");
+                        return false;
+                    } else { 
+                        $this.button('Login');
+                        if (data.status === "success") {
+                            window.location.href="dashboard";
                         }
-                    });
+                    }
+                });
         } else {
-            sweetAlert("Oops...", "Mobile Number and MPIN does not matched with our record!", "error");
+            sweetAlert("Oops...", "Please enter your mobile number and mpin", "error");
+            return false;
         }
     };
 </script> 

@@ -54,7 +54,7 @@
  * NOTE: If you change these, also change the error_reporting() code below
  */
 	define('ENVIRONMENT', isset($_SERVER['CI_ENV']) ? $_SERVER['CI_ENV'] : 'development');
-	define('API_CALL_PATH', 'http://caprispine.in/ritvigroup.com/ritvigroup/api_old/V1/');
+	define('API_CALL_PATH', 'http://ritvigroup.com/ritvigroup.com/ritvigroup/api_old/V1/');
 
 	
 
@@ -70,7 +70,7 @@ switch (ENVIRONMENT)
 {
 	case 'development':
 		error_reporting(-1);
-		ini_set('display_errors', 0);
+		ini_set('display_errors', 1);
 	break;
 
 	case 'testing':

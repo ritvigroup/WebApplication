@@ -36,7 +36,7 @@ if(DEVELOPMENT_MODE != 1) {
 
     $server_name    = "localhost";
     $server_user    = "ritvis32_kuser";
-    $server_pass    = "loLZG!)F($HK";
+    $server_pass    = "8f3l,gT70HBt";
     $server_db      = "ritvis32_kaajneeti";
 
     
