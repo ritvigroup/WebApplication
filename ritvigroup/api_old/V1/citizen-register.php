@@ -15,7 +15,169 @@ $device_os 	  	= real_escape_string($_POST['device_os']);
 $error_occured = false;
 $msg = '';
 
-if($request_action == "REGISTER_MOBILE" || $request_action == "REGENERATE_MOBILE_OTP") {
+if($request_action == "REGISTER_WITH_SOCIAL") {
+	$id 			= real_escape_string($_POST['id']);
+	$name 			= real_escape_string($_POST['name']);
+	$email 			= real_escape_string($_POST['email']);
+	$mobile 		= real_escape_string($_POST['mobile']);
+	$social_type 	= real_escape_string($_POST['social_type']);
+
+	if($id == "") {
+		$msg = "Please select your id";
+		$error_occured = true;
+	} else if($name == "") {
+		$msg = "Please select your name";
+		$error_occured = true;
+	} else {
+
+		if($social_type == "facebook") { // FACEBOOK
+			$sel_u = "SELECT c.`id` FROM `citizen` AS c 
+									LEFT JOIN `citizen_profile` AS cp ON c.id = cp.citizen_id 
+									WHERE 
+										cp.`facebook_profile_id` = '".$id."'";
+		} else if($social_type == "google") { // GOOGLE
+			$sel_u = "SELECT c.`id` FROM `citizen` AS c 
+									LEFT JOIN `citizen_profile` AS cp ON c.id = cp.citizen_id 
+									WHERE 
+										cp.`google_profile_id` = '".$id."'";
+		} else if($social_type == "twitter") { // TWITTER
+			$sel_u = "SELECT c.`id` FROM `citizen` AS c 
+									LEFT JOIN `citizen_profile` AS cp ON c.id = cp.citizen_id 
+									WHERE 
+										cp.`twitter_profile_id` = '".$id."'";
+		}
+		$exe_u = execute_query($sel_u);
+		$num_u = num_rows($exe_u);
+		if($num_u > 0) {
+
+			$res_u = fetch_assoc($exe_u);
+			if($res_u['id'] > 0) {
+				$msg = "You are already registered with us. Please login.";
+				$error_occured = true;
+			}
+		}
+
+		if($mobile != '') {
+			$sel_u = "SELECT mpin FROM `citizen` WHERE `mobile` = '".$mobile."'";
+			$exe_u = execute_query($sel_u);
+			$num_u = num_rows($exe_u);
+			if($num_u > 0) {
+
+				$res_u = fetch_assoc($exe_u);
+				if($res_u['mpin'] > 0) {
+					$msg = "This mobile is already exist in our system. Please login.";
+					$error_occured = true;
+				}
+			}
+		}
+
+		if($email != '') {
+			$sel_u = "SELECT mpin FROM `citizen` WHERE `email` = '".$email."'";
+			$exe_u = execute_query($sel_u);
+			$num_u = num_rows($exe_u);
+			if($num_u > 0) {
+
+				$res_u = fetch_assoc($exe_u);
+				if($res_u['mpin'] > 0) {
+					$msg = "This email is already exist in our system. Please login.";
+					$error_occured = true;
+				}
+			}
+		}
+
+
+		if($error_occured != true) {
+
+			$username = auto_generate_citizen_name();
+			$profile_id = auto_generate_citizen_profile_id();
+
+			$upd_otp = "INSERT INTO `citizen` SET 
+										`login_otp` 			= '".$otp."', 
+										`device_token` 			= '".$device_token."', 
+										`created_on` 			= '".date('Y-m-d H:i:s')."', 
+										`updated_on` 			= '".date('Y-m-d H:i:s')."', 
+										`profile_id` 			= '".$profile_id."', 
+										`mobile` 				= '".$mobile."', 
+										`email` 				= '".$email."', 
+										`username` 				= '".$username."', 
+										`lantitude` 			= '".$location_lant."', 
+										`longitude` 			= '".$location_long."', 
+										`login_status` 			= '1',
+										`status` 				= '1'";
+			$exe_otp = execute_query($upd_otp);
+
+			$citizen_id = insert_id();
+
+			$upd_cp = "INSERT INTO `citizen_profile` SET 
+										`citizen_id` 	= '".$citizen_id."', 
+										`firstname` 	= '".$name."', 
+										`fullname` 		= '".$name."', 
+										`updated_on` 	= '".date('Y-m-d H:i:s')."', 
+										`mobile` 		= '".$mobile."', 
+										`email` 		= '".$email."', 
+										`status` 		= '1'";
+			if($social_type == "facebook") {
+				$upd_cp .= ", `facebook_profile_id`= '".$id."'";
+			} else if($social_type == "google") {
+				$upd_cp .= ", `google_profile_id`= '".$id."'";
+			} else if($social_type == "twitter") {
+				$upd_cp .= ", `twitter_profile_id`= '".$id."'";
+			}
+			$exe_cp = execute_query($upd_cp);
+
+			$profile_file = basename($_FILES['photo']['name']);
+			if($profile_file != '') {
+				$profile_image = date('YmdHisA').'-'.time().'-PROFILE-'.mt_rand().'.'.end(explode('.', $profile_file));
+
+				$path = PROFILE_IMAGE_DIR.$profile_image;
+				$source = $_FILES["photo"]["tmp_name"];
+				$result = uploads3($path, $source);
+
+				// Create album and save that photo
+				$album_id = create_album_for_citizen($citizen_id, 'Profile', 'My Profile');
+
+				$photo_id = insert_citizen_photo($citizen_id, $album_id, $profile_image, $photo_title, $photo_description);
+
+				// Update Citizen Profile Photo id in Profile
+				$upd_user = "UPDATE `citizen_profile` SET 
+											`profile_photo_id` 	= '".$photo_id."',
+											`updated_on` 		= '".date('Y-m-d H:i:s')."' 
+										WHERE 
+											`citizen_id` = '".$citizen_id."'";
+				$exe_user = execute_query($upd_user);
+			}
+
+			$user_detail['user_profile'] = get_citizen_detail($citizen_id);
+
+			$upd_ud = "INSERT INTO `citizen_log` 
+											SET 
+												`citizen_id` 		= '".$citizen_id."', 
+												`device_token_id` 	= '".$device_token."', 
+												`device_name` 		= '".$device_name."', 
+												`device_os` 		= '".$device_os."', 
+												`logged_in` 		= '".date('Y-m-d H:i:s')."', 
+												`lantitude` 		= '".$location_lant."', 
+												`longitude` 		= '".$location_long."'";
+			$exe_ud = execute_query($upd_ud);
+
+			$msg = "Citizen registered successfully.";
+		}
+	}
+
+	if($error_occured == true) {
+		$array = array(
+						"status" 		=> 'failed',
+						"message" 		=> $msg,
+					);
+	} else {
+
+		$array = array(
+		               "status" 		=> 'success',
+					   "message"		=> $msg,
+					   "user_detail" 	=> $user_detail,
+		               );
+	}
+} else if($request_action == "REGISTER_MOBILE" || $request_action == "REGENERATE_MOBILE_OTP") {
 	$mobile 		= real_escape_string($_POST['mobile']);
 	if($mobile == "") {
 		$msg = "Please enter your mobile number";

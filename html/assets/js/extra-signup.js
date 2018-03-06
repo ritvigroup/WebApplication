@@ -11,6 +11,10 @@ $(function()
                 {
                     required: true
                 },
+                mobile:
+                {
+                    required: true,
+                },
                 email:
                 {
                     required: true,
@@ -19,23 +23,25 @@ $(function()
                 password:
                 {
                     required: true,
-                    minlength: 3,
+                    minlength: 6,
                     maxlength: 20
                 },
                 passwordConfirm:
                 {
                     required: true,
-                    minlength: 3,
+                    minlength: 6,
                     maxlength: 20,
                     equalTo: '#password'
                 },
                 firstname:
                 {
-                    required: true
+                    required: true,
+                    minlength: 3
                 },
                 lastname:
                 {
-                    required: true
+                    required: true,
+                    minlength: 3
                 },
                 gender:
                 {
@@ -49,6 +55,10 @@ $(function()
                 login:
                 {
                     required: 'Please enter your login'
+                },
+                mobile:
+                {
+                    required: 'Please enter your mobile number'
                 },
                 email:
                 {

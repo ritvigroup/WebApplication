@@ -534,6 +534,28 @@ function auto_generate_citizen_profile_id() {
 	return $auto_profile_id;
 }
 
+function auto_generate_leader_name() {
+	$auto_username = "kaajneeti-l".time();
+	$sel = "SELECT `id` FROM `leader` WHERE `username` = '".$auto_username."'";
+	$exe = execute_query($sel);
+	$num = num_rows($exe);
+	if($num > 0) {
+		auto_generate_leader_name();
+	}
+	return $auto_username;
+}
+
+function auto_generate_leader_profile_id() {
+	$auto_profile_id = mt_rand().time().rand();
+	$sel = "SELECT `id` FROM `leader` WHERE `profile_id` = '".$auto_profile_id."'";
+	$exe = execute_query($sel);
+	$num = num_rows($exe);
+	if($num > 0) {
+		auto_generate_leader_profile_id();
+	}
+	return $auto_profile_id;
+}
+
 
 function auto_generate_admin_username() {
 	$auto_username = "ritvigroup-".time();
@@ -809,8 +831,12 @@ function auto_generate_code($length = 20) {
 function auto_generate_otp($length = 6) {
 	$digit_chars 	= "0123456789";
 
-	$chars = isset($digit_chars) ? $digit_chars : '';
-    $code = substr( str_shuffle( $chars ), 0, $length );
+	if(DEVELOPMENT_MODE == 0) { 
+		$chars = isset($digit_chars) ? $digit_chars : '';
+	    $code = substr( str_shuffle( $chars ), 0, $length );
+	} else {
+    	$code = "123456";
+    }
     return $code;
 }
 

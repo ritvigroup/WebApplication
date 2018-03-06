@@ -153,6 +153,55 @@ if($request_action == "LOGIN_WITH_SOCIAL") {
 					   "message"			=> $msg,
 		               );
 	}
+} else if($request_action == "LOGIN_WITH_USERNAME_PASSWORD") {
+
+	$user_detail = array();
+	$username 	= real_escape_string($_POST['username']);
+	$password 	= real_escape_string($_POST['password']);
+	if($username == "") {
+		$msg = "Please enter username";
+		$error_occured = true;
+	} else if($password == "") {
+		$msg = "Please enter password";
+		$error_occured = true;
+	} else {
+
+		$sel_u = "SELECT `id`, `status` FROM `leader` WHERE `username` = '".$username."' AND `password` = '".md5($password)."'";
+		$exe_u = execute_query($sel_u);
+		$num_u = num_rows($exe_u);
+		if($num_u > 0) {
+			$res_u = fetch_array($exe_u);
+			if($res_u['status'] == '1') {
+				$leader_id 	= $res_u['id'];
+				
+				$upd_u = "UPDATE `leader` SET `login_status` = '1' WHERE `id` = '".$leader_id."'";
+				$exe_u = execute_query($upd_u);
+
+				$user_detail['user_profile'] = get_leader_detail($leader_id);
+				$msg = "Leader logged in successfully";
+			} else {
+				$msg = "You are not a valid user. Please send your detail to admin.";
+				$error_occured = true;
+			}
+		} else {
+			$msg = "Username or password incorrect";
+			$error_occured = true;
+		}
+	}
+
+	if($error_occured == true) {
+		$array = array(
+						"status" 		=> 'failed',
+						"message" 		=> $msg,
+					);
+	} else {
+
+		$array = array(
+		               "status" 			=> 'success',
+		               "user_detail" 		=> $user_detail,
+					   "message"			=> $msg,
+		               );
+	}
 } else if($request_action == "LOGIN_MOBILE" || $request_action == "REGENERATE_MOBILE_OTP") {
 	$mobile 		= real_escape_string($_POST['mobile']);
 	if($mobile == "") {

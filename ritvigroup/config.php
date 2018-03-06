@@ -15,7 +15,7 @@ ini_set('post_max_size', '256M');
 ini_set('max_input_time', 300);
 ini_set('max_execution_time', 300);*/
 
-define('DEVELOPMENT_MODE', 0); // 1 = Development, 0 = Production
+define('DEVELOPMENT_MODE', 1); // 1 = Development, 0 = Production
 
 define('APP_FOLDER', 'ritvigroup');
 define('API_FOLDER', 'api');
@@ -25,8 +25,9 @@ define('VERSON_FOLDER', 'V1');
 define('LAST_24_HOUR', date("Y-m-d H:i:s", mktime(date("H"), date("i"), date("s"), date("m"), (date("d")-1), date("Y"))));
 
 
-if(DEVELOPMENT_MODE != 1) {
+if(DEVELOPMENT_MODE == 1) {
     
+    // Development
     define('WEBSITE_URL', 'http://ritvigroup.com/ritvigroup/');
 
     $server_name    = "localhost";
@@ -40,7 +41,19 @@ if(DEVELOPMENT_MODE != 1) {
     $server_db      = "ritvis32_kaajneeti";
 
     
+} else if(DEVELOPMENT_MODE == 0) { 
+    
+    // Production
+    define('WEBSITE_URL', 'http://ritvigroup.com/ritvigroup.com/');
+
+    $server_name    = "localhost";
+    $server_user    = "ritvis32_kuser";
+    $server_pass    = "8f3l,gT70HBt";
+    $server_db      = "ritvis32_kaajneeti";
+
 } else {
+
+    // Local
     $server_name    = "localhost";
     $server_user    = "root";
     $server_pass    = "";

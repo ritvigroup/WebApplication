@@ -53,7 +53,7 @@
                     <div class="page-title">Dashboard</div>
                 </div>
                 <ol class="breadcrumb page-breadcrumb pull-left">
-                    <li><i class="fa fa-home"></i>&nbsp;<a href="index.html">Home</a>&nbsp;&nbsp;<i
+                    <li><i class="fa fa-home"></i>&nbsp;<a href="<?=base_url();?>leader/dashboard">Home</a>&nbsp;&nbsp;<i
                             class="fa fa-angle-right"></i>&nbsp;&nbsp;</li>
                     <li class="hidden"><a href="#">Dashboard</a>&nbsp;&nbsp;<i class="fa fa-angle-right"></i>&nbsp;&nbsp;
                     </li>
