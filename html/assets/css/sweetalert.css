@@ -230,10 +230,10 @@ body.stop-scrolling {
       .sweet-alert .sa-icon.sa-error .sa-line {
         position: absolute;
         height: 5px;
-        width: 30px;
+        width: 34px;
         background-color: #F27474;
         display: block;
-        top: 23px;
+        top: 26px;
         border-radius: 2px; }
         .sweet-alert .sa-icon.sa-error .sa-line.sa-left {
           -webkit-transform: rotate(45deg);

@@ -91,8 +91,9 @@ $('input[type="radio"]').iCheck({
                 function (data, status) {
                    
                     if (data.status === "failed") {
-                        //sweetAlert("Oops...", data.message, "error");
-                        swal("Congratulations!", data.message, "success");
+                        sweetAlert("Oops...", data.message, "error");
+                        $(".signin-username").val('');
+                        $(".signin-username").focus();
                         return false;
                     } else { 
                         $this.button('Submit');
