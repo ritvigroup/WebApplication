@@ -28,7 +28,7 @@ define('LAST_24_HOUR', date("Y-m-d H:i:s", mktime(date("H"), date("i"), date("s"
 if(DEVELOPMENT_MODE == 1) {
     
     // Development
-    define('WEBSITE_URL', 'http://ritvigroup.com/ritvigroup/');
+    define('WEBSITE_URL', 'http://ritvigroup.com/ritvigroup.com');
 
     $server_name    = "localhost";
     $server_user    = "caprienn_ritvius";
@@ -44,7 +44,7 @@ if(DEVELOPMENT_MODE == 1) {
 } else if(DEVELOPMENT_MODE == 0) { 
     
     // Production
-    define('WEBSITE_URL', 'http://ritvigroup.com/ritvigroup.com/');
+    define('WEBSITE_URL', 'http://ritvigroup.com/ritvigroup.com');
 
     $server_name    = "localhost";
     $server_user    = "ritvis32_kuser";

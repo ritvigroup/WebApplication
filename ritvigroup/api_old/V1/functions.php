@@ -488,14 +488,16 @@ function uploads3($upload_path, $source){
 	));
 	return $result;*/
 
-	$source_exp = explode("/", $source);
+	$upload_path_exp = explode("/", $upload_path);
 	$new_folder_path = '';
-	for($i = 0; $i < (count($source_exp)); $i++) {
-		$new_folder_path .= $source_exp[$i].'/';
+	for($i = 0; $i < (count($upload_path_exp)); $i++) {
+		$new_folder_path .= $upload_path_exp[$i].'/';
 		if(!is_dir($new_folder_path)) {
 			@mkdir($new_folder_path, 0777);
 		}
 	}
+
+	@move_uploaded_file($source, "../../../".$upload_path);
 }
 
 
@@ -766,6 +768,48 @@ function send_forgot_password_email_for_phone($res_user) {
 }
 
 
+function sendResetPasswordLinkLeader($res_leader) {
+	$headers = "From: Ritvi Group <info@ritvigroup.com>\r\n";
+	$headers .= "MIME-Version: 1.0\r\n";
+	$headers .= "Content-Type: text/html; charset=UTF-8\r\n";
+
+	$subject = "Reset Password Link";
+
+	$code = autoGenerateResetCodeLeader();
+
+	$reset_link = "http://ritvigroup.com/ritvigroup.com/html/leader/resetpassword/".$code;
+
+	$upd = "UPDATE `leader` SET `reset_password_code` = '".$code."' WHERE `id` = '".$res_leader['id']."'";
+	$exe = execute_query($upd);
+
+	$message = "Hi, ".$res_user['first_name'].' '.$res_user['last_name'];
+	$message .= "<br><br>Username:".$res_user['username'];
+	$message .= '<br><br>Please click this <a href="'.$reset_link.'">link</a> to reset your password.';
+	$message .= "<br><br>Note: Please don't reply to this email" ;
+	$message .= '<br><br>Thanks,';
+	$message .= '<br>Ritvi Group';
+	$message .= '<br><br><br>';
+
+	$email = $res_user['email'];
+
+	if(@mail($email, $subject, $message, $headers))
+	{
+		$array = array(
+	            	"status" 	=> 'success',
+	               	"message" 	=> 'Password sent to your email',
+	               	"code" 		=> $code,
+	            );
+
+	} else  {
+		$array = array(
+		               "status" 	=> 'failed',
+		               "message" 	=> 'Error occured. Some problem to send email from our server.',
+		        );
+	}
+	return $array;
+}
+
+
 function send_forgot_password_email($res_user) {
 	$headers = "From: Ritvi Group Application";
 	$headers .= "MIME-Version: 1.0\r\n";
@@ -816,7 +860,7 @@ function generate_password($length = 8) {
     return $password;
 }
 
-function auto_generate_code($length = 20) {
+function auto_generate_code($length = 30) {
 	$small_chars 	= "abcdefghijklmnopqrstuvwxyz";
 	$caps_chars 	= "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 	$digit_chars 	= "0123456789";
@@ -825,6 +869,7 @@ function auto_generate_code($length = 20) {
 	$chars .= isset($caps_chars) ? $caps_chars : '';
 	$chars .= isset($digit_chars) ? $digit_chars : '';
     $code = substr( str_shuffle( $chars ), 0, $length );
+
     return $code;
 }
 
@@ -840,6 +885,25 @@ function auto_generate_otp($length = 6) {
     return $code;
 }
 
+
+function autoGenerateResetCodeLeader($length = 40) {
+	$small_chars 	= "abcdefghijklmnopqrstuvwxyz";
+	$caps_chars 	= "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+	$digit_chars 	= "0123456789";
+
+	$chars = isset($small_chars) ? $small_chars : '';
+	$chars .= isset($caps_chars) ? $caps_chars : '';
+	$chars .= isset($digit_chars) ? $digit_chars : '';
+    $password = substr( str_shuffle( $chars ), 0, $length );
+
+    $sel_r = "SELECT `id` FROM `leader` WHERE `reset_password_code` = '".$password."'";
+    $exe_r = execute_query($sel_r);
+    $num_r = num_rows($exe_r);
+    if($num_r > 0) {
+    	autoGenerateResetCodeLeader();
+    }
+    return $password;
+}
 
 
 

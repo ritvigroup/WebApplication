@@ -126,6 +126,7 @@
         </div>
         <?php } ?>
 
+        <?php /*
         <div class="form-group">
             <div class="input-icon right"><i class="fa fa-user"></i><input type="text" placeholder="Phone Number"
                                                                            name="mobile" class="form-control signin-mobile">
@@ -142,6 +143,7 @@
         </div>
         <div class="clearfix"></div>
         <hr>
+        */ ?>
         <div class="form-group">
             <div class="input-icon right"><i class="fa fa-user"></i><input type="text" placeholder="Username"
                                                                            name="username" class="form-control signin-username">
@@ -159,7 +161,7 @@
         <div class="clearfix"></div>
         <div class="forget-password"><h4>Forgotten MPIN?</h4>
 
-            <p>no worries, click <a href='#' class='btn-forgot-pwd'>here</a> to reset your MPIN.</p></div>
+            <p>no worries, click <a href="<?=base_url();?>leader/forgot" class='btn-forgot-pwd'>here</a> to reset your password.</p></div>
         <hr>
         <p>Don't have an account? <a id="btn-register" href="<?=base_url();?>leader/register">Register Now</a></p>
     </div>
@@ -190,7 +192,7 @@ $('input[type="radio"]').iCheck({
 </script>
 
 <script>
-    document.querySelector('.signin_button').onclick = function () {
+    /*document.querySelector('.signin_button').onclick = function () {
         var $this = $(this);
         var signin_mobile = $(".signin-mobile").val();
         var signin_mpin = $(".signin-mpin").val();
@@ -218,7 +220,7 @@ $('input[type="radio"]').iCheck({
             sweetAlert("Oops...", "Please enter your mobile number and mpin", "error");
             return false;
         }
-    };
+    };*/
 
 
     document.querySelector('.signin_up_button').onclick = function () {
@@ -246,7 +248,7 @@ $('input[type="radio"]').iCheck({
                     }
                 });
         } else {
-            sweetAlert("Oops...", "Please enter your mobile number and mpin", "error");
+            sweetAlert("Oops...", "Please enter your username and password", "error");
             return false;
         }
     };

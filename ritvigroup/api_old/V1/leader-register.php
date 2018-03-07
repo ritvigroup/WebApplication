@@ -224,14 +224,14 @@ if($request_action == "REGISTER_WITH_SOCIAL") {
 		if($num_u > 0) {
 
 			$res_u = fetch_assoc($exe_u);
-			if(strtolower($res_u['username']) == $username) {
-				$msg = "This username is already taken. Please choose another";
-				$error_occured = true;
-			} else if($res_u['email'] == $email) {
+			if($res_u['email'] == $email) {
 				$msg = "This email is already in use. Please choose another";
 				$error_occured = true;
 			} else if($res_u['mobile'] == $mobile) {
 				$msg = "This mobile number is already in use. Please choose another";
+				$error_occured = true;
+			} else if(strtolower($res_u['username']) == $username) {
+				$msg = "This username is already taken. Please choose another";
 				$error_occured = true;
 			}
 		} 

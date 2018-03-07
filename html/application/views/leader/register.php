@@ -153,6 +153,9 @@ $('input[type="radio"]').iCheck({
         } else if (signup_gender == 0) {
             sweetAlert("Oops...", "Please select your gender", "error");
             return false;
+        } else if($('#terms').prop("checked") == false) {
+            sweetAlert("Oops...", "Please select terms and conditions checkbox", "error");
+            return false;
         } else {
 
             $this.button('Validating...');
