@@ -1,0 +1,292 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="9e58f360-3764-4810-b156-77c9db3ffedc" name="Default" comment="">
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/html/application/views/leader/call.php" afterPath="$PROJECT_DIR$/html/application/views/leader/call.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/html/application/views/leader/chat.php" afterPath="$PROJECT_DIR$/html/application/views/leader/chat.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/html/application/views/leader/citizen.php" afterPath="$PROJECT_DIR$/html/application/views/leader/citizen.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/html/application/views/leader/email.php" afterPath="$PROJECT_DIR$/html/application/views/leader/email.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/html/application/views/leader/event.php" afterPath="$PROJECT_DIR$/html/application/views/leader/event.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/html/application/views/leader/geography_report.php" afterPath="$PROJECT_DIR$/html/application/views/leader/geography_report.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/html/application/views/leader/issue.php" afterPath="$PROJECT_DIR$/html/application/views/leader/issue.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/html/application/views/leader/livestreaming.php" afterPath="$PROJECT_DIR$/html/application/views/leader/livestreaming.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/html/application/views/leader/notification.php" afterPath="$PROJECT_DIR$/html/application/views/leader/notification.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/html/application/views/leader/poll.php" afterPath="$PROJECT_DIR$/html/application/views/leader/poll.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/html/application/views/leader/profile.php" afterPath="$PROJECT_DIR$/html/application/views/leader/profile.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/html/application/views/leader/setting.php" afterPath="$PROJECT_DIR$/html/application/views/leader/setting.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/html/application/views/leader/sms.php" afterPath="$PROJECT_DIR$/html/application/views/leader/sms.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/html/application/views/leader/social.php" afterPath="$PROJECT_DIR$/html/application/views/leader/social.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/html/application/views/leader/switch_profile.php" afterPath="$PROJECT_DIR$/html/application/views/leader/switch_profile.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/html/application/views/leader/team.php" afterPath="$PROJECT_DIR$/html/application/views/leader/team.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/html/application/views/leader/team_report.php" afterPath="$PROJECT_DIR$/html/application/views/leader/team_report.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/html/application/views/leader/voter_report.php" afterPath="$PROJECT_DIR$/html/application/views/leader/voter_report.php" />
+    </list>
+    <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
+    <option name="TRACKING_ENABLED" value="true" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileEditorManager">
+    <leaf>
+      <file leaf-file-name="team.php" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/html/application/views/leader/team.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="270">
+              <caret line="208" column="45" lean-forward="false" selection-start-line="208" selection-start-column="45" selection-end-line="208" selection-end-column="45" />
+              <folding>
+                <element signature="e#4069#4506#0#PHP" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="left.php" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/html/application/views/leader/include/left.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="378">
+              <caret line="45" column="126" lean-forward="false" selection-start-line="45" selection-start-column="99" selection-end-line="45" selection-end-column="126" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+    </leaf>
+  </component>
+  <component name="FindInProjectRecents">
+    <findStrings>
+      <find>index.html</find>
+    </findStrings>
+    <replaceStrings>
+      <replace>&lt;?=base_url();?&gt;leader/home</replace>
+    </replaceStrings>
+    <dirStrings>
+      <dir>$PROJECT_DIR$/html/application/views/leader</dir>
+    </dirStrings>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="IdeDocumentHistory">
+    <option name="CHANGED_PATHS">
+      <list>
+        <option value="$PROJECT_DIR$/html/application/views/leader/call.php" />
+        <option value="$PROJECT_DIR$/html/application/views/leader/chat.php" />
+        <option value="$PROJECT_DIR$/html/application/views/leader/citizen.php" />
+        <option value="$PROJECT_DIR$/html/application/views/leader/team.php" />
+      </list>
+    </option>
+  </component>
+  <component name="JsBuildToolGruntFileManager" detection-done="true" sorting="DEFINITION_ORDER" />
+  <component name="JsBuildToolPackageJson" detection-done="true" sorting="DEFINITION_ORDER" />
+  <component name="JsGulpfileManager">
+    <detection-done>true</detection-done>
+    <sorting>DEFINITION_ORDER</sorting>
+  </component>
+  <component name="PhpWorkspaceProjectConfiguration" backward_compatibility_performed="true" />
+  <component name="ProjectFrameBounds" extendedState="6">
+    <option name="x" value="63" />
+    <option name="y" value="43" />
+    <option name="width" value="1293" />
+    <option name="height" value="704" />
+  </component>
+  <component name="ProjectView">
+    <navigator currentView="ProjectPane" proportions="" version="1">
+      <flattenPackages />
+      <showMembers />
+      <showModules />
+      <showLibraryContents />
+      <hideEmptyPackages />
+      <abbreviatePackageNames />
+      <autoscrollToSource />
+      <autoscrollFromSource />
+      <sortByType />
+      <manualOrder />
+      <foldersAlwaysOnTop value="true" />
+    </navigator>
+    <panes>
+      <pane id="ProjectPane">
+        <subPane>
+          <expand>
+            <path>
+              <item name="ritvigroup.com" type="b2602c69:ProjectViewProjectNode" />
+              <item name="ritvigroup.com" type="2a2b976b:PhpTreeStructureProvider$1" />
+            </path>
+            <path>
+              <item name="ritvigroup.com" type="b2602c69:ProjectViewProjectNode" />
+              <item name="ritvigroup.com" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="html" type="2a2b976b:PhpTreeStructureProvider$1" />
+            </path>
+            <path>
+              <item name="ritvigroup.com" type="b2602c69:ProjectViewProjectNode" />
+              <item name="ritvigroup.com" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="html" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="application" type="2a2b976b:PhpTreeStructureProvider$1" />
+            </path>
+            <path>
+              <item name="ritvigroup.com" type="b2602c69:ProjectViewProjectNode" />
+              <item name="ritvigroup.com" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="html" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="application" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="views" type="2a2b976b:PhpTreeStructureProvider$1" />
+            </path>
+            <path>
+              <item name="ritvigroup.com" type="b2602c69:ProjectViewProjectNode" />
+              <item name="ritvigroup.com" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="html" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="application" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="views" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="leader" type="2a2b976b:PhpTreeStructureProvider$1" />
+            </path>
+            <path>
+              <item name="ritvigroup.com" type="b2602c69:ProjectViewProjectNode" />
+              <item name="ritvigroup.com" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="html" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="application" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="views" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="leader" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="include" type="2a2b976b:PhpTreeStructureProvider$1" />
+            </path>
+          </expand>
+          <select />
+        </subPane>
+      </pane>
+      <pane id="Scope" />
+      <pane id="Scratches" />
+    </panes>
+  </component>
+  <component name="PropertiesComponent">
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/html/application/views/leader" />
+  </component>
+  <component name="RunDashboard">
+    <option name="ruleStates">
+      <list>
+        <RuleState>
+          <option name="name" value="ConfigurationTypeDashboardGroupingRule" />
+        </RuleState>
+        <RuleState>
+          <option name="name" value="StatusDashboardGroupingRule" />
+        </RuleState>
+      </list>
+    </option>
+  </component>
+  <component name="ShelveChangesManager" show_recycled="false">
+    <option name="remove_strategy" value="false" />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="9e58f360-3764-4810-b156-77c9db3ffedc" name="Default" comment="" />
+      <created>1520577023686</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1520577023686</updated>
+      <workItem from="1520577029662" duration="1871000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TimeTrackingManager">
+    <option name="totallyTimeSpent" value="1871000" />
+  </component>
+  <component name="ToolWindowManager">
+    <frame x="53" y="-4" width="1313" height="772" extended-state="6" />
+    <layout>
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.22162986" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="true" content_ui="tabs" />
+      <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32882884" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
+      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="true" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
+      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
+      <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+    </layout>
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="1" />
+  </component>
+  <component name="VcsContentAnnotationSettings">
+    <option name="myLimit" value="2678400000" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager />
+    <watches-manager />
+  </component>
+  <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/html/application/views/leader/citizen.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="139">
+          <caret line="49" column="65" lean-forward="false" selection-start-line="49" selection-start-column="65" selection-end-line="49" selection-end-column="65" />
+          <folding>
+            <element signature="e#3248#3254#1#HTML" expanded="true" />
+            <element signature="e#3300#3306#0#HTML" expanded="true" />
+            <element signature="e#3306#3312#0#HTML" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/html/application/views/leader/chat.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="821">
+          <caret line="49" column="75" lean-forward="false" selection-start-line="49" selection-start-column="75" selection-end-line="49" selection-end-column="75" />
+          <folding>
+            <marker date="1520577780249" expanded="false" signature="3367:3373" ph=" " />
+            <marker date="1520577780249" expanded="false" signature="3373:3379" ph=" " />
+            <marker date="1520577780249" expanded="false" signature="3431:3437" ph=" " />
+            <marker date="1520577780249" expanded="false" signature="3437:3443" ph=" " />
+            <marker date="1520577780249" expanded="false" signature="3476:3482" ph=" " />
+            <marker date="1520577780249" expanded="false" signature="3482:3488" ph=" " />
+            <marker date="1520577780249" expanded="false" signature="3654:3660" ph=" " />
+            <marker date="1520577780249" expanded="false" signature="3673:3679" ph=" " />
+            <marker date="1520577780249" expanded="false" signature="3685:3691" ph=" " />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/html/application/views/leader/call.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="821">
+          <caret line="49" column="75" lean-forward="false" selection-start-line="49" selection-start-column="75" selection-end-line="49" selection-end-column="75" />
+          <folding>
+            <marker date="1520577781049" expanded="false" signature="3367:3373" ph=" " />
+            <marker date="1520577781049" expanded="false" signature="3373:3379" ph=" " />
+            <marker date="1520577781049" expanded="false" signature="3431:3437" ph=" " />
+            <marker date="1520577781049" expanded="false" signature="3437:3443" ph=" " />
+            <marker date="1520577781049" expanded="false" signature="3476:3482" ph=" " />
+            <marker date="1520577781049" expanded="false" signature="3482:3488" ph=" " />
+            <marker date="1520577781049" expanded="false" signature="3654:3660" ph=" " />
+            <marker date="1520577781049" expanded="false" signature="3673:3679" ph=" " />
+            <marker date="1520577781049" expanded="false" signature="3685:3691" ph=" " />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/html/application/views/leader/include/left.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="378">
+          <caret line="45" column="126" lean-forward="false" selection-start-line="45" selection-start-column="99" selection-end-line="45" selection-end-column="126" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/html/application/views/leader/team.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="270">
+          <caret line="208" column="45" lean-forward="false" selection-start-line="208" selection-start-column="45" selection-end-line="208" selection-end-column="45" />
+          <folding>
+            <element signature="e#4069#4506#0#PHP" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+  </component>
+</project>

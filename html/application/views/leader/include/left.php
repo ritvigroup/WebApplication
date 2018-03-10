@@ -39,7 +39,7 @@
                 </ul>
             </li>
             */ ?>
-            <li class="<?php if($request_uri['4'] == "team" || $request_uri['4'] == "citizen") {?>active<?php } ?>"><a href="#"><i class="fa fa-desktop fa-fw">
+            <li class="<?php if($request_uri['4'] == "team" || $request_uri['4'] == "newleader" || $request_uri['4'] == "citizen") {?>active<?php } ?>"><a href="#"><i class="fa fa-desktop fa-fw">
                 <div class="icon-bg bg-pink"></div>
             </i><span class="menu-title">Organize</span><span class="fa arrow"></span></a>
                 <ul class="nav nav-second-level">
@@ -59,10 +59,11 @@
                 </ul>
             </li>
 
-            <li class="<?php if($request_uri['4'] == "email" || $request_uri['4'] == "sms" || $request_uri['4'] == "notification" || $request_uri['4'] == "livestreaming" || $request_uri['4'] == "event" || $request_uri['4'] == "issue" || $request_uri['4'] == "poll" || $request_uri['4'] == "social") {?>active<?php } ?>"><a href="#"><i class="fa fa-send-o fa-fw">
+            <li class="<?php if($request_uri['4'] == "complaint" || $request_uri['4'] == "email" || $request_uri['4'] == "sms" || $request_uri['4'] == "notification" || $request_uri['4'] == "livestreaming" || $request_uri['4'] == "event" || $request_uri['4'] == "issue" || $request_uri['4'] == "poll" || $request_uri['4'] == "social") {?>active<?php } ?>"><a href="#"><i class="fa fa-send-o fa-fw">
                 <div class="icon-bg bg-green"></div>
                 </i><span class="menu-title">Broadcast</span><span class="fa arrow"></span></a>
                 <ul class="nav nav-second-level">
+                    <li class="<?php if($request_uri['4'] == "complaint") {?>active<?php } ?>"><a href="<?=base_url();?>leader/complaint"><i class="fa fa-briefcase"></i><span class="submenu-title">Complaint</span></a></li>
                     <li class="<?php if($request_uri['4'] == "email") {?>active<?php } ?>"><a href="<?=base_url();?>leader/email"><i class="fa fa-briefcase"></i><span class="submenu-title">Email</span></a></li>
                     <li class="<?php if($request_uri['4'] == "sms") {?>active<?php } ?>"><a href="<?=base_url();?>leader/sms"><i class="fa fa-briefcase"></i><span class="submenu-title">SMS</span></a></li>
                     <li class="<?php if($request_uri['4'] == "notification") {?>active<?php } ?>"><a href="<?=base_url();?>leader/notification"><i class="fa fa-briefcase"></i><span class="submenu-title">Notification</span></a></li>

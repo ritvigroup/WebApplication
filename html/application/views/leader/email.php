@@ -10,6 +10,7 @@
     <link rel="apple-touch-icon" href="<?=base_url();?>assets/images/icons/favicon.png">
     <link rel="apple-touch-icon" sizes="72x72" href="<?=base_url();?>assets/images/icons/favicon-72x72.png">
     <link rel="apple-touch-icon" sizes="114x114" href="<?=base_url();?>assets/images/icons/favicon-114x114.png">
+    
     <!--Loading bootstrap css-->
     <link type="text/css" rel="stylesheet"
           href="http://fonts.googleapis.com/css?family=Open+Sans:400italic,400,300,700">
@@ -18,6 +19,7 @@
           href="<?=base_url();?>assets/vendors/jquery-ui-1.10.4.custom/css/ui-lightness/jquery-ui-1.10.4.custom.min.css">
     <link type="text/css" rel="stylesheet" href="<?=base_url();?>assets/vendors/font-awesome/css/font-awesome.min.css">
     <link type="text/css" rel="stylesheet" href="<?=base_url();?>assets/vendors/bootstrap/css/bootstrap.min.css">
+    <link type="text/css" rel="stylesheet" href="<?=base_url();?>assets/vendors/bootstrap/css/bootstrap-rtl.min.css">
     <!--LOADING STYLESHEET FOR PAGE--><!--Loading style vendors-->
     <link type="text/css" rel="stylesheet" href="<?=base_url();?>assets/vendors/animate.css/animate.css">
     <link type="text/css" rel="stylesheet" href="<?=base_url();?>assets/vendors/jquery-pace/pace.css">
@@ -28,7 +30,10 @@
     <link type="text/css" rel="stylesheet" href="<?=base_url();?>assets/css/themes/style1/orange-blue.css" class="default-style">
     <link type="text/css" rel="stylesheet" href="<?=base_url();?>assets/css/themes/style1/orange-blue.css" id="theme-change"
           class="style-change color-change">
+    <link type="text/css" rel="stylesheet" href="<?=base_url();?>assets/css/style-rtl.css">
     <link type="text/css" rel="stylesheet" href="<?=base_url();?>assets/css/style-responsive.css">
+    <link type="text/css" rel="stylesheet" href="<?=base_url();?>assets/css/style-responsive-rtl.css">
+
 </head>
 <body class=" ">
 <div>
@@ -47,7 +52,7 @@
                     <div class="page-title">Email</div>
                 </div>
                 <ol class="breadcrumb page-breadcrumb">
-                    <li><i class="fa fa-home"></i>&nbsp;<a href="index.html">Home</a>&nbsp;&nbsp;<i
+                    <li><i class="fa fa-home"></i>&nbsp;<a href="<?=base_url();?>leader/home">Home</a>&nbsp;&nbsp;<i
                             class="fa fa-angle-right"></i>&nbsp;&nbsp;</li>
                     <li><a href="#">Tables</a>&nbsp;&nbsp;<i class="fa fa-angle-right"></i>&nbsp;&nbsp;</li>
                     <li class="active">Email</li>
@@ -61,396 +66,448 @@
             <!--END TITLE & BREADCRUMB PAGE--><!--BEGIN CONTENT-->
             <div class="page-content">
                 <div class="row">
-                    <div class="col-lg-6">
-                        <div class="panel panel-yellow">
-                            <div class="panel-heading">Simple Table</div>
-                            <div class="panel-body">
-                                <table class="table table-hover">
-                                    <thead>
-                                    <tr>
-                                        <th>#</th>
-                                        <th>Username</th>
-                                        <th>Age</th>
-                                        <th>Status</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    <tr>
-                                        <td>1</td>
-                                        <td>Henry</td>
-                                        <td>23</td>
-                                        <td><span class="label label-sm label-success">Approved</span></td>
-                                    </tr>
-                                    <tr>
-                                        <td>2</td>
-                                        <td>John</td>
-                                        <td>45</td>
-                                        <td><span class="label label-sm label-info">Pending</span></td>
-                                    </tr>
-                                    <tr>
-                                        <td>3</td>
-                                        <td>Larry</td>
-                                        <td>30</td>
-                                        <td><span class="label label-sm label-warning">Suspended</span></td>
-                                    </tr>
-                                    <tr>
-                                        <td>4</td>
-                                        <td>Lahm</td>
-                                        <td>15</td>
-                                        <td><span class="label label-sm label-danger">Blocked</span></td>
-                                    </tr>
-                                    </tbody>
-                                </table>
-                            </div>
+                    <div class="col-sm-3 col-md-2">
+                        <div class="btn-group btn-group-sm">
+                            <button type="button" data-toggle="dropdown" class="btn btn-primary dropdown-toggle">Mail
+                                &nbsp;<span class="caret"></span></button>
+                            <ul role="menu" class="dropdown-menu">
+                                <li><a href="#">Mail</a></li>
+                                <li><a href="#">Contacts</a></li>
+                                <li><a href="#">Tasks</a></li>
+                            </ul>
                         </div>
-                        <div class="panel panel-green">
-                            <div class="panel-heading">Bordered Table</div>
-                            <div class="panel-body">
-                                <table class="table table-hover table-bordered">
-                                    <thead>
-                                    <tr>
-                                        <th>#</th>
-                                        <th>Username</th>
-                                        <th>Age</th>
-                                        <th>Status</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    <tr>
-                                        <td>1</td>
-                                        <td>Henry</td>
-                                        <td>23</td>
-                                        <td><span class="label label-sm label-success">Approved</span></td>
-                                    </tr>
-                                    <tr>
-                                        <td>2</td>
-                                        <td>John</td>
-                                        <td>45</td>
-                                        <td><span class="label label-sm label-info">Pending</span></td>
-                                    </tr>
-                                    <tr>
-                                        <td>3</td>
-                                        <td>Larry</td>
-                                        <td>30</td>
-                                        <td><span class="label label-sm label-warning">Suspended</span></td>
-                                    </tr>
-                                    <tr>
-                                        <td>4</td>
-                                        <td>Lahm</td>
-                                        <td>15</td>
-                                        <td><span class="label label-sm label-danger">Blocked</span></td>
-                                    </tr>
-                                    </tbody>
-                                </table>
-                            </div>
+                    </div>
+                    <div class="col-sm-9 col-md-10">
+                        <div class="btn-group">
+                            <button type="button" class="btn btn-default"><input type="checkbox"
+                                                                                 style="margin: 0; vertical-align: middle;"
+                                                                                 class="checkall"/></button>
+                            <button type="button" data-toggle="dropdown" class="btn btn-default dropdown-toggle"><span
+                                    class="caret"></span><span class="sr-only">Toggle Dropdown</span></button>
+                            <ul role="menu" class="dropdown-menu">
+                                <li><a href="#">All</a></li>
+                                <li><a href="#">None</a></li>
+                                <li><a href="#">Read</a></li>
+                                <li><a href="#">Unread</a></li>
+                                <li><a href="#">Starred</a></li>
+                                <li><a href="#">Unstarred</a></li>
+                            </ul>
                         </div>
-                        <div class="panel panel-red">
-                            <div class="panel-heading">Contextual Row</div>
-                            <div class="panel-body">
-                                <table class="table table-hover table-bordered">
-                                    <thead>
-                                    <tr>
-                                        <th>#</th>
-                                        <th>Column</th>
-                                        <th>Column</th>
-                                        <th>Column</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    <tr class="active">
-                                        <td>1</td>
-                                        <td>active</td>
-                                        <td>active</td>
-                                        <td>active</td>
-                                    </tr>
-                                    <tr class="success">
-                                        <td>2</td>
-                                        <td>success</td>
-                                        <td>success</td>
-                                        <td>success</td>
-                                    </tr>
-                                    <tr class="warning">
-                                        <td>3</td>
-                                        <td>warning</td>
-                                        <td>warning</td>
-                                        <td>warning</td>
-                                    </tr>
-                                    <tr class="danger">
-                                        <td>4</td>
-                                        <td>danger</td>
-                                        <td>danger</td>
-                                        <td>danger</td>
-                                    </tr>
-                                    </tbody>
-                                </table>
-                            </div>
+                        <button type="button" data-toggle="tooltip" title="Refresh" class="btn btn-default mls mrs">
+                            <span class="glyphicon glyphicon-refresh"></span></button>
+                        <div class="btn-group">
+                            <button type="button" data-toggle="dropdown" class="btn btn-default dropdown-toggle">More
+                                &nbsp;<span class="caret"></span></button>
+                            <ul role="menu" class="dropdown-menu">
+                                <li><a href="#">Mark all as read</a></li>
+                                <li class="divider"></li>
+                                <li class="text-center pbm">
+                                    <small class="text-muted">Select messages to see more actions</small>
+                                </li>
+                            </ul>
                         </div>
-                        <div class="panel panel-blue">
-                            <div class="panel-heading">Variations Table</div>
-                            <div class="panel-body">
-                                <table class="table table-hover table-bordered">
-                                    <thead>
-                                    <tr>
-                                        <th>#</th>
-                                        <th>Username</th>
-                                        <th>Age</th>
-                                        <th>Status</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    <tr>
-                                        <td>1</td>
-                                        <td>Henry</td>
-                                        <td>23</td>
-                                        <td><span class="label label-sm label-success">Approved</span></td>
-                                    </tr>
-                                    <tr>
-                                        <td>2</td>
-                                        <td>John</td>
-                                        <td>45</td>
-                                        <td><span class="label label-sm label-info">Pending</span></td>
-                                    </tr>
-                                    <tr>
-                                        <td>3</td>
-                                        <td>Larry</td>
-                                        <td>30</td>
-                                        <td><span class="label label-sm label-warning">Suspended</span></td>
-                                    </tr>
-                                    <tr>
-                                        <td>4</td>
-                                        <td>Lahm</td>
-                                        <td>15</td>
-                                        <td><span class="label label-sm label-danger">Blocked</span></td>
-                                    </tr>
-                                    </tbody>
-                                    <tfoot>
-                                    <tr>
-                                        <th></th>
-                                        <th><i>4 People</i></th>
-                                        <th></th>
-                                        <th><i>1 Approved</i></th>
-                                    </tr>
-                                    </tfoot>
-                                </table>
+                        <div class="pull-left"><span class="text-muted"><b>1</b>&nbsp; – &nbsp;<b>50</b>&nbsp; of &nbsp;<b>277</b></span>
+
+                            <div class="btn-group mlm">
+                                <button type="button" class="btn btn-default"><span
+                                        class="glyphicon glyphicon-chevron-right"></span></button>
+                                <button type="button" class="btn btn-default"><span
+                                        class="glyphicon glyphicon-chevron-left"></span></button>
                             </div>
                         </div>
                     </div>
-                    <div class="col-lg-6">
-                        <div class="panel panel-violet">
-                            <div class="panel-heading">Striped Table</div>
-                            <div class="panel-body">
-                                <table class="table table-hover table-striped">
-                                    <thead>
-                                    <tr>
-                                        <th>#</th>
-                                        <th>Username</th>
-                                        <th>Age</th>
-                                        <th>Status</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    <tr>
-                                        <td>1</td>
-                                        <td>Henry</td>
-                                        <td>23</td>
-                                        <td><span class="label label-sm label-success">Approved</span></td>
-                                    </tr>
-                                    <tr>
-                                        <td>2</td>
-                                        <td>John</td>
-                                        <td>45</td>
-                                        <td><span class="label label-sm label-info">Pending</span></td>
-                                    </tr>
-                                    <tr>
-                                        <td>3</td>
-                                        <td>Larry</td>
-                                        <td>30</td>
-                                        <td><span class="label label-sm label-warning">Suspended</span></td>
-                                    </tr>
-                                    <tr>
-                                        <td>4</td>
-                                        <td>Lahm</td>
-                                        <td>15</td>
-                                        <td><span class="label label-sm label-danger">Blocked</span></td>
-                                    </tr>
-                                    </tbody>
-                                </table>
+                </div>
+                <div class="mtl mbl"></div>
+                <div class="row">
+                    <div class="col-sm-3 col-md-2"><a href="#" role="button" class="btn btn-danger btn-sm btn-block">COMPOSE</a>
+
+                        <div class="mtm mbm"></div>
+                        <div class="panel">
+                            <div class="panel-body pan">
+                                <ul style="background: #fff" class="nav nav-pills nav-stacked">
+                                    <li class="active"><a href="#"><span class="badge pull-right">42</span><i
+                                            class="fa fa-inbox fa-fw mrs"></i>Inbox</a></li>
+                                    <li><a href="#"><i class="fa fa-star-o fa-fw mrs"></i>Starred</a></li>
+                                    <li><a href="#"><i class="fa fa-info-circle fa-fw mrs"></i>Important</a></li>
+                                    <li><a href="#"><i class="fa fa-plane fa-fw mrs"></i>Sent Mail</a></li>
+                                    <li><a href="#"><span class="badge badge-orange pull-right">3</span><i
+                                            class="fa fa-edit fa-fw mrs"></i>Drafts</a></li>
+                                </ul>
                             </div>
                         </div>
-                        <div class="panel panel-pink">
-                            <div class="panel-heading">Condensed Table</div>
-                            <div class="panel-body">
-                                <table class="table table-hover table-condensed">
-                                    <thead>
-                                    <tr>
-                                        <th>#</th>
-                                        <th>Username</th>
-                                        <th>Age</th>
-                                        <th>Status</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    <tr>
-                                        <td>1</td>
-                                        <td>Henry</td>
-                                        <td>23</td>
-                                        <td><span class="label label-sm label-success">Approved</span></td>
-                                    </tr>
-                                    <tr>
-                                        <td>2</td>
-                                        <td>John</td>
-                                        <td>45</td>
-                                        <td><span class="label label-sm label-info">Pending</span></td>
-                                    </tr>
-                                    <tr>
-                                        <td>3</td>
-                                        <td>Larry</td>
-                                        <td>30</td>
-                                        <td><span class="label label-sm label-warning">Suspended</span></td>
-                                    </tr>
-                                    <tr>
-                                        <td>4</td>
-                                        <td>Lahm</td>
-                                        <td>15</td>
-                                        <td><span class="label label-sm label-danger">Blocked</span></td>
-                                    </tr>
-                                    </tbody>
-                                </table>
+                        <hr/>
+                        <div class="panel">
+                            <div class="panel-body pan">
+                                <ul style="background: #fff" class="nav nav-pills nav-stacked">
+                                    <li class="active"><a href="#">Buddy Online</a></li>
+                                    <li><a href="#"><i class="fa fa-circle text-yellow pull-right"></i>Home</a></li>
+                                    <li><a href="#"><i class="fa fa-circle text-success pull-right"></i>Work</a></li>
+                                    <li><a href="#"><i class="fa fa-circle text-red pull-right"></i>Family</a></li>
+                                    <li><a href="#"><i class="fa fa-circle text-muted pull-right"></i>Other</a></li>
+                                </ul>
                             </div>
                         </div>
-                        <div class="panel panel-grey">
-                            <div class="panel-heading">Contextual Column</div>
-                            <div class="panel-body">
-                                <table class="table table-hover table-bordered">
-                                    <thead>
-                                    <tr>
-                                        <th>#</th>
-                                        <th>Column</th>
-                                        <th>Column</th>
-                                        <th>Column</th>
-                                        <th>Column</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    <tr>
-                                        <td>1</td>
-                                        <td class="active">active</td>
-                                        <td class="success">success</td>
-                                        <td class="warning">warning</td>
-                                        <td class="danger">danger</td>
-                                    </tr>
-                                    <tr>
-                                        <td>2</td>
-                                        <td class="active">active</td>
-                                        <td class="success">success</td>
-                                        <td class="warning">warning</td>
-                                        <td class="danger">danger</td>
-                                    </tr>
-                                    <tr>
-                                        <td>3</td>
-                                        <td class="active">active</td>
-                                        <td class="success">success</td>
-                                        <td class="warning">warning</td>
-                                        <td class="danger">danger</td>
-                                    </tr>
-                                    <tr>
-                                        <td>4</td>
-                                        <td class="active">active</td>
-                                        <td class="success">success</td>
-                                        <td class="warning">warning</td>
-                                        <td class="danger">danger</td>
-                                    </tr>
-                                    <tr>
-                                        <td>5</td>
-                                        <td class="active">active</td>
-                                        <td class="success">success</td>
-                                        <td class="warning">warning</td>
-                                        <td class="danger">danger</td>
-                                    </tr>
-                                    </tbody>
-                                </table>
+                    </div>
+                    <div class="col-sm-9 col-md-10">
+                        <ul class="nav nav-tabs">
+                            <li class="active"><a href="#home" data-toggle="tab"><span
+                                    class="glyphicon glyphicon-inbox"></span>&nbsp;
+                                Primary</a></li>
+                            <li><a href="#profile" data-toggle="tab"><span class="glyphicon glyphicon-user"></span>&nbsp;
+                                Social</a></li>
+                            <li><a href="#messages" data-toggle="tab"><span class="glyphicon glyphicon-tags"></span>&nbsp;
+                                Promotions</a></li>
+                            <li><a href="#settings" data-toggle="tab"><span class="glyphicon glyphicon-plus man"></span></a>
+                            </li>
+                        </ul>
+                        <div class="tab-content">
+                            <div id="home" class="tab-pane fade in active">
+                                <div class="list-group mail-box"><a href="#" class="list-group-item"><input
+                                        type="checkbox"/><span class="fa fa-star-o mrm mlm"></span><span
+                                        style="min-width: 120px; display: inline-block;"
+                                        class="name">Bhaumik Patel</span><span>Sed ut perspiciatis unde</span>&nbsp; -
+                                    &nbsp;<span style="font-size: 11px;" class="text-muted">Lorem ipsum dolor sit amet, consectetur adipisicing elit</span><span
+                                            class="time-badge">12:10 AM</span><span class="pull-left mll"><span
+                                            class="glyphicon glyphicon-paperclip"></span></span></a><a href="#"
+                                                                                                       class="list-group-item"><input
+                                        type="checkbox"/><span class="fa fa-star-o mrm mlm"></span><span
+                                        style="min-width: 120px; display: inline-block;"
+                                        class="name">Bhaumik Patel</span><span>Sed ut perspiciatis unde</span>&nbsp; -
+                                    &nbsp;<span style="font-size: 11px;" class="text-muted">Lorem ipsum dolor sit amet, consectetur adipisicing elit</span><span
+                                            class="time-badge">12:10 AM</span><span class="pull-left mll"><span
+                                            class="glyphicon glyphicon-paperclip"></span></span></a><a href="#"
+                                                                                                       class="list-group-item"><input
+                                        type="checkbox"/><span class="fa fa-star-o mrm mlm"></span><span
+                                        style="min-width: 120px; display: inline-block;"
+                                        class="name">Bhaumik Patel</span><span>Sed ut perspiciatis unde</span>&nbsp; -
+                                    &nbsp;<span style="font-size: 11px;" class="text-muted">Lorem ipsum dolor sit amet, consectetur adipisicing elit ...</span><span
+                                            class="time-badge">12:10 AM</span><span class="pull-left mll"><span
+                                            class="glyphicon glyphicon-paperclip"></span></span></a><a href="#"
+                                                                                                       class="list-group-item"><input
+                                        type="checkbox"/><span class="fa fa-star-o mrm mlm"></span><span
+                                        style="min-width: 120px; display: inline-block;"
+                                        class="name">Bhaumik Patel</span><span>Sed ut perspiciatis unde</span>&nbsp; -
+                                    &nbsp;<span style="font-size: 11px;" class="text-muted">Lorem ipsum dolor sit amet, consectetur adipisicing elit</span><span
+                                            class="time-badge">12:10 AM</span><span class="pull-left mll"><span
+                                            class="glyphicon glyphicon-paperclip"></span></span></a><a href="#"
+                                                                                                       class="list-group-item"><input
+                                        type="checkbox"/><span class="fa fa-star-o mrm mlm"></span><span
+                                        style="min-width: 120px; display: inline-block;"
+                                        class="name">Bhaumik Patel</span><span>Sed ut perspiciatis unde</span>&nbsp; -
+                                    &nbsp;<span style="font-size: 11px;" class="text-muted">Lorem ipsum dolor sit amet, consectetur adipisicing elit ...</span><span
+                                            class="time-badge">12:10 AM</span><span class="pull-left mll"><span
+                                            class="glyphicon glyphicon-paperclip"></span></span></a><a href="#"
+                                                                                                       class="list-group-item"><input
+                                        type="checkbox"/><span class="fa fa-star-o mrm mlm"></span><span
+                                        style="min-width: 120px; display: inline-block;"
+                                        class="name">Bhaumik Patel</span><span>Sed ut perspiciatis unde</span>&nbsp; -
+                                    &nbsp;<span style="font-size: 11px;" class="text-muted">Lorem ipsum dolor sit amet, consectetur adipisicing elit</span><span
+                                            class="time-badge">12:10 AM</span><span class="pull-left mll"><span
+                                            class="glyphicon glyphicon-paperclip"></span></span></a><a href="#"
+                                                                                                       class="list-group-item"><input
+                                        type="checkbox"/><span class="fa fa-star-o mrm mlm"></span><span
+                                        style="min-width: 120px; display: inline-block;"
+                                        class="name">Bhaumik Patel</span><span>Sed ut perspiciatis unde</span>&nbsp; -
+                                    &nbsp;<span style="font-size: 11px;" class="text-muted">Lorem ipsum dolor sit amet, consectetur adipisicing elit</span><span
+                                            class="time-badge">12:10 AM</span><span class="pull-left mll"><span
+                                            class="glyphicon glyphicon-paperclip"></span></span></a><a href="#"
+                                                                                                       class="list-group-item"><input
+                                        type="checkbox"/><span class="fa fa-star-o mrm mlm"></span><span
+                                        style="min-width: 120px; display: inline-block;"
+                                        class="name">Bhaumik Patel</span><span>Sed ut perspiciatis unde</span>&nbsp; -
+                                    &nbsp;<span style="font-size: 11px;" class="text-muted">Lorem ipsum dolor sit amet, consectetur adipisicing elit</span><span
+                                            class="time-badge">12:10 AM</span><span class="pull-left mll"><span
+                                            class="glyphicon glyphicon-paperclip"></span></span></a><a href="#"
+                                                                                                       class="list-group-item"><input
+                                        type="checkbox"/><span class="fa fa-star-o mrm mlm"></span><span
+                                        style="min-width: 120px; display: inline-block;"
+                                        class="name">Bhaumik Patel</span><span>Sed ut perspiciatis unde</span>&nbsp; -
+                                    &nbsp;<span style="font-size: 11px;" class="text-muted">Lorem ipsum dolor sit amet, consectetur adipisicing elit ...</span><span
+                                            class="time-badge">12:10 AM</span><span class="pull-left mll"><span
+                                            class="glyphicon glyphicon-paperclip"></span></span></a><a href="#"
+                                                                                                       class="list-group-item"><input
+                                        type="checkbox"/><span class="fa fa-star-o mrm mlm"></span><span
+                                        style="min-width: 120px; display: inline-block;"
+                                        class="name">Bhaumik Patel</span><span>Sed ut perspiciatis unde</span>&nbsp; -
+                                    &nbsp;<span style="font-size: 11px;" class="text-muted">Lorem ipsum dolor sit amet, consectetur adipisicing elit</span><span
+                                            class="time-badge">12:10 AM</span><span class="pull-left mll"><span
+                                            class="glyphicon glyphicon-paperclip"></span></span></a><a href="#"
+                                                                                                       class="list-group-item"><input
+                                        type="checkbox"/><span class="fa fa-star-o mrm mlm"></span><span
+                                        style="min-width: 120px; display: inline-block;"
+                                        class="name">Bhaumik Patel</span><span>Sed ut perspiciatis unde</span>&nbsp; -
+                                    &nbsp;<span style="font-size: 11px;" class="text-muted">Lorem ipsum dolor sit amet, consectetur adipisicing elit</span><span
+                                            class="time-badge">12:10 AM</span><span class="pull-left mll"><span
+                                            class="glyphicon glyphicon-paperclip"></span></span></a><a href="#"
+                                                                                                       class="list-group-item"><input
+                                        type="checkbox"/><span class="fa fa-star-o mrm mlm"></span><span
+                                        style="min-width: 120px; display: inline-block;"
+                                        class="name">Bhaumik Patel</span><span>Sed ut perspiciatis unde</span>&nbsp; -
+                                    &nbsp;<span style="font-size: 11px;" class="text-muted">Lorem ipsum dolor sit amet, consectetur adipisicing elit ...</span><span
+                                            class="time-badge">12:10 AM</span><span class="pull-left mll"><span
+                                            class="glyphicon glyphicon-paperclip"></span></span></a></div>
                             </div>
-                        </div>
-                        <div class="panel panel-orange">
-                            <div class="panel-heading">Hover Table - Opion 1</div>
-                            <div class="panel-body">
-                                <table class="table table-hover">
-                                    <thead>
-                                    <tr>
-                                        <th>#</th>
-                                        <th>Username</th>
-                                        <th>Age</th>
-                                        <th>Status</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    <tr>
-                                        <td>1</td>
-                                        <td>Henry</td>
-                                        <td>23</td>
-                                        <td><span class="label label-sm label-success">Approved</span></td>
-                                    </tr>
-                                    <tr>
-                                        <td>2</td>
-                                        <td>John</td>
-                                        <td>45</td>
-                                        <td><span class="label label-sm label-info">Pending</span></td>
-                                    </tr>
-                                    <tr>
-                                        <td>3</td>
-                                        <td>Larry</td>
-                                        <td>30</td>
-                                        <td><span class="label label-sm label-warning">Suspended</span></td>
-                                    </tr>
-                                    <tr>
-                                        <td>4</td>
-                                        <td>Lahm</td>
-                                        <td>15</td>
-                                        <td><span class="label label-sm label-danger">Blocked</span></td>
-                                    </tr>
-                                    </tbody>
-                                </table>
+                            <div id="profile" class="tab-pane fade in">
+                                <div class="list-group mail-box"><a href="#" class="list-group-item"><input
+                                        type="checkbox"/><span class="fa fa-star-o mrm mlm"></span><span
+                                        style="min-width: 120px; display: inline-block;"
+                                        class="name">Bhaumik Patel</span><span>Sed ut perspiciatis unde</span>&nbsp; -
+                                    &nbsp;<span style="font-size: 11px;" class="text-muted">Lorem ipsum dolor sit amet, consectetur adipisicing elit</span><span
+                                            class="time-badge">12:10 AM</span><span class="pull-left mll"><span
+                                            class="glyphicon glyphicon-paperclip"></span></span></a><a href="#"
+                                                                                                       class="list-group-item"><input
+                                        type="checkbox"/><span class="fa fa-star-o mrm mlm"></span><span
+                                        style="min-width: 120px; display: inline-block;"
+                                        class="name">Bhaumik Patel</span><span>Sed ut perspiciatis unde</span>&nbsp; -
+                                    &nbsp;<span style="font-size: 11px;"
+                                                class="text-muted">Lorem ipsum dolor sit amet</span><span
+                                            class="time-badge">12:10 AM</span><span class="pull-left mll"><span
+                                            class="glyphicon glyphicon-paperclip"></span></span></a><a href="#"
+                                                                                                       class="list-group-item"><input
+                                        type="checkbox"/><span class="fa fa-star-o mrm mlm"></span><span
+                                        style="min-width: 120px; display: inline-block;"
+                                        class="name">Bhaumik Patel</span><span>Sed ut perspiciatis unde</span>&nbsp; -
+                                    &nbsp;<span style="font-size: 11px;" class="text-muted">Lorem ipsum dolor sit amet, consectetur adipisicing elit ...</span><span
+                                            class="time-badge">12:10 AM</span><span class="pull-left mll"><span
+                                            class="glyphicon glyphicon-paperclip"></span></span></a><a href="#"
+                                                                                                       class="list-group-item"><input
+                                        type="checkbox"/><span class="fa fa-star-o mrm mlm"></span><span
+                                        style="min-width: 120px; display: inline-block;"
+                                        class="name">Bhaumik Patel</span><span>Sed ut perspiciatis unde</span>&nbsp; -
+                                    &nbsp;<span style="font-size: 11px;" class="text-muted">Lorem ipsum dolor sit amet, consectetur adipisicing elit</span><span
+                                            class="time-badge">12:10 AM</span><span class="pull-left mll"><span
+                                            class="glyphicon glyphicon-paperclip"></span></span></a><a href="#"
+                                                                                                       class="list-group-item"><input
+                                        type="checkbox"/><span class="fa fa-star-o mrm mlm"></span><span
+                                        style="min-width: 120px; display: inline-block;"
+                                        class="name">Bhaumik Patel</span><span>Sed ut perspiciatis unde</span>&nbsp; -
+                                    &nbsp;<span style="font-size: 11px;" class="text-muted">Lorem ipsum dolor sit amet, consectetur adipisicing elit</span><span
+                                            class="time-badge">12:10 AM</span><span class="pull-left mll"><span
+                                            class="glyphicon glyphicon-paperclip"></span></span></a><a href="#"
+                                                                                                       class="list-group-item"><input
+                                        type="checkbox"/><span class="fa fa-star-o mrm mlm"></span><span
+                                        style="min-width: 120px; display: inline-block;"
+                                        class="name">Bhaumik Patel</span><span>Sed ut perspiciatis unde</span>&nbsp; -
+                                    &nbsp;<span style="font-size: 11px;" class="text-muted">Lorem ipsum dolor sit amet, consectetur adipisicing elit</span><span
+                                            class="time-badge">12:10 AM</span><span class="pull-left mll"><span
+                                            class="glyphicon glyphicon-paperclip"></span></span></a><a href="#"
+                                                                                                       class="list-group-item"><input
+                                        type="checkbox"/><span class="fa fa-star-o mrm mlm"></span><span
+                                        style="min-width: 120px; display: inline-block;"
+                                        class="name">Bhaumik Patel</span><span>Sed ut perspiciatis unde</span>&nbsp; -
+                                    &nbsp;<span style="font-size: 11px;" class="text-muted">Lorem ipsum dolor sit amet, consectetur adipisicing elit</span><span
+                                            class="time-badge">12:10 AM</span><span class="pull-left mll"><span
+                                            class="glyphicon glyphicon-paperclip"></span></span></a><a href="#"
+                                                                                                       class="list-group-item"><input
+                                        type="checkbox"/><span class="fa fa-star-o mrm mlm"></span><span
+                                        style="min-width: 120px; display: inline-block;"
+                                        class="name">Bhaumik Patel</span><span>Sed ut perspiciatis unde</span>&nbsp; -
+                                    &nbsp;<span style="font-size: 11px;"
+                                                class="text-muted">Lorem ipsum dolor sit amet</span><span
+                                            class="time-badge">12:10 AM</span><span class="pull-left mll"><span
+                                            class="glyphicon glyphicon-paperclip"></span></span></a><a href="#"
+                                                                                                       class="list-group-item"><input
+                                        type="checkbox"/><span class="fa fa-star-o mrm mlm"></span><span
+                                        style="min-width: 120px; display: inline-block;"
+                                        class="name">Bhaumik Patel</span><span>Sed ut perspiciatis unde</span>&nbsp; -
+                                    &nbsp;<span style="font-size: 11px;" class="text-muted">Lorem ipsum dolor sit amet, consectetur adipisicing elit</span><span
+                                            class="time-badge">12:10 AM</span><span class="pull-left mll"><span
+                                            class="glyphicon glyphicon-paperclip"></span></span></a><a href="#"
+                                                                                                       class="list-group-item"><input
+                                        type="checkbox"/><span class="fa fa-star-o mrm mlm"></span><span
+                                        style="min-width: 120px; display: inline-block;"
+                                        class="name">Bhaumik Patel</span><span>Sed ut perspiciatis unde</span>&nbsp; -
+                                    &nbsp;<span style="font-size: 11px;" class="text-muted">Lorem ipsum dolor sit amet, consectetur adipisicing elit</span><span
+                                            class="time-badge">12:10 AM</span><span class="pull-left mll"><span
+                                            class="glyphicon glyphicon-paperclip"></span></span></a><a href="#"
+                                                                                                       class="list-group-item"><input
+                                        type="checkbox"/><span class="fa fa-star-o mrm mlm"></span><span
+                                        style="min-width: 120px; display: inline-block;"
+                                        class="name">Bhaumik Patel</span><span>Sed ut perspiciatis unde</span>&nbsp; -
+                                    &nbsp;<span style="font-size: 11px;" class="text-muted">Lorem ipsum dolor sit amet, consectetur adipisicing elit</span><span
+                                            class="time-badge">12:10 AM</span><span class="pull-left mll"><span
+                                            class="glyphicon glyphicon-paperclip"></span></span></a><a href="#"
+                                                                                                       class="list-group-item"><input
+                                        type="checkbox"/><span class="fa fa-star-o mrm mlm"></span><span
+                                        style="min-width: 120px; display: inline-block;"
+                                        class="name">Bhaumik Patel</span><span>Sed ut perspiciatis unde</span>&nbsp; -
+                                    &nbsp;<span style="font-size: 11px;" class="text-muted">Lorem ipsum dolor sit amet, consectetur adipisicing elit ...</span><span
+                                            class="time-badge">12:10 AM</span><span class="pull-left mll"><span
+                                            class="glyphicon glyphicon-paperclip"></span></span></a></div>
                             </div>
-                        </div>
-                        <div class="panel panel-green">
-                            <div class="panel-heading">Hover Table - Opion 2</div>
-                            <div class="panel-body">
-                                <table class="table table-hover-color">
-                                    <thead>
-                                    <tr>
-                                        <th>#</th>
-                                        <th>Username</th>
-                                        <th>Age</th>
-                                        <th>Status</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    <tr>
-                                        <td>1</td>
-                                        <td>Henry</td>
-                                        <td>23</td>
-                                        <td><span class="label label-sm label-success">Approved</span></td>
-                                    </tr>
-                                    <tr>
-                                        <td>2</td>
-                                        <td>John</td>
-                                        <td>45</td>
-                                        <td><span class="label label-sm label-info">Pending</span></td>
-                                    </tr>
-                                    <tr>
-                                        <td>3</td>
-                                        <td>Larry</td>
-                                        <td>30</td>
-                                        <td><span class="label label-sm label-warning">Suspended</span></td>
-                                    </tr>
-                                    <tr>
-                                        <td>4</td>
-                                        <td>Lahm</td>
-                                        <td>15</td>
-                                        <td><span class="label label-sm label-danger">Blocked</span></td>
-                                    </tr>
-                                    </tbody>
-                                </table>
+                            <div id="messages" class="tab-pane fade in">
+                                <div class="list-group mail-box"><a href="#" class="list-group-item"><input
+                                        type="checkbox"/><span class="fa fa-star-o mrm mlm"></span><span
+                                        style="min-width: 120px; display: inline-block;"
+                                        class="name">Bhaumik Patel</span><span>Sed ut perspiciatis unde</span>&nbsp; -
+                                    &nbsp;<span style="font-size: 11px;" class="text-muted">Lorem ipsum dolor sit amet, consectetur adipisicing elit</span><span
+                                            class="time-badge">12:10 AM</span><span class="pull-left mll"><span
+                                            class="glyphicon glyphicon-paperclip"></span></span></a><a href="#"
+                                                                                                       class="list-group-item"><input
+                                        type="checkbox"/><span class="fa fa-star-o mrm mlm"></span><span
+                                        style="min-width: 120px; display: inline-block;"
+                                        class="name">Bhaumik Patel</span><span>Sed ut perspiciatis unde</span>&nbsp; -
+                                    &nbsp;<span style="font-size: 11px;" class="text-muted">Lorem ipsum dolor sit amet, consectetur adipisicing elit</span><span
+                                            class="time-badge">12:10 AM</span><span class="pull-left mll"><span
+                                            class="glyphicon glyphicon-paperclip"></span></span></a><a href="#"
+                                                                                                       class="list-group-item"><input
+                                        type="checkbox"/><span class="fa fa-star-o mrm mlm"></span><span
+                                        style="min-width: 120px; display: inline-block;"
+                                        class="name">Bhaumik Patel</span><span>Sed ut perspiciatis unde</span>&nbsp; -
+                                    &nbsp;<span style="font-size: 11px;"
+                                                class="text-muted">Lorem ipsum dolor sit amet</span><span
+                                            class="time-badge">12:10 AM</span><span class="pull-left mll"><span
+                                            class="glyphicon glyphicon-paperclip"></span></span></a><a href="#"
+                                                                                                       class="list-group-item"><input
+                                        type="checkbox"/><span class="fa fa-star-o mrm mlm"></span><span
+                                        style="min-width: 120px; display: inline-block;"
+                                        class="name">Bhaumik Patel</span><span>Sed ut perspiciatis unde</span>&nbsp; -
+                                    &nbsp;<span style="font-size: 11px;" class="text-muted">Lorem ipsum dolor sit amet, consectetur adipisicing elit</span><span
+                                            class="time-badge">12:10 AM</span><span class="pull-left mll"><span
+                                            class="glyphicon glyphicon-paperclip"></span></span></a><a href="#"
+                                                                                                       class="list-group-item"><input
+                                        type="checkbox"/><span class="fa fa-star-o mrm mlm"></span><span
+                                        style="min-width: 120px; display: inline-block;"
+                                        class="name">Bhaumik Patel</span><span>Sed ut perspiciatis unde</span>&nbsp; -
+                                    &nbsp;<span style="font-size: 11px;" class="text-muted">Lorem ipsum dolor sit amet, consectetur adipisicing elit</span><span
+                                            class="time-badge">12:10 AM</span><span class="pull-left mll"><span
+                                            class="glyphicon glyphicon-paperclip"></span></span></a><a href="#"
+                                                                                                       class="list-group-item"><input
+                                        type="checkbox"/><span class="fa fa-star-o mrm mlm"></span><span
+                                        style="min-width: 120px; display: inline-block;"
+                                        class="name">Bhaumik Patel</span><span>Sed ut perspiciatis unde</span>&nbsp; -
+                                    &nbsp;<span style="font-size: 11px;" class="text-muted">Lorem ipsum dolor sit amet, consectetur adipisicing elit ...</span><span
+                                            class="time-badge">12:10 AM</span><span class="pull-left mll"><span
+                                            class="glyphicon glyphicon-paperclip"></span></span></a><a href="#"
+                                                                                                       class="list-group-item"><input
+                                        type="checkbox"/><span class="fa fa-star-o mrm mlm"></span><span
+                                        style="min-width: 120px; display: inline-block;"
+                                        class="name">Bhaumik Patel</span><span>Sed ut perspiciatis unde</span>&nbsp; -
+                                    &nbsp;<span style="font-size: 11px;" class="text-muted">Lorem ipsum dolor sit amet, consectetur adipisicing elit</span><span
+                                            class="time-badge">12:10 AM</span><span class="pull-left mll"><span
+                                            class="glyphicon glyphicon-paperclip"></span></span></a><a href="#"
+                                                                                                       class="list-group-item"><input
+                                        type="checkbox"/><span class="fa fa-star-o mrm mlm"></span><span
+                                        style="min-width: 120px; display: inline-block;"
+                                        class="name">Bhaumik Patel</span><span>Sed ut perspiciatis unde</span>&nbsp; -
+                                    &nbsp;<span style="font-size: 11px;" class="text-muted">Lorem ipsum dolor sit amet, consectetur adipisicing elit</span><span
+                                            class="time-badge">12:10 AM</span><span class="pull-left mll"><span
+                                            class="glyphicon glyphicon-paperclip"></span></span></a><a href="#"
+                                                                                                       class="list-group-item"><input
+                                        type="checkbox"/><span class="fa fa-star-o mrm mlm"></span><span
+                                        style="min-width: 120px; display: inline-block;"
+                                        class="name">Bhaumik Patel</span><span>Sed ut perspiciatis unde</span>&nbsp; -
+                                    &nbsp;<span style="font-size: 11px;" class="text-muted">Lorem ipsum dolor sit amet, consectetur adipisicing elit ...</span><span
+                                            class="time-badge">12:10 AM</span><span class="pull-left mll"><span
+                                            class="glyphicon glyphicon-paperclip"></span></span></a><a href="#"
+                                                                                                       class="list-group-item"><input
+                                        type="checkbox"/><span class="fa fa-star-o mrm mlm"></span><span
+                                        style="min-width: 120px; display: inline-block;"
+                                        class="name">Bhaumik Patel</span><span>Sed ut perspiciatis unde</span>&nbsp; -
+                                    &nbsp;<span style="font-size: 11px;" class="text-muted">Lorem ipsum dolor sit amet, consectetur adipisicing elit</span><span
+                                            class="time-badge">12:10 AM</span><span class="pull-left mll"><span
+                                            class="glyphicon glyphicon-paperclip"></span></span></a><a href="#"
+                                                                                                       class="list-group-item"><input
+                                        type="checkbox"/><span class="fa fa-star-o mrm mlm"></span><span
+                                        style="min-width: 120px; display: inline-block;"
+                                        class="name">Bhaumik Patel</span><span>Sed ut perspiciatis unde</span>&nbsp; -
+                                    &nbsp;<span style="font-size: 11px;" class="text-muted">Lorem ipsum dolor sit amet, consectetur adipisicing elit</span><span
+                                            class="time-badge">12:10 AM</span><span class="pull-left mll"><span
+                                            class="glyphicon glyphicon-paperclip"></span></span></a><a href="#"
+                                                                                                       class="list-group-item"><input
+                                        type="checkbox"/><span class="fa fa-star-o mrm mlm"></span><span
+                                        style="min-width: 120px; display: inline-block;"
+                                        class="name">Bhaumik Patel</span><span>Sed ut perspiciatis unde</span>&nbsp; -
+                                    &nbsp;<span style="font-size: 11px;" class="text-muted">Lorem ipsum dolor sit amet, consectetur adipisicing elit ...</span><span
+                                            class="time-badge">12:10 AM</span><span class="pull-left mll"><span
+                                            class="glyphicon glyphicon-paperclip"></span></span></a></div>
+                            </div>
+                            <div id="settings" class="tab-pane fade in">
+                                <div class="list-group mail-box"><a href="#" class="list-group-item"><input
+                                        type="checkbox"/><span class="fa fa-star-o mrm mlm"></span><span
+                                        style="min-width: 120px; display: inline-block;"
+                                        class="name">Bhaumik Patel</span><span>Sed ut perspiciatis unde</span>&nbsp; -
+                                    &nbsp;<span style="font-size: 11px;" class="text-muted">Lorem ipsum dolor sit amet, consectetur adipisicing elit</span><span
+                                            class="time-badge">12:10 AM</span><span class="pull-left mll"><span
+                                            class="glyphicon glyphicon-paperclip"></span></span></a><a href="#"
+                                                                                                       class="list-group-item"><input
+                                        type="checkbox"/><span class="fa fa-star-o mrm mlm"></span><span
+                                        style="min-width: 120px; display: inline-block;"
+                                        class="name">Bhaumik Patel</span><span>Sed ut perspiciatis unde</span>&nbsp; -
+                                    &nbsp;<span style="font-size: 11px;"
+                                                class="text-muted">Lorem ipsum dolor sit amet</span><span
+                                            class="time-badge">12:10 AM</span><span class="pull-left mll"><span
+                                            class="glyphicon glyphicon-paperclip"></span></span></a><a href="#"
+                                                                                                       class="list-group-item"><input
+                                        type="checkbox"/><span class="fa fa-star-o mrm mlm"></span><span
+                                        style="min-width: 120px; display: inline-block;"
+                                        class="name">Bhaumik Patel</span><span>Sed ut perspiciatis unde</span>&nbsp; -
+                                    &nbsp;<span style="font-size: 11px;" class="text-muted">Lorem ipsum dolor sit amet, consectetur adipisicing elit</span><span
+                                            class="time-badge">12:10 AM</span><span class="pull-left mll"><span
+                                            class="glyphicon glyphicon-paperclip"></span></span></a><a href="#"
+                                                                                                       class="list-group-item"><input
+                                        type="checkbox"/><span class="fa fa-star-o mrm mlm"></span><span
+                                        style="min-width: 120px; display: inline-block;"
+                                        class="name">Bhaumik Patel</span><span>Sed ut perspiciatis unde</span>&nbsp; -
+                                    &nbsp;<span style="font-size: 11px;" class="text-muted">Lorem ipsum dolor sit amet, consectetur adipisicing elit</span><span
+                                            class="time-badge">12:10 AM</span><span class="pull-left mll"><span
+                                            class="glyphicon glyphicon-paperclip"></span></span></a><a href="#"
+                                                                                                       class="list-group-item"><input
+                                        type="checkbox"/><span class="fa fa-star-o mrm mlm"></span><span
+                                        style="min-width: 120px; display: inline-block;"
+                                        class="name">Bhaumik Patel</span><span>Sed ut perspiciatis unde</span>&nbsp; -
+                                    &nbsp;<span style="font-size: 11px;" class="text-muted">Lorem ipsum dolor sit amet, consectetur adipisicing elit</span><span
+                                            class="time-badge">12:10 AM</span><span class="pull-left mll"><span
+                                            class="glyphicon glyphicon-paperclip"></span></span></a><a href="#"
+                                                                                                       class="list-group-item"><input
+                                        type="checkbox"/><span class="fa fa-star-o mrm mlm"></span><span
+                                        style="min-width: 120px; display: inline-block;"
+                                        class="name">Bhaumik Patel</span><span>Sed ut perspiciatis unde</span>&nbsp; -
+                                    &nbsp;<span style="font-size: 11px;" class="text-muted">Lorem ipsum dolor sit amet, consectetur adipisicing elit ...</span><span
+                                            class="time-badge">12:10 AM</span><span class="pull-left mll"><span
+                                            class="glyphicon glyphicon-paperclip"></span></span></a><a href="#"
+                                                                                                       class="list-group-item"><input
+                                        type="checkbox"/><span class="fa fa-star-o mrm mlm"></span><span
+                                        style="min-width: 120px; display: inline-block;"
+                                        class="name">Bhaumik Patel</span><span>Sed ut perspiciatis unde</span>&nbsp; -
+                                    &nbsp;<span style="font-size: 11px;" class="text-muted">Lorem ipsum dolor sit amet, consectetur adipisicing elit</span><span
+                                            class="time-badge">12:10 AM</span><span class="pull-left mll"><span
+                                            class="glyphicon glyphicon-paperclip"></span></span></a><a href="#"
+                                                                                                       class="list-group-item"><input
+                                        type="checkbox"/><span class="fa fa-star-o mrm mlm"></span><span
+                                        style="min-width: 120px; display: inline-block;"
+                                        class="name">Bhaumik Patel</span><span>Sed ut perspiciatis unde</span>&nbsp; -
+                                    &nbsp;<span style="font-size: 11px;" class="text-muted">Lorem ipsum dolor sit amet, consectetur adipisicing elit</span><span
+                                            class="time-badge">12:10 AM</span><span class="pull-left mll"><span
+                                            class="glyphicon glyphicon-paperclip"></span></span></a><a href="#"
+                                                                                                       class="list-group-item"><input
+                                        type="checkbox"/><span class="fa fa-star-o mrm mlm"></span><span
+                                        style="min-width: 120px; display: inline-block;"
+                                        class="name">Bhaumik Patel</span><span>Sed ut perspiciatis unde</span>&nbsp; -
+                                    &nbsp;<span style="font-size: 11px;" class="text-muted">Lorem ipsum dolor sit amet, consectetur adipisicing elit</span><span
+                                            class="time-badge">12:10 AM</span><span class="pull-left mll"><span
+                                            class="glyphicon glyphicon-paperclip"></span></span></a><a href="#"
+                                                                                                       class="list-group-item"><input
+                                        type="checkbox"/><span class="fa fa-star-o mrm mlm"></span><span
+                                        style="min-width: 120px; display: inline-block;"
+                                        class="name">Bhaumik Patel</span><span>Sed ut perspiciatis unde</span>&nbsp; -
+                                    &nbsp;<span style="font-size: 11px;" class="text-muted">Lorem ipsum dolor sit amet, consectetur adipisicing elit</span><span
+                                            class="time-badge">12:10 AM</span><span class="pull-left mll"><span
+                                            class="glyphicon glyphicon-paperclip"></span></span></a><a href="#"
+                                                                                                       class="list-group-item"><input
+                                        type="checkbox"/><span class="fa fa-star-o mrm mlm"></span><span
+                                        style="min-width: 120px; display: inline-block;"
+                                        class="name">Bhaumik Patel</span><span>Sed ut perspiciatis unde</span>&nbsp; -
+                                    &nbsp;<span style="font-size: 11px;" class="text-muted">Lorem ipsum dolor sit amet, consectetur adipisicing elit</span><span
+                                            class="time-badge">12:10 AM</span><span class="pull-left mll"><span
+                                            class="glyphicon glyphicon-paperclip"></span></span></a><a href="#"
+                                                                                                       class="list-group-item"><input
+                                        type="checkbox"/><span class="fa fa-star-o mrm mlm"></span><span
+                                        style="min-width: 120px; display: inline-block;"
+                                        class="name">Bhaumik Patel</span><span>Sed ut perspiciatis unde</span>&nbsp; -
+                                    &nbsp;<span style="font-size: 11px;" class="text-muted">Lorem ipsum dolor sit amet, consectetur adipisicing elit ...</span><span
+                                            class="time-badge">12:10 AM</span><span class="pull-left mll"><span
+                                            class="glyphicon glyphicon-paperclip"></span></span></a></div>
                             </div>
                         </div>
                     </div>
@@ -489,6 +546,7 @@
 <!--CORE JAVASCRIPT-->
 <script src="<?=base_url();?>assets/js/main.js"></script>
 <!--LOADING SCRIPTS FOR PAGE-->
+<script src="<?=base_url();?>assets/js/email-inbox.js"></script>
 
 </body>
 </html>

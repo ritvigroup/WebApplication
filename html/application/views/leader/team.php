@@ -47,410 +47,177 @@
                     <div class="page-title">Team</div>
                 </div>
                 <ol class="breadcrumb page-breadcrumb">
-                    <li><i class="fa fa-home"></i>&nbsp;<a href="index.html">Home</a>&nbsp;&nbsp;<i
+                    <li><i class="fa fa-home"></i>&nbsp;<a href="<?=base_url();?>leader/home">Home</a>&nbsp;&nbsp;<i
                             class="fa fa-angle-right"></i>&nbsp;&nbsp;</li>
-                    <li><a href="#">Tables</a>&nbsp;&nbsp;<i class="fa fa-angle-right"></i>&nbsp;&nbsp;</li>
+                    <li><a href="<?=base_url();?>leader/team">Organise</a>&nbsp;&nbsp;<i class="fa fa-angle-right"></i>&nbsp;&nbsp;</li>
                     <li class="active">Team</li>
                 </ol>
-                <div class="btn btn-blue reportrange hide"><i class="fa fa-calendar"></i>&nbsp;<span></span>&nbsp;report&nbsp;<i
-                        class="fa fa-angle-down"></i><input type="hidden" name="datestart"/><input type="hidden"
-                                                                                                   name="endstart"/>
-                </div>
+
                 <div class="clearfix"></div>
             </div>
             <!--END TITLE & BREADCRUMB PAGE--><!--BEGIN CONTENT-->
             <div class="page-content">
                 <div class="row">
-                    <div class="col-lg-6">
-                        <div class="panel panel-yellow">
-                            <div class="panel-heading">Simple Table</div>
-                            <div class="panel-body">
-                                <table class="table table-hover">
-                                    <thead>
-                                    <tr>
-                                        <th>#</th>
-                                        <th>Username</th>
-                                        <th>Age</th>
-                                        <th>Status</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    <tr>
-                                        <td>1</td>
-                                        <td>Henry</td>
-                                        <td>23</td>
-                                        <td><span class="label label-sm label-success">Approved</span></td>
-                                    </tr>
-                                    <tr>
-                                        <td>2</td>
-                                        <td>John</td>
-                                        <td>45</td>
-                                        <td><span class="label label-sm label-info">Pending</span></td>
-                                    </tr>
-                                    <tr>
-                                        <td>3</td>
-                                        <td>Larry</td>
-                                        <td>30</td>
-                                        <td><span class="label label-sm label-warning">Suspended</span></td>
-                                    </tr>
-                                    <tr>
-                                        <td>4</td>
-                                        <td>Lahm</td>
-                                        <td>15</td>
-                                        <td><span class="label label-sm label-danger">Blocked</span></td>
-                                    </tr>
-                                    </tbody>
-                                </table>
+                    <div class="col-md-12">
+                        <div class="portlet box">
+                            <div class="portlet-header">
+                                <div class="caption">My Team</div>
+                                <div class="actions"><a href="<?=base_url();?>leader/newleader" class="btn btn-info btn-xs"><i class="fa fa-plus"></i>&nbsp;
+                                    New Leader</a>
+                                    <?php /* &nbsp;
+                                    <div class="btn-group"><a href="#" data-toggle="dropdown"
+                                                              class="btn btn-warning btn-xs dropdown-toggle"><i
+                                            class="fa fa-wrench"></i>&nbsp;
+                                        Tools</a>
+                                        <ul class="dropdown-menu pull-right">
+                                            <li><a href="#">Export to Excel</a></li>
+                                            <li><a href="#">Export to CSV</a></li>
+                                            <li><a href="#">Export to XML</a></li>
+                                            <li class="divider"></li>
+                                            <li><a href="#">Print Invoices</a></li>
+                                        </ul>
+                                    </div> */ ?>
+                                </div>
                             </div>
-                        </div>
-                        <div class="panel panel-green">
-                            <div class="panel-heading">Bordered Table</div>
-                            <div class="panel-body">
-                                <table class="table table-hover table-bordered">
-                                    <thead>
-                                    <tr>
-                                        <th>#</th>
-                                        <th>Username</th>
-                                        <th>Age</th>
-                                        <th>Status</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    <tr>
-                                        <td>1</td>
-                                        <td>Henry</td>
-                                        <td>23</td>
-                                        <td><span class="label label-sm label-success">Approved</span></td>
-                                    </tr>
-                                    <tr>
-                                        <td>2</td>
-                                        <td>John</td>
-                                        <td>45</td>
-                                        <td><span class="label label-sm label-info">Pending</span></td>
-                                    </tr>
-                                    <tr>
-                                        <td>3</td>
-                                        <td>Larry</td>
-                                        <td>30</td>
-                                        <td><span class="label label-sm label-warning">Suspended</span></td>
-                                    </tr>
-                                    <tr>
-                                        <td>4</td>
-                                        <td>Lahm</td>
-                                        <td>15</td>
-                                        <td><span class="label label-sm label-danger">Blocked</span></td>
-                                    </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                        <div class="panel panel-red">
-                            <div class="panel-heading">Contextual Row</div>
-                            <div class="panel-body">
-                                <table class="table table-hover table-bordered">
-                                    <thead>
-                                    <tr>
-                                        <th>#</th>
-                                        <th>Column</th>
-                                        <th>Column</th>
-                                        <th>Column</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    <tr class="active">
-                                        <td>1</td>
-                                        <td>active</td>
-                                        <td>active</td>
-                                        <td>active</td>
-                                    </tr>
-                                    <tr class="success">
-                                        <td>2</td>
-                                        <td>success</td>
-                                        <td>success</td>
-                                        <td>success</td>
-                                    </tr>
-                                    <tr class="warning">
-                                        <td>3</td>
-                                        <td>warning</td>
-                                        <td>warning</td>
-                                        <td>warning</td>
-                                    </tr>
-                                    <tr class="danger">
-                                        <td>4</td>
-                                        <td>danger</td>
-                                        <td>danger</td>
-                                        <td>danger</td>
-                                    </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                        <div class="panel panel-blue">
-                            <div class="panel-heading">Variations Table</div>
-                            <div class="panel-body">
-                                <table class="table table-hover table-bordered">
-                                    <thead>
-                                    <tr>
-                                        <th>#</th>
-                                        <th>Username</th>
-                                        <th>Age</th>
-                                        <th>Status</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    <tr>
-                                        <td>1</td>
-                                        <td>Henry</td>
-                                        <td>23</td>
-                                        <td><span class="label label-sm label-success">Approved</span></td>
-                                    </tr>
-                                    <tr>
-                                        <td>2</td>
-                                        <td>John</td>
-                                        <td>45</td>
-                                        <td><span class="label label-sm label-info">Pending</span></td>
-                                    </tr>
-                                    <tr>
-                                        <td>3</td>
-                                        <td>Larry</td>
-                                        <td>30</td>
-                                        <td><span class="label label-sm label-warning">Suspended</span></td>
-                                    </tr>
-                                    <tr>
-                                        <td>4</td>
-                                        <td>Lahm</td>
-                                        <td>15</td>
-                                        <td><span class="label label-sm label-danger">Blocked</span></td>
-                                    </tr>
-                                    </tbody>
-                                    <tfoot>
-                                    <tr>
-                                        <th></th>
-                                        <th><i>4 People</i></th>
-                                        <th></th>
-                                        <th><i>1 Approved</i></th>
-                                    </tr>
-                                    </tfoot>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-6">
-                        <div class="panel panel-violet">
-                            <div class="panel-heading">Striped Table</div>
-                            <div class="panel-body">
-                                <table class="table table-hover table-striped">
-                                    <thead>
-                                    <tr>
-                                        <th>#</th>
-                                        <th>Username</th>
-                                        <th>Age</th>
-                                        <th>Status</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    <tr>
-                                        <td>1</td>
-                                        <td>Henry</td>
-                                        <td>23</td>
-                                        <td><span class="label label-sm label-success">Approved</span></td>
-                                    </tr>
-                                    <tr>
-                                        <td>2</td>
-                                        <td>John</td>
-                                        <td>45</td>
-                                        <td><span class="label label-sm label-info">Pending</span></td>
-                                    </tr>
-                                    <tr>
-                                        <td>3</td>
-                                        <td>Larry</td>
-                                        <td>30</td>
-                                        <td><span class="label label-sm label-warning">Suspended</span></td>
-                                    </tr>
-                                    <tr>
-                                        <td>4</td>
-                                        <td>Lahm</td>
-                                        <td>15</td>
-                                        <td><span class="label label-sm label-danger">Blocked</span></td>
-                                    </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                        <div class="panel panel-pink">
-                            <div class="panel-heading">Condensed Table</div>
-                            <div class="panel-body">
-                                <table class="table table-hover table-condensed">
-                                    <thead>
-                                    <tr>
-                                        <th>#</th>
-                                        <th>Username</th>
-                                        <th>Age</th>
-                                        <th>Status</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    <tr>
-                                        <td>1</td>
-                                        <td>Henry</td>
-                                        <td>23</td>
-                                        <td><span class="label label-sm label-success">Approved</span></td>
-                                    </tr>
-                                    <tr>
-                                        <td>2</td>
-                                        <td>John</td>
-                                        <td>45</td>
-                                        <td><span class="label label-sm label-info">Pending</span></td>
-                                    </tr>
-                                    <tr>
-                                        <td>3</td>
-                                        <td>Larry</td>
-                                        <td>30</td>
-                                        <td><span class="label label-sm label-warning">Suspended</span></td>
-                                    </tr>
-                                    <tr>
-                                        <td>4</td>
-                                        <td>Lahm</td>
-                                        <td>15</td>
-                                        <td><span class="label label-sm label-danger">Blocked</span></td>
-                                    </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                        <div class="panel panel-grey">
-                            <div class="panel-heading">Contextual Column</div>
-                            <div class="panel-body">
-                                <table class="table table-hover table-bordered">
-                                    <thead>
-                                    <tr>
-                                        <th>#</th>
-                                        <th>Column</th>
-                                        <th>Column</th>
-                                        <th>Column</th>
-                                        <th>Column</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    <tr>
-                                        <td>1</td>
-                                        <td class="active">active</td>
-                                        <td class="success">success</td>
-                                        <td class="warning">warning</td>
-                                        <td class="danger">danger</td>
-                                    </tr>
-                                    <tr>
-                                        <td>2</td>
-                                        <td class="active">active</td>
-                                        <td class="success">success</td>
-                                        <td class="warning">warning</td>
-                                        <td class="danger">danger</td>
-                                    </tr>
-                                    <tr>
-                                        <td>3</td>
-                                        <td class="active">active</td>
-                                        <td class="success">success</td>
-                                        <td class="warning">warning</td>
-                                        <td class="danger">danger</td>
-                                    </tr>
-                                    <tr>
-                                        <td>4</td>
-                                        <td class="active">active</td>
-                                        <td class="success">success</td>
-                                        <td class="warning">warning</td>
-                                        <td class="danger">danger</td>
-                                    </tr>
-                                    <tr>
-                                        <td>5</td>
-                                        <td class="active">active</td>
-                                        <td class="success">success</td>
-                                        <td class="warning">warning</td>
-                                        <td class="danger">danger</td>
-                                    </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                        <div class="panel panel-orange">
-                            <div class="panel-heading">Hover Table - Opion 1</div>
-                            <div class="panel-body">
-                                <table class="table table-hover">
-                                    <thead>
-                                    <tr>
-                                        <th>#</th>
-                                        <th>Username</th>
-                                        <th>Age</th>
-                                        <th>Status</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    <tr>
-                                        <td>1</td>
-                                        <td>Henry</td>
-                                        <td>23</td>
-                                        <td><span class="label label-sm label-success">Approved</span></td>
-                                    </tr>
-                                    <tr>
-                                        <td>2</td>
-                                        <td>John</td>
-                                        <td>45</td>
-                                        <td><span class="label label-sm label-info">Pending</span></td>
-                                    </tr>
-                                    <tr>
-                                        <td>3</td>
-                                        <td>Larry</td>
-                                        <td>30</td>
-                                        <td><span class="label label-sm label-warning">Suspended</span></td>
-                                    </tr>
-                                    <tr>
-                                        <td>4</td>
-                                        <td>Lahm</td>
-                                        <td>15</td>
-                                        <td><span class="label label-sm label-danger">Blocked</span></td>
-                                    </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                        <div class="panel panel-green">
-                            <div class="panel-heading">Hover Table - Opion 2</div>
-                            <div class="panel-body">
-                                <table class="table table-hover-color">
-                                    <thead>
-                                    <tr>
-                                        <th>#</th>
-                                        <th>Username</th>
-                                        <th>Age</th>
-                                        <th>Status</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    <tr>
-                                        <td>1</td>
-                                        <td>Henry</td>
-                                        <td>23</td>
-                                        <td><span class="label label-sm label-success">Approved</span></td>
-                                    </tr>
-                                    <tr>
-                                        <td>2</td>
-                                        <td>John</td>
-                                        <td>45</td>
-                                        <td><span class="label label-sm label-info">Pending</span></td>
-                                    </tr>
-                                    <tr>
-                                        <td>3</td>
-                                        <td>Larry</td>
-                                        <td>30</td>
-                                        <td><span class="label label-sm label-warning">Suspended</span></td>
-                                    </tr>
-                                    <tr>
-                                        <td>4</td>
-                                        <td>Lahm</td>
-                                        <td>15</td>
-                                        <td><span class="label label-sm label-danger">Blocked</span></td>
-                                    </tr>
-                                    </tbody>
-                                </table>
+                            <div class="portlet-body pan">
+                                <div class="table-responsive">
+                                    <table id="user-last-logged-table"
+                                           class="table table-striped table-hover thumb-small">
+                                        <thead>
+                                        <tr class="condensed">
+                                            <th scope="col"><span class="column-sorter"></span></th>
+                                            <th scope="col">User<span class="column-sorter"></span></th>
+                                            <th scope="col">Username<span class="column-sorter"></span></th>
+                                            <th scope="col">Active<span class="column-sorter"></span></th>
+                                            <th scope="col">Roles<span class="column-sorter"></span></th>
+                                            <th scope="col">Status<span class="column-sorter"></span></th>
+                                            <th scope="col">Last Access<span class="column-sorter"></span></th>
+                                        </tr>
+                                        </thead>
+                                        <tbody class="media-thumb">
+                                        <tr>
+                                            <td><span class="img-shadow"><img
+                                                            src="https://s3.amazonaws.com/uifaces/faces/twitter/dominikmartn/128.jpg"
+                                                            class="media-object thumb"/></span></td>
+                                            <td><a href="javascript:void(0)"><h6 class="media-heading">Colin Nixon</h6>
+                                                </a>
+
+                                                <div>semper@email.edu</div>
+                                            </td>
+                                            <td>[<span>Colix</span>]</td>
+                                            <td><span>Yes</span></td>
+                                            <td>admin</td>
+                                            <td><span class="label label-success">online</span></td>
+                                            <td>
+                                                <ul class="data">
+                                                    <li><em>2 min 21 sec</em>ago</li>
+                                                    <li>IP:<strong class="user-list-ip">133.64.146.145</strong></li>
+                                                </ul>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td><span class="img-shadow"><img
+                                                            src="https://s3.amazonaws.com/uifaces/faces/twitter/geeftvorm/128.jpg"
+                                                            class="media-object thumb"/></span></td>
+                                            <td><a href="javascript:void(0)"><h6 class="media-heading">Naida
+                                                        Bennett</h6></a>
+
+                                                <div>commodo@email.ca</div>
+                                            </td>
+                                            <td>[<span>Nadiana</span>]</td>
+                                            <td><span>Yes</span></td>
+                                            <td>editor</td>
+                                            <td><span class="label label-success">online</span></td>
+                                            <td>
+                                                <ul class="data">
+                                                    <li><em>5 min 45 sec</em>ago</li>
+                                                    <li>IP:<strong class="user-list-ip">146.132.46.47</strong></li>
+                                                </ul>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td><span class="img-shadow"><img
+                                                            src="https://s3.amazonaws.com/uifaces/faces/twitter/andrewcohen/128.jpg"
+                                                            class="media-object thumb"/></span></td>
+                                            <td><a href="javascript:void(0)"><h6 class="media-heading">Danielle
+                                                        Myers</h6></a>
+
+                                                <div>nunc.sed@email.ca</div>
+                                            </td>
+                                            <td>[<span>Myellersi</span>]</td>
+                                            <td><span>Yes</span></td>
+                                            <td>editor</td>
+                                            <td><span class="label label-default">offline</span></td>
+                                            <td>
+                                                <ul class="data">
+                                                    <li><em>18 min 39 sec</em>ago</li>
+                                                    <li>IP:<strong class="user-list-ip">44.44.55.011</strong></li>
+                                                </ul>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td><span class="img-shadow"><img
+                                                            src="https://s3.amazonaws.com/uifaces/faces/twitter/wdeb/128.jpg"
+                                                            class="media-object thumb"/></span></td>
+                                            <td><a href="javascript:void(0)"><h6 class="media-heading">Whitney
+                                                        Jones</h6></a>
+
+                                                <div>nunc@email.edu</div>
+                                            </td>
+                                            <td>[<span>whitney</span>]</td>
+                                            <td><span>Yes</span></td>
+                                            <td>editor</td>
+                                            <td><span class="label label-default">offline</span></td>
+                                            <td>
+                                                <ul class="data">
+                                                    <li><em>46 min 24 sec</em>ago</li>
+                                                    <li>IP:<strong class="user-list-ip">188.88.88.88</strong></li>
+                                                </ul>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td><span class="img-shadow"><img
+                                                            src="https://s3.amazonaws.com/uifaces/faces/twitter/manoukvdberg/128.jpg"
+                                                            class="media-object thumb"/></span></td>
+                                            <td><a href="javascript:void(0)"><h6 class="media-heading">Marvin Bell</h6>
+                                                </a>
+
+                                                <div>aliquet@email.com</div>
+                                            </td>
+                                            <td>[<span>marvin-marvin</span>]</td>
+                                            <td><span>Yes</span></td>
+                                            <td>editor</td>
+                                            <td><span class="label label-default">offline</span></td>
+                                            <td>
+                                                <ul class="data">
+                                                    <li><em>1 hour 52 min</em>ago</li>
+                                                    <li>IP:<strong class="user-list-ip">97.145.98.146</strong></li>
+                                                </ul>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td><span class="img-shadow"><img
+                                                            src="https://s3.amazonaws.com/uifaces/faces/twitter/chexee/128.jpg"
+                                                            class="media-object thumb"/></span></td>
+                                            <td><a href="javascript:void(0)"><h6 class="media-heading">Lucas
+                                                        Melendez</h6></a>
+
+                                                <div>m.malesuada@email.org</div>
+                                            </td>
+                                            <td>[<span>Melendez</span>]</td>
+                                            <td><span>Yes</span></td>
+                                            <td>editor</td>
+                                            <td><span class="label label-success">online</span></td>
+                                            <td>
+                                                <ul class="data">
+                                                    <li><em>4 hour 21 min</em>ago</li>
+                                                    <li>IP:<strong class="user-list-ip">111.112.112.011</strong></li>
+                                                </ul>
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
                         </div>
                     </div>

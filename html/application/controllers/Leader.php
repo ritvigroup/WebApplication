@@ -366,6 +366,11 @@ class Leader extends CI_Controller {
         $this->load->view('leader/team',$data);
     }
 
+    public function newleader() {
+        $data = array();
+        $this->load->view('leader/newleader',$data);
+    }
+
     public function citizen() {
         $data = array();
         $this->load->view('leader/citizen',$data);
@@ -379,6 +384,12 @@ class Leader extends CI_Controller {
     public function call() {
         $data = array();
         $this->load->view('leader/call',$data);
+    }
+
+
+    public function complaint() {
+        $data = array();
+        $this->load->view('leader/complaint',$data);
     }
 
     public function email() {
