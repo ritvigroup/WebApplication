@@ -22,7 +22,36 @@
             <li class="<?php if($request_uri['4'] == "dashboard") {?>active<?php } ?>"><a href="<?=base_url();?>leader/dashboard"><i class="fa fa-tachometer fa-fw">
                 <div class="icon-bg bg-orange"></div>
             </i><span class="menu-title">Dashboard</span></a></li>
-            
+
+            <li class="<?php if($request_uri['4'] == "team") {?>active<?php } ?>"><a href="<?=base_url();?>leader/team"><i class="fa fa-tachometer fa-fw">
+                <div class="icon-bg bg-orange"></div>
+            </i><span class="menu-title">Lead / Plan</span></a></li>
+
+            <li class="<?php if($request_uri['4'] == "complaint") {?>active<?php } ?>"><a href="<?=base_url();?>leader/complaint"><i class="fa fa-tachometer fa-fw">
+                <div class="icon-bg bg-orange"></div>
+            </i><span class="menu-title">Connect</span></a></li>
+
+
+            <li class="<?php if($request_uri['4'] == "event") {?>active<?php } ?>"><a href="<?=base_url();?>leader/event"><i class="fa fa-tachometer fa-fw">
+                <div class="icon-bg bg-orange"></div>
+            </i><span class="menu-title">Listen</span></a></li>
+
+            <li class="<?php if($request_uri['4'] == "event") {?>active<?php } ?>"><a href="<?=base_url();?>leader/event"><i class="fa fa-tachometer fa-fw">
+                <div class="icon-bg bg-orange"></div>
+            </i><span class="menu-title">Influence / Engage</span></a></li>
+
+            <li class="<?php if($request_uri['4'] == "event") {?>active<?php } ?>"><a href="<?=base_url();?>leader/event"><i class="fa fa-tachometer fa-fw">
+                <div class="icon-bg bg-orange"></div>
+            </i><span class="menu-title">Convert</span></a></li>
+
+            <li class="<?php if($request_uri['4'] == "event") {?>active<?php } ?>"><a href="<?=base_url();?>leader/event"><i class="fa fa-tachometer fa-fw">
+                <div class="icon-bg bg-orange"></div>
+            </i><span class="menu-title">Reports</span></a></li>
+
+            <li class="<?php if($request_uri['4'] == "setting") {?>active<?php } ?>"><a href="<?=base_url();?>leader/setting"><i class="fa fa-tachometer fa-fw">
+                <div class="icon-bg bg-orange"></div>
+            </i><span class="menu-title">Setting</span></a></li>
+
             <?php /*
             <li><a href="http://madmin.swlabs.co/" target="_blank"><i class="fa fa-bullhorn fa-fw">
                 <div class="icon-bg bg-orange"></div>
@@ -38,7 +67,7 @@
                             class="submenu-title">One Page</span></a></li>
                 </ul>
             </li>
-            */ ?>
+            
             <li class="<?php if($request_uri['4'] == "team" || $request_uri['4'] == "newleader" || $request_uri['4'] == "citizen") {?>active<?php } ?>"><a href="#"><i class="fa fa-desktop fa-fw">
                 <div class="icon-bg bg-pink"></div>
             </i><span class="menu-title">Organize</span><span class="fa arrow"></span></a>
@@ -92,7 +121,7 @@
             <li class="<?php if($request_uri['4'] == "switch-profile") {?>active<?php } ?>"><a href="<?=base_url();?>leader/switch-profile"><i class="fa fa-slack fa-fw">
                 <div class="icon-bg bg-green"></div>
             </i><span class="menu-title">Switch Profile</span></a></li>
-            
+            */ ?>
         </ul>
     </div>
 </nav>

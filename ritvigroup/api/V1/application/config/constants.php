@@ -88,51 +88,51 @@ defined('EXIT__AUTO_MAX')      OR define('EXIT__AUTO_MAX', 125); // highest auto
 
 /* ================= OUR CONSTANTS ================== */
 
-define('WEBSITE_URL', 'http://www.ritvigroup.com/');
+defined('WEBSITE_URL')        OR define('WEBSITE_URL', 'http://www.ritvigroup.com');
 
 
-define('APP_FOLDER', 'ritvigroup');
-define('API_FOLDER', 'api');
-define('VERSON_FOLDER', 'V1');
+defined('APP_FOLDER')        OR define('APP_FOLDER', 'ritvigroup');
+defined('API_FOLDER')        OR define('API_FOLDER', 'api');
+defined('VERSON_FOLDER')        OR define('VERSON_FOLDER', 'V1');
 
-define('LAST_24_HOUR', date("Y-m-d H:i:s", mktime(date("H"), date("i"), date("s"), date("m"), (date("d")-1), date("Y"))));
+defined('LAST_24_HOUR')        OR define('LAST_24_HOUR', date("Y-m-d H:i:s", mktime(date("H"), date("i"), date("s"), date("m"), (date("d")-1), date("Y"))));
 
-define('SITE_URL', WEBSITE_URL.DIRECTORY_SEPARATOR.APP_FOLDER.DIRECTORY_SEPARATOR.API_FOLDER.DIRECTORY_SEPARATOR.VERSON_FOLDER);
-define('SITE_PATH', WEBSITE_URL.DIRECTORY_SEPARATOR);
+defined('SITE_URL')        OR define('SITE_URL', WEBSITE_URL.DIRECTORY_SEPARATOR.APP_FOLDER.DIRECTORY_SEPARATOR.API_FOLDER.DIRECTORY_SEPARATOR.VERSON_FOLDER);
+defined('SITE_PATH')        OR define('SITE_PATH', WEBSITE_URL.DIRECTORY_SEPARATOR);
 
-define('UPLOAD_DIR', 'uploads');
+defined('UPLOAD_DIR')        OR define('UPLOAD_DIR', 'uploads');
 
-define('CHAT_IMAGE_DIR', UPLOAD_DIR.'/image/chat/');
-define('CHAT_IMAGE_URL', SITE_PATH.UPLOAD_DIR.'/image/chat/');
+defined('CHAT_IMAGE_DIR')        OR define('CHAT_IMAGE_DIR', UPLOAD_DIR.'/image/chat/');
+defined('CHAT_IMAGE_URL')        OR define('CHAT_IMAGE_URL', SITE_PATH.UPLOAD_DIR.'/image/chat/');
 
-define('PROFILE_IMAGE_DIR', UPLOAD_DIR.'/image/profile/');
-define('PROFILE_IMAGE_URL', SITE_PATH.UPLOAD_DIR.'/image/profile/');
+defined('PROFILE_IMAGE_DIR')        OR define('PROFILE_IMAGE_DIR', UPLOAD_DIR.'/image/profile/');
+defined('PROFILE_IMAGE_URL')        OR define('PROFILE_IMAGE_URL', SITE_PATH.UPLOAD_DIR.'/image/profile/');
 
-define('VIDEO_IMAGE_DIR', UPLOAD_DIR.'/video/image/');
-define('VIDEO_IMAGE_URL', SITE_PATH.UPLOAD_DIR.'/video/image/');
+defined('VIDEO_IMAGE_DIR')        OR define('VIDEO_IMAGE_DIR', UPLOAD_DIR.'/video/image/');
+defined('VIDEO_IMAGE_URL')        OR define('VIDEO_IMAGE_URL', SITE_PATH.UPLOAD_DIR.'/video/image/');
 
-define('VIDEO_VIDEO_DIR', UPLOAD_DIR.'/video/');
-define('VIDEO_VIDEO_URL', SITE_PATH.UPLOAD_DIR.'/video/');
+defined('VIDEO_VIDEO_DIR')        OR define('VIDEO_VIDEO_DIR', UPLOAD_DIR.'/video/');
+defined('VIDEO_VIDEO_URL')        OR define('VIDEO_VIDEO_URL', SITE_PATH.UPLOAD_DIR.'/video/');
 
-define('PHOTO_IMAGE_DIR', UPLOAD_DIR.'/photo/');
-define('PHOTO_IMAGE_URL', SITE_PATH.UPLOAD_DIR.'/photo/');
+defined('PHOTO_IMAGE_DIR')        OR define('PHOTO_IMAGE_DIR', UPLOAD_DIR.'/photo/');
+defined('PHOTO_IMAGE_URL')        OR define('PHOTO_IMAGE_URL', SITE_PATH.UPLOAD_DIR.'/photo/');
 
 // Messages
-define('MSG_AUDIO_DIR', UPLOAD_DIR.'/message/audio/');
-define('MSG_AUDIO_URL', SITE_PATH.UPLOAD_DIR.'/message/audio/');
+defined('MSG_AUDIO_DIR')        OR define('MSG_AUDIO_DIR', UPLOAD_DIR.'/message/audio/');
+defined('MSG_AUDIO_URL')        OR define('MSG_AUDIO_URL', SITE_PATH.UPLOAD_DIR.'/message/audio/');
 
-define('MSG_DOC_DIR', UPLOAD_DIR.'/message/document/');
-define('MSG_DOC_URL', SITE_PATH.UPLOAD_DIR.'/message/document/');
+defined('MSG_DOC_DIR')        OR define('MSG_DOC_DIR', UPLOAD_DIR.'/message/document/');
+defined('MSG_DOC_URL')        OR define('MSG_DOC_URL', SITE_PATH.UPLOAD_DIR.'/message/document/');
 
-define('MSG_IMAGE_DIR', UPLOAD_DIR.'/message/image/');
-define('MSG_IMAGE_URL', SITE_PATH.UPLOAD_DIR.'/message/image/');
+defined('MSG_IMAGE_DIR')        OR define('MSG_IMAGE_DIR', UPLOAD_DIR.'/message/image/');
+defined('MSG_IMAGE_URL')        OR define('MSG_IMAGE_URL', SITE_PATH.UPLOAD_DIR.'/message/image/');
 
-define('MSG_VIDEO_DIR', UPLOAD_DIR.'/message/video/');
-define('MSG_VIDEO_URL', SITE_PATH.UPLOAD_DIR.'/message/video/');
+defined('MSG_VIDEO_DIR')        OR define('MSG_VIDEO_DIR', UPLOAD_DIR.'/message/video/');
+defined('MSG_VIDEO_URL')        OR define('MSG_VIDEO_URL', SITE_PATH.UPLOAD_DIR.'/message/video/');
 
-define('MSG_THUMB_DIR', UPLOAD_DIR.'/message/thumbnail/');
-define('MSG_THUMB_URL', SITE_PATH.UPLOAD_DIR.'/message/thumbnail/');
+defined('MSG_THUMB_DIR')        OR define('MSG_THUMB_DIR', UPLOAD_DIR.'/message/thumbnail/');
+defined('MSG_THUMB_URL')        OR define('MSG_THUMB_URL', SITE_PATH.UPLOAD_DIR.'/message/thumbnail/');
 
-define('LIKE_IMAGE_DIR', UPLOAD_DIR.'/emotions/');
-define('LIKE_IMAGE_URL', SITE_PATH.UPLOAD_DIR.'/emotions/');
+defined('LIKE_IMAGE_DIR')        OR define('LIKE_IMAGE_DIR', UPLOAD_DIR.'/emotions/');
+defined('LIKE_IMAGE_URL')        OR define('LIKE_IMAGE_URL', SITE_PATH.UPLOAD_DIR.'/emotions/');
 

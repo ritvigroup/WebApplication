@@ -451,3 +451,27 @@ if ( ! function_exists('octal_permissions'))
 		return substr(sprintf('%o', $perms), -3);
 	}
 }
+
+
+// --------------------------------------------------------------------
+
+if ( ! function_exists('uploadFileOnServer'))
+{
+	/**
+	 * Octal Permissions
+	 *
+	 * Takes a numeric value representing a file's permissions and returns
+	 * a three character string representing the file's octal permissions
+	 *
+	 * @param	int	$perms	Permissions
+	 * @return	string
+	 */
+	function uploadFileOnServer($from_source, $to_destination) {
+		
+		if(@move_uploaded_file($from_source, $to_destination)) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+}

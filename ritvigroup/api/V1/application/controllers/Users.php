@@ -1,8 +1,10 @@
 <?php 
 if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+
 /**
  * User Management class created by CodexWorld
- */
+*/
+
 class Users extends CI_Controller {
     
     function __construct() {

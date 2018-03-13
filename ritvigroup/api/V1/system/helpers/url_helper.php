@@ -567,3 +567,364 @@ if ( ! function_exists('redirect'))
 		exit;
 	}
 }
+
+
+// -DISPLAY CUSTOM JSON_ENCODE--
+
+if ( ! function_exists('displayJsonEncode'))
+{
+	function displayJsonEncode($array = array())
+	{
+		header('Content-type: application/json');
+		echo json_encode($array);
+		exit;
+	}
+}
+
+
+if ( ! function_exists('autoGenerateOtp'))
+{
+	function autoGenerateOtp($length = 6) {
+		$digit_chars 	= "0123456789";
+
+		/*if($DEVELOPMENT_MODE == 0) { 
+			$chars = isset($digit_chars) ? $digit_chars : '';
+		    $code = substr( str_shuffle( $chars ), 0, $length );
+		} else {
+	    	$code = "123456";
+	    }*/
+	    $code = "123456";
+	    return $code;
+	}
+}
+
+if ( ! function_exists('sendMessageToPhone'))
+{
+	function sendMessageToPhone($recerverNO, $message) {
+		if (!function_exists('curl_init')) {
+			echo "Error : Curl library not installed";
+			return FALSE;
+		}
+		if (strlen($message) > 140) {
+			$message = substr($message, 0, 140);
+		}
+
+		$userID = "919911529958";
+		$userPWD = "neelAm7112";
+
+		$cookie_file_path = "./cookie.txt";
+		$temp_file = "./temporary.txt";
+		//unlink($temp_file);
+		$user_agent = "Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/35.0.1916.153 Safari/537.36";
+
+		// LOGIN TO WAY2SMS
+
+		$url =  "http://site24.way2sms.com/content/Login1.action";
+		$parameters = array("username"=>"$userID","password"=>"$userPWD","button"=>"Login");
+
+		$ch = curl_init();
+			curl_setopt($ch, CURLOPT_URL, $url);
+			curl_setopt($ch, CURLOPT_POST, count($parameters));
+			curl_setopt($ch, CURLOPT_POSTFIELDS, $parameters);
+			curl_setopt($ch, CURLOPT_HEADER, TRUE);
+			curl_setopt($ch, CURLOPT_RETURNTRANSFER,TRUE);
+			curl_setopt($ch, CURLOPT_COOKIEJAR, $cookie_file_path);
+			curl_setopt($ch, CURLOPT_COOKIEFILE, $cookie_file_path);
+			curl_setopt($ch, CURLOPT_FOLLOWLOCATION, TRUE);
+			curl_setopt($ch, CURLOPT_USERAGENT, $user_agent);
+			curl_setopt($ch, CURLOPT_NOBODY, FALSE);
+			$result = curl_exec ($ch);
+		curl_close ($ch);
+
+
+		// SAVE LOGOUT URL
+
+		file_put_contents($temp_file,$result);
+		$result = "";
+		$logout_url = "";
+		$file = fopen($temp_file,"r");
+		$line = "";
+		$cond = TRUE;
+		while ($cond == TRUE) {
+			$line = fgets($file);
+			if ($line === FALSE) { // EOF
+				$cond = FALSE;
+			} else {
+				$pos = strpos( $line, '            window.location = "');
+				if ($pos === FALSE ) {
+					$line = "";
+				} else { // URL FOUND
+					$cond = FALSE;
+					$logout_url = substr($line,-25);
+					$logout_url = substr($logout_url,0,21);
+				}
+			}
+		}
+		fclose($file);
+
+		// SAVE SESSION ID
+
+		$file = fopen($cookie_file_path,"r");
+		$line = "";
+		$cond = TRUE;
+		while ($cond == TRUE) {
+			$line = fgets($file);
+			if ($line === FALSE) { // EOF
+				$cond = FALSE;
+			} else {
+				$pos = strpos( $line, "JSESSIONID");
+				if ($pos === FALSE ) {
+					$line = "";
+				} else { // SESSION ID FOUND
+					$cond = FALSE;
+					$id = substr($line,$pos+15);
+				}
+			}
+		}
+		fclose($file);
+
+				
+
+
+		if (!isset($id)) {
+			echo "Session Failed";
+			unlink($cookie_file_path);
+			unlink($temp_file);
+			return FALSE;
+		}
+		if ($logout_url == "") {
+			echo "Login Failed";
+			unlink($cookie_file_path);
+			unlink($temp_file);
+			return FALSE;
+		}
+
+		// SEND SMS
+
+		$url = "http://site24.way2sms.com/smstoss.action?Token=" . $id; 
+		$parameters = array("button"=>"Send SMS","mobile"=>"$recerverNO","message"=>"$message");
+
+		$ch = curl_init();
+			curl_setopt($ch, CURLOPT_URL, $url);
+			curl_setopt($ch, CURLOPT_POST, count($parameters));
+			curl_setopt($ch, CURLOPT_POSTFIELDS, $parameters);
+			curl_setopt($ch, CURLOPT_HEADER, TRUE);
+			curl_setopt($ch, CURLOPT_RETURNTRANSFER,TRUE);
+			curl_setopt($ch, CURLOPT_COOKIEJAR, $cookie_file_path);
+			curl_setopt($ch, CURLOPT_COOKIEFILE, $cookie_file_path);
+			curl_setopt($ch, CURLOPT_FOLLOWLOCATION, TRUE);
+			curl_setopt($ch, CURLOPT_USERAGENT, $user_agent);
+			curl_setopt($ch, CURLOPT_NOBODY, FALSE);
+			$result = curl_exec ($ch);
+		curl_close ($ch);
+
+
+		file_put_contents($temp_file,$result);
+		$result = "";
+		$sms_status = "";
+		$file = fopen($temp_file,"r");
+		$line = "";
+		$cond = TRUE;
+		while ($cond == TRUE) {
+			$line = fgets($file);
+			if ($line === FALSE) { // EOF
+				$cond = FALSE;
+			} else {
+				$pos = strpos( $line, '        <p class="mess"><i class="ssms consuki "><em class="ei"></em><strong><b>x</b></strong></i><span class="">');
+				if ($pos === FALSE ) {
+					$line = "";
+				} else { // URL FOUND
+					$cond = FALSE;
+					$sms_status = substr($line,-53);
+					$sms_status = substr($sms_status,0,40);
+					if ($sms_status != "Message has been submitted successfully.") {
+						echo "Failed to send SMS.";
+						unlink($cookie_file_path);
+						fclose($file);
+						unlink($temp_file);
+						return FALSE;
+					}
+				}
+			}
+		}
+		fclose($file);
+
+		$url = "site24.way2sms.com/" . $logout_url;
+
+		$ch = curl_init();
+			curl_setopt($ch, CURLOPT_URL, $url);
+			curl_setopt($ch, CURLOPT_HEADER, TRUE);
+			curl_setopt($ch, CURLOPT_RETURNTRANSFER,TRUE);
+			curl_setopt($ch, CURLOPT_COOKIEJAR, $cookie_file_path);
+			curl_setopt($ch, CURLOPT_COOKIEFILE, $cookie_file_path);
+			curl_setopt($ch, CURLOPT_FOLLOWLOCATION, TRUE);
+			curl_setopt($ch, CURLOPT_USERAGENT, $user_agent);
+			curl_setopt($ch, CURLOPT_NOBODY, FALSE);
+			$result = curl_exec ($ch);
+		curl_close ($ch);
+
+		file_put_contents($temp_file,$result);
+		$result = "";
+		$logout_status = FALSE;
+		$file = fopen($temp_file,"r");
+		$line = "";
+		$cond = TRUE;
+		while ($cond == TRUE) {
+			$line = fgets($file);
+			if ($line === FALSE) { // EOF
+				$cond = FALSE;
+			} else {
+				$pos = strpos( $line, '<div class="trap mess">');
+				if ($pos === FALSE ) {
+					$line = "";
+				} else {
+					$line = fgets($file);
+					if ($line === FALSE) { // EOF
+						$cond = FALSE;
+					} else {
+						$line = fgets($file);
+						if ($line === FALSE) { // EOF
+							$cond = FALSE;
+						} else {
+							$cond = FALSE;
+							$logout_status_string = substr($line,24,39);
+							if ($logout_status_string == "You have successfully <b>logged out</b>") {
+								$logout_status = TRUE;
+							}
+						}
+					}
+				}
+			}
+		}
+		fclose($file);
+
+		// DELETE TEMP FILES
+
+		unlink($cookie_file_path);
+		unlink($temp_file);
+
+		if ($logout_status) {
+			echo "Success";
+			return TRUE;
+		} else {
+			echo "Failure";
+			return FALSE;
+		}
+	}
+
+	/*function sendMessageToPhone1($phone, $message)
+	{
+		$uid = "919911529958";
+		$pwd = "neelAm7112";
+		$curl = curl_init();
+		$timeout = 30;
+		$result = array();
+		$uid = urlencode($uid);
+		$pwd = urlencode($pwd);
+		// Go where the server takes you :P
+		curl_setopt($curl, CURLOPT_URL, "http://way2sms.com");
+		curl_setopt($curl, CURLOPT_HEADER, true);
+		curl_setopt($curl, CURLOPT_FOLLOWLOCATION, false);
+		curl_setopt($curl, CURLOPT_RETURNTRANSFER, TRUE);
+		$a = curl_exec($curl);
+		if(preg_match('#Location: (.*)#', $a, $r))
+		$way2sms = trim($r[1]);
+		// Setup for login
+		curl_setopt($curl, CURLOPT_URL, $way2sms."Login1.action");
+		curl_setopt($curl, CURLOPT_POST, 1);
+		curl_setopt($curl, CURLOPT_POSTFIELDS, "username=".$uid."&password=".$pwd."&button=Login");
+		curl_setopt($curl, CURLOPT_COOKIESESSION, 1);
+		curl_setopt($curl, CURLOPT_COOKIEFILE, "cookie_way2sms");
+		curl_setopt($curl, CURLOPT_FOLLOWLOCATION, 1);
+		curl_setopt($curl, CURLOPT_MAXREDIRS, 20);
+		curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+		curl_setopt($curl, CURLOPT_USERAGENT, "Mozilla/5.0 (Windows; U; Windows NT 6.0; en-US; rv:1.9.0.5) Gecko/2008120122 Firefox/3.0.5");
+		curl_setopt($curl, CURLOPT_CONNECTTIMEOUT, $timeout);
+		curl_setopt($curl, CURLOPT_REFERER, $way2sms);
+		$text = curl_exec($curl);
+		// Check if any error occured
+		if (curl_errno($curl))
+		return "access error : ". curl_error($curl);
+		// Check for proper login
+		$pos = stripos(curl_getinfo($curl, CURLINFO_EFFECTIVE_URL), "ebrdg.action");
+
+		//if ($pos === "FALSE" || $pos == 0 || $pos == "")
+		//return "invalid login";
+		// Check the message
+		if (trim($message) == "" || strlen($message) == 0)
+		return "invalid message";
+		// Take only the first 140 characters of the message
+		$message = urlencode(substr($message, 0, 140));
+		// Store the numbers from the string to an array
+		$pharr = explode(",", $phone);
+		// Set the home page from where we can send message
+		$refurl = curl_getinfo($curl, CURLINFO_EFFECTIVE_URL);
+		$newurl = str_replace("ebrdg.action?id=", "main.action?section=s&Token=", $refurl);
+		curl_setopt($curl, CURLOPT_URL, $newurl);
+
+		// Extract the token from the URL
+		$jstoken = substr($newurl, 50, -41);
+		//Go to the homepage
+		$text = curl_exec($curl);
+		// Send SMS to each number
+		foreach ($pharr as $p)
+		{
+			// Check the mobile number
+			if (strlen($p) != 10 || !is_numeric($p) || strpos($p, ".") != false)
+			{
+			  $result[] = array('phone' => $p, 'msg' => urldecode($message), 'result' => "invalid number");
+			  continue;
+			}
+			$p = urlencode($p);
+			// Setup to send SMS
+			curl_setopt($curl, CURLOPT_URL, $way2sms.'smstoss.action');
+			curl_setopt($curl, CURLOPT_REFERER, curl_getinfo($curl, CURLINFO_EFFECTIVE_URL));
+			curl_setopt($curl, CURLOPT_POST, 1);
+			curl_setopt($curl, CURLOPT_POSTFIELDS, "ssaction=ss&Token=".$jstoken."&mobile=".$p."&message=".$message."&button=Login");
+			$contents = curl_exec($curl);
+			//Check Message Status
+			$pos = strpos($contents, 'Message has been submitted successfully');
+			$res = ($pos !== false) ? true : false;
+			$result[] = array('phone' => $p, 'msg' => urldecode($message), 'result' => $res);
+		}
+		// Logout
+		curl_setopt($curl, CURLOPT_URL, $way2sms."LogOut");
+		curl_setopt($curl, CURLOPT_REFERER, $refurl);
+		$text = curl_exec($curl);
+		curl_close($curl);
+		return $result;
+	}*/
+}
+
+
+if ( ! function_exists('sendMessageToPhone2'))
+{
+	function sendMessageToPhone2($phone, $message)
+	{
+		$url = "http://www.proovl.com/api/send.php";
+
+		$postfields = array(
+			'user' => "c6wqfjw",
+			'token' => "Qcxw8F62VGcdlgB2T6CtYt3Rkr7HP9WL",
+			'route' => "1",
+			'from' => "9911529958",
+			'to' => $phone,
+			'text' => "$message"
+		);
+
+		if (!$curld = curl_init()) {
+			exit;
+		}
+
+		curl_setopt($curld, CURLOPT_POST, true);
+		curl_setopt($curld, CURLOPT_POSTFIELDS, $postfields);
+		curl_setopt($curld, CURLOPT_URL,$url);
+		curl_setopt($curld, CURLOPT_RETURNTRANSFER, true);
+
+		$output = curl_exec($curld);
+
+		curl_close ($output);
+
+		return $output;
+	}
+}
