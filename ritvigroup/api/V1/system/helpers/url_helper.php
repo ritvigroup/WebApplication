@@ -686,7 +686,7 @@ if ( ! function_exists('sendMessageToPhone'))
 				
 
 
-		if (!isset($id)) {
+		/*if (!isset($id)) {
 			echo "Session Failed";
 			unlink($cookie_file_path);
 			unlink($temp_file);
@@ -696,8 +696,8 @@ if ( ! function_exists('sendMessageToPhone'))
 			echo "Login Failed";
 			unlink($cookie_file_path);
 			unlink($temp_file);
-			return FALSE;
-		}
+			//return FALSE;
+		}*/
 
 		// SEND SMS
 

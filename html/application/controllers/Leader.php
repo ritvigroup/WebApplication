@@ -20,6 +20,12 @@ class Leader extends CI_Controller {
         $this->load->library('encrypt');*/
 
         $this->load->library('facebook');
+
+        $this->device_token     = gethostname();
+        $this->location_lant    = $this->input->post('location_lant');
+        $this->location_long    = $this->input->post('location_long');
+        $this->device_name      = $this->input->post('device_name');
+        $this->device_os        = $this->input->post('device_os');
        
 
     }
@@ -101,67 +107,22 @@ class Leader extends CI_Controller {
             redirect('leader/dashboard');
         }
 
-        if($this->facebook->is_authenticated()){
-            // Get user facebook profile details
-            $userProfile = $this->facebook->request('get', '/me?fields=id,first_name,last_name,email,gender,locale,picture');
+        if($this->input->post('MOCK') != '') {
 
-            echo '<pre>';
-            print_r($userProfile);
-            echo '</pre>';
-
-            // Preparing data for database insertion
-            $userData['oauth_provider'] = 'facebook';
-            $userData['oauth_uid'] = $userProfile['id'];
-            $userData['first_name'] = $userProfile['first_name'];
-            $userData['last_name'] = $userProfile['last_name'];
-            $userData['email'] = $userProfile['email'];
-            $userData['gender'] = $userProfile['gender'];
-            $userData['locale'] = $userProfile['locale'];
-            $userData['profile_url'] = 'https://www.facebook.com/'.$userProfile['id'];
-            $userData['picture_url'] = $userProfile['picture']['data']['url'];
-
-            // Check user data insert or update status
-            if(!empty($userID)){
-                $data['userData'] = $userData;
-                $this->session->set_userdata('userData',$userData);
-            }else{
-               $data['userData'] = array();
-            }
-
-            // Get logout URL
-            $data['logoutUrl'] = "rajesh1";$this->facebook->logout_url();
-        }else{
-            $fbuser = '';
-
-            // Get login URL
-            $data['authUrl'] =  $this->facebook->login_url();
-        }
-
-        if($this->input->post('request_action') != '') {
-
-            $this->curl->create(API_CALL_PATH.'leader-login.php');
+            $this->curl->create(API_CALL_PATH);
             $this->curl->option('buffersize', 10);
-            //$this->curl->option('useragent', 'Mozilla/5.0 (Windows; U; Windows NT 6.1; en-US; rv:1.9.2.8) Gecko/20100722 Firefox/3.6.8 (.NET CLR 3.5.30729)');
 
             $this->curl->option('returntransfer', 1);
             $this->curl->option('followlocation', 1);
             $this->curl->option('HEADER', false);
             $this->curl->option('connecttimeout', 600);
 
-            if($this->input->post('request_action') == "LOGIN_WITH_MPIN") {
-	            $post_data = array(
-	                                'request_action' => $this->input->post('request_action'),
-	                                'mobile' => $this->input->post('mobile'),
-	                                'mpin' => $this->input->post('mpin'),
-	                                );
-	        } else  if($this->input->post('request_action') == "LOGIN_WITH_USERNAME_PASSWORD") {
-	            $post_data = array(
-	                                'request_action' => $this->input->post('request_action'),
-	                                'username' => $this->input->post('username'),
-	                                'password' => $this->input->post('password'),
-	                                );
-	        }
+            $post_data = array();
+            foreach($this->input->post() AS $post_key => $post_value) {
+                $post_data = array_merge($post_data, array($post_key => $post_value));
 
+            }
+            
             $this->curl->option('postfields', $post_data);
             $data = $this->curl->execute();
 

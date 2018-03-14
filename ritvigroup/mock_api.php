@@ -5,19 +5,25 @@ $pageName = $_REQUEST['page_name'];
 
 switch ($pageName) {
 	case 'userlogin/loginMobileMpin':
-		$mobile = $_REQUEST['mobile'];
-		$mpin = $_REQUEST['mpin'];
+		
+		break;
+	case 'userlogin/loginMobile':
+		break;
 
-		$postData = array(
-							'mobile' => $mobile,
-							'mpin' => $mpin,
-							);
-		callTestMockApi($pageName, $postData);
+	case 'userlogin/loginUsernamePassword':
 		break;
 	
 	default:
 		# code...
 		break;
+}
+
+if($_POST['MOCK'] == "Y") {
+	callTestMockApi($pageName, $_POST);
+} else if($_POST['MOCK'] == "N"){
+	postDataInCurlGetResponse($pageName, $_POST);
+} else {
+	echo "Rajesh";die;
 }
 
 function callTestMockApi($pageName, $postData, $checkParam = true) {
@@ -33,8 +39,12 @@ function callTestMockApi($pageName, $postData, $checkParam = true) {
 			$sel_p = "SELECT tma.* FROM `TestMockApi` AS tma ";
 
 			$i = 1;
+
+			$notCheckParam = array('page_name', 'MOCK', 'device_token', 'location_lant', 'location_long', 'device_name', 'device_os');
 			foreach($postData AS $key => $val) {
-				$sel_p .= " INNER JOIN `TestMockApiParam` AS tmap".$i." ON (tma.`TestMockApiId` = tmap".$i.".`TestMockApiId` AND tmap".$i.".`TestMockApiKey` = '".$key."' AND tmap".$i.".`TestMockApiValue` = '".$val."') ";
+				if(!in_array($key, $notCheckParam)) {
+					$sel_p .= " INNER JOIN `TestMockApiParam` AS tmap".$i." ON (tma.`TestMockApiId` = tmap".$i.".`TestMockApiId` AND tmap".$i.".`TestMockApiKey` = '".$key."' AND tmap".$i.".`TestMockApiValue` = '".$val."') ";
+				}
 				$i++;
 			}
 			$sel_p .= " WHERE tma.`TestMockApiId` = '".$res['TestMockApiId']."' ";
@@ -48,26 +58,34 @@ function callTestMockApi($pageName, $postData, $checkParam = true) {
 				echo $res['TestMockApiResponseFailed'];
 			}
 		}
+	} else {
+
 	}
 }
 
 
-/*function post_curl($pageName, $postvars) {
+function postDataInCurlGetResponse($pageName, $postvars) {
 	$ch = curl_init();
-	
-	$url = "http://www.google.com";
-	curl_setopt($ch,CURLOPT_URL,$url);
-	curl_setopt($ch,CURLOPT_POST, 1);                //0 for a get request
-	curl_setopt($ch,CURLOPT_POSTFIELDS,$postvars);
-	curl_setopt($ch,CURLOPT_RETURNTRANSFER, true);
-	curl_setopt($ch,CURLOPT_CONNECTTIMEOUT ,3);
-	curl_setopt($ch,CURLOPT_TIMEOUT, 20);
+
+	$headers = array("Content-Type:multipart/form-data");
+
+	$callurl = SITE_URL.'/'.$pageName;
+
+	curl_setopt($ch, CURLOPT_URL, $callurl);
+	curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+	curl_setopt($ch, CURLOPT_HEADER, false);
+	curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+	curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 2);
+	curl_setopt($ch, CURLOPT_TIMEOUT, 2);
+	curl_setopt($ch, CURLOPT_POST, 1); //0 for a get request
+	curl_setopt($ch, CURLOPT_POSTFIELDS, $postvars);
 	$response = curl_exec($ch);
 	
 	header('Content-type: application/json');
 
 	echo $response;
 
-	curl_close ($ch);
-}*/
+	curl_close($ch);
+
+}
 ?>

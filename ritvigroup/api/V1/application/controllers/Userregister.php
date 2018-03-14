@@ -172,9 +172,27 @@ class Userregister extends CI_Controller {
     					                    'UpdatedOn' 				=> date('Y-m-d H:i:s'),
     					                );
 
-    		            $UserProfileId = $this->User_Model->insertUserProfile($insertData);
+                        $UserCitizenProfileId = $this->User_Model->insertUserProfile($insertData);
 
-                        if($UserProfileId > 0) {
+                        $insertData = array(
+                                            'UserId'                    => $UserId,
+                                            'UserTypeId'                => 2,
+                                            'ParentUserId'              => 0,
+                                            'FirstName'                 => $name,
+                                            'Email'                     => $email,
+                                            'UserProfileDeviceToken'    => $this->device_token,
+                                            'Mobile'                    => $mobile,
+                                            'ProfileStatus'             => 1,
+                                            'AddedBy'                   => $UserId,
+                                            'UpdatedBy'                 => $UserId,
+                                            'DeviceLantitude'           => $this->location_lant,
+                                            'AddedOn'                   => date('Y-m-d H:i:s'),
+                                            'UpdatedOn'                 => date('Y-m-d H:i:s'),
+                                        );
+
+                        $UserLeaderProfileId = $this->User_Model->insertUserProfile($insertData);
+
+                        if($UserCitizenProfileId > 0 && $UserLeaderProfileId > 0) {
                             $this->db->query("COMMIT");
                             $user_profile = $this->User_Model->getUserDetail($UserId);
                             $msg = "User registered and logged in successfully";
@@ -203,6 +221,157 @@ class Userregister extends CI_Controller {
             $array = array(
                            "status"         => 'success',
                            "user_profile"	=> $user_profile,
+                           "message"        => $msg,
+                           );
+        }
+        displayJsonEncode($array);
+    }
+
+
+    public function registerFromWebsite() {
+        $error_occured = false;
+        $username           = $this->input->post('username');
+        $mobile             = $this->input->post('mobile');
+        $email              = $this->input->post('email');
+        $password           = $this->input->post('password');
+        $passwordConfirm    = $this->input->post('passwordConfirm');
+        $firstname          = $this->input->post('firstname');
+        $lastname           = $this->input->post('lastname');
+        $gender             = $this->input->post('gender');
+        
+        if($username == "") {
+            $msg = "Please enter your username";
+            $error_occured = true;
+        } else if($mobile == "") {
+            $msg = "Please enter your mobile number";
+            $error_occured = true;
+        } else if($email == "") {
+            $msg = "Please enter your email";
+            $error_occured = true;
+        } else if($password == "") {
+            $msg = "Please enter your password";
+            $error_occured = true;
+        } else if($conf_pass == "") {
+            $msg = "Please enter confirm password";
+            $error_occured = true;
+        } else if($password != $conf_pass) {
+            $msg = "Please confirm your password";
+            $error_occured = true;
+        } else if($first_name == "") {
+            $msg = "Please enter your first name";
+            $error_occured = true;
+        } else if($last_name == "") {
+            $msg = "Please enter your last name";
+            $error_occured = true;
+        } else if($gender == "0") {
+            $msg = "Please select your gender";
+            $error_occured = true;
+        } else {
+
+            $res_u = $this->User_Model->userExistForUsernameEmailMobile($username, $email, $mobile);
+
+            if($res_u['UserName'] == $username) {
+                $msg = "Username already exist";
+                $error_occured = true;
+            } else if($res_u['UserEmail'] == $email) {
+                $msg = "Email already exist";
+                $error_occured = true;
+            } else if($res_u['UserMobile'] == $mobile) {
+                $msg = "Phone number already exist";
+                $error_occured = true;
+            } else {
+                // If User Not exist in our system we register him/her first and generate UserId for him/her
+
+                $this->db->query("BEGIN");
+
+                $UserUniqueId = $this->User_Model->autoGenerateUserUniqueId();
+
+                $insertData = array(
+                                    'LoginDeviceToken'  => $this->device_token,
+                                    'DeviceLongitude'   => $this->location_long,
+                                    'DeviceLantitude'   => $this->location_lant,
+                                    'UserStatus'        => 1,
+                                    'LoginStatus'       => 1,
+                                    'UserName'          => $username,
+                                    'UserPassword'      => $password,
+                                    'UserUniqueId'      => $user_unique_id,
+                                    'UserMobile'        => $mobile,
+                                    'UserEmail'         => $email,
+                                    'AddedOn'           => date('Y-m-d H:i:s'),
+                                    'UpdatedOn'         => date('Y-m-d H:i:s'),
+                                );
+
+                $UserId = $this->User_Model->insertUser($insertData);
+
+                if($UserId > 0) {
+                    $insertData = array(
+                                        'UserId'                    => $UserId,
+                                        'UserTypeId'                => 1,
+                                        'ParentUserId'              => 0,
+                                        'FirstName'                 => $first_name,
+                                        'LastName'                  => $last_name,
+                                        'Email'                     => $email,
+                                        'UserProfileDeviceToken'    => $this->device_token,
+                                        'Mobile'                    => $mobile,
+                                        'Gender'                    => $gender,
+                                        'ProfileStatus'             => 1,
+                                        'AddedBy'                   => $UserId,
+                                        'UpdatedBy'                 => $UserId,
+                                        'DeviceLantitude'           => $this->location_lant,
+                                        'AddedOn'                   => date('Y-m-d H:i:s'),
+                                        'UpdatedOn'                 => date('Y-m-d H:i:s'),
+                                    );
+
+                    $UserCitizenProfileId = $this->User_Model->insertUserProfile($insertData);
+
+                    $insertData = array(
+                                        'UserId'                    => $UserId,
+                                        'UserTypeId'                => 2,
+                                        'ParentUserId'              => 0,
+                                        'FirstName'                 => $first_name,
+                                        'LastName'                  => $last_name,
+                                        'Email'                     => $email,
+                                        'UserProfileDeviceToken'    => $this->device_token,
+                                        'Mobile'                    => $mobile,
+                                        'Gender'                    => $gender,
+                                        'ProfileStatus'             => 1,
+                                        'AddedBy'                   => $UserId,
+                                        'UpdatedBy'                 => $UserId,
+                                        'DeviceLantitude'           => $this->location_lant,
+                                        'AddedOn'                   => date('Y-m-d H:i:s'),
+                                        'UpdatedOn'                 => date('Y-m-d H:i:s'),
+                                    );
+
+                    $UserLeaderProfileId = $this->User_Model->insertUserProfile($insertData);
+
+                    if($UserCitizenProfileId > 0 && $UserLeaderProfileId > 0) {
+                        $this->db->query("COMMIT");
+                        $user_profile = $this->User_Model->getUserDetail($UserId);
+                        $msg = "User registered and logged in successfully";
+                    } else {
+                        $this->db->query("ROLLBACK");
+                        $msg = "Error: Problem to save user profile";
+                        $error_occured = true;
+                    }
+
+                } else {
+                    $this->db->query("ROLLBACK");
+                    $msg = "Error: User not saved.";
+                    $error_occured = true;
+                }
+            }
+        }
+
+        if($error_occured == true) {
+            $array = array(
+                            "status"        => 'failed',
+                            "message"       => $msg,
+                        );
+        } else {
+
+            $array = array(
+                           "status"         => 'success',
+                           "user_profile"   => $user_profile,
                            "message"        => $msg,
                            );
         }
@@ -285,9 +454,25 @@ class Userregister extends CI_Controller {
                                         'UpdatedOn'                 => date('Y-m-d H:i:s'),
                                     );
 
-                    $UserProfileId = $this->User_Model->insertUserProfile($insertData);
+                    $UserCitizenProfileId = $this->User_Model->insertUserProfile($insertData);
 
-                    if($UserProfileId > 0) {
+                    $insertData = array(
+                                        'UserId'                    => $UserId,
+                                        'UserTypeId'                => 2,
+                                        'ParentUserId'              => 0,
+                                        'FirstName'                 => $UserName,
+                                        'UserProfileDeviceToken'    => $this->device_token,
+                                        'Mobile'                    => $mobile,
+                                        'ProfileStatus'             => 1,
+                                        'AddedBy'                   => $UserId,
+                                        'UpdatedBy'                 => $UserId,
+                                        'AddedOn'                   => date('Y-m-d H:i:s'),
+                                        'UpdatedOn'                 => date('Y-m-d H:i:s'),
+                                    );
+
+                    $UserLeaderProfileId = $this->User_Model->insertUserProfile($insertData);
+
+                    if($UserCitizenProfileId > 0 && $UserLeaderProfileId > 0) {
 
                         $updateData = array(
                             'LoginOtp' => $otp,

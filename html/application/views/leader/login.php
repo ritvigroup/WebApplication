@@ -234,7 +234,7 @@ $('input[type="radio"]').iCheck({
 
             $this.button('Validating...');
 
-            $.post("<?php echo base_url(); ?>leader/login", {username: signin_username, password: signin_password, request_action: 'LOGIN_WITH_USERNAME_PASSWORD'},
+            $.post("<?php echo base_url(); ?>leader/login", {username: signin_username, password: signin_password, page_name: 'userlogin/loginUsernamePassword', MOCK: 'Y'},
                 function (data, status) {
                    
                     if (data.status === "failed") {

@@ -15,7 +15,7 @@ ini_set('post_max_size', '256M');
 ini_set('max_input_time', 300);
 ini_set('max_execution_time', 300);*/
 
-define('DEVELOPMENT_MODE', 2); // 1 = Development, 0 = Production
+define('DEVELOPMENT_MODE', 1); // 1 = Development, 0 = Production
 
 define('APP_FOLDER', 'ritvigroup');
 define('API_FOLDER', 'api');
@@ -54,7 +54,7 @@ if(DEVELOPMENT_MODE == 1) {
     $server_pass    = "";
     $server_db      = "kaajneeti";
 
-    define('WEBSITE_URL', 'http://localhost:81');
+    define('WEBSITE_URL', 'http://localhost:81/ritvigroup.com');
     
 }
 define('SITE_URL', WEBSITE_URL.DIRECTORY_SEPARATOR.APP_FOLDER.DIRECTORY_SEPARATOR.API_FOLDER.DIRECTORY_SEPARATOR.VERSON_FOLDER);

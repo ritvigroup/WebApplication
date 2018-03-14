@@ -83,6 +83,23 @@ class User_Model extends CI_Model {
     }
 
 
+    public function userExistForUsernameEmailMobile($UserName, $UserEmail, $UserMobile) {
+        $this->db->select('UserId, UserStatus, UserName, UserEmail, UserMobile');
+        $this->db->from('User');
+        $this->db->where('UserName', $UserName);
+        $this->db->or_where('UserEmail', $UserEmail);
+        $this->db->or_where('UserMobile', $UserMobile);
+        $this->db->limit(1);
+        $query = $this->db->get();
+        $result = $query->row_array();
+        if ($query->num_rows() > 0) {
+            return ($result);
+        } else {
+            return false;
+        }
+    }
+
+
     public function updateLoginStatus($UserId, $updateData) {
         $this->db->where('UserId', $UserId);
         $this->db->update('User', $updateData);

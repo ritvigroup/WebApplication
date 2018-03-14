@@ -119,6 +119,8 @@ class Userlogin extends CI_Controller {
 
                 	// If User Not exist in our system we register him/her first and generate UserId for him/her
 
+                    $this->db->query("BEGIN");
+
                 	$UserName = $this->User_Model->autoGenerateUserName();
 					$UserUniqueId = $this->User_Model->autoGenerateUserUniqueId();
 
@@ -153,26 +155,56 @@ class Userlogin extends CI_Controller {
 
 		            $UserId = $this->User_Model->insertUser($insertData);
 
-		            $insertData = array(
-					                    'UserId' 					=> $UserId,
-					                    'UserTypeId' 				=> 1,
-					                    'ParentUserId' 				=> 0,
-					                    'FirstName' 				=> $name,
-					                    'Email' 					=> $email,
-					                    'UserProfileDeviceToken' 	=> $this->device_token,
-					                    'Mobile' 					=> $mobile,
-					                    'ProfileStatus' 			=> 1,
-					                    'AddedBy' 					=> $UserId,
-					                    'UpdatedBy' 				=> $UserId,
-					                    'AddedOn' 					=> date('Y-m-d H:i:s'),
-					                    'UpdatedOn' 				=> date('Y-m-d H:i:s'),
-					                );
+                    if($UserId > 0) {
+    		            $insertData = array(
+    					                    'UserId' 					=> $UserId,
+    					                    'UserTypeId' 				=> 1,
+    					                    'ParentUserId' 				=> 0,
+    					                    'FirstName' 				=> $name,
+    					                    'Email' 					=> $email,
+    					                    'UserProfileDeviceToken' 	=> $this->device_token,
+    					                    'Mobile' 					=> $mobile,
+    					                    'ProfileStatus' 			=> 1,
+    					                    'AddedBy' 					=> $UserId,
+    					                    'UpdatedBy' 				=> $UserId,
+    					                    'AddedOn' 					=> date('Y-m-d H:i:s'),
+    					                    'UpdatedOn' 				=> date('Y-m-d H:i:s'),
+    					                );
 
-		            $UserProfileId = $this->User_Model->insertUserProfile($insertData);
+                        $UserCitizenProfileId = $this->User_Model->insertUserProfile($insertData);
 
-                    $user_profile = $this->User_Model->getUserDetail($UserId);
+                        $insertData = array(
+                                            'UserId'                    => $UserId,
+                                            'UserTypeId'                => 2,
+                                            'ParentUserId'              => 0,
+                                            'FirstName'                 => $name,
+                                            'Email'                     => $email,
+                                            'UserProfileDeviceToken'    => $this->device_token,
+                                            'Mobile'                    => $mobile,
+                                            'ProfileStatus'             => 1,
+                                            'AddedBy'                   => $UserId,
+                                            'UpdatedBy'                 => $UserId,
+                                            'AddedOn'                   => date('Y-m-d H:i:s'),
+                                            'UpdatedOn'                 => date('Y-m-d H:i:s'),
+                                        );
 
-                    $msg = "User registered and logged in successfully";
+                        $UserLeaderProfileId = $this->User_Model->insertUserProfile($insertData);
+
+                        if($UserCitizenProfileId > 0 && $UserLeaderProfileId > 0) {
+                            $this->db->query("COMMIT");
+                            $user_profile = $this->User_Model->getUserDetail($UserId);
+                            $msg = "User registered and logged in successfully";
+                        } else {
+                            $this->db->query("ROLLBACK");
+                            $msg = "Error: Problem to save user profile";
+                            $error_occured = true;
+                        }
+
+                    } else {
+                        $this->db->query("ROLLBACK");
+                        $msg = "Error: User not saved.";
+                        $error_occured = true;
+                    }
                 }
             }
         }

@@ -53,8 +53,8 @@
  *
  * NOTE: If you change these, also change the error_reporting() code below
  */
-	define('ENVIRONMENT', isset($_SERVER['CI_ENV']) ? $_SERVER['CI_ENV'] : 'development');
-	define('API_CALL_PATH', 'http://ritvigroup.com/ritvigroup.com/ritvigroup/api_old/V1/');
+	define('ENVIRONMENT', 'development');
+	
 
 	
 
@@ -71,6 +71,9 @@ switch (ENVIRONMENT)
 	case 'development':
 		error_reporting(-1);
 		ini_set('display_errors', 0);
+
+		define('API_CALL_PATH', 'http://ritvigroup.com/ritvigroup.com/ritvigroup/mock_api.php');
+
 	break;
 
 	case 'testing':
@@ -84,6 +87,9 @@ switch (ENVIRONMENT)
 		{
 			error_reporting(E_ALL & ~E_NOTICE & ~E_STRICT & ~E_USER_NOTICE);
 		}
+
+		define('API_CALL_PATH', 'http://ritvigroup.com/ritvigroup.com/ritvigroup/mock_api.php');
+		
 	break;
 
 	default:
@@ -315,4 +321,5 @@ switch (ENVIRONMENT)
  *
  * And away we go...
  */
+
 require_once BASEPATH.'core/CodeIgniter.php';
