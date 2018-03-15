@@ -1,7 +1,7 @@
 <?php
 include('mock_config.php');
 
-$pageName = $_REQUEST['page_name'];
+$pageName = $_POST['page_name'];
 
 switch ($pageName) {
 	case 'userlogin/loginMobileMpin':
@@ -12,19 +12,22 @@ switch ($pageName) {
 
 	case 'userlogin/loginUsernamePassword':
 		break;
+
+	case 'userregister/registerFromWebsite':
+		break;
 	
 	default:
 		# code...
 		break;
 }
-
-if($_POST['MOCK'] == "Y") {
+callTestMockApi($pageName, $_POST);
+/*if($_POST['MOCK'] == "Y") {
 	callTestMockApi($pageName, $_POST);
 } else if($_POST['MOCK'] == "N"){
 	postDataInCurlGetResponse($pageName, $_POST);
 } else {
 	echo "Rajesh";die;
-}
+}*/
 
 function callTestMockApi($pageName, $postData, $checkParam = true) {
 	$sel = "SELECT * FROM `TestMockApi` WHERE `TestMockApiName` = '".$pageName."'";

@@ -251,16 +251,16 @@ class Userregister extends CI_Controller {
         } else if($password == "") {
             $msg = "Please enter your password";
             $error_occured = true;
-        } else if($conf_pass == "") {
+        } else if($passwordConfirm == "") {
             $msg = "Please enter confirm password";
             $error_occured = true;
-        } else if($password != $conf_pass) {
+        } else if($password != $passwordConfirm) {
             $msg = "Please confirm your password";
             $error_occured = true;
-        } else if($first_name == "") {
+        } else if($firstname == "") {
             $msg = "Please enter your first name";
             $error_occured = true;
-        } else if($last_name == "") {
+        } else if($lastname == "") {
             $msg = "Please enter your last name";
             $error_occured = true;
         } else if($gender == "0") {

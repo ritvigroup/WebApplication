@@ -32,7 +32,7 @@ class Leader extends CI_Controller {
     
     public function index()
     {
-        if(($this->session->userdata('leader_id')) > 0)
+        if(($this->session->userdata('UserId')) > 0)
         {
             redirect('leader/dashboard');
         }
@@ -102,7 +102,7 @@ class Leader extends CI_Controller {
     public function login(){
         $data = array();
 
-        if(($this->session->userdata('leader_id')) > 0)
+        if(($this->session->userdata('UserId')) > 0)
         {
             redirect('leader/dashboard');
         }
@@ -132,9 +132,9 @@ class Leader extends CI_Controller {
 
             if($json_decode->status == "success") {
 
-                $leader_id = $json_decode->user_detail->user_profile->leader_id;
-                if($leader_id > 0) {
-                    $this->session->set_userdata('leader_id', $leader_id);
+                $UserId = $json_decode->user_profile->UserId;
+                if($UserId > 0) {
+                    $this->session->set_userdata('UserId', $UserId);
                     
                 }
             }
@@ -146,45 +146,45 @@ class Leader extends CI_Controller {
     }
 
     public function register(){
-    	if(($this->session->userdata('leader_id')) > 0)
+    	if(($this->session->userdata('UserId')) > 0)
         {
             redirect('leader/dashboard');
         }
 
-        if($this->input->post('request_action') != '') {
+        if($this->input->post('MOCK') != '') {
 
-            $this->curl->create(API_CALL_PATH.'leader-register.php');
+            $this->curl->create(API_CALL_PATH);
             $this->curl->option('buffersize', 10);
-            //$this->curl->option('useragent', 'Mozilla/5.0 (Windows; U; Windows NT 6.1; en-US; rv:1.9.2.8) Gecko/20100722 Firefox/3.6.8 (.NET CLR 3.5.30729)');
 
             $this->curl->option('returntransfer', 1);
             $this->curl->option('followlocation', 1);
             $this->curl->option('HEADER', false);
             $this->curl->option('connecttimeout', 600);
-            $post_data = array(
-                                'request_action' 	=> $this->input->post('request_action'),
-                                'username' 			=> $this->input->post('username'),
-                                'mobile' 			=> $this->input->post('mobile'),
-                                'email' 			=> $this->input->post('email'),
-                                'password' 			=> $this->input->post('password'),
-                                'passwordConfirm' 	=> $this->input->post('passwordConfirm'),
-                                'firstname' 		=> $this->input->post('firstname'),
-                                'lastname' 			=> $this->input->post('lastname'),
-                                'gender' 			=> $this->input->post('gender'),
-                                );
+            
+            $post_data = array();
+            foreach($this->input->post() AS $post_key => $post_value) {
+                $post_data = array_merge($post_data, array($post_key => $post_value));
+
+            }
 
             $this->curl->option('postfields', $post_data);
             $data = $this->curl->execute();
 
             $json_decode = json_decode($data);
 
+            echo '<pre>';
+            print_r(API_CALL_PATH);
+            print_r($json_decode);
+            print_r($this->input->post());
+            return false;
+
             header('Content-type: application/json');
 
             if($json_decode->status == "success") {
 
-                $leader_id = $json_decode->user_detail->user_profile->leader_id;
-                if($leader_id > 0) {
-                    $this->session->set_userdata('leader_id', $leader_id);
+                $UserId = $json_decode->user_profile->UserId;
+                if($UserId > 0) {
+                    $this->session->set_userdata('UserId', $UserId);
                     
                 }
             }
@@ -197,7 +197,7 @@ class Leader extends CI_Controller {
     }
 
     public function forgot(){
-        if(($this->session->userdata('leader_id')) > 0)
+        if(($this->session->userdata('UserId')) > 0)
         {
             redirect('leader/dashboard');
         }
@@ -226,9 +226,9 @@ class Leader extends CI_Controller {
 
             if($json_decode->status == "success") {
 
-                /*$leader_id = $json_decode->user_detail->user_profile->leader_id;
-                if($leader_id > 0) {
-                    $this->session->set_userdata('leader_id', $leader_id);
+                /*$UserId = $json_decode->user_profile->UserId;
+                if($UserId > 0) {
+                    $this->session->set_userdata('UserId', $UserId);
                     
                 }*/
             }
@@ -242,7 +242,7 @@ class Leader extends CI_Controller {
 
 
     public function resetpassword(){
-        if(($this->session->userdata('leader_id')) > 0)
+        if(($this->session->userdata('UserId')) > 0)
         {
             redirect('leader/dashboard');
         }
@@ -273,9 +273,9 @@ class Leader extends CI_Controller {
 
             if($json_decode->status == "success") {
 
-                /*$leader_id = $json_decode->user_detail->user_profile->leader_id;
-                if($leader_id > 0) {
-                    $this->session->set_userdata('leader_id', $leader_id);
+                /*$UserId = $json_decode->user_profile->UserId;
+                if($UserId > 0) {
+                    $this->session->set_userdata('UserId', $UserId);
                     
                 }*/
             }
@@ -292,10 +292,10 @@ class Leader extends CI_Controller {
     public function logout()
 	{
 		$this->session->set_userdata(array(
-			'leader_id'		=> '',
+			'UserId'		=> '',
 		));
             
-		$this->session->unset_userdata('leader_id');
+		$this->session->unset_userdata('UserId');
 		$this->session->sess_destroy();
 		redirect('leader/login');
 	}
@@ -305,7 +305,7 @@ class Leader extends CI_Controller {
         $this->facebook->destroy_session();
 
         // Remove user data from session
-        $this->session->unset_userdata('leader_id');
+        $this->session->unset_userdata('UserId');
         $this->session->sess_destroy();
         // Redirect to login page
         redirect('leader/login');
@@ -319,6 +319,9 @@ class Leader extends CI_Controller {
 
     public function profile() {
         $data = array();
+
+        if(($this->session->userdata('UserId')) > 0) {
+        }
         $this->load->view('leader/profile',$data);
     }
 

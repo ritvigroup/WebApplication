@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-<head><title>Leader Registration</title>
+<head><title>Registration</title>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -160,7 +160,7 @@ $('input[type="radio"]').iCheck({
 
             $this.button('Validating...');
 
-            $.post("<?php echo base_url(); ?>leader/register", {email: signup_email, mobile: signup_mobile, username: signup_username, password: signup_password, passwordConfirm: signup_confirm_password, firstname: signup_firstname, lastname: signup_lastname, gender: signup_gender, request_action: 'REGISTER_FROM_WEB'},
+            $.post("<?php echo base_url(); ?>leader/register", {email: signup_email, mobile: signup_mobile, username: signup_username, password: signup_password, passwordConfirm: signup_confirm_password, firstname: signup_firstname, lastname: signup_lastname, gender: signup_gender, page_name: 'userregister/registerFromWebsite', MOCK: 'Y'},
                 function (data, status) {
                    
                     if (data.status === "failed") {
