@@ -48,7 +48,7 @@ class Userlogin extends CI_Controller {
                 
                 $this->User_Model->updateLoginStatus($UserId, $updateData);
 
-                $user_profile = $this->User_Model->getUserDetail($UserId);
+                $user_info = $this->User_Model->getUserDetail($UserId);
 
                 $msg = "User logged in successfully";
 
@@ -97,7 +97,7 @@ class Userlogin extends CI_Controller {
                 		$this->User_Model->updateUserData($UserId, $updateData);
                 	}
 
-                	$this->User_Model->saveUserPhoto($photo_cover, $UserId, $profile_or_cover = 1);
+                	$this->User_Model->saveUserPhoto('photo', $UserId, $profile_or_cover = 1);
 
                 	$insertData = array(
 					                    'UserId' 		=> $UserId,
@@ -111,7 +111,7 @@ class Userlogin extends CI_Controller {
 
 		            $this->User_Model->insertUserLog($insertData);
 
-		            $user_profile = $this->User_Model->getUserDetail($UserId);
+		            $user_info = $this->User_Model->getUserDetail($UserId);
 
                 	$msg = "User logged in successfully";
 
@@ -192,7 +192,7 @@ class Userlogin extends CI_Controller {
 
                         if($UserCitizenProfileId > 0 && $UserLeaderProfileId > 0) {
                             $this->db->query("COMMIT");
-                            $user_profile = $this->User_Model->getUserDetail($UserId);
+                            $user_info = $this->User_Model->getUserDetail($UserId);
                             $msg = "User registered and logged in successfully";
                         } else {
                             $this->db->query("ROLLBACK");
@@ -217,9 +217,9 @@ class Userlogin extends CI_Controller {
         } else {
 
             $array = array(
-                           "status"         => 'success',
-                           "user_profile"	=> $user_profile,
-                           "message"        => $msg,
+                           "status"     => 'success',
+                           "user_info"  => $user_info,
+                           "message"    => $msg,
                            );
         }
         displayJsonEncode($array);
@@ -251,7 +251,7 @@ class Userlogin extends CI_Controller {
                 
                 $this->User_Model->updateLoginStatus($UserId, $updateData);
 
-                $user_profile = $this->User_Model->getUserDetail($UserId);
+                $user_info = $this->User_Model->getUserDetail($UserId);
 
                 $msg = "User logged in successfully";
             } else {
@@ -269,7 +269,7 @@ class Userlogin extends CI_Controller {
 
             $array = array(
                            "status"         => 'success',
-                           "user_profile"	=> $user_profile,
+                           "user_info"	     => $user_info,
                            "message"        => $msg,
                            );
         }
@@ -302,7 +302,7 @@ class Userlogin extends CI_Controller {
                 
                 $this->User_Model->updateLoginStatus($UserId, $updateData);
 
-                $user_profile = $this->User_Model->getUserDetail($UserId);
+                $user_info = $this->User_Model->getUserDetail($UserId);
 
                 $msg = "User logged in successfully";
             } else {
@@ -320,7 +320,7 @@ class Userlogin extends CI_Controller {
 
             $array = array(
                            "status"         => 'success',
-                           "user_profile"	=> $user_profile,
+                           "user_info"	=> $user_info,
                            "message"        => $msg,
                            );
         }
@@ -410,7 +410,7 @@ class Userlogin extends CI_Controller {
                 
                 $this->User_Model->updateLoginStatus($UserId, $updateData);
 
-                $user_profile = $this->User_Model->getUserDetail($UserId);
+                $user_info = $this->User_Model->getUserDetail($UserId);
                 
                 $insertData = array(
 				                    'UserId' 		=> $UserId,
@@ -437,8 +437,8 @@ class Userlogin extends CI_Controller {
 						);
 		} else {
 			$array = array(
-			               "status" 		=> 'success',
-						   "user_profile"	=> $user_profile,
+			               "status" 	    => 'success',
+						   "user_info"	    => $user_info,
 						   "message"		=> $msg,
 			               );
 		}

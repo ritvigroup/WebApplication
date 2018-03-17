@@ -88,7 +88,7 @@ defined('EXIT__AUTO_MAX')      OR define('EXIT__AUTO_MAX', 125); // highest auto
 
 /* ================= OUR CONSTANTS ================== */
 
-defined('WEBSITE_URL')        OR define('WEBSITE_URL', 'http://www.ritvigroup.com');
+defined('WEBSITE_URL')        OR define('WEBSITE_URL', 'http://www.ritvigroup.com/ritvigroup.com');
 
 
 defined('APP_FOLDER')        OR define('APP_FOLDER', 'ritvigroup');
@@ -135,4 +135,21 @@ defined('MSG_THUMB_URL')        OR define('MSG_THUMB_URL', SITE_PATH.UPLOAD_DIR.
 
 defined('LIKE_IMAGE_DIR')        OR define('LIKE_IMAGE_DIR', UPLOAD_DIR.'/emotions/');
 defined('LIKE_IMAGE_URL')        OR define('LIKE_IMAGE_URL', SITE_PATH.UPLOAD_DIR.'/emotions/');
+
+
+// Posts
+defined('POST_AUDIO_DIR')        OR define('POST_AUDIO_DIR', UPLOAD_DIR.'/post/audio/');
+defined('POST_AUDIO_URL')        OR define('POST_AUDIO_URL', SITE_PATH.UPLOAD_DIR.'/post/audio/');
+
+defined('POST_DOC_DIR')        	OR define('POST_DOC_DIR', UPLOAD_DIR.'/post/document/');
+defined('POST_DOC_URL')        	OR define('POST_DOC_URL', SITE_PATH.UPLOAD_DIR.'/post/document/');
+
+defined('POST_IMAGE_DIR')        OR define('POST_IMAGE_DIR', UPLOAD_DIR.'/post/image/');
+defined('POST_IMAGE_URL')        OR define('POST_IMAGE_URL', SITE_PATH.UPLOAD_DIR.'/post/image/');
+
+defined('POST_VIDEO_DIR')        OR define('POST_VIDEO_DIR', UPLOAD_DIR.'/post/video/');
+defined('POST_VIDEO_URL')        OR define('POST_VIDEO_URL', SITE_PATH.UPLOAD_DIR.'/post/video/');
+
+defined('POST_THUMB_DIR')        OR define('POST_THUMB_DIR', UPLOAD_DIR.'/post/thumbnail/');
+defined('POST_THUMB_URL')        OR define('POST_THUMB_URL', SITE_PATH.UPLOAD_DIR.'/post/thumbnail/');
 

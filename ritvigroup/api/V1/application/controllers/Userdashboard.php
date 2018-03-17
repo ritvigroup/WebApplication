@@ -28,7 +28,7 @@ class Userdashboard extends CI_Controller {
 			$msg = "Please enter user";
 			$error_occured = true;
 		} else {
-            $user_dashboard = $this->User_Model->getUserCitizenDashboard($UserId);
+            $citizen_dashboard = $this->User_Model->getUserCitizenDashboard($UserId);
         }
 
         if($error_occured == true) {
@@ -39,9 +39,9 @@ class Userdashboard extends CI_Controller {
         } else {
 
             $array = array(
-                           "status"         => 'success',
-                           "user_dashboard"	=> $user_dashboard,
-                           "message"        => $msg,
+                           "status"             => 'success',
+                           "citizen_dashboard"	=> $citizen_dashboard,
+                           "message"            => $msg,
                            );
         }
         displayJsonEncode($array);

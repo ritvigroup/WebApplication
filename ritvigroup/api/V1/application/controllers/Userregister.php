@@ -48,7 +48,7 @@ class Userregister extends CI_Controller {
                 
                 $this->User_Model->updateLoginStatus($UserId, $updateData);
 
-                $user_profile = $this->User_Model->getUserDetail($UserId);
+                $user_info = $this->User_Model->getUserDetail($UserId);
 
                 $msg = "User logged in successfully";
 
@@ -97,7 +97,7 @@ class Userregister extends CI_Controller {
                 		$this->User_Model->updateUserData($UserId, $updateData);
                 	}
 
-                	$this->User_Model->saveUserPhoto($photo_cover, $UserId, $profile_or_cover = 1);
+                	$this->User_Model->saveUserPhoto('photo', $UserId, $profile_or_cover = 1);
 
                 	$insertData = array(
 					                    'UserId' 		=> $UserId,
@@ -111,7 +111,7 @@ class Userregister extends CI_Controller {
 
 		            $this->User_Model->insertUserLog($insertData);
 
-		            $user_profile = $this->User_Model->getUserDetail($UserId);
+		            $user_info = $this->User_Model->getUserDetail($UserId);
 
                 	$msg = "User logged in successfully";
 
@@ -194,7 +194,7 @@ class Userregister extends CI_Controller {
 
                         if($UserCitizenProfileId > 0 && $UserLeaderProfileId > 0) {
                             $this->db->query("COMMIT");
-                            $user_profile = $this->User_Model->getUserDetail($UserId);
+                            $user_info = $this->User_Model->getUserDetail($UserId);
                             $msg = "User registered and logged in successfully";
                         } else {
                             $this->db->query("ROLLBACK");
@@ -220,7 +220,7 @@ class Userregister extends CI_Controller {
 
             $array = array(
                            "status"         => 'success',
-                           "user_profile"	=> $user_profile,
+                           "user_info"	=> $user_info,
                            "message"        => $msg,
                            );
         }
@@ -346,7 +346,7 @@ class Userregister extends CI_Controller {
 
                     if($UserCitizenProfileId > 0 && $UserLeaderProfileId > 0) {
                         $this->db->query("COMMIT");
-                        $user_profile = $this->User_Model->getUserDetail($UserId);
+                        $user_info = $this->User_Model->getUserDetail($UserId);
                         $msg = "User registered and logged in successfully";
                     } else {
                         $this->db->query("ROLLBACK");
@@ -371,7 +371,7 @@ class Userregister extends CI_Controller {
 
             $array = array(
                            "status"         => 'success',
-                           "user_profile"   => $user_profile,
+                           "user_info"   => $user_info,
                            "message"        => $msg,
                            );
         }
@@ -484,7 +484,7 @@ class Userregister extends CI_Controller {
 
                         $this->db->query("COMMIT");
 
-                        $user_profile = $this->User_Model->getUserDetail($UserId);
+                        $user_info = $this->User_Model->getUserDetail($UserId);
 
                         $msg = "Otp send to your mobile for verification.";
                     } else {
@@ -547,7 +547,7 @@ class Userregister extends CI_Controller {
                 
                 $this->User_Model->updateLoginStatus($UserId, $updateData);
 
-                $user_profile = $this->User_Model->getUserDetail($UserId);
+                $user_info = $this->User_Model->getUserDetail($UserId);
                 
 
                 $msg = "OPT validated successfully";
@@ -565,7 +565,7 @@ class Userregister extends CI_Controller {
 		} else {
 			$array = array(
 			               "status" 		=> 'success',
-						   "user_profile"	=> $user_profile,
+						   "user_info"	=> $user_info,
 						   "message"		=> $msg,
 			               );
 		}
@@ -600,6 +600,7 @@ class Userregister extends CI_Controller {
                 $UserId = $res_u['UserId'];
 
                 $updateData = array(
+                    'UserMpin'   	=> $mpin,
                     'LoginStatus'   => 1,
                     'UserStatus'    => 1,
                     'UpdatedOn'     => date('Y-m-d H:i:s'),
@@ -607,7 +608,7 @@ class Userregister extends CI_Controller {
                 
                 $this->User_Model->updateUserData($UserId, $updateData);
 
-                $user_profile = $this->User_Model->getUserDetail($UserId);
+                $user_info = $this->User_Model->getUserDetail($UserId);
 
                 $insertData = array(
                                     'UserId'        => $UserId,
@@ -636,7 +637,7 @@ class Userregister extends CI_Controller {
         } else {
             $array = array(
                            "status"         => 'success',
-                           "user_profile"   => $user_profile,
+                           "user_info"   => $user_info,
                            "message"        => $msg,
                            );
         }
