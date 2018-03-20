@@ -187,3 +187,20 @@ defined('EVENT_VIDEO_URL')        OR define('EVENT_VIDEO_URL', SITE_PATH.UPLOAD_
 defined('EVENT_THUMB_DIR')        OR define('EVENT_THUMB_DIR', UPLOAD_DIR.'/event/thumbnail/');
 defined('EVENT_THUMB_URL')        OR define('EVENT_THUMB_URL', SITE_PATH.UPLOAD_DIR.'/event/thumbnail/');
 
+
+// Information
+defined('INFORMATION_AUDIO_DIR')        OR define('INFORMATION_AUDIO_DIR', UPLOAD_DIR.'/information/audio/');
+defined('INFORMATION_AUDIO_URL')        OR define('INFORMATION_AUDIO_URL', SITE_PATH.UPLOAD_DIR.'/information/audio/');
+
+defined('INFORMATION_DOC_DIR')        	OR define('INFORMATION_DOC_DIR', UPLOAD_DIR.'/information/document/');
+defined('INFORMATION_DOC_URL')        	OR define('INFORMATION_DOC_URL', SITE_PATH.UPLOAD_DIR.'/information/document/');
+
+defined('INFORMATION_IMAGE_DIR')        OR define('INFORMATION_IMAGE_DIR', UPLOAD_DIR.'/information/image/');
+defined('INFORMATION_IMAGE_URL')        OR define('INFORMATION_IMAGE_URL', SITE_PATH.UPLOAD_DIR.'/information/image/');
+
+defined('INFORMATION_VIDEO_DIR')        OR define('INFORMATION_VIDEO_DIR', UPLOAD_DIR.'/information/video/');
+defined('INFORMATION_VIDEO_URL')        OR define('INFORMATION_VIDEO_URL', SITE_PATH.UPLOAD_DIR.'/information/video/');
+
+defined('INFORMATION_THUMB_DIR')        OR define('INFORMATION_THUMB_DIR', UPLOAD_DIR.'/information/thumbnail/');
+defined('INFORMATION_THUMB_URL')        OR define('INFORMATION_THUMB_URL', SITE_PATH.UPLOAD_DIR.'/information/thumbnail/');
+

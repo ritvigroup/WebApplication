@@ -177,5 +177,74 @@ class Event extends CI_Controller {
         displayJsonEncode($array);
     }
 
+
+    public function AttendEventByApproval() {
+        $error_occured = false;
+
+        $UserProfileId      = $this->input->post('user_profile_id');
+        $EventId        = $this->input->post('event_id');
+        
+        if($UserProfileId == "") {
+            $msg = "Please select your profile";
+            $error_occured = true;
+        } else if($EventId == "") {
+            $msg = "Please select event to approve";
+            $error_occured = true;
+        } else {
+
+            $this->db->query("BEGIN");
+
+            $validate_poll_already = $this->Poll_Model->validateUserProfileAlreadyPolled($PollId, $UserProfileId);
+
+            if($validate_poll_already > 0) { 
+                $this->db->query("ROLLBACK");
+                $msg = "You had already participated in this poll.";
+                $error_occured = true;
+            } else {
+
+                $insertData = array(
+                                    'PollId'            => $PollId,
+                                    'PollAnswerId'      => $PollAnswerId,
+                                    'PollParticipationDescription'       => '',
+                                    'AddedBy'           => $UserProfileId,
+                                    'UpdatedBy'         => $UserProfileId,
+                                    'AddedOn'           => date('Y-m-d H:i:s'),
+                                    'UpdatedOn'         => date('Y-m-d H:i:s'),
+                                );
+                $PollParticipationId = $this->Poll_Model->participatePollWithAnswer($insertData);
+
+                if($PollParticipationId > 0) {
+
+                    $this->db->query("COMMIT");
+                    
+                    $poll_detail = $this->Poll_Model->getPollDetail($PollId);
+
+
+                    $msg = "Poll answer submitted successfully";
+
+                } else {
+                    $this->db->query("ROLLBACK");
+                    $msg = "Poll answer not participated. Error occured";
+                    $error_occured = true;
+                }
+            }
+        }
+
+        if($error_occured == true) {
+            $array = array(
+                            "status"        => 'failed',
+                            "message"       => $msg,
+                        );
+        } else {
+
+            $array = array(
+                           "status"             => 'success',
+                           "poll_detail"       => $poll_detail,
+                           "message"            => $msg,
+                           );
+        }
+        displayJsonEncode($array);
+    }
+
 }
 
