@@ -68,6 +68,8 @@ class Complaint extends CI_Controller {
 
                 $complaint_detail = $this->Complaint_Model->getComplaintDetail($ComplaintId);
 
+                $this->db->query("COMMIT");
+
                 $msg = "Complaint added successfully";
 
             } else {
@@ -109,7 +111,13 @@ class Complaint extends CI_Controller {
         } else {
 
             $complaint_detail = $this->Complaint_Model->getComplaintDetail($ComplaintId);
-            $msg = "Complaint fetched successfully";
+
+            if(count($complaint_detail) > 0) {
+                $msg = "Complaint fetched successfully";
+            } else {
+                $msg = "Complaint not found";
+                $error_occured = true;
+            }
         }
 
         if($error_occured == true) {

@@ -94,6 +94,8 @@ class Post extends CI_Controller {
 
                 $post_detail = $this->Post_Model->getPostDetail($PostId);
 
+                $this->db->query("COMMIT");
+
                 $msg = "Post added successfully";
 
             } else {

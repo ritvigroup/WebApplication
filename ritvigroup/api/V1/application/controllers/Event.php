@@ -59,12 +59,15 @@ class Event extends CI_Controller {
                                 'EveryMonth'        => $EveryMonth,
                                 'EventStatus'       => 1,
                                 'AddedBy'           => $UserProfileId,
+                                'UpdatedBy'         => $UserProfileId,
                                 'AddedOn'           => date('Y-m-d H:i:s'),
                                 'UpdatedOn'         => date('Y-m-d H:i:s'),
                             );
 			$EventId = $this->Event_Model->saveMyEvent($insertData);
 
             if($EventId > 0) {
+
+                $this->db->query("COMMIT");
                 
                 $this->Event_Model->saveMyEventAttendee($EventId, $UserProfileId, $event_attendee);
                 
@@ -113,7 +116,13 @@ class Event extends CI_Controller {
         } else {
 
             $event_detail = $this->Event_Model->getEventDetail($EventId);
-            $msg = "Event fetched successfully";
+            
+            if(count($event_detail) > 0) {
+                $msg = "Event fetched successfully";
+            } else {
+                $msg = "Event not found";
+                $error_occured = true;
+            }
         }
 
         if($error_occured == true) {
