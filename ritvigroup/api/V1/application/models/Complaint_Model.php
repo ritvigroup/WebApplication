@@ -138,8 +138,45 @@ class Complaint_Model extends CI_Model {
     }
 
 
+    public function getMyAllComplaint($UserProfileId) {
+        $complaints = array();
+        if(isset($UserProfileId) && $UserProfileId > 0) {
+
+            $query = $this->db->query("SELECT ComplaintId FROM $this->complaintTbl WHERE `AddedBy` = '".$UserProfileId."'");
+
+            $res = $query->result_array();
+
+            foreach($res AS $key => $result) {
+                $complaints[] = $this->getComplaintDetail($result['ComplaintId']);
+            }
+        } else {
+            $complaints = array();
+        }
+        return $complaints;
+    }
+
+
+    public function getAllComplaintWhereMyselfAssociated($UserProfileId) {
+        $complaints = array();
+        if(isset($UserProfileId) && $UserProfileId > 0) {
+
+            $query = $this->db->query("SELECT ComplaintId FROM $this->complaintMemberTbl WHERE `UserProfileId` = '".$UserProfileId."'");
+
+            $res = $query->result_array();
+
+            foreach($res AS $key => $result) {
+                $complaints[] = $this->getComplaintDetail($result['ComplaintId']);
+            }
+        } else {
+            $complaints = array();
+        }
+        return $complaints;
+    }
+
+
     
     public function getComplaintDetail($ComplaintId) {
+        $complaint_detail = array();
         if(isset($ComplaintId) && $ComplaintId > 0) {
 
             $query = $this->db->query("SELECT * FROM $this->complaintTbl WHERE ComplaintId = '".$ComplaintId."'");

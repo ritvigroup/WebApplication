@@ -12,7 +12,6 @@ class Complaint extends CI_Controller {
 
         $this->load->model('User_Model');
         $this->load->model('Complaint_Model');
-        $this->load->model('Feeling_Model');
 
         $this->device_token 	= $this->input->post('device_token');
         $this->location_lant 	= $this->input->post('location_lant');
@@ -124,6 +123,78 @@ class Complaint extends CI_Controller {
                            "status"             => 'success',
                            "complaint_detail"   => $complaint_detail,
                            "message"            => $msg,
+                           );
+        }
+        displayJsonEncode($array);
+    }
+
+
+    public function getMyAllComplaint() {
+        $error_occured = false;
+
+        $UserProfileId   = $this->input->post('user_profile_id');
+        
+        if($UserProfileId == "") {
+            $msg = "Please select your profile";
+            $error_occured = true;
+        } else {
+
+            $complaints = $this->Complaint_Model->getMyAllComplaint($UserProfileId);
+            if(count($complaints) > 0) {
+                $msg = "Complaint fetched successfully";
+            } else {
+                $msg = "No complaint added by you";
+                $error_occured = true;
+            }
+        }
+
+        if($error_occured == true) {
+            $array = array(
+                            "status"        => 'failed',
+                            "message"       => $msg,
+                        );
+        } else {
+
+            $array = array(
+                           "status"       => 'success',
+                           "complaints"   => $complaints,
+                           "message"      => $msg,
+                           );
+        }
+        displayJsonEncode($array);
+    }
+
+
+    public function getAllComplaintWhereMyselfAssociated() {
+        $error_occured = false;
+
+        $UserProfileId   = $this->input->post('user_profile_id');
+        
+        if($UserProfileId == "") {
+            $msg = "Please select your profile";
+            $error_occured = true;
+        } else {
+
+            $complaints = $this->Complaint_Model->getAllComplaintWhereMyselfAssociated($UserProfileId);
+            if(count($complaints) > 0) {
+                $msg = "Complaint fetched successfully";
+            } else {
+                $msg = "No complaint added by you";
+                $error_occured = true;
+            }
+        }
+
+        if($error_occured == true) {
+            $array = array(
+                            "status"        => 'failed',
+                            "message"       => $msg,
+                        );
+        } else {
+
+            $array = array(
+                           "status"       => 'success',
+                           "complaints"   => $complaints,
+                           "message"      => $msg,
                            );
         }
         displayJsonEncode($array);
