@@ -170,3 +170,20 @@ defined('COMPLAINT_VIDEO_URL')        OR define('COMPLAINT_VIDEO_URL', SITE_PATH
 defined('COMPLAINT_THUMB_DIR')        OR define('COMPLAINT_THUMB_DIR', UPLOAD_DIR.'/complaint/thumbnail/');
 defined('COMPLAINT_THUMB_URL')        OR define('COMPLAINT_THUMB_URL', SITE_PATH.UPLOAD_DIR.'/complaint/thumbnail/');
 
+
+// Event
+defined('EVENT_AUDIO_DIR')        OR define('EVENT_AUDIO_DIR', UPLOAD_DIR.'/event/audio/');
+defined('EVENT_AUDIO_URL')        OR define('EVENT_AUDIO_URL', SITE_PATH.UPLOAD_DIR.'/event/audio/');
+
+defined('EVENT_DOC_DIR')        	OR define('EVENT_DOC_DIR', UPLOAD_DIR.'/event/document/');
+defined('EVENT_DOC_URL')        	OR define('EVENT_DOC_URL', SITE_PATH.UPLOAD_DIR.'/event/document/');
+
+defined('EVENT_IMAGE_DIR')        OR define('EVENT_IMAGE_DIR', UPLOAD_DIR.'/event/image/');
+defined('EVENT_IMAGE_URL')        OR define('EVENT_IMAGE_URL', SITE_PATH.UPLOAD_DIR.'/event/image/');
+
+defined('EVENT_VIDEO_DIR')        OR define('EVENT_VIDEO_DIR', UPLOAD_DIR.'/event/video/');
+defined('EVENT_VIDEO_URL')        OR define('EVENT_VIDEO_URL', SITE_PATH.UPLOAD_DIR.'/event/video/');
+
+defined('EVENT_THUMB_DIR')        OR define('EVENT_THUMB_DIR', UPLOAD_DIR.'/event/thumbnail/');
+defined('EVENT_THUMB_URL')        OR define('EVENT_THUMB_URL', SITE_PATH.UPLOAD_DIR.'/event/thumbnail/');
+
