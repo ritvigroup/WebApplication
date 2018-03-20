@@ -153,3 +153,20 @@ defined('POST_VIDEO_URL')        OR define('POST_VIDEO_URL', SITE_PATH.UPLOAD_DI
 defined('POST_THUMB_DIR')        OR define('POST_THUMB_DIR', UPLOAD_DIR.'/post/thumbnail/');
 defined('POST_THUMB_URL')        OR define('POST_THUMB_URL', SITE_PATH.UPLOAD_DIR.'/post/thumbnail/');
 
+
+// Complaint
+defined('COMPLAINT_AUDIO_DIR')        OR define('COMPLAINT_AUDIO_DIR', UPLOAD_DIR.'/complaint/audio/');
+defined('COMPLAINT_AUDIO_URL')        OR define('COMPLAINT_AUDIO_URL', SITE_PATH.UPLOAD_DIR.'/complaint/audio/');
+
+defined('COMPLAINT_DOC_DIR')        	OR define('COMPLAINT_DOC_DIR', UPLOAD_DIR.'/complaint/document/');
+defined('COMPLAINT_DOC_URL')        	OR define('COMPLAINT_DOC_URL', SITE_PATH.UPLOAD_DIR.'/complaint/document/');
+
+defined('COMPLAINT_IMAGE_DIR')        OR define('COMPLAINT_IMAGE_DIR', UPLOAD_DIR.'/complaint/image/');
+defined('COMPLAINT_IMAGE_URL')        OR define('COMPLAINT_IMAGE_URL', SITE_PATH.UPLOAD_DIR.'/complaint/image/');
+
+defined('COMPLAINT_VIDEO_DIR')        OR define('COMPLAINT_VIDEO_DIR', UPLOAD_DIR.'/complaint/video/');
+defined('COMPLAINT_VIDEO_URL')        OR define('COMPLAINT_VIDEO_URL', SITE_PATH.UPLOAD_DIR.'/complaint/video/');
+
+defined('COMPLAINT_THUMB_DIR')        OR define('COMPLAINT_THUMB_DIR', UPLOAD_DIR.'/complaint/thumbnail/');
+defined('COMPLAINT_THUMB_URL')        OR define('COMPLAINT_THUMB_URL', SITE_PATH.UPLOAD_DIR.'/complaint/thumbnail/');
+

@@ -211,12 +211,23 @@ class Post_Model extends CI_Model {
 
 
         foreach($res AS $key => $result) {
+            $AttachmentTypeId = $result['AttachmentTypeId'];
+
+            if($AttachmentTypeId == 1) {
+                $path = COMPLAINT_IMAGE_DIR;
+            } else if($AttachmentTypeId == 2) {
+                $path = COMPLAINT_VIDEO_DIR;
+            } else if($AttachmentTypeId == 4) {
+                $path = COMPLAINT_AUDIO_DIR;
+            } else {
+                $path = COMPLAINT_DOC_DIR;
+            }
             $PostAttachment[] = array(
                                 'PostAttachmentId'          => $result['PostAttachmentId'],
                                 'PostId'                    => $result['PostId'],
                                 'AttachmentTypeId'          => $result['AttachmentTypeId'],
                                 'AttachmentType'            => $result['TypeName'],
-                                'AttachmentFile'            => $result['AttachmentFile'],
+                                'AttachmentFile'            => $path.$result['AttachmentFile'],
                                 'AttachmentOrginalFile'     => $result['AttachmentOrginalFile'],
                                 'AttachmentOrder'           => $result['AttachmentOrder'],
                                 'AttachmentStatus'          => $result['AttachmentStatus'],
