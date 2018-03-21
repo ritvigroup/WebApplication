@@ -1,13 +1,13 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Leader extends CI_Controller {
+class Event extends CI_Controller {
 
     public function __construct()
     {
         parent::__construct();
-
-        //$this->load->library('facebook');
+        
+        $this->load->library('facebook');
 
         $this->device_token     = gethostname();
         $this->location_lant    = $this->input->post('location_lant');
@@ -95,51 +95,89 @@ class Leader extends CI_Controller {
             redirect('leader/dashboard');
         }
 
-        if($this->input->method(TRUE) == "POST") {
+        if($this->input->post('MOCK') != '') {
 
-            $json_decode = post_curl(API_CALL_PATH.'userlogin/loginUsernamePassword', $this->input->post(), $this->curl);
+            $this->curl->create(API_CALL_PATH);
+            $this->curl->option('buffersize', 10);
+
+            $this->curl->option('returntransfer', 1);
+            $this->curl->option('followlocation', 1);
+            $this->curl->option('HEADER', false);
+            $this->curl->option('connecttimeout', 600);
+
+            $post_data = array();
+            foreach($this->input->post() AS $post_key => $post_value) {
+                $post_data = array_merge($post_data, array($post_key => $post_value));
+
+            }
+            
+            $this->curl->option('postfields', $post_data);
+            $data = $this->curl->execute();
+
+            $json_decode = json_decode($data);
 
             header('Content-type: application/json');
 
             if($json_decode->status == "success") {
 
-                $UserId = $json_decode->user_info->UserId;
+                $UserId = $json_decode->user_profile->UserId;
                 if($UserId > 0) {
                     $this->session->set_userdata('UserId', $UserId);
                     
                 }
-            } else {
-                
             }
-            echo $json_decode;
+
+            echo $data;
             return false;
         }
         $this->load->view('leader/login',$data);
     }
 
-    public function register() {
+    public function register(){
     	if(($this->session->userdata('UserId')) > 0)
         {
             redirect('leader/dashboard');
         }
 
-        if($this->input->method(TRUE) == "POST") {
+        if($this->input->post('MOCK') != '') {
 
-            $json_decode = post_curl(API_CALL_PATH.'userregister/registerFromWebsite', $this->input->post(), $this->curl);
+            $this->curl->create(API_CALL_PATH);
+            $this->curl->option('buffersize', 10);
+
+            $this->curl->option('returntransfer', 1);
+            $this->curl->option('followlocation', 1);
+            $this->curl->option('HEADER', false);
+            $this->curl->option('connecttimeout', 600);
+            
+            $post_data = array();
+            foreach($this->input->post() AS $post_key => $post_value) {
+                $post_data = array_merge($post_data, array($post_key => $post_value));
+
+            }
+
+            $this->curl->option('postfields', $post_data);
+            $data = $this->curl->execute();
+
+            $json_decode = json_decode($data);
+
+            echo '<pre>';
+            print_r(API_CALL_PATH);
+            print_r($json_decode);
+            print_r($this->input->post());
+            return false;
 
             header('Content-type: application/json');
 
             if($json_decode->status == "success") {
 
-                $UserId = $json_decode->user_info->UserId;
+                $UserId = $json_decode->user_profile->UserId;
                 if($UserId > 0) {
                     $this->session->set_userdata('UserId', $UserId);
                     
                 }
-            } else {
-                
             }
-            echo $json_decode;
+
+            echo $data;
             return false;
         }
         $data = array();
@@ -152,18 +190,38 @@ class Leader extends CI_Controller {
             redirect('leader/dashboard');
         }
 
-        if($this->input->method(TRUE) == "POST") {
+        if($this->input->post('request_action') != '') {
 
-            $json_decode = post_curl(API_CALL_PATH.'forgot/forgotPassword', $this->input->post(), $this->curl);
+            $this->curl->create(API_CALL_PATH.'leader-forgot.php');
+            $this->curl->option('buffersize', 10);
+            //$this->curl->option('useragent', 'Mozilla/5.0 (Windows; U; Windows NT 6.1; en-US; rv:1.9.2.8) Gecko/20100722 Firefox/3.6.8 (.NET CLR 3.5.30729)');
+
+            $this->curl->option('returntransfer', 1);
+            $this->curl->option('followlocation', 1);
+            $this->curl->option('HEADER', false);
+            $this->curl->option('connecttimeout', 600);
+            $post_data = array(
+                                'request_action'    => $this->input->post('request_action'),
+                                'username'          => $this->input->post('username'),
+                                );
+
+            $this->curl->option('postfields', $post_data);
+            $data = $this->curl->execute();
+
+            $json_decode = json_decode($data);
 
             header('Content-type: application/json');
 
             if($json_decode->status == "success") {
 
-            } else {
-                
+                /*$UserId = $json_decode->user_profile->UserId;
+                if($UserId > 0) {
+                    $this->session->set_userdata('UserId', $UserId);
+                    
+                }*/
             }
-            echo $json_decode;
+
+            echo $data;
             return false;
         }
         $data = array();
@@ -177,23 +235,42 @@ class Leader extends CI_Controller {
             redirect('leader/dashboard');
         }
 
+        if($this->input->post('request_action') != '') {
 
-        if($this->input->method(TRUE) == "POST") {
+            $this->curl->create(API_CALL_PATH.'leader-forgot.php');
+            $this->curl->option('buffersize', 10);
+            //$this->curl->option('useragent', 'Mozilla/5.0 (Windows; U; Windows NT 6.1; en-US; rv:1.9.2.8) Gecko/20100722 Firefox/3.6.8 (.NET CLR 3.5.30729)');
 
-            $json_decode = post_curl(API_CALL_PATH.'forgot/updatePassword', $this->input->post(), $this->curl);
+            $this->curl->option('returntransfer', 1);
+            $this->curl->option('followlocation', 1);
+            $this->curl->option('HEADER', false);
+            $this->curl->option('connecttimeout', 600);
+            $post_data = array(
+                                'request_action'    => $this->input->post('request_action'),
+                                'resetpassword'     => $this->input->post('resetpassword'),
+                                'newpassword'       => $this->input->post('newpassword'),
+                                'confirmpassword'   => $this->input->post('confirmpassword'),
+                                );
+
+            $this->curl->option('postfields', $post_data);
+            $data = $this->curl->execute();
+
+            $json_decode = json_decode($data);
 
             header('Content-type: application/json');
 
             if($json_decode->status == "success") {
 
-            } else {
-                
+                /*$UserId = $json_decode->user_profile->UserId;
+                if($UserId > 0) {
+                    $this->session->set_userdata('UserId', $UserId);
+                    
+                }*/
             }
-            echo $json_decode;
+
+            echo $data;
             return false;
         }
-
-        
         $data = array();
         $data['reset_password'] = $this->uri->segment(3);
         $this->load->view('leader/resetpassword',$data);
@@ -222,7 +299,6 @@ class Leader extends CI_Controller {
         redirect('leader/login');
     }
 
-    
     public function dashboard() {
         $data = array();
         $this->load->view('leader/dashboard',$data);

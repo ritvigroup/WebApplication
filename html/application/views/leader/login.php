@@ -28,68 +28,6 @@
     <link rel="shortcut icon" href="<?=base_url();?>assets/images/favicon.ico">
 
 
-<script>
- /*
-    // This is called with the results from from FB.getLoginStatus().
-  function statusChangeCallback(response) {
-    console.log('statusChangeCallback');
-    console.log(response);
-    // The response object is returned with a status field that lets the
-    // app know the current login status of the person.
-    // Full docs on the response object can be found in the documentation
-    // for FB.getLoginStatus().
-    if (response.status === 'connected') {
-      // Logged into your app and Facebook.
-      testAPI();
-    } else {
-      // The person is not logged into your app or we are unable to tell.
-      document.getElementById('status').innerHTML = 'Please log ' +
-        'into this app.';
-    }
-  }
-
-  // This function is called when someone finishes with the Login
-  // Button.  See the onlogin handler attached to it in the sample
-  // code below.
-  function checkLoginState() {
-    FB.getLoginStatus(function(response) {
-      statusChangeCallback(response);
-    });
-  }
-
-  window.fbAsyncInit = function() {
-    FB.init({
-      appId      : '144567099675348',
-      cookie     : true,
-      xfbml      : true,
-      version    : 'v2.8'
-    });
-      
-    FB.AppEvents.logPageView();   
-
-    FB.getLoginStatus(function(response) {
-      statusChangeCallback(response);
-    });
-      
-  };
-
-  (function(d, s, id){
-     var js, fjs = d.getElementsByTagName(s)[0];
-     if (d.getElementById(id)) {return;}
-     js = d.createElement(s); js.id = id;
-     js.src = "https://connect.facebook.net/en_US/sdk.js";
-     fjs.parentNode.insertBefore(js, fjs);
-   }(document, 'script', 'facebook-jssdk'));
-
-  function testAPI() {
-    console.log('Welcome!  Fetching your information.... ');
-    FB.api('/me', function(response) {
-      console.log('Successful login for: ' + response.name);
-      document.getElementById('status').innerHTML =
-        'Thanks for logging in, ' + response.name + '!';
-    });
-  } */
-</script>
 
 </head>
 <body id="signin-page">
@@ -100,50 +38,14 @@
         <div class="row mbm text-center">
             <div class="col-md-4"><a href="#" class="btn btn-sm btn-twitter btn-block"><i
                     class="fa fa-twitter fa-fw"></i>Twitter</a></div>
-            <?php if(!empty($authUrl)) { ?><div class="col-md-4"><a href="<?php echo $authUrl; ?>" class="btn btn-sm btn-facebook btn-block"><i
-                    class="fa fa-facebook fa-fw"></i>Facebook</a></div><?php } ?>
+            <div class="col-md-4"><a href="#" class="btn btn-sm btn-facebook btn-block"><i
+                    class="fa fa-facebook fa-fw"></i>Facebook</a></div>
             <div class="col-md-4"><a href="#" class="btn btn-sm btn-google-plus btn-block"><i
                     class="fa fa-google-plus fa-fw"></i>Google +</a></div>
         </div>
 
-        <?php
-        if($userData['first_name'] != '') {
-        ?>
-        <div class="wrapper">
-            <h1>Facebook Profile Details </h1>
-            <div class="welcome_txt">Welcome <b><?php echo $userData['first_name']; ?></b></div>
-            <div class="fb_box">
-                <p class="image"><img src="<?php echo $userData['picture_url']; ?>" alt="" width="300" height="220"/></p>
-                <p><b>Facebook ID : </b><?php echo $userData['oauth_uid']; ?></p>
-                <p><b>Name : </b><?php echo $userData['first_name'].' '.$userData['last_name']; ?></p>
-                <p><b>Email : </b><?php echo $userData['email']; ?></p>
-                <p><b>Gender : </b><?php echo $userData['gender']; ?></p>
-                <p><b>Locale : </b><?php echo $userData['locale']; ?></p>
-                <p><b>You are login with : </b>Facebook</p>
-                <p><a href="<?php echo $userData['profile_url']; ?>" target="_blank">Click to Visit Facebook Page</a></p>
-                <p><b>Logout from <a href="<?php echo $logoutUrl; ?>">Facebook</a></b></p>
-            </div>
-        </div>
-        <?php } ?>
+        <div class="form-group"><div class="error_msg" style="color: red;"></div></div>
 
-        <?php /*
-        <div class="form-group">
-            <div class="input-icon right"><i class="fa fa-user"></i><input type="text" placeholder="Phone Number"
-                                                                           name="mobile" class="form-control signin-mobile">
-            </div>
-        </div>
-        <div class="form-group">
-            <div class="input-icon right"><i class="fa fa-key"></i><input type="password" placeholder="Password"
-                                                                          name="mpin" class="form-control signin-mpin">
-            </div>
-        </div>
-        <div class="form-group pull-right">
-            <button type="submit" class="btn btn-success signin_button">Login By Phone
-                &nbsp;<i class="fa fa-chevron-circle-right"></i></button>
-        </div>
-        <div class="clearfix"></div>
-        <hr>
-        */ ?>
         <div class="form-group">
             <div class="input-icon right"><i class="fa fa-user"></i><input type="text" placeholder="Username"
                                                                            name="username" class="form-control signin-username">
@@ -159,7 +61,7 @@
                 &nbsp;<i class="fa fa-chevron-circle-right"></i></button>
         </div>
         <div class="clearfix"></div>
-        <div class="forget-password"><h4>Forgotten MPIN?</h4>
+        <div class="forget-password"><h4>Forgotten Password?</h4>
 
             <p>no worries, click <a href="<?=base_url();?>leader/forgot" class='btn-forgot-pwd'>here</a> to reset your password.</p></div>
         <hr>
@@ -192,37 +94,6 @@ $('input[type="radio"]').iCheck({
 </script>
 
 <script>
-    /*document.querySelector('.signin_button').onclick = function () {
-        var $this = $(this);
-        var signin_mobile = $(".signin-mobile").val();
-        var signin_mpin = $(".signin-mpin").val();
-
-
-        if (signin_mobile.length >= 10 && signin_mpin.length >= 4) {
-            //var pattern = /^\b[A-Z0-9._%-]+@[A-Z0-9.-]+\.[A-Z]{2,4}\b$/i;
-
-            $this.button('Validating...');
-
-            $.post("<?php echo base_url(); ?>leader/login", {mobile: signin_mobile, mpin: signin_mpin, request_action: 'LOGIN_WITH_MPIN'},
-                function (data, status) {
-                   
-                    if (data.status === "failed") {
-                        sweetAlert("Oops...", data.message, "error");
-                        return false;
-                    } else { 
-                        $this.button('Login');
-                        if (data.status === "success") {
-                            window.location.href="dashboard";
-                        }
-                    }
-                });
-        } else {
-            sweetAlert("Oops...", "Please enter your mobile number and mpin", "error");
-            return false;
-        }
-    };*/
-
-
     document.querySelector('.signin_up_button').onclick = function () {
         var $this = $(this);
         var signin_username = $(".signin-username").val();
@@ -234,7 +105,7 @@ $('input[type="radio"]').iCheck({
 
             $this.button('Validating...');
 
-            $.post("<?php echo base_url(); ?>leader/login", {username: signin_username, password: signin_password, page_name: 'userlogin/loginUsernamePassword', MOCK: 'Y'},
+            $.post("<?php echo base_url(); ?>leader/login", {username: signin_username, password: signin_password},
                 function (data, status) {
                    
                     if (data.status === "failed") {

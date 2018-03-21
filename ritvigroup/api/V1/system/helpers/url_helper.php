@@ -601,7 +601,7 @@ if ( ! function_exists('autoGenerateOtp'))
 if ( ! function_exists('sendMessageToPhone'))
 {
 	function sendMessageToPhone($recerverNO, $message) {
-		if (!function_exists('curl_init')) {
+		/*if (!function_exists('curl_init')) {
 			echo "Error : Curl library not installed";
 			return FALSE;
 		}
@@ -701,7 +701,7 @@ if ( ! function_exists('sendMessageToPhone'))
 
 		// SEND SMS
 
-		$url = "http://site24.way2sms.com/smstoss.action?Token=" . $id; 
+		/*$url = "http://site24.way2sms.com/smstoss.action?Token=" . $id; 
 		$parameters = array("button"=>"Send SMS","mobile"=>"$recerverNO","message"=>"$message");
 
 		$ch = curl_init();
@@ -809,7 +809,7 @@ if ( ! function_exists('sendMessageToPhone'))
 		} else {
 			echo "Failure";
 			return FALSE;
-		}
+		}*/
 	}
 
 	/*function sendMessageToPhone1($phone, $message)
@@ -901,7 +901,7 @@ if ( ! function_exists('sendMessageToPhone2'))
 {
 	function sendMessageToPhone2($phone, $message)
 	{
-		$url = "http://www.proovl.com/api/send.php";
+		/*$url = "http://www.proovl.com/api/send.php";
 
 		$postfields = array(
 			'user' => "c6wqfjw",
@@ -925,6 +925,6 @@ if ( ! function_exists('sendMessageToPhone2'))
 
 		curl_close ($output);
 
-		return $output;
+		return $output;*/
 	}
 }

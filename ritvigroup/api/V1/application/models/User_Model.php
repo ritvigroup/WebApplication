@@ -73,6 +73,21 @@ class User_Model extends CI_Model {
     }
 
 
+    public function userUsernameExist($username) {
+        $this->db->select('UserId, UserStatus, UserEmail');
+        $this->db->from($this->userTbl);
+        $this->db->where('UserName', $username);
+        $this->db->limit(1);
+        $query = $this->db->get();
+        $result = $query->row_array();
+        if ($query->num_rows() > 0) {
+            return ($result);
+        } else {
+            return false;
+        }
+    }
+
+
     public function userMobileWithMpinExist($mobile) {
         $this->db->select('UserId, UserStatus, UserMpin');
         $this->db->from($this->userTbl);
@@ -143,8 +158,12 @@ class User_Model extends CI_Model {
 
             $user_detail = $this->returnUserDetail($res_u);
 
+            $UserProfileCitizen = $this->getCitizenProfileInformation($UserId);
+
+            $user_detail = array_merge($user_detail, array("UserProfileCitizen" => $UserProfileCitizen));
+
             if($full_information > 0) {
-                $UserProfileCitizen = $this->getCitizenProfileInformation($UserId);
+                $UserProfileCitizen = $this->getLeaderProfileInformation($UserId);
 
                 $user_detail = array_merge($user_detail, array("UserProfileCitizen" => $UserProfileCitizen));
             }
@@ -184,8 +203,6 @@ class User_Model extends CI_Model {
                                 "LastName"                      => (($res_u['LastName'] != NULL) ? $res_u['LastName'] : ""),
                                 "Email"                         => (($res_u['Email'] != NULL) ? $res_u['Email'] : ""),
                                 "UserProfileDeviceToken"        => (($res_u['UserProfileDeviceToken'] != NULL) ? $res_u['UserProfileDeviceToken'] : ""),
-                                "DateOfBirth"                   => (($res_u['DateOfBirth'] != NULL) ? $res_u['DateOfBirth'] : ""),
-                                "Gender"                        => (($res_u['Gender'] != NULL) ? $res_u['Gender'] : ""),
                                 "Address"                       => (($res_u['Address'] != NULL) ? $res_u['Address'] : ""),
                                 "Mobile"                        => (($res_u['Mobile'] != NULL) ? $res_u['Mobile'] : ""),
                                 "AltMobile"                     => (($res_u['AltMobile'] != NULL) ? $res_u['AltMobile'] : ""),
@@ -204,6 +221,18 @@ class User_Model extends CI_Model {
         $this->db->from($this->userProfileTbl);
         $this->db->where('UserId', $UserId);
         $this->db->where('UserTypeId', 1);
+        $query = $this->db->get();
+        $res_u = $query->row_array();
+
+        return $this->getUserProfileInformation($res_u['UserProfileId']);
+    }
+
+
+    public function getLeaderProfileInformation($UserId) {
+        $this->db->select('UserProfileId');
+        $this->db->from($this->userProfileTbl);
+        $this->db->where('UserId', $UserId);
+        $this->db->where('UserTypeId', 2);
         $query = $this->db->get();
         $res_u = $query->row_array();
 
@@ -236,6 +265,8 @@ class User_Model extends CI_Model {
                                 "UserMobile"            => $UserMobile,
                                 "AddedOn"               => $AddedOn,
                                 "UpdatedOn"             => $UpdatedOn,
+                                "DateOfBirth"           => (($res_u['DateOfBirth'] != NULL) ? $res_u['DateOfBirth'] : ""),
+                                "Gender"                => (($res_u['Gender'] != NULL) ? $res_u['Gender'] : ""),
                                 "ProfilePhotoId"        => (($res_u['ProfilePhotoId'] != NULL) ? $res_u['ProfilePhotoId'] : ""),
                                 "ProfilePhotoPath"      => (($res_u['UserProfilePhoto'] != NULL) ? PROFILE_IMAGE_URL.$res_u['UserProfilePhoto'] : ""),
                                 "CoverPhotoId"          => (($res_u['CoverPhotoId'] != NULL) ? $res_u['CoverPhotoId'] : ""),
@@ -612,6 +643,21 @@ class User_Model extends CI_Model {
             } else {
                 return false;
             }
+        }
+    }
+
+
+
+    public function existResetPasswordCode($resetpassword) {
+        $this->db->select('UserId, UserStatus');
+        $this->db->from($this->userTbl);
+        $this->db->where('ResetPasswordCode', $resetpassword);
+        $this->db->where('ResetPasswordCodeValidTill >=', date('Y-m-d H:i:s'));
+        $query = $this->db->get();
+        if ($query->num_rows() > 0) {
+            return $result = $query->row_array();
+        } else {
+            return false;
         }
     }
 

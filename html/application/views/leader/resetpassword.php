@@ -86,9 +86,9 @@ $('input[type="radio"]').iCheck({
 <script>
     document.querySelector('.reset_password_button').onclick = function () {
         var $this = $(this);
-        var newpassword = $(".newpassword").val();
+        var newpassword     = $(".newpassword").val();
         var confirmpassword = $(".confirmpassword").val();
-        var resetpassword = $(".resetpassword").val();
+        var resetpassword   = $(".resetpassword").val();
 
 
         if (newpassword.length >= 6 && confirmpassword.length >= 6) {
@@ -96,7 +96,10 @@ $('input[type="radio"]').iCheck({
 
             $this.button('Validating...');
 
-            $.post("<?php echo base_url(); ?>leader/resetpassword", {newpassword: newpassword, confirmpassword: confirmpassword, resetpassword: resetpassword, request_action: 'SET_NEW_PASSWORD'},
+            $.post("<?php echo base_url(); ?>leader/resetpassword", {
+                                                newpassword: newpassword, 
+                                                confirmpassword: confirmpassword, 
+                                                resetpassword: resetpassword},
                 function (data, status) {
                    
                     if (data.status === "failed") {

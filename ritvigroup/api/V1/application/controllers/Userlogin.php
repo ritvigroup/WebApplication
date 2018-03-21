@@ -319,9 +319,9 @@ class Userlogin extends CI_Controller {
         } else {
 
             $array = array(
-                           "status"         => 'success',
-                           "user_info"	=> $user_info,
-                           "message"        => $msg,
+                           "status"      => 'success',
+                           "user_info"	 => $user_info,
+                           "message"     => $msg,
                            );
         }
         displayJsonEncode($array);

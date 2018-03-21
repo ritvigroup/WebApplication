@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Mar 09, 2018 at 06:03 AM
+-- Generation Time: Mar 21, 2018 at 07:22 AM
 -- Server version: 5.6.16
 -- PHP Version: 5.5.9
 
@@ -27,9 +27,10 @@ SET time_zone = "+00:00";
 --
 
 CREATE TABLE IF NOT EXISTS `AttachmentType` (
-  `AttachmentTypeId` bigint(20) NOT NULL AUTO_INCREMENT,
-  `TypeName` varchar(100) NOT NULL,
+  `AttachmentTypeId` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `TypeName` varchar(100) DEFAULT NULL,
   `TypeDescription` text NOT NULL,
+  `TypeExtensions` varchar(200) DEFAULT NULL,
   `TypeStatus` int(11) NOT NULL DEFAULT '0',
   `AddedBy` bigint(20) NOT NULL,
   `AddedOn` datetime NOT NULL,
@@ -37,7 +38,7 @@ CREATE TABLE IF NOT EXISTS `AttachmentType` (
   `UpdatedOn` datetime NOT NULL,
   PRIMARY KEY (`AttachmentTypeId`),
   KEY `TypeName` (`TypeName`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=5 ;
 
 -- --------------------------------------------------------
 
@@ -46,7 +47,7 @@ CREATE TABLE IF NOT EXISTS `AttachmentType` (
 --
 
 CREATE TABLE IF NOT EXISTS `Chat` (
-  `ChatId` bigint(20) NOT NULL AUTO_INCREMENT,
+  `ChatId` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `UserProfileId` bigint(20) unsigned NOT NULL,
   `FriendUserProfileId` bigint(20) unsigned NOT NULL,
   `UserGroupId` bigint(20) unsigned NOT NULL,
@@ -74,8 +75,8 @@ CREATE TABLE IF NOT EXISTS `Chat` (
 --
 
 CREATE TABLE IF NOT EXISTS `ChatGroup` (
-  `ChatGroupId` bigint(20) NOT NULL AUTO_INCREMENT,
-  `ChatGroupName` varchar(100) NOT NULL,
+  `ChatGroupId` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `ChatGroupName` varchar(100) DEFAULT NULL,
   `ChatGroupDescription` text NOT NULL,
   `ChatGroupStatus` int(11) NOT NULL DEFAULT '0',
   `AddedBy` bigint(20) NOT NULL,
@@ -93,10 +94,10 @@ CREATE TABLE IF NOT EXISTS `ChatGroup` (
 --
 
 CREATE TABLE IF NOT EXISTS `ChatGroupMember` (
-  `ChatGroupMemberId` bigint(20) NOT NULL AUTO_INCREMENT,
-  `ChatGroupId` bigint(20) NOT NULL,
-  `UserProfileId` bigint(20) NOT NULL,
-  `AddedBy` bigint(20) NOT NULL,
+  `ChatGroupMemberId` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `ChatGroupId` bigint(20) unsigned NOT NULL,
+  `UserProfileId` bigint(20) unsigned NOT NULL,
+  `AddedBy` bigint(20) unsigned NOT NULL,
   `AddedOn` datetime NOT NULL,
   `AcceptedYesNo` int(11) NOT NULL DEFAULT '0',
   `AcceptedOn` datetime NOT NULL,
@@ -112,9 +113,9 @@ CREATE TABLE IF NOT EXISTS `ChatGroupMember` (
 --
 
 CREATE TABLE IF NOT EXISTS `Complaint` (
-  `ComplaintId` bigint(20) NOT NULL AUTO_INCREMENT,
+  `ComplaintId` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `ComplaintUniqueId` varchar(100) NOT NULL,
-  `ComplaintTypeId` bigint(20) NOT NULL,
+  `ComplaintTypeId` bigint(20) unsigned NOT NULL,
   `ApplicantName` varchar(100) NOT NULL,
   `ApplicantFatherName` varchar(100) NOT NULL,
   `ApplicantGender` varchar(10) NOT NULL,
@@ -135,9 +136,9 @@ CREATE TABLE IF NOT EXISTS `Complaint` (
   `ComplaintDescription` text NOT NULL,
   `ComplaintStatus` bigint(20) NOT NULL DEFAULT '0',
   `AddedOn` datetime NOT NULL,
-  `AddedBy` bigint(20) NOT NULL,
+  `AddedBy` bigint(20) unsigned NOT NULL,
   `UpdatedOn` datetime NOT NULL,
-  `UpdatedBy` bigint(20) NOT NULL,
+  `UpdatedBy` bigint(20) unsigned NOT NULL,
   PRIMARY KEY (`ComplaintId`),
   KEY `ComplaintStatus` (`ComplaintStatus`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
@@ -149,10 +150,10 @@ CREATE TABLE IF NOT EXISTS `Complaint` (
 --
 
 CREATE TABLE IF NOT EXISTS `ComplaintAssigned` (
-  `ComplaintAssignedId` bigint(20) NOT NULL AUTO_INCREMENT,
-  `ComplaintId` bigint(20) NOT NULL,
-  `AssignedTo` bigint(20) NOT NULL,
-  `AssignedBy` bigint(20) NOT NULL,
+  `ComplaintAssignedId` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `ComplaintId` bigint(20) unsigned NOT NULL,
+  `AssignedTo` bigint(20) unsigned NOT NULL,
+  `AssignedBy` bigint(20) unsigned NOT NULL,
   `AddedOn` datetime NOT NULL,
   PRIMARY KEY (`ComplaintAssignedId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
@@ -164,9 +165,9 @@ CREATE TABLE IF NOT EXISTS `ComplaintAssigned` (
 --
 
 CREATE TABLE IF NOT EXISTS `ComplaintAttachment` (
-  `ComplaintAttachmentId` bigint(20) NOT NULL AUTO_INCREMENT,
-  `ComplaintId` bigint(20) NOT NULL,
-  `AttachmentTypeId` bigint(20) NOT NULL,
+  `ComplaintAttachmentId` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `ComplaintId` bigint(20) unsigned NOT NULL,
+  `AttachmentTypeId` bigint(20) unsigned NOT NULL,
   `AttachmentFile` varchar(200) NOT NULL,
   `AttachmentOrginalFile` varchar(200) NOT NULL,
   `AttachmentOrder` int(11) NOT NULL DEFAULT '0',
@@ -202,9 +203,9 @@ CREATE TABLE IF NOT EXISTS `ComplaintHistory` (
 --
 
 CREATE TABLE IF NOT EXISTS `ComplaintHistoryAttachment` (
-  `ComplaintHistoryAttachmentId` bigint(20) NOT NULL AUTO_INCREMENT,
-  `ComplaintHistoryId` bigint(20) NOT NULL,
-  `AttachmentTypeId` bigint(20) NOT NULL,
+  `ComplaintHistoryAttachmentId` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `ComplaintHistoryId` bigint(20) unsigned NOT NULL,
+  `AttachmentTypeId` bigint(20) unsigned NOT NULL,
   `AttachmentFile` varchar(200) NOT NULL,
   `AttachmentOrginalFile` varchar(200) NOT NULL,
   `AttachmentOrder` int(11) NOT NULL DEFAULT '0',
@@ -224,10 +225,10 @@ CREATE TABLE IF NOT EXISTS `ComplaintHistoryAttachment` (
 --
 
 CREATE TABLE IF NOT EXISTS `ComplaintMember` (
-  `ComplaintMemberId` bigint(20) NOT NULL AUTO_INCREMENT,
-  `ComplaintId` bigint(20) NOT NULL,
-  `UserProfileId` bigint(20) NOT NULL,
-  `AddedBy` bigint(20) NOT NULL,
+  `ComplaintMemberId` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `ComplaintId` bigint(20) unsigned NOT NULL,
+  `UserProfileId` bigint(20) unsigned NOT NULL,
+  `AddedBy` bigint(20) unsigned NOT NULL,
   `AddedOn` datetime NOT NULL,
   `AcceptedYesNo` int(11) NOT NULL DEFAULT '0',
   `AcceptedOn` datetime NOT NULL,
@@ -242,13 +243,13 @@ CREATE TABLE IF NOT EXISTS `ComplaintMember` (
 --
 
 CREATE TABLE IF NOT EXISTS `ComplaintStatus` (
-  `ComplaintStatusId` bigint(20) NOT NULL AUTO_INCREMENT,
+  `ComplaintStatusId` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `StatusName` varchar(100) NOT NULL,
   `StatusDescription` text NOT NULL,
   `StatusStatus` int(11) NOT NULL DEFAULT '0',
-  `AddedBy` bigint(20) NOT NULL,
+  `AddedBy` bigint(20) unsigned NOT NULL,
   `AddedOn` datetime NOT NULL,
-  `UpdatedBy` bigint(20) NOT NULL,
+  `UpdatedBy` bigint(20) unsigned NOT NULL,
   `UpdatedOn` datetime NOT NULL,
   PRIMARY KEY (`ComplaintStatusId`),
   KEY `TypeName` (`StatusName`)
@@ -261,13 +262,13 @@ CREATE TABLE IF NOT EXISTS `ComplaintStatus` (
 --
 
 CREATE TABLE IF NOT EXISTS `ComplaintType` (
-  `ComplaintTypeId` bigint(20) NOT NULL AUTO_INCREMENT,
+  `ComplaintTypeId` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `TypeName` varchar(100) NOT NULL,
   `TypeDescription` text NOT NULL,
   `TypeStatus` int(11) NOT NULL DEFAULT '0',
-  `AddedBy` bigint(20) NOT NULL,
+  `AddedBy` bigint(20) unsigned NOT NULL,
   `AddedOn` datetime NOT NULL,
-  `UpdatedBy` bigint(20) NOT NULL,
+  `UpdatedBy` bigint(20) unsigned NOT NULL,
   `UpdatedOn` datetime NOT NULL,
   PRIMARY KEY (`ComplaintTypeId`),
   KEY `TypeName` (`TypeName`)
@@ -298,6 +299,7 @@ CREATE TABLE IF NOT EXISTS `Country` (
 
 CREATE TABLE IF NOT EXISTS `Event` (
   `EventId` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `EventUniqueId` varchar(100) DEFAULT NULL,
   `EventName` varchar(100) NOT NULL,
   `EventDescription` text NOT NULL,
   `EventLocation` varchar(100) NOT NULL,
@@ -305,12 +307,36 @@ CREATE TABLE IF NOT EXISTS `Event` (
   `EndDate` date NOT NULL,
   `EveryYear` int(11) NOT NULL DEFAULT '0',
   `EveryMonth` int(11) NOT NULL DEFAULT '0',
+  `EventStatus` int(11) NOT NULL DEFAULT '0',
   `AddedBy` bigint(20) NOT NULL,
   `AddedOn` datetime NOT NULL,
   `UpdatedBy` bigint(20) NOT NULL,
   `UpdatedOn` datetime NOT NULL,
   PRIMARY KEY (`EventId`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `EventAttachment`
+--
+
+CREATE TABLE IF NOT EXISTS `EventAttachment` (
+  `EventAttachmentId` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `EventId` bigint(20) unsigned NOT NULL,
+  `AttachmentTypeId` bigint(20) unsigned NOT NULL,
+  `AttachmentFile` varchar(200) DEFAULT NULL,
+  `AttachmentOrginalFile` varchar(200) DEFAULT NULL,
+  `AttachmentOrder` int(11) NOT NULL DEFAULT '0',
+  `EventMain` int(11) NOT NULL DEFAULT '0',
+  `AttachmentStatus` int(11) NOT NULL DEFAULT '0',
+  `AddedBy` bigint(20) unsigned NOT NULL,
+  `AddedOn` datetime NOT NULL,
+  `DeletedOn` datetime NOT NULL,
+  PRIMARY KEY (`EventAttachmentId`),
+  KEY `AttachmentTypeId` (`AttachmentTypeId`),
+  KEY `ComplaintId` (`EventId`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ;
 
 -- --------------------------------------------------------
 
@@ -327,7 +353,21 @@ CREATE TABLE IF NOT EXISTS `EventAttendee` (
   `AddedBy` bigint(20) NOT NULL,
   PRIMARY KEY (`EventAttendeeId`),
   KEY `ComplaintId` (`EventId`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=3 ;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `Feeling`
+--
+
+CREATE TABLE IF NOT EXISTS `Feeling` (
+  `FeelingId` int(11) NOT NULL AUTO_INCREMENT,
+  `FeelingName` varchar(100) DEFAULT NULL,
+  `FeelingImagePath` varchar(200) DEFAULT NULL,
+  `FeelingStatus` int(11) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`FeelingId`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=5 ;
 
 -- --------------------------------------------------------
 
@@ -337,16 +377,16 @@ CREATE TABLE IF NOT EXISTS `EventAttendee` (
 
 CREATE TABLE IF NOT EXISTS `Information` (
   `InformationId` bigint(20) NOT NULL AUTO_INCREMENT,
-  `InformationUniqueId` varchar(100) NOT NULL,
+  `InformationUniqueId` varchar(100) DEFAULT NULL,
   `InformationPrivacy` bigint(20) NOT NULL,
-  `ApplicantName` varchar(100) NOT NULL,
-  `ApplicantFatherName` varchar(100) NOT NULL,
-  `ApplicantGender` varchar(10) NOT NULL,
-  `ApplicantMobile` varchar(20) NOT NULL,
-  `ApplicantEmail` varchar(100) NOT NULL,
-  `ApplicantAadhaarNumber` varchar(100) NOT NULL,
-  `InformationSubject` varchar(200) NOT NULL,
-  `InformationDescription` text NOT NULL,
+  `ApplicantName` varchar(100) DEFAULT NULL,
+  `ApplicantFatherName` varchar(100) DEFAULT NULL,
+  `ApplicantGender` varchar(10) DEFAULT NULL,
+  `ApplicantMobile` varchar(20) DEFAULT NULL,
+  `ApplicantEmail` varchar(100) DEFAULT NULL,
+  `ApplicantAadhaarNumber` varchar(100) DEFAULT NULL,
+  `InformationSubject` varchar(200) DEFAULT NULL,
+  `InformationDescription` text,
   `InformationStatus` bigint(20) NOT NULL DEFAULT '0',
   `AddedOn` datetime NOT NULL,
   `AddedBy` bigint(20) NOT NULL,
@@ -442,6 +482,7 @@ CREATE TABLE IF NOT EXISTS `Permission` (
 
 CREATE TABLE IF NOT EXISTS `Poll` (
   `PollId` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `PollUniqueId` varchar(100) DEFAULT NULL,
   `PollQuestion` varchar(200) NOT NULL,
   `PollPrivacy` int(11) NOT NULL DEFAULT '1',
   `ValidFromDate` date NOT NULL,
@@ -452,7 +493,7 @@ CREATE TABLE IF NOT EXISTS `Poll` (
   `UpdatedBy` bigint(20) NOT NULL,
   `UpdatedOn` datetime NOT NULL,
   PRIMARY KEY (`PollId`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=4 ;
 
 -- --------------------------------------------------------
 
@@ -470,7 +511,7 @@ CREATE TABLE IF NOT EXISTS `PollAnswer` (
   `UpdatedBy` bigint(20) NOT NULL,
   `UpdatedOn` datetime NOT NULL,
   PRIMARY KEY (`PollAnswerId`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=13 ;
 
 -- --------------------------------------------------------
 
@@ -488,7 +529,68 @@ CREATE TABLE IF NOT EXISTS `PollParticipation` (
   `UpdatedBy` bigint(20) NOT NULL,
   `UpdatedOn` datetime NOT NULL,
   PRIMARY KEY (`PollParticipationId`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=6 ;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `Post`
+--
+
+CREATE TABLE IF NOT EXISTS `Post` (
+  `PostId` bigint(20) NOT NULL AUTO_INCREMENT,
+  `UserProfileId` bigint(20) NOT NULL,
+  `PostTitle` text,
+  `PostFeelingId` int(11) NOT NULL DEFAULT '0',
+  `PostStatus` int(11) NOT NULL DEFAULT '0',
+  `PostLocation` text,
+  `PostDescription` text,
+  `PostURL` text,
+  `AddedOn` datetime NOT NULL,
+  `UpdatedOn` datetime NOT NULL,
+  PRIMARY KEY (`PostId`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `PostAttachment`
+--
+
+CREATE TABLE IF NOT EXISTS `PostAttachment` (
+  `PostAttachmentId` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `PostId` bigint(20) unsigned NOT NULL,
+  `AttachmentTypeId` bigint(20) unsigned NOT NULL,
+  `AttachmentFile` varchar(200) DEFAULT NULL,
+  `AttachmentOrginalFile` varchar(200) DEFAULT NULL,
+  `AttachmentOrder` int(11) NOT NULL DEFAULT '0',
+  `AttachmentStatus` int(11) NOT NULL DEFAULT '0',
+  `AddedBy` bigint(20) unsigned NOT NULL,
+  `AddedOn` datetime NOT NULL,
+  `DeletedOn` datetime DEFAULT NULL,
+  PRIMARY KEY (`PostAttachmentId`),
+  KEY `AttachmentTypeId` (`AttachmentTypeId`),
+  KEY `ComplaintId` (`PostId`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=3 ;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `PostTag`
+--
+
+CREATE TABLE IF NOT EXISTS `PostTag` (
+  `PostTagId` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `PostId` bigint(20) unsigned NOT NULL,
+  `UserProfileId` bigint(20) unsigned NOT NULL,
+  `TagStatus` int(11) NOT NULL DEFAULT '0',
+  `TagApproved` int(11) NOT NULL DEFAULT '0',
+  `AddedBy` bigint(20) unsigned NOT NULL,
+  `AddedOn` datetime NOT NULL,
+  PRIMARY KEY (`PostTagId`),
+  KEY `AttachmentTypeId` (`UserProfileId`),
+  KEY `ComplaintId` (`PostId`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=3 ;
 
 -- --------------------------------------------------------
 
@@ -595,6 +697,34 @@ CREATE TABLE IF NOT EXISTS `SuggestionHistoryAttachment` (
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `TestMockApi`
+--
+
+CREATE TABLE IF NOT EXISTS `TestMockApi` (
+  `TestMockApiId` bigint(20) NOT NULL AUTO_INCREMENT,
+  `TestMockApiName` text NOT NULL,
+  `TestMockApiResponseSuccess` text NOT NULL,
+  `TestMockApiResponseFailed` text NOT NULL,
+  PRIMARY KEY (`TestMockApiId`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=6 ;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `TestMockApiParam`
+--
+
+CREATE TABLE IF NOT EXISTS `TestMockApiParam` (
+  `TestMockApiParamId` bigint(20) NOT NULL AUTO_INCREMENT,
+  `TestMockApiId` bigint(20) NOT NULL,
+  `TestMockApiKey` varchar(50) NOT NULL,
+  `TestMockApiValue` text NOT NULL,
+  PRIMARY KEY (`TestMockApiParamId`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=18 ;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `User`
 --
 
@@ -613,6 +743,13 @@ CREATE TABLE IF NOT EXISTS `User` (
   `LoginOtpValidTill` datetime NOT NULL,
   `ActivationCode` varchar(200) DEFAULT NULL,
   `ResetPasswordCode` varchar(200) NOT NULL,
+  `ResetPasswordCodeValidTill` datetime DEFAULT NULL,
+  `ProfilePhotoId` bigint(20) NOT NULL DEFAULT '0',
+  `CoverPhotoId` bigint(20) NOT NULL DEFAULT '0',
+  `FacebookProfileId` varchar(200) NOT NULL,
+  `GoogleProfileId` varchar(200) NOT NULL,
+  `LinkedinProfileId` varchar(200) NOT NULL,
+  `TwitterProfileId` varchar(200) NOT NULL,
   `DeviceLantitude` varchar(200) DEFAULT NULL,
   `DeviceLongitude` varchar(200) DEFAULT NULL,
   `AddedOn` datetime DEFAULT NULL,
@@ -631,7 +768,7 @@ CREATE TABLE IF NOT EXISTS `User` (
   KEY `login_otp` (`LoginOtp`),
   KEY `login_otp_valid_till` (`LoginOtpValidTill`),
   KEY `activation_code` (`ActivationCode`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=5 ;
 
 -- --------------------------------------------------------
 
@@ -641,7 +778,7 @@ CREATE TABLE IF NOT EXISTS `User` (
 
 CREATE TABLE IF NOT EXISTS `UserAlbum` (
   `UserAlbumId` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
-  `UserProfileId` bigint(20) unsigned NOT NULL,
+  `UserId` bigint(20) unsigned NOT NULL,
   `AlbumName` varchar(100) NOT NULL,
   `AlbumDescription` text NOT NULL,
   `PrivacyType` int(11) NOT NULL DEFAULT '1',
@@ -658,9 +795,9 @@ CREATE TABLE IF NOT EXISTS `UserAlbum` (
 --
 
 CREATE TABLE IF NOT EXISTS `UserFavUser` (
-  `UserFavUserId` bigint(20) NOT NULL AUTO_INCREMENT,
-  `UserProfileId` bigint(20) NOT NULL DEFAULT '0',
-  `FriendUserProfileId` bigint(20) NOT NULL DEFAULT '0',
+  `UserFavUserId` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `UserProfileId` bigint(20) unsigned NOT NULL DEFAULT '0',
+  `FriendUserProfileId` bigint(20) unsigned NOT NULL DEFAULT '0',
   `FavOn` datetime NOT NULL,
   PRIMARY KEY (`UserFavUserId`),
   KEY `user_id` (`FriendUserProfileId`,`UserProfileId`),
@@ -677,7 +814,7 @@ CREATE TABLE IF NOT EXISTS `UserFavUser` (
 CREATE TABLE IF NOT EXISTS `UserLog` (
   `UserLogId` bigint(20) NOT NULL AUTO_INCREMENT,
   `UserId` bigint(20) NOT NULL,
-  `DeviceTokenId` text NOT NULL,
+  `DeviceTokenId` text,
   `DeviceName` text,
   `DeviceOs` varchar(200) DEFAULT NULL,
   `Longitude` varchar(200) DEFAULT NULL,
@@ -685,7 +822,7 @@ CREATE TABLE IF NOT EXISTS `UserLog` (
   `LoggedIn` datetime NOT NULL,
   `LoggedOut` datetime NOT NULL,
   PRIMARY KEY (`UserLogId`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=8 ;
 
 -- --------------------------------------------------------
 
@@ -695,7 +832,7 @@ CREATE TABLE IF NOT EXISTS `UserLog` (
 
 CREATE TABLE IF NOT EXISTS `UserPhoto` (
   `UserPhotoId` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
-  `UserProfileId` bigint(20) unsigned NOT NULL,
+  `UserId` bigint(20) unsigned NOT NULL,
   `UserAlbumId` bigint(20) unsigned NOT NULL,
   `PhotoPath` varchar(255) NOT NULL,
   `PhotoStatus` int(11) NOT NULL DEFAULT '0',
@@ -712,31 +849,42 @@ CREATE TABLE IF NOT EXISTS `UserPhoto` (
 
 CREATE TABLE IF NOT EXISTS `UserProfile` (
   `UserProfileId` bigint(20) NOT NULL AUTO_INCREMENT,
-  `UserId` bigint(20) unsigned NOT NULL,
-  `UserTypeId` int(11) NOT NULL DEFAULT '1' COMMENT '1=Citizen',
-  `ParentUserId` bigint(20) unsigned NOT NULL,
-  `FirstName` varchar(100) NOT NULL,
-  `MiddleName` varchar(100) NOT NULL,
-  `LastName` varchar(100) NOT NULL,
-  `Email` varchar(100) NOT NULL,
-  `UserProfileDeviceToken` text NOT NULL,
-  `DateOfBirth` date NOT NULL,
-  `Gender` varchar(20) NOT NULL,
-  `Address` varchar(200) NOT NULL,
-  `Mobile` varchar(20) NOT NULL,
-  `AltMobile` varchar(20) NOT NULL,
-  `ProfileStatus` int(11) NOT NULL DEFAULT '0',
-  `ProfilePhotoId` bigint(20) NOT NULL,
-  `CoverPhotoId` bigint(20) NOT NULL,
-  `AddedOn` datetime NOT NULL,
-  `UpdatedOn` datetime NOT NULL,
-  `AddedBy` bigint(20) NOT NULL,
-  `UpdatedBy` bigint(20) NOT NULL,
+  `UserId` bigint(20) unsigned DEFAULT NULL,
+  `UserTypeId` int(11) DEFAULT '1' COMMENT '1=Citizen',
+  `ParentUserId` bigint(20) unsigned DEFAULT NULL,
+  `UserRoleId` bigint(20) DEFAULT '0',
+  `FirstName` varchar(100) DEFAULT NULL,
+  `MiddleName` varchar(100) DEFAULT NULL,
+  `LastName` varchar(100) DEFAULT NULL,
+  `Email` varchar(100) DEFAULT NULL,
+  `UserProfileDeviceToken` text,
+  `DateOfBirth` date DEFAULT NULL,
+  `Gender` varchar(20) DEFAULT NULL,
+  `Address` varchar(200) DEFAULT NULL,
+  `City` varchar(100) DEFAULT NULL,
+  `District` varchar(100) DEFAULT NULL,
+  `Tehsil` varchar(100) DEFAULT NULL,
+  `Thana` varchar(100) DEFAULT NULL,
+  `Block` varchar(100) DEFAULT NULL,
+  `VillagePanchayat` varchar(100) DEFAULT NULL,
+  `Village` varchar(100) DEFAULT NULL,
+  `TownArea` varchar(100) DEFAULT NULL,
+  `Ward` varchar(100) DEFAULT NULL,
+  `State` varchar(100) DEFAULT NULL,
+  `ZipCode` varchar(100) DEFAULT NULL,
+  `Mobile` varchar(20) DEFAULT NULL,
+  `AltMobile` varchar(20) DEFAULT NULL,
+  `ProfileStatus` int(11) DEFAULT '0',
+  `AddedOn` datetime DEFAULT NULL,
+  `UpdatedOn` datetime DEFAULT NULL,
+  `AddedBy` bigint(20) DEFAULT NULL,
+  `UpdatedBy` bigint(20) DEFAULT NULL,
   PRIMARY KEY (`UserProfileId`),
   KEY `UserId` (`UserId`),
   KEY `UserType` (`UserTypeId`),
-  KEY `ParentUserId` (`ParentUserId`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+  KEY `ParentUserId` (`ParentUserId`),
+  KEY `UserRoleId` (`UserRoleId`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=4 ;
 
 -- --------------------------------------------------------
 

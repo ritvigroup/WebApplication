@@ -54,6 +54,7 @@
  * NOTE: If you change these, also change the error_reporting() code below
  */
 	define('ENVIRONMENT', 'development');
+	//define('ENVIRONMENT', 'development');
 	
 
 	
@@ -72,7 +73,7 @@ switch (ENVIRONMENT)
 		error_reporting(-1);
 		ini_set('display_errors', 0);
 
-		define('API_CALL_PATH', 'http://ritvigroup.com/ritvigroup.com/ritvigroup/mock_api.php');
+		define('API_CALL_PATH', 'http://localhost:81/ritvigroup.com/ritvigroup/api/V1/');
 
 	break;
 
@@ -88,7 +89,7 @@ switch (ENVIRONMENT)
 			error_reporting(E_ALL & ~E_NOTICE & ~E_STRICT & ~E_USER_NOTICE);
 		}
 
-		define('API_CALL_PATH', 'http://ritvigroup.com/ritvigroup.com/ritvigroup/mock_api.php');
+		define('API_CALL_PATH', 'http://ritvigroup.com/ritvigroup.com/ritvigroup/api/V1/');
 		
 	break;
 

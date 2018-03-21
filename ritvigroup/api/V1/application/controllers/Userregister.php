@@ -167,7 +167,6 @@ class Userregister extends CI_Controller {
     					                    'ProfileStatus' 			=> 1,
     					                    'AddedBy' 					=> $UserId,
     					                    'UpdatedBy' 				=> $UserId,
-    					                    'DeviceLantitude' 			=> $this->location_lant,
     					                    'AddedOn' 					=> date('Y-m-d H:i:s'),
     					                    'UpdatedOn' 				=> date('Y-m-d H:i:s'),
     					                );
@@ -185,7 +184,6 @@ class Userregister extends CI_Controller {
                                             'ProfileStatus'             => 1,
                                             'AddedBy'                   => $UserId,
                                             'UpdatedBy'                 => $UserId,
-                                            'DeviceLantitude'           => $this->location_lant,
                                             'AddedOn'                   => date('Y-m-d H:i:s'),
                                             'UpdatedOn'                 => date('Y-m-d H:i:s'),
                                         );
@@ -270,14 +268,14 @@ class Userregister extends CI_Controller {
 
             $res_u = $this->User_Model->userExistForUsernameEmailMobile($username, $email, $mobile);
 
-            if($res_u['UserName'] == $username) {
-                $msg = "Username already exist";
-                $error_occured = true;
-            } else if($res_u['UserEmail'] == $email) {
+            if($res_u['UserEmail'] == $email) {
                 $msg = "Email already exist";
                 $error_occured = true;
             } else if($res_u['UserMobile'] == $mobile) {
                 $msg = "Phone number already exist";
+                $error_occured = true;
+            } else if($res_u['UserName'] == $username) {
+                $msg = "Username already exist";
                 $error_occured = true;
             } else {
                 // If User Not exist in our system we register him/her first and generate UserId for him/her
@@ -292,9 +290,10 @@ class Userregister extends CI_Controller {
                                     'DeviceLantitude'   => $this->location_lant,
                                     'UserStatus'        => 1,
                                     'LoginStatus'       => 1,
+                                    'Gender'            => $gender,
                                     'UserName'          => $username,
-                                    'UserPassword'      => $password,
-                                    'UserUniqueId'      => $user_unique_id,
+                                    'UserPassword'      => md5($password),
+                                    'UserUniqueId'      => $UserUniqueId,
                                     'UserMobile'        => $mobile,
                                     'UserEmail'         => $email,
                                     'AddedOn'           => date('Y-m-d H:i:s'),
@@ -304,6 +303,8 @@ class Userregister extends CI_Controller {
                 $UserId = $this->User_Model->insertUser($insertData);
 
                 if($UserId > 0) {
+
+                    // Citizen
                     $insertData = array(
                                         'UserId'                    => $UserId,
                                         'UserTypeId'                => 1,
@@ -313,17 +314,16 @@ class Userregister extends CI_Controller {
                                         'Email'                     => $email,
                                         'UserProfileDeviceToken'    => $this->device_token,
                                         'Mobile'                    => $mobile,
-                                        'Gender'                    => $gender,
                                         'ProfileStatus'             => 1,
                                         'AddedBy'                   => $UserId,
                                         'UpdatedBy'                 => $UserId,
-                                        'DeviceLantitude'           => $this->location_lant,
                                         'AddedOn'                   => date('Y-m-d H:i:s'),
                                         'UpdatedOn'                 => date('Y-m-d H:i:s'),
                                     );
 
                     $UserCitizenProfileId = $this->User_Model->insertUserProfile($insertData);
 
+                    // Leader
                     $insertData = array(
                                         'UserId'                    => $UserId,
                                         'UserTypeId'                => 2,
@@ -333,11 +333,9 @@ class Userregister extends CI_Controller {
                                         'Email'                     => $email,
                                         'UserProfileDeviceToken'    => $this->device_token,
                                         'Mobile'                    => $mobile,
-                                        'Gender'                    => $gender,
                                         'ProfileStatus'             => 1,
                                         'AddedBy'                   => $UserId,
                                         'UpdatedBy'                 => $UserId,
-                                        'DeviceLantitude'           => $this->location_lant,
                                         'AddedOn'                   => date('Y-m-d H:i:s'),
                                         'UpdatedOn'                 => date('Y-m-d H:i:s'),
                                     );
@@ -371,7 +369,7 @@ class Userregister extends CI_Controller {
 
             $array = array(
                            "status"         => 'success',
-                           "user_info"   => $user_info,
+                           "user_info"      => $user_info,
                            "message"        => $msg,
                            );
         }

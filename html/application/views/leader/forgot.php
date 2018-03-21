@@ -87,7 +87,7 @@ $('input[type="radio"]').iCheck({
 
             $this.button('Validating...');
 
-            $.post("<?php echo base_url(); ?>leader/forgot", {username: signin_username, request_action: 'FORGOT_PASSWORD'},
+            $.post("<?php echo base_url(); ?>leader/forgot", {username: signin_username},
                 function (data, status) {
                    
                     if (data.status === "failed") {

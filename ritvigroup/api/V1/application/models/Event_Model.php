@@ -53,9 +53,12 @@ class Event_Model extends CI_Model {
 
     public function saveMyEventAttachment($EventId, $UserProfileId, $event_attachment) {
         $j = 0;
+
         for($i = 0; $i < count($event_attachment['name']); $i++) {
 
             $upload_file_name = $event_attachment['name'][$i];
+
+
             
             if($upload_file_name != '') {
 
@@ -73,15 +76,27 @@ class Event_Model extends CI_Model {
                     $path = EVENT_DOC_DIR;
                 }
                 $path = $path.$AttachmentFile;
-                $source = $event_attachment['tmp_name'];
+                $source = $event_attachment['tmp_name'][$i];
 
                 $upload_result = uploadFileOnServer($source, $path);
+
+                $AttachmentThumb = '';
+                if($_FILES['thumb']['name'][$i] != '') {
+                    $AttachmentThumb = date('YmdHisA').'-'.time().'-EVENT-THUMB-'.mt_rand().'.'.end(explode('.', $_FILES['thumb']['name'][$i]));
+                    $path = EVENT_IMAGE_DIR.$AttachmentThumb;
+                    $source = $_FILES['thumb']['tmp_name'][$i];
+
+                    $upload_result = uploadFileOnServer($source, $path);
+                }
+
+                
 
                 $insertData = array(
                                     'EventId'               => $EventId,
                                     'AttachmentTypeId'      => $AttachmentTypeId,
                                     'AttachmentFile'        => $AttachmentFile,
                                     'AttachmentOrginalFile' => $upload_file_name,
+                                    'AttachmentThumb'       => $AttachmentThumb,
                                     'AttachmentOrder'       => $j,
                                     'AttachmentStatus'      => 1,
                                     'AddedBy'               => $UserProfileId,
@@ -250,13 +265,18 @@ class Event_Model extends CI_Model {
             $AttachmentTypeId = $result['AttachmentTypeId'];
 
             if($AttachmentTypeId == 1) {
-                $path = EVENT_IMAGE_DIR;
+                $path = EVENT_IMAGE_URL;
             } else if($AttachmentTypeId == 2) {
-                $path = EVENT_VIDEO_DIR;
+                $path = EVENT_VIDEO_URL;
             } else if($AttachmentTypeId == 4) {
-                $path = EVENT_AUDIO_DIR;
+                $path = EVENT_AUDIO_URL;
             } else {
-                $path = EVENT_DOC_DIR;
+                $path = EVENT_DOC_URL;
+            }
+            $AttachmentThumb = '';
+
+            if($AttachmentTypeId == 2) {
+                $AttachmentThumb = EVENT_IMAGE_URL.$result['AttachmentThumb'];
             }
 
             $EventAttachment[] = array(
@@ -266,6 +286,7 @@ class Event_Model extends CI_Model {
                                 'AttachmentType'        => $result['TypeName'],
                                 'AttachmentFile'        => $path.$result['AttachmentFile'],
                                 'AttachmentOrginalFile' => $result['AttachmentOrginalFile'],
+                                'AttachmentThumb'       => $AttachmentThumb,
                                 'AttachmentOrder'       => $result['AttachmentOrder'],
                                 'AttachmentStatus'      => $result['AttachmentStatus'],
                                 'AddedBy'               => $this->User_Model->getUserProfileWithUserInformation($result['AddedBy']),

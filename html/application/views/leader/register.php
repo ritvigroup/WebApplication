@@ -160,7 +160,17 @@ $('input[type="radio"]').iCheck({
 
             $this.button('Validating...');
 
-            $.post("<?php echo base_url(); ?>leader/register", {email: signup_email, mobile: signup_mobile, username: signup_username, password: signup_password, passwordConfirm: signup_confirm_password, firstname: signup_firstname, lastname: signup_lastname, gender: signup_gender, page_name: 'userregister/registerFromWebsite', MOCK: 'Y'},
+            $.post("<?php echo base_url(); ?>leader/register", 
+                                    {
+                                        email: signup_email, 
+                                        mobile: signup_mobile, 
+                                        username: signup_username, 
+                                        password: signup_password, 
+                                        passwordConfirm: signup_confirm_password, 
+                                        firstname: signup_firstname, 
+                                        lastname: signup_lastname, 
+                                        gender: signup_gender
+                                    },
                 function (data, status) {
                    
                     if (data.status === "failed") {

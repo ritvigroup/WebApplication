@@ -67,11 +67,13 @@ class Event extends CI_Controller {
 
             if($EventId > 0) {
 
-                $this->db->query("COMMIT");
+                
                 
                 $this->Event_Model->saveMyEventAttendee($EventId, $UserProfileId, $event_attendee);
                 
                 $this->Event_Model->saveMyEventAttachment($EventId, $UserProfileId, $_FILES['file']);
+
+                $this->db->query("COMMIT");
 
                 $event_detail = $this->Event_Model->getEventDetail($EventId);
 
