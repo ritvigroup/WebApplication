@@ -42,7 +42,7 @@ class Post extends CI_Controller {
 
             $array = array(
                            "status"         => 'success',
-                           "feeling"       => $feeling,
+                           "result"       => $feeling,
                            "message"        => $msg,
                            );
         }
@@ -114,7 +114,7 @@ class Post extends CI_Controller {
 
             $array = array(
                            "status"         => 'success',
-                           "post_detail"    => $post_detail,
+                           "result"    => $post_detail,
                            "message"        => $msg,
                            );
         }
@@ -149,7 +149,7 @@ class Post extends CI_Controller {
 
             $array = array(
                            "status"         => 'success',
-                           "post_detail"    => $post_detail,
+                           "result"    => $post_detail,
                            "message"        => $msg,
                            );
         }

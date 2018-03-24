@@ -204,3 +204,21 @@ defined('INFORMATION_VIDEO_URL')        OR define('INFORMATION_VIDEO_URL', SITE_
 defined('INFORMATION_THUMB_DIR')        OR define('INFORMATION_THUMB_DIR', UPLOAD_DIR.'/information/thumbnail/');
 defined('INFORMATION_THUMB_URL')        OR define('INFORMATION_THUMB_URL', SITE_PATH.UPLOAD_DIR.'/information/thumbnail/');
 
+
+
+// Suggestion
+defined('SUGGESTION_AUDIO_DIR')        OR define('SUGGESTION_AUDIO_DIR', UPLOAD_DIR.'/suggestion/audio/');
+defined('SUGGESTION_AUDIO_URL')        OR define('SUGGESTION_AUDIO_URL', SITE_PATH.UPLOAD_DIR.'/suggestion/audio/');
+
+defined('SUGGESTION_DOC_DIR')        	OR define('SUGGESTION_DOC_DIR', UPLOAD_DIR.'/suggestion/document/');
+defined('SUGGESTION_DOC_URL')        	OR define('SUGGESTION_DOC_URL', SITE_PATH.UPLOAD_DIR.'/suggestion/document/');
+
+defined('SUGGESTION_IMAGE_DIR')        OR define('SUGGESTION_IMAGE_DIR', UPLOAD_DIR.'/suggestion/image/');
+defined('SUGGESTION_IMAGE_URL')        OR define('SUGGESTION_IMAGE_URL', SITE_PATH.UPLOAD_DIR.'/suggestion/image/');
+
+defined('SUGGESTION_VIDEO_DIR')        OR define('SUGGESTION_VIDEO_DIR', UPLOAD_DIR.'/suggestion/video/');
+defined('SUGGESTION_VIDEO_URL')        OR define('SUGGESTION_VIDEO_URL', SITE_PATH.UPLOAD_DIR.'/suggestion/video/');
+
+defined('SUGGESTION_THUMB_DIR')        OR define('SUGGESTION_THUMB_DIR', UPLOAD_DIR.'/suggestion/thumbnail/');
+defined('SUGGESTION_THUMB_URL')        OR define('SUGGESTION_THUMB_URL', SITE_PATH.UPLOAD_DIR.'/suggestion/thumbnail/');
+

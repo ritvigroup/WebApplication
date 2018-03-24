@@ -111,7 +111,7 @@ class Userlogin extends CI_Controller {
 
 		            $this->User_Model->insertUserLog($insertData);
 
-		            $user_info = $this->User_Model->getUserDetail($UserId);
+		            $user_info = $this->User_Model->getUserDetailAll($UserId);
 
                 	$msg = "User logged in successfully";
 
@@ -192,7 +192,7 @@ class Userlogin extends CI_Controller {
 
                         if($UserCitizenProfileId > 0 && $UserLeaderProfileId > 0) {
                             $this->db->query("COMMIT");
-                            $user_info = $this->User_Model->getUserDetail($UserId);
+                            $user_info = $this->User_Model->getUserDetailAll($UserId);
                             $msg = "User registered and logged in successfully";
                         } else {
                             $this->db->query("ROLLBACK");
@@ -218,7 +218,7 @@ class Userlogin extends CI_Controller {
 
             $array = array(
                            "status"     => 'success',
-                           "user_info"  => $user_info,
+                           "result"  => $user_info,
                            "message"    => $msg,
                            );
         }
@@ -251,7 +251,7 @@ class Userlogin extends CI_Controller {
                 
                 $this->User_Model->updateLoginStatus($UserId, $updateData);
 
-                $user_info = $this->User_Model->getUserDetail($UserId);
+                $user_info = $this->User_Model->getUserDetailAll($UserId);
 
                 $msg = "User logged in successfully";
             } else {
@@ -269,7 +269,7 @@ class Userlogin extends CI_Controller {
 
             $array = array(
                            "status"         => 'success',
-                           "user_info"	     => $user_info,
+                           "result"	     => $user_info,
                            "message"        => $msg,
                            );
         }
@@ -320,7 +320,7 @@ class Userlogin extends CI_Controller {
 
             $array = array(
                            "status"      => 'success',
-                           "user_info"	 => $user_info,
+                           "result"	 => $user_info,
                            "message"     => $msg,
                            );
         }
@@ -373,12 +373,11 @@ class Userlogin extends CI_Controller {
 
 			// otp code
 			$otp_message = "Your one time verification code for Ritvi Group is ".$otp;
-			$result = sendMessageToPhone($mobile, $otp_message);
+			$otp_sent = sendMessageToPhone($mobile, $otp_message);
 
 			$array = array(
 			               "status" 		=> 'success',
 						   "message"		=> $msg,
-						   "result"			=> $result,
 			               );
 		}
         displayJsonEncode($array);
@@ -438,7 +437,7 @@ class Userlogin extends CI_Controller {
 		} else {
 			$array = array(
 			               "status" 	    => 'success',
-						   "user_info"	    => $user_info,
+						   "result"	    => $user_info,
 						   "message"		=> $msg,
 			               );
 		}

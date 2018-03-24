@@ -2,16 +2,16 @@
 if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
 /**
- * Complaint Management
+ * Suggestion Management
 */
 
-class Complaint extends CI_Controller {
+class Suggestion extends CI_Controller {
     
     public function __construct() {
         parent::__construct();
 
         $this->load->model('User_Model');
-        $this->load->model('Complaint_Model');
+        $this->load->model('Suggestion_Model');
 
         $this->device_token 	= $this->input->post('device_token');
         $this->location_lant 	= $this->input->post('location_lant');
@@ -21,28 +21,25 @@ class Complaint extends CI_Controller {
     }
 
 
-    public function postMyComplaint() {
+    public function postMySuggestion() {
 		$error_occured = false;
 
         $UserProfileId          = $this->input->post('user_profile_id');
-        $ComplaintTypeId        = $this->input->post('complaint_type_id');
-        $ComplaintSubject       = $this->input->post('complaint_subject');
-        $ComplaintDescription   = $this->input->post('complaint_description');
+        $SuggestionSubject      = $this->input->post('suggestion_subject');
+        $SuggestionDescription  = $this->input->post('suggestion_description');
         $ApplicantName          = $this->input->post('applicant_name');
         $ApplicantFatherName    = $this->input->post('applicant_father_name');
         $ApplicantMobile        = $this->input->post('applicant_mobile');
+        $ApplicantEmail         = $this->input->post('applicant_email');
 
         $AssignedTo             = $this->input->post('assign_to_profile_id'); // Assign to Favourite Leader/Sub-Leader
 
-        $complaint_member = $this->input->post('complaint_member'); // Should be multiple in array
-
-
-        $ComplaintUniqueId = $this->Complaint_Model->generateComplaintUniqueId();
+        $SuggestionUniqueId = $this->Suggestion_Model->generateSuggestionUniqueId();
         
         if($UserProfileId == "") {
 			$msg = "Please select your profile";
 			$error_occured = true;
-		} else if($ComplaintSubject == "") {
+		} else if($SuggestionSubject == "") {
 			$msg = "Please enter some text to subject";
 			$error_occured = true;
 		} else {
@@ -50,36 +47,35 @@ class Complaint extends CI_Controller {
             $this->db->query("BEGIN");
 
             $insertData = array(
-                                'ComplaintUniqueId'         => $ComplaintUniqueId,
-                                'ComplaintSubject'          => $ComplaintSubject,
-                                'ComplaintDescription'      => $ComplaintDescription,
+                                'SuggestionUniqueId'         => $SuggestionUniqueId,
+                                'SuggestionSubject'          => $SuggestionSubject,
+                                'SuggestionDescription'      => $SuggestionDescription,
                                 'ApplicantName'             => $ApplicantName,
                                 'ApplicantFatherName'       => $ApplicantFatherName,
                                 'ApplicantMobile'           => $ApplicantMobile,
-                                'ComplaintStatus'           => 1,
+                                'ApplicantEmail'           => $ApplicantEmail,
+                                'SuggestionStatus'           => 1,
                                 'AddedBy'                   => $UserProfileId,
                                 'AddedOn'                   => date('Y-m-d H:i:s'),
                                 'UpdatedOn'                 => date('Y-m-d H:i:s'),
                             );
-			$ComplaintId = $this->Complaint_Model->saveMyComplaint($insertData);
+			$SuggestionId = $this->Suggestion_Model->saveMySuggestion($insertData);
 
-            if($ComplaintId > 0) {
+            if($SuggestionId > 0) {
                 
-                $this->Complaint_Model->assignComplaintToLeaderSubLeader($ComplaintId, $UserProfileId, $AssignedTo);
-
-                $this->Complaint_Model->saveMyComplaintMembers($ComplaintId, $UserProfileId, $complaint_member);
+                $this->Suggestion_Model->assignSuggestionToLeaderSubLeader($SuggestionId, $UserProfileId, $AssignedTo);
                 
-                $this->Complaint_Model->saveMyComplaintAttachment($ComplaintId, $UserProfileId, $_FILES['file']);
+                $this->Suggestion_Model->saveMySuggestionAttachment($SuggestionId, $UserProfileId, $_FILES['file']);
 
-                $complaint_detail = $this->Complaint_Model->getComplaintDetail($ComplaintId);
+                $suggestion_detail = $this->Suggestion_Model->getSuggestionDetail($SuggestionId);
 
                 $this->db->query("COMMIT");
 
-                $msg = "Complaint added successfully";
+                $msg = "Suggestion added successfully";
 
             } else {
                 $this->db->query("ROLLBACK");
-                $msg = "Complaint not saved. Error occured";
+                $msg = "Suggestion not saved. Error occured";
                 $error_occured = true;
             }
         }
@@ -93,7 +89,7 @@ class Complaint extends CI_Controller {
 
             $array = array(
                            "status"             => 'success',
-                           "result"   => $complaint_detail,
+                           "result"   => $suggestion_detail,
                            "message"            => $msg,
                            );
         }
@@ -101,26 +97,26 @@ class Complaint extends CI_Controller {
     }
     
     
-    public function getComplaintDetail() {
+    public function getSuggestionDetail() {
         $error_occured = false;
 
         $UserProfileId   = $this->input->post('user_profile_id');
-        $ComplaintId          = $this->input->post('complaint_id');
+        $SuggestionId          = $this->input->post('suggestion_id');
         
         if($UserProfileId == "") {
             $msg = "Please select your profile";
             $error_occured = true;
-        } else if($ComplaintId == "") {
-            $msg = "Please select complaint";
+        } else if($SuggestionId == "") {
+            $msg = "Please select suggestion";
             $error_occured = true;
         } else {
 
-            $complaint_detail = $this->Complaint_Model->getComplaintDetail($ComplaintId);
+            $suggestion_detail = $this->Suggestion_Model->getSuggestionDetail($SuggestionId);
 
-            if(count($complaint_detail) > 0) {
-                $msg = "Complaint fetched successfully";
+            if(count($suggestion_detail) > 0) {
+                $msg = "Suggestion fetched successfully";
             } else {
-                $msg = "Complaint not found";
+                $msg = "Suggestion not found";
                 $error_occured = true;
             }
         }
@@ -134,7 +130,7 @@ class Complaint extends CI_Controller {
 
             $array = array(
                            "status"             => 'success',
-                           "result"   => $complaint_detail,
+                           "result"   => $suggestion_detail,
                            "message"            => $msg,
                            );
         }
@@ -142,7 +138,7 @@ class Complaint extends CI_Controller {
     }
 
 
-    public function getMyAllComplaint() {
+    public function getMyAllSuggestion() {
         $error_occured = false;
 
         $UserProfileId   = $this->input->post('user_profile_id');
@@ -152,11 +148,11 @@ class Complaint extends CI_Controller {
             $error_occured = true;
         } else {
 
-            $complaints = $this->Complaint_Model->getMyAllComplaint($UserProfileId);
-            if(count($complaints) > 0) {
-                $msg = "Complaint fetched successfully";
+            $suggestions = $this->Suggestion_Model->getMyAllSuggestion($UserProfileId);
+            if(count($suggestions) > 0) {
+                $msg = "Suggestion fetched successfully";
             } else {
-                $msg = "No complaint added by you";
+                $msg = "No suggestion added by you";
                 $error_occured = true;
             }
         }
@@ -170,47 +166,12 @@ class Complaint extends CI_Controller {
 
             $array = array(
                            "status"       => 'success',
-                           "result"   => $complaints,
+                           "result"   => $suggestions,
                            "message"      => $msg,
                            );
         }
         displayJsonEncode($array);
     }
 
-
-    public function getAllComplaintWhereMyselfAssociated() {
-        $error_occured = false;
-
-        $UserProfileId   = $this->input->post('user_profile_id');
-        
-        if($UserProfileId == "") {
-            $msg = "Please select your profile";
-            $error_occured = true;
-        } else {
-
-            $complaints = $this->Complaint_Model->getAllComplaintWhereMyselfAssociated($UserProfileId);
-            if(count($complaints) > 0) {
-                $msg = "Complaint fetched successfully";
-            } else {
-                $msg = "No complaint added by you";
-                $error_occured = true;
-            }
-        }
-
-        if($error_occured == true) {
-            $array = array(
-                            "status"        => 'failed',
-                            "message"       => $msg,
-                        );
-        } else {
-
-            $array = array(
-                           "status"       => 'success',
-                           "result"   => $complaints,
-                           "message"      => $msg,
-                           );
-        }
-        displayJsonEncode($array);
-    }
 }
 

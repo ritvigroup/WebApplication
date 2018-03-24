@@ -156,7 +156,7 @@ class Forgot extends CI_Controller {
         } else {
             $array = array(
                            "status"      => 'success',
-                           "user_info"   => $user_info,
+                           "result"   => $user_info,
                            "message"     => $msg,
                            );
         }
@@ -209,12 +209,12 @@ class Forgot extends CI_Controller {
 
             // code
             $otp_message = "Reset forgot password code is sent to your mobile number. Reset password code is: ".$ResetPasswordCode;
-            $result = sendMessageToPhone($mobile, $otp_message);
+            $otp_sent = sendMessageToPhone($mobile, $otp_message);
 
             $array = array(
                            "status"         => 'success',
                            "message"        => $msg,
-                           "result"         => $result,
+                           "result"         => $user_info,
                            );
         }
         displayJsonEncode($array);
@@ -257,7 +257,7 @@ class Forgot extends CI_Controller {
 		} else {
 			$array = array(
 			               "status" 	    => 'success',
-						   "user_info"	    => $user_info,
+						   "result"	    => $user_info,
 						   "message"		=> $msg,
 			               );
 		}
@@ -329,7 +329,7 @@ class Forgot extends CI_Controller {
         } else {
             $array = array(
                            "status"      => 'success',
-                           "user_info"   => $user_info,
+                           "result"   => $user_info,
                            "message"     => $msg,
                            );
         }

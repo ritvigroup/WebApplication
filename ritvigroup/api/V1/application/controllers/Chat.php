@@ -98,7 +98,7 @@ class Chat extends CI_Controller {
 
             $array = array(
                            "status"             => 'success',
-                           "chat_detail"   => $chat_detail,
+                           "result"   => $chat_detail,
                            "message"            => $msg,
                            );
         }
@@ -139,7 +139,7 @@ class Chat extends CI_Controller {
 
             $array = array(
                            "status"             => 'success',
-                           "chat_detail"   => $chat_detail,
+                           "result"   => $chat_detail,
                            "message"            => $msg,
                            );
         }
@@ -175,7 +175,7 @@ class Chat extends CI_Controller {
 
             $array = array(
                            "status"       => 'success',
-                           "chats"   => $chats,
+                           "result"   => $chats,
                            "message"      => $msg,
                            );
         }

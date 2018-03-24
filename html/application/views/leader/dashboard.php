@@ -39,11 +39,11 @@
 <div>
     <!--BEGIN BACK TO TOP--><a id="totop" href="#"><i class="fa fa-angle-up"></i></a><!--END BACK TO TOP-->
     
-    <?php  require_once 'include/top.php';?>
+    <?php  include_once './include/top.php';?>
 
     <div id="wrapper"><!--BEGIN SIDEBAR MENU-->
         
-        <?php  require_once 'include/left.php';?>
+        <?php  include_once './include/left.php';?>
 
 
         <!--END CHAT FORM--><!--BEGIN PAGE WRAPPER-->
@@ -298,7 +298,7 @@
             <!--END CONTENT-->
         </div>
         
-        <?php  require_once 'include/footer.php';?>
+        <?php  require_once './include/footer.php';?>
         <!--END PAGE WRAPPER-->
     </div>
 </div>

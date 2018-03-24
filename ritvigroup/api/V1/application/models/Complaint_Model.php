@@ -41,6 +41,18 @@ class Complaint_Model extends CI_Model {
     }
 
 
+    public function assignComplaintToLeaderSubLeader($ComplaintId, $UserProfileId, $AssignedTo) {
+        $insertData = array(
+                            'ComplaintId'       => $ComplaintId,
+                            'AssignedTo'        => $AssignedTo,
+                            'AssignedBy'        => $UserProfileId,
+                            'AddedOn'           => date('Y-m-d H:i:s'),
+                            );
+        $this->db->insert($this->complaintAssignedTbl, $insertData);
+        return true;
+    }
+
+
     public function saveMyComplaintMembers($ComplaintId, $UserProfileId, $complaint_member) {
         foreach($complaint_member AS $member_user_profile_id) {
             $insertData = array(

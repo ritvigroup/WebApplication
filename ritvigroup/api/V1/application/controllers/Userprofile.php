@@ -55,7 +55,7 @@ class Userprofile extends CI_Controller {
 
             $array = array(
                            "status"         => 'success',
-                           "user_info"   => $user_info,
+                           "result"   => $user_info,
                            "message"        => $msg,
                            );
         }
@@ -98,7 +98,7 @@ class Userprofile extends CI_Controller {
 
             $array = array(
                            "status"         => 'success',
-                           "user_info"	 => $user_info,
+                           "result"	 => $user_info,
                            "message"        => $msg,
                            );
         }
@@ -142,13 +142,185 @@ class Userprofile extends CI_Controller {
 
             $array = array(
                            "status"     => 'success',
-                           "profile"    => $profile,
+                           "result"    => $profile,
                            "message"    => $msg,
                            );
         }
         displayJsonEncode($array);
     }
 
+
+    public function searchCitizenProfiles() {
+        $error_occured = false;
+        $UserProfileId = $this->input->post('user_profile_id');
+        
+        $search = $this->input->post('search');
+                
+        if($UserProfileId == "") {
+            $msg = "Please select user profile";
+            $error_occured = true;
+        } else if($search == "" || count($search) == 0) {
+            $msg = "Please enter something to search";
+            $error_occured = true;
+        } else {
+
+            $res_u = $this->User_Model->searchCitizenProfiles($UserProfileId, $search);
+
+            if(count($res_u) > 0) {
+
+                $msg = "Profile information found successfully";
+
+            } else {
+                $msg = "No user profile Found";
+                $error_occured = true;
+            }
+        }
+
+        if($error_occured == true) {
+            $array = array(
+                            "status"        => 'failed',
+                            "message"       => $msg,
+                        );
+        } else {
+
+            $array = array(
+                           "status"     => 'success',
+                           "result"    => $res_u,
+                           "message"    => $msg,
+                           );
+        }
+        displayJsonEncode($array);
+    }
+
+
+    public function searchLeaderProfiles() {
+        $error_occured = false;
+        $UserProfileId = $this->input->post('user_profile_id');
+        
+        $search = $this->input->post('search');
+                
+        if($UserProfileId == "") {
+            $msg = "Please select user profile";
+            $error_occured = true;
+        } else if($search == "" || count($search) == 0) {
+            $msg = "Please enter something to search";
+            $error_occured = true;
+        } else {
+
+            $res_u = $this->User_Model->searchLeaderProfiles($UserProfileId, $search);
+
+            if(count($res_u) > 0) {
+
+                $msg = "Profile information found successfully";
+
+            } else {
+                $msg = "No user profile Found";
+                $error_occured = true;
+            }
+        }
+
+        if($error_occured == true) {
+            $array = array(
+                            "status"        => 'failed',
+                            "message"       => $msg,
+                        );
+        } else {
+
+            $array = array(
+                           "status"     => 'success',
+                           "result"    => $res_u,
+                           "message"    => $msg,
+                           );
+        }
+        displayJsonEncode($array);
+    }
+
+
+    public function searchSubLeaderProfiles() {
+        $error_occured = false;
+        $UserProfileId = $this->input->post('user_profile_id');
+        
+        $search = $this->input->post('search');
+                
+        if($UserProfileId == "") {
+            $msg = "Please select user profile";
+            $error_occured = true;
+        } else if($search == "" || count($search) == 0) {
+            $msg = "Please enter something to search";
+            $error_occured = true;
+        } else {
+
+            $res_u = $this->User_Model->searchSubLeaderProfiles($UserProfileId, $search);
+
+            if(count($res_u) > 0) {
+
+                $msg = "Profile information found successfully";
+
+            } else {
+                $msg = "No user profile Found";
+                $error_occured = true;
+            }
+        }
+
+        if($error_occured == true) {
+            $array = array(
+                            "status"        => 'failed',
+                            "message"       => $msg,
+                        );
+        } else {
+
+            $array = array(
+                           "status"     => 'success',
+                           "result"    => $res_u,
+                           "message"    => $msg,
+                           );
+        }
+        displayJsonEncode($array);
+    }
+
+
+    public function searchAllUserProfiles() {
+        $error_occured = false;
+        $UserProfileId = $this->input->post('user_profile_id');
+        
+        $search = $this->input->post('search');
+                
+        if($UserProfileId == "") {
+            $msg = "Please select user profile";
+            $error_occured = true;
+        } else if($search == "" || count($search) == 0) {
+            $msg = "Please enter something to search";
+            $error_occured = true;
+        } else {
+
+            $res_u = $this->User_Model->searchAllUserProfiles($UserProfileId, $search);
+
+            if(count($res_u) > 0) {
+
+                $msg = "Profile information found successfully";
+
+            } else {
+                $msg = "No user profile Found";
+                $error_occured = true;
+            }
+        }
+
+        if($error_occured == true) {
+            $array = array(
+                            "status"        => 'failed',
+                            "message"       => $msg,
+                        );
+        } else {
+
+            $array = array(
+                           "status"     => 'success',
+                           "result"    => $res_u,
+                           "message"    => $msg,
+                           );
+        }
+        displayJsonEncode($array);
+    }
+    
 
     public function removeProfilePicture() {
         $error_occured = false;
@@ -194,7 +366,7 @@ class Userprofile extends CI_Controller {
 
             $array = array(
                            "status"         => 'success',
-                           "user_info"   => $user_info,
+                           "result"   => $user_info,
                            "message"        => $msg,
                            );
         }
@@ -246,7 +418,7 @@ class Userprofile extends CI_Controller {
 
             $array = array(
                            "status"         => 'success',
-                           "user_info"   => $user_info,
+                           "result"   => $user_info,
                            "message"        => $msg,
                            );
         }
@@ -343,11 +515,17 @@ class Userprofile extends CI_Controller {
                 }
 
                 $updateData = array(
+                    'DateOfBirth' => $date_of_birth,
+                    'Gender' => $gender,
+                    'UpdatedOn' => date('Y-m-d H:i:s'),
+                );
+                
+                $this->User_Model->updateUserData($UserId, $updateData);
+
+                $updateData = array(
                                     'FirstName'     => $FirstName,
                                     'MiddleName'    => $MiddleName,
                                     'LastName'      => $LastName,
-                                    'DateOfBirth'   => $date_of_birth,
-                                    'Gender'        => $gender,
                                     'Email'         => $email,
                                     'Mobile'        => $mobile,
                                     'AltMobile'     => $alt_mobile,
@@ -355,6 +533,7 @@ class Userprofile extends CI_Controller {
                                     'UpdatedOn'     => date('Y-m-d H:i:s'),
                                     'UpdatedBy'     => $UserProfileId,
                                 );
+
                 if($this->User_Model->updateUserProfileData($UserProfileId, $updateData)) {
                     
                     $this->User_Model->saveUserPhoto('photo', $UserId, 1);
@@ -381,7 +560,7 @@ class Userprofile extends CI_Controller {
 
             $array = array(
                            "status"      => 'success',
-                           "user_info"   => $user_info,
+                           "result"   => $user_info,
                            "message"     => $msg,
                            );
         }
@@ -516,11 +695,157 @@ class Userprofile extends CI_Controller {
 
             $array = array(
                            "status"      => 'success',
-                           "user_info"   => $user_info,
+                           "result"   => $user_info,
                            "message"     => $msg,
                            );
         }
         displayJsonEncode($array);
     }
+
+
+    public function setLeaderAsFavourite() {
+        $UserId                 = $this->input->post('user_id');
+        $UserProfileId          = $this->input->post('user_profile_id');
+        $FriendUserProfileId    = $this->input->post('friend_user_profile_id');
+        
+        if($UserId == "") {
+            $msg = "Please select user";
+            $error_occured = true;
+        } else if($UserProfileId == "") {
+            $msg = "Please select user profile";
+            $error_occured = true;
+        } else if($FriendUserProfileId == "") {
+            $msg = "Please select friend user profile";
+            $error_occured = true;
+        } else {
+
+            $UserProfileDetail = $this->User_Model->checkUserSetAsFavourite($UserProfileId, $FriendUserProfileId);
+
+            if($UserProfileDetail['UserProfileId'] > 0) {
+                $this->db->query("BEGIN");
+                $this->User_Model->deleteUserFavUser($UserProfileId, $FriendUserProfileId);
+                $this->db->query("COMMIT");
+                $msg = "User profile removed from favourite successfully";
+                $favourite = 0;
+            } else {
+                $this->db->query("BEGIN");
+                $insertData = array(
+                                    'UserProfileId'         => $UserProfileId,
+                                    'FriendUserProfileId'   => $FriendUserProfileId,
+                                    'FavOn'                 => date('Y-m-d H:i:s'),
+                                );
+                $this->User_Model->insertUserFavUser($insertData);
+                $this->db->query("COMMIT");
+                $msg = "This user is set as favourite";
+                $favourite = 1;
+            }
+        }
+
+        if($error_occured == true) {
+            $array = array(
+                            "status"        => 'failed',
+                            "message"       => $msg,
+                        );
+        } else {
+
+            $array = array(
+                           "status"      => 'success',
+                           "message"     => $msg,
+                           "favourite"     => $favourite,
+                           );
+        }
+        displayJsonEncode($array);
+    }
+
+
+    public function removeLeaderAsFavourite() {
+        $UserId                 = $this->input->post('user_id');
+        $UserProfileId          = $this->input->post('user_profile_id');
+        $FriendUserProfileId    = $this->input->post('friend_user_profile_id');
+        
+        if($UserId == "") {
+            $msg = "Please select user";
+            $error_occured = true;
+        } else if($UserProfileId == "") {
+            $msg = "Please select user profile";
+            $error_occured = true;
+        } else if($FriendUserProfileId == "") {
+            $msg = "Please select friend user profile";
+            $error_occured = true;
+        } else {
+
+            $UserProfileDetail = $this->User_Model->checkUserSetAsFavourite($UserProfileId, $FriendUserProfileId);
+
+            if($UserProfileDetail['UserProfileId'] > 0) {
+                $this->db->query("BEGIN");
+                $this->User_Model->deleteUserFavUser($UserProfileId, $FriendUserProfileId);
+                $this->db->query("COMMIT");
+                $msg = "User profile removed from favourite successfully";
+            } else {
+                $msg = "This user is not in your favourite list";
+                $error_occured = true;
+            }
+        }
+
+        if($error_occured == true) {
+            $array = array(
+                            "status"        => 'failed',
+                            "message"       => $msg,
+                        );
+        } else {
+
+            $array = array(
+                           "status"      => 'success',
+                           "message"     => $msg,
+                           );
+        }
+        displayJsonEncode($array);
+    }
+
+
+    public function getMyAllFavouriteLeader() {
+        $error_occured = false;
+        $UserId         = $this->input->post('user_id');
+        $UserProfileId  = $this->input->post('user_profile_id');
+        
+                
+        if($UserId == "") {
+            $msg = "Please select user";
+            $error_occured = true;
+        } else if($UserProfileId == "") {
+            $msg = "Please select user profile";
+            $error_occured = true;
+        } else {
+
+            $fav_leader = $this->User_Model->getMyAllFavouriteLeader($UserId, $UserProfileId);
+
+            if(count($fav_leader) > 0) {
+
+                $msg = "Favourite leader found successfully";
+
+            } else {
+                $msg = "No leader in your favourite list.";
+                $error_occured = true;
+            }
+        }
+
+        if($error_occured == true) {
+            $array = array(
+                            "status"        => 'failed',
+                            "message"       => $msg,
+                        );
+        } else {
+
+            $array = array(
+                           "status"     => 'success',
+                           "result"    => $fav_leader,
+                           "message"    => $msg,
+                           );
+        }
+        displayJsonEncode($array);
+    }
+
+
+
         
 }

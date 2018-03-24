@@ -97,21 +97,29 @@ class Leader extends CI_Controller {
 
         if($this->input->method(TRUE) == "POST") {
 
-            $json_decode = post_curl(API_CALL_PATH.'userlogin/loginUsernamePassword', $this->input->post(), $this->curl);
+            $json = post_curl(API_CALL_PATH.'userlogin/loginUsernamePassword', $this->input->post(), $this->curl);
 
-            header('Content-type: application/json');
-
+            $json_decode = json_decode($json);
             if($json_decode->status == "success") {
 
-                $UserId = $json_decode->user_info->UserId;
+                $UserId = $json_decode->result->UserId;
+                
                 if($UserId > 0) {
+                    $CitizenProfileId   = $json_decode->result->UserProfileCitizen->UserProfileId;
+                    $LeaderProfileId    = $json_decode->result->UserProfileLeader->UserProfileId;
+
                     $this->session->set_userdata('UserId', $UserId);
+                    $this->session->set_userdata('CitizenProfileId', $CitizenProfileId);
+                    $this->session->set_userdata('LeaderProfileId', $LeaderProfileId);
+
+
                     
                 }
             } else {
                 
             }
-            echo $json_decode;
+            header('Content-type: application/json');
+            echo $json;
             return false;
         }
         $this->load->view('leader/login',$data);
@@ -125,21 +133,29 @@ class Leader extends CI_Controller {
 
         if($this->input->method(TRUE) == "POST") {
 
-            $json_decode = post_curl(API_CALL_PATH.'userregister/registerFromWebsite', $this->input->post(), $this->curl);
+            $json = post_curl(API_CALL_PATH.'userregister/registerFromWebsite', $this->input->post(), $this->curl);
 
-            header('Content-type: application/json');
-
+            $json_decode = json_decode($json);
             if($json_decode->status == "success") {
 
-                $UserId = $json_decode->user_info->UserId;
+                $UserId = $json_decode->result->UserId;
+                
                 if($UserId > 0) {
+                    $CitizenProfileId   = $json_decode->result->UserProfileCitizen->UserProfileId;
+                    $LeaderProfileId    = $json_decode->result->UserProfileLeader->UserProfileId;
+
                     $this->session->set_userdata('UserId', $UserId);
+                    $this->session->set_userdata('CitizenProfileId', $CitizenProfileId);
+                    $this->session->set_userdata('LeaderProfileId', $LeaderProfileId);
+
+
                     
                 }
             } else {
                 
             }
-            echo $json_decode;
+            header('Content-type: application/json');
+            echo $json;
             return false;
         }
         $data = array();
@@ -154,7 +170,7 @@ class Leader extends CI_Controller {
 
         if($this->input->method(TRUE) == "POST") {
 
-            $json_decode = post_curl(API_CALL_PATH.'forgot/forgotPassword', $this->input->post(), $this->curl);
+            $json = post_curl(API_CALL_PATH.'forgot/forgotPassword', $this->input->post(), $this->curl);
 
             header('Content-type: application/json');
 
@@ -180,16 +196,16 @@ class Leader extends CI_Controller {
 
         if($this->input->method(TRUE) == "POST") {
 
-            $json_decode = post_curl(API_CALL_PATH.'forgot/updatePassword', $this->input->post(), $this->curl);
+            $json = post_curl(API_CALL_PATH.'forgot/updatePassword', $this->input->post(), $this->curl);
 
-            header('Content-type: application/json');
-
+            $json_decode = json_decode($json);
             if($json_decode->status == "success") {
 
             } else {
                 
             }
-            echo $json_decode;
+            header('Content-type: application/json');
+            echo $json;
             return false;
         }
 
@@ -224,6 +240,13 @@ class Leader extends CI_Controller {
 
     
     public function dashboard() {
+
+        if(($this->session->userdata('UserId')) > 0) { 
+        } else {
+            redirect('leader/login');
+        }
+        
+
         $data = array();
         $this->load->view('leader/dashboard',$data);
     }
@@ -233,6 +256,7 @@ class Leader extends CI_Controller {
         $data = array();
 
         if(($this->session->userdata('UserId')) > 0) {
+        } else {
         }
         $this->load->view('leader/profile',$data);
     }
@@ -339,5 +363,31 @@ class Leader extends CI_Controller {
     public function switch_profile() {
         $data = array();
         $this->load->view('leader/switch_profile',$data);
+    }
+
+
+    public function searchLeaderProfiles($option = true) {
+
+        if($this->session->userdata('UserId') > 0) {
+            $_POST['user_id'] = $this->session->userdata('UserId');
+            $_POST['user_profile_id'] = $this->session->userdata('LeaderProfileId');
+            $json = post_curl(API_CALL_PATH.'userprofile/searchLeaderProfiles', $this->input->post(), $this->curl);
+
+            $json_decode = json_decode($json);
+            
+            if($option == true) {
+                $options = '';
+                $UserProfileLeader = $json_decode->result->UserProfileLeader;
+                foreach($UserProfileLeader AS $LeaderProfile) {
+                    $options .= '<option value="'.$LeaderProfile->UserProfileLeader->UserProfileId.'">'.$LeaderProfile->UserProfileLeader->FirstName. ' '.$LeaderProfile->UserProfileLeader->LastName .'</option>';
+                }
+                echo $options;
+            } else {
+                echo $json;
+            }
+            
+        } else {
+            return false;
+        }
     }
 }

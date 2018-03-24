@@ -37,7 +37,7 @@ class Event_Model extends CI_Model {
 
 
     public function saveMyEventAttendee($EventId, $UserProfileId, $event_member) {
-        foreach($event_member AS $member_user_profile_id) {
+        foreach($event_member AS $key => $member_user_profile_id) {
             $insertData = array(
                                 'EventId'               => $EventId,
                                 'UserProfileId'         => $member_user_profile_id,
@@ -151,7 +151,11 @@ class Event_Model extends CI_Model {
         $events = array();
         if(isset($UserProfileId) && $UserProfileId > 0) {
 
-            $query = $this->db->query("SELECT EventId FROM $this->eventTbl WHERE `AddedBy` = '".$UserProfileId."'");
+            $this->db->select('EventId');
+            $this->db->from($this->eventTbl);
+            $this->db->where('AddedBy', $UserProfileId);
+            $this->db->order_by('StartDate','DESC');
+            $query = $this->db->get();
 
             $res = $query->result_array();
 
@@ -216,7 +220,9 @@ class Event_Model extends CI_Model {
                                 "EveryMonth"         => $EveryMonth,
                                 "EventStatus"        => $EventStatus,
                                 "AddedOn"            => $AddedOn,
+                                "AddedOnTime"        => $res['AddedOn'],
                                 "UpdatedOn"          => $UpdatedOn,
+                                "UpdatedOnTime"      => $res['UpdatedOn'],
                                 "EventProfile"       => $EventProfile,
                                 "EventAttendee"      => $EventAttendee,
                                 "EventAttachment"    => $EventAttachment,
@@ -291,6 +297,7 @@ class Event_Model extends CI_Model {
                                 'AttachmentStatus'      => $result['AttachmentStatus'],
                                 'AddedBy'               => $this->User_Model->getUserProfileWithUserInformation($result['AddedBy']),
                                 'AddedOn'               => return_time_ago($result['AddedOn']),
+                                'AddedOnTime'           => $result['AddedOn'],
                                 );
         }
 

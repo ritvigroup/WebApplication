@@ -10,7 +10,6 @@
     <link rel="apple-touch-icon" href="<?=base_url();?>assets/images/icons/favicon.png">
     <link rel="apple-touch-icon" sizes="72x72" href="<?=base_url();?>assets/images/icons/favicon-72x72.png">
     <link rel="apple-touch-icon" sizes="114x114" href="<?=base_url();?>assets/images/icons/favicon-114x114.png">
-
     <!--Loading bootstrap css-->
     <link type="text/css" rel="stylesheet"
           href="http://fonts.googleapis.com/css?family=Open+Sans:400italic,400,300,700">
@@ -19,10 +18,7 @@
           href="<?=base_url();?>assets/vendors/jquery-ui-1.10.4.custom/css/ui-lightness/jquery-ui-1.10.4.custom.min.css">
     <link type="text/css" rel="stylesheet" href="<?=base_url();?>assets/vendors/font-awesome/css/font-awesome.min.css">
     <link type="text/css" rel="stylesheet" href="<?=base_url();?>assets/vendors/bootstrap/css/bootstrap.min.css">
-    <!--LOADING STYLESHEET FOR PAGE-->
-    <link type="text/css" rel="stylesheet" href="<?=base_url();?>assets/vendors/fullcalendar/fullcalendar.css">
-    <link type="text/css" rel="stylesheet" href="<?=base_url();?>assets/vendors/fullcalendar/fullcalendar.print.css">
-    <!--Loading style vendors-->
+    <!--LOADING STYLESHEET FOR PAGE--><!--Loading style vendors-->
     <link type="text/css" rel="stylesheet" href="<?=base_url();?>assets/vendors/animate.css/animate.css">
     <link type="text/css" rel="stylesheet" href="<?=base_url();?>assets/vendors/jquery-pace/pace.css">
     <link type="text/css" rel="stylesheet" href="<?=base_url();?>assets/vendors/iCheck/skins/all.css">
@@ -53,44 +49,56 @@
                 <ol class="breadcrumb page-breadcrumb">
                     <li><i class="fa fa-home"></i>&nbsp;<a href="<?=base_url();?>leader/home">Home</a>&nbsp;&nbsp;<i
                             class="fa fa-angle-right"></i>&nbsp;&nbsp;</li>
-                    <li><a href="#">Tables</a>&nbsp;&nbsp;<i class="fa fa-angle-right"></i>&nbsp;&nbsp;</li>
+                    <li><a href="<?=base_url();?>event/event">Event</a>&nbsp;&nbsp;<i class="fa fa-angle-right"></i>&nbsp;&nbsp;</li>
                     <li class="active">Event</li>
                 </ol>
-                <div class="btn btn-blue reportrange hide"><i class="fa fa-calendar"></i>&nbsp;<span></span>&nbsp;report&nbsp;<i
-                        class="fa fa-angle-down"></i><input type="hidden" name="datestart"/><input type="hidden"
-                                                                                                   name="endstart"/>
-                </div>
+
                 <div class="clearfix"></div>
             </div>
             <!--END TITLE & BREADCRUMB PAGE--><!--BEGIN CONTENT-->
             <div class="page-content">
-                <div style="height: 770px" class="row">
-                    <div class="col-lg-12">
-                        <div class="panel">
-                            <div class="panel-body">
-                                <div class="row">
-                                    <div class="col-md-3">
-                                        <div id="external-events"><h4>Draggable Events</h4><input id="event-name"
-                                                                                                  type="text" value=""
-                                                                                                  placeholder="Event name..."
-                                                                                                  class="form-control"/><br/><a
-                                                id="event-add" href="javascript:;" class="btn btn-primary btn-sm">Add
-                                            Event</a>
-                                            <hr/>
-                                            <div id="event-box">
-                                                <div class="external-event label label-default">My Event 1</div>
-                                                <div class="external-event label label-default">My Event 2</div>
-                                                <div class="external-event label label-default">My Event 3</div>
-                                                <div class="external-event label label-default">My Event 4</div>
-                                                <div class="external-event label label-default">My Event 5</div>
-                                            </div>
-                                            <div id="event-block"></div>
-                                            <p><input id="drop-remove" type="checkbox"/>&nbsp;<label for="drop-remove">Remove
-                                                after drop</label></p></div>
-                                    </div>
-                                    <div class="col-md-9">
-                                        <div id="calendar"></div>
-                                    </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="portlet box">
+                            <div class="portlet-header">
+                                <div class="caption">My Event</div>
+                                <div class="actions"><a href="<?=base_url();?>event/newevent" class="btn btn-info btn-xs"><i class="fa fa-plus"></i>&nbsp;
+                                    New Event</a>
+                                </div>
+                            </div>
+                            <div class="portlet-body pan">
+                                <div class="table-responsive">
+                                    <table id="user-last-logged-table"
+                                           class="table table-striped table-hover thumb-small">
+                                        <thead>
+                                        <tr class="condensed">
+                                            <th scope="col"><span class="column-sorter"></span></th>
+                                            <th scope="col">Name<span class="column-sorter"></span></th>
+                                            <th scope="col">Location<span class="column-sorter"></span></th>
+                                            <th scope="col">Start Date<span class="column-sorter"></span></th>
+                                            <th scope="col">End Sate<span class="column-sorter"></span></th>
+                                            <th scope="col">Status<span class="column-sorter"></span></th>
+                                        </tr>
+                                        </thead>
+                                        <?php 
+                                        if(count($result) > 0) { ?>
+                                        <tbody class="media-thumb">
+                                        <?php foreach($result AS $event) { ?>
+                                            <?php $EventStatus  = (($event->EventStatus == 1) ? 'Active' : 'In-Active'); ?>
+                                            <?php $StartDate    = (($event->StartDate == '0000-00-00 00:00:00') ? '' : date('d-M-Y h:i A', strtotime($event->StartDate))); ?>
+                                            <?php $EndDate    = (($event->EndDate == '0000-00-00 00:00:00') ? '' : date('d-M-Y h:i A', strtotime($event->EndDate))); ?>
+                                            <tr>
+                                                <td></td>
+                                                <td><?php echo $event->EventName; ?></td>
+                                                <td><?php echo $event->EventLocation; ?></td>
+                                                <td><?php echo $StartDate; ?></td>
+                                                <td><?php echo $EndDate; ?></td>
+                                                <td><?php echo $EventStatus; ?></td>
+                                            </tr>
+                                        <?php }  ?>
+                                        </tbody>
+                                        <?php }  ?>                                        
+                                    </table>
                                 </div>
                             </div>
                         </div>
@@ -130,10 +138,6 @@
 <!--CORE JAVASCRIPT-->
 <script src="<?=base_url();?>assets/js/main.js"></script>
 <!--LOADING SCRIPTS FOR PAGE-->
-<script src="<?=base_url();?>assets/vendors/fullcalendar/fullcalendar.min.js"></script>
-<script src="<?=base_url();?>assets/js/page-calendar.js"></script>
-
-
 
 </body>
 </html>

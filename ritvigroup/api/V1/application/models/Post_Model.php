@@ -163,7 +163,9 @@ class Post_Model extends CI_Model {
                                 "PostDescription"       => $PostDescription,
                                 "PostURL"               => $PostURL,
                                 "AddedOn"               => $AddedOn,
+                                "AddedOnTime"           => $res['AddedOn'],
                                 "UpdatedOn"             => $UpdatedOn,
+                                "UpdatedOnTime"         => $res['UpdatedOn'],
                                 "FeelingData"           => $FeelingData,
                                 "PostProfile"           => $PostProfile,
                                 "PostTag"               => $PostTag,
@@ -232,6 +234,7 @@ class Post_Model extends CI_Model {
                                 'AttachmentOrder'           => $result['AttachmentOrder'],
                                 'AttachmentStatus'          => $result['AttachmentStatus'],
                                 'AddedOn'                   => return_time_ago($result['AddedOn']),
+                                'AddedOnTime'               => ($result['AddedOn']),
                                 );
         }
 

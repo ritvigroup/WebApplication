@@ -218,7 +218,7 @@ class Userregister extends CI_Controller {
 
             $array = array(
                            "status"         => 'success',
-                           "user_info"	=> $user_info,
+                           "result"	    => $user_info,
                            "message"        => $msg,
                            );
         }
@@ -309,8 +309,8 @@ class Userregister extends CI_Controller {
                                         'UserId'                    => $UserId,
                                         'UserTypeId'                => 1,
                                         'ParentUserId'              => 0,
-                                        'FirstName'                 => $first_name,
-                                        'LastName'                  => $last_name,
+                                        'FirstName'                 => $firstname,
+                                        'LastName'                  => $lastname,
                                         'Email'                     => $email,
                                         'UserProfileDeviceToken'    => $this->device_token,
                                         'Mobile'                    => $mobile,
@@ -328,8 +328,8 @@ class Userregister extends CI_Controller {
                                         'UserId'                    => $UserId,
                                         'UserTypeId'                => 2,
                                         'ParentUserId'              => 0,
-                                        'FirstName'                 => $first_name,
-                                        'LastName'                  => $last_name,
+                                        'FirstName'                 => $firstname,
+                                        'LastName'                  => $lastname,
                                         'Email'                     => $email,
                                         'UserProfileDeviceToken'    => $this->device_token,
                                         'Mobile'                    => $mobile,
@@ -344,7 +344,7 @@ class Userregister extends CI_Controller {
 
                     if($UserCitizenProfileId > 0 && $UserLeaderProfileId > 0) {
                         $this->db->query("COMMIT");
-                        $user_info = $this->User_Model->getUserDetail($UserId);
+                        $user_info = $this->User_Model->getUserDetailAll($UserId);
                         $msg = "User registered and logged in successfully";
                     } else {
                         $this->db->query("ROLLBACK");
@@ -369,7 +369,7 @@ class Userregister extends CI_Controller {
 
             $array = array(
                            "status"         => 'success',
-                           "user_info"      => $user_info,
+                           "result"         => $user_info,
                            "message"        => $msg,
                            );
         }
@@ -508,12 +508,12 @@ class Userregister extends CI_Controller {
 
 			// otp code
 			$otp_message = "Your one time verification code for Ritvi Group is ".$otp;
-			$result = sendMessageToPhone($mobile, $otp_message);
+			$otp_sent = sendMessageToPhone($mobile, $otp_message);
 
 			$array = array(
 			               "status" 		=> 'success',
 						   "message"		=> $msg,
-						   "result"			=> $result,
+						   "result"			=> $user_info,
 			               );
 		}
         displayJsonEncode($array);
@@ -563,7 +563,7 @@ class Userregister extends CI_Controller {
 		} else {
 			$array = array(
 			               "status" 		=> 'success',
-						   "user_info"	=> $user_info,
+						   "result"	      => $user_info,
 						   "message"		=> $msg,
 			               );
 		}
@@ -635,7 +635,7 @@ class Userregister extends CI_Controller {
         } else {
             $array = array(
                            "status"         => 'success',
-                           "user_info"   => $user_info,
+                           "result"         => $user_info,
                            "message"        => $msg,
                            );
         }

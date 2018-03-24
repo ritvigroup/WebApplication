@@ -190,7 +190,9 @@ class Information_Model extends CI_Model {
                                 "InformationDescription"    => $InformationDescription,
                                 "InformationStatus"         => $InformationStatus,
                                 "AddedOn"                   => $AddedOn,
+                                "AddedOnTime"               => $res['AddedOn'],
                                 "UpdatedOn"                 => $UpdatedOn,
+                                "UpdatedOnTime"             => $res['UpdatedOn'],
                                 "InformationProfile"        => $InformationProfile,
                                 "InformationAttachment"     => $InformationAttachment,
                                 );
@@ -235,6 +237,7 @@ class Information_Model extends CI_Model {
                                 'AttachmentOrder'           => $result['AttachmentOrder'],
                                 'AttachmentStatus'          => $result['AttachmentStatus'],
                                 'AddedOn'                   => return_time_ago($result['AddedOn']),
+                                'AddedOnTime'               => ($result['AddedOn']),
                                 );
         }
 

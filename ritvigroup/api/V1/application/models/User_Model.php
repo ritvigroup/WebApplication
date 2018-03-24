@@ -8,6 +8,7 @@ class User_Model extends CI_Model {
         $this->userAlbumTbl     = 'UserAlbum';
         $this->userPhotoTbl     = 'UserPhoto';
         $this->userLogTbl       = 'UserLog';
+        $this->userFavUserLogTbl       = 'UserFavUser';
     }
 
     // Login with username with password
@@ -136,6 +137,9 @@ class User_Model extends CI_Model {
         $this->db->where('UserProfileId', $UserProfileId);
         $this->db->update($this->userProfileTbl, $updateData);
 
+        //print_r($this->db->last_query());
+
+        //echo "Affected rows: ".$this->db->affected_rows();
         if($this->db->affected_rows() > 0) {
             return true;
         } else {
@@ -163,10 +167,122 @@ class User_Model extends CI_Model {
             $user_detail = array_merge($user_detail, array("UserProfileCitizen" => $UserProfileCitizen));
 
             if($full_information > 0) {
-                $UserProfileCitizen = $this->getLeaderProfileInformation($UserId);
+                $UserProfileLeader = $this->getLeaderProfileInformation($UserId);
 
-                $user_detail = array_merge($user_detail, array("UserProfileCitizen" => $UserProfileCitizen));
+                $user_detail = array_merge($user_detail, array("UserProfileLeader" => $UserProfileLeader));
+
+                $UserProfileSubLeader = $this->getSubLeaderProfileInformation($UserId);
+
+                $user_detail = array_merge($user_detail, array("UserProfileSubLeader" => $UserProfileSubLeader));
             }
+
+        } else {
+            $user_detail = array();
+        }
+        return $user_detail;
+    }
+
+
+    public function getUserDetailCitizen($UserId) {
+        if(isset($UserId) && $UserId > 0) {
+
+            $query = $this->db->query("SELECT u.*, uph.PhotoPath AS UserProfilePhoto, uch.PhotoPath AS UserCoverPhoto 
+                                                        FROM ".$this->userTbl." AS u 
+                                                        LEFT JOIN ".$this->userPhotoTbl." uph ON u.ProfilePhotoId = uph.UserPhotoId
+                                                        LEFT JOIN ".$this->userPhotoTbl." uch ON u.CoverPhotoId = uch.UserPhotoId
+                                                        WHERE 
+                                                            u.`UserId` = '".$UserId."'");
+
+            $res_u = $query->row_array();
+
+            $user_detail = $this->returnUserDetail($res_u);
+
+            $UserProfileCitizen = $this->getCitizenProfileInformation($UserId);
+
+            $user_detail = array_merge($user_detail, array("UserProfileCitizen" => $UserProfileCitizen));
+
+        } else {
+            $user_detail = array();
+        }
+        return $user_detail;
+    }
+
+
+    public function getUserDetailLeader($UserId) {
+        if(isset($UserId) && $UserId > 0) {
+
+            $query = $this->db->query("SELECT u.*, uph.PhotoPath AS UserProfilePhoto, uch.PhotoPath AS UserCoverPhoto 
+                                                        FROM ".$this->userTbl." AS u 
+                                                        LEFT JOIN ".$this->userPhotoTbl." uph ON u.ProfilePhotoId = uph.UserPhotoId
+                                                        LEFT JOIN ".$this->userPhotoTbl." uch ON u.CoverPhotoId = uch.UserPhotoId
+                                                        WHERE 
+                                                            u.`UserId` = '".$UserId."'");
+
+            $res_u = $query->row_array();
+
+            $user_detail = $this->returnUserDetail($res_u);
+
+            $UserProfileLeader = $this->getLeaderProfileInformation($UserId);
+
+            $user_detail = array_merge($user_detail, array("UserProfileLeader" => $UserProfileLeader));
+
+        } else {
+            $user_detail = array();
+        }
+        return $user_detail;
+    }
+
+
+    public function getUserDetailSubLeader($UserId) {
+        if(isset($UserId) && $UserId > 0) {
+
+            $query = $this->db->query("SELECT u.*, uph.PhotoPath AS UserProfilePhoto, uch.PhotoPath AS UserCoverPhoto 
+                                                        FROM ".$this->userTbl." AS u 
+                                                        LEFT JOIN ".$this->userPhotoTbl." uph ON u.ProfilePhotoId = uph.UserPhotoId
+                                                        LEFT JOIN ".$this->userPhotoTbl." uch ON u.CoverPhotoId = uch.UserPhotoId
+                                                        WHERE 
+                                                            u.`UserId` = '".$UserId."'");
+
+            $res_u = $query->row_array();
+
+            $user_detail = $this->returnUserDetail($res_u);
+
+            $UserProfileSubLeader = $this->getSubLeaderProfileInformation($UserId);
+
+            $user_detail = array_merge($user_detail, array("UserProfileSubLeader" => $UserProfileSubLeader));
+
+        } else {
+            $user_detail = array();
+        }
+        return $user_detail;
+    }
+
+
+    public function getUserDetailAll($UserId) {
+        if(isset($UserId) && $UserId > 0) {
+
+            $query = $this->db->query("SELECT u.*, uph.PhotoPath AS UserProfilePhoto, uch.PhotoPath AS UserCoverPhoto 
+                                                        FROM ".$this->userTbl." AS u 
+                                                        LEFT JOIN ".$this->userPhotoTbl." uph ON u.ProfilePhotoId = uph.UserPhotoId
+                                                        LEFT JOIN ".$this->userPhotoTbl." uch ON u.CoverPhotoId = uch.UserPhotoId
+                                                        WHERE 
+                                                            u.`UserId` = '".$UserId."'");
+
+            $res_u = $query->row_array();
+
+            $user_detail = $this->returnUserDetail($res_u);
+
+            $UserProfileCitizen = $this->getCitizenProfileInformation($UserId);
+
+            $user_detail = array_merge($user_detail, array("UserProfileCitizen" => $UserProfileCitizen));
+
+            $UserProfileLeader = $this->getLeaderProfileInformation($UserId);
+
+            $user_detail = array_merge($user_detail, array("UserProfileLeader" => $UserProfileLeader));
+
+            $UserProfileSubLeader = $this->getSubLeaderProfileInformation($UserId);
+
+            $user_detail = array_merge($user_detail, array("UserProfileSubLeader" => $UserProfileSubLeader));
 
         } else {
             $user_detail = array();
@@ -204,13 +320,18 @@ class User_Model extends CI_Model {
                                 "Email"                         => (($res_u['Email'] != NULL) ? $res_u['Email'] : ""),
                                 "UserProfileDeviceToken"        => (($res_u['UserProfileDeviceToken'] != NULL) ? $res_u['UserProfileDeviceToken'] : ""),
                                 "Address"                       => (($res_u['Address'] != NULL) ? $res_u['Address'] : ""),
+                                "City"                          => (($res_u['City'] != NULL) ? $res_u['City'] : ""),
+                                "State"                         => (($res_u['State'] != NULL) ? $res_u['State'] : ""),
+                                "ZipCode"                       => (($res_u['ZipCode'] != NULL) ? $res_u['ZipCode'] : ""),
                                 "Mobile"                        => (($res_u['Mobile'] != NULL) ? $res_u['Mobile'] : ""),
                                 "AltMobile"                     => (($res_u['AltMobile'] != NULL) ? $res_u['AltMobile'] : ""),
                                 "ProfileStatus"                 => (($res_u['ProfileStatus'] != NULL) ? $res_u['ProfileStatus'] : ""),
                                 "AddedBy"                       => (($res_u['AddedBy'] != NULL) ? $res_u['AddedBy'] : ""),
                                 "UpdatedBy"                     => (($res_u['UpdatedBy'] != NULL) ? $res_u['UpdatedBy'] : ""),
                                 "AddedOn"                       => return_time_ago($res_u['AddedOn']),
+                                "AddedOnTime"                   => ($res_u['AddedOn']),
                                 "UpdatedOn"                     => return_time_ago($res_u['UpdatedOn']),
+                                "UpdatedOnTime"                 => ($res_u['UpdatedOn']),
                                 );
         return $user_data_array;
     }
@@ -239,6 +360,211 @@ class User_Model extends CI_Model {
         return $this->getUserProfileInformation($res_u['UserProfileId']);
     }
 
+    public function getSubLeaderProfileInformation($UserId) {
+        $this->db->select('UserProfileId');
+        $this->db->from($this->userProfileTbl);
+        $this->db->where('UserId', $UserId);
+        $this->db->where('UserTypeId', 3);
+        $query = $this->db->get();
+        $res_u = $query->result_array();
+
+        $sub_leader = array();
+
+        foreach($res_u AS $key => $result) {
+            $sub_leader[] = $this->getUserProfileInformation($result['UserProfileId']);
+        }
+
+        return $sub_leader;
+    }
+
+
+    public function searchCitizenProfiles($UserProfileId, $search) {
+        if(is_array($search)) {
+            $this->db->select('UserProfileId, UserId');
+            $this->db->from($this->userProfileTbl);
+            $this->db->where("UserProfileId != ", $UserProfileId);
+            $this->db->where('UserTypeId', 1);
+            $this->db->where('ProfileStatus', 1);
+            foreach($search AS $search_text) {
+                $this->db->group_start();
+                $this->db->or_like('FirstName', $search_text);
+                $this->db->or_like('LastName', $search_text);
+                $this->db->or_like('Email', $search_text);
+                $this->db->group_end();
+            }
+            $this->db->order_by('FirstName');
+            $query = $this->db->get();
+            $res_u = $query->result_array();
+
+
+        } else {
+            $this->db->select('UserProfileId, UserId');
+            $this->db->from($this->userProfileTbl);
+            $this->db->where('UserTypeId', 1);
+            $this->db->where('ProfileStatus', 1);
+            $this->db->where("UserProfileId != ", $UserProfileId);
+            $this->db->group_start();
+            $this->db->or_like('FirstName', $search);
+            $this->db->or_like('LastName', $search);
+            $this->db->or_like('Email', $search);
+            $this->db->group_end();
+            $this->db->order_by('FirstName');
+            $query = $this->db->get();
+            $res_u = $query->result_array();
+        }
+
+        $user_profiles = array();
+        foreach($res_u AS $key => $result) {
+            $user_profiles['UserProfileCitizen'][] = $this->getUserDetailCitizen($result['UserId']);
+        }
+        return $user_profiles;
+    }
+
+
+    public function searchLeaderProfiles($UserProfileId, $search) {
+        if(is_array($search)) {
+            $this->db->select('UserProfileId, UserId');
+            $this->db->from($this->userProfileTbl);
+            $this->db->where("UserProfileId != ", $UserProfileId);
+            $this->db->where('UserTypeId', 2);
+            $this->db->where('ProfileStatus', 1);
+            foreach($search AS $search_text) {
+                $this->db->group_start();
+                $this->db->or_like('FirstName', $search_text);
+                $this->db->or_like('LastName', $search_text);
+                $this->db->or_like('Email', $search_text);
+                $this->db->group_end();
+            }
+            $this->db->order_by('FirstName');
+            $query = $this->db->get();
+            $res_u = $query->result_array();
+
+
+        } else {
+            $this->db->select('UserProfileId, UserId');
+            $this->db->from($this->userProfileTbl);
+            $this->db->where('UserTypeId', 2);
+            $this->db->where('ProfileStatus', 1);
+            $this->db->where("UserProfileId != ", $UserProfileId);
+            $this->db->group_start();
+            $this->db->or_like('FirstName', $search);
+            $this->db->or_like('LastName', $search);
+            $this->db->or_like('Email', $search);
+            $this->db->group_end();
+            $this->db->order_by('FirstName');
+            $query = $this->db->get();
+            $res_u = $query->result_array();
+        }
+
+        $user_profiles = array();
+        foreach($res_u AS $key => $result) {
+
+            $MyFavouriteLeaderYesNo = 0;
+            $MyFavouriteLeader = $this->checkUserSetAsFavourite($UserProfileId, $result['UserProfileId']);
+            if($MyFavouriteLeader != false) {
+                $MyFavouriteLeaderYesNo = 1;
+            }
+
+            $leader_detail = $this->getUserDetailLeader($result['UserId']);
+
+            $leader_detail = array_merge($leader_detail, array('MyFavouriteLeader' => $MyFavouriteLeaderYesNo));
+
+
+            $user_profiles['UserProfileLeader'][] = $leader_detail;
+        }
+        return $user_profiles;
+    }
+
+
+    public function searchSubLeaderProfiles($UserProfileId, $search) {
+        if(is_array($search)) {
+            $this->db->select('UserProfileId, UserId');
+            $this->db->from($this->userProfileTbl);
+            $this->db->where("UserProfileId != ", $UserProfileId);
+            $this->db->where('UserTypeId', 3);
+            $this->db->where('ProfileStatus', 1);
+            foreach($search AS $search_text) {
+                $this->db->group_start();
+                $this->db->or_like('FirstName', $search_text);
+                $this->db->or_like('LastName', $search_text);
+                $this->db->or_like('Email', $search_text);
+                $this->db->group_end();
+            }
+            $this->db->order_by('FirstName');
+            $query = $this->db->get();
+            $res_u = $query->result_array();
+
+
+        } else {
+            $this->db->select('UserProfileId, UserId');
+            $this->db->from($this->userProfileTbl);
+            $this->db->where('UserTypeId', 3);
+            $this->db->where('ProfileStatus', 1);
+            $this->db->where("UserProfileId != ", $UserProfileId);
+            $this->db->group_start();
+            $this->db->or_like('FirstName', $search);
+            $this->db->or_like('LastName', $search);
+            $this->db->or_like('Email', $search);
+            $this->db->group_end();
+            $this->db->order_by('FirstName');
+            $query = $this->db->get();
+            $res_u = $query->result_array();
+        }
+
+        $user_profiles = array();
+        foreach($res_u AS $key => $result) {
+            $user_profiles['UserProfileSubLeader'][] = $this->getUserDetailSubLeader($result['UserId']);
+        }
+        return $user_profiles;
+    }
+
+
+    public function searchAllUserProfiles($UserProfileId, $search) {
+        if(is_array($search)) {
+            $this->db->select('UserProfileId, UserTypeId, UserId');
+            $this->db->from($this->userProfileTbl);
+            $this->db->where("UserProfileId != ", $UserProfileId);
+            $this->db->where('ProfileStatus', 1);
+            foreach($search AS $search_text) {
+                $this->db->group_start();
+                $this->db->or_like('FirstName', $search_text);
+                $this->db->or_like('LastName', $search_text);
+                $this->db->or_like('Email', $search_text);
+                $this->db->group_end();
+            }
+            $this->db->order_by('FirstName');
+            $query = $this->db->get();
+            $res_u = $query->result_array();
+
+
+        } else {
+            $this->db->select('UserProfileId, UserTypeId, UserId');
+            $this->db->from($this->userProfileTbl);
+            $this->db->where('ProfileStatus', 1);
+            $this->db->where("UserProfileId != ", $UserProfileId);
+            $this->db->group_start();
+            $this->db->or_like('FirstName', $search);
+            $this->db->or_like('LastName', $search);
+            $this->db->or_like('Email', $search);
+            $this->db->group_end();
+            $this->db->order_by('FirstName');
+            $query = $this->db->get();
+            $res_u = $query->result_array();
+        }
+
+        $user_profiles = array();
+        foreach($res_u AS $key => $result) {
+            if($result['UserTypeId'] == 1) {
+                $user_profiles['UserProfileCitizen'][] = $this->getUserDetailCitizen($result['UserId']);
+            } else if($result['UserTypeId'] == 2) {
+                $user_profiles['UserProfileLeader'][] = $this->getUserDetailLeader($result['UserId']);
+            } else if($result['UserTypeId'] == 3) {
+                $user_profiles['UserProfileSubLeader'][] = $this->getUserDetailSubLeader($result['UserId']);
+            }
+        }
+        return $user_profiles;
+    }
+
 
     public function returnUserDetail($res_u, $user_profile_id = 0) {
         $UserId             = $res_u['UserId'];
@@ -264,7 +590,9 @@ class User_Model extends CI_Model {
                                 "UserEmail"             => $UserEmail,
                                 "UserMobile"            => $UserMobile,
                                 "AddedOn"               => $AddedOn,
+                                "AddedOnTime"           => $res_u['AddedOn'],
                                 "UpdatedOn"             => $UpdatedOn,
+                                "UpdatedOnTime"         => $res_u['UpdatedOn'],
                                 "DateOfBirth"           => (($res_u['DateOfBirth'] != NULL) ? $res_u['DateOfBirth'] : ""),
                                 "Gender"                => (($res_u['Gender'] != NULL) ? $res_u['Gender'] : ""),
                                 "ProfilePhotoId"        => (($res_u['ProfilePhotoId'] != NULL) ? $res_u['ProfilePhotoId'] : ""),
@@ -538,7 +866,7 @@ class User_Model extends CI_Model {
         $this->db->select('UserId, UserStatus');
         $this->db->from($this->userTbl);
         $this->db->where('UserMobile', $mobile);
-        $this->db->and_where('UserId != ', $UserId);
+        $this->db->where('UserId != ', $UserId);
         $query = $this->db->get();
         if ($query->num_rows() > 0) {
             return $result = $query->row_array();
@@ -552,21 +880,7 @@ class User_Model extends CI_Model {
         $this->db->select('UserId, UserStatus');
         $this->db->from($this->userTbl);
         $this->db->where('UserEmail', $email);
-        $this->db->and_where('UserId != ', $UserId);
-        $query = $this->db->get();
-        if ($query->num_rows() > 0) {
-            return $result = $query->row_array();
-        } else {
-            return false;
-        }
-    }
-
-
-    public function isExistUserAltMobile($alt_mobile, $UserId) {
-        $this->db->select('UserId, UserStatus');
-        $this->db->from($this->userTbl);
-        $this->db->where('UserEmail', $alt_mobile);
-        $this->db->and_where('UserId != ', $UserId);
+        $this->db->where('UserId != ', $UserId);
         $query = $this->db->get();
         if ($query->num_rows() > 0) {
             return $result = $query->row_array();
@@ -580,16 +894,18 @@ class User_Model extends CI_Model {
         $this->db->select('UserId, UserStatus');
         $this->db->from($this->userTbl);
         $this->db->where('UserMobile', $mobile);
-        $this->db->and_where('UserId != ', $UserId);
+        $this->db->where('UserId != ', $UserId);
         $query = $this->db->get();
         if ($query->num_rows() > 0) {
             return $result = $query->row_array();
         } else {
             $this->db->select('UserId');
             $this->db->from($this->userProfileTbl);
+            $this->db->where('UserId != ', $UserId);
+            $this->db->group_start();
             $this->db->where('Mobile', $mobile);
             $this->db->or_where('AltMobile', $mobile);
-            $this->db->where('UserId != ', $UserId);
+            $this->db->group_end();
             $query = $this->db->get();
             if ($query->num_rows() > 0) {
                 return $result = $query->row_array();
@@ -604,7 +920,7 @@ class User_Model extends CI_Model {
         $this->db->select('UserId, UserStatus');
         $this->db->from($this->userTbl);
         $this->db->where('UserEmail', $email);
-        $this->db->and_where('UserId != ', $UserId);
+        $this->db->where('UserId != ', $UserId);
         $query = $this->db->get();
         if ($query->num_rows() > 0) {
             return $result = $query->row_array();
@@ -612,7 +928,7 @@ class User_Model extends CI_Model {
             $this->db->select('UserId');
             $this->db->from($this->userProfileTbl);
             $this->db->where('Email', $email);
-            $this->db->and_where('UserId != ', $UserId);
+            $this->db->where('UserId != ', $UserId);
             $query = $this->db->get();
             if ($query->num_rows() > 0) {
                 return $result = $query->row_array();
@@ -627,16 +943,18 @@ class User_Model extends CI_Model {
         $this->db->select('UserId, UserStatus');
         $this->db->from($this->userTbl);
         $this->db->where('UserEmail', $alt_mobile);
-        $this->db->and_where('UserId != ', $UserId);
+        $this->db->where('UserId != ', $UserId);
         $query = $this->db->get();
         if ($query->num_rows() > 0) {
             return $result = $query->row_array();
         } else {
             $this->db->select('UserId');
             $this->db->from($this->userProfileTbl);
+            $this->db->where('UserId != ', $UserId);
+            $this->db->group_start();
             $this->db->where('Mobile', $alt_mobile);
             $this->db->or_where('AltMobile', $alt_mobile);
-            $this->db->where('UserId != ', $UserId);
+            $this->db->group_end();
             $query = $this->db->get();
             if ($query->num_rows() > 0) {
                 return $result = $query->row_array();
@@ -660,5 +978,60 @@ class User_Model extends CI_Model {
             return false;
         }
     }
+
+
+    public function checkUserSetAsFavourite($UserProfileId, $FriendUserProfileId) {
+        $this->db->select('UserProfileId, FriendUserProfileId');
+        $this->db->from($this->userFavUserLogTbl);
+        $this->db->where('UserProfileId', $UserProfileId);
+        $this->db->where('FriendUserProfileId', $FriendUserProfileId);
+        $query = $this->db->get();
+        if ($query->num_rows() > 0) {
+            return $result = $query->row_array();
+        } else {
+            return false;
+        }
+    }
+
+    public function insertUserFavUser($insertData) {
+        $this->db->insert($this->userFavUserLogTbl, $insertData);
+
+        return $this->db->insert_id();
+    }
+
+
+    public function deleteUserFavUser($UserProfileId, $FriendUserProfileId) {
+        $this->db->where('UserProfileId', $UserProfileId);
+        $this->db->where('FriendUserProfileId', $FriendUserProfileId);
+        $this->db->delete($this->userFavUserLogTbl);
+    }
+
+
+    public function getMyAllFavouriteLeader($UserId, $UserProfileId) {
+
+        $query = $this->db->query("SELECT ufu.* 
+                                        FROM ".$this->userFavUserLogTbl." AS ufu 
+                                        LEFT JOIN ".$this->userProfileTbl." up ON ufu.FriendUserProfileId = up.UserProfileId
+                                        WHERE 
+                                            ufu.`UserProfileId` = '".$UserProfileId."'
+                                        AND (up.UserTypeId = '2' OR up.UserTypeId = '3')");
+
+        $res_u = $query->result_array();
+
+        $fav_leader = array();
+
+        foreach($res_u AS $key => $result) {
+            $fav_leader[] = $this->getUserProfileWithUserInformation($result['FriendUserProfileId']);
+        }
+
+        return $fav_leader;
+    }
+
+
+    public function sendFollowRequest($UserProfileId, $FriendUserProfileId) {
+        
+    }
+
+
 
 }

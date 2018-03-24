@@ -40,7 +40,7 @@ class Userdashboard extends CI_Controller {
 
             $array = array(
                            "status"             => 'success',
-                           "citizen_dashboard"	=> $citizen_dashboard,
+                           "result"	=> $citizen_dashboard,
                            "message"            => $msg,
                            );
         }

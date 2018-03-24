@@ -84,7 +84,7 @@ class Inforation extends CI_Controller {
 
             $array = array(
                            "status"                 => 'success',
-                           "information_detail"     => $information_detail,
+                           "result"     => $information_detail,
                            "message"                => $msg,
                            );
         }
@@ -125,7 +125,7 @@ class Inforation extends CI_Controller {
 
             $array = array(
                            "status"             => 'success',
-                           "information_detail"   => $information_detail,
+                           "result"   => $information_detail,
                            "message"            => $msg,
                            );
         }
@@ -161,7 +161,7 @@ class Inforation extends CI_Controller {
 
             $array = array(
                            "status"       => 'success',
-                           "informations"   => $informations,
+                           "result"   => $informations,
                            "message"      => $msg,
                            );
         }

@@ -38,11 +38,11 @@
 <div>
     <!--BEGIN BACK TO TOP--><a id="totop" href="#"><i class="fa fa-angle-up"></i></a><!--END BACK TO TOP-->
     <!--BEGIN TOPBAR-->
-    <?php  require_once 'include/top.php';?>
+    <?php  require_once './include/top.php';?>
     <!--END TOPBAR-->
     <div id="wrapper"><!--BEGIN SIDEBAR MENU-->
         
-        <?php  require_once 'include/left.php';?>
+        <?php  require_once './include/left.php';?>
 
         <!--BEGIN PAGE WRAPPER-->
         <div id="page-wrapper"><!--BEGIN TITLE & BREADCRUMB PAGE-->
@@ -247,7 +247,7 @@
             <!--END CONTENT--></div>
         <!--BEGIN FOOTER-->
         
-        <?php  require_once 'include/footer.php';?>
+        <?php  require_once './include/footer.php';?>
 
         <!--END FOOTER--><!--END PAGE WRAPPER--></div>
 </div>

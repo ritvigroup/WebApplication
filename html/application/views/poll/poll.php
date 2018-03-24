@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-<head><title>Event</title>
+<head><title>Poll</title>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,7 +10,6 @@
     <link rel="apple-touch-icon" href="<?=base_url();?>assets/images/icons/favicon.png">
     <link rel="apple-touch-icon" sizes="72x72" href="<?=base_url();?>assets/images/icons/favicon-72x72.png">
     <link rel="apple-touch-icon" sizes="114x114" href="<?=base_url();?>assets/images/icons/favicon-114x114.png">
-
     <!--Loading bootstrap css-->
     <link type="text/css" rel="stylesheet"
           href="http://fonts.googleapis.com/css?family=Open+Sans:400italic,400,300,700">
@@ -19,10 +18,7 @@
           href="<?=base_url();?>assets/vendors/jquery-ui-1.10.4.custom/css/ui-lightness/jquery-ui-1.10.4.custom.min.css">
     <link type="text/css" rel="stylesheet" href="<?=base_url();?>assets/vendors/font-awesome/css/font-awesome.min.css">
     <link type="text/css" rel="stylesheet" href="<?=base_url();?>assets/vendors/bootstrap/css/bootstrap.min.css">
-    <!--LOADING STYLESHEET FOR PAGE-->
-    <link type="text/css" rel="stylesheet" href="<?=base_url();?>assets/vendors/fullcalendar/fullcalendar.css">
-    <link type="text/css" rel="stylesheet" href="<?=base_url();?>assets/vendors/fullcalendar/fullcalendar.print.css">
-    <!--Loading style vendors-->
+    <!--LOADING STYLESHEET FOR PAGE--><!--Loading style vendors-->
     <link type="text/css" rel="stylesheet" href="<?=base_url();?>assets/vendors/animate.css/animate.css">
     <link type="text/css" rel="stylesheet" href="<?=base_url();?>assets/vendors/jquery-pace/pace.css">
     <link type="text/css" rel="stylesheet" href="<?=base_url();?>assets/vendors/iCheck/skins/all.css">
@@ -48,49 +44,63 @@
         <div id="page-wrapper"><!--BEGIN TITLE & BREADCRUMB PAGE-->
             <div id="title-breadcrumb-option-demo" class="page-title-breadcrumb">
                 <div class="page-header pull-left">
-                    <div class="page-title">Event</div>
+                    <div class="page-title">Poll</div>
                 </div>
                 <ol class="breadcrumb page-breadcrumb">
                     <li><i class="fa fa-home"></i>&nbsp;<a href="<?=base_url();?>leader/home">Home</a>&nbsp;&nbsp;<i
                             class="fa fa-angle-right"></i>&nbsp;&nbsp;</li>
-                    <li><a href="#">Tables</a>&nbsp;&nbsp;<i class="fa fa-angle-right"></i>&nbsp;&nbsp;</li>
-                    <li class="active">Event</li>
+                    <li><a href="<?=base_url();?>poll/poll">Poll</a>&nbsp;&nbsp;<i class="fa fa-angle-right"></i>&nbsp;&nbsp;</li>
+                    <li class="active">Poll</li>
                 </ol>
-                <div class="btn btn-blue reportrange hide"><i class="fa fa-calendar"></i>&nbsp;<span></span>&nbsp;report&nbsp;<i
-                        class="fa fa-angle-down"></i><input type="hidden" name="datestart"/><input type="hidden"
-                                                                                                   name="endstart"/>
-                </div>
+
                 <div class="clearfix"></div>
             </div>
             <!--END TITLE & BREADCRUMB PAGE--><!--BEGIN CONTENT-->
             <div class="page-content">
-                <div style="height: 770px" class="row">
-                    <div class="col-lg-12">
-                        <div class="panel">
-                            <div class="panel-body">
-                                <div class="row">
-                                    <div class="col-md-3">
-                                        <div id="external-events"><h4>Draggable Events</h4><input id="event-name"
-                                                                                                  type="text" value=""
-                                                                                                  placeholder="Event name..."
-                                                                                                  class="form-control"/><br/><a
-                                                id="event-add" href="javascript:;" class="btn btn-primary btn-sm">Add
-                                            Event</a>
-                                            <hr/>
-                                            <div id="event-box">
-                                                <div class="external-event label label-default">My Event 1</div>
-                                                <div class="external-event label label-default">My Event 2</div>
-                                                <div class="external-event label label-default">My Event 3</div>
-                                                <div class="external-event label label-default">My Event 4</div>
-                                                <div class="external-event label label-default">My Event 5</div>
-                                            </div>
-                                            <div id="event-block"></div>
-                                            <p><input id="drop-remove" type="checkbox"/>&nbsp;<label for="drop-remove">Remove
-                                                after drop</label></p></div>
-                                    </div>
-                                    <div class="col-md-9">
-                                        <div id="calendar"></div>
-                                    </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="portlet box">
+                            <div class="portlet-header">
+                                <div class="caption">My Polls</div>
+                                <div class="actions"><a href="<?=base_url();?>poll/newpoll" class="btn btn-info btn-xs"><i class="fa fa-plus"></i>&nbsp;
+                                    New Poll</a>
+                                </div>
+                            </div>
+
+                            <div class="portlet-body pan">
+                                <div class="table-responsive">
+                                    <table id="user-last-logged-table"
+                                           class="table table-striped table-hover thumb-small">
+                                        <thead>
+                                        <tr class="condensed">
+                                            <th scope="col"><span class="column-sorter"></span></th>
+                                            <th scope="col">Question<span class="column-sorter"></span></th>
+                                            <th scope="col">Privacy<span class="column-sorter"></span></th>
+                                            <th scope="col">Start Date<span class="column-sorter"></span></th>
+                                            <th scope="col">End Sate<span class="column-sorter"></span></th>
+                                            <th scope="col">Status<span class="column-sorter"></span></th>
+                                        </tr>
+                                        </thead>
+                                        <?php 
+                                        if(count($result) > 0) { ?>
+                                        <tbody class="media-thumb">
+                                        <?php foreach($result AS $poll) { ?>
+                                            <?php $PollStatus  = (($poll->PollStatus == 1) ? 'Active' : 'In-Active'); ?>
+                                            <?php $PollPrivacy  = (($poll->PollPrivacy == 1) ? 'Public' : 'Private'); ?>
+                                            <?php $ValidFromDate    = (($poll->ValidFromDate == '0000-00-00 00:00:00') ? '' : date('d-M-Y h:i A', strtotime($poll->ValidFromDate))); ?>
+                                            <?php $ValidEndDate    = (($poll->ValidEndDate == '0000-00-00 00:00:00') ? '' : date('d-M-Y h:i A', strtotime($poll->ValidEndDate))); ?>
+                                            <tr>
+                                                <td></td>
+                                                <td><?php echo $poll->PollQuestion; ?></td>
+                                                <td><?php echo $PollPrivacy; ?></td>
+                                                <td><?php echo $ValidFromDate; ?></td>
+                                                <td><?php echo $ValidEndDate; ?></td>
+                                                <td><?php echo $PollStatus; ?></td>
+                                            </tr>
+                                        <?php }  ?>
+                                        </tbody>
+                                        <?php }  ?>                                        
+                                    </table>
                                 </div>
                             </div>
                         </div>
@@ -130,10 +140,6 @@
 <!--CORE JAVASCRIPT-->
 <script src="<?=base_url();?>assets/js/main.js"></script>
 <!--LOADING SCRIPTS FOR PAGE-->
-<script src="<?=base_url();?>assets/vendors/fullcalendar/fullcalendar.min.js"></script>
-<script src="<?=base_url();?>assets/js/page-calendar.js"></script>
-
-
 
 </body>
 </html>

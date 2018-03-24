@@ -53,8 +53,8 @@ class Event extends CI_Controller {
                                 'EventName'         => $EventName,
                                 'EventDescription'  => $EventDescription,
                                 'EventLocation'     => $EventLocation,
-                                'StartDate'         => $StartDate,
-                                'EndDate'           => $EndDate,
+                                'StartDate'         => date('Y-m-d H:i:s', strtotime($StartDate)),
+                                'EndDate'           => date('Y-m-d H:i:s', strtotime($EndDate)),
                                 'EveryYear'         => $EveryYear,
                                 'EveryMonth'        => $EveryMonth,
                                 'EventStatus'       => 1,
@@ -63,11 +63,10 @@ class Event extends CI_Controller {
                                 'AddedOn'           => date('Y-m-d H:i:s'),
                                 'UpdatedOn'         => date('Y-m-d H:i:s'),
                             );
+
 			$EventId = $this->Event_Model->saveMyEvent($insertData);
 
             if($EventId > 0) {
-
-                
                 
                 $this->Event_Model->saveMyEventAttendee($EventId, $UserProfileId, $event_attendee);
                 
@@ -95,7 +94,7 @@ class Event extends CI_Controller {
 
             $array = array(
                            "status"             => 'success',
-                           "event_detail"       => $event_detail,
+                           "result"       => $event_detail,
                            "message"            => $msg,
                            );
         }
@@ -136,7 +135,7 @@ class Event extends CI_Controller {
 
             $array = array(
                            "status"             => 'success',
-                           "event_detail"   => $event_detail,
+                           "result"   => $event_detail,
                            "message"            => $msg,
                            );
         }
@@ -172,7 +171,7 @@ class Event extends CI_Controller {
 
             $array = array(
                            "status"     => 'success',
-                           "events"     => $events,
+                           "result"     => $events,
                            "message"    => $msg,
                            );
         }
@@ -241,7 +240,7 @@ class Event extends CI_Controller {
 
             $array = array(
                            "status"             => 'success',
-                           "poll_detail"       => $poll_detail,
+                           "result"       => $poll_detail,
                            "message"            => $msg,
                            );
         }

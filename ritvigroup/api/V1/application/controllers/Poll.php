@@ -49,8 +49,8 @@ class Poll extends CI_Controller {
                                 'PollUniqueId'      => $PollUniqueId,
                                 'PollQuestion'      => $PollQuestion,
                                 'PollPrivacy'       => $PollPrivacy,
-                                'ValidFromDate'     => $ValidFromDate,
-                                'ValidEndDate'      => $ValidEndDate,
+                                'ValidFromDate'     => date('Y-m-d', strtotime($ValidFromDate)),
+                                'ValidEndDate'      => date('Y-m-d', strtotime($ValidEndDate)),
                                 'PollStatus'        => 1,
                                 'AddedBy'           => $UserProfileId,
                                 'UpdatedBy'         => $UserProfileId,
@@ -85,7 +85,7 @@ class Poll extends CI_Controller {
 
             $array = array(
                            "status"             => 'success',
-                           "poll_detail"       => $poll_detail,
+                           "result"       => $poll_detail,
                            "message"            => $msg,
                            );
         }
@@ -126,7 +126,7 @@ class Poll extends CI_Controller {
 
             $array = array(
                            "status"             => 'success',
-                           "poll_detail"        => $poll_detail,
+                           "result"        => $poll_detail,
                            "message"            => $msg,
                            );
         }
@@ -162,7 +162,7 @@ class Poll extends CI_Controller {
 
             $array = array(
                            "status"     => 'success',
-                           "polls"     => $polls,
+                           "result"     => $polls,
                            "message"    => $msg,
                            );
         }
@@ -232,7 +232,7 @@ class Poll extends CI_Controller {
 
             $array = array(
                            "status"             => 'success',
-                           "poll_detail"       => $poll_detail,
+                           "result"       => $poll_detail,
                            "message"            => $msg,
                            );
         }
