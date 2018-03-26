@@ -1093,6 +1093,15 @@ class User_Model extends CI_Model {
     }
 
 
+    public function undoUserProfileFriendRequest($UserProfileId, $FriendUserProfileId) {
+        $this->db->where('UserProfileId', $UserProfileId);
+        $this->db->where('FriendUserProfileId', $FriendUserProfileId);
+        $this->db->delete($this->UserFriendTbl);
+
+        return true;
+    }
+
+
     public function insertUserFavUser($insertData) {
         $this->db->insert($this->userFavUserTbl, $insertData);
 

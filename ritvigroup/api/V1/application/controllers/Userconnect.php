@@ -150,6 +150,43 @@ class Userconnect extends CI_Controller {
     }
 
 
+    public function undoUserProfileFriendRequest() {
+        $UserId                 = $this->input->post('user_id');
+        $UserProfileId          = $this->input->post('user_profile_id');
+        $FriendUserProfileId    = $this->input->post('friend_user_profile_id');
+        
+        if($UserId == "") {
+            $msg = "Please select user";
+            $error_occured = true;
+        } else if($UserProfileId == "") {
+            $msg = "Please select user profile";
+            $error_occured = true;
+        } else if($FriendUserProfileId == "") {
+            $msg = "Please select friend user profile";
+            $error_occured = true;
+        } else {
+            $friend = 0;
+            $this->User_Model->undoUserProfileFriendRequest($UserProfileId, $FriendUserProfileId);
+            $msg = "My request cancelled";
+        }
+
+        if($error_occured == true) {
+            $array = array(
+                            "status"        => 'failed',
+                            "message"       => $msg,
+                        );
+        } else {
+
+            $array = array(
+                           "status"      => 'success',
+                           "message"     => $msg,
+                           "friend"     => $friend,
+                           );
+        }
+        displayJsonEncode($array);
+    }
+
+
     public function getMyAllFriendRequest($UserProfileId) {
         $UserId                 = $this->input->post('user_id');
         $UserProfileId          = $this->input->post('user_profile_id');
