@@ -44,7 +44,7 @@
                 <div class="icon-bg bg-orange"></div>
             </i><span class="menu-title">Convert</span></a></li>
 
-            <li class="<?php if($request_uri['4'] == "chat") {?>active<?php } ?>"><a href="<?=base_url();?>leader/chat"><i class="fa fa-tachometer fa-fw">
+            <li class="<?php if($request_uri['4'] == "post") {?>active<?php } ?>"><a href="<?=base_url();?>post/post"><i class="fa fa-tachometer fa-fw">
                 <div class="icon-bg bg-orange"></div>
             </i><span class="menu-title">Reports</span></a></li>
 

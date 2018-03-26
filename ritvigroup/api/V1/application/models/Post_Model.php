@@ -118,6 +118,24 @@ class Post_Model extends CI_Model {
     }
 
 
+    public function getMyAllPost($UserProfileId) {
+        $posts = array();
+        if(isset($UserProfileId) && $UserProfileId > 0) {
+
+            $query = $this->db->query("SELECT PostId FROM $this->postTbl WHERE `UserProfileId` = '".$UserProfileId."'");
+
+            $res = $query->result_array();
+
+            foreach($res AS $key => $result) {
+                $posts[] = $this->getPostDetail($result['PostId']);
+            }
+        } else {
+            $posts = array();
+        }
+        return $posts;
+    }
+
+
     
     public function getPostDetail($PostId) {
         if(isset($PostId) && $PostId > 0) {

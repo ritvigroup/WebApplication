@@ -155,5 +155,41 @@ class Post extends CI_Controller {
         }
         displayJsonEncode($array);
     }
+
+
+    public function getMyAllPost() {
+        $error_occured = false;
+
+        $UserProfileId   = $this->input->post('user_profile_id');
+        
+        if($UserProfileId == "") {
+            $msg = "Please select your profile";
+            $error_occured = true;
+        } else {
+
+            $posts = $this->Post_Model->getMyAllPost($UserProfileId);
+            if(count($posts) > 0) {
+                $msg = "Post fetched successfully";
+            } else {
+                $msg = "No post added by you";
+                $error_occured = true;
+            }
+        }
+
+        if($error_occured == true) {
+            $array = array(
+                            "status"        => 'failed',
+                            "message"       => $msg,
+                        );
+        } else {
+
+            $array = array(
+                           "status"       => 'success',
+                           "result"   => $posts,
+                           "message"      => $msg,
+                           );
+        }
+        displayJsonEncode($array);
+    }
 }
 
