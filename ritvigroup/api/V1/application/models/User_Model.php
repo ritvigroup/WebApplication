@@ -338,13 +338,23 @@ class User_Model extends CI_Model {
 
         if($UserProfileId > 0) {
             $friend_response = $this->checkUserFriendRequest($UserProfileId, $FriendUserProfileId);
-            if($friend_response['RequestAccepted'] == 0) {
-                $user_data_array = array_merge($user_data_array, array('MyFriend' => 1)); // Send Request
-            } else if($friend_response['RequestAccepted'] == 1) {
-                $user_data_array = array_merge($user_data_array, array('MyFriend' => 2)); // Accepted Friend Request
-            } else if($friend_response['RequestAccepted'] == 2) {
-                $user_data_array = array_merge($user_data_array, array('MyFriend' => 3)); // Not to Send Request
+
+
+            if($friend_response['RequestAccepted'] != '') {
+                if($friend_response['RequestAccepted'] == 0) {
+                    $user_data_array = array_merge($user_data_array, array('MyFriend' => 1)); // Send Request
+                } else if($friend_response['RequestAccepted'] == 1) {
+                    $user_data_array = array_merge($user_data_array, array('MyFriend' => 2)); // Accepted Friend Request
+                } else if($friend_response['RequestAccepted'] == 2) {
+                    $user_data_array = array_merge($user_data_array, array('MyFriend' => 3)); // Not to Send Request
+                } else {
+                    $user_data_array = array_merge($user_data_array, array('MyFriend' => 0)); // Fresh
+                }
+            } else {
+                $user_data_array = array_merge($user_data_array, array('MyFriend' => 0)); // Fresh
             }
+        } else {
+            $user_data_array = array_merge($user_data_array, array('MyFriend' => 0)); // Fresh
         }
         return $user_data_array;
     }
@@ -1138,7 +1148,7 @@ class User_Model extends CI_Model {
 
 
     public function getMyAllFriendRequest($UserProfileId) {
-        $query = $this->db->query("SELECT uf.UserProfileId 
+        $query = $this->db->query("SELECT uf.UserProfileId, uf.RequestSentOn 
                                         FROM ".$this->UserFriendTbl." AS uf 
                                         WHERE 
                                             uf.`FriendUserProfileId` = '".$UserProfileId."'
@@ -1150,14 +1160,17 @@ class User_Model extends CI_Model {
         $friend_requests = array();
 
         foreach($res_u AS $key => $result) {
-            $friend_requests[] = $this->getUserProfileWithUserInformation($result['UserProfileId'], $UserProfileId);
+
+            $friend_profile = $this->getUserProfileWithUserInformation($result['UserProfileId'], $UserProfileId);
+            $friend_profile = array_merge($friend_profile, array('RequestSentOn' => $result['RequestSentOn']));
+            $friend_requests[] = $friend_profile;
         }
 
         return $friend_requests;
     }
 
     public function getMyAllRequestToFriends($UserProfileId) {
-        $query = $this->db->query("SELECT uf.FriendUserProfileId 
+        $query = $this->db->query("SELECT uf.FriendUserProfileId, uf.RequestSentOn 
                                         FROM ".$this->UserFriendTbl." AS uf 
                                         WHERE 
                                             uf.`UserProfileId` = '".$UserProfileId."'
@@ -1169,7 +1182,9 @@ class User_Model extends CI_Model {
         $request_friends = array();
 
         foreach($res_u AS $key => $result) {
-            $request_friends[] = $this->getUserProfileWithUserInformation($result['FriendUserProfileId'], $UserProfileId);
+            $friend_profile = $this->getUserProfileWithUserInformation($result['FriendUserProfileId'], $UserProfileId);
+            $friend_profile = array_merge($friend_profile, array('RequestSentOn' => $result['RequestSentOn']));
+            $request_friends[] = $friend_profile;
         }
 
         return $request_friends;

@@ -202,7 +202,7 @@ class Userconnect extends CI_Controller {
             $friend_request = $this->User_Model->getMyAllFriendRequest($UserProfileId);
 
             if(count($friend_request) > 0) {
-                $msg = count($friend_request)."Friend request found."
+                $msg = count($friend_request)."Friend request found.";
             } else {
 
                 $msg = "No friend request found";
@@ -242,7 +242,7 @@ class Userconnect extends CI_Controller {
             $request_friend = $this->User_Model->getMyAllRequestToFriends($UserProfileId);
 
             if(count($request_friend) > 0) {
-                $msg = count($request_friend)." request sent to your friends found."
+                $msg = count($request_friend)." request sent to your friends found.";
             } else {
 
                 $msg = "No request to friend found";
@@ -283,7 +283,7 @@ class Userconnect extends CI_Controller {
             $friends = $this->User_Model->getMyAllFriends($UserProfileId);
 
             if(count($friends) > 0) {
-                $msg = count($friends)."  friends found."
+                $msg = count($friends)."  friends found.";
             } else {
 
                 $msg = "No friend found";
