@@ -3,12 +3,13 @@
 class User_Model extends CI_Model {
 
     function __construct() {
-        $this->userTbl          = 'User';
-        $this->userProfileTbl   = 'UserProfile';
-        $this->userAlbumTbl     = 'UserAlbum';
-        $this->userPhotoTbl     = 'UserPhoto';
-        $this->userLogTbl       = 'UserLog';
-        $this->userFavUserLogTbl       = 'UserFavUser';
+        $this->userTbl              = 'User';
+        $this->userProfileTbl       = 'UserProfile';
+        $this->userAlbumTbl         = 'UserAlbum';
+        $this->userPhotoTbl         = 'UserPhoto';
+        $this->userLogTbl           = 'UserLog';
+        $this->userFavUserTbl       = 'UserFavUser';
+        $this->UserFriendTbl        = 'UserFriend';
     }
 
     // Login with username with password
@@ -148,30 +149,30 @@ class User_Model extends CI_Model {
     }
 
 
-    public function getUserDetail($UserId, $full_information = 0) {
-        if(isset($UserId) && $UserId > 0) {
+    public function getUserDetail($FriendUserId, $UserProfileId, $full_information = 0) {
+        if(isset($FriendUserId) && $FriendUserId > 0) {
 
             $query = $this->db->query("SELECT u.*, uph.PhotoPath AS UserProfilePhoto, uch.PhotoPath AS UserCoverPhoto 
                                                         FROM ".$this->userTbl." AS u 
                                                         LEFT JOIN ".$this->userPhotoTbl." uph ON u.ProfilePhotoId = uph.UserPhotoId
                                                         LEFT JOIN ".$this->userPhotoTbl." uch ON u.CoverPhotoId = uch.UserPhotoId
                                                         WHERE 
-                                                            u.`UserId` = '".$UserId."'");
+                                                            u.`UserId` = '".$FriendUserId."'");
 
             $res_u = $query->row_array();
 
             $user_detail = $this->returnUserDetail($res_u);
 
-            $UserProfileCitizen = $this->getCitizenProfileInformation($UserId);
+            $UserProfileCitizen = $this->getCitizenProfileInformation($FriendUserId, $UserProfileId);
 
             $user_detail = array_merge($user_detail, array("UserProfileCitizen" => $UserProfileCitizen));
 
             if($full_information > 0) {
-                $UserProfileLeader = $this->getLeaderProfileInformation($UserId);
+                $UserProfileLeader = $this->getLeaderProfileInformation($FriendUserId, $UserProfileId);
 
                 $user_detail = array_merge($user_detail, array("UserProfileLeader" => $UserProfileLeader));
 
-                $UserProfileSubLeader = $this->getSubLeaderProfileInformation($UserId);
+                $UserProfileSubLeader = $this->getSubLeaderProfileInformation($FriendUserId, $UserProfileId);
 
                 $user_detail = array_merge($user_detail, array("UserProfileSubLeader" => $UserProfileSubLeader));
             }
@@ -183,21 +184,21 @@ class User_Model extends CI_Model {
     }
 
 
-    public function getUserDetailCitizen($UserId) {
-        if(isset($UserId) && $UserId > 0) {
+    public function getUserDetailCitizen($FriendUserId, $UserProfileId) {
+        if(isset($FriendUserId) && $FriendUserId > 0) {
 
             $query = $this->db->query("SELECT u.*, uph.PhotoPath AS UserProfilePhoto, uch.PhotoPath AS UserCoverPhoto 
                                                         FROM ".$this->userTbl." AS u 
                                                         LEFT JOIN ".$this->userPhotoTbl." uph ON u.ProfilePhotoId = uph.UserPhotoId
                                                         LEFT JOIN ".$this->userPhotoTbl." uch ON u.CoverPhotoId = uch.UserPhotoId
                                                         WHERE 
-                                                            u.`UserId` = '".$UserId."'");
+                                                            u.`UserId` = '".$FriendUserId."'");
 
             $res_u = $query->row_array();
 
             $user_detail = $this->returnUserDetail($res_u);
 
-            $UserProfileCitizen = $this->getCitizenProfileInformation($UserId);
+            $UserProfileCitizen = $this->getCitizenProfileInformation($FriendUserId, $UserProfileId);
 
             $user_detail = array_merge($user_detail, array("UserProfileCitizen" => $UserProfileCitizen));
 
@@ -208,21 +209,21 @@ class User_Model extends CI_Model {
     }
 
 
-    public function getUserDetailLeader($UserId) {
-        if(isset($UserId) && $UserId > 0) {
+    public function getUserDetailLeader($FriendUserId, $UserProfileId) {
+        if(isset($FriendUserId) && $FriendUserId > 0) {
 
             $query = $this->db->query("SELECT u.*, uph.PhotoPath AS UserProfilePhoto, uch.PhotoPath AS UserCoverPhoto 
                                                         FROM ".$this->userTbl." AS u 
                                                         LEFT JOIN ".$this->userPhotoTbl." uph ON u.ProfilePhotoId = uph.UserPhotoId
                                                         LEFT JOIN ".$this->userPhotoTbl." uch ON u.CoverPhotoId = uch.UserPhotoId
                                                         WHERE 
-                                                            u.`UserId` = '".$UserId."'");
+                                                            u.`UserId` = '".$FriendUserId."'");
 
             $res_u = $query->row_array();
 
             $user_detail = $this->returnUserDetail($res_u);
 
-            $UserProfileLeader = $this->getLeaderProfileInformation($UserId);
+            $UserProfileLeader = $this->getLeaderProfileInformation($FriendUserId, $UserProfileId);
 
             $user_detail = array_merge($user_detail, array("UserProfileLeader" => $UserProfileLeader));
 
@@ -233,21 +234,21 @@ class User_Model extends CI_Model {
     }
 
 
-    public function getUserDetailSubLeader($UserId) {
-        if(isset($UserId) && $UserId > 0) {
+    public function getUserDetailSubLeader($FriendUserId, $UserProfileId) {
+        if(isset($FriendUserId) && $FriendUserId > 0) {
 
             $query = $this->db->query("SELECT u.*, uph.PhotoPath AS UserProfilePhoto, uch.PhotoPath AS UserCoverPhoto 
                                                         FROM ".$this->userTbl." AS u 
                                                         LEFT JOIN ".$this->userPhotoTbl." uph ON u.ProfilePhotoId = uph.UserPhotoId
                                                         LEFT JOIN ".$this->userPhotoTbl." uch ON u.CoverPhotoId = uch.UserPhotoId
                                                         WHERE 
-                                                            u.`UserId` = '".$UserId."'");
+                                                            u.`UserId` = '".$FriendUserId."'");
 
             $res_u = $query->row_array();
 
             $user_detail = $this->returnUserDetail($res_u);
 
-            $UserProfileSubLeader = $this->getSubLeaderProfileInformation($UserId);
+            $UserProfileSubLeader = $this->getSubLeaderProfileInformation($FriendUserId, $UserProfileId);
 
             $user_detail = array_merge($user_detail, array("UserProfileSubLeader" => $UserProfileSubLeader));
 
@@ -258,29 +259,29 @@ class User_Model extends CI_Model {
     }
 
 
-    public function getUserDetailAll($UserId) {
-        if(isset($UserId) && $UserId > 0) {
+    public function getUserDetailAll($FriendUserId, $UserProfileId) {
+        if(isset($FriendUserId) && $FriendUserId > 0) {
 
             $query = $this->db->query("SELECT u.*, uph.PhotoPath AS UserProfilePhoto, uch.PhotoPath AS UserCoverPhoto 
                                                         FROM ".$this->userTbl." AS u 
                                                         LEFT JOIN ".$this->userPhotoTbl." uph ON u.ProfilePhotoId = uph.UserPhotoId
                                                         LEFT JOIN ".$this->userPhotoTbl." uch ON u.CoverPhotoId = uch.UserPhotoId
                                                         WHERE 
-                                                            u.`UserId` = '".$UserId."'");
+                                                            u.`UserId` = '".$FriendUserId."'");
 
             $res_u = $query->row_array();
 
             $user_detail = $this->returnUserDetail($res_u);
 
-            $UserProfileCitizen = $this->getCitizenProfileInformation($UserId);
+            $UserProfileCitizen = $this->getCitizenProfileInformation($FriendUserId, $UserProfileId);
 
             $user_detail = array_merge($user_detail, array("UserProfileCitizen" => $UserProfileCitizen));
 
-            $UserProfileLeader = $this->getLeaderProfileInformation($UserId);
+            $UserProfileLeader = $this->getLeaderProfileInformation($FriendUserId, $UserProfileId);
 
             $user_detail = array_merge($user_detail, array("UserProfileLeader" => $UserProfileLeader));
 
-            $UserProfileSubLeader = $this->getSubLeaderProfileInformation($UserId);
+            $UserProfileSubLeader = $this->getSubLeaderProfileInformation($FriendUserId, $UserProfileId);
 
             $user_detail = array_merge($user_detail, array("UserProfileSubLeader" => $UserProfileSubLeader));
 
@@ -291,9 +292,9 @@ class User_Model extends CI_Model {
     }
 
 
-    public function getUserProfileWithUserInformation($UserProfileId) {
-        $profile = $this->getUserProfileInformation($UserProfileId);
-        $detail = $this->getUserDetail($profile['UserId']);
+    public function getUserProfileWithUserInformation($FriendUserProfileId, $UserProfileId) {
+        $profile = $this->getUserProfileInformation($FriendUserProfileId, $UserProfileId);
+        $detail = $this->getUserDetail($profile['UserId'], $UserProfileId, 0);
 
         $return['user_profile_detail'] = array(
                                 'user_info' => $detail,
@@ -304,11 +305,12 @@ class User_Model extends CI_Model {
     }
 
 
-    public function getUserProfileInformation($UserProfileId) {
+    public function getUserProfileInformation($FriendUserProfileId, $UserProfileId = 0) {
 
-        $query = $this->db->query("SELECT * FROM ".$this->userProfileTbl." WHERE `UserProfileId` = '".$UserProfileId."'");
+        $query = $this->db->query("SELECT * FROM ".$this->userProfileTbl." WHERE `UserProfileId` = '".$FriendUserProfileId."'");
 
         $res_u = $query->row_array();
+
 
         $user_data_array = array(
                                 "UserProfileId"                 => (($res_u['UserProfileId'] != NULL) ? $res_u['UserProfileId'] : ""),
@@ -333,11 +335,22 @@ class User_Model extends CI_Model {
                                 "UpdatedOn"                     => return_time_ago($res_u['UpdatedOn']),
                                 "UpdatedOnTime"                 => ($res_u['UpdatedOn']),
                                 );
+
+        if($UserProfileId > 0) {
+            $friend_response = $this->checkUserFriendRequest($UserProfileId, $FriendUserProfileId);
+            if($friend_response['RequestAccepted'] == 0) {
+                $user_data_array = array_merge($user_data_array, array('MyFriend' => 1)); // Send Request
+            } else if($friend_response['RequestAccepted'] == 1) {
+                $user_data_array = array_merge($user_data_array, array('MyFriend' => 2)); // Accepted Friend Request
+            } else if($friend_response['RequestAccepted'] == 2) {
+                $user_data_array = array_merge($user_data_array, array('MyFriend' => 3)); // Not to Send Request
+            }
+        }
         return $user_data_array;
     }
 
 
-    public function getCitizenProfileInformation($UserId) {
+    public function getCitizenProfileInformation($UserId, $UserProfileId) {
         $this->db->select('UserProfileId');
         $this->db->from($this->userProfileTbl);
         $this->db->where('UserId', $UserId);
@@ -345,11 +358,11 @@ class User_Model extends CI_Model {
         $query = $this->db->get();
         $res_u = $query->row_array();
 
-        return $this->getUserProfileInformation($res_u['UserProfileId']);
+        return $this->getUserProfileInformation($res_u['UserProfileId'], $UserProfileId);
     }
 
 
-    public function getLeaderProfileInformation($UserId) {
+    public function getLeaderProfileInformation($UserId, $UserProfileId) {
         $this->db->select('UserProfileId');
         $this->db->from($this->userProfileTbl);
         $this->db->where('UserId', $UserId);
@@ -357,10 +370,10 @@ class User_Model extends CI_Model {
         $query = $this->db->get();
         $res_u = $query->row_array();
 
-        return $this->getUserProfileInformation($res_u['UserProfileId']);
+        return $this->getUserProfileInformation($res_u['UserProfileId'], $UserProfileId);
     }
 
-    public function getSubLeaderProfileInformation($UserId) {
+    public function getSubLeaderProfileInformation($UserId, $UserProfileId) {
         $this->db->select('UserProfileId');
         $this->db->from($this->userProfileTbl);
         $this->db->where('UserId', $UserId);
@@ -371,7 +384,7 @@ class User_Model extends CI_Model {
         $sub_leader = array();
 
         foreach($res_u AS $key => $result) {
-            $sub_leader[] = $this->getUserProfileInformation($result['UserProfileId']);
+            $sub_leader[] = $this->getUserProfileInformation($result['UserProfileId'], $UserProfileId);
         }
 
         return $sub_leader;
@@ -415,7 +428,7 @@ class User_Model extends CI_Model {
 
         $user_profiles = array();
         foreach($res_u AS $key => $result) {
-            $user_profiles['UserProfileCitizen'][] = $this->getUserDetailCitizen($result['UserId']);
+            $user_profiles['UserProfileCitizen'][] = $this->getUserDetailCitizen($result['UserId'], $UserProfileId);
         }
         return $user_profiles;
     }
@@ -465,7 +478,7 @@ class User_Model extends CI_Model {
                 $MyFavouriteLeaderYesNo = 1;
             }
 
-            $leader_detail = $this->getUserDetailLeader($result['UserId']);
+            $leader_detail = $this->getUserDetailLeader($result['UserId'], $UserProfileId);
 
             $leader_detail = array_merge($leader_detail, array('MyFavouriteLeader' => $MyFavouriteLeaderYesNo));
 
@@ -513,7 +526,7 @@ class User_Model extends CI_Model {
 
         $user_profiles = array();
         foreach($res_u AS $key => $result) {
-            $user_profiles['UserProfileSubLeader'][] = $this->getUserDetailSubLeader($result['UserId']);
+            $user_profiles['UserProfileSubLeader'][] = $this->getUserDetailSubLeader($result['UserId'], $UserProfileId);
         }
         return $user_profiles;
     }
@@ -555,11 +568,11 @@ class User_Model extends CI_Model {
         $user_profiles = array();
         foreach($res_u AS $key => $result) {
             if($result['UserTypeId'] == 1) {
-                $user_profiles['UserProfileCitizen'][] = $this->getUserDetailCitizen($result['UserId']);
+                $user_profiles['UserProfileCitizen'][] = $this->getUserDetailCitizen($result['UserId'], $UserProfileId);
             } else if($result['UserTypeId'] == 2) {
-                $user_profiles['UserProfileLeader'][] = $this->getUserDetailLeader($result['UserId']);
+                $user_profiles['UserProfileLeader'][] = $this->getUserDetailLeader($result['UserId'], $UserProfileId);
             } else if($result['UserTypeId'] == 3) {
-                $user_profiles['UserProfileSubLeader'][] = $this->getUserDetailSubLeader($result['UserId']);
+                $user_profiles['UserProfileSubLeader'][] = $this->getUserDetailSubLeader($result['UserId'], $UserProfileId);
             }
         }
         return $user_profiles;
@@ -982,7 +995,7 @@ class User_Model extends CI_Model {
 
     public function checkUserSetAsFavourite($UserProfileId, $FriendUserProfileId) {
         $this->db->select('UserProfileId, FriendUserProfileId');
-        $this->db->from($this->userFavUserLogTbl);
+        $this->db->from($this->userFavUserTbl);
         $this->db->where('UserProfileId', $UserProfileId);
         $this->db->where('FriendUserProfileId', $FriendUserProfileId);
         $query = $this->db->get();
@@ -993,8 +1006,95 @@ class User_Model extends CI_Model {
         }
     }
 
+
+    public function checkUserFriendRequest($UserProfileId, $FriendUserProfileId) {
+        /*$this->db->select('UserProfileId, FriendUserProfileId');
+        $this->db->from($this->UserFriendTbl);
+        $this->db->group_start();
+        $this->db->where('UserProfileId', $UserProfileId);
+        $this->db->where('FriendUserProfileId', $FriendUserProfileId);
+        $this->db->group_end();
+        $this->db->or_group_start();
+        $this->db->where('UserProfileId', $FriendUserProfileId);
+        $this->db->where('FriendUserProfileId', $UserProfileId);
+        $this->db->group_end();*/
+
+        $this->db->select('UserProfileId, FriendUserProfileId, RequestAccepted');
+        $this->db->from($this->UserFriendTbl);
+        $this->db->where('UserProfileId', $UserProfileId);
+        $this->db->where('FriendUserProfileId', $FriendUserProfileId);
+        $query = $this->db->get();
+
+        if ($query->num_rows() > 0) {
+            return $result = $query->row_array();
+        } else {
+            return false;
+        }
+    }
+
+
+    public function acceptUserFriendRequest($UserProfileId, $FriendUserProfileId) {
+
+        $insertData = array(
+                            'UserProfileId'         => $UserProfileId,
+                            'FriendUserProfileId'   => $FriendUserProfileId,
+                            'RequestSentOn'         => date('Y-m-d H:i:s'),
+                            'RequestAccepted'       => '1',
+                            'RequestAcceptedOn'     => date('Y-m-d H:i:s'),
+                            );
+        $this->db->insert($this->UserFriendTbl, $insertData);
+
+        $updateData = array(
+                            'RequestAccepted'       => '1',
+                            'RequestAcceptedOn'     => date('Y-m-d H:i:s'),
+                            );
+        $this->db->where('UserProfileId', $FriendUserProfileId);
+        $this->db->where('FriendUserProfileId', $UserProfileId);
+        $this->db->update($this->UserFriendTbl, $updateData);
+
+        return true;
+    }
+
+    public function sendUserFriendRequest($UserProfileId, $FriendUserProfileId) {
+        $insertData = array(
+                            'UserProfileId'         => $UserProfileId,
+                            'FriendUserProfileId'   => $FriendUserProfileId,
+                            'RequestSentOn'         => date('Y-m-d H:i:s'),
+                            'RequestAccepted'       => '0',
+                            );
+        $this->db->insert($this->UserFriendTbl, $insertData);
+        return true;
+    }
+
+    public function deleteUserFriendRequest($UserProfileId, $FriendUserProfileId) {
+        $this->db->where('UserProfileId', $UserProfileId);
+        $this->db->where('FriendUserProfileId', $FriendUserProfileId);
+        $this->db->delete($this->UserFriendTbl);
+
+        $this->db->where('UserProfileId', $FriendUserProfileId);
+        $this->db->where('FriendUserProfileId', $UserProfileId);
+        $this->db->delete($this->UserFriendTbl);
+
+        return true;
+    }
+
+
+    public function cancelUserFriendRequest($UserProfileId, $FriendUserProfileId) {
+
+        $updateData = array(
+                            'RequestAccepted'      => '2',
+                            'RequestDeletedOn'     => date('Y-m-d H:i:s'),
+                            );
+        $this->db->where('UserProfileId', $FriendUserProfileId);
+        $this->db->where('FriendUserProfileId', $UserProfileId);
+        $this->db->update($this->UserFriendTbl, $updateData);
+
+        return true;
+    }
+
+
     public function insertUserFavUser($insertData) {
-        $this->db->insert($this->userFavUserLogTbl, $insertData);
+        $this->db->insert($this->userFavUserTbl, $insertData);
 
         return $this->db->insert_id();
     }
@@ -1003,14 +1103,14 @@ class User_Model extends CI_Model {
     public function deleteUserFavUser($UserProfileId, $FriendUserProfileId) {
         $this->db->where('UserProfileId', $UserProfileId);
         $this->db->where('FriendUserProfileId', $FriendUserProfileId);
-        $this->db->delete($this->userFavUserLogTbl);
+        $this->db->delete($this->userFavUserTbl);
     }
 
 
     public function getMyAllFavouriteLeader($UserId, $UserProfileId) {
 
         $query = $this->db->query("SELECT ufu.* 
-                                        FROM ".$this->userFavUserLogTbl." AS ufu 
+                                        FROM ".$this->userFavUserTbl." AS ufu 
                                         LEFT JOIN ".$this->userProfileTbl." up ON ufu.FriendUserProfileId = up.UserProfileId
                                         WHERE 
                                             ufu.`UserProfileId` = '".$UserProfileId."'
@@ -1021,10 +1121,69 @@ class User_Model extends CI_Model {
         $fav_leader = array();
 
         foreach($res_u AS $key => $result) {
-            $fav_leader[] = $this->getUserProfileWithUserInformation($result['FriendUserProfileId']);
+            $fav_leader[] = $this->getUserProfileWithUserInformation($result['FriendUserProfileId'], $UserProfileId);
         }
 
         return $fav_leader;
+    }
+
+
+    public function getMyAllFriendRequest($UserProfileId) {
+        $query = $this->db->query("SELECT uf.UserProfileId 
+                                        FROM ".$this->UserFriendTbl." AS uf 
+                                        WHERE 
+                                            uf.`FriendUserProfileId` = '".$UserProfileId."'
+                                        AND uf.RequestAccepted = '0'
+                                        ORDER BY uf.RequestSentOn DESC");
+
+        $res_u = $query->result_array();
+
+        $friend_requests = array();
+
+        foreach($res_u AS $key => $result) {
+            $friend_requests[] = $this->getUserProfileWithUserInformation($result['UserProfileId'], $UserProfileId);
+        }
+
+        return $friend_requests;
+    }
+
+    public function getMyAllRequestToFriends($UserProfileId) {
+        $query = $this->db->query("SELECT uf.FriendUserProfileId 
+                                        FROM ".$this->UserFriendTbl." AS uf 
+                                        WHERE 
+                                            uf.`UserProfileId` = '".$UserProfileId."'
+                                        AND uf.RequestAccepted = '0' 
+                                        ORDER BY uf.RequestSentOn DESC");
+
+        $res_u = $query->result_array();
+
+        $request_friends = array();
+
+        foreach($res_u AS $key => $result) {
+            $request_friends[] = $this->getUserProfileWithUserInformation($result['FriendUserProfileId'], $UserProfileId);
+        }
+
+        return $request_friends;
+    }
+
+
+    public function getMyAllFriends($UserProfileId) {
+        $query = $this->db->query("SELECT uf.FriendUserProfileId 
+                                        FROM ".$this->UserFriendTbl." AS uf 
+                                        WHERE 
+                                            uf.`UserProfileId` = '".$UserProfileId."'
+                                        AND uf.RequestAccepted = '1' 
+                                        ORDER BY uf.RequestAcceptedOn DESC");
+
+        $res_u = $query->result_array();
+
+        $friends = array();
+
+        foreach($res_u AS $key => $result) {
+            $friends[] = $this->getUserProfileWithUserInformation($result['FriendUserProfileId'], $UserProfileId);
+        }
+
+        return $friends;
     }
 
 

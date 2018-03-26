@@ -5,7 +5,7 @@ if ( ! defined('BASEPATH')) exit('No direct script access allowed');
  * Information Management
 */
 
-class Inforation extends CI_Controller {
+class Information extends CI_Controller {
     
     public function __construct() {
         parent::__construct();

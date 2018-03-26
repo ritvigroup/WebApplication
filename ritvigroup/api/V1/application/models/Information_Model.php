@@ -15,7 +15,7 @@ class Information_Model extends CI_Model {
 
 
     public function generateInformationUniqueId() {
-        $InformationUniqueId = "C".mt_rand().time();
+        $InformationUniqueId = "I".mt_rand().time();
         $this->db->select('InformationUniqueId');
         $this->db->from($this->informationTbl);
         $this->db->where('InformationUniqueId', $InformationUniqueId);

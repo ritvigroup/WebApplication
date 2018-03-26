@@ -33,7 +33,7 @@ class Userprofile extends CI_Controller {
 
             if($res_u['UserStatus'] == '1') {
                 
-                $user_info = $this->User_Model->getUserDetail($UserId);
+                $user_info = $this->User_Model->getUserDetail($UserId, 0, 0);
 
                 $msg = "User information found successfully";
 
@@ -76,7 +76,7 @@ class Userprofile extends CI_Controller {
 
             if($res_u['UserStatus'] == '1') {
                 
-                $user_info = $this->User_Model->getUserDetail($UserId, 1); // 1 = Full Information
+                $user_info = $this->User_Model->getUserDetail($UserId, 0, 1); // 1 = Full Information
 
                 $msg = "User information found successfully";
 
@@ -119,7 +119,7 @@ class Userprofile extends CI_Controller {
             $error_occured = true;
         } else {
 
-            $res_u = $this->User_Model->getUserProfileInformation($FriendUserProfileId);
+            $res_u = $this->User_Model->getUserProfileInformation($FriendUserProfileId, $UserProfileId);
 
             if($res_u['ProfileStatus'] == '1') {
                 
@@ -344,7 +344,7 @@ class Userprofile extends CI_Controller {
                 
                 $this->User_Model->updateUserData($UserId, $updateData);
                 
-                $user_info = $this->User_Model->getUserDetail($UserId);
+                $user_info = $this->User_Model->getUserDetail($UserId, 0, 0);
 
                 $msg = "User profile photo removed successfully";
 
@@ -396,7 +396,7 @@ class Userprofile extends CI_Controller {
                 
                 $this->User_Model->updateUserData($UserId, $updateData);
                 
-                $user_info = $this->User_Model->getUserDetail($UserId);
+                $user_info = $this->User_Model->getUserDetail($UserId, 0, 0);
 
                 $msg = "User cover profile photo removed successfully";
 
@@ -538,7 +538,7 @@ class Userprofile extends CI_Controller {
                     
                     $this->User_Model->saveUserPhoto('photo', $UserId, 1);
 
-                    $user_info = $this->User_Model->getUserDetail($UserId);
+                    $user_info = $this->User_Model->getUserDetail($UserId, 0, 0);
 
                     $this->db->query("COMMIT");
                     $msg = "User profile updated successfully";
@@ -673,7 +673,7 @@ class Userprofile extends CI_Controller {
                     
                     $this->User_Model->saveUserPhoto('photo', $UserId, 1);
 
-                    $user_info = $this->User_Model->getUserDetail($UserId);
+                    $user_info = $this->User_Model->getUserDetail($UserId, 0, 0);
 
                     $this->db->query("COMMIT");
                     $msg = "User profile updated successfully";
@@ -844,8 +844,5 @@ class Userprofile extends CI_Controller {
         }
         displayJsonEncode($array);
     }
-
-
-
-        
+       
 }

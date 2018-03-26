@@ -26,11 +26,11 @@ class Post extends CI_Controller {
         $error_occured = false;
         $feeling = $this->Feeling_Model->getAllFeelings();
 
-        if(count($feeling) == 0) {
+        if(count($feeling) > 0) {
+            $msg = "Feelings found.";
+        } else {
             $error_occured = true;
             $msg = "No feeling found";
-        } else {
-            $msg = "Feelings found.";
         }
 
         if($error_occured == true) {
