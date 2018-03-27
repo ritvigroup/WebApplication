@@ -11,6 +11,8 @@ class Userprofile extends CI_Controller {
         parent::__construct();
 
         $this->load->model('User_Model');
+        $this->load->model('Politicalparty_Model');
+
 
         $this->device_token 	= $this->input->post('device_token');
         $this->location_lant 	= $this->input->post('location_lant');
@@ -839,6 +841,92 @@ class Userprofile extends CI_Controller {
             $array = array(
                            "status"     => 'success',
                            "result"    => $fav_leader,
+                           "message"    => $msg,
+                           );
+        }
+        displayJsonEncode($array);
+    }
+
+
+    public function getAllGender() {
+        $error_occured = false;
+        $UserId         = $this->input->post('user_id');
+        $UserProfileId  = $this->input->post('user_profile_id');
+        
+                
+        if($UserId == "") {
+            $msg = "Please select user";
+            $error_occured = true;
+        } else if($UserProfileId == "") {
+            $msg = "Please select user profile";
+            $error_occured = true;
+        } else {
+
+            $gender = $this->User_Model->getAllGender();
+
+            if(count($gender) > 0) {
+
+                $msg = "Gender found successfully";
+
+            } else {
+                $msg = "No gender found";
+                $error_occured = true;
+            }
+        }
+
+        if($error_occured == true) {
+            $array = array(
+                            "status"        => 'failed',
+                            "message"       => $msg,
+                        );
+        } else {
+
+            $array = array(
+                           "status"     => 'success',
+                           "result"    => $gender,
+                           "message"    => $msg,
+                           );
+        }
+        displayJsonEncode($array);
+    }
+
+
+    public function getAllPoliticalParty() {
+        $error_occured = false;
+        $UserId         = $this->input->post('user_id');
+        $UserProfileId  = $this->input->post('user_profile_id');
+        
+                
+        if($UserId == "") {
+            $msg = "Please select user";
+            $error_occured = true;
+        } else if($UserProfileId == "") {
+            $msg = "Please select user profile";
+            $error_occured = true;
+        } else {
+
+            $political_party = $this->Politicalparty_Model->getAllPoliticalParty();
+
+            if(count($political_party) > 0) {
+
+                $msg = "Party found successfully";
+
+            } else {
+                $msg = "No political party found";
+                $error_occured = true;
+            }
+        }
+
+        if($error_occured == true) {
+            $array = array(
+                            "status"        => 'failed',
+                            "message"       => $msg,
+                        );
+        } else {
+
+            $array = array(
+                           "status"     => 'success',
+                           "result"    => $political_party,
                            "message"    => $msg,
                            );
         }

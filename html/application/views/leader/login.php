@@ -33,7 +33,10 @@
 <body id="signin-page">
 <div class="page-form">
     <div class="header-content"><h1>Log In</h1></div>
-    <div class="body-content"><p>Log in with a social network:</p>
+    <div class="body-content">
+
+        <?php /* ?>
+        <p>Log in with a social network:</p>
 
         <div class="row mbm text-center">
             <div class="col-md-4"><a href="#" class="btn btn-sm btn-twitter btn-block"><i
@@ -43,6 +46,7 @@
             <div class="col-md-4"><a href="#" class="btn btn-sm btn-google-plus btn-block"><i
                     class="fa fa-google-plus fa-fw"></i>Google +</a></div>
         </div>
+        <?php */ ?>
 
         <div class="form-group"><div class="error_msg" style="color: red;"></div></div>
 
@@ -103,23 +107,25 @@ $('input[type="radio"]').iCheck({
         if (signin_username.length > 0 && signin_password.length > 0) {
             //var pattern = /^\b[A-Z0-9._%-]+@[A-Z0-9.-]+\.[A-Z]{2,4}\b$/i;
 
-            $this.button('Validating...');
+            $('.signin_up_button').html('Authenticating...');
 
             $.post("<?php echo base_url(); ?>leader/login", {username: signin_username, password: signin_password},
                 function (data, status) {
                    
                     if (data.status === "failed") {
-                        sweetAlert("Oops...", data.message, "error");
+                        sweetAlert("Error", data.message, "error");
+                        $('.signin_up_button').html('Login');
                         return false;
                     } else { 
-                        $this.button('Login');
                         if (data.status === "success") {
+                            $('.signin_up_button').html('Login Successful');
                             window.location.href="dashboard";
                         }
                     }
+                    
                 });
         } else {
-            sweetAlert("Oops...", "Please enter your username and password", "error");
+            sweetAlert("Error", "Please enter your username and password", "error");
             return false;
         }
     };

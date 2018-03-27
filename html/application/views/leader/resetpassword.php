@@ -94,7 +94,7 @@ $('input[type="radio"]').iCheck({
         if (newpassword.length >= 6 && confirmpassword.length >= 6) {
             //var pattern = /^\b[A-Z0-9._%-]+@[A-Z0-9.-]+\.[A-Z]{2,4}\b$/i;
 
-            $this.button('Validating...');
+            $('.reset_password_button').html('Validating');
 
             $.post("<?php echo base_url(); ?>leader/resetpassword", {
                                                 newpassword: newpassword, 
@@ -103,18 +103,20 @@ $('input[type="radio"]').iCheck({
                 function (data, status) {
                    
                     if (data.status === "failed") {
-                        sweetAlert("Oops...", data.message, "error");
+                        sweetAlert("Error", data.message, "error");
+                        $('.reset_password_button').html('Submit');
                         return false;
                     } else { 
                         $this.button('Submit');
                         if (data.status === "success") {
                             swal("Congratulations!", data.message, "success");
+                            $('.reset_password_button').html('Redirecting');
                             window.location.href= "<?php echo base_url(); ?>leader/login";
                         }
                     }
                 });
         } else {
-            sweetAlert("Oops...", "Please enter your password and confirm your password with atleast 6 character", "error");
+            sweetAlert("Error", "Please enter your password and confirm your password with atleast 6 character", "error");
             return false;
         }
     };

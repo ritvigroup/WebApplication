@@ -10,6 +10,9 @@ class User_Model extends CI_Model {
         $this->userLogTbl           = 'UserLog';
         $this->userFavUserTbl       = 'UserFavUser';
         $this->UserFriendTbl        = 'UserFriend';
+
+        $this->genderTbl            = 'Gender';
+        $this->politicalPartyTbl    = 'PoliticalParty';
     }
 
     // Login with username with password
@@ -307,7 +310,10 @@ class User_Model extends CI_Model {
 
     public function getUserProfileInformation($FriendUserProfileId, $UserProfileId = 0) {
 
-        $query = $this->db->query("SELECT * FROM ".$this->userProfileTbl." WHERE `UserProfileId` = '".$FriendUserProfileId."'");
+        $query = $this->db->query("SELECT up.*, pp.PoliticalPartyName FROM ".$this->userProfileTbl." AS up 
+                                        LEFT JOIN ".$this->politicalPartyTbl." AS pp ON up.PoliticalPartyId = pp.PoliticalPartyId
+                                        WHERE 
+                                            up.`UserProfileId` = '".$FriendUserProfileId."'");
 
         $res_u = $query->row_array();
 
@@ -321,6 +327,8 @@ class User_Model extends CI_Model {
                                 "LastName"                      => (($res_u['LastName'] != NULL) ? $res_u['LastName'] : ""),
                                 "Email"                         => (($res_u['Email'] != NULL) ? $res_u['Email'] : ""),
                                 "UserProfileDeviceToken"        => (($res_u['UserProfileDeviceToken'] != NULL) ? $res_u['UserProfileDeviceToken'] : ""),
+                                "PoliticalPartyId"              => (($res_u['PoliticalPartyId'] > 0) ? $res_u['PoliticalPartyId'] : "0"),
+                                "PoliticalPartyName"            => (($res_u['PoliticalPartyName'] != NULL) ? $res_u['PoliticalPartyName'] : ""),
                                 "Address"                       => (($res_u['Address'] != NULL) ? $res_u['Address'] : ""),
                                 "City"                          => (($res_u['City'] != NULL) ? $res_u['City'] : ""),
                                 "State"                         => (($res_u['State'] != NULL) ? $res_u['State'] : ""),
@@ -344,17 +352,31 @@ class User_Model extends CI_Model {
                 if($friend_response['RequestAccepted'] == 0) {
                     $user_data_array = array_merge($user_data_array, array('MyFriend' => 1)); // Send Request
                 } else if($friend_response['RequestAccepted'] == 1) {
-                    $user_data_array = array_merge($user_data_array, array('MyFriend' => 2)); // Accepted Friend Request
+                    $user_data_array = array_merge($user_data_array, array('MyFriend' => 3)); // Accepted Friend Request
                 } else if($friend_response['RequestAccepted'] == 2) {
-                    $user_data_array = array_merge($user_data_array, array('MyFriend' => 3)); // Not to Send Request
+                    $user_data_array = array_merge($user_data_array, array('MyFriend' => 4)); // Not to Send Request
                 } else {
                     $user_data_array = array_merge($user_data_array, array('MyFriend' => 0)); // Fresh
                 }
             } else {
-                $user_data_array = array_merge($user_data_array, array('MyFriend' => 0)); // Fresh
+                $friend_response = $this->checkUserFriendRequest($FriendUserProfileId, $UserProfileId);
+
+                if($friend_response['RequestAccepted'] != '') {
+                    if($friend_response['RequestAccepted'] == 0) {
+                        $user_data_array = array_merge($user_data_array, array('MyFriend' => 2)); // Incoming Request
+                    } else if($friend_response['RequestAccepted'] == 1) {
+                        $user_data_array = array_merge($user_data_array, array('MyFriend' => 3)); // Accepted Friend Request
+                    } else if($friend_response['RequestAccepted'] == 2) {
+                        $user_data_array = array_merge($user_data_array, array('MyFriend' => 4)); // Not to Send Request
+                    } else {
+                        $user_data_array = array_merge($user_data_array, array('MyFriend' => 0)); // Fresh
+                    }
+                } else {
+                    $user_data_array = array_merge($user_data_array, array('MyFriend' => 0)); // Fresh
+                }
             }
         } else {
-            $user_data_array = array_merge($user_data_array, array('MyFriend' => 0)); // Fresh
+            $user_data_array = array_merge($user_data_array, array('MyFriend' => -1)); // Self Profile
         }
         return $user_data_array;
     }
@@ -402,23 +424,34 @@ class User_Model extends CI_Model {
 
 
     public function searchCitizenProfiles($UserProfileId, $search) {
+
         if(is_array($search)) {
-            $this->db->select('UserProfileId, UserId');
-            $this->db->from($this->userProfileTbl);
-            $this->db->where("UserProfileId != ", $UserProfileId);
-            $this->db->where('UserTypeId', 1);
-            $this->db->where('ProfileStatus', 1);
-            foreach($search AS $search_text) {
-                $this->db->group_start();
-                $this->db->or_like('FirstName', $search_text);
-                $this->db->or_like('LastName', $search_text);
-                $this->db->or_like('Email', $search_text);
-                $this->db->group_end();
+            $this->db->select('up.UserProfileId, up.UserId');
+            $this->db->from($this->userProfileTbl." AS up");
+            $this->db->join($this->userTbl. " AS u", ' up.UserId = u.UserId');
+            $this->db->where("up.UserProfileId != ", $UserProfileId);
+            $this->db->where('up.UserTypeId', 1);
+            $this->db->where('up.ProfileStatus', 1);
+            foreach($search AS $search_text_key => $search_text_val) {
+                if($search_text_key == "search_text") {
+                    $this->db->group_start();
+                    $this->db->or_like('up.FirstName', $search_text_val);
+                    $this->db->or_like('up.LastName', $search_text_val);
+                    $this->db->or_like('up.Email', $search_text_val);
+                    $this->db->group_end();
+                } else if($search_text_key == "gender") {
+                    $this->db->group_start();
+                    $this->db->where('u.Gender', $search_text_val);
+                    $this->db->group_end();
+                } else if($search_text_key == "political_party") {
+                    $this->db->group_start();
+                    $this->db->where('up.PoliticalPartyId', $search_text_val);
+                    $this->db->group_end();
+                }
             }
-            $this->db->order_by('FirstName');
+            $this->db->order_by('up.FirstName');
             $query = $this->db->get();
             $res_u = $query->result_array();
-
 
         } else {
             $this->db->select('UserProfileId, UserId');
@@ -446,22 +479,32 @@ class User_Model extends CI_Model {
 
     public function searchLeaderProfiles($UserProfileId, $search) {
         if(is_array($search)) {
-            $this->db->select('UserProfileId, UserId');
-            $this->db->from($this->userProfileTbl);
-            $this->db->where("UserProfileId != ", $UserProfileId);
-            $this->db->where('UserTypeId', 2);
-            $this->db->where('ProfileStatus', 1);
-            foreach($search AS $search_text) {
-                $this->db->group_start();
-                $this->db->or_like('FirstName', $search_text);
-                $this->db->or_like('LastName', $search_text);
-                $this->db->or_like('Email', $search_text);
-                $this->db->group_end();
+            $this->db->select('up.UserProfileId, up.UserId');
+            $this->db->from($this->userProfileTbl." AS up");
+            $this->db->join($this->userTbl. " AS u", ' up.UserId = u.UserId', 'LEFT');
+            $this->db->where("up.UserProfileId != ", $UserProfileId);
+            $this->db->where('up.UserTypeId', 2);
+            $this->db->where('up.ProfileStatus', 1);
+            foreach($search AS $search_text_key => $search_text_val) {
+                if($search_text_key == "search_text") {
+                    $this->db->group_start();
+                    $this->db->or_like('up.FirstName', $search_text_val);
+                    $this->db->or_like('up.LastName', $search_text_val);
+                    $this->db->or_like('up.Email', $search_text_val);
+                    $this->db->group_end();
+                } else if($search_text_key == "gender") {
+                    $this->db->group_start();
+                    $this->db->where('u.Gender', $search_text_val);
+                    $this->db->group_end();
+                } else if($search_text_key == "political_party") {
+                    $this->db->group_start();
+                    $this->db->where('up.PoliticalPartyId', $search_text_val);
+                    $this->db->group_end();
+                }
             }
-            $this->db->order_by('FirstName');
+            $this->db->order_by('up.FirstName');
             $query = $this->db->get();
             $res_u = $query->result_array();
-
 
         } else {
             $this->db->select('UserProfileId, UserId');
@@ -1208,6 +1251,33 @@ class User_Model extends CI_Model {
         }
 
         return $friends;
+    }
+
+
+    public function getAllGender() {
+        $this->db->select('*');
+        $this->db->from($this->genderTbl);
+        $this->db->where('GenderStatus', 1);
+        $query = $this->db->get();
+        $result = $query->result_array();
+        if ($query->num_rows() > 0) {
+            $gender = array();
+            foreach($result AS $key => $result) {
+                $gender[] = $this->returnGender($result);
+            }
+            return $gender;
+        } else {
+            return false;
+        }
+    }
+
+    public function returnGender($result) {
+        $detail = array(
+                        'GenderId'       => $result['GenderId'],
+                        'GenderName'     => $result['GenderName'],
+                        'GenderStatus'   => $result['GenderStatus'],
+                        );
+        return $detail;
     }
 
 

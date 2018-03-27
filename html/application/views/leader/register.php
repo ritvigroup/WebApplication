@@ -127,38 +127,38 @@ $('input[type="radio"]').iCheck({
         var error_found = false;
         var pattern = /^\b[A-Z0-9._%-]+@[A-Z0-9.-]+\.[A-Z]{2,4}\b$/i;
         if (!pattern.test(signup_email)) {
-            sweetAlert("Oops...", "Please enter valid email address", "error");
+            sweetAlert("Error", "Please enter valid email address", "error");
             return false;
         } else if (signup_mobile.length < 10) {
-            sweetAlert("Oops...", "Please enter valid phone number", "error");
+            sweetAlert("Error", "Please enter valid phone number", "error");
             return false;
         } else if (signup_username.length < 6) {
-            sweetAlert("Oops...", "Please enter your username atleast 6 character", "error");
+            sweetAlert("Error", "Please enter your username atleast 6 character", "error");
             return false;
         } else if (signup_password.length < 6) {
-            sweetAlert("Oops...", "Please enter atleast 6 character password", "error");
+            sweetAlert("Error", "Please enter atleast 6 character password", "error");
             return false;
         } else if (signup_confirm_password.length < 6) {
-            sweetAlert("Oops...", "Please confirm your password", "error");
+            sweetAlert("Error", "Please confirm your password", "error");
             return false;
         } else if (signup_password != signup_confirm_password) {
-            sweetAlert("Oops...", "Please check both password and confirm password", "error");
+            sweetAlert("Error", "Please check both password and confirm password", "error");
             return false;
         } else if (signup_firstname.length < 3) {
-            sweetAlert("Oops...", "Please enter valid first name atleast 3 charater", "error");
+            sweetAlert("Error", "Please enter valid first name atleast 3 charater", "error");
             return false;
         } else if (signup_lastname < 3) {
-            sweetAlert("Oops...", "Please enter valid last name atleast 3 character", "error");
+            sweetAlert("Error", "Please enter valid last name atleast 3 character", "error");
             return false;
         } else if (signup_gender == 0) {
-            sweetAlert("Oops...", "Please select your gender", "error");
+            sweetAlert("Error", "Please select your gender", "error");
             return false;
         } else if($('#terms').prop("checked") == false) {
-            sweetAlert("Oops...", "Please select terms and conditions checkbox", "error");
+            sweetAlert("Error", "Please select terms and conditions checkbox", "error");
             return false;
         } else {
 
-            $this.button('Validating...');
+            $('.signup_button').html('Validating');
 
             $.post("<?php echo base_url(); ?>leader/register", 
                                     {
@@ -174,11 +174,14 @@ $('input[type="radio"]').iCheck({
                 function (data, status) {
                    
                     if (data.status === "failed") {
-                        sweetAlert("Oops...", data.message, "error");
+                        sweetAlert("Error", data.message, "error");
+                        $('.signup_button').html('Submit');
                         return false;
                     } else { 
                         $this.button('Submit');
                         if (data.status === "success") {
+                            $('.signup_button').html('Registration Successful');
+
                             window.location.href="dashboard";
                         }
                     }

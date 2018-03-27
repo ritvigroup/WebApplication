@@ -85,25 +85,28 @@ $('input[type="radio"]').iCheck({
         if (signin_username.length > 0) {
             //var pattern = /^\b[A-Z0-9._%-]+@[A-Z0-9.-]+\.[A-Z]{2,4}\b$/i;
 
-            $this.button('Validating...');
+            $('.forgot_button').html('Validating');
+
 
             $.post("<?php echo base_url(); ?>leader/forgot", {username: signin_username},
                 function (data, status) {
                    
                     if (data.status === "failed") {
-                        sweetAlert("Oops...", data.message, "error");
+                        sweetAlert("Error", data.message, "error");
+                        $('.forgot_button').html('Submit');
                         $(".signin-username").val('');
                         $(".signin-username").focus();
                         return false;
                     } else { 
                         $this.button('Submit');
                         if (data.status === "success") {
+                            $('.forgot_button').html('Submit');
                             swal("Congratulations!", data.message, "success");
                         }
                     }
                 });
         } else {
-            sweetAlert("Oops...", "Please enter your username", "error");
+            sweetAlert("Error", "Please enter your username", "error");
             return false;
         }
     };
