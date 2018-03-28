@@ -45,17 +45,25 @@ class Event extends CI_Controller {
             $_POST['user_profile_id'] = $this->session->userdata('LeaderProfileId');
 
 
-            $file_data = array();
-            for($i = 0; $i < count($_FILES['file']['name']); $i++) {
-                if($_FILES['file']['name'][$i] != '') {
-                    $file_data['file'][] = getCurlValue($_FILES['file']['tmp_name'][$i], $_FILES['file']['type'][$i], $_FILES['file']['name'][$i]);
+            $post_data = $this->input->post();
+            $attendee = array();
+            if($post_data['event_attendee'] != '') {
+                $exp_attendee = explode(',', $post_data['event_attendee']);
+                for($i = 0; $i < count($exp_attendee); $i++) {
+                    if($exp_attendee[$i] > 0) {
+                        $post_data = array_merge($post_data, array('event_attendee['.$i.']' => $exp_attendee[$i]));
+                    }
                 }
             }
 
-            $post_data = $this->input->post();
-            $post_data = array_merge($post_data, $file_data);
+            for($i = 0; $i < count($_FILES['file']['name']); $i++) {
+                if($_FILES['file']['name'][$i] != '') {
 
-            $json_decode = post_curl(API_CALL_PATH.'event/saveMyEvent', $post_data, $this->curl);
+                    //$post_data = array_merge($post_data, array('file['.$i.']' => '@'.($_FILES['file']['tmp_name'][$i]).''));
+                    $post_data = array_merge($post_data, array('file['.$i.']' => getCurlValue($_FILES['file']['tmp_name'][$i], $_FILES['file']['type'][$i], $_FILES['file']['name'][$i])));
+                }
+            }
+            $json_decode = post_curl_with_files(API_CALL_PATH.'event/saveMyEvent', $post_data, $this->curl);
 
             header('Content-type: application/json');
 

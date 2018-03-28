@@ -22,6 +22,27 @@ if ( ! function_exists('post_curl'))
 }
 
 
+if ( ! function_exists('post_curl_with_files'))
+{
+
+        function post_curl_with_files($api_call_path, $params, $this_curl) {
+
+            $this_curl->create($api_call_path);
+                $this_curl->option('buffersize', 10);
+
+                $this_curl->option('returntransfer', 1);
+                $this_curl->option('followlocation', 1);
+                //$this_curl->option('HTTPHEADER', array("Content-type: multipart/form-data"));
+                $this_curl->option('HEADER', false);
+                $this_curl->option('connecttimeout', 60000);
+
+                $this_curl->option('postfields', ($params));
+                $data = $this_curl->execute();
+                return $data;
+        }
+}
+
+
 if ( ! function_exists('getCurlValue'))
 {
         function getCurlValue($filename, $contentType, $postname)

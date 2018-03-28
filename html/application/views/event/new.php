@@ -83,7 +83,6 @@
                             </div>
                             <div class="portlet-body">
                                 
-
                                 <h3 class="mbxl">Save Your New Event</h3>
 
                                 <div class="row">
@@ -178,12 +177,7 @@
                                     <div class="col-md-12">
                                         <div class="form-group"><label for="files"
                                                                        class="control-label">Select Photo</label>
-                                            <input type="file" name="file[]" class="form-control fileUploadForm"/><br>
-                                            <input type="file" name="file[]" class="form-control fileUploadForm"/><br>
-                                            <input type="file" name="file[]" class="form-control fileUploadForm"/><br>
-                                            <input type="file" name="file[]" class="form-control fileUploadForm"/><br>
-                                            <input type="file" name="file[]" class="form-control fileUploadForm"/><br>
-                                            <input type="file" name="file[]" class="form-control fileUploadForm"/><br>
+                                            <input type="file" name="file[]" class="form-control fileUploadForm" multiple="true"/><br>
                                         </div>
                                     </div>
                                 </div>
@@ -192,7 +186,6 @@
                             <div class="form-group"><button type="submit" class="btn btn-success event_button">Submit&nbsp;<i class="fa fa-chevron-circle-right"></i></button></div>
                         </div>
                     </div>
-                    
                 </div>
                 
             </div>
@@ -286,22 +279,34 @@
         if (event_name.length > 0) {
             $this.button('Uploading...');
 
-            var event_attend = {};
+            var event_attend = '';
             $('#event_attendee :selected').each(function(i, selected) {
-                event_attend[i] = $(selected).val();
+                event_attend += $(selected).val()+',';
+            });
+            
+            var form_data = new FormData($('input[name^="file"]'));
+
+            jQuery.each($('input[name^="file[]"]')[0].files, function(i, file) {
+                form_data.append('file[]', file);
             });
 
+            form_data.append('event_name', event_name);
+            form_data.append('event_description', event_description);
+            form_data.append('event_location', event_location);
+            form_data.append('start_date', start_date);
+            form_data.append('end_date', end_date);
+            form_data.append('event_attendee', event_attend);
 
-            $.post("<?php echo base_url(); ?>event/newevent", {
-                                                            event_name: event_name, 
-                                                            event_description: event_description,
-                                                            event_location: event_location,
-                                                            start_date: start_date,
-                                                            end_date: end_date,
-                                                            event_attendee: event_attend,
-                                                            },
-                function (data, status) {
-                   
+
+            jQuery.ajax({
+                type: 'POST',
+                cache: false,
+                processData: false,
+                contentType: false,
+                data: form_data,
+                url: "<?php echo base_url(); ?>event/newevent",
+
+                success: function(data) {
                     if (data.status === "failed") {
                         sweetAlert("Oops...", data.message, "error");
                         return false;
@@ -311,7 +316,9 @@
                             window.location.href="event";
                         }
                     }
-                });
+                }
+            });
+
         } else {
             sweetAlert("Oops...", "Please enter event name", "error");
             return false;

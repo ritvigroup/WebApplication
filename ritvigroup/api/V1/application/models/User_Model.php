@@ -1171,7 +1171,7 @@ class User_Model extends CI_Model {
 
     public function getMyAllFavouriteLeader($UserId, $UserProfileId) {
 
-        $query = $this->db->query("SELECT ufu.* 
+        $query = $this->db->query("SELECT ufu.*, up.UserId 
                                         FROM ".$this->userFavUserTbl." AS ufu 
                                         LEFT JOIN ".$this->userProfileTbl." up ON ufu.FriendUserProfileId = up.UserProfileId
                                         WHERE 
@@ -1183,7 +1183,7 @@ class User_Model extends CI_Model {
         $fav_leader = array();
 
         foreach($res_u AS $key => $result) {
-            $fav_leader[] = $this->getUserProfileWithUserInformation($result['FriendUserProfileId'], $UserProfileId);
+            $fav_leader[] = $this->getUserDetailLeader($result['UserId'], $UserProfileId);
         }
 
         return $fav_leader;
