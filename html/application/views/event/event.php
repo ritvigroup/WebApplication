@@ -89,7 +89,8 @@
                                             <?php $EndDate    = (($event->EndDate == '0000-00-00 00:00:00') ? '' : date('d-M-Y h:i A', strtotime($event->EndDate))); ?>
                                             <tr>
                                                 <td></td>
-                                                <td><?php echo $event->EventName; ?></td>
+
+                                                <td><a data-target="#modal-stackable" data-toggle="modal" onClick="return openEventDetail(<?php echo $event->EventId; ?>);" href="javascript:void(0);"><?php echo $event->EventName; ?></a></td>
                                                 <td><?php echo $event->EventLocation; ?></td>
                                                 <td><?php echo $StartDate; ?></td>
                                                 <td><?php echo $EndDate; ?></td>
@@ -112,6 +113,18 @@
 
         <!--END FOOTER--><!--END PAGE WRAPPER--></div>
 </div>
+
+<div id="modal-stackable" tabindex="-1" role="dialog" aria-labelledby="modal-stackable-label" aria-hidden="true" class="modal fade" style="display: none;">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            
+        </div>
+    </div>
+</div>
+
+<script src="<?php echo base_url(); ?>assets/js/sweetalert-dev.js"></script> 
+<script src="<?php echo base_url(); ?>assets/js/sweetalert.min.js"></script> 
+
 <script src="<?=base_url();?>assets/js/jquery-1.10.2.min.js"></script>
 <script src="<?=base_url();?>assets/js/jquery-migrate-1.2.1.min.js"></script>
 <script src="<?=base_url();?>assets/js/jquery-ui.js"></script>
@@ -138,6 +151,49 @@
 <!--CORE JAVASCRIPT-->
 <script src="<?=base_url();?>assets/js/main.js"></script>
 <!--LOADING SCRIPTS FOR PAGE-->
+<script src="<?=base_url();?>assets/vendors/bootstrap-datepicker/js/bootstrap-datepicker.js"></script>
+<script src="<?=base_url();?>assets/vendors/bootstrap-daterangepicker/daterangepicker.js"></script>
+<script src="<?=base_url();?>assets/vendors/moment/moment.js"></script>
+<script src="<?=base_url();?>assets/vendors/bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js"></script>
+<script src="<?=base_url();?>assets/vendors/bootstrap-timepicker/js/bootstrap-timepicker.js"></script>
+<script src="<?=base_url();?>assets/vendors/bootstrap-clockface/js/clockface.js"></script>
+<script src="<?=base_url();?>assets/vendors/bootstrap-colorpicker/js/bootstrap-colorpicker.js"></script>
+<script src="<?=base_url();?>assets/vendors/bootstrap-switch/js/bootstrap-switch.min.js"></script>
+<script src="<?=base_url();?>assets/vendors/jquery-maskedinput/jquery-maskedinput.js"></script>
+<script src="<?=base_url();?>assets/vendors/charCount.js"></script>
+<script src="<?=base_url();?>assets/js/form-components.js"></script>
 
+
+
+<script src="<?=base_url();?>assets/vendors/jquery-validate/jquery.validate.min.js"></script>
+<script src="<?=base_url();?>assets/vendors/jquery-steps/js/jquery.steps.min.js"></script>
+<script src="<?=base_url();?>assets/vendors/jquery-bootstrap-wizard/jquery.bootstrap.wizard.min.js"></script>
+<script src="<?=base_url();?>assets/js/form-wizard.js"></script>
+
+
+
+<script src="<?=base_url();?>assets/vendors/mixitup/src/jquery.mixitup.js"></script>
+<script src="<?=base_url();?>assets/vendors/lightbox/js/lightbox.min.js"></script>
+<script src="<?=base_url();?>assets/js/page-gallery.js"></script>
+
+
+<script>
+function openEventDetail(event_id) {
+
+    if (event_id > 0) {
+        $.post("<?php echo base_url(); ?>event/eventdetail", {event_id: event_id},
+            function (data, status) {
+                if(data != '') {
+                    $('.modal-content').html(data);
+                } else {
+                    $('.modal-content').html(data);
+                }
+            });
+    } else {
+        sweetAlert("Oops...", "Please enter something to search leaders", "error");
+        return false;
+    }
+}
+</script>
 </body>
 </html>

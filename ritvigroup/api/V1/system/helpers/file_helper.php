@@ -468,7 +468,7 @@ if ( ! function_exists('uploadFileOnServer'))
 	 */
 	function uploadFileOnServer($from_source, $to_destination) {
 		
-		$dir = '../../../';
+		$dir = '../../';
 
 		$exp_dir = @explode('/', $dir);
 

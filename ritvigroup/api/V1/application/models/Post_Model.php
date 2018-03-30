@@ -234,13 +234,13 @@ class Post_Model extends CI_Model {
             $AttachmentTypeId = $result['AttachmentTypeId'];
 
             if($AttachmentTypeId == 1) {
-                $path = COMPLAINT_IMAGE_DIR;
+                $path = POST_IMAGE_URL;
             } else if($AttachmentTypeId == 2) {
-                $path = COMPLAINT_VIDEO_DIR;
+                $path = POST_VIDEO_URL;
             } else if($AttachmentTypeId == 4) {
-                $path = COMPLAINT_AUDIO_DIR;
+                $path = POST_AUDIO_URL;
             } else {
-                $path = COMPLAINT_DOC_DIR;
+                $path = POST_DOC_URL;
             }
             $PostAttachment[] = array(
                                 'PostAttachmentId'          => $result['PostAttachmentId'],

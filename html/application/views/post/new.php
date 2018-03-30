@@ -150,14 +150,8 @@
 
                                 <div class="row">
                                     <div class="col-md-12">
-                                        <div class="form-group"><label for="files"
-                                                                       class="control-label">Select Photo</label>
-                                            <input type="file" name="file[]" class="form-control fileUploadForm"/><br>
-                                            <input type="file" name="file[]" class="form-control fileUploadForm"/><br>
-                                            <input type="file" name="file[]" class="form-control fileUploadForm"/><br>
-                                            <input type="file" name="file[]" class="form-control fileUploadForm"/><br>
-                                            <input type="file" name="file[]" class="form-control fileUploadForm"/><br>
-                                            <input type="file" name="file[]" class="form-control fileUploadForm"/><br>
+                                        <div class="form-group"><label for="files" class="control-label">Select Photo</label>
+                                            <input type="file" name="file[]" class="form-control fileUploadForm" multiple="true"/>
                                         </div>
                                     </div>
                                 </div>
@@ -256,22 +250,32 @@
 
 
         if (post_name.length > 0) {
-            $this.button('Uploading...');
 
-            var post_attendeea = {};
+            var post_attendeea = '';
             $('#post_attendee :selected').each(function(i, selected) {
-                post_attendeea[i] = $(selected).val();
+                post_attendeea += $(selected).val()+',';
+            });
+            
+            var form_data = new FormData($('input[name^="file"]'));
+
+            jQuery.each($('input[name^="file[]"]')[0].files, function(i, file) {
+                form_data.append('file[]', file);
             });
 
+            form_data.append('title', post_name);
+            form_data.append('description', post_description);
+            form_data.append('location', post_location);
+            form_data.append('post_tag', post_attendeea);
 
-            $.post("<?php echo base_url(); ?>post/newpost", {
-                                                            title: post_name, 
-                                                            description: post_description,
-                                                            location: post_location,
-                                                            post_tag: post_attendeea,
-                                                            },
-                function (data, status) {
-                   
+            jQuery.ajax({
+                type: 'POST',
+                cache: false,
+                processData: false,
+                contentType: false,
+                data: form_data,
+                url: "<?php echo base_url(); ?>post/newpost",
+
+                success: function(data) {
                     if (data.status === "failed") {
                         sweetAlert("Oops...", data.message, "error");
                         return false;
@@ -281,7 +285,9 @@
                             window.location.href="post";
                         }
                     }
-                });
+                }
+            });
+
         } else {
             sweetAlert("Oops...", "Please enter post title", "error");
             return false;

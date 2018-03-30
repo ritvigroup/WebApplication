@@ -87,7 +87,7 @@
                                             <?php $PostStatus  = (($post->PostStatus == 1) ? 'Active' : 'In-Active'); ?>
                                             <tr>
                                                 <td></td>
-                                                <td><?php echo $post->PostTitle; ?></td>
+                                                <td><a data-target="#modal-stackable" data-toggle="modal" onClick="return openPostDetail(<?php echo $post->PostId; ?>);" href="javascript:void(0);"><?php echo $post->PostTitle; ?></a></td>
                                                 <td><?php echo $post->PostLocation; ?></td>
                                                 <td><?php echo $post->PostDescription; ?></td>
                                                 <td><?php echo date('d-M-Y h:i', strtotime($post->AddedOnTime)); ?></td>
@@ -110,6 +110,17 @@
 
         <!--END FOOTER--><!--END PAGE WRAPPER--></div>
 </div>
+<div id="modal-stackable" tabindex="-1" role="dialog" aria-labelledby="modal-stackable-label" aria-hidden="true" class="modal fade" style="display: none;">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            
+        </div>
+    </div>
+</div>
+
+<script src="<?php echo base_url(); ?>assets/js/sweetalert-dev.js"></script> 
+<script src="<?php echo base_url(); ?>assets/js/sweetalert.min.js"></script> 
+
 <script src="<?=base_url();?>assets/js/jquery-1.10.2.min.js"></script>
 <script src="<?=base_url();?>assets/js/jquery-migrate-1.2.1.min.js"></script>
 <script src="<?=base_url();?>assets/js/jquery-ui.js"></script>
@@ -136,6 +147,50 @@
 <!--CORE JAVASCRIPT-->
 <script src="<?=base_url();?>assets/js/main.js"></script>
 <!--LOADING SCRIPTS FOR PAGE-->
+<script src="<?=base_url();?>assets/vendors/bootstrap-datepicker/js/bootstrap-datepicker.js"></script>
+<script src="<?=base_url();?>assets/vendors/bootstrap-daterangepicker/daterangepicker.js"></script>
+<script src="<?=base_url();?>assets/vendors/moment/moment.js"></script>
+<script src="<?=base_url();?>assets/vendors/bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js"></script>
+<script src="<?=base_url();?>assets/vendors/bootstrap-timepicker/js/bootstrap-timepicker.js"></script>
+<script src="<?=base_url();?>assets/vendors/bootstrap-clockface/js/clockface.js"></script>
+<script src="<?=base_url();?>assets/vendors/bootstrap-colorpicker/js/bootstrap-colorpicker.js"></script>
+<script src="<?=base_url();?>assets/vendors/bootstrap-switch/js/bootstrap-switch.min.js"></script>
+<script src="<?=base_url();?>assets/vendors/jquery-maskedinput/jquery-maskedinput.js"></script>
+<script src="<?=base_url();?>assets/vendors/charCount.js"></script>
+<script src="<?=base_url();?>assets/js/form-components.js"></script>
+
+
+
+<script src="<?=base_url();?>assets/vendors/jquery-validate/jquery.validate.min.js"></script>
+<script src="<?=base_url();?>assets/vendors/jquery-steps/js/jquery.steps.min.js"></script>
+<script src="<?=base_url();?>assets/vendors/jquery-bootstrap-wizard/jquery.bootstrap.wizard.min.js"></script>
+<script src="<?=base_url();?>assets/js/form-wizard.js"></script>
+
+
+
+<script src="<?=base_url();?>assets/vendors/mixitup/src/jquery.mixitup.js"></script>
+<script src="<?=base_url();?>assets/vendors/lightbox/js/lightbox.min.js"></script>
+<script src="<?=base_url();?>assets/js/page-gallery.js"></script>
+
+
+<script>
+function openPostDetail(post_id) {
+
+    if (post_id > 0) {
+        $.post("<?php echo base_url(); ?>post/postdetail", {post_id: post_id},
+            function (data, status) {
+                if(data != '') {
+                    $('.modal-content').html(data);
+                } else {
+                    $('.modal-content').html(data);
+                }
+            });
+    } else {
+        sweetAlert("Oops...", "Please click post title to see detail", "error");
+        return false;
+    }
+}
+</script>
 
 </body>
 </html>

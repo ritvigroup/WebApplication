@@ -10,6 +10,8 @@ class Event_Model extends CI_Model {
         $this->eventTbl             = 'Event';
         $this->eventAttachmentTbl   = 'EventAttachment';
         $this->eventAttendeeTbl     = 'EventAttendee';
+
+        $this->eventLikeTbl         = 'EventLike';
     }
 
 
@@ -110,6 +112,25 @@ class Event_Model extends CI_Model {
     }
 
 
+    public function saveEventLike($insertData) {
+        $this->db->insert($this->eventLikeTbl, $insertData);
+
+        $event_like_id = $this->db->insert_id();
+
+        return $event_like_id;
+    }
+
+
+
+    public function deleteEventLike($EventId, $UserProfileId) {
+        $this->db->where('EventId', $EventId);
+        $this->db->where('UserProfileId', $UserProfileId);
+        $this->db->delete($this->eventLikeTbl);
+
+        return true;
+    }
+
+
 
     public function getAttachmentTypeId($file_name) {
         $photo_file_array = array('jpg', 'jpeg', 'bmp', 'png');
@@ -160,7 +181,7 @@ class Event_Model extends CI_Model {
             $res = $query->result_array();
 
             foreach($res AS $key => $result) {
-                $events[] = $this->getEventDetail($result['EventId']);
+                $events[] = $this->getEventDetail($result['EventId'], $UserProfileId);
             }
         } else {
             $events = array();
@@ -169,8 +190,24 @@ class Event_Model extends CI_Model {
     }
 
 
+    public function getEventLikeByUserProfileId($EventId, $UserProfileId) {
+        $event_like_detail = array();
+        if(isset($EventId) && $EventId > 0 && isset($UserProfileId) && $UserProfileId > 0) {
+
+            $query = $this->db->query("SELECT EventLikeId FROM $this->eventLikeTbl WHERE EventId = '".$EventId."' AND UserProfileId = '".$UserProfileId."'");
+
+            $res = $query->row_array();
+
+            $event_like_detail = $res;
+        } else {
+            $event_like_detail = array();
+        }
+        return $event_like_detail;
+    }
+
+
     
-    public function getEventDetail($EventId) {
+    public function getEventDetail($EventId, $UserProfileId = 0) {
         $event_detail = array();
         if(isset($EventId) && $EventId > 0) {
 
@@ -178,7 +215,9 @@ class Event_Model extends CI_Model {
 
             $res = $query->row_array();
 
-            $event_detail = $this->returnEventDetail($res);
+            if($res['EventId'] > 0) {
+                $event_detail = $this->returnEventDetail($res, $UserProfileId);
+            }
         } else {
             $event_detail = array();
         }
@@ -186,7 +225,7 @@ class Event_Model extends CI_Model {
     }
 
     
-    public function returnEventDetail($res) {
+    public function returnEventDetail($res, $UserProfileId = 0) {
         $EventId            = $res['EventId'];
         $EventUniqueId      = $res['EventUniqueId'];
         $AddedBy            = $res['AddedBy'];
@@ -207,6 +246,15 @@ class Event_Model extends CI_Model {
         $EventProfile       = $this->User_Model->getUserProfileWithUserInformation($AddedBy);
         $EventAttendee      = $this->getEventAttendee($EventId);
         $EventAttachment    = $this->getEventAttachment($EventId);
+        $TotalEventLike     = $this->getTotalEventLike($EventId);
+
+        $EventLikedByMe = 0;
+        if($UserProfileId > 0) {
+            $MeEventLiked   = $this->getEventLikeByUserProfileId($EventId, $UserProfileId);
+            if($MeEventLiked['EventLikeId'] > 0) {
+                $EventLikedByMe = 1;
+            }
+        }
 
         $user_data_array = array(
                                 "EventId"            => $EventId,
@@ -226,6 +274,9 @@ class Event_Model extends CI_Model {
                                 "EventProfile"       => $EventProfile,
                                 "EventAttendee"      => $EventAttendee,
                                 "EventAttachment"    => $EventAttachment,
+
+                                "TotalEventLike"     => $TotalEventLike,
+                                "EventLikedByMe"     => $EventLikedByMe,
                                 );
         return $user_data_array;
     }
@@ -250,6 +301,73 @@ class Event_Model extends CI_Model {
         }
 
         return $EventAttendee;
+    }
+
+
+    public function getTotalEventLike($EventId) {
+        
+        $EventAttendee = array();
+
+        $query = $this->db->query("SELECT COUNT(EventLikeId) AS TotalEventLike FROM ".$this->eventLikeTbl." WHERE `EventId` = '".$EventId."'");
+
+        
+        $res = $query->row_array();
+
+        $TotalEventLike = ($res['TotalEventLike'] > 0) ? $res['TotalEventLike'] : 0;
+
+        return $TotalEventLike;
+    }
+
+
+    public function getEventLikeDetail($EventId, $UserProfileId = 0) {
+        $event_like_detail = array();
+        if(isset($EventId) && $EventId > 0) {
+
+            $query = $this->db->query("SELECT * FROM $this->eventLikeTbl WHERE EventId = '".$EventId."' ORDER BY LikedOn DESC");
+
+            $res = $query->result_array();
+
+            foreach($res AS $key => $result) {
+                $event_like_detail = $this->returnEventLikeDetail($result, $UserProfileId);
+            }
+        } else {
+            $event_like_detail = array();
+        }
+        return $event_like_detail;
+    }
+
+    
+    public function returnEventLikeDetail($res, $UserProfileId = 0) {
+        $EventLikeId            = $res['EventLikeId'];
+        $EventId                = $res['EventId'];
+        $EventUserProfileId     = $res['UserProfileId'];
+
+        $LikedOn                = return_time_ago($res['LikedOn']);
+        $LikedOnTime            = ($res['LikedOn']);
+
+        $EventLikeProfile       = $this->User_Model->getUserProfileWithUserInformation($EventUserProfileId);
+        $TotalEventLike         = $this->getTotalEventLike($EventId);
+
+        $EventLikedByMe = 0;
+        if($UserProfileId > 0) {
+            $MeEventLiked   = $this->getEventLikeByUserProfileId($EventId, $UserProfileId);
+            if($MeEventLiked['EventLikeId'] > 0) {
+                $EventLikedByMe = 1;
+            }
+        }
+
+        $user_data_array = array(
+                                "EventLikeId"        => $EventLikeId,
+                                "EventId"            => $EventId,
+                                "UserProfileId"      => $EventUserProfileId,
+                                "EventLikeProfile"   => $EventLikeProfile,
+                                "LikedOn"            => $LikedOn,
+                                "LikedOnTime"        => $LikedOnTime,
+
+                                "TotalEventLike"     => $TotalEventLike,
+                                "EventLikedByMe"     => $EventLikedByMe,
+                                );
+        return $user_data_array;
     }
 
 

@@ -578,7 +578,7 @@ class Userprofile extends CI_Controller {
         $gender         = $this->input->post('gender');
         $gender         = ($gender > 0) ? $gender : 0;
         $date_of_birth  = $this->input->post('date_of_birth');
-        $date_of_birth  = ($date_of_birth != '') ? $date_of_birth : '0000-00-00';
+        $date_of_birth  = ($date_of_birth != '') ? date('Y-m-d', strtotime($date_of_birth)) : '0000-00-00';
         $state          = $this->input->post('state');
         $email          = $this->input->post('email');
         $mobile         = $this->input->post('mobile');

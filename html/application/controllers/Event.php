@@ -74,4 +74,23 @@ class Event extends CI_Controller {
         $this->load->view('event/new',$data);
     }
 
+
+    public function eventdetail() {
+        $data = array();
+      
+        if (!$this->input->is_ajax_request()) {
+           exit('Error');
+        }
+        $_POST['user_profile_id'] = $this->session->userdata('LeaderProfileId');
+        $_POST['event_id'] = $this->input->post('event_id');
+        $json_encode = post_curl(API_CALL_PATH.'event/getEventDetail', $this->input->post(), $this->curl);
+
+        $json_decode = json_decode($json_encode);
+        if(count($json_decode->result) > 0) {
+            $data = $json_decode;
+        }
+        
+        $this->load->view('event/eventdetail',$data);
+    }
+
 }

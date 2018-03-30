@@ -238,6 +238,30 @@ class Leader extends CI_Controller {
         redirect('leader/login');
     }
 
+
+    public function home() {
+
+        if(($this->session->userdata('UserId')) > 0) { 
+        } else {
+            redirect('leader/login');
+        }
+
+        $data = array();
+
+        $_POST['user_id'] = $this->session->userdata('UserId');
+        $_POST['user_profile_id'] = $this->session->userdata('LeaderProfileId');
+
+        $json_encode = post_curl(API_CALL_PATH.'leader/getAllHomePageData', $this->input->post(), $this->curl);
+        
+        $json_decode = json_decode($json_encode);
+        if(count($json_decode->result) > 0) {
+            $data = $json_decode;
+        }
+
+        
+        $this->load->view('leader/home',$data);
+    }
+
     
     public function dashboard() {
 
@@ -367,6 +391,10 @@ class Leader extends CI_Controller {
 
 
     public function searchLeaderProfiles($option = true) {
+
+        if (!$this->input->is_ajax_request()) {
+           exit('Error');
+        }
 
         if($this->session->userdata('UserId') > 0) {
             $_POST['user_id'] = $this->session->userdata('UserId');
