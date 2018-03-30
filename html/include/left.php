@@ -23,9 +23,15 @@
                 <div class="icon-bg bg-orange"></div>
             </i><span class="menu-title">Dashboard</span></a></li>
 
-            <li class="<?php if($request_uri['4'] == "team") {?>active<?php } ?>"><a href="<?=base_url();?>leader/team"><i class="fa fa-tachometer fa-fw">
+            <li class="<?php if($request_uri['4'] == "plan") {?>active<?php } ?>">
+                <a href="<?=base_url();?>plan/plan">
+                    <i class="fa fa-tachometer fa-fw"><div class="icon-bg bg-orange"></div></i><span class="menu-title">Plan</span>
+                </a>
+            </li>
+
+            <li class="<?php if($request_uri['4'] == "organize") {?>active<?php } ?>"><a href="<?=base_url();?>leader/organize"><i class="fa fa-tachometer fa-fw">
                 <div class="icon-bg bg-orange"></div>
-            </i><span class="menu-title">Lead / Plan</span></a></li>
+            </i><span class="menu-title">Organize</span></a></li>
 
             <li class="<?php if($request_uri['4'] == "complaint") {?>active<?php } ?>"><a href="<?=base_url();?>leader/complaint"><i class="fa fa-tachometer fa-fw">
                 <div class="icon-bg bg-orange"></div>
@@ -38,7 +44,7 @@
 
             <li class="<?php if($request_uri['4'] == "poll") {?>active<?php } ?>"><a href="<?=base_url();?>poll/poll"><i class="fa fa-tachometer fa-fw">
                 <div class="icon-bg bg-orange"></div>
-            </i><span class="menu-title">Influence / Engage</span></a></li>
+            </i><span class="menu-title">Influence</span></a></li>
 
             <li class="<?php if($request_uri['4'] == "suggestion") {?>active<?php } ?>"><a href="<?=base_url();?>suggestion/suggestion"><i class="fa fa-tachometer fa-fw">
                 <div class="icon-bg bg-orange"></div>
@@ -47,10 +53,6 @@
             <li class="<?php if($request_uri['4'] == "post") {?>active<?php } ?>"><a href="<?=base_url();?>post/post"><i class="fa fa-tachometer fa-fw">
                 <div class="icon-bg bg-orange"></div>
             </i><span class="menu-title">Reports</span></a></li>
-
-            <li class="<?php if($request_uri['4'] == "setting") {?>active<?php } ?>"><a href="<?=base_url();?>leader/setting"><i class="fa fa-tachometer fa-fw">
-                <div class="icon-bg bg-orange"></div>
-            </i><span class="menu-title">Setting</span></a></li>
 
             <?php /*
             <li><a href="http://madmin.swlabs.co/" target="_blank"><i class="fa fa-bullhorn fa-fw">

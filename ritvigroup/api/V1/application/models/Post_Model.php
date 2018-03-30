@@ -159,7 +159,9 @@ class Post_Model extends CI_Model {
         $PostTitle          = (($res['PostTitle'] != NULL) ? $res['PostTitle'] : "");
         $PostStatus         = $res['PostStatus'];
         $PostFeelingId      = $res['PostFeelingId'];
-        $FeelingData        = ($PostFeelingId > 0) ? $this->Feeling_Model->getFeelingDetail($PostFeelingId) : 0;
+
+        $Feelings = $this->Feeling_Model->getFeelingDetail($PostFeelingId);
+        $FeelingData        = ($PostFeelingId > 0) ? array($Feelings) : array();
         
         $PostLocation       = (($res['PostLocation'] != NULL) ? $res['PostLocation'] : "");
         $PostDescription    = (($res['PostDescription'] != NULL) ? $res['PostDescription'] : "");
