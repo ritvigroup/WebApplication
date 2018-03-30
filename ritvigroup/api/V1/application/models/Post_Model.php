@@ -59,7 +59,7 @@ class Post_Model extends CI_Model {
                     $path = POST_DOC_DIR;
                 }
                 $path = $path.$AttachmentFile;
-                $source = $post_attachment['tmp_name'];
+                $source = $post_attachment['tmp_name'][$i];
 
                 $upload_result = uploadFileOnServer($source, $path);
 

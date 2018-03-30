@@ -24,5 +24,51 @@ class Plan extends CI_Controller {
         $this->load->view('plan/plan',$data);
     }
 
+    public function searchCity() {
+        if (!$this->input->is_ajax_request()) {
+           exit('Error');
+        }
+
+        if($this->session->userdata('UserId') > 0) {
+            $_POST['search_text'] = $this->input->post('search_text');
+            $_POST['user_profile_id'] = $this->session->userdata('LeaderProfileId');
+            $json = post_curl(API_CALL_PATH.'plan/searchCity', $this->input->post(), $this->curl);
+
+            echo $json->result;
+            
+        } else {
+            return false;
+        }
+    }
+
+
+    public function createplan() {
+        $data = array();
+
+        $_POST['user_profile_id'] = $this->session->userdata('LeaderProfileId');
+        $json_encode = post_curl(API_CALL_PATH.'plan/getAllNonDefaultUserType', $this->input->post(), $this->curl);
+
+        $json_decode = json_decode($json_encode);
+        if(count($json_decode->result) > 0) {
+            $data['UserType'] = $json_decode;
+        }
+
+        $json_encode = post_curl(API_CALL_PATH.'plan/getAllVehicle', $this->input->post(), $this->curl);
+
+        $json_decode = json_decode($json_encode);
+        if(count($json_decode->result) > 0) {
+            $data['Vehicle'] = $json_decode;
+        }
+
+        $json_encode = post_curl(API_CALL_PATH.'plan/getAllFund', $this->input->post(), $this->curl);
+
+        $json_decode = json_decode($json_encode);
+        if(count($json_decode->result) > 0) {
+            $data['Fund'] = $json_decode;
+        }
+
+        $this->load->view('plan/createplan',$data);
+    }
+
     
 }

@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-<head><title>Team</title>
+<head><title>Plan</title>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -44,13 +44,13 @@
         <div id="page-wrapper"><!--BEGIN TITLE & BREADCRUMB PAGE-->
             <div id="title-breadcrumb-option-demo" class="page-title-breadcrumb">
                 <div class="page-header pull-left">
-                    <div class="page-title">Team</div>
+                    <div class="page-title">Plan</div>
                 </div>
                 <ol class="breadcrumb page-breadcrumb">
                     <li><i class="fa fa-home"></i>&nbsp;<a href="<?=base_url();?>leader/home">Home</a>&nbsp;&nbsp;<i
                             class="fa fa-angle-right"></i>&nbsp;&nbsp;</li>
                     <li><a href="<?=base_url();?>leader/team">Organise</a>&nbsp;&nbsp;<i class="fa fa-angle-right"></i>&nbsp;&nbsp;</li>
-                    <li class="active">Team</li>
+                    <li class="active">Plan</li>
                 </ol>
 
                 <div class="clearfix"></div>
@@ -61,8 +61,9 @@
                     <div class="col-md-12">
                         <div class="portlet box">
                             <div class="portlet-header">
-                                <div class="caption">My Team</div>
+                                <div class="caption">Plan</div>
                                 <div class="actions">
+                                    <a href="<?=base_url();?>plan/createplan" class="btn btn-info btn-xs"><i class="fa fa-plus"></i>&nbsp;Create New Plan</a>&nbsp;
                                     <a href="<?=base_url();?>connect/search" class="btn btn-info btn-xs"><i class="fa fa-plus"></i>&nbsp;Search</a>&nbsp;
                                     <a href="<?=base_url();?>connect/myfriends" class="btn btn-info btn-xs"><i class="fa fa-plus"></i>&nbsp;My Connection</a>&nbsp;
                                     <a href="<?=base_url();?>connect/invitation" class="btn btn-info btn-xs"><i class="fa fa-plus"></i>&nbsp;Invitation</a>&nbsp;
