@@ -63,7 +63,7 @@ class Document_Model extends CI_Model {
             $this->db->select('DocumentId');
             $this->db->from($this->DocumentTbl);
             $this->db->where('AddedBy', $UserProfileId);
-            $this->db->order_by('DocumentName','ASC');
+            $this->db->order_by('AddedOn','DESC');
             $query = $this->db->get();
 
             $res = $query->result_array();

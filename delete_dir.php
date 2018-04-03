@@ -19,7 +19,7 @@ function delete_directory($dirname) {
 }
 
 
-$array_folder = array('event', 'uploads', 'ritvigroup/event', 'ritvigroup/image', 'ritvigroup/post');
+$array_folder = array('../uploads', 'event', 'uploads', 'ritvigroup/event', 'ritvigroup/image', 'ritvigroup/post', 'ritvigroup/complaint', 'ritvigroup/doc');
 
 foreach($array_folder AS $folders) {
 	delete_directory('./'.$folders);

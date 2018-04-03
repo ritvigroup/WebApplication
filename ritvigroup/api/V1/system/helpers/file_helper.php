@@ -475,14 +475,16 @@ if ( ! function_exists('uploadFileOnServer'))
 		$exp_to_destination = @explode('/', $dir.$to_destination);
 
 		$create_dir = $dir;
-		for($i = count($exp_dir); $i < (count($exp_to_destination)-1); $i++) {
+		for($i = 2; $i < (count($exp_to_destination)-1); $i++) {
 			$create_dir .= $exp_to_destination[$i].'/';
 			if(!@is_dir($create_dir)){
 				@mkdir($create_dir, 0777);
 			}
 		}
 
-		if(@move_uploaded_file($from_source, $dir.$to_destination)) {
+
+
+		if(move_uploaded_file($from_source, $dir.$to_destination)) {
 			return true;
 		} else {
 			return false;

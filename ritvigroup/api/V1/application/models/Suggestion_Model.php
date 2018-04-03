@@ -72,7 +72,7 @@ class Suggestion_Model extends CI_Model {
                     $path = SUGGESTION_DOC_DIR;
                 }
                 $path = $path.$AttachmentFile;
-                $source = $suggestion_attachment['tmp_name'];
+                $source = $suggestion_attachment['tmp_name'][$i];
 
                 $upload_result = uploadFileOnServer($source, $path);
 

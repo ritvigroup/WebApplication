@@ -205,6 +205,9 @@ class Complaint extends CI_Controller {
         } else {
 
             $complaints = $this->Complaint_Model->getMyAllComplaint($UserProfileId);
+            //$associated_complaints = $this->Complaint_Model->getAllComplaintWhereMyselfAssociated($UserProfileId);
+
+            //$complaints = array_merge($complaints, $associated_complaints);
             if(count($complaints) > 0) {
                 $msg = "Complaint fetched successfully";
             } else {

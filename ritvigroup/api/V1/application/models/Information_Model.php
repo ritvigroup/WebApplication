@@ -60,7 +60,7 @@ class Information_Model extends CI_Model {
                     $path = INFORMATION_DOC_DIR;
                 }
                 $path = $path.$AttachmentFile;
-                $source = $information_attachment['tmp_name'];
+                $source = $information_attachment['tmp_name'][$i];
 
                 $upload_result = uploadFileOnServer($source, $path);
 

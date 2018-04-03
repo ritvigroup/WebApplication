@@ -40,7 +40,7 @@ class Organize extends CI_Controller {
 
             $post_data = $this->input->post();
 
-            $json_decode = post_curl_with_files(API_CALL_PATH.'leader/saveMyDocumentFolder', $post_data, $this->curl);
+            $json_decode = post_curl_with_files(API_CALL_PATH.'document/saveMyDocumentFolder', $post_data, $this->curl);
 
             header('Content-type: application/json');
 
@@ -50,7 +50,7 @@ class Organize extends CI_Controller {
         }
         
         $_POST['user_profile_id'] = $this->session->userdata('LeaderProfileId');
-        $json_encode = post_curl(API_CALL_PATH.'leader/getMyAllDocumentFolder', $this->input->post(), $this->curl);
+        $json_encode = post_curl(API_CALL_PATH.'document/getMyAllDocumentFolder', $this->input->post(), $this->curl);
 
         $json_decode = json_decode($json_encode);
         if(count($json_decode->result) > 0) {
@@ -78,7 +78,7 @@ class Organize extends CI_Controller {
                     $post_data = array_merge($post_data, array('file['.$i.']' => getCurlValue($_FILES['file']['tmp_name'][$i], $_FILES['file']['type'][$i], $_FILES['file']['name'][$i])));
                 }
             }
-            $json_decode = post_curl_with_files(API_CALL_PATH.'leader/saveMyDocument', $post_data, $this->curl);
+            $json_decode = post_curl_with_files(API_CALL_PATH.'document/saveMyDocument', $post_data, $this->curl);
 
             header('Content-type: application/json');
 
@@ -88,14 +88,14 @@ class Organize extends CI_Controller {
         }
         $_POST['user_profile_id'] = $this->session->userdata('LeaderProfileId');
 
-        $json_encode = post_curl(API_CALL_PATH.'leader/getMyAllDocumentFolder', $this->input->post(), $this->curl);
+        $json_encode = post_curl(API_CALL_PATH.'document/getMyAllDocumentFolder', $this->input->post(), $this->curl);
 
         $json_decode = json_decode($json_encode);
         if(count($json_decode->result) > 0) {
             $data['DocumentFolder'] = $json_decode;
         }
 
-        $json_encode = post_curl(API_CALL_PATH.'leader/getMyAllDocument', $this->input->post(), $this->curl);
+        $json_encode = post_curl(API_CALL_PATH.'document/getMyAllDocument', $this->input->post(), $this->curl);
 
 
         $json_decode = json_decode($json_encode);
@@ -105,6 +105,50 @@ class Organize extends CI_Controller {
         }
 
         $this->load->view('organize/documents', $data);
+    }
+
+
+    public function fleet() {
+        $data = array();
+
+           
+        if($this->input->method(TRUE) == "POST") {
+            $_POST['user_profile_id'] = $this->session->userdata('LeaderProfileId');
+
+            $post_data = array(
+                                'user_profile_id' => $this->input->post('user_profile_id'),
+                                'vehicle_id' => explode(',', $this->input->post('vehicle_id')),
+                                'vehicle_quantity' => explode(',', $this->input->post('vehicle_quantity')),
+                                );
+
+            $json_decode = post_curl(API_CALL_PATH.'fleet/saveFleet', $post_data, $this->curl);
+
+            header('Content-type: application/json');
+
+            echo $json_decode;
+
+            return false;
+        }
+        
+        $_POST['user_profile_id'] = $this->session->userdata('LeaderProfileId');
+        $json_encode = post_curl(API_CALL_PATH.'fleet/getAllVehicle', $this->input->post(), $this->curl);
+
+        $json_decode = json_decode($json_encode);
+        if(count($json_decode->result) > 0) {
+            $data['Vehicle'] = $json_decode;
+        }
+
+        $json_encode = post_curl(API_CALL_PATH.'fleet/getMyAllFleet', $this->input->post(), $this->curl);
+
+        $json_decode = json_decode($json_encode);
+        if(count($json_decode->result) > 0) {
+            $data['Fleet'] = $json_decode;
+        }
+
+
+
+
+        $this->load->view('organize/fleet', $data);
     }
 
 }

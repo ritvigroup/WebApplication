@@ -115,7 +115,7 @@ class Complaint_Model extends CI_Model {
                     $path = COMPLAINT_DOC_DIR;
                 }
                 $path = $path.$AttachmentFile;
-                $source = $complaint_attachment['tmp_name'];
+                $source = $complaint_attachment['tmp_name'][$i];
 
                 $upload_result = uploadFileOnServer($source, $path);
 
@@ -168,7 +168,7 @@ class Complaint_Model extends CI_Model {
                     $path = COMPLAINT_DOC_DIR;
                 }
                 $path = $path.$AttachmentFile;
-                $source = $complaint_history_attachment['tmp_name'];
+                $source = $complaint_history_attachment['tmp_name'][$i];
 
                 $upload_result = uploadFileOnServer($source, $path);
 
@@ -239,12 +239,21 @@ class Complaint_Model extends CI_Model {
         $complaints = array();
         if(isset($UserProfileId) && $UserProfileId > 0) {
 
-            $query = $this->db->query("SELECT ComplaintId FROM $this->complaintTbl WHERE `AddedBy` = '".$UserProfileId."'");
+            $query = $this->db->query("
+                                        (SELECT ComplaintId FROM ".$this->complaintTbl." WHERE `AddedBy` = '".$UserProfileId."' ORDER BY AddedOn DESC) 
+                                        UNION 
+                                        (SELECT cm.ComplaintId FROM ".$this->complaintMemberTbl." cm 
+                                         LEFT JOIN ".$this->complaintTbl." AS c ON cm.ComplaintId = c.ComplaintId WHERE cm.`UserProfileId` = '".$UserProfileId."' ORDER BY c.AddedOn DESC) 
+                                        ");
 
             $res = $query->result_array();
 
+            $complaint_array = array();
             foreach($res AS $key => $result) {
-                $complaints[] = $this->getComplaintDetail($result['ComplaintId']);
+                if(!@in_array($result['complaint_array'], $complaint_array)) {
+                    $complaints[] = $this->getComplaintDetail($result['ComplaintId']);
+                    $complaint_array[] = $result['ComplaintId'];
+                }
             }
         } else {
             $complaints = array();
@@ -338,7 +347,9 @@ class Complaint_Model extends CI_Model {
                                 "ComplaintDescription"      => $ComplaintDescription,
                                 "ComplaintStatus"           => $ComplaintStatus,
                                 "AddedOn"                   => $AddedOn,
+                                "AddedOnTime"               => $res['AddedOn'],
                                 "UpdatedOn"                 => $UpdatedOn,
+                                "UpdatedOnTime"             => $res['UpdatedOn'],
                                 "ComplaintProfile"          => $ComplaintProfile,
                                 "ComplaintMember"           => $ComplaintMember,
                                 "ComplaintAttachment"       => $ComplaintAttachment,
@@ -353,7 +364,7 @@ class Complaint_Model extends CI_Model {
         
         $ComplaintMember = array();
 
-        $query = $this->db->query("SELECT up.UserProfileId 
+        $query = $this->db->query("SELECT cm.* 
                                             FROM ".$this->complaintMemberTbl." AS cm 
                                             LEFT JOIN ".$this->userProfileTbl." up ON cm.UserProfileId = up.UserProfileId
                                             WHERE 
@@ -363,7 +374,10 @@ class Complaint_Model extends CI_Model {
         $res = $query->result_array();
 
         foreach($res AS $key => $result) {
-            $ComplaintMember[] = $this->User_Model->getUserProfileWithUserInformation($result['UserProfileId']);
+            $user_detail = $this->User_Model->getUserProfileWithUserInformation($result['UserProfileId']);
+            $user_detail = array_merge($user_detail, array('AcceptedYesNo' => $result['AcceptedYesNo']));
+            $user_detail = array_merge($user_detail, array('AcceptedOn' => $result['AcceptedOn']));
+            $ComplaintMember[] = $user_detail;
         }
 
         return $ComplaintMember;
@@ -391,13 +405,13 @@ class Complaint_Model extends CI_Model {
             $AttachmentProfile = $this->User_Model->getUserProfileWithUserInformation($AddedBy);
 
             if($AttachmentTypeId == 1) {
-                $path = COMPLAINT_IMAGE_DIR;
+                $path = COMPLAINT_IMAGE_URL;
             } else if($AttachmentTypeId == 2) {
-                $path = COMPLAINT_VIDEO_DIR;
+                $path = COMPLAINT_VIDEO_URL;
             } else if($AttachmentTypeId == 4) {
-                $path = COMPLAINT_AUDIO_DIR;
+                $path = COMPLAINT_AUDIO_URL;
             } else {
-                $path = COMPLAINT_DOC_DIR;
+                $path = COMPLAINT_DOC_URL;
             }
 
             $ComplaintAttachment[] = array(
@@ -411,6 +425,7 @@ class Complaint_Model extends CI_Model {
                                 'AttachmentStatus'          => $result['AttachmentStatus'],
                                 'AddedBy'                   => $AttachmentProfile,
                                 'AddedOn'                   => return_time_ago($result['AddedOn']),
+                                'AddedOnTime'               => ($result['AddedOn']),
                                 );
         }
 
@@ -480,6 +495,7 @@ class Complaint_Model extends CI_Model {
                             "HistoryDescription"            => $HistoryDescription,
                             "HistoryStatus"                 => $HistoryStatus,
                             "AddedOn"                       => $AddedOn,
+                            "AddedOnTime"                   => $res['AddedOn'],
                             "ComplaintHistoryProfile"       => $ComplaintHistoryProfile,
                             "ComplaintHistoryAttachment"    => $ComplaintHistoryAttachment,
                             "ComplaintHistoryHistory"       => $ComplaintHistoryHistory,
@@ -532,6 +548,7 @@ class Complaint_Model extends CI_Model {
                                                 'AttachmentStatus'                  => $result['AttachmentStatus'],
                                                 'AddedBy'                           => $AttachmentProfile,
                                                 'AddedOn'                           => return_time_ago($result['AddedOn']),
+                                                'AddedOnTime'                       => ($result['AddedOn']),
                                                 );
         }
 
