@@ -73,7 +73,20 @@
                 </div>
                 <div class="clearfix"></div>
             </div>
-            <!--END TITLE & BREADCRUMB PAGE--><!--BEGIN CONTENT-->
+            <!--END TITLE & BREADCRUMB PAGE-->
+            <!--BEGIN CONTENT-->
+
+
+            <?php
+
+            // echo '<pre>';
+            // print_r($UserType);
+            // print_r($Vehicle);
+            // print_r($Fund);
+            // echo '</pre>';
+            ?>
+
+
             <div class="page-content">
                 <div class="row">
                     <div class="col-lg-12">
@@ -83,107 +96,132 @@
                             </div>
                             <div class="portlet-body">
                                 
-                                <h3 class="mbxl">Save Your New Plan</h3>
+                                <h3 class="mbxl">Set Your Goal</h3>
 
                                 <div class="row">
                                     <div class="col-md-12">
-                                        <div class="form-group"><label for="event_name"
-                                                                       class="control-label">Title <span
-                                                class='require'>*</span></label><input id="event_name" name="event_name"
-                                                                                       type="text"
-                                                                                       placeholder="Plan Title"
-                                                                                       class="form-control"/><i
-                                                class="alert alert-hide">Oops! Forgot something? Let try
-                                            again.</i>
+                                        <div class="form-group"><label for="user_type"
+                                                                       class="control-label">What do you want to be: <span
+                                                class='require'>*</span></label>
+
+                                                <select name="user_type" id="user_type" class="form-control">
+                                                    <option value="">-Select-</option>
+                                                    <?php
+                                                    foreach($UserType AS $user_type) {
+                                                        echo '<option value="'.$user_type->UserTypeId.'">'.$user_type->TypeName.'</option>';
+                                                    }
+                                                    ?>
+                                                </select>
                                         </div>
                                     </div>
                                 </div>
                                 
+                                <h3 class="mbxl">Plan your goal today</h3>
+                                
                                 <div class="row">
                                     <div class="col-md-12">
                                         <div class="form-group">
-                                            <label for="event_description" class="control-label">Description</label>
-                                            <textarea
-                                                id="event_description" name="event_description" type="text" placeholder="Plan Description"
-                                                class="form-control"/></textarea>
-                                            <i class="alert alert-hide">Oops! Forgot something? Let try again.</i>
+                                            <label for="state_id_city_id" class="control-label">Geography</label>
+                                            <select name="state_id_city_id" id="state_id_city_id" class="form-control" onChange="return getCityDetailByStateIdCityId(this.value);">
+                                                <option value="">-Select-</option>
+                                                <?php
+                                                foreach($City AS $city) {
+                                                    echo '<option value="'.$city->StateId.'_'.$city->CityId.'">'.$city->CityName.'</option>';
+                                                }
+                                                ?>
+                                            </select>
                                         </div>
                                     </div>
                                 </div>
+
+
                                 <div class="row">
-                                    <div class="col-md-4">
-                                        <div class="form-group"><label for="event_location"
-                                                                       class="control-label">Location <span
-                                                class='require'>*</span></label><input id="event_location" name="event_location"
-                                                                                       type="text"
-                                                                                       placeholder="Plan Location"
-                                                                                       class="form-control"/><i
-                                                class="alert alert-hide">Oops! Forgot something? Let try
-                                            again.</i>
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            Total Population: <input type="text" class="form-control" name="total_population" id="total_population" readonly="readonly"><br>
+                                            Male Population: <input type="text" class="form-control" name="male_population" id="male_population" readonly="readonly"><br>
+                                            Female Population: <input type="text" class="form-control" name="female_population" id="female_population" readonly="readonly"><br>
+                                            Between 18-30 Yrs. Population: <input type="text" class="form-control" name="above_18_30_population" id="above_18_30_population" readonly="readonly"><br>
+                                            Between 31-50 Yrs. Population: <input type="text" class="form-control" name="above_31_50_population" id="above_31_50_population" readonly="readonly"><br>
+                                            Between 51-60 Yrs. Population: <input type="text" class="form-control" name="above_51_60_population" id="above_51_60_population" readonly="readonly"><br>
+                                            Above 60 Yrs. Population: <input type="text" class="form-control" name="above_60_population" id="above_60_population" readonly="readonly"><br>
+                                            Total Area: <input type="text" class="form-control" name="total_area" id="total_area" readonly="readonly"><br>
                                         </div>
                                     </div>
+                                </div>
+
+                                <h3 class="mbxl">Target People</h3>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            Target Population: <input type="text" class="form-control" name="target_total_population" id="target_total_population"><br>
+                                            Target Male Population: <input type="text" class="form-control" name="target_male_population" id="target_male_population"><br>
+                                            Target Female Population: <input type="text" class="form-control" name="target_female_population" id="target_female_population"><br>
+                                            Target Between 18-30 Yrs. Population: <input type="text" class="form-control" name="target_above_18_30_population" id="target_above_18_30_population"><br>
+                                            Target Between 31-50 Yrs. Population: <input type="text" class="form-control" name="target_above_31_50_population" id="target_above_31_50_population"><br>
+                                            Target Between 51-60 Yrs. Population: <input type="text" class="form-control" name="target_above_51_60_population" id="target_above_51_60_population"><br>
+                                            Target Above 60 Yrs. Population: <input type="text" class="form-control" name="target_above_60_population" id="target_above_60_population"><br>
+                                            Target Total Area: <input type="text" class="form-control" name="target_total_area" id="target_total_area"><br>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-3">
+                                        <div class="form-group"><label for="team_size"
+                                                                       class="control-label">Male Team Size <span
+                                                class='require'>*</span></label>
+                                             <input type="text" class="form-control" name="male_team_size" id="male_team_size"><br>
+                                            Female Team Size: <span
+                                                class='require'>*</span><input type="text" class="form-control" name="female_team_size" id="female_team_size"><br>
+
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-3">
+                                        <div class="form-group"><label for="total_event"
+                                                                       class="control-label">Total Event to Conduct:  <span
+                                                class='require'>*</span></label>
+                                            <input type="text" class="form-control" name="total_event" id="total_event">
+
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-3">
+                                        <div class="form-group"><label for="total_vehicle"
+                                                                       class="control-label">Total Vehicle Needed:  <span
+                                                class='require'>*</span></label>
+                                            <input type="text" class="form-control" name="total_vehicle" id="total_vehicle">
+
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-3">
+                                        <div class="form-group"><label for="total_budget"
+                                                                       class="control-label">Budget <span
+                                                class='require'>*</span></label>
+                                            <input type="text" class="form-control" name="total_budget" id="total_budget">
+
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
                                     <div class="col-md-4">
                                         <div class="form-group"><label for="start_date"
-                                                                       class="control-label">Start Date <span
-                                                class='require'>*</span></label>
-                                                <div class="input-group datetimepicker-default date">
-                                                    <input type="text" id="start_date" name="start_date" class="form-control"><span class="input-group-addon"><i class="fa fa-calendar"></i></span>
-                                                </div> 
+                                                                       class="control-label">Funds Required<span
+                                                class='require'>*</span></label><br>
+                                                <?php
+                                                foreach($Fund AS $fund) {
+                                                    echo '<input type="checkbox" name="funds" value="'.$fund->FundId.'">'.$fund->FundName.'</br>';
+                                                }
+                                                ?>
                                                 
                                         </div>
                                     </div>
-                                    <div class="col-md-4">
-                                        <div class="form-group">
-                                            <label for="end_date" class="control-label">End Date <span
-                                                class='require'>*</span></label>
-                                            <div class="input-group datetimepicker-default date">
-                                                <input type="text" id="end_date" name="end_date" class="form-control"><span class="input-group-addon"><i class="fa fa-calendar"></i></span>
-                                            </div>
-                                        </div>
-                                    </div>
                                 </div>
-                                    
-
-
-                                <div class="row">
-                                    <div class="col-md-4">
-                                        <div class="form-group">
-                                            <label class="control-label">Every <span class='require'>*</span></label>
-                                            <input id="year" name="every_year" type="radio" class="form-control"/>Year
-                                            <input id="month" name="every_year" type="radio" class="form-control"/>Month
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-md-4">
-                                        <div class="form-group"><label for="search_attendee"
-                                                                       class="control-label">Search</label>
-                                            <input id="search_attendee" type="text" name="search" placeholder="search.." class="form-control"/>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <div class="form-group"><label>&nbsp;</label><input type="button" class="search_button" value="Search"></div>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <div class="form-group"><label for="event_attendee"
-                                                                       class="control-label">Plan Attendees</label><select
-                                                id="event_attendee" name="event_attendee" multiple class="form-control">
-                                            <option value="">Select Attendee</option>
-                                        </select></div>
-                                    </div>
-                                </div>
-
-                                <div class="row">
-                                    <div class="col-md-12">
-                                        <div class="form-group"><label for="files"
-                                                                       class="control-label">Select Photo</label>
-                                            <input type="file" name="file[]" class="form-control fileUploadForm" multiple="true"/><br>
-                                        </div>
-                                    </div>
-                                </div>
-
                             </div>
-                            <div class="form-group"><button type="submit" class="btn btn-success event_button">Submit&nbsp;<i class="fa fa-chevron-circle-right"></i></button></div>
+                            <div class="form-group"><button type="submit" class="btn btn-success plan_button">Submit&nbsp;<i class="fa fa-chevron-circle-right"></i></button></div>
                         </div>
                     </div>
                 </div>
@@ -245,79 +283,96 @@
 <script src="<?=base_url();?>assets/js/form-wizard.js"></script>
 
 <script>
-    document.querySelector('.search_button').onclick = function () {
-        var search_attendee = $("#search_attendee").val();
+    function getCityDetailByStateIdCityId(state_id_city_id) {
 
-        if (search_attendee.length > 0) {
-            //var pattern = /^\b[A-Z0-9._%-]+@[A-Z0-9.-]+\.[A-Z]{2,4}\b$/i;
+        $.post("<?php echo base_url(); ?>plan/searchCityByCityId", {state_id_city_id: state_id_city_id},
+            function (data, status) {
+                var json_data = $.parseJSON(data);
 
-            $.post("<?php echo base_url(); ?>leader/searchLeaderProfiles", {search: search_attendee},
-                function (data, status) {
-
-                    if(data != '') {
-                        $('#event_attendee').html(data);
-                    } else {
-                        $('#event_attendee').html('<option value="">No Leader Found</option>');
-                    }
-                });
-        } else {
-            sweetAlert("Oops...", "Please enter something to search leaders", "error");
-            return false;
-        }
-    };
+                $('#total_population').val(json_data.TotalPopulation);
+                $('#male_population').val(json_data.MalePopulation);
+                $('#female_population').val(json_data.FemalePopulation);
+                $('#above_18_30_population').val(json_data.Above18_30Population);
+                $('#above_31_50_population').val(json_data.Above31_50Population);
+                $('#above_51_60_population').val(json_data.Above51_60Population);
+                $('#above_60_population').val(json_data.Above60Population);
+                $('#total_area').val(json_data.TotalArea);
 
 
-    document.querySelector('.event_button').onclick = function () {
+                $('#target_total_population').val(json_data.TotalPopulation);
+                $('#target_male_population').val(json_data.MalePopulation);
+                $('#target_female_population').val(json_data.FemalePopulation);
+                $('#target_above_18_30_population').val(json_data.Above18_30Population);
+                $('#target_above_31_50_population').val(json_data.Above31_50Population);
+                $('#target_above_51_60_population').val(json_data.Above51_60Population);
+                $('#target_above_60_population').val(json_data.Above60Population);
+                $('#target_total_area').val(json_data.TotalArea);
+            }
+        );
+    }
+
+
+    document.querySelector('.plan_button').onclick = function () {
         var $this = $(this);
-        var event_name          = $("#event_name").val();
-        var event_description   = $("#event_description").val();
-        var event_location      = $("#event_location").val();
-        var start_date          = $("#start_date").val();
-        var end_date            = $("#end_date").val();
+        var user_type                       = $("#user_type").val();
+        var state_id_city_id                = $("#state_id_city_id").val();
 
 
-        if (event_name.length > 0) {
+        var target_total_population         = $("#target_total_population").val();
+        var target_male_population          = $("#target_male_population").val();
+        var target_female_population        = $("#target_female_population").val();
+        var target_above_18_30_population   = $("#target_above_18_30_population").val();
+        var target_above_31_50_population   = $("#target_above_31_50_population").val();
+        var target_above_51_60_population   = $("#target_above_51_60_population").val();
+        var target_above_60_population      = $("#target_above_60_population").val();
+        var target_total_area               = $("#target_total_area").val();
+
+
+        var male_team_size                  = $("#male_team_size").val();
+        var female_team_size                = $("#female_team_size").val();
+        var total_event                     = $("#total_event").val();
+        var total_vehicle                   = $("#total_vehicle").val();
+        var total_budget                    = $("#total_budget").val();
+
+
+        if (user_type > 0) {
             $this.button('Uploading...');
 
-            var event_attend = '';
-            $('#event_attendee :selected').each(function(i, selected) {
-                event_attend += $(selected).val()+',';
-            });
-            
-            var form_data = new FormData($('input[name^="file"]'));
-
-            jQuery.each($('input[name^="file[]"]')[0].files, function(i, file) {
-                form_data.append('file[]', file);
+            var funds = '';
+            $('input[name="funds"]:checked').each(function() {
+                funds += this.value+',';
             });
 
-            form_data.append('event_name', event_name);
-            form_data.append('event_description', event_description);
-            form_data.append('event_location', event_location);
-            form_data.append('start_date', start_date);
-            form_data.append('end_date', end_date);
-            form_data.append('event_attendee', event_attend);
-
-
-            jQuery.ajax({
-                type: 'POST',
-                cache: false,
-                processData: false,
-                contentType: false,
-                data: form_data,
-                url: "<?php echo base_url(); ?>event/newevent",
-
-                success: function(data) {
+            $.post("<?php echo base_url(); ?>plan/createplan", {
+                                                            user_type: user_type, 
+                                                            state_id_city_id: state_id_city_id,
+                                                            target_total_population: target_total_population,
+                                                            target_male_population: target_male_population,
+                                                            target_female_population: target_female_population,
+                                                            target_above_18_30_population: target_above_18_30_population,
+                                                            target_above_31_50_population: target_above_31_50_population,
+                                                            target_above_51_60_population: target_above_51_60_population,
+                                                            target_above_60_population: target_above_60_population,
+                                                            target_total_area: target_total_area,
+                                                            male_team_size: male_team_size,
+                                                            female_team_size: female_team_size,
+                                                            total_event: total_event,
+                                                            total_vehicle: total_vehicle,
+                                                            total_budget: total_budget,
+                                                            funds: funds,
+                                                            },
+                function (data, status) {
+                   
                     if (data.status === "failed") {
                         sweetAlert("Oops...", data.message, "error");
                         return false;
                     } else { 
                         $this.button('Submit');
                         if (data.status === "success") {
-                            window.location.href="event";
+                            window.location.href="plan";
                         }
                     }
-                }
-            });
+                });
 
         } else {
             sweetAlert("Oops...", "Please enter event name", "error");

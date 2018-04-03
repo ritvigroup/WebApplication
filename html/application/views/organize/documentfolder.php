@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-<head><title>Post</title>
+<head><title>Documents</title>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,6 +10,8 @@
     <link rel="apple-touch-icon" href="<?=base_url();?>assets/images/icons/favicon.png">
     <link rel="apple-touch-icon" sizes="72x72" href="<?=base_url();?>assets/images/icons/favicon-72x72.png">
     <link rel="apple-touch-icon" sizes="114x114" href="<?=base_url();?>assets/images/icons/favicon-114x114.png">
+
+
     <!--Loading bootstrap css-->
     <link type="text/css" rel="stylesheet"
           href="http://fonts.googleapis.com/css?family=Open+Sans:400italic,400,300,700">
@@ -18,7 +20,19 @@
           href="<?=base_url();?>assets/vendors/jquery-ui-1.10.4.custom/css/ui-lightness/jquery-ui-1.10.4.custom.min.css">
     <link type="text/css" rel="stylesheet" href="<?=base_url();?>assets/vendors/font-awesome/css/font-awesome.min.css">
     <link type="text/css" rel="stylesheet" href="<?=base_url();?>assets/vendors/bootstrap/css/bootstrap.min.css">
-    <!--LOADING STYLESHEET FOR PAGE--><!--Loading style vendors-->
+
+    <link type="text/css" rel="stylesheet" href="<?php echo base_url(); ?>assets/css/sweetalert.css?ver=1.04">
+
+    <!--LOADING STYLESHEET FOR PAGE-->
+    <link type="text/css" rel="stylesheet" href="<?=base_url();?>assets/vendors/bootstrap-colorpicker/css/colorpicker.css">
+    <link type="text/css" rel="stylesheet" href="<?=base_url();?>assets/vendors/bootstrap-datepicker/css/datepicker.css">
+    <link type="text/css" rel="stylesheet" href="<?=base_url();?>assets/vendors/bootstrap-daterangepicker/daterangepicker-bs3.css">
+    <link type="text/css" rel="stylesheet"
+          href="<?=base_url();?>assets/vendors/bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css">
+    <link type="text/css" rel="stylesheet" href="<?=base_url();?>assets/vendors/bootstrap-timepicker/css/bootstrap-timepicker.min.css">
+    <link type="text/css" rel="stylesheet" href="<?=base_url();?>assets/vendors/bootstrap-clockface/css/clockface.css">
+    <link type="text/css" rel="stylesheet" href="<?=base_url();?>assets/vendors/bootstrap-switch/css/bootstrap-switch.css">
+    <!--Loading style vendors-->
     <link type="text/css" rel="stylesheet" href="<?=base_url();?>assets/vendors/animate.css/animate.css">
     <link type="text/css" rel="stylesheet" href="<?=base_url();?>assets/vendors/jquery-pace/pace.css">
     <link type="text/css" rel="stylesheet" href="<?=base_url();?>assets/vendors/iCheck/skins/all.css">
@@ -29,6 +43,7 @@
     <link type="text/css" rel="stylesheet" href="<?=base_url();?>assets/css/themes/style1/orange-blue.css" id="theme-change"
           class="style-change color-change">
     <link type="text/css" rel="stylesheet" href="<?=base_url();?>assets/css/style-responsive.css">
+
 </head>
 <body class=" ">
 <div>
@@ -44,64 +59,84 @@
         <div id="page-wrapper"><!--BEGIN TITLE & BREADCRUMB PAGE-->
             <div id="title-breadcrumb-option-demo" class="page-title-breadcrumb">
                 <div class="page-header pull-left">
-                    <div class="page-title">Post</div>
+                    <div class="page-title">Folders</div>
                 </div>
                 <ol class="breadcrumb page-breadcrumb">
                     <li><i class="fa fa-home"></i>&nbsp;<a href="<?=base_url();?>leader/home">Home</a>&nbsp;&nbsp;<i
                             class="fa fa-angle-right"></i>&nbsp;&nbsp;</li>
-                    <li><a href="<?=base_url();?>post/post">Post</a>&nbsp;&nbsp;<i class="fa fa-angle-right"></i>&nbsp;&nbsp;</li>
-                    <li class="active">Post</li>
+                    <li><a href="#">Folders</a>&nbsp;&nbsp;<i class="fa fa-angle-right"></i>&nbsp;&nbsp;</li>
+                    <li class="active">New</li>
                 </ol>
-
+                <div class="btn btn-blue reportrange hide"><i class="fa fa-calendar"></i>&nbsp;<span></span>&nbsp;report&nbsp;<i
+                        class="fa fa-angle-down"></i><input type="hidden" name="datestart"/><input type="hidden"
+                                                                                                   name="endstart"/>
+                </div>
                 <div class="clearfix"></div>
             </div>
             <!--END TITLE & BREADCRUMB PAGE--><!--BEGIN CONTENT-->
             <div class="page-content">
                 <div class="row">
-                    <div class="col-md-12">
-                        <div class="portlet box">
+                    <div class="col-lg-12">
+                        <div class="portlet box portlet-green">
                             <div class="portlet-header">
-                                <div class="caption">My Post</div>
-                                <div class="actions"><a href="<?=base_url();?>post/newpost" class="btn btn-info btn-xs"><i class="fa fa-plus"></i>&nbsp;
-                                    New Post</a>
+                                <div class="caption">Folders</div>
+                                <div class="actions">
+                                    <a href="<?=base_url();?>organize/documents" class="btn btn-info btn-xs"><i class="fa fa-plus"></i>&nbsp;Documents</a>&nbsp;
                                 </div>
                             </div>
-                            <div class="portlet-body pan">
+                            <div class="portlet-body">
+                                
+                                <h3 class="mbxl">Add Folder</h3>
+
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="form-group"><label for="folder_name"
+                                                                       class="control-label">Folder Name <span
+                                                class='require'>*</span></label><input id="folder_name" name="folder_name"
+                                                                                       type="text"
+                                                                                       placeholder="Folder Name"
+                                                                                       class="form-control"/>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <button type="submit" class="btn btn-success folder_button">Submit&nbsp;<i class="fa fa-chevron-circle-right"></i></button>
+                                </div>
+                            </div>
+
+                            <div class="portlet-body">
+                                <h3 class="mbxl">Document Folder</h3>
                                 <div class="table-responsive">
                                     <table id="user-last-logged-table"
                                            class="table table-striped table-hover thumb-small">
                                         <thead>
                                         <tr class="condensed">
                                             <th scope="col"><span class="column-sorter"></span></th>
-                                            <th scope="col">Title<span class="column-sorter"></span></th>
-                                            <th scope="col">Location<span class="column-sorter"></span></th>
-                                            <th scope="col">Description<span class="column-sorter"></span></th>
+                                            <th scope="col">Name<span class="column-sorter"></span></th>
                                             <th scope="col">Added On<span class="column-sorter"></span></th>
-                                            <th scope="col">Status<span class="column-sorter"></span></th>
                                         </tr>
                                         </thead>
-                                        <?php 
-                                        if(count($result) > 0) { ?>
                                         <tbody class="media-thumb">
-                                        <?php foreach($result AS $post) { ?>
-                                            <?php $PostStatus  = (($post->postdata->PostStatus == 1) ? 'Active' : 'In-Active'); ?>
+                                            <?php foreach($result AS $key => $val) { ?>
                                             <tr>
                                                 <td></td>
-                                                <td><a data-target="#modal-stackable" data-toggle="modal" onClick="return openPostDetail(<?php echo $post->postdata->PostId; ?>);" href="javascript:void(0);"><?php echo $post->postdata->PostTitle; ?></a></td>
-                                                <td><?php echo $post->postdata->PostLocation; ?></td>
-                                                <td><?php echo $post->postdata->PostDescription; ?></td>
-                                                <td><?php echo date('d-M-Y h:i', strtotime($post->postdata->AddedOnTime)); ?></td>
-                                                <td><?php echo $PostStatus; ?></td>
+                                                <td><?php echo $val->DocumentFolderName; ?></td>
+                                                <td>
+                                                    <ul class="data">
+                                                        <li><strong class="user-list-ip"><?php echo $val->AddedOn; ?></strong></li>
+                                                    </ul>
+                                                </td>
                                             </tr>
-                                        <?php }  ?>
+                                            <?php } ?>
                                         </tbody>
-                                        <?php }  ?>                                        
                                     </table>
                                 </div>
                             </div>
+
                         </div>
                     </div>
                 </div>
+                
             </div>
             <!--END CONTENT--></div>
         <!--BEGIN FOOTER-->
@@ -110,14 +145,6 @@
 
         <!--END FOOTER--><!--END PAGE WRAPPER--></div>
 </div>
-<div id="modal-stackable" tabindex="-1" role="dialog" aria-labelledby="modal-stackable-label" aria-hidden="true" class="modal fade" style="display: none;">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            
-        </div>
-    </div>
-</div>
-
 <script src="<?php echo base_url(); ?>assets/js/sweetalert-dev.js"></script> 
 <script src="<?php echo base_url(); ?>assets/js/sweetalert.min.js"></script> 
 
@@ -166,31 +193,37 @@
 <script src="<?=base_url();?>assets/vendors/jquery-bootstrap-wizard/jquery.bootstrap.wizard.min.js"></script>
 <script src="<?=base_url();?>assets/js/form-wizard.js"></script>
 
-
-
-<script src="<?=base_url();?>assets/vendors/mixitup/src/jquery.mixitup.js"></script>
-<script src="<?=base_url();?>assets/vendors/lightbox/js/lightbox.min.js"></script>
-<script src="<?=base_url();?>assets/js/page-gallery.js"></script>
-
-
 <script>
-function openPostDetail(post_id) {
+    
+    document.querySelector('.folder_button').onclick = function () {
+        var $this = $(this);
+        var folder_name = $("#folder_name").val();
 
-    if (post_id > 0) {
-        $.post("<?php echo base_url(); ?>post/postdetail", {post_id: post_id},
-            function (data, status) {
-                if(data != '') {
-                    $('.modal-content').html(data);
-                } else {
-                    $('.modal-content').html(data);
-                }
-            });
-    } else {
-        sweetAlert("Oops...", "Please click post title to see detail", "error");
-        return false;
-    }
-}
-</script>
+        if (folder_name.length > 0) {
+            $this.button('Uploading...');
+
+            $.post("<?php echo base_url(); ?>organize/documentfolder", {
+                                                            folder_name: folder_name, 
+                                                            },
+                function (data, status) {
+                   
+                    if (data.status === "failed") {
+                        sweetAlert("Oops...", data.message, "error");
+                        return false;
+                    } else { 
+                        $this.button('Submit');
+                        if (data.status === "success") {
+                            window.location.href="documentfolder";
+                        }
+                    }
+                });
+
+        } else {
+            sweetAlert("Oops...", "Please enter folder name", "error");
+            return false;
+        }
+    };
+</script> 
 
 </body>
 </html>

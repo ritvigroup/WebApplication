@@ -84,14 +84,14 @@
                                         if(count($result) > 0) { ?>
                                         <tbody class="media-thumb">
                                         <?php foreach($result AS $event) { ?>
-                                            <?php $EventStatus  = (($event->EventStatus == 1) ? 'Active' : 'In-Active'); ?>
-                                            <?php $StartDate    = (($event->StartDate == '0000-00-00 00:00:00') ? '' : date('d-M-Y h:i A', strtotime($event->StartDate))); ?>
-                                            <?php $EndDate    = (($event->EndDate == '0000-00-00 00:00:00') ? '' : date('d-M-Y h:i A', strtotime($event->EndDate))); ?>
+                                            <?php $EventStatus  = (($event->eventdata->EventStatus == 1) ? 'Active' : 'In-Active'); ?>
+                                            <?php $StartDate    = (($event->eventdata->StartDate == '0000-00-00 00:00:00') ? '' : date('d-M-Y h:i A', strtotime($event->eventdata->StartDate))); ?>
+                                            <?php $EndDate    = (($event->eventdata->EndDate == '0000-00-00 00:00:00') ? '' : date('d-M-Y h:i A', strtotime($event->eventdata->EndDate))); ?>
                                             <tr>
                                                 <td></td>
 
-                                                <td><a data-target="#modal-stackable" data-toggle="modal" onClick="return openEventDetail(<?php echo $event->EventId; ?>);" href="javascript:void(0);"><?php echo $event->EventName; ?></a></td>
-                                                <td><?php echo $event->EventLocation; ?></td>
+                                                <td><a data-target="#modal-stackable" data-toggle="modal" onClick="return openEventDetail(<?php echo $event->eventdata->EventId; ?>);" href="javascript:void(0);"><?php echo $event->eventdata->EventName; ?></a></td>
+                                                <td><?php echo $event->eventdata->EventLocation; ?></td>
                                                 <td><?php echo $StartDate; ?></td>
                                                 <td><?php echo $EndDate; ?></td>
                                                 <td><?php echo $EventStatus; ?></td>

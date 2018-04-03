@@ -41,6 +41,21 @@ class Complaint_Model extends CI_Model {
     }
 
 
+    public function updateComplaint($UserProfileId, $ComplaintId, $current_status = 0) {
+        if($current_status > 0) {
+            $this->db->where('ComplaintId', $ComplaintId);
+
+            $updateData = array(
+                                'ComplaintStatus' => $current_status,
+                                'UpdatedOn' => date('Y-m-d H:i:s'),
+                                'UpdatedBy' => $UserProfileId,
+                                );
+
+            $this->db->update($this->complaintTbl, $updateData);
+        }
+    }
+
+
     public function assignComplaintToLeaderSubLeader($ComplaintId, $UserProfileId, $AssignedTo) {
         $insertData = array(
                             'ComplaintId'       => $ComplaintId,
@@ -66,6 +81,15 @@ class Complaint_Model extends CI_Model {
             $this->db->insert($this->complaintMemberTbl, $insertData);
         }
         return true;
+    }
+
+
+    public function saveMyComplaintHistory($insertData) {
+        $this->db->insert($this->complaintHistoryTbl, $insertData);
+
+        $complaint_history_id = $this->db->insert_id();
+
+        return $complaint_history_id;
     }
 
 
@@ -95,23 +119,84 @@ class Complaint_Model extends CI_Model {
 
                 $upload_result = uploadFileOnServer($source, $path);
 
+                $AttachmentThumb = '';
+                if($_FILES['thumb']['name'][$i] != '') {
+                    $AttachmentThumb = date('YmdHisA').'-'.time().'-COMPLAINT-THUMB-'.mt_rand().'.'.end(explode('.', $_FILES['thumb']['name'][$i]));
+                    $path = COMPLAINT_IMAGE_DIR.$AttachmentThumb;
+                    $source = $_FILES['thumb']['tmp_name'][$i];
+
+                    $upload_result = uploadFileOnServer($source, $path);
+                }
+
                 $insertData = array(
                                     'ComplaintId'           => $ComplaintId,
                                     'AttachmentTypeId'      => $AttachmentTypeId,
                                     'AttachmentFile'        => $AttachmentFile,
                                     'AttachmentOrginalFile' => $upload_file_name,
+                                    'AttachmentThumb'       => $AttachmentThumb,
                                     'AttachmentOrder'       => $j,
                                     'AttachmentStatus'      => 1,
                                     'AddedBy'               => $UserProfileId,
                                     'AddedOn'               => date('Y-m-d H:i:s'),
                                     );
-                $j++;
                 $this->db->insert($this->complaintAttachmentTbl, $insertData);
             }
         }
         return true;
     }
 
+
+    public function saveMyComplaintHistoryAttachment($ComplaintHistoryId, $UserProfileId, $complaint_history_attachment) {
+        $j = 0;
+        for($i = 0; $i < count($complaint_history_attachment['name']); $i++) {
+
+            $upload_file_name = $complaint_history_attachment['name'][$i];
+            
+            if($upload_file_name != '') {
+
+                $AttachmentTypeId = $this->getAttachmentTypeId($upload_file_name);
+
+                $AttachmentFile = date('YmdHisA').'-'.time().'-COMPLAINT-HISTORY-'.mt_rand().'.'.end(explode('.', $upload_file_name));
+
+                if($AttachmentTypeId == 1) {
+                    $path = COMPLAINT_IMAGE_DIR;
+                } else if($AttachmentTypeId == 2) {
+                    $path = COMPLAINT_VIDEO_DIR;
+                } else if($AttachmentTypeId == 4) {
+                    $path = COMPLAINT_AUDIO_DIR;
+                } else {
+                    $path = COMPLAINT_DOC_DIR;
+                }
+                $path = $path.$AttachmentFile;
+                $source = $complaint_history_attachment['tmp_name'];
+
+                $upload_result = uploadFileOnServer($source, $path);
+
+                $AttachmentThumb = '';
+                if($_FILES['thumb']['name'][$i] != '') {
+                    $AttachmentThumb = date('YmdHisA').'-'.time().'-COMPLAINT-HISTORY-THUMB-'.mt_rand().'.'.end(explode('.', $_FILES['thumb']['name'][$i]));
+                    $path = COMPLAINT_IMAGE_DIR.$AttachmentThumb;
+                    $source = $_FILES['thumb']['tmp_name'][$i];
+
+                    $upload_result = uploadFileOnServer($source, $path);
+                }
+
+                $insertData = array(
+                                    'ComplaintHistoryId'    => $ComplaintHistoryId,
+                                    'AttachmentTypeId'      => $AttachmentTypeId,
+                                    'AttachmentFile'        => $AttachmentFile,
+                                    'AttachmentOrginalFile' => $upload_file_name,
+                                    'AttachmentThumb'       => $AttachmentThumb,
+                                    'AttachmentOrder'       => $j,
+                                    'AttachmentStatus'      => 1,
+                                    'AddedBy'               => $UserProfileId,
+                                    'AddedOn'               => date('Y-m-d H:i:s'),
+                                    );
+                $this->db->insert($this->complaintHistoryAttachmentTbl, $insertData);
+            }
+        }
+        return true;
+    }
 
 
     public function getAttachmentTypeId($file_name) {
@@ -168,6 +253,7 @@ class Complaint_Model extends CI_Model {
     }
 
 
+    // Get All Complaint Where Myself Associated
     public function getAllComplaintWhereMyselfAssociated($UserProfileId) {
         $complaints = array();
         if(isset($UserProfileId) && $UserProfileId > 0) {
@@ -186,7 +272,24 @@ class Complaint_Model extends CI_Model {
     }
 
 
-    
+    // Accept Complaint Invitations
+    public function updateComplaintInvitations($UserProfileId, $ComplaintId) {
+        if($ComplaintId > 0) {
+            $this->db->where('ComplaintId', $ComplaintId);
+            $this->db->where('UserProfileId', $UserProfileId);
+
+            $updateData = array(
+                                'AcceptedYesNo' => 1,
+                                'AcceptedOn' => date('Y-m-d H:i:s'),
+                                );
+
+            $this->db->update($this->complaintMemberTbl, $updateData);
+            return true;
+        } 
+        return false;
+    }
+
+    // Get Complaint Detail
     public function getComplaintDetail($ComplaintId) {
         $complaint_detail = array();
         if(isset($ComplaintId) && $ComplaintId > 0) {
@@ -202,7 +305,7 @@ class Complaint_Model extends CI_Model {
         return $complaint_detail;
     }
 
-    
+    // Return Complaint Detail
     public function returnComplaintDetail($res) {
         $ComplaintId            = $res['ComplaintId'];
         $ComplaintUniqueId      = $res['ComplaintUniqueId'];
@@ -222,6 +325,7 @@ class Complaint_Model extends CI_Model {
         $ComplaintProfile       = $this->User_Model->getUserProfileWithUserInformation($AddedBy);
         $ComplaintMember        = $this->getComplaintMember($ComplaintId);
         $ComplaintAttachment    = $this->getComplaintAttachment($ComplaintId);
+        //$ComplaintHistory       = $this->getComplaintHistory($ComplaintId);
 
         $user_data_array = array(
                                 "ComplaintId"               => $ComplaintId,
@@ -238,12 +342,13 @@ class Complaint_Model extends CI_Model {
                                 "ComplaintProfile"          => $ComplaintProfile,
                                 "ComplaintMember"           => $ComplaintMember,
                                 "ComplaintAttachment"       => $ComplaintAttachment,
+                                //"ComplaintHistory"          => $ComplaintHistory,
                                 );
         return $user_data_array;
     }
 
 
-
+    // Get Complaint Member Attached
     public function getComplaintMember($ComplaintId) {
         
         $ComplaintMember = array();
@@ -265,7 +370,7 @@ class Complaint_Model extends CI_Model {
     }
 
 
-
+    // Get Complaint Attachement
     public function getComplaintAttachment($ComplaintId) {
         
         $ComplaintAttachment = array();
@@ -281,6 +386,9 @@ class Complaint_Model extends CI_Model {
 
         foreach($res AS $key => $result) {
             $AttachmentTypeId = $result['AttachmentTypeId'];
+
+            $AddedBy = $result['AddedBy'];
+            $AttachmentProfile = $this->User_Model->getUserProfileWithUserInformation($AddedBy);
 
             if($AttachmentTypeId == 1) {
                 $path = COMPLAINT_IMAGE_DIR;
@@ -301,11 +409,133 @@ class Complaint_Model extends CI_Model {
                                 'AttachmentOrginalFile'     => $result['AttachmentOrginalFile'],
                                 'AttachmentOrder'           => $result['AttachmentOrder'],
                                 'AttachmentStatus'          => $result['AttachmentStatus'],
+                                'AddedBy'                   => $AttachmentProfile,
                                 'AddedOn'                   => return_time_ago($result['AddedOn']),
                                 );
         }
 
         return $ComplaintAttachment;
+    }
+
+
+
+    // Start Get All Complaint History
+    public function getComplaintHistory($ComplaintId) {
+        $complaint_history_detail = array();
+        if(isset($ComplaintId) && $ComplaintId > 0) {
+
+            $query = $this->db->query("SELECT ComplaintHistoryId FROM $this->complaintHistoryTbl WHERE ComplaintId = '".$ComplaintId."' ORDER BY AddedOn DESC");
+
+            $res = $query->result_array();
+            foreach($res AS $key => $result) {
+                $complaint_history_detail[] = $this->getComplaintHistoryDetail($result['ComplaintHistoryId']);
+            }
+
+        } else {
+            $complaint_history_detail = array();
+        }
+        return $complaint_history_detail;
+    }
+
+    // Start Get Complaint History Detail
+    public function getComplaintHistoryDetail($ComplaintHistoryId) {
+        $complaint_history_detail = array();
+        if(isset($ComplaintHistoryId) && $ComplaintHistoryId > 0) {
+
+            $query = $this->db->query("SELECT * FROM $this->complaintHistoryTbl WHERE ComplaintHistoryId = '".$ComplaintHistoryId."'");
+
+            $res = $query->row_array();
+            
+            $complaint_history_detail = $this->returnComplaintHistoryDetail($res);
+
+        } else {
+            $complaint_history_detail = array();
+        }
+        return $complaint_history_detail;
+    }
+
+    // Return Complaint Histpory Detail with Attachement and history history
+    public function returnComplaintHistoryDetail($res) {
+        $ComplaintHistoryId         = $res['ComplaintHistoryId'];
+        $ComplaintId                = $res['ComplaintId'];
+        $ParentComplaintHistoryId   = $res['ParentComplaintHistoryId'];
+        $AddedBy                    = $res['AddedBy'];
+        
+        $HistoryTitle           = (($res['HistoryTitle'] != NULL) ? $res['HistoryTitle'] : "");
+        $HistoryDescription     = (($res['HistoryDescription'] != NULL) ? $res['HistoryDescription'] : "");
+        $HistoryStatus          = $res['HistoryStatus'];
+
+        $AddedOn                = return_time_ago($res['AddedOn']);
+
+        $ComplaintHistoryProfile       = $this->User_Model->getUserProfileWithUserInformation($AddedBy);
+        $ComplaintHistoryAttachment    = $this->getComplaintHistoryAttachment($ComplaintHistoryId);
+
+        $ComplaintHistoryHistory       = $this->getComplaintHistoryDetail($ParentComplaintHistoryId);
+
+        $data_array = array(
+                            "ComplaintHistoryId"            => $ComplaintHistoryId,
+                            "ComplaintId"                   => $ComplaintId,
+                            "ParentComplaintHistoryId"      => $ParentComplaintHistoryId,
+                            "HistoryTitle"                  => $HistoryTitle,
+                            "HistoryDescription"            => $HistoryDescription,
+                            "HistoryStatus"                 => $HistoryStatus,
+                            "AddedOn"                       => $AddedOn,
+                            "ComplaintHistoryProfile"       => $ComplaintHistoryProfile,
+                            "ComplaintHistoryAttachment"    => $ComplaintHistoryAttachment,
+                            "ComplaintHistoryHistory"       => $ComplaintHistoryHistory,
+                            );
+        return $data_array;
+    }
+
+
+    // get Complaint History Attachments
+    public function getComplaintHistoryAttachment($ComplaintHistoryId) {
+        
+        $ComplaintHistoryAttachment = array();
+
+        $query = $this->db->query("SELECT cha.*, at.TypeName 
+                                            FROM ".$this->complaintHistoryAttachmentTbl." AS cha 
+                                            LEFT JOIN ".$this->attachmentTypeTbl." at ON cha.AttachmentTypeId = at.AttachmentTypeId
+                                            WHERE 
+                                                cha.`ComplaintHistoryId` = '".$ComplaintHistoryId."'");
+
+        $res = $query->result_array();
+
+
+        foreach($res AS $key => $result) {
+            $AttachmentTypeId = $result['AttachmentTypeId'];
+
+            $AddedBy = $result['AddedBy'];
+            $AttachmentProfile = $this->User_Model->getUserProfileWithUserInformation($AddedBy);
+
+            if($AttachmentTypeId == 1) {
+                $path = COMPLAINT_IMAGE_DIR;
+            } else if($AttachmentTypeId == 2) {
+                $path = COMPLAINT_VIDEO_DIR;
+            } else if($AttachmentTypeId == 4) {
+                $path = COMPLAINT_AUDIO_DIR;
+            } else {
+                $path = COMPLAINT_DOC_DIR;
+            }
+
+            $AttachmentThumb = ($result['AttachmentThumb'] != '') ? COMPLAINT_IMAGE_DIR.$result['AttachmentThumb'] : '';
+
+            $ComplaintHistoryAttachment[] = array(
+                                                'ComplaintHistoryAttachmentId'      => $result['ComplaintHistoryAttachmentId'],
+                                                'ComplaintHistoryId'                => $result['ComplaintHistoryId'],
+                                                'AttachmentTypeId'                  => $result['AttachmentTypeId'],
+                                                'AttachmentType'                    => $result['TypeName'],
+                                                'AttachmentFile'                    => $path.$result['AttachmentFile'],
+                                                'AttachmentThumb'                   => $AttachmentThumb,
+                                                'AttachmentOrginalFile'             => $result['AttachmentOrginalFile'],
+                                                'AttachmentOrder'                   => $result['AttachmentOrder'],
+                                                'AttachmentStatus'                  => $result['AttachmentStatus'],
+                                                'AddedBy'                           => $AttachmentProfile,
+                                                'AddedOn'                           => return_time_ago($result['AddedOn']),
+                                                );
+        }
+
+        return $ComplaintHistoryAttachment;
     }
     
 

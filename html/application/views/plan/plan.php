@@ -84,6 +84,12 @@
                                     </div> */ ?>
                                 </div>
                             </div>
+                            <?php
+                            // echo '<pre>';
+                            // print_r($result);
+                            // echo '</pre>';
+                            ?>
+
                             <div class="portlet-body pan">
                                 <div class="table-responsive">
                                     <table id="user-last-logged-table"
@@ -91,135 +97,31 @@
                                         <thead>
                                         <tr class="condensed">
                                             <th scope="col"><span class="column-sorter"></span></th>
-                                            <th scope="col">User<span class="column-sorter"></span></th>
-                                            <th scope="col">Username<span class="column-sorter"></span></th>
-                                            <th scope="col">Active<span class="column-sorter"></span></th>
-                                            <th scope="col">Roles<span class="column-sorter"></span></th>
+                                            <th scope="col">Plan<span class="column-sorter"></span></th>
+                                            <th scope="col">For<span class="column-sorter"></span></th>
+                                            <th scope="col">Male Team Req.<span class="column-sorter"></span></th>
+                                            <th scope="col">Female Team Req.<span class="column-sorter"></span></th>
+                                            <th scope="col">Total Budget<span class="column-sorter"></span></th>
+                                            <th scope="col">Total Event<span class="column-sorter"></span></th>
+                                            <th scope="col">Total Vehicle<span class="column-sorter"></span></th>
                                             <th scope="col">Status<span class="column-sorter"></span></th>
-                                            <th scope="col">Last Access<span class="column-sorter"></span></th>
                                         </tr>
                                         </thead>
                                         <tbody class="media-thumb">
+                                        <?php foreach($result AS $key => $plan) { ?>
+                                        <?php $PlanStatus = ($plan->plandata->PlanStatus == 1) ? 'Active' : 'InActive'; ?>
                                         <tr>
-                                            <td><span class="img-shadow"><img
-                                                            src="https://s3.amazonaws.com/uifaces/faces/twitter/dominikmartn/128.jpg"
-                                                            class="media-object thumb"/></span></td>
-                                            <td><a href="javascript:void(0)"><h6 class="media-heading">Colin Nixon</h6>
-                                                </a>
-
-                                                <div>semper@email.edu</div>
-                                            </td>
-                                            <td>[<span>Colix</span>]</td>
-                                            <td><span>Yes</span></td>
-                                            <td>admin</td>
-                                            <td><span class="label label-success">online</span></td>
-                                            <td>
-                                                <ul class="data">
-                                                    <li><em>2 min 21 sec</em>ago</li>
-                                                    <li>IP:<strong class="user-list-ip">133.64.146.145</strong></li>
-                                                </ul>
-                                            </td>
+                                            <td></td>
+                                            <td><?php echo $plan->plandata->PlanUniqueId; ?></td>
+                                            <td><?php echo $plan->plandata->UserType; ?></td>
+                                            <td><?php echo $plan->plandata->TotalTeamMale; ?></td>
+                                            <td><?php echo $plan->plandata->TotalTeamFemale; ?></td>
+                                            <td><?php echo $plan->plandata->TotalBudget; ?></td>
+                                            <td><?php echo $plan->plandata->TotalEvent; ?></td>
+                                            <td><?php echo $plan->plandata->TotalVehicle; ?></td>
+                                            <td><span class="label label-success"><?php echo $PlanStatus; ?></span></td>
                                         </tr>
-                                        <tr>
-                                            <td><span class="img-shadow"><img
-                                                            src="https://s3.amazonaws.com/uifaces/faces/twitter/geeftvorm/128.jpg"
-                                                            class="media-object thumb"/></span></td>
-                                            <td><a href="javascript:void(0)"><h6 class="media-heading">Naida
-                                                        Bennett</h6></a>
-
-                                                <div>commodo@email.ca</div>
-                                            </td>
-                                            <td>[<span>Nadiana</span>]</td>
-                                            <td><span>Yes</span></td>
-                                            <td>editor</td>
-                                            <td><span class="label label-success">online</span></td>
-                                            <td>
-                                                <ul class="data">
-                                                    <li><em>5 min 45 sec</em>ago</li>
-                                                    <li>IP:<strong class="user-list-ip">146.132.46.47</strong></li>
-                                                </ul>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td><span class="img-shadow"><img
-                                                            src="https://s3.amazonaws.com/uifaces/faces/twitter/andrewcohen/128.jpg"
-                                                            class="media-object thumb"/></span></td>
-                                            <td><a href="javascript:void(0)"><h6 class="media-heading">Danielle
-                                                        Myers</h6></a>
-
-                                                <div>nunc.sed@email.ca</div>
-                                            </td>
-                                            <td>[<span>Myellersi</span>]</td>
-                                            <td><span>Yes</span></td>
-                                            <td>editor</td>
-                                            <td><span class="label label-default">offline</span></td>
-                                            <td>
-                                                <ul class="data">
-                                                    <li><em>18 min 39 sec</em>ago</li>
-                                                    <li>IP:<strong class="user-list-ip">44.44.55.011</strong></li>
-                                                </ul>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td><span class="img-shadow"><img
-                                                            src="https://s3.amazonaws.com/uifaces/faces/twitter/wdeb/128.jpg"
-                                                            class="media-object thumb"/></span></td>
-                                            <td><a href="javascript:void(0)"><h6 class="media-heading">Whitney
-                                                        Jones</h6></a>
-
-                                                <div>nunc@email.edu</div>
-                                            </td>
-                                            <td>[<span>whitney</span>]</td>
-                                            <td><span>Yes</span></td>
-                                            <td>editor</td>
-                                            <td><span class="label label-default">offline</span></td>
-                                            <td>
-                                                <ul class="data">
-                                                    <li><em>46 min 24 sec</em>ago</li>
-                                                    <li>IP:<strong class="user-list-ip">188.88.88.88</strong></li>
-                                                </ul>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td><span class="img-shadow"><img
-                                                            src="https://s3.amazonaws.com/uifaces/faces/twitter/manoukvdberg/128.jpg"
-                                                            class="media-object thumb"/></span></td>
-                                            <td><a href="javascript:void(0)"><h6 class="media-heading">Marvin Bell</h6>
-                                                </a>
-
-                                                <div>aliquet@email.com</div>
-                                            </td>
-                                            <td>[<span>marvin-marvin</span>]</td>
-                                            <td><span>Yes</span></td>
-                                            <td>editor</td>
-                                            <td><span class="label label-default">offline</span></td>
-                                            <td>
-                                                <ul class="data">
-                                                    <li><em>1 hour 52 min</em>ago</li>
-                                                    <li>IP:<strong class="user-list-ip">97.145.98.146</strong></li>
-                                                </ul>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td><span class="img-shadow"><img
-                                                            src="https://s3.amazonaws.com/uifaces/faces/twitter/chexee/128.jpg"
-                                                            class="media-object thumb"/></span></td>
-                                            <td><a href="javascript:void(0)"><h6 class="media-heading">Lucas
-                                                        Melendez</h6></a>
-
-                                                <div>m.malesuada@email.org</div>
-                                            </td>
-                                            <td>[<span>Melendez</span>]</td>
-                                            <td><span>Yes</span></td>
-                                            <td>editor</td>
-                                            <td><span class="label label-success">online</span></td>
-                                            <td>
-                                                <ul class="data">
-                                                    <li><em>4 hour 21 min</em>ago</li>
-                                                    <li>IP:<strong class="user-list-ip">111.112.112.011</strong></li>
-                                                </ul>
-                                            </td>
-                                        </tr>
+                                        <?php } ?>
                                         </tbody>
                                     </table>
                                 </div>

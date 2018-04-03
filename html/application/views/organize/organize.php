@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-<head><title>Post</title>
+<head><title>Organize</title>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -44,13 +44,13 @@
         <div id="page-wrapper"><!--BEGIN TITLE & BREADCRUMB PAGE-->
             <div id="title-breadcrumb-option-demo" class="page-title-breadcrumb">
                 <div class="page-header pull-left">
-                    <div class="page-title">Post</div>
+                    <div class="page-title">Organize</div>
                 </div>
                 <ol class="breadcrumb page-breadcrumb">
                     <li><i class="fa fa-home"></i>&nbsp;<a href="<?=base_url();?>leader/home">Home</a>&nbsp;&nbsp;<i
                             class="fa fa-angle-right"></i>&nbsp;&nbsp;</li>
-                    <li><a href="<?=base_url();?>post/post">Post</a>&nbsp;&nbsp;<i class="fa fa-angle-right"></i>&nbsp;&nbsp;</li>
-                    <li class="active">Post</li>
+                    <li><a href="<?=base_url();?>leader/team">Organise</a>&nbsp;&nbsp;<i class="fa fa-angle-right"></i>&nbsp;&nbsp;</li>
+                    <li class="active">Organize</li>
                 </ol>
 
                 <div class="clearfix"></div>
@@ -61,11 +61,19 @@
                     <div class="col-md-12">
                         <div class="portlet box">
                             <div class="portlet-header">
-                                <div class="caption">My Post</div>
-                                <div class="actions"><a href="<?=base_url();?>post/newpost" class="btn btn-info btn-xs"><i class="fa fa-plus"></i>&nbsp;
-                                    New Post</a>
+                                <div class="caption">Organize</div>
+                                <div class="actions">
+                                    <a href="<?=base_url();?>organize/team" class="btn btn-info btn-xs"><i class="fa fa-plus"></i>&nbsp;Team</a>&nbsp;
+                                    <a href="<?=base_url();?>organize/fleet" class="btn btn-info btn-xs"><i class="fa fa-plus"></i>&nbsp;Fleet</a>&nbsp;
+                                    <a href="<?=base_url();?>organize/documents" class="btn btn-info btn-xs"><i class="fa fa-plus"></i>&nbsp;Documents</a>&nbsp;
                                 </div>
                             </div>
+                            <?php
+                            // echo '<pre>';
+                            // print_r($result);
+                            // echo '</pre>';
+                            ?>
+
                             <div class="portlet-body pan">
                                 <div class="table-responsive">
                                     <table id="user-last-logged-table"
@@ -73,29 +81,32 @@
                                         <thead>
                                         <tr class="condensed">
                                             <th scope="col"><span class="column-sorter"></span></th>
-                                            <th scope="col">Title<span class="column-sorter"></span></th>
-                                            <th scope="col">Location<span class="column-sorter"></span></th>
-                                            <th scope="col">Description<span class="column-sorter"></span></th>
-                                            <th scope="col">Added On<span class="column-sorter"></span></th>
+                                            <th scope="col">Organize<span class="column-sorter"></span></th>
+                                            <th scope="col">For<span class="column-sorter"></span></th>
+                                            <th scope="col">Male Team Req.<span class="column-sorter"></span></th>
+                                            <th scope="col">Female Team Req.<span class="column-sorter"></span></th>
+                                            <th scope="col">Total Budget<span class="column-sorter"></span></th>
+                                            <th scope="col">Total Event<span class="column-sorter"></span></th>
+                                            <th scope="col">Total Vehicle<span class="column-sorter"></span></th>
                                             <th scope="col">Status<span class="column-sorter"></span></th>
                                         </tr>
                                         </thead>
-                                        <?php 
-                                        if(count($result) > 0) { ?>
                                         <tbody class="media-thumb">
-                                        <?php foreach($result AS $post) { ?>
-                                            <?php $PostStatus  = (($post->postdata->PostStatus == 1) ? 'Active' : 'In-Active'); ?>
-                                            <tr>
-                                                <td></td>
-                                                <td><a data-target="#modal-stackable" data-toggle="modal" onClick="return openPostDetail(<?php echo $post->postdata->PostId; ?>);" href="javascript:void(0);"><?php echo $post->postdata->PostTitle; ?></a></td>
-                                                <td><?php echo $post->postdata->PostLocation; ?></td>
-                                                <td><?php echo $post->postdata->PostDescription; ?></td>
-                                                <td><?php echo date('d-M-Y h:i', strtotime($post->postdata->AddedOnTime)); ?></td>
-                                                <td><?php echo $PostStatus; ?></td>
-                                            </tr>
-                                        <?php }  ?>
+                                        <?php foreach($result AS $key => $plan) { ?>
+                                        <?php $OrganizeStatus = ($plan->plandata->OrganizeStatus == 1) ? 'Active' : 'InActive'; ?>
+                                        <tr>
+                                            <td></td>
+                                            <td><?php echo $plan->plandata->OrganizeUniqueId; ?></td>
+                                            <td><?php echo $plan->plandata->UserType; ?></td>
+                                            <td><?php echo $plan->plandata->TotalTeamMale; ?></td>
+                                            <td><?php echo $plan->plandata->TotalTeamFemale; ?></td>
+                                            <td><?php echo $plan->plandata->TotalBudget; ?></td>
+                                            <td><?php echo $plan->plandata->TotalEvent; ?></td>
+                                            <td><?php echo $plan->plandata->TotalVehicle; ?></td>
+                                            <td><span class="label label-success"><?php echo $OrganizeStatus; ?></span></td>
+                                        </tr>
+                                        <?php } ?>
                                         </tbody>
-                                        <?php }  ?>                                        
                                     </table>
                                 </div>
                             </div>
@@ -110,17 +121,6 @@
 
         <!--END FOOTER--><!--END PAGE WRAPPER--></div>
 </div>
-<div id="modal-stackable" tabindex="-1" role="dialog" aria-labelledby="modal-stackable-label" aria-hidden="true" class="modal fade" style="display: none;">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            
-        </div>
-    </div>
-</div>
-
-<script src="<?php echo base_url(); ?>assets/js/sweetalert-dev.js"></script> 
-<script src="<?php echo base_url(); ?>assets/js/sweetalert.min.js"></script> 
-
 <script src="<?=base_url();?>assets/js/jquery-1.10.2.min.js"></script>
 <script src="<?=base_url();?>assets/js/jquery-migrate-1.2.1.min.js"></script>
 <script src="<?=base_url();?>assets/js/jquery-ui.js"></script>
@@ -147,50 +147,6 @@
 <!--CORE JAVASCRIPT-->
 <script src="<?=base_url();?>assets/js/main.js"></script>
 <!--LOADING SCRIPTS FOR PAGE-->
-<script src="<?=base_url();?>assets/vendors/bootstrap-datepicker/js/bootstrap-datepicker.js"></script>
-<script src="<?=base_url();?>assets/vendors/bootstrap-daterangepicker/daterangepicker.js"></script>
-<script src="<?=base_url();?>assets/vendors/moment/moment.js"></script>
-<script src="<?=base_url();?>assets/vendors/bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js"></script>
-<script src="<?=base_url();?>assets/vendors/bootstrap-timepicker/js/bootstrap-timepicker.js"></script>
-<script src="<?=base_url();?>assets/vendors/bootstrap-clockface/js/clockface.js"></script>
-<script src="<?=base_url();?>assets/vendors/bootstrap-colorpicker/js/bootstrap-colorpicker.js"></script>
-<script src="<?=base_url();?>assets/vendors/bootstrap-switch/js/bootstrap-switch.min.js"></script>
-<script src="<?=base_url();?>assets/vendors/jquery-maskedinput/jquery-maskedinput.js"></script>
-<script src="<?=base_url();?>assets/vendors/charCount.js"></script>
-<script src="<?=base_url();?>assets/js/form-components.js"></script>
-
-
-
-<script src="<?=base_url();?>assets/vendors/jquery-validate/jquery.validate.min.js"></script>
-<script src="<?=base_url();?>assets/vendors/jquery-steps/js/jquery.steps.min.js"></script>
-<script src="<?=base_url();?>assets/vendors/jquery-bootstrap-wizard/jquery.bootstrap.wizard.min.js"></script>
-<script src="<?=base_url();?>assets/js/form-wizard.js"></script>
-
-
-
-<script src="<?=base_url();?>assets/vendors/mixitup/src/jquery.mixitup.js"></script>
-<script src="<?=base_url();?>assets/vendors/lightbox/js/lightbox.min.js"></script>
-<script src="<?=base_url();?>assets/js/page-gallery.js"></script>
-
-
-<script>
-function openPostDetail(post_id) {
-
-    if (post_id > 0) {
-        $.post("<?php echo base_url(); ?>post/postdetail", {post_id: post_id},
-            function (data, status) {
-                if(data != '') {
-                    $('.modal-content').html(data);
-                } else {
-                    $('.modal-content').html(data);
-                }
-            });
-    } else {
-        sweetAlert("Oops...", "Please click post title to see detail", "error");
-        return false;
-    }
-}
-</script>
 
 </body>
 </html>

@@ -91,8 +91,6 @@ class Event_Model extends CI_Model {
                     $upload_result = uploadFileOnServer($source, $path);
                 }
 
-                
-
                 $insertData = array(
                                     'EventId'               => $EventId,
                                     'AttachmentTypeId'      => $AttachmentTypeId,
@@ -104,7 +102,6 @@ class Event_Model extends CI_Model {
                                     'AddedBy'               => $UserProfileId,
                                     'AddedOn'               => date('Y-m-d H:i:s'),
                                     );
-                $j++;
                 $this->db->insert($this->eventAttachmentTbl, $insertData);
             }
         }
@@ -181,7 +178,10 @@ class Event_Model extends CI_Model {
             $res = $query->result_array();
 
             foreach($res AS $key => $result) {
-                $events[] = $this->getEventDetail($result['EventId'], $UserProfileId);
+                $events[] = array(
+                                'feedtype' => 'event',
+                                'eventdata' => $this->getEventDetail($result['EventId'], $UserProfileId),
+                                );
             }
         } else {
             $events = array();

@@ -127,7 +127,10 @@ class Post_Model extends CI_Model {
             $res = $query->result_array();
 
             foreach($res AS $key => $result) {
-                $posts[] = $this->getPostDetail($result['PostId']);
+                $posts[] = array(
+                                'feedtype' => 'post',
+                                'postdata' => $this->getPostDetail($result['PostId']),
+                                );
             }
         } else {
             $posts = array();

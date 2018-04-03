@@ -29,7 +29,7 @@
                 </a>
             </li>
 
-            <li class="<?php if($request_uri['4'] == "organize") {?>active<?php } ?>"><a href="<?=base_url();?>leader/organize"><i class="fa fa-tachometer fa-fw">
+            <li class="<?php if($request_uri['4'] == "organize") {?>active<?php } ?>"><a href="<?=base_url();?>organize/organize"><i class="fa fa-tachometer fa-fw">
                 <div class="icon-bg bg-orange"></div>
             </i><span class="menu-title">Organize</span></a></li>
 

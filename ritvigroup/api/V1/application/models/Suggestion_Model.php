@@ -145,7 +145,7 @@ class Suggestion_Model extends CI_Model {
         $suggestions = array();
         if(isset($UserProfileId) && $UserProfileId > 0) {
 
-            $query = $this->db->query("SELECT SuggestionId FROM $this->suggestionTbl WHERE `AddedBy` = '".$UserProfileId."'");
+            $query = $this->db->query("SELECT SuggestionId FROM $this->suggestionTbl WHERE `AddedBy` = '".$UserProfileId."' ORDER BY `AddedOn` DESC");
 
             $res = $query->result_array();
 

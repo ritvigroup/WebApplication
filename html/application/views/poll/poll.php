@@ -85,13 +85,13 @@
                                         if(count($result) > 0) { ?>
                                         <tbody class="media-thumb">
                                         <?php foreach($result AS $poll) { ?>
-                                            <?php $PollStatus  = (($poll->PollStatus == 1) ? 'Active' : 'In-Active'); ?>
-                                            <?php $PollPrivacy  = (($poll->PollPrivacy == 1) ? 'Public' : 'Private'); ?>
-                                            <?php $ValidFromDate    = (($poll->ValidFromDate == '0000-00-00 00:00:00') ? '' : date('d-M-Y h:i A', strtotime($poll->ValidFromDate))); ?>
-                                            <?php $ValidEndDate    = (($poll->ValidEndDate == '0000-00-00 00:00:00') ? '' : date('d-M-Y h:i A', strtotime($poll->ValidEndDate))); ?>
+                                            <?php $PollStatus  = (($poll->polldata->PollStatus == 1) ? 'Active' : 'In-Active'); ?>
+                                            <?php $PollPrivacy  = (($poll->polldata->PollPrivacy == 1) ? 'Public' : 'Private'); ?>
+                                            <?php $ValidFromDate    = (($poll->polldata->ValidFromDate == '0000-00-00 00:00:00') ? '' : date('d-M-Y h:i A', strtotime($poll->polldata->ValidFromDate))); ?>
+                                            <?php $ValidEndDate    = (($poll->polldata->ValidEndDate == '0000-00-00 00:00:00') ? '' : date('d-M-Y h:i A', strtotime($poll->polldata->ValidEndDate))); ?>
                                             <tr>
                                                 <td></td>
-                                                <td><?php echo $poll->PollQuestion; ?></td>
+                                                <td><?php echo $poll->polldata->PollQuestion; ?></td>
                                                 <td><?php echo $PollPrivacy; ?></td>
                                                 <td><?php echo $ValidFromDate; ?></td>
                                                 <td><?php echo $ValidEndDate; ?></td>

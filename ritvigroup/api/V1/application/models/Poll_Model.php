@@ -71,7 +71,10 @@ class Poll_Model extends CI_Model {
             $res = $query->result_array();
 
             foreach($res AS $key => $result) {
-                $polls[] = $this->getPollDetail($result['PollId']);
+                $polls[] = array(
+                                'feedtype' => 'poll',
+                                'polldata' => $this->getPollDetail($result['PollId']),
+                                );
             }
         } else {
             $polls = array();
