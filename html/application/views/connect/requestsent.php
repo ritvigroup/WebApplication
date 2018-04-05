@@ -62,7 +62,7 @@
                         <div class="portlet box">
                             <div class="portlet-header">
                                 <div class="caption">Request Sent</div>
-                                
+                                <?php echo $this->plan_links; ?>
                             </div>
 
                             <div class="portlet-body pan">

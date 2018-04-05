@@ -32,6 +32,20 @@ class Complaint_Model extends CI_Model {
     }
 
 
+    public function getAllComplaintType() {
+        $result = array();
+        $this->db->select('*');
+        $this->db->from($this->complaintTypeTbl);
+        $this->db->where('TypeStatus', 1);
+        $query = $this->db->get();
+        
+        if ($query->num_rows() > 0) {
+            $result = $query->result_array();
+        }
+        return $result;
+    }
+
+
     public function saveMyComplaint($insertData) {
         $this->db->insert($this->complaintTbl, $insertData);
 
@@ -239,12 +253,13 @@ class Complaint_Model extends CI_Model {
         $complaints = array();
         if(isset($UserProfileId) && $UserProfileId > 0) {
 
-            $query = $this->db->query("
-                                        (SELECT ComplaintId FROM ".$this->complaintTbl." WHERE `AddedBy` = '".$UserProfileId."' ORDER BY AddedOn DESC) 
-                                        UNION 
-                                        (SELECT cm.ComplaintId FROM ".$this->complaintMemberTbl." cm 
-                                         LEFT JOIN ".$this->complaintTbl." AS c ON cm.ComplaintId = c.ComplaintId WHERE cm.`UserProfileId` = '".$UserProfileId."' ORDER BY c.AddedOn DESC) 
-                                        ");
+            $sql = "(SELECT ComplaintId FROM ".$this->complaintTbl." WHERE `AddedBy` = '".$UserProfileId."' ORDER BY AddedOn DESC) 
+                    UNION 
+                    (SELECT cm.ComplaintId FROM ".$this->complaintMemberTbl." cm 
+                     LEFT JOIN ".$this->complaintTbl." AS c ON cm.ComplaintId = c.ComplaintId WHERE cm.`UserProfileId` = '".$UserProfileId."' ORDER BY c.AddedOn DESC) 
+                    ";
+            $sql = "SELECT ComplaintId FROM ".$this->complaintTbl." WHERE `AddedBy` = '".$UserProfileId."' ORDER BY AddedOn DESC";
+            $query = $this->db->query($sql);
 
             $res = $query->result_array();
 
@@ -281,6 +296,31 @@ class Complaint_Model extends CI_Model {
     }
 
 
+    public function getAllAssignedComplaintToMe($UserProfileId) {
+        $complaints = array();
+        if(isset($UserProfileId) && $UserProfileId > 0) {
+
+            $sql = "SELECT DISTINCT(c.ComplaintId) AS ComplaintId FROM 
+                                                ".$this->complaintAssignedTbl." ca
+                                            LEFT JOIN ".$this->complaintTbl." AS c ON ca.ComplaintId = c.ComplaintId 
+                                            WHERE 
+                                                ca.`AssignedTo` = '".$UserProfileId."' 
+                                            AND c.ComplaintStatus > 0 
+                                            ORDER BY c.AddedOn DESC";
+            $query = $this->db->query($sql);
+
+            $res = $query->result_array();
+
+            foreach($res AS $key => $result) {
+                $complaints[] = $this->getComplaintDetail($result['ComplaintId']);
+            }
+        } else {
+            $complaints = array();
+        }
+        return $complaints;
+    }
+
+
     // Accept Complaint Invitations
     public function updateComplaintInvitations($UserProfileId, $ComplaintId) {
         if($ComplaintId > 0) {
@@ -298,12 +338,33 @@ class Complaint_Model extends CI_Model {
         return false;
     }
 
+
+    // Get Complaint Detail By Unique Id
+    public function getComplaintDetailByUniqueId($ComplaintUniqueId) {
+        $complaint_detail = array();
+        if(isset($ComplaintUniqueId) && $ComplaintUniqueId != '') {
+
+            $query = $this->db->query("SELECT * FROM $this->complaintTbl WHERE ComplaintUniqueId = '".$ComplaintUniqueId."'");
+
+            $res = $query->row_array();
+
+            $complaint_detail = $this->returnComplaintDetail($res);
+        } else {
+            $complaint_detail = array();
+        }
+        return $complaint_detail;
+    }
+
     // Get Complaint Detail
     public function getComplaintDetail($ComplaintId) {
         $complaint_detail = array();
         if(isset($ComplaintId) && $ComplaintId > 0) {
 
-            $query = $this->db->query("SELECT * FROM $this->complaintTbl WHERE ComplaintId = '".$ComplaintId."'");
+            $query = $this->db->query("SELECT c.*, cs.StatusName AS ComplaintStatusName 
+                                            FROM ".$this->complaintTbl." AS c 
+                                            LEFT JOIN ".$this->complaintStatusTbl." AS cs ON c.ComplaintStatus = cs.ComplaintStatusId
+                                            WHERE 
+                                                c.ComplaintId = '".$ComplaintId."'");
 
             $res = $query->row_array();
 
@@ -327,6 +388,7 @@ class Complaint_Model extends CI_Model {
         $ComplaintSubject       = (($res['ComplaintSubject'] != NULL) ? $res['ComplaintSubject'] : "");
         $ComplaintDescription   = (($res['ComplaintDescription'] != NULL) ? $res['ComplaintDescription'] : "");
         $ComplaintStatus        = $res['ComplaintStatus'];
+        $ComplaintStatusName    = $res['ComplaintStatusName'];
 
         $AddedOn            = return_time_ago($res['AddedOn']);
         $UpdatedOn          = return_time_ago($res['UpdatedOn']);
@@ -346,6 +408,7 @@ class Complaint_Model extends CI_Model {
                                 "ComplaintSubject"          => $ComplaintSubject,
                                 "ComplaintDescription"      => $ComplaintDescription,
                                 "ComplaintStatus"           => $ComplaintStatus,
+                                "ComplaintStatusName"       => $ComplaintStatusName,
                                 "AddedOn"                   => $AddedOn,
                                 "AddedOnTime"               => $res['AddedOn'],
                                 "UpdatedOn"                 => $UpdatedOn,
@@ -431,8 +494,6 @@ class Complaint_Model extends CI_Model {
 
         return $ComplaintAttachment;
     }
-
-
 
     // Start Get All Complaint History
     public function getComplaintHistory($ComplaintId) {
@@ -525,16 +586,16 @@ class Complaint_Model extends CI_Model {
             $AttachmentProfile = $this->User_Model->getUserProfileWithUserInformation($AddedBy);
 
             if($AttachmentTypeId == 1) {
-                $path = COMPLAINT_IMAGE_DIR;
+                $path = COMPLAINT_IMAGE_URL;
             } else if($AttachmentTypeId == 2) {
-                $path = COMPLAINT_VIDEO_DIR;
+                $path = COMPLAINT_VIDEO_URL;
             } else if($AttachmentTypeId == 4) {
-                $path = COMPLAINT_AUDIO_DIR;
+                $path = COMPLAINT_AUDIO_URL;
             } else {
-                $path = COMPLAINT_DOC_DIR;
+                $path = COMPLAINT_DOC_URL;
             }
 
-            $AttachmentThumb = ($result['AttachmentThumb'] != '') ? COMPLAINT_IMAGE_DIR.$result['AttachmentThumb'] : '';
+            $AttachmentThumb = ($result['AttachmentThumb'] != '') ? COMPLAINT_IMAGE_URL.$result['AttachmentThumb'] : '';
 
             $ComplaintHistoryAttachment[] = array(
                                                 'ComplaintHistoryAttachmentId'      => $result['ComplaintHistoryAttachmentId'],

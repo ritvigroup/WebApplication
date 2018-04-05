@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-<head><title>My Invitations</title>
+<head><title>Listen</title>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -44,82 +44,90 @@
         <div id="page-wrapper"><!--BEGIN TITLE & BREADCRUMB PAGE-->
             <div id="title-breadcrumb-option-demo" class="page-title-breadcrumb">
                 <div class="page-header pull-left">
-                    <div class="page-title">Invitations</div>
+                    <div class="page-title">Listen</div>
                 </div>
                 <ol class="breadcrumb page-breadcrumb">
                     <li><i class="fa fa-home"></i>&nbsp;<a href="<?=base_url();?>leader/home">Home</a>&nbsp;&nbsp;<i
                             class="fa fa-angle-right"></i>&nbsp;&nbsp;</li>
-                    <li><a href="<?=base_url();?>leader/team">Organise</a>&nbsp;&nbsp;<i class="fa fa-angle-right"></i>&nbsp;&nbsp;</li>
-                    <li class="active">Invitations</li>
+                    <li><a href="<?=base_url();?>event/event">Listen</a>&nbsp;&nbsp;<i class="fa fa-angle-right"></i>&nbsp;&nbsp;</li>
+                    <li class="active">Listen</li>
                 </ol>
 
                 <div class="clearfix"></div>
             </div>
             <!--END TITLE & BREADCRUMB PAGE--><!--BEGIN CONTENT-->
             <div class="page-content">
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="portlet box">
-                            <div class="portlet-header">
-                                <div class="caption">Invitations</div>
-                                <?php echo $this->plan_links; ?>
-                            </div>
+                <div id="tab-general">
+                    <div id="sum_box" class="row mbl">
+                        <div class="col-sm-6 col-md-3">
+                            <div class="panel profit db mbm">
+                                <div class="panel-body"><p class="icon"><i class="icon fa fa-shopping-cart"></i></p><h4
+                                        class="value"><span data-counter="" data-start="10" data-end="<?php echo $result->TotalComplaint; ?>" data-step="1"
+                                                            data-duration="0"></span><span><?php echo $result->TotalComplaint; ?></span></h4> 
 
-                            <div class="portlet-body pan">
-                                <div class="table-responsive">
-                                    <table id="user-last-logged-table"
-                                           class="table table-striped table-hover thumb-small">
-                                        <thead>
-                                        <tr class="condensed">
-                                            <th scope="col"><span class="column-sorter"></span></th>
-                                            <th scope="col">Name<span class="column-sorter"></span></th>
-                                            <th scope="col">Gender<span class="column-sorter"></span></th>
-                                            <th scope="col">Request On<span class="column-sorter"></span></th>
-                                            <th scope="col">Action<span class="column-sorter"></span></th>
-                                        </tr>
-                                        </thead>
-                                        <?php if(count($result) > 0) {?>
-                                            <?php foreach($result AS $user) { ?>
-                                                <?php
-                                                $ProfilePhotoPath = (($user->user_profile_detail->user_info->ProfilePhotoId > 0) ? '<img src="'.$user->user_profile_detail->user_info->ProfilePhotoPath.'" class="media-object thumb">' : '');
-                                                $Gender = ($user->user_profile_detail->user_info->Gender == 1) ? 'Male' : (($user->user_profile_detail->user_info->Gender == 2) ? 'Female' : 'Other');
-                                                ?>
-                                            <tbody class="media-thumb">
-                                                <tr>
-                                                    <td><span class="img-shadow"><?php echo $ProfilePhotoPath; ?></span></td>
-                                                    <td><a href="javascript:void(0)"><h6 class="media-heading"><?php echo $user->user_profile_detail->profile->FirstName.' '.$user->user_profile_detail->profile->LastName?></h6></a>
-                                                        <div></div>
-                                                    </td>
-                                                    <td><span class="label label-success"><?php echo $Gender; ?></span></td>
-                                                    <td>
-                                                        <ul class="data">
-                                                            <li><em><?php echo date('d-M-Y h:i A', strtotime($user->RequestSentOn)); ?></em></li>
-                                                        </ul>
-                                                    </td>
-                                                    <td id="request_id_<?php echo $user->user_profile_detail->profile->UserProfileId; ?>">
-                                                        <button type="button" class="btn btn-success btn-xs" onClick="return acceptRequest(<?php echo $user->user_profile_detail->profile->UserProfileId; ?>);"><i
-                                                                class="fa fa-plus-o"></i>&nbsp;
-                                                            Accept Request
-                                                        </button>
-                                                        <button type="button" class="btn btn-danger btn-xs" onClick="return deleteRequest(<?php echo $user->user_profile_detail->profile->UserProfileId; ?>);"><i
-                                                                class="fa fa-trash-o"></i>&nbsp;
-                                                            Delete Request
-                                                        </button>
-                                                    </td>
-                                                </tr>
-                                            </tbody>
-                                            <?php } ?>
-                                        <?php } else { ?>
-                                        <tr>
-                                            <td colspan="100%" align="center">No invitations</td>
-                                        </tr>
-                                        <?php } ?>
-                                        
-                                    </table>
+                                    <p class="description"><a href="<?=base_url();?>complaint/complaintReceived">Complaint Received</a></p>
+
+                                    
                                 </div>
                             </div>
                         </div>
-                    </div>
+                        <div class="col-sm-6 col-md-3">
+                            <div class="panel income db mbm">
+                                <div class="panel-body"><p class="icon"><i class="icon fa fa-money"></i></p><h4
+                                        class="value"><span><?php echo $result->TotalEvent; ?></span></h4>
+
+                                    <p class="description"><a href="<?=base_url();?>event/event">Events</a></p>
+
+                                    
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6 col-md-3">
+                            <div class="panel task db mbm">
+                                <div class="panel-body"><p class="icon"><i class="icon fa fa-signal"></i></p><h4
+                                        class="value"><span><?php echo $result->TotalSuggestion; ?></span></h4>
+
+                                    <p class="description"><a href="<?=base_url();?>suggestion/suggestion">Suggestion</a></p>
+
+                                    
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6 col-md-3">
+                            <div class="panel visit db mbm">
+                                <div class="panel-body"><p class="icon"><i class="icon fa fa-group"></i></p><h4
+                                        class="value"><span><?php echo $result->TotalPoll; ?></span></h4>
+
+                                    <p class="description"><a href="<?=base_url();?>poll/poll">Poll</a></p>
+
+                                    
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-6 col-md-3">
+                            <div class="panel visit db mbm">
+                                <div class="panel-body"><p class="icon"><i class="icon fa fa-money"></i></p><h4
+                                        class="value"><span><?php echo $result->TotalPost; ?></span></h4>
+
+                                    <p class="description"><a href="<?=base_url();?>post/post">Post</a></p>
+
+                                    
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6 col-md-3">
+                            <div class="panel visit db mbm">
+                                <div class="panel-body"><p class="icon"><i class="icon fa fa-signal"></i></p><h4
+                                        class="value"><span><?php echo $result->TotalInformation; ?></span></h4>
+
+                                    <p class="description"><a href="<?=base_url();?>information/information">Information</a></p>
+
+                                    
+                                </div>
+                            </div>
+                        </div>
+                    </div>                    
                 </div>
             </div>
             <!--END CONTENT--></div>
@@ -129,6 +137,15 @@
 
         <!--END FOOTER--><!--END PAGE WRAPPER--></div>
 </div>
+
+<div id="modal-stackable" tabindex="-1" role="dialog" aria-labelledby="modal-stackable-label" aria-hidden="true" class="modal fade" style="display: none;">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            
+        </div>
+    </div>
+</div>
+
 <script src="<?php echo base_url(); ?>assets/js/sweetalert-dev.js"></script> 
 <script src="<?php echo base_url(); ?>assets/js/sweetalert.min.js"></script> 
 
@@ -177,48 +194,30 @@
 <script src="<?=base_url();?>assets/vendors/jquery-bootstrap-wizard/jquery.bootstrap.wizard.min.js"></script>
 <script src="<?=base_url();?>assets/js/form-wizard.js"></script>
 
+
+
+<script src="<?=base_url();?>assets/vendors/mixitup/src/jquery.mixitup.js"></script>
+<script src="<?=base_url();?>assets/vendors/lightbox/js/lightbox.min.js"></script>
+<script src="<?=base_url();?>assets/js/page-gallery.js"></script>
+
+
 <script>
-function deleteRequest(id) {
+function openListenDetail(event_id) {
 
-    if (id > 0) {
-        $.post("<?php echo base_url(); ?>connect/cancelUserProfileFriendRequest", {id: id},
+    if (event_id > 0) {
+        $.post("<?php echo base_url(); ?>event/eventdetail", {event_id: event_id},
             function (data, status) {
-
-               if (data.status === "failed") {
-                    
-                    sweetAlert("Oops...", data.message, "error");
-                    return false;
+                if(data != '') {
+                    $('.modal-content').html(data);
                 } else {
-                    $('#request_id_'+id).html('<button type="button" class="btn btn-danger btn-xs"><i class="fa fa-trash-o"></i>&nbsp;  Request Deleted</button>');
+                    $('.modal-content').html(data);
                 }
             });
     } else {
-        sweetAlert("Oops...", "Please select user to cancel", "error");
-        return false;
-    }
-}
-
-
-function acceptRequest(id) {
-
-    if (id > 0) {
-        $.post("<?php echo base_url(); ?>connect/sendUserProfileFriendRequest", {id: id},
-            function (data, status) {
-
-               if (data.status === "failed") {
-                    
-                    sweetAlert("Oops...", data.message, "error");
-                    return false;
-                } else {
-                    $('#request_id_'+id).html('<button type="button" class="btn btn-success btn-xs"><i class="fa fa-trash-o"></i>&nbsp;Friend</button>');
-                }
-            });
-    } else {
-        sweetAlert("Oops...", "Please select user to accept request", "error");
+        sweetAlert("Oops...", "Please enter something to search leaders", "error");
         return false;
     }
 }
 </script>
-
 </body>
 </html>

@@ -400,6 +400,8 @@
             </div>
         </nav>
         <!--BEGIN MODAL CONFIG PORTLET-->
+        
+        <?php /* 
         <div id="modal-config" class="modal fade">
             <div class="modal-dialog">
                 <div class="modal-content">
@@ -421,5 +423,6 @@
                 </div>
             </div>
         </div>
+        */ ?>
         <!--END MODAL CONFIG PORTLET--></div>
     <!--END TOPBAR-->

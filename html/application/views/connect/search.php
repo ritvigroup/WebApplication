@@ -70,7 +70,7 @@
                         <div class="portlet box">
                             <div class="portlet-header">
                                 <div class="caption">Search Profile</div>
-                                
+                                <?php echo $this->plan_links; ?>
                             </div>
 
 

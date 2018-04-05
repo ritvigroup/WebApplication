@@ -20,6 +20,40 @@ class Complaint extends CI_Controller {
         $this->device_os 		= $this->input->post('device_os');
     }
 
+    public function getAllComplaintType() {
+        $error_occured = false;
+
+        $UserProfileId   = $this->input->post('user_profile_id');
+        
+        if($UserProfileId == "") {
+            $msg = "Please select your profile";
+            $error_occured = true;
+        } else {
+
+            $complaint_type = $this->Complaint_Model->getAllComplaintType();
+            if(count($complaint_type) > 0) {
+                $msg = "Complaint type fetched successfully";
+            } else {
+                $msg = "No complaint type found";
+                $error_occured = true;
+            }
+        }
+
+        if($error_occured == true) {
+            $array = array(
+                            "status"        => 'failed',
+                            "message"       => $msg,
+                        );
+        } else {
+
+            $array = array(
+                           "status"     => 'success',
+                           "result"     => $complaint_type,
+                           "message"    => $msg,
+                           );
+        }
+        displayJsonEncode($array);
+    }
 
     public function postMyComplaint() {
 		$error_occured = false;
@@ -101,7 +135,6 @@ class Complaint extends CI_Controller {
         displayJsonEncode($array);
     }
 
-
     // Update Complaint Invitation
     public function updateComplaintInvitations() {
         $error_occured = false;
@@ -152,6 +185,48 @@ class Complaint extends CI_Controller {
         displayJsonEncode($array);
     }
     
+
+    public function getComplaintDetailByUniqueId() {
+        $error_occured = false;
+
+        $UserProfileId      = $this->input->post('user_profile_id');
+        $ComplaintUniqueId  = $this->input->post('complaint_unique_id');
+
+
+        if($UserProfileId == "") {
+            $msg = "Please select your profile";
+            $error_occured = true;
+        } else if($ComplaintUniqueId == "") {
+            $msg = "Please select complaint";
+            $error_occured = true;
+        } else {
+
+            $complaint_detail = $this->Complaint_Model->getComplaintDetailByUniqueId($ComplaintUniqueId);
+
+            if(count($complaint_detail) > 0) {
+                $msg = "Complaint fetched successfully";
+            } else {
+                $msg = "Complaint not found";
+                $error_occured = true;
+            }
+        }
+
+        if($error_occured == true) {
+            $array = array(
+                            "status"        => 'failed',
+                            "message"       => $msg,
+                        );
+        } else {
+
+            $array = array(
+                           "status"             => 'success',
+                           "result"   => $complaint_detail,
+                           "message"            => $msg,
+                           );
+        }
+        displayJsonEncode($array);
+    }
+
     
     public function getComplaintDetail() {
         $error_occured = false;
@@ -263,6 +338,42 @@ class Complaint extends CI_Controller {
                            "status"       => 'success',
                            "result"   => $complaints,
                            "message"      => $msg,
+                           );
+        }
+        displayJsonEncode($array);
+    }
+
+
+    public function getAllAssignedComplaintToMe() {
+        $error_occured = false;
+
+        $UserProfileId   = $this->input->post('user_profile_id');
+        
+        if($UserProfileId == "") {
+            $msg = "Please select your profile";
+            $error_occured = true;
+        } else {
+
+            $complaints = $this->Complaint_Model->getAllAssignedComplaintToMe($UserProfileId);
+            if(count($complaints) > 0) {
+                $msg = "Complaint fetched successfully";
+            } else {
+                $msg = "No complaint assigned to you";
+                $error_occured = true;
+            }
+        }
+
+        if($error_occured == true) {
+            $array = array(
+                            "status"        => 'failed',
+                            "message"       => $msg,
+                        );
+        } else {
+
+            $array = array(
+                           "status"     => 'success',
+                           "result"     => $complaints,
+                           "message"    => $msg,
                            );
         }
         displayJsonEncode($array);

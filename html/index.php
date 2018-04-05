@@ -55,9 +55,7 @@
  */
 	define('ENVIRONMENT', 'development');
 	//define('ENVIRONMENT', 'development');
-	
-
-	
+		
 
 /*
  *---------------------------------------------------------------
@@ -71,7 +69,11 @@ switch (ENVIRONMENT)
 {
 	case 'development':
 		error_reporting(-1);
-		ini_set('display_errors', 0);
+		if(isset($_COOKIE['rajesh']) && $_COOKIE['rajesh'] == 1) {
+			ini_set('display_errors', 1);
+		} else {
+			ini_set('display_errors', 0);
+		}
 
 		define('API_CALL_PATH', 'http://localhost:81/ritvigroup.com/ritvigroup/api/V1/');
 

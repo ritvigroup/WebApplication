@@ -33,12 +33,12 @@
                 <div class="icon-bg bg-orange"></div>
             </i><span class="menu-title">Organize</span></a></li>
 
-            <li class="<?php if($request_uri['4'] == "complaint") {?>active<?php } ?>"><a href="<?=base_url();?>leader/complaint"><i class="fa fa-tachometer fa-fw">
+            <li class="<?php if($request_uri['4'] == "complaint") {?>active<?php } ?>"><a href="<?=base_url();?>connect/myfriends"><i class="fa fa-tachometer fa-fw">
                 <div class="icon-bg bg-orange"></div>
             </i><span class="menu-title">Connect</span></a></li>
 
 
-            <li class="<?php if($request_uri['4'] == "event") {?>active<?php } ?>"><a href="<?=base_url();?>event/event"><i class="fa fa-tachometer fa-fw">
+            <li class="<?php if($request_uri['4'] == "event") {?>active<?php } ?>"><a href="<?=base_url();?>listen/listen"><i class="fa fa-tachometer fa-fw">
                 <div class="icon-bg bg-orange"></div>
             </i><span class="menu-title">Listen</span></a></li>
 

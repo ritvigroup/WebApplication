@@ -64,11 +64,6 @@
                                 <div class="caption">Plan</div>
                                 <div class="actions">
                                     <a href="<?=base_url();?>plan/createplan" class="btn btn-info btn-xs"><i class="fa fa-plus"></i>&nbsp;Create New Plan</a>&nbsp;
-                                    <a href="<?=base_url();?>connect/search" class="btn btn-info btn-xs"><i class="fa fa-plus"></i>&nbsp;Search</a>&nbsp;
-                                    <a href="<?=base_url();?>connect/myfriends" class="btn btn-info btn-xs"><i class="fa fa-plus"></i>&nbsp;My Connection</a>&nbsp;
-                                    <a href="<?=base_url();?>connect/invitation" class="btn btn-info btn-xs"><i class="fa fa-plus"></i>&nbsp;Invitation</a>&nbsp;
-                                    <a href="<?=base_url();?>connect/requestsent" class="btn btn-info btn-xs"><i class="fa fa-plus"></i>&nbsp;Request</a>&nbsp;
-                                    <a href="<?=base_url();?>leader/newleader" class="btn btn-info btn-xs"><i class="fa fa-plus"></i>&nbsp;New Leader</a>
                                     <?php /* &nbsp;
                                     <div class="btn-group"><a href="#" data-toggle="dropdown"
                                                               class="btn btn-warning btn-xs dropdown-toggle"><i

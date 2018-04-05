@@ -108,5 +108,85 @@ class Leader extends CI_Controller {
         }
         displayJsonEncode($array);
     }
+
+
+    public function getMyAllSummaryTotal() {
+        $error_occured = false;
+
+        $UserId             = $this->input->post('user_id');
+        $UserProfileId      = $this->input->post('user_profile_id');
+
+       
+        if($UserId == "") {
+            $msg = "Please select user";
+            $error_occured = true;
+        } else if($UserProfileId == "") {
+            $msg = "Please select user profile";
+            $error_occured = true;
+        } else {
+        
+            $result = array();
+            
+            $sql = "SELECT COUNT(EventId) AS TotalEvent FROM `Event` WHERE `AddedBy` = '".$UserProfileId."'";
+            $query = $this->db->query($sql);
+            $res = $query->row_array();
+            $TotalEvent = ($res['TotalEvent'] > 0) ? $res['TotalEvent'] : 0; 
+
+            $sql = "SELECT COUNT(PollId) AS TotalPoll FROM `Poll` WHERE `AddedBy` = '".$UserProfileId."'";
+            $query = $this->db->query($sql);
+            $res = $query->row_array();
+            $TotalPoll = ($res['TotalPoll'] > 0) ? $res['TotalPoll'] : 0; 
+
+            $sql = "SELECT COUNT(PostId) AS TotalPost FROM `Post` WHERE `UserProfileId` = '".$UserProfileId."'";
+            $query = $this->db->query($sql);
+            $res = $query->row_array();
+            $TotalPost = ($res['TotalPost'] > 0) ? $res['TotalPost'] : 0; 
+
+            $sql = "SELECT COUNT(SuggestionId) AS TotalSuggestion FROM `Suggestion` WHERE `AddedBy` = '".$UserProfileId."'";
+            $query = $this->db->query($sql);
+            $res = $query->row_array();
+            $TotalSuggestion = ($res['TotalSuggestion'] > 0) ? $res['TotalSuggestion'] : 0; 
+
+            $sql = "SELECT COUNT(InformationId) AS TotalInformation FROM `Information` WHERE `AddedBy` = '".$UserProfileId."'";
+            $query = $this->db->query($sql);
+            $res = $query->row_array();
+            $TotalInformation = ($res['TotalInformation'] > 0) ? $res['TotalInformation'] : 0; 
+
+            $sql = "SELECT COUNT(c.ComplaintId) AS TotalComplaint FROM 
+                                                `Complaint` AS c 
+                                            LEFT JOIN `ComplaintAssigned` AS ca ON c.ComplaintId = ca.ComplaintId 
+                                            WHERE 
+                                                ca.`AssignedTo` = '".$UserProfileId."'";
+            $query = $this->db->query($sql);
+            $res = $query->row_array();
+            $TotalComplaint = ($res['TotalComplaint'] > 0) ? $res['TotalComplaint'] : 0; 
+
+            $result = array(
+                        'TotalEvent'        => $TotalEvent,
+                        'TotalPoll'         => $TotalPoll,
+                        'TotalPost'         => $TotalPost,
+                        'TotalSuggestion'   => $TotalSuggestion,
+                        'TotalInformation'  => $TotalInformation,
+                        'TotalComplaint'    => $TotalComplaint,
+                        );
+
+            $msg = "User summary data found";
+        }
+
+        if($error_occured == true) {
+            $array = array(
+                            "status"        => 'failed',
+                            "message"       => $msg,
+                        );
+        } else {
+
+            $array = array(
+                           "status"     => 'success',
+                           "result"     => $result,
+                           "message"    => $msg,
+                           );
+        }
+        displayJsonEncode($array);
+    }
 }
 

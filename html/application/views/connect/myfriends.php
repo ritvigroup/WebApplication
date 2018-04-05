@@ -55,6 +55,7 @@
 
                 <div class="clearfix"></div>
             </div>
+            
             <!--END TITLE & BREADCRUMB PAGE--><!--BEGIN CONTENT-->
             <div class="page-content">
                 <div class="row">
@@ -62,7 +63,7 @@
                         <div class="portlet box">
                             <div class="portlet-header">
                                 <div class="caption">My Friends</div>
-                                
+                                <?php echo $this->plan_links; ?>
                             </div>
 
                             <div class="portlet-body pan">

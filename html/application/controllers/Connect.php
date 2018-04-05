@@ -19,6 +19,13 @@ class Connect extends CI_Controller {
             redirect('leader/login');
         }
 
+
+        $this->plan_links = '
+        <a href="'.base_url().'connect/search" class="btn btn-info btn-xs"><i class="fa fa-plus"></i>&nbsp;Search</a>&nbsp;
+        <a href="'.base_url().'connect/myfriends" class="btn btn-info btn-xs"><i class="fa fa-plus"></i>&nbsp;My Connection</a>&nbsp;
+        <a href="'.base_url().'connect/invitation" class="btn btn-info btn-xs"><i class="fa fa-plus"></i>&nbsp;Invitation</a>&nbsp;
+        <a href="'.base_url().'connect/requestsent" class="btn btn-info btn-xs"><i class="fa fa-plus"></i>&nbsp;Request</a>&nbsp;';
+
     }
 
 
