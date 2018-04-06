@@ -10,6 +10,7 @@ class Payment extends CI_Controller {
     public function __construct() {
         parent::__construct();
 
+        $this->load->model('User_Model');
         $this->load->model('Payment_Model');
 
         $this->device_token 	= $this->input->post('device_token');

@@ -3,11 +3,11 @@
     <div class="sidebar-collapse menu-scroll">
         <ul id="side-menu" class="nav">
             <li class="user-panel">
-                <div class="thumb"><img src="https://s3.amazonaws.com/uifaces/faces/twitter/kolage/128.jpg"
+                <div class="thumb"><img src="<?php echo $this->session->userdata('UserProfilePic'); ?>"
                                         alt="" class="img-circle"/></div>
-                <div class="info"><p>Rajesh</p>
+                <div class="info"><p><?php echo $this->session->userdata('UserName'); ?></p>
                     <ul class="list-inline list-unstyled">
-                        <li><a href="<?=base_url();?>leader/profile" data-hover="tooltip" title="Profile"><i
+                        <li><a href="<?=base_url();?>profile/profile" data-hover="tooltip" title="Profile"><i
                                 class="fa fa-user"></i></a></li>
                         <li><a href="<?=base_url();?>leader/inbox" data-hover="tooltip" title="Mail"><i
                                 class="fa fa-envelope"></i></a></li>

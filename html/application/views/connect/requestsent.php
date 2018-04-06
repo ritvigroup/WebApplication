@@ -83,11 +83,14 @@
                                                 <?php
                                                 $ProfilePhotoPath = (($user->user_profile_detail->user_info->ProfilePhotoId > 0) ? '<img src="'.$user->user_profile_detail->user_info->ProfilePhotoPath.'" class="media-object thumb">' : '');
                                                 $Gender = ($user->user_profile_detail->user_info->Gender == 1) ? 'Male' : (($user->user_profile_detail->user_info->Gender == 2) ? 'Female' : 'Other');
+
+                                                $UserProfileHrefLink = base_url().'profile/profile/'.$user->user_profile_detail->user_info->UserUniqueId;
+
                                                 ?>
                                             <tbody class="media-thumb" id="request_id_<?php echo $user->user_profile_detail->profile->UserProfileId; ?>">
                                                 <tr>
                                                     <td><span class="img-shadow"><?php echo $ProfilePhotoPath; ?></span></td>
-                                                    <td><a href="javascript:void(0)"><h6 class="media-heading"><?php echo $user->user_profile_detail->profile->FirstName.' '.$user->user_profile_detail->profile->LastName?></h6></a>
+                                                    <td><a href="<?php echo $UserProfileHrefLink; ?>" target="_blank"><h6 class="media-heading"><?php echo $user->user_profile_detail->profile->FirstName.' '.$user->user_profile_detail->profile->LastName?></h6></a>
                                                         <div></div>
                                                     </td>
                                                     <td><span class="label label-success"><?php echo $Gender; ?></span></td>

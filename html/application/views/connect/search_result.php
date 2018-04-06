@@ -18,10 +18,12 @@
         $ProfilePhotoPath = ($leader_profile->ProfilePhotoPath != '') ? '<img src="'.$leader_profile->ProfilePhotoPath.'"
                             class="media-object thumb"/>' : '';
 
+        $UserProfileHrefLink = base_url().'profile/profile/'.$leader_profile->UserUniqueId;
+
         ?>
         <tr>
             <td><span class="img-shadow"><?php echo $ProfilePhotoPath; ?></span></td>
-            <td><a href="javascript:void(0)"><h6 class="media-heading"><?php echo $leader_profile->UserProfileLeader->FirstName.' '.$leader_profile->UserProfileLeader->LastName; ?></h6>
+            <td><a href="<?php echo $UserProfileHrefLink; ?>" target="_blank"><h6 class="media-heading"><?php echo $leader_profile->UserProfileLeader->FirstName.' '.$leader_profile->UserProfileLeader->LastName; ?></h6>
                 </a></td>
             <td>
                 <div><?php echo $leader_profile->UserProfileLeader->Email; ?></div>

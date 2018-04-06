@@ -311,11 +311,11 @@
                         </ul>
                     </li>
                     <li class="dropdown topbar-user"><a data-hover="dropdown" href="#" class="dropdown-toggle"><img
-                            src="https://s3.amazonaws.com/uifaces/faces/twitter/kolage/48.jpg" alt=""
-                            class="img-responsive img-circle"/>&nbsp;<span class="hidden-xs">Rajesh </span>&nbsp;<span
+                            src="<?php echo $this->session->userdata('UserProfilePic'); ?>" alt=""
+                            class="img-responsive img-circle"/>&nbsp;<span class="hidden-xs"><?php echo $this->session->userdata('UserName'); ?> </span>&nbsp;<span
                             class="caret"></span></a>
                         <ul class="dropdown-menu dropdown-user pull-right">
-                            <li><a href="<?=base_url();?>leader/profile"><i class="fa fa-user"></i>My Profile</a></li>
+                            <li><a href="<?=base_url();?>profile/profile"><i class="fa fa-user"></i>My Profile</a></li>
                             <li><a href="<?=base_url();?>leader/calendar"><i class="fa fa-calendar"></i>My Calendar</a></li>
                             <li><a href="<?=base_url();?>leader/myinbox"><i class="fa fa-envelope"></i>My Inbox<span
                                     class="badge badge-danger">3</span></a></li>

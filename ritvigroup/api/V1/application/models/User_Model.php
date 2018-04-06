@@ -338,6 +338,12 @@ class User_Model extends CI_Model {
                                 "ProfileStatus"                 => (($res_u['ProfileStatus'] != NULL) ? $res_u['ProfileStatus'] : ""),
                                 "AddedBy"                       => (($res_u['AddedBy'] != NULL) ? $res_u['AddedBy'] : ""),
                                 "UpdatedBy"                     => (($res_u['UpdatedBy'] != NULL) ? $res_u['UpdatedBy'] : ""),
+                                
+                                "WebsiteUrl"                    => (($res_u['WebsiteUrl'] != NULL) ? $res_u['WebsiteUrl'] : ""),
+                                "FacebookPageUrl"               => (($res_u['FacebookPageUrl'] != NULL) ? $res_u['FacebookPageUrl'] : ""),
+                                "TwitterPageUrl"                => (($res_u['TwitterPageUrl'] != NULL) ? $res_u['TwitterPageUrl'] : ""),
+                                "GooglePageUrl"                 => (($res_u['GooglePageUrl'] != NULL) ? $res_u['GooglePageUrl'] : ""),
+                                
                                 "AddedOn"                       => return_time_ago($res_u['AddedOn']),
                                 "AddedOnTime"                   => ($res_u['AddedOn']),
                                 "UpdatedOn"                     => return_time_ago($res_u['UpdatedOn']),
@@ -661,6 +667,10 @@ class User_Model extends CI_Model {
                                 "UpdatedOnTime"         => $res_u['UpdatedOn'],
                                 "DateOfBirth"           => (($res_u['DateOfBirth'] != NULL) ? $res_u['DateOfBirth'] : ""),
                                 "Gender"                => (($res_u['Gender'] != NULL) ? $res_u['Gender'] : ""),
+
+                                "MaritalStatus"         => (($res_u['MaritalStatus'] == 0) ? 0 : 1),
+                                "MaritalStatusName"     => (($res_u['MaritalStatus'] == 0) ? "Un Married" : "Married"),
+
                                 "ProfilePhotoId"        => (($res_u['ProfilePhotoId'] != NULL) ? $res_u['ProfilePhotoId'] : ""),
                                 "ProfilePhotoPath"      => (($res_u['UserProfilePhoto'] != NULL) ? PROFILE_IMAGE_URL.$res_u['UserProfilePhoto'] : ""),
                                 "CoverPhotoId"          => (($res_u['CoverPhotoId'] != NULL) ? $res_u['CoverPhotoId'] : ""),
@@ -754,6 +764,17 @@ class User_Model extends CI_Model {
         $this->db->select('UserId, UserStatus');
         $this->db->from($this->userTbl);
         $this->db->where('UserId', $UserId);
+        $this->db->limit(1);
+        $query = $this->db->get();
+        $result = $query->row_array();
+        return $result;
+    }
+
+
+    public function getUserInformationByUniqueProfileId($UserUniqueId) {
+        $this->db->select('UserId, UserStatus');
+        $this->db->from($this->userTbl);
+        $this->db->where('UserUniqueId', $UserUniqueId);
         $this->db->limit(1);
         $query = $this->db->get();
         $result = $query->row_array();

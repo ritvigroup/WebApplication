@@ -96,6 +96,10 @@
                                                 <?php
                                                 $datetime = date('d M,Y h:i', strtotime($complaint_history->AddedOnTime));
                                                 $datetime_ago = $complaint_history->AddedOn;
+
+                                                $UserProfileHrefLink = base_url().'profile/profile/'.$complaint_history->ComplaintHistoryProfile->user_profile_detail->user_info->UserUniqueId;
+
+                                                $By = $complaint_history->ComplaintHistoryProfile->user_profile_detail->profile->FirstName. ' '.$complaint_history->ComplaintHistoryProfile->user_profile_detail->profile->LastName;
                                                 ?>
                                                 <article class="timeline-entry <?php echo $left_aligned; ?>">
                                                     <div class="timeline-entry-inner">
@@ -105,7 +109,9 @@
                                                         <div class="timeline-label">
                                                             <h2 class="timeline-title"><?php echo $complaint_history->HistoryTitle; ?></h2>
                                                             <p><?php echo $complaint_history->HistoryDescription; ?></p>
-                                                            <p style="text-align: right;">By - <?php echo $complaint_history->ComplaintHistoryProfile->user_profile_detail->profile->FirstName. ' '.$complaint_history->ComplaintHistoryProfile->user_profile_detail->profile->LastName; ?></p>
+                                                            <p style="text-align: right;">By - 
+                                                                <a href="<?php echo $UserProfileHrefLink; ?>" target="_blank"><?php echo $By; ?></a>
+                                                            </p>
                                                             <?php
                                                             $ComplaintHistoryAttachment = $complaint_history->ComplaintHistoryAttachment;
                                                             if(count($ComplaintHistoryAttachment) > 0) {
@@ -148,9 +154,12 @@
                                                             echo '<p>';
                                                             foreach($ComplaintMember AS $complaint_member) {
                                                                 if((int) $complaint_member->AcceptedYesNo == 1) {
+                                                                    $UserProfileHrefLink = base_url().'profile/profile/'.$complaint_member->user_profile_detail->user_info->UserUniqueId;
+                                                                    echo '<a href="'.$UserProfileHrefLink.'" target="_blank">';
                                                                     echo $complaint_member->user_profile_detail->profile->FirstName;
                                                                     echo ' ';
                                                                     echo $complaint_member->user_profile_detail->profile->LastName;
+                                                                    echo '</a>';
                                                                     echo ',&nbsp;';
                                                                 }
                                                             }
@@ -169,8 +178,13 @@
                                                             }
                                                             echo '</p>';
                                                         }
+
+                                                        $UserProfileHrefLink = base_url().'profile/profile/'.$ComplaintDetail->result->ComplaintProfile->user_profile_detail->user_info->UserUniqueId;
+
+                                                        $By = $ComplaintDetail->result->ComplaintProfile->user_profile_detail->profile->FirstName.' '.$ComplaintDetail->result->ComplaintProfile->user_profile_detail->profile->LastName;
+
                                                         ?>
-                                                        <p style="text-align: right;">By- <?php echo $ComplaintDetail->result->ComplaintProfile->user_profile_detail->profile->FirstName.' '.$ComplaintDetail->result->ComplaintProfile->user_profile_detail->profile->LastName; ?></p>
+                                                        <p style="text-align: right;">By- <a href="<?php echo $UserProfileHrefLink; ?>" target="_blank"><?php echo $By; ?></a></p>
                                                     </div>
                                                 </div>
                                             </article>

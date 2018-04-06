@@ -80,7 +80,7 @@
                                            class="table table-striped table-hover thumb-small">
                                         <tr>
                                             <td>Search:</td>
-                                            <td><input type="text" id="search_text" class="form-control"></td>
+                                            <td><input type="text" id="search_text" class="form-control" autocomplete="off"></td>
                                         </tr>
                                         <tr>
                                             <td>Gender:</td>

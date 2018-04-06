@@ -108,6 +108,49 @@ class Userprofile extends CI_Controller {
     }
 
 
+    public function getUserAllProfileInformationByUniqueProfileId() {
+        $error_occured = false;
+        $unique_profile_id = $this->input->post('unique_profile_id');
+        
+        if($unique_profile_id == "") {
+            $msg = "Please select user";
+            $error_occured = true;
+        } else {
+
+            $res_u = $this->User_Model->getUserInformationByUniqueProfileId($unique_profile_id);
+
+            if($res_u['UserStatus'] == '1') {
+                
+                $UserId = $res_u['UserId'];
+                $user_info = $this->User_Model->getUserDetail($UserId, 0, 1); // 1 = Full Information
+
+                $msg = "User information found successfully";
+
+            }/* else if($res_u['UserId'] > 0 && $res_u['UserStatus'] != '1') {
+                $msg = "User in no longer active.";
+                $error_occured = true;
+            }*/ else {
+                $msg = "No User Found";
+                $error_occured = true;
+            }
+        }
+
+        if($error_occured == true) {
+            $array = array(
+                            "status"        => 'failed',
+                            "message"       => $msg,
+                        );
+        } else {
+
+            $array = array(
+                           "status"         => 'success',
+                           "result"  => $user_info,
+                           "message"        => $msg,
+                           );
+        }
+        displayJsonEncode($array);
+    }
+
     public function getUserprofileFriendsprofileInformation() {
         $error_occured = false;
         $UserProfileId = $this->input->post('user_profile_id');

@@ -103,12 +103,17 @@ class Leader extends CI_Controller {
             if($json_decode->status == "success") {
 
                 $UserId = $json_decode->result->UserId;
+                $UserName = $json_decode->result->UserName;
+                $UserName = $json_decode->result->UserName;
+                $UserProfilePic = ($json_decode->result->ProfilePhotoPath != '') ? $json_decode->result->ProfilePhotoPath : base_url().'assets/images/default-user.png';
                 
                 if($UserId > 0) {
                     $CitizenProfileId   = $json_decode->result->UserProfileCitizen->UserProfileId;
                     $LeaderProfileId    = $json_decode->result->UserProfileLeader->UserProfileId;
 
                     $this->session->set_userdata('UserId', $UserId);
+                    $this->session->set_userdata('UserName', $UserName);
+                    $this->session->set_userdata('UserProfilePic', $UserProfilePic);
                     $this->session->set_userdata('CitizenProfileId', $CitizenProfileId);
                     $this->session->set_userdata('LeaderProfileId', $LeaderProfileId);
 

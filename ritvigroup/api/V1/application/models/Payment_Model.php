@@ -100,7 +100,7 @@ class Payment_Model extends CI_Model {
             if ($query->num_rows() > 0) {
                 $res = $query->result_array();
                 foreach($res AS $key => $result) {
-                    $log_detail[] = $this->getPaymentTransactionLogDetail($res['PaymentTransactionLogId']);
+                    $log_detail[] = $this->getPaymentTransactionLogDetail($result['PaymentTransactionLogId']);
                 }
             }
             
