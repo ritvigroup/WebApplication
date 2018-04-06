@@ -44,13 +44,13 @@
         <div id="page-wrapper"><!--BEGIN TITLE & BREADCRUMB PAGE-->
             <div id="title-breadcrumb-option-demo" class="page-title-breadcrumb">
                 <div class="page-header pull-left">
-                    <div class="page-title">Suggestion</div>
+                    <div class="page-title">Suggestion Received</div>
                 </div>
                 <ol class="breadcrumb page-breadcrumb">
                     <li><i class="fa fa-home"></i>&nbsp;<a href="<?=base_url();?>leader/home">Home</a>&nbsp;&nbsp;<i
                             class="fa fa-angle-right"></i>&nbsp;&nbsp;</li>
-                    <li><a href="<?=base_url();?>suggestion/suggestion">Suggestion</a>&nbsp;&nbsp;<i class="fa fa-angle-right"></i>&nbsp;&nbsp;</li>
-                    <li class="active">Suggestion</li>
+                    <li><a href="<?=base_url();?>suggestion/suggestionReceived">Suggestion Received</a>&nbsp;&nbsp;<i class="fa fa-angle-right"></i>&nbsp;&nbsp;</li>
+                    <li class="active">Suggestion Received</li>
                 </ol>
 
                 <div class="clearfix"></div>
@@ -61,7 +61,7 @@
                     <div class="col-md-12">
                         <div class="portlet box">
                             <div class="portlet-header">
-                                <div class="caption">My Suggestion</div>
+                                <div class="caption">Suggestion Received</div>
                                 <div class="actions">
                                     <a href="<?=base_url();?>suggestion/suggestionReceived" class="btn btn-info btn-xs"><i class="fa fa-plus"></i>&nbsp;Suggestion Received</a>&nbsp;
                                     <a href="<?=base_url();?>suggestion/newsuggestion" class="btn btn-info btn-xs"><i class="fa fa-plus"></i>&nbsp;New Suggestion</a>&nbsp;

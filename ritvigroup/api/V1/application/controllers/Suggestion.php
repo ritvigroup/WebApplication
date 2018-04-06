@@ -173,5 +173,41 @@ class Suggestion extends CI_Controller {
         displayJsonEncode($array);
     }
 
+
+    public function getAllAssignedSuggestionToMe() {
+        $error_occured = false;
+
+        $UserProfileId   = $this->input->post('user_profile_id');
+        
+        if($UserProfileId == "") {
+            $msg = "Please select your profile";
+            $error_occured = true;
+        } else {
+
+            $suggestions = $this->Suggestion_Model->getAllAssignedSuggestionToMe($UserProfileId);
+            if(count($suggestions) > 0) {
+                $msg = "Suggestion fetched successfully";
+            } else {
+                $msg = "No suggestion added by you";
+                $error_occured = true;
+            }
+        }
+
+        if($error_occured == true) {
+            $array = array(
+                            "status"        => 'failed',
+                            "message"       => $msg,
+                        );
+        } else {
+
+            $array = array(
+                           "status"       => 'success',
+                           "result"   => $suggestions,
+                           "message"      => $msg,
+                           );
+        }
+        displayJsonEncode($array);
+    }
+
 }
 

@@ -104,7 +104,6 @@ class Suggestion_Model extends CI_Model {
     }
 
 
-
     public function getAttachmentTypeId($file_name) {
         $photo_file_array = array('jpg', 'jpeg', 'bmp', 'png');
         $doc_file_array = array('doc', 'docx', 'xls', 'pdf', 'txt');
@@ -158,6 +157,26 @@ class Suggestion_Model extends CI_Model {
         return $suggestions;
     }
 
+
+    public function getAllAssignedSuggestionToMe($UserProfileId) {
+        $suggestions = array();
+        if(isset($UserProfileId) && $UserProfileId > 0) {
+
+            $query = $this->db->query("SELECT sa.SuggestionId FROM ".$this->suggestionAssignedTbl." AS sa 
+                                                LEFT JOIN ".$this->suggestionTbl." AS s ON sa.SuggestionId = s.SuggestionId
+                                                WHERE 
+                                                    sa.`AssignedTo` = '".$UserProfileId."' ORDER BY sa.`AddedOn` DESC");
+
+            $res = $query->result_array();
+
+            foreach($res AS $key => $result) {
+                $suggestions[] = $this->getSuggestionDetail($result['SuggestionId']);
+            }
+        } else {
+            $suggestions = array();
+        }
+        return $suggestions;
+    }
 
     
     public function getSuggestionDetail($SuggestionId) {
@@ -238,19 +257,19 @@ class Suggestion_Model extends CI_Model {
             $AttachmentTypeId = $result['AttachmentTypeId'];
 
             if($AttachmentTypeId == 1) {
-                $path = SUGGESTION_IMAGE_DIR;
+                $path = SUGGESTION_IMAGE_URL;
             } else if($AttachmentTypeId == 2) {
-                $path = SUGGESTION_VIDEO_DIR;
+                $path = SUGGESTION_VIDEO_URL;
             } else if($AttachmentTypeId == 4) {
-                $path = SUGGESTION_AUDIO_DIR;
+                $path = SUGGESTION_AUDIO_URL;
             } else {
-                $path = SUGGESTION_DOC_DIR;
+                $path = SUGGESTION_DOC_URL;
             }
 
             $AttachmentThumb = '';
 
             if($AttachmentTypeId == 2) {
-                $AttachmentThumb = SUGGESTION_IMAGE_DIR.$result['AttachmentThumb'];
+                $AttachmentThumb = SUGGESTION_IMAGE_URL.$result['AttachmentThumb'];
             }
 
             $SuggestionAttachment[] = array(

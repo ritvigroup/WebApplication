@@ -62,10 +62,22 @@
                         <div class="col-sm-6 col-md-3">
                             <div class="panel profit db mbm">
                                 <div class="panel-body"><p class="icon"><i class="icon fa fa-shopping-cart"></i></p><h4
+                                        class="value"><span data-counter="" data-start="10" data-end="<?php echo $result->TotalComplaintReceived; ?>" data-step="1"
+                                                            data-duration="0"></span><span><?php echo $result->TotalComplaintReceived; ?></span></h4> 
+
+                                    <p class="description"><a href="<?=base_url();?>complaint/complaintReceived">Complaint Received</a></p>
+
+                                    
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6 col-md-3">
+                            <div class="panel profit db mbm">
+                                <div class="panel-body"><p class="icon"><i class="icon fa fa-shopping-cart"></i></p><h4
                                         class="value"><span data-counter="" data-start="10" data-end="<?php echo $result->TotalComplaint; ?>" data-step="1"
                                                             data-duration="0"></span><span><?php echo $result->TotalComplaint; ?></span></h4> 
 
-                                    <p class="description"><a href="<?=base_url();?>complaint/complaintReceived">Complaint Received</a></p>
+                                    <p class="description"><a href="<?=base_url();?>complaint/mycomplaint">My Complaint</a></p>
 
                                     
                                 </div>
@@ -85,9 +97,20 @@
                         <div class="col-sm-6 col-md-3">
                             <div class="panel task db mbm">
                                 <div class="panel-body"><p class="icon"><i class="icon fa fa-signal"></i></p><h4
+                                        class="value"><span><?php echo $result->TotalSuggestionReceived; ?></span></h4>
+
+                                    <p class="description"><a href="<?=base_url();?>suggestion/suggestionReceived">Suggestion Received</a></p>
+
+                                    
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6 col-md-3">
+                            <div class="panel task db mbm">
+                                <div class="panel-body"><p class="icon"><i class="icon fa fa-signal"></i></p><h4
                                         class="value"><span><?php echo $result->TotalSuggestion; ?></span></h4>
 
-                                    <p class="description"><a href="<?=base_url();?>suggestion/suggestion">Suggestion</a></p>
+                                    <p class="description"><a href="<?=base_url();?>suggestion/suggestion">My Suggestion</a></p>
 
                                     
                                 </div>

@@ -147,27 +147,41 @@ class Leader extends CI_Controller {
             $res = $query->row_array();
             $TotalSuggestion = ($res['TotalSuggestion'] > 0) ? $res['TotalSuggestion'] : 0; 
 
+            $sql = "SELECT COUNT(sa.SuggestionId) AS TotalSuggestionReceived FROM `Suggestion` AS s
+                                    LEFT JOIN `SuggestionAssigned` AS sa ON sa.SuggestionId = s.SuggestionId 
+                                    WHERE sa.`AssignedTo` = '".$UserProfileId."'";
+            $query = $this->db->query($sql);
+            $res = $query->row_array();
+            $TotalSuggestionReceived = ($res['TotalSuggestionReceived'] > 0) ? $res['TotalSuggestionReceived'] : 0; 
+
             $sql = "SELECT COUNT(InformationId) AS TotalInformation FROM `Information` WHERE `AddedBy` = '".$UserProfileId."'";
             $query = $this->db->query($sql);
             $res = $query->row_array();
             $TotalInformation = ($res['TotalInformation'] > 0) ? $res['TotalInformation'] : 0; 
 
-            $sql = "SELECT COUNT(c.ComplaintId) AS TotalComplaint FROM 
+            $sql = "SELECT COUNT(ComplaintId) AS TotalComplaint FROM `Complaint` WHERE `AddedBy` = '".$UserProfileId."'";
+            $query = $this->db->query($sql);
+            $res = $query->row_array();
+            $TotalComplaint = ($res['TotalComplaint'] > 0) ? $res['TotalComplaint'] : 0; 
+
+            $sql = "SELECT COUNT(c.ComplaintId) AS TotalComplaintReceived FROM 
                                                 `Complaint` AS c 
                                             LEFT JOIN `ComplaintAssigned` AS ca ON c.ComplaintId = ca.ComplaintId 
                                             WHERE 
                                                 ca.`AssignedTo` = '".$UserProfileId."'";
             $query = $this->db->query($sql);
             $res = $query->row_array();
-            $TotalComplaint = ($res['TotalComplaint'] > 0) ? $res['TotalComplaint'] : 0; 
+            $TotalComplaintReceived = ($res['TotalComplaintReceived'] > 0) ? $res['TotalComplaintReceived'] : 0; 
 
             $result = array(
-                        'TotalEvent'        => $TotalEvent,
-                        'TotalPoll'         => $TotalPoll,
-                        'TotalPost'         => $TotalPost,
-                        'TotalSuggestion'   => $TotalSuggestion,
-                        'TotalInformation'  => $TotalInformation,
-                        'TotalComplaint'    => $TotalComplaint,
+                        'TotalEvent'                => $TotalEvent,
+                        'TotalPoll'                 => $TotalPoll,
+                        'TotalPost'                 => $TotalPost,
+                        'TotalSuggestion'           => $TotalSuggestion,
+                        'TotalSuggestionReceived'   => $TotalSuggestionReceived,
+                        'TotalInformation'          => $TotalInformation,
+                        'TotalComplaint'            => $TotalComplaint,
+                        'TotalComplaintReceived'    => $TotalComplaintReceived,
                         );
 
             $msg = "User summary data found";

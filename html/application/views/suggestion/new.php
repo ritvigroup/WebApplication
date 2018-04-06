@@ -80,6 +80,11 @@
                         <div class="portlet box portlet-green">
                             <div class="portlet-header">
                                 <div class="caption">New Suggestion</div>
+                                <div class="actions">
+                                    <a href="<?=base_url();?>suggestion/suggestionReceived" class="btn btn-info btn-xs"><i class="fa fa-plus"></i>&nbsp;Suggestion Received</a>&nbsp;
+                                    <a href="<?=base_url();?>suggestion/newsuggestion" class="btn btn-info btn-xs"><i class="fa fa-plus"></i>&nbsp;New Suggestion</a>&nbsp;
+                                    <a href="<?=base_url();?>suggestion/suggestion" class="btn btn-info btn-xs"><i class="fa fa-plus"></i>&nbsp;My Suggestion</a>&nbsp;
+                                </div>
                             </div>
                             <div class="portlet-body">
                                 
