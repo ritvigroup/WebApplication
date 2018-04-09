@@ -41,6 +41,31 @@ class Profile extends CI_Controller {
         } else {
             $_POST['user_id'] = $this->session->userdata('UserId');
             $_POST['user_profile_id'] = $this->session->userdata('LeaderProfileId');
+
+
+            if($this->input->method(TRUE) == "POST" && $this->input->post('first_name') != '') {
+
+                $post_data = $this->input->post();
+
+                /*for($i = 0; $i < count($_FILES['file']['name']); $i++) {
+                    if($_FILES['file']['name'][$i] != '') {
+
+                        $post_data = array_merge($post_data, array('file['.$i.']' => getCurlValue($_FILES['file']['tmp_name'][$i], $_FILES['file']['type'][$i], $_FILES['file']['name'][$i])));
+                    }
+                }*/
+
+                if($_FILES['file']['name'] != '') {
+                    $post_data = array_merge($post_data, array('photo' => getCurlValue($_FILES['file']['tmp_name'], $_FILES['file']['type'], $_FILES['file']['name'])));
+                }
+
+                $json_decode = post_curl_with_files(API_CALL_PATH.'userprofile/updateLeaderProfileSetting', $post_data, $this->curl);
+
+                header('Content-type: application/json');
+
+                echo $json_decode;
+
+                return false;
+            }
             $json_encode = post_curl(API_CALL_PATH.'userprofile/getUserAllProfileInformation', $this->input->post(), $this->curl);
 
             $json_decode = json_decode($json_encode);

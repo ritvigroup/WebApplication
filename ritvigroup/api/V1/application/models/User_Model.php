@@ -929,9 +929,11 @@ class User_Model extends CI_Model {
                                     );
             }
             $this->updateUserData($UserId, $updateData);
+
+            return $photo_id;
             
         }
-        return $photo_id;
+        
     }
 
     

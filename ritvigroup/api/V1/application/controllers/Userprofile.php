@@ -151,6 +151,7 @@ class Userprofile extends CI_Controller {
         displayJsonEncode($array);
     }
 
+
     public function getUserprofileFriendsprofileInformation() {
         $error_occured = false;
         $UserProfileId = $this->input->post('user_profile_id');
@@ -698,7 +699,7 @@ class Userprofile extends CI_Controller {
                 } else {
                     $FirstName     = $fullname_exp[0];
                     $MiddleName    = $fullname_exp[1];
-                    $LastName      = $fullname_exp[2];
+                    $LastName      = trim(str_replace($fullname_exp[0].' '.$fullname_exp[1], '', $fullname));
                 }
 
                 $updateData = array(
@@ -728,6 +729,106 @@ class Userprofile extends CI_Controller {
                     $msg = "There is some problem to update user profile. Please try again later.";
                     $error_occured = true;
                 }
+            }
+        }
+
+        if($error_occured == true) {
+            $array = array(
+                            "status"        => 'failed',
+                            "message"       => $msg,
+                        );
+        } else {
+
+            $array = array(
+                           "status"      => 'success',
+                           "result"   => $user_info,
+                           "message"     => $msg,
+                           );
+        }
+        displayJsonEncode($array);
+    }
+
+
+    public function updateLeaderProfileSetting() {
+        $UserId         = $this->input->post('user_id');
+        $UserProfileId  = $this->input->post('user_profile_id');
+        
+        $fullname       = $this->input->post('fullname');
+        $gender         = $this->input->post('gender');
+        $gender         = ($gender > 0) ? $gender : 0;
+        $date_of_birth  = $this->input->post('date_of_birth');
+        $date_of_birth  = ($date_of_birth != '') ? date('Y-m-d', strtotime($date_of_birth)) : '0000-00-00';
+        $martial_status = $this->input->post('martial_status');
+        $martial_status = ($martial_status > 0) ? 1 : 0;
+
+        if($UserId == "") {
+            $msg = "Please select user";
+            $error_occured = true;
+        } else if($UserProfileId == "") {
+            $msg = "Please select user profile";
+            $error_occured = true;
+        } else if($fullname == "") {
+            $msg = "Please enter fullname";
+            $error_occured = true;
+        } else if($gender == "") {
+            $msg = "Please select gender";
+            $error_occured = true;
+        } else if($date_of_birth == "0000-00-00") {
+            $msg = "Please enter date of birth";
+            $error_occured = true;
+        } else {
+
+            $this->db->query("BEGIN");
+
+            $fullname_exp = explode(' ', $fullname);
+
+            $FirstName = '';
+            $MiddleName = '';
+            $LastName = '';
+            if(count($fullname_exp) == 1) {
+                $FirstName     = $fullname_exp[0];
+            } else if(count($fullname_exp) == 2) {
+                $FirstName     = $fullname_exp[0];
+                $LastName      = $fullname_exp[1];
+            } else if(count($fullname_exp) == 3) {
+                $FirstName     = $fullname_exp[0];
+                $MiddleName    = $fullname_exp[1];
+                $LastName      = $fullname_exp[2];
+            } else {
+                $FirstName     = $fullname_exp[0];
+                $MiddleName    = $fullname_exp[1];
+                $LastName      = trim(str_replace($fullname_exp[0].' '.$fullname_exp[1], '', $fullname));
+            }
+
+            $updateData = array(
+                                'FirstName'     => $FirstName,
+                                'MiddleName'    => $MiddleName,
+                                'LastName'      => $LastName,
+                                'UpdatedOn'     => date('Y-m-d H:i:s'),
+                                'UpdatedBy'     => $UserProfileId,
+                            );
+            if($this->User_Model->updateUserProfileData($UserProfileId, $updateData)) {
+
+                $updateData = array(
+                                'DateOfBirth'       => $date_of_birth,
+                                'Gender'            => $gender,
+                                'MaritalStatus'     => $martial_status,
+                                'UpdatedOn'         => date('Y-m-d H:i:s'),
+                            );
+
+                $this->User_Model->updateUserData($UserId, $updateData);
+                
+                $this->User_Model->saveUserPhoto('photo', $UserId, 1);
+
+                $user_info = $this->User_Model->getUserDetailLeader($UserId, $UserProfileId);
+
+                $this->db->query("COMMIT");
+                $msg = "User profile updated successfully";
+
+            } else {
+                $this->db->query("ROLLBACK");
+                $msg = "There is some problem to update user profile. Please try again later.";
+                $error_occured = true;
             }
         }
 

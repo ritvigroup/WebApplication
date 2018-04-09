@@ -116,9 +116,10 @@ class Payment_Model extends CI_Model {
         $log_detail = array();
         if(isset($PaymentTransactionLogId) && $PaymentTransactionLogId > 0) {
 
-            $this->db->select('*');
-            $this->db->from($this->PaymentTransactionLogTbl);
-            $this->db->where('PaymentTransactionLogId', $PaymentTransactionLogId);
+            $this->db->select('ptl.*, pg.PaymentGatewayName');
+            $this->db->from($this->PaymentTransactionLogTbl.' AS ptl');
+            $this->db->join($this->PaymentGatewayTbl.' AS pg', 'ptl.PaymentGatewayId = pg.PaymentGatewayId' , 'LEFT');
+            $this->db->where('ptl.PaymentTransactionLogId', $PaymentTransactionLogId);
             $query = $this->db->get();
             
             if ($query->num_rows() > 0) {
@@ -137,6 +138,7 @@ class Payment_Model extends CI_Model {
     public function returnPaymentTransactionLogDetail($res) {
         $PaymentTransactionLogId    = $res['PaymentTransactionLogId'];
         $PaymentGatewayId           = $res['PaymentGatewayId'];
+        $PaymentGatewayName         = $res['PaymentGatewayName'];
         
        
         $TransactionId              = (($res['TransactionId'] != NULL) ? $res['TransactionId'] : "");
@@ -155,6 +157,7 @@ class Payment_Model extends CI_Model {
         $data_array = array(
                             "PaymentTransactionLogId"       => $PaymentTransactionLogId,
                             "PaymentGatewayId"              => $PaymentGatewayId,
+                            "PaymentGatewayName"            => $PaymentGatewayName,
                             "TransactionId"                 => $TransactionId,
                             "TransactionDate"               => $TransactionDate,
                             "TransactionAmount"             => $TransactionAmount,

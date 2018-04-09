@@ -151,7 +151,7 @@ $profile_pic = ($UserDetail->ProfilePhotoPath != '') ? $UserDetail->ProfilePhoto
                                             <div class="col-md-9">
                                                 <div class="tab-content">
                                                     <div id="tab-profile-setting" class="tab-pane fade in active">
-                                                        <form action="#" class="form-horizontal">
+                                                        <form action="" class="form-horizontal" onSubmit="return false;">
                                                             <div class="form-group"><label
                                                                     class="col-sm-3 control-label">First Name</label>
 
@@ -199,7 +199,7 @@ $profile_pic = ($UserDetail->ProfilePhotoPath != '') ? $UserDetail->ProfilePhoto
                                                                 <div class="col-sm-9 controls">
                                                                     <div class="row">
                                                                         <div class="col-xs-6"><select
-                                                                                class="form-control">
+                                                                                class="form-control" id="martial_status">
                                                                             <option value="0" <?php if($MaritalStatus == 0) { ?> selected="selected"<?php } ?> >Single</option>
                                                                             <option value="1" <?php if($MaritalStatus == 1) { ?> selected="selected"<?php } ?> >Married</option>
                                                                         </select></div>
@@ -208,17 +208,17 @@ $profile_pic = ($UserDetail->ProfilePhotoPath != '') ? $UserDetail->ProfilePhoto
                                                             </div>
                                                             
                                                             <div class="form-group"><label
-                                                                    class="col-sm-3 control-label">About</label>
+                                                                    class="col-sm-3 control-label">Profile Pic</label>
 
-                                                                <div class="col-sm-9 controls"><textarea rows="3"
-                                                                                                         class="form-control"></textarea>
+                                                                <div class="col-sm-9 controls">
+                                                                    <input type="file" name="file" id="file">
                                                                 </div>
                                                             </div>
                                                             <div class="form-group mbn"><label
                                                                     class="col-sm-3 control-label"></label>
 
                                                                 <div class="col-sm-9 controls">
-                                                                    <button type="submit" class="btn btn-success"><i
+                                                                    <button type="submit" class="btn btn-success" onClick="return submit_profile_setting();"><i
                                                                             class="fa fa-save"></i>&nbsp;
                                                                         Save
                                                                     </button>
@@ -228,7 +228,7 @@ $profile_pic = ($UserDetail->ProfilePhotoPath != '') ? $UserDetail->ProfilePhoto
                                                         </form>
                                                     </div>
                                                     <div id="tab-account-setting" class="tab-pane fade">
-                                                        <form action="#" class="form-horizontal">
+                                                        <form action="" class="form-horizontal" onSubmit="return false;">
                                                             <div class="form-body">
                                                                 <div class="form-group"><label
                                                                         class="col-sm-3 control-label">Email</label>
@@ -275,7 +275,7 @@ $profile_pic = ($UserDetail->ProfilePhotoPath != '') ? $UserDetail->ProfilePhoto
                                                                         class="col-sm-3 control-label"></label>
 
                                                                     <div class="col-sm-9 controls">
-                                                                        <button type="submit" class="btn btn-success"><i
+                                                                        <button type="submit" class="btn btn-success account_setting"><i
                                                                                 class="fa fa-save"></i>&nbsp;
                                                                             Save
                                                                         </button>
@@ -287,7 +287,7 @@ $profile_pic = ($UserDetail->ProfilePhotoPath != '') ? $UserDetail->ProfilePhoto
                                                         </form>
                                                     </div>
                                                     <div id="tab-contact-setting" class="tab-pane fade">
-                                                        <form action="#" class="form-horizontal">
+                                                        <form action="" class="form-horizontal" onSubmit="return false;">
                                                             <div class="form-group"><label
                                                                     class="col-sm-3 control-label">Mobile Phone</label>
 
@@ -332,7 +332,7 @@ $profile_pic = ($UserDetail->ProfilePhotoPath != '') ? $UserDetail->ProfilePhoto
                                                                     class="col-sm-3 control-label"></label>
 
                                                                 <div class="col-sm-9 controls">
-                                                                    <button type="submit" class="btn btn-success"><i
+                                                                    <button type="submit" class="btn btn-success contact_setting"><i
                                                                             class="fa fa-save"></i>&nbsp;
                                                                         Save
                                                                     </button>
@@ -397,6 +397,96 @@ $profile_pic = ($UserDetail->ProfilePhotoPath != '') ? $UserDetail->ProfilePhoto
 <!--LOADING SCRIPTS FOR PAGE-->
 <script src="<?=base_url();?>assets/vendors/bootstrap-datepicker/js/bootstrap-datepicker.js"></script>
 <script src="<?=base_url();?>assets/js/extra-profile.js"></script>
+
+
+<script>
+
+    function submit_profile_setting() {
+
+        var first_name          = $("#first_name").val();
+        var last_name           = $("#last_name").val();
+        var gender              = $("input[name='gender']:checked").val();
+        var date_of_birth       = $("#date_of_birth").val();
+        var martial_status      = $('#martial_status option:selected').val();
+
+
+        // console.log('first_name:'+first_name);
+        // console.log('last_name:'+last_name);
+        // console.log('gender:'+gender);
+        // console.log('date_of_birth:'+date_of_birth);
+        // console.log('martial_status:'+martial_status);
+
+        var form_data = new FormData($('input[name^="file"]'));
+
+        var file_selected = 0;
+        jQuery.each($('input[name^="file"]')[0].files, function(i, file) {
+            form_data.append('file', file);
+            file_selected++;
+        });
+
+        if(file_selected > 0) {
+            form_data.append('first_name', first_name);
+            form_data.append('last_name', last_name);
+            form_data.append('fullname', first_name+' '+last_name);
+            form_data.append('gender', gender);
+            form_data.append('date_of_birth', date_of_birth);
+            form_data.append('martial_status', martial_status);
+
+
+            if (first_name.length > 0) {
+
+                jQuery.ajax({
+                    type: 'POST',
+                    cache: false,
+                    processData: false,
+                    contentType: false,
+                    data: form_data,
+                    url: "<?php echo base_url(); ?>profile/profile",
+
+                    success: function(data) {
+                        if (data.status === "failed") {
+                            sweetAlert("Oops...", data.message, "error");
+                            return false;
+                        } else { 
+                            if (data.status === "success") {
+                                window.location.href="profile";
+                            }
+                        }
+                    }
+                });
+
+            } else {
+                sweetAlert("Oops...", "Please enter first name", "error");
+                return false;
+            }
+        } else {
+            if (first_name.length > 0) {
+                $.post("<?php echo base_url(); ?>profile/profile", {
+                                                                first_name: first_name, 
+                                                                last_name: last_name,
+                                                                fullname: first_name+' '+last_name,
+                                                                gender: gender,
+                                                                date_of_birth: date_of_birth,
+                                                                martial_status: martial_status,
+                                                                },
+                function (data, status) {
+                   
+                    if (data.status === "failed") {
+                        sweetAlert("Oops...", data.message, "error");
+                        return false;
+                    } else { 
+                        if (data.status === "success") {
+                            window.location.href="profile";
+                        }
+                    }
+                });
+            } else {
+                sweetAlert("Oops...", "Please enter first name", "error");
+                return false;
+            }
+        }
+    };
+</script> 
 
 </body>
 </html>
