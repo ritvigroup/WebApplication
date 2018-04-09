@@ -849,6 +849,108 @@ class Userprofile extends CI_Controller {
     }
 
 
+    public function updateLeaderPassword() {
+        $UserId         = $this->input->post('user_id');
+        $UserProfileId  = $this->input->post('user_profile_id');
+        
+        $password           = $this->input->post('password');
+        $confirm_password   = $this->input->post('confirm_password');
+
+        if($UserId == "") {
+            $msg = "Please select user";
+            $error_occured = true;
+        } else if($UserProfileId == "") {
+            $msg = "Please select user profile";
+            $error_occured = true;
+        } else if($password == "") {
+            $msg = "Please enter password";
+            $error_occured = true;
+        } else if($confirm_password == "") {
+            $msg = "Please enter confirm password";
+            $error_occured = true;
+        } else if($password != $confirm_password) {
+            $msg = "Password and confirm password not matched";
+            $error_occured = true;
+        } else {
+
+            $this->db->query("BEGIN");
+
+            $updateData = array(
+                                'UserPassword'  => md5($password),
+                                'UpdatedOn'     => date('Y-m-d H:i:s'),
+                            );
+            
+
+            $this->User_Model->updateUserData($UserId, $updateData);
+                
+            $user_info = $this->User_Model->getUserDetailLeader($UserId, $UserProfileId);
+            $this->db->query("COMMIT");
+            $msg = "User profile updated successfully";
+        }
+
+        if($error_occured == true) {
+            $array = array(
+                            "status"        => 'failed',
+                            "message"       => $msg,
+                        );
+        } else {
+
+            $array = array(
+                           "status"     => 'success',
+                           "result"     => $user_info,
+                           "message"    => $msg,
+                           );
+        }
+        displayJsonEncode($array);
+    }
+
+
+    public function updateLeaderContact() {
+        $UserId         = $this->input->post('user_id');
+        $UserProfileId  = $this->input->post('user_profile_id');
+        
+        $website_url    = $this->input->post('website_url');
+        $facebook_url   = $this->input->post('facebook_url');
+        $twitter_url    = $this->input->post('twitter_url');
+        $google_url     = $this->input->post('google_url');
+
+       
+
+        $this->db->query("BEGIN");
+
+        $updateData = array(
+                            'WebsiteUrl'        => $website_url,
+                            'FacebookPageUrl'   => $facebook_url,
+                            'TwitterPageUrl'    => $twitter_url,
+                            'GooglePageUrl'     => $google_url,
+                            'UpdatedOn'         => date('Y-m-d H:i:s'),
+                            'UpdatedBy'         => $UserProfileId,
+                        );
+        
+
+        $this->User_Model->updateUserProfileData($UserProfileId, $updateData);
+            
+        $user_info = $this->User_Model->getUserDetailLeader($UserId, $UserProfileId);
+        $this->db->query("COMMIT");
+        $msg = "User profile updated successfully";
+
+        if($error_occured == true) {
+            $array = array(
+                            "status"        => 'failed',
+                            "message"       => $msg,
+                        );
+        } else {
+
+            $array = array(
+                           "status"     => 'success',
+                           "result"     => $user_info,
+                           "message"    => $msg,
+                           );
+        }
+        displayJsonEncode($array);
+    }
+
+
     public function setLeaderAsFavourite() {
         $UserId                 = $this->input->post('user_id');
         $UserProfileId          = $this->input->post('user_profile_id');

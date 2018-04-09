@@ -94,7 +94,67 @@ class Payment_Model extends CI_Model {
             $this->db->from($this->PaymentTransactionLogTbl);
             $this->db->where('PaymentBy', $UserProfileId);
             $this->db->or_where('PaymentTo', $UserProfileId);
-            $this->db->order_by('TransactionDate', 'DESC');
+            $this->db->order_by('AddedOn', 'DESC');
+            $query = $this->db->get();
+            
+            if ($query->num_rows() > 0) {
+                $res = $query->result_array();
+                foreach($res AS $key => $result) {
+                    $log_detail[] = $this->getPaymentTransactionLogDetail($result['PaymentTransactionLogId']);
+                }
+            }
+            
+        } else {
+            $log_detail = array();
+        }
+        return $log_detail;
+    }
+
+
+    // Get My Payment Debit Transaction Log
+    public function getMyAllPaymentDebitTransactionLog($UserProfileId) {
+        $log_detail = array();
+        if(isset($UserProfileId) && $UserProfileId > 0) {
+
+            $this->db->select('PaymentTransactionLogId');
+            $this->db->from($this->PaymentTransactionLogTbl);
+            $this->db->where('DebitOrCredit', 0);
+            $this->db->group_start();
+            $this->db->where('PaymentBy', $UserProfileId);
+            $this->db->or_where('PaymentTo', $UserProfileId);
+            $this->db->group_end();
+            $this->db->order_by('AddedOn', 'DESC');
+
+            $query = $this->db->get();
+            
+            if ($query->num_rows() > 0) {
+                $res = $query->result_array();
+                foreach($res AS $key => $result) {
+                    $log_detail[] = $this->getPaymentTransactionLogDetail($result['PaymentTransactionLogId']);
+                }
+            }
+            
+        } else {
+            $log_detail = array();
+        }
+        return $log_detail;
+    }
+
+
+    // Get My Payment Credit Transaction Log
+    public function getMyAllPaymentCreditTransactionLog($UserProfileId) {
+        $log_detail = array();
+        if(isset($UserProfileId) && $UserProfileId > 0) {
+
+            $this->db->select('PaymentTransactionLogId');
+            $this->db->from($this->PaymentTransactionLogTbl);
+            $this->db->where('DebitOrCredit', 1);
+            $this->db->group_start();
+            $this->db->where('PaymentBy', $UserProfileId);
+            $this->db->or_where('PaymentTo', $UserProfileId);
+            $this->db->group_end();
+            $this->db->order_by('AddedOn', 'DESC');
+
             $query = $this->db->get();
             
             if ($query->num_rows() > 0) {
@@ -171,5 +231,57 @@ class Payment_Model extends CI_Model {
                             "PaymentTo"                     => $PaymentTo,
                             );
         return $data_array;
+    }
+
+
+    // My Wallet Amount
+    public function getMyTotalWalletAmount($UserProfileId) {
+        $log_detail = array(
+                            'MyWalletBalance' => 0.00,
+                            'TotalDebit' => 0.00,
+                            'TotalCredit' => 0.00,
+                            );
+        if(isset($UserProfileId) && $UserProfileId > 0) {
+
+            $this->db->select('SUM(TransactionAmount) AS TotalDebit');
+            $this->db->from($this->PaymentTransactionLogTbl);
+            $this->db->where('DebitOrCredit', 0);
+            $this->db->where('TransactionStatus', 1);
+            $this->db->group_start();
+            $this->db->where('PaymentBy', $UserProfileId);
+            $this->db->or_where('PaymentTo', $UserProfileId);
+            $this->db->group_end();
+            $query = $this->db->get();
+            
+            $TotalDebit = 0.00;
+            if ($query->num_rows() > 0) {
+                $res = $query->row_array();
+                $TotalDebit = ($res['TotalDebit'] > 0) ? $res['TotalDebit'] : 0.00;
+            }
+
+            $this->db->select('SUM(TransactionAmount) AS TotalCredit');
+            $this->db->from($this->PaymentTransactionLogTbl);
+            $this->db->where('DebitOrCredit', 1);
+            $this->db->where('TransactionStatus', 1);
+            $this->db->group_start();
+            $this->db->where('PaymentBy', $UserProfileId);
+            $this->db->or_where('PaymentTo', $UserProfileId);
+            $this->db->group_end();
+            $query = $this->db->get();
+            
+            $TotalCredit = 0.00;
+            if ($query->num_rows() > 0) {
+                $res = $query->row_array();
+                $TotalCredit = ($res['TotalCredit'] > 0) ? $res['TotalCredit'] : 0.00;
+            }
+
+            $log_detail = array(
+                            'MyWalletBalance' => number_format(($TotalCredit - $TotalDebit), 2, '.', ''),
+                            'TotalDebit' => number_format($TotalDebit, 2, '.', ''),
+                            'TotalCredit' => number_format($TotalCredit, 2, '.', ''),
+                            );
+            
+        }
+        return $log_detail;
     }
 }

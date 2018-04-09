@@ -46,8 +46,18 @@ $profile_pic = ($UserDetail->ProfilePhotoPath != '') ? $UserDetail->ProfilePhoto
           href="<?=base_url();?>assets/vendors/jquery-ui-1.10.4.custom/css/ui-lightness/jquery-ui-1.10.4.custom.min.css">
     <link type="text/css" rel="stylesheet" href="<?=base_url();?>assets/vendors/font-awesome/css/font-awesome.min.css">
     <link type="text/css" rel="stylesheet" href="<?=base_url();?>assets/vendors/bootstrap/css/bootstrap.min.css">
+
+    <link type="text/css" rel="stylesheet" href="<?php echo base_url(); ?>assets/css/sweetalert.css?ver=1.04">
+
     <!--LOADING STYLESHEET FOR PAGE-->
+    <link type="text/css" rel="stylesheet" href="<?=base_url();?>assets/vendors/bootstrap-colorpicker/css/colorpicker.css">
     <link type="text/css" rel="stylesheet" href="<?=base_url();?>assets/vendors/bootstrap-datepicker/css/datepicker.css">
+    <link type="text/css" rel="stylesheet" href="<?=base_url();?>assets/vendors/bootstrap-daterangepicker/daterangepicker-bs3.css">
+    <link type="text/css" rel="stylesheet"
+          href="<?=base_url();?>assets/vendors/bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css">
+    <link type="text/css" rel="stylesheet" href="<?=base_url();?>assets/vendors/bootstrap-timepicker/css/bootstrap-timepicker.min.css">
+    <link type="text/css" rel="stylesheet" href="<?=base_url();?>assets/vendors/bootstrap-clockface/css/clockface.css">
+    <link type="text/css" rel="stylesheet" href="<?=base_url();?>assets/vendors/bootstrap-switch/css/bootstrap-switch.css">
     <!--Loading style vendors-->
     <link type="text/css" rel="stylesheet" href="<?=base_url();?>assets/vendors/animate.css/animate.css">
     <link type="text/css" rel="stylesheet" href="<?=base_url();?>assets/vendors/jquery-pace/pace.css">
@@ -218,11 +228,11 @@ $profile_pic = ($UserDetail->ProfilePhotoPath != '') ? $UserDetail->ProfilePhoto
                                                                     class="col-sm-3 control-label"></label>
 
                                                                 <div class="col-sm-9 controls">
-                                                                    <button type="submit" class="btn btn-success" onClick="return submit_profile_setting();"><i
+                                                                    <button type="submit" class="btn btn-success profile_setting" onClick="return submit_profile_setting();"><i
                                                                             class="fa fa-save"></i>&nbsp;
                                                                         Save
                                                                     </button>
-                                                                    &nbsp; &nbsp;<a href="#" class="btn btn-default">Cancel</a>
+                                                                    &nbsp; &nbsp;<a href="javascript:void(0);" class="btn btn-default">Cancel</a>
                                                                 </div>
                                                             </div>
                                                         </form>
@@ -233,17 +243,13 @@ $profile_pic = ($UserDetail->ProfilePhotoPath != '') ? $UserDetail->ProfilePhoto
                                                                 <div class="form-group"><label
                                                                         class="col-sm-3 control-label">Email</label>
 
-                                                                    <div class="col-sm-9 controls"><input type="email" id="email" value="<?php echo $Email; ?>"
-                                                                                                          placeholder="email@yourcompany.com"
-                                                                                                          class="form-control"/>
+                                                                    <div class="col-sm-9 controls"><input type="email" id="email" value="<?php echo $Email; ?>" placeholder="email@yourcompany.com"class="form-control"  readonly disabled="disabled" />
                                                                     </div>
                                                                 </div>
                                                                 <div class="form-group"><label
                                                                         class="col-sm-3 control-label">Username</label>
 
-                                                                    <div class="col-sm-9 controls"><input type="text" value="<?php echo $UserName; ?>" readonly disabled="disabled"
-                                                                                                          placeholder="username"
-                                                                                                          class="form-control"/>
+                                                                    <div class="col-sm-9 controls"><input type="text" value="<?php echo $UserName; ?>" readonly disabled="disabled" placeholder="username" class="form-control"/>
                                                                     </div>
                                                                 </div>
                                                                 <div class="form-group"><label
@@ -251,9 +257,7 @@ $profile_pic = ($UserDetail->ProfilePhotoPath != '') ? $UserDetail->ProfilePhoto
 
                                                                     <div class="col-sm-9 controls">
                                                                         <div class="row">
-                                                                            <div class="col-xs-6"><input type="password" id="password"
-                                                                                                         placeholder=""
-                                                                                                         class="form-control"/>
+                                                                            <div class="col-xs-6"><input type="password" id="password" placeholder="" class="form-control" autocomplete="off" />
                                                                             </div>
                                                                         </div>
                                                                     </div>
@@ -264,9 +268,7 @@ $profile_pic = ($UserDetail->ProfilePhotoPath != '') ? $UserDetail->ProfilePhoto
 
                                                                     <div class="col-sm-9 controls">
                                                                         <div class="row">
-                                                                            <div class="col-xs-6"><input type="password" id="confirm_password"
-                                                                                                         placeholder=""
-                                                                                                         class="form-control"/>
+                                                                            <div class="col-xs-6"><input type="password" id="confirm_password" placeholder="" class="form-control" autocomplete="off" />
                                                                             </div>
                                                                         </div>
                                                                     </div>
@@ -275,12 +277,11 @@ $profile_pic = ($UserDetail->ProfilePhotoPath != '') ? $UserDetail->ProfilePhoto
                                                                         class="col-sm-3 control-label"></label>
 
                                                                     <div class="col-sm-9 controls">
-                                                                        <button type="submit" class="btn btn-success account_setting"><i
+                                                                        <button type="submit" class="btn btn-success account_setting" onClick="return submit_account_setting();"><i
                                                                                 class="fa fa-save"></i>&nbsp;
                                                                             Save
                                                                         </button>
-                                                                        &nbsp; &nbsp;<a href="#"
-                                                                                        class="btn btn-default">Cancel</a>
+                                                                        &nbsp; &nbsp;<a href="javascript:void(0);" class="btn btn-default">Cancel</a>
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -291,9 +292,7 @@ $profile_pic = ($UserDetail->ProfilePhotoPath != '') ? $UserDetail->ProfilePhoto
                                                             <div class="form-group"><label
                                                                     class="col-sm-3 control-label">Mobile Phone</label>
 
-                                                                <div class="col-sm-9 controls"><input type="text" id="mobile" value="<?php echo $Mobile; ?>"
-                                                                                                      placeholder="0-123-456-789"
-                                                                                                      class="form-control"/>
+                                                                <div class="col-sm-9 controls"><input type="text" id="mobile" value="<?php echo $Mobile; ?>" placeholder="0-123-456-789" readonly disabled="disabled" class="form-control"/>
                                                                 </div>
                                                             </div>
                                                             <div class="form-group"><label
@@ -332,11 +331,11 @@ $profile_pic = ($UserDetail->ProfilePhotoPath != '') ? $UserDetail->ProfilePhoto
                                                                     class="col-sm-3 control-label"></label>
 
                                                                 <div class="col-sm-9 controls">
-                                                                    <button type="submit" class="btn btn-success contact_setting"><i
+                                                                    <button type="submit" class="btn btn-success contact_setting" onClick="return submit_contact_setting();"><i
                                                                             class="fa fa-save"></i>&nbsp;
                                                                         Save
                                                                     </button>
-                                                                    &nbsp; &nbsp;<a href="#" class="btn btn-default">Cancel</a>
+                                                                    &nbsp; &nbsp;<a href="javascript:void(0);" class="btn btn-default">Cancel</a>
                                                                 </div>
                                                             </div>
                                                         </form>
@@ -369,6 +368,9 @@ $profile_pic = ($UserDetail->ProfilePhotoPath != '') ? $UserDetail->ProfilePhoto
         <?php  require_once './include/footer.php';?>
         <!--END FOOTER--><!--END PAGE WRAPPER--></div>
 </div>
+<script src="<?php echo base_url(); ?>assets/js/sweetalert-dev.js"></script> 
+<script src="<?php echo base_url(); ?>assets/js/sweetalert.min.js"></script> 
+
 <script src="<?=base_url();?>assets/js/jquery-1.10.2.min.js"></script>
 <script src="<?=base_url();?>assets/js/jquery-migrate-1.2.1.min.js"></script>
 <script src="<?=base_url();?>assets/js/jquery-ui.js"></script>
@@ -396,6 +398,20 @@ $profile_pic = ($UserDetail->ProfilePhotoPath != '') ? $UserDetail->ProfilePhoto
 <script src="<?=base_url();?>assets/js/main.js"></script>
 <!--LOADING SCRIPTS FOR PAGE-->
 <script src="<?=base_url();?>assets/vendors/bootstrap-datepicker/js/bootstrap-datepicker.js"></script>
+<script src="<?=base_url();?>assets/vendors/bootstrap-daterangepicker/daterangepicker.js"></script>
+<script src="<?=base_url();?>assets/vendors/moment/moment.js"></script>
+<script src="<?=base_url();?>assets/vendors/bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js"></script>
+<script src="<?=base_url();?>assets/vendors/bootstrap-timepicker/js/bootstrap-timepicker.js"></script>
+<script src="<?=base_url();?>assets/vendors/bootstrap-clockface/js/clockface.js"></script>
+<script src="<?=base_url();?>assets/vendors/bootstrap-colorpicker/js/bootstrap-colorpicker.js"></script>
+<script src="<?=base_url();?>assets/vendors/bootstrap-switch/js/bootstrap-switch.min.js"></script>
+<script src="<?=base_url();?>assets/vendors/jquery-maskedinput/jquery-maskedinput.js"></script>
+<script src="<?=base_url();?>assets/vendors/charCount.js"></script>
+<script src="<?=base_url();?>assets/js/form-components.js"></script>
+
+
+
+<script src="<?=base_url();?>assets/vendors/jquery-validate/jquery.validate.min.js"></script>
 <script src="<?=base_url();?>assets/js/extra-profile.js"></script>
 
 
@@ -409,13 +425,6 @@ $profile_pic = ($UserDetail->ProfilePhotoPath != '') ? $UserDetail->ProfilePhoto
         var date_of_birth       = $("#date_of_birth").val();
         var martial_status      = $('#martial_status option:selected').val();
 
-
-        // console.log('first_name:'+first_name);
-        // console.log('last_name:'+last_name);
-        // console.log('gender:'+gender);
-        // console.log('date_of_birth:'+date_of_birth);
-        // console.log('martial_status:'+martial_status);
-
         var form_data = new FormData($('input[name^="file"]'));
 
         var file_selected = 0;
@@ -423,6 +432,8 @@ $profile_pic = ($UserDetail->ProfilePhotoPath != '') ? $UserDetail->ProfilePhoto
             form_data.append('file', file);
             file_selected++;
         });
+
+        $('.profile_setting').html('<i class="fa fa-save"></i> Updating');
 
         if(file_selected > 0) {
             form_data.append('first_name', first_name);
@@ -485,7 +496,74 @@ $profile_pic = ($UserDetail->ProfilePhotoPath != '') ? $UserDetail->ProfilePhoto
                 return false;
             }
         }
-    };
+    }
+
+    
+    function submit_account_setting() {
+        var password          = $("#password").val();
+        var confirm_password  = $("#confirm_password").val();
+
+        
+        if (password.length < 6) {
+            sweetAlert("Oops...", "Please enter password atleast 6 character", "error");
+            return false;
+        } else if (confirm_password.length < 6) {
+            sweetAlert("Oops...", "Please enter confirm password atleast 6 character", "error");
+            return false;
+        } else if (password != confirm_password) {
+            sweetAlert("Oops...", "Password and confirm password not matched", "error");
+            return false;
+        } else {
+            $('.account_setting').html('<i class="fa fa-save"></i> Updating');
+
+            $.post("<?php echo base_url(); ?>profile/profile", {
+                                                            password: password, 
+                                                            confirm_password: confirm_password,
+                                                            update_password: 'Y',
+                                                            },
+            function (data, status) {
+               
+                if (data.status === "failed") {
+                    sweetAlert("Oops...", data.message, "error");
+                    return false;
+                } else { 
+                    if (data.status === "success") {
+                        window.location.href="profile";
+                    }
+                }
+            });
+        }
+    }
+
+
+    function submit_contact_setting() {
+        var website_url     = $("#website_url").val();
+        var facebook_url    = $("#facebook_url").val();
+        var twitter_url     = $("#twitter_url").val();
+        var google_url      = $("#google_url").val();
+        
+        $('.contact_setting').html('<i class="fa fa-save"></i> Updating');
+
+        $.post("<?php echo base_url(); ?>profile/profile", {
+                                                        website_url: website_url, 
+                                                        facebook_url: facebook_url,
+                                                        twitter_url: twitter_url,
+                                                        google_url: google_url,
+                                                        update_contact: 'Y',
+                                                        },
+        function (data, status) {
+           
+            if (data.status === "failed") {
+                sweetAlert("Oops...", data.message, "error");
+                return false;
+            } else { 
+                if (data.status === "success") {
+                    window.location.href="profile";
+                }
+            }
+        });
+    }
+
 </script> 
 
 </body>

@@ -20,6 +20,8 @@ class Payment extends CI_Controller {
         $this->device_os 		= $this->input->post('device_os');
     }
 
+    
+
     public function getAllPaymentGateway() {
         $error_occured = false;
 
@@ -183,6 +185,114 @@ class Payment extends CI_Controller {
                 $msg = "Payment Log fetched successfully";
             } else {
                 $msg = "No Payment log found";
+                $error_occured = true;
+            }
+        }
+
+        if($error_occured == true) {
+            $array = array(
+                            "status"        => 'failed',
+                            "message"       => $msg,
+                        );
+        } else {
+
+            $array = array(
+                           "status"     => 'success',
+                           "result"     => $payment_log,
+                           "message"    => $msg,
+                           );
+        }
+        displayJsonEncode($array);
+    }
+
+
+    public function getMyAllPaymentDebitTransactionLog() {
+        $error_occured = false;
+
+        $UserProfileId   = $this->input->post('user_profile_id');
+        
+        if($UserProfileId == "") {
+            $msg = "Please select your profile";
+            $error_occured = true;
+        } else {
+
+            $payment_log = $this->Payment_Model->getMyAllPaymentDebitTransactionLog($UserProfileId);
+            if(count($payment_log) > 0) {
+                $msg = "Payment debit Log fetched successfully";
+            } else {
+                $msg = "No Payment debit log found";
+                $error_occured = true;
+            }
+        }
+
+        if($error_occured == true) {
+            $array = array(
+                            "status"        => 'failed',
+                            "message"       => $msg,
+                        );
+        } else {
+
+            $array = array(
+                           "status"     => 'success',
+                           "result"     => $payment_log,
+                           "message"    => $msg,
+                           );
+        }
+        displayJsonEncode($array);
+    }
+
+
+    public function getMyAllPaymentCreditTransactionLog() {
+        $error_occured = false;
+
+        $UserProfileId   = $this->input->post('user_profile_id');
+        
+        if($UserProfileId == "") {
+            $msg = "Please select your profile";
+            $error_occured = true;
+        } else {
+
+            $payment_log = $this->Payment_Model->getMyAllPaymentCreditTransactionLog($UserProfileId);
+            if(count($payment_log) > 0) {
+                $msg = "Payment credit Log fetched successfully";
+            } else {
+                $msg = "No Payment credit log found";
+                $error_occured = true;
+            }
+        }
+
+        if($error_occured == true) {
+            $array = array(
+                            "status"        => 'failed',
+                            "message"       => $msg,
+                        );
+        } else {
+
+            $array = array(
+                           "status"     => 'success',
+                           "result"     => $payment_log,
+                           "message"    => $msg,
+                           );
+        }
+        displayJsonEncode($array);
+    }
+
+
+    public function getMyTotalWalletAmount() {
+        $error_occured = false;
+
+        $UserProfileId   = $this->input->post('user_profile_id');
+        
+        if($UserProfileId == "") {
+            $msg = "Please select your profile";
+            $error_occured = true;
+        } else {
+
+            $payment_log = $this->Payment_Model->getMyTotalWalletAmount($UserProfileId);
+            if(count($payment_log) > 0) {
+                $msg = "Wallet fetched successfully";
+            } else {
+                $msg = "No wallet found";
                 $error_occured = true;
             }
         }

@@ -47,18 +47,45 @@ class Profile extends CI_Controller {
 
                 $post_data = $this->input->post();
 
-                /*for($i = 0; $i < count($_FILES['file']['name']); $i++) {
-                    if($_FILES['file']['name'][$i] != '') {
-
-                        $post_data = array_merge($post_data, array('file['.$i.']' => getCurlValue($_FILES['file']['tmp_name'][$i], $_FILES['file']['type'][$i], $_FILES['file']['name'][$i])));
-                    }
-                }*/
-
                 if($_FILES['file']['name'] != '') {
                     $post_data = array_merge($post_data, array('photo' => getCurlValue($_FILES['file']['tmp_name'], $_FILES['file']['type'], $_FILES['file']['name'])));
                 }
 
-                $json_decode = post_curl_with_files(API_CALL_PATH.'userprofile/updateLeaderProfileSetting', $post_data, $this->curl);
+                $json = post_curl_with_files(API_CALL_PATH.'userprofile/updateLeaderProfileSetting', $post_data, $this->curl);
+
+                $json_decode = json_decode($json);
+                if($json_decode->status == "success") {
+
+                    $UserProfilePic = ($json_decode->result->ProfilePhotoPath != '') ? $json_decode->result->ProfilePhotoPath : base_url().'assets/images/default-user.png';
+                    
+                    if($json_decode->result->ProfilePhotoPath != '') {
+
+                        $this->session->set_userdata('UserProfilePic', $UserProfilePic);
+                    }
+                }
+
+                header('Content-type: application/json');
+
+                echo $json;
+
+                return false;
+
+            } else if($this->input->method(TRUE) == "POST" && $this->input->post('update_password') == 'Y') {
+
+                $post_data = $this->input->post();
+
+                $json_decode = post_curl_with_files(API_CALL_PATH.'userprofile/updateLeaderPassword', $post_data, $this->curl);
+
+                header('Content-type: application/json');
+
+                echo $json_decode;
+
+                return false;
+            } else if($this->input->method(TRUE) == "POST" && $this->input->post('update_contact') == 'Y') {
+
+                $post_data = $this->input->post();
+
+                $json_decode = post_curl_with_files(API_CALL_PATH.'userprofile/updateLeaderContact', $post_data, $this->curl);
 
                 header('Content-type: application/json');
 
@@ -66,6 +93,7 @@ class Profile extends CI_Controller {
 
                 return false;
             }
+
             $json_encode = post_curl(API_CALL_PATH.'userprofile/getUserAllProfileInformation', $this->input->post(), $this->curl);
 
             $json_decode = json_decode($json_encode);
