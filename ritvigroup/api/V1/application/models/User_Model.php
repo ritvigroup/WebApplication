@@ -11,6 +11,9 @@ class User_Model extends CI_Model {
         $this->userFavUserTbl       = 'UserFavUser';
         $this->UserFriendTbl        = 'UserFriend';
 
+        $this->UserProfileAddressTbl    = 'UserProfileAddress';
+        $this->UserProfileEducationTbl  = 'UserProfileEducation';
+
         $this->genderTbl            = 'Gender';
         $this->politicalPartyTbl    = 'PoliticalParty';
     }
@@ -1299,6 +1302,210 @@ class User_Model extends CI_Model {
                         'GenderId'       => $result['GenderId'],
                         'GenderName'     => $result['GenderName'],
                         'GenderStatus'   => $result['GenderStatus'],
+                        );
+        return $detail;
+    }
+
+
+    public function updateProfileAddress($UserProfileId, $post_data) {
+        $address_id     = is_array($post_data['address_id']) ? $post_data['address_id'] : explode('~', $post_data['address_id']);
+        $address        = is_array($post_data['address']) ? $post_data['address'] : explode('~', $post_data['address']);
+        $city           = is_array($post_data['city']) ? $post_data['city'] : explode('~', $post_data['city']);
+        $state          = is_array($post_data['state']) ? $post_data['state'] : explode('~', $post_data['state']);
+        $landmark       = is_array($post_data['landmark']) ? $post_data['landmark'] : explode('~', $post_data['landmark']);
+        $country        = is_array($post_data['country']) ? $post_data['country'] : explode('~', $post_data['country']);
+        $pincode        = is_array($post_data['pincode']) ? $post_data['pincode'] : explode('~', $post_data['pincode']);
+        $default        = is_array($post_data['default']) ? $post_data['default'] : explode('~', $post_data['default']);
+        $home_work      = is_array($post_data['home_work']) ? $post_data['home_work'] : explode('~', $post_data['home_work']);
+        $private_public = is_array($post_data['private_public']) ? $post_data['private_public'] : explode('~', $post_data['private_public']);
+
+        $j = 0;
+
+        for($i = 0; $i < count($address); $i++) {
+            if($address_id[$i] > 0) {
+                $update_address = array(
+                                        'UserProfileId'     => $UserProfileId,
+                                        'Address'           => $address[$i],
+                                        'City'              => $city[$i],
+                                        'State'             => $state[$i],
+                                        'Landmark'          => $landmark[$i],
+                                        'Country'           => $country[$i],
+                                        'Pincode'           => $pincode[$i],
+                                        'Default'           => $default[$i],
+                                        'HomeWork'          => $home_work[$i],
+                                        'Status'            => 1,
+                                        'PrivatePublic'     => $private_public[$i],
+                                        'UpdatedOn'         => date('Y-m-d H:i:s'),
+                                        );
+                $this->db->where('UserProfileAddressId', $address_id[$i]);
+                $this->db->update($this->UserProfileAddressTbl, $update_address);
+
+                $j++;
+            } else {
+                $update_address = array(
+                                        'UserProfileId'     => $UserProfileId,
+                                        'Address'           => $address[$i],
+                                        'City'              => $city[$i],
+                                        'State'             => $state[$i],
+                                        'Landmark'          => $landmark[$i],
+                                        'Country'           => $country[$i],
+                                        'Pincode'           => $pincode[$i],
+                                        'Default'           => $default[$i],
+                                        'HomeWork'          => $home_work[$i],
+                                        'Status'            => 1,
+                                        'PrivatePublic'     => $private_public[$i],
+                                        'AddedOn'           => date('Y-m-d H:i:s'),
+                                        'UpdatedOn'         => date('Y-m-d H:i:s'),
+                                        );
+                 $this->db->insert($this->UserProfileAddressTbl, $update_address);
+                 $j++;
+            }
+        }
+        if($j > 0) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+
+    public function getUserProfileAddress($UserProfileId) {
+
+        $user_profile_address = array();
+        $this->db->select('*');
+        $this->db->from($this->UserProfileAddressTbl);
+        $this->db->where('UserProfileId', $UserProfileId);
+        $this->db->order_by('UserProfileAddressId', 'ASC');
+        $query = $this->db->get();
+        $result = $query->result_array();
+        if ($query->num_rows() > 0) {
+            $user_profile_address = array();
+            foreach($result AS $key => $result) {
+                $user_profile_address[] = $this->returnUserProfileAddress($result);
+            }
+            return $user_profile_address;
+        } else {
+            return false;
+        }
+    }
+
+
+    public function returnUserProfileAddress($result) {
+        $detail = array(
+                        'UserProfileAddressId'      => $result['UserProfileAddressId'],
+                        'UserProfileId'             => $result['UserProfileId'],
+                        'Address'                   => $result['Address'],
+                        'City'                      => $result['City'],
+                        'State'                     => $result['State'],
+                        'Landmark'                  => $result['Landmark'],
+                        'Country'                   => $result['Country'],
+                        'Pincode'                   => $result['Pincode'],
+                        'Status'                    => $result['Status'],
+                        'Default'                   => $result['Default'],
+                        'HomeWork'                  => $result['HomeWork'],
+                        'PrivatePublic'             => $result['PrivatePublic'],
+                        'AddedOn'                   => return_time_ago($result['AddedOn']),
+                        'UpdatedOn'                 => return_time_ago($result['UpdatedOn']),
+                        'AddedOnTime'               => $result['AddedOn'],
+                        'UpdatedOnTime'             => $result['UpdatedOn'],
+                        );
+        return $detail;
+    }
+
+
+    public function updateProfileEducation($UserProfileId, $post_data) {
+        $education_id   = is_array($post_data['education_id']) ? $post_data['education_id'] : explode('~', $post_data['education_id']);
+        $qualification  = is_array($post_data['qualification']) ? $post_data['qualification'] : explode('~', $post_data['qualification']);
+        $location       = is_array($post_data['location']) ? $post_data['location'] : explode('~', $post_data['location']);
+        $university     = is_array($post_data['university']) ? $post_data['university'] : explode('~', $post_data['university']);
+        $from           = is_array($post_data['from']) ? $post_data['from'] : explode('~', $post_data['from']);
+        $to             = is_array($post_data['to']) ? $post_data['to'] : explode('~', $post_data['to']);
+        $persuing       = is_array($post_data['persuing']) ? $post_data['persuing'] : explode('~', $post_data['persuing']);
+        $private_public = is_array($post_data['private_public']) ? $post_data['private_public'] : explode('~', $post_data['private_public']);
+
+        $j = 0;
+
+        for($i = 0; $i < count($qualification); $i++) {
+            if($education_id[$i] > 0) {
+                $update_education = array(
+                                        'UserProfileId'             => $UserProfileId,
+                                        'Qualification'             => $qualification[$i],
+                                        'QualificationLocation'     => $location[$i],
+                                        'QualificationUniversity'   => $university[$i],
+                                        'QualificationFrom'         => $from[$i],
+                                        'QualificationTo'           => $to[$i],
+                                        'Persuing'                  => $persuing[$i],
+                                        'Status'                    => 1,
+                                        'PrivatePublic'             => $private_public[$i],
+                                        'UpdatedOn'                 => date('Y-m-d H:i:s'),
+                                        );
+                $this->db->where('UserProfileEducationId', $education_id[$i]);
+                $this->db->update($this->UserProfileEducationTbl, $update_education);
+
+                $j++;
+            } else {
+                $update_education = array(
+                                        'UserProfileId'             => $UserProfileId,
+                                        'Qualification'             => $qualification[$i],
+                                        'QualificationLocation'     => $location[$i],
+                                        'QualificationUniversity'   => $university[$i],
+                                        'QualificationFrom'         => $from[$i],
+                                        'QualificationTo'           => $to[$i],
+                                        'Persuing'                  => $persuing[$i],
+                                        'Status'                    => 1,
+                                        'PrivatePublic'             => $private_public[$i],
+                                        'AddedOn'                   => date('Y-m-d H:i:s'),
+                                        'UpdatedOn'                 => date('Y-m-d H:i:s'),
+                                        );
+                 $this->db->insert($this->UserProfileEducationTbl, $update_education);
+                 $j++;
+            }
+        }
+        if($j > 0) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+
+    public function getUserProfileEducation($UserProfileId) {
+
+        $user_profile_education = array();
+        $this->db->select('*');
+        $this->db->from($this->UserProfileEducationTbl);
+        $this->db->where('UserProfileId', $UserProfileId);
+        $this->db->order_by('UserProfileEducationId', 'ASC');
+        $query = $this->db->get();
+        $result = $query->result_array();
+        if ($query->num_rows() > 0) {
+            $user_profile_education = array();
+            foreach($result AS $key => $result) {
+                $user_profile_education[] = $this->returnUserProfileEducation($result);
+            }
+            return $user_profile_education;
+        } else {
+            return false;
+        }
+    }
+
+
+    public function returnUserProfileEducation($result) {
+        $detail = array(
+                        'UserProfileEducationId'    => $result['UserProfileEducationId'],
+                        'UserProfileId'             => $result['UserProfileId'],
+                        'Qualification'             => $result['Qualification'],
+                        'QualificationLocation'     => $result['QualificationLocation'],
+                        'QualificationUniversity'   => $result['QualificationUniversity'],
+                        'QualificationFrom'         => $result['QualificationFrom'],
+                        'QualificationTo'           => $result['QualificationTo'],
+                        'Persuing'                  => $result['Persuing'],
+                        'Status'                    => $result['Status'],
+                        'PrivatePublic'             => $result['PrivatePublic'],
+                        'AddedOn'                   => return_time_ago($result['AddedOn']),
+                        'UpdatedOn'                 => return_time_ago($result['UpdatedOn']),
+                        'AddedOnTime'               => $result['AddedOn'],
+                        'UpdatedOnTime'             => $result['UpdatedOn'],
                         );
         return $detail;
     }

@@ -1178,5 +1178,183 @@ class Userprofile extends CI_Controller {
         }
         displayJsonEncode($array);
     }
-       
+
+
+    public function updateProfileAddress() {
+        $UserId         = $this->input->post('user_id');
+        $UserProfileId  = $this->input->post('user_profile_id');
+        
+        $address        = $this->input->post('address');
+
+        if($UserId == "") {
+            $msg = "Please select user";
+            $error_occured = true;
+        } else if($UserProfileId == "") {
+            $msg = "Please select user profile";
+            $error_occured = true;
+        } else if(count($address) == 0) {
+            $msg = "Please add some address";
+            $error_occured = true;
+        } else {
+
+            $this->db->query("BEGIN");
+
+            $address_save = $this->User_Model->updateProfileAddress($UserProfileId, $this->input->post());
+
+            if($address_save == true) {
+                
+                $user_info = $this->User_Model->getUserProfileAddress($UserProfileId);
+
+                $this->db->query("COMMIT");
+                $msg = "User address updated successfully";
+
+            } else {
+                $this->db->query("ROLLBACK");
+                $msg = "There is some problem to update user address. Please try again later.";
+                $error_occured = true;
+            }
+        }
+
+        if($error_occured == true) {
+            $array = array(
+                            "status"        => 'failed',
+                            "message"       => $msg,
+                        );
+        } else {
+
+            $array = array(
+                           "status"   => 'success',
+                           "result"   => $user_info,
+                           "message"  => $msg,
+                           );
+        }
+        displayJsonEncode($array);
+    }
+
+
+    public function getUserProfileAddress() {
+        $UserId         = $this->input->post('user_id');
+        $UserProfileId  = $this->input->post('user_profile_id');
+        
+        if($UserId == "") {
+            $msg = "Please select user";
+            $error_occured = true;
+        } else if($UserProfileId == "") {
+            $msg = "Please select user profile";
+            $error_occured = true;
+        } else {
+            $user_info = $this->User_Model->getUserProfileAddress($UserProfileId);
+            if(count($user_info) > 0) {
+                $msg = "User address detail found.";
+            } else {
+                $msg = "There is no any address detail for this user";
+                $error_occured = true;
+            }
+        }
+
+        if($error_occured == true) {
+            $array = array(
+                            "status"        => 'failed',
+                            "message"       => $msg,
+                        );
+        } else {
+
+            $array = array(
+                           "status"   => 'success',
+                           "result"   => $user_info,
+                           "message"  => $msg,
+                           );
+        }
+        displayJsonEncode($array);
+    }
+    
+
+    public function updateProfileEducation() {
+        $UserId         = $this->input->post('user_id');
+        $UserProfileId  = $this->input->post('user_profile_id');
+        
+        $qualification  = $this->input->post('qualification');
+
+        if($UserId == "") {
+            $msg = "Please select user";
+            $error_occured = true;
+        } else if($UserProfileId == "") {
+            $msg = "Please select user profile";
+            $error_occured = true;
+        } else if(count($qualification) == 0) {
+            $msg = "Please add some qualification";
+            $error_occured = true;
+        } else {
+
+            $this->db->query("BEGIN");
+
+            $qualification_save = $this->User_Model->updateProfileEducation($UserProfileId, $this->input->post());
+
+            if($qualification_save == true) {
+                
+                $user_info = $this->User_Model->getUserProfileEducation($UserProfileId);
+
+                $this->db->query("COMMIT");
+                $msg = "User address updated successfully";
+
+            } else {
+                $this->db->query("ROLLBACK");
+                $msg = "There is some problem to update user education. Please try again later.";
+                $error_occured = true;
+            }
+        }
+
+        if($error_occured == true) {
+            $array = array(
+                            "status"        => 'failed',
+                            "message"       => $msg,
+                        );
+        } else {
+
+            $array = array(
+                           "status"   => 'success',
+                           "result"   => $user_info,
+                           "message"  => $msg,
+                           );
+        }
+        displayJsonEncode($array);
+    }
+
+
+    public function getUserProfileEducation() {
+        $UserId         = $this->input->post('user_id');
+        $UserProfileId  = $this->input->post('user_profile_id');
+        
+        if($UserId == "") {
+            $msg = "Please select user";
+            $error_occured = true;
+        } else if($UserProfileId == "") {
+            $msg = "Please select user profile";
+            $error_occured = true;
+        } else {
+
+            $user_info = $this->User_Model->getUserProfileEducation($UserProfileId);
+            if(count($user_info) > 0) {
+                $msg = "User education detail found.";
+            } else {
+                $msg = "There is no any eduction detail for this user";
+                $error_occured = true;
+            }
+        }
+
+        if($error_occured == true) {
+            $array = array(
+                            "status"        => 'failed',
+                            "message"       => $msg,
+                        );
+        } else {
+
+            $array = array(
+                           "status"   => 'success',
+                           "result"   => $user_info,
+                           "message"  => $msg,
+                           );
+        }
+        displayJsonEncode($array);
+    }
 }

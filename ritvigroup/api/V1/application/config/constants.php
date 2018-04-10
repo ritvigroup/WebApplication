@@ -87,8 +87,11 @@ defined('EXIT__AUTO_MAX')      OR define('EXIT__AUTO_MAX', 125); // highest auto
 
 
 /* ================= OUR CONSTANTS ================== */
-
-defined('WEBSITE_URL')        OR define('WEBSITE_URL', 'http://www.ritvigroup.com/ritvigroup.com/ritvigroup');
+if(ENVIRONMENT == 'development') {
+	defined('WEBSITE_URL')        OR define('WEBSITE_URL', 'http://localhost:81/ritvigroup.com/ritvigroup');
+} else {
+	defined('WEBSITE_URL')        OR define('WEBSITE_URL', 'http://www.ritvigroup.com/ritvigroup.com/ritvigroup');
+}
 
 
 defined('APP_FOLDER')        OR define('APP_FOLDER', 'ritvigroup');
