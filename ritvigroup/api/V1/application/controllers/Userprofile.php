@@ -21,7 +21,7 @@ class Userprofile extends CI_Controller {
         $this->device_os 		= $this->input->post('device_os');
     }
 
-
+    // Get User Information
     public function getUserInformation() {
         $error_occured = false;
         $UserId = $this->input->post('user_id');
@@ -64,7 +64,7 @@ class Userprofile extends CI_Controller {
         displayJsonEncode($array);
     }
 
-
+    // Get User All Profile Information
     public function getUserAllProfileInformation() {
 		$error_occured = false;
         $UserId = $this->input->post('user_id');
@@ -107,10 +107,11 @@ class Userprofile extends CI_Controller {
         displayJsonEncode($array);
     }
 
-
+    // Get User All Profile Information By Unique Profile Id
     public function getUserAllProfileInformationByUniqueProfileId() {
         $error_occured = false;
-        $unique_profile_id = $this->input->post('unique_profile_id');
+        $unique_profile_id  = $this->input->post('unique_profile_id');
+        $UserProfileId      = $this->input->post('user_profile_id'); // Logged In User Profile Id
         
         if($unique_profile_id == "") {
             $msg = "Please select user";
@@ -122,7 +123,7 @@ class Userprofile extends CI_Controller {
             if($res_u['UserStatus'] == '1') {
                 
                 $UserId = $res_u['UserId'];
-                $user_info = $this->User_Model->getUserDetail($UserId, 0, 1); // 1 = Full Information
+                $user_info = $this->User_Model->getUserDetail($UserId, $UserProfileId, 1); // 1 = Full Information
 
                 $msg = "User information found successfully";
 
@@ -151,7 +152,7 @@ class Userprofile extends CI_Controller {
         displayJsonEncode($array);
     }
 
-
+    // Get User Profile Friend Profile Information
     public function getUserprofileFriendsprofileInformation() {
         $error_occured = false;
         $UserProfileId = $this->input->post('user_profile_id');
@@ -195,7 +196,7 @@ class Userprofile extends CI_Controller {
         displayJsonEncode($array);
     }
 
-
+    // Search Citizen Profiles
     public function searchCitizenProfiles() {
         $error_occured = false;
         $UserProfileId = $this->input->post('user_profile_id');
@@ -238,7 +239,7 @@ class Userprofile extends CI_Controller {
         displayJsonEncode($array);
     }
 
-
+    // Search Leader Profiles
     public function searchLeaderProfiles() {
         $error_occured = false;
         $UserProfileId = $this->input->post('user_profile_id');
@@ -281,7 +282,7 @@ class Userprofile extends CI_Controller {
         displayJsonEncode($array);
     }
 
-
+    // Search SubLeader Profiles
     public function searchSubLeaderProfiles() {
         $error_occured = false;
         $UserProfileId = $this->input->post('user_profile_id');
@@ -324,7 +325,7 @@ class Userprofile extends CI_Controller {
         displayJsonEncode($array);
     }
 
-
+    // Search All User Profiles
     public function searchAllUserProfiles() {
         $error_occured = false;
         $UserProfileId = $this->input->post('user_profile_id');
@@ -367,7 +368,7 @@ class Userprofile extends CI_Controller {
         displayJsonEncode($array);
     }
     
-
+    // Remove Profile Picutre
     public function removeProfilePicture() {
         $error_occured = false;
         $UserId = $this->input->post('user_id');
@@ -419,7 +420,7 @@ class Userprofile extends CI_Controller {
         displayJsonEncode($array);
     }
 
-
+    // Remove Cover Profile Picture
     public function removeCoverProfilePicture() {
         $error_occured = false;
         $UserId = $this->input->post('user_id');
@@ -471,7 +472,7 @@ class Userprofile extends CI_Controller {
         displayJsonEncode($array);
     }
 
-
+    // Update Profile After Login
     public function updateProfileAfterLogin() {
         $UserId     = $this->input->post('user_id');
         $UserProfileId     = $this->input->post('user_profile_id');
@@ -613,7 +614,7 @@ class Userprofile extends CI_Controller {
         displayJsonEncode($array);
     }
 
-
+    // Update profile
     public function updateProfile() {
         $UserId         = $this->input->post('user_id');
         $UserProfileId  = $this->input->post('user_profile_id');
@@ -623,7 +624,10 @@ class Userprofile extends CI_Controller {
         $gender         = ($gender > 0) ? $gender : 0;
         $date_of_birth  = $this->input->post('date_of_birth');
         $date_of_birth  = ($date_of_birth != '') ? date('Y-m-d', strtotime($date_of_birth)) : '0000-00-00';
+        $city           = $this->input->post('city');
         $state          = $this->input->post('state');
+        $pincode        = $this->input->post('pincode');
+        $country        = $this->input->post('country');
         $email          = $this->input->post('email');
         $mobile         = $this->input->post('mobile');
         $alt_mobile     = $this->input->post('alt_mobile');
@@ -634,7 +638,7 @@ class Userprofile extends CI_Controller {
         } else if($UserProfileId == "") {
             $msg = "Please select user profile";
             $error_occured = true;
-        } else if($fullname == "") {
+        /*} else if($fullname == "") {
             $msg = "Please enter fullname";
             $error_occured = true;
         } else if($gender == "") {
@@ -648,13 +652,13 @@ class Userprofile extends CI_Controller {
             $error_occured = true;
         } else if($email == "") {
             $msg = "Please enter email";
-            $error_occured = true;
+            $error_occured = true;*/
         } else if($mobile == "") {
             $msg = "Please enter mobile number";
             $error_occured = true;
-        } else if($alt_mobile == "") {
+        /*} else if($alt_mobile == "") {
             $msg = "Please enter alternate mobile number";
-            $error_occured = true;
+            $error_occured = true;*/
         } else {
 
             $res_u = $this->User_Model->isExistUserAndUserProfileMobile($mobile, $UserId);
@@ -662,17 +666,18 @@ class Userprofile extends CI_Controller {
                 $msg = "This Mobile number is already in use. Please choose mobile number";
                 $error_occured = true;
             } else {
-
-                $res_u = $this->User_Model->isExistUserAndUserProfileEmail($email, $UserId);
-                if($res_u['UserId'] > 0) {
-                    $msg = "This Email is already in use. Please choose email address";
-                    $error_occured = true;
-                } else {
-
-                    $res_u = $this->User_Model->isExistUserAndUserProfileAltMobile($alt_mobile, $UserId);
+                if($email != '') {
+                    $res_u = $this->User_Model->isExistUserAndUserProfileEmail($email, $UserId);
                     if($res_u['UserId'] > 0) {
-                        $msg = "This alternate mobile is already in use. Please choose mobile number";
+                        $msg = "This Email is already in use. Please choose email address";
                         $error_occured = true;
+                    } else {
+
+                        $res_u = $this->User_Model->isExistUserAndUserProfileAltMobile($alt_mobile, $UserId);
+                        if($res_u['UserId'] > 0) {
+                            $msg = "This alternate mobile is already in use. Please choose mobile number";
+                            $error_occured = true;
+                        }
                     }
                 }
             }
@@ -682,39 +687,53 @@ class Userprofile extends CI_Controller {
 
                 $this->db->query("BEGIN");
 
-                $fullname_exp = explode(' ', $fullname);
+                $updateData = array();
+                if($fullname != '') {
+                    $fullname_exp = explode(' ', $fullname);
 
-                $FirstName = '';
-                $MiddleName = '';
-                $LastName = '';
-                if(count($fullname_exp) == 1) {
-                    $FirstName     = $fullname_exp[0];
-                } else if(count($fullname_exp) == 2) {
-                    $FirstName     = $fullname_exp[0];
-                    $LastName      = $fullname_exp[1];
-                } else if(count($fullname_exp) == 3) {
-                    $FirstName     = $fullname_exp[0];
-                    $MiddleName    = $fullname_exp[1];
-                    $LastName      = $fullname_exp[2];
-                } else {
-                    $FirstName     = $fullname_exp[0];
-                    $MiddleName    = $fullname_exp[1];
-                    $LastName      = trim(str_replace($fullname_exp[0].' '.$fullname_exp[1], '', $fullname));
+                    $FirstName = '';
+                    $MiddleName = '';
+                    $LastName = '';
+                    if(count($fullname_exp) == 1) {
+                        $FirstName     = $fullname_exp[0];
+                    } else if(count($fullname_exp) == 2) {
+                        $FirstName     = $fullname_exp[0];
+                        $LastName      = $fullname_exp[1];
+                    } else if(count($fullname_exp) == 3) {
+                        $FirstName     = $fullname_exp[0];
+                        $MiddleName    = $fullname_exp[1];
+                        $LastName      = $fullname_exp[2];
+                    } else {
+                        $FirstName     = $fullname_exp[0];
+                        $MiddleName    = $fullname_exp[1];
+                        $LastName      = trim(str_replace($fullname_exp[0].' '.$fullname_exp[1], '', $fullname));
+                    }
+
+                    $updateData = array_merge($updateData, array('FirstName' => $FirstName));
+                    $updateData = array_merge($updateData, array('MiddleName' => $MiddleName));
+                    $updateData = array_merge($updateData, array('LastName' => $LastName));
+                }
+                if($date_of_birth != '0000-00-00') {
+                    $updateData = array_merge($updateData, array('DateOfBirth' => $date_of_birth));
+                }
+                if($gender != '0') {
+                    $updateData = array_merge($updateData, array('Gender' => $gender));
+                }
+                if($email != '') {
+                    $updateData = array_merge($updateData, array('Email' => $email));
                 }
 
-                $updateData = array(
-                                    'FirstName'     => $FirstName,
-                                    'MiddleName'    => $MiddleName,
-                                    'LastName'      => $LastName,
-                                    'DateOfBirth'   => $date_of_birth,
-                                    'Gender'        => $gender,
-                                    'Email'         => $email,
-                                    'Mobile'        => $mobile,
+                $updateData2 = array(
                                     'AltMobile'     => $alt_mobile,
+                                    'City'          => $city,
                                     'State'         => $state,
+                                    'ZipCode'       => $pincode,
+                                    'Country'       => $country,
                                     'UpdatedOn'     => date('Y-m-d H:i:s'),
                                     'UpdatedBy'     => $UserProfileId,
                                 );
+                $updateData = array_merge($updateData, $updateData2);
+
                 if($this->User_Model->updateUserProfileData($UserProfileId, $updateData)) {
                     
                     $this->User_Model->saveUserPhoto('photo', $UserId, 1);
@@ -748,7 +767,7 @@ class Userprofile extends CI_Controller {
         displayJsonEncode($array);
     }
 
-
+    // Update leader profile Setting
     public function updateLeaderProfileSetting() {
         $UserId         = $this->input->post('user_id');
         $UserProfileId  = $this->input->post('user_profile_id');
@@ -848,7 +867,7 @@ class Userprofile extends CI_Controller {
         displayJsonEncode($array);
     }
 
-
+    // Update Leader Password
     public function updateLeaderPassword() {
         $UserId         = $this->input->post('user_id');
         $UserProfileId  = $this->input->post('user_profile_id');
@@ -904,7 +923,7 @@ class Userprofile extends CI_Controller {
         displayJsonEncode($array);
     }
 
-
+    // Update Leader Contact
     public function updateLeaderContact() {
         $UserId         = $this->input->post('user_id');
         $UserProfileId  = $this->input->post('user_profile_id');
@@ -950,7 +969,7 @@ class Userprofile extends CI_Controller {
         displayJsonEncode($array);
     }
 
-
+    // Get All Genders
     public function getAllGender() {
         $error_occured = false;
         $UserId         = $this->input->post('user_id');
@@ -993,7 +1012,7 @@ class Userprofile extends CI_Controller {
         displayJsonEncode($array);
     }
 
-
+    // Get All Political Party
     public function getAllPoliticalParty() {
         $error_occured = false;
         $UserId         = $this->input->post('user_id');
@@ -1036,7 +1055,7 @@ class Userprofile extends CI_Controller {
         displayJsonEncode($array);
     }
 
-
+    // UPdate Profile Address
     public function updateProfileAddress() {
         $UserId         = $this->input->post('user_id');
         $UserProfileId  = $this->input->post('user_profile_id');
@@ -1088,7 +1107,7 @@ class Userprofile extends CI_Controller {
         displayJsonEncode($array);
     }
 
-
+    // Get User Profile Address
     public function getUserProfileAddress() {
         $UserId         = $this->input->post('user_id');
         $UserProfileId  = $this->input->post('user_profile_id');
@@ -1125,7 +1144,7 @@ class Userprofile extends CI_Controller {
         displayJsonEncode($array);
     }
     
-
+    // Update Profile Education
     public function updateProfileEducation() {
         $UserId         = $this->input->post('user_id');
         $UserProfileId  = $this->input->post('user_profile_id');
@@ -1177,7 +1196,7 @@ class Userprofile extends CI_Controller {
         displayJsonEncode($array);
     }
 
-
+    // Get user Profile Education
     public function getUserProfileEducation() {
         $UserId         = $this->input->post('user_id');
         $UserProfileId  = $this->input->post('user_profile_id');
@@ -1215,7 +1234,97 @@ class Userprofile extends CI_Controller {
         displayJsonEncode($array);
     }
 
+    // Update Profile Work
+    public function updateProfileWork() {
+        $UserId         = $this->input->post('user_id');
+        $UserProfileId  = $this->input->post('user_profile_id');
+        
+        $work  = $this->input->post('work');
 
+        if($UserId == "") {
+            $msg = "Please select user";
+            $error_occured = true;
+        } else if($UserProfileId == "") {
+            $msg = "Please select user profile";
+            $error_occured = true;
+        } else if(count($work) == 0) {
+            $msg = "Please add some work profile";
+            $error_occured = true;
+        } else {
+
+            $this->db->query("BEGIN");
+
+            $work_save = $this->User_Model->updateProfileWork($UserProfileId, $this->input->post());
+
+            if($work_save == true) {
+                
+                $user_info = $this->User_Model->getUserProfileWork($UserProfileId);
+
+                $this->db->query("COMMIT");
+                $msg = "User work updated successfully";
+
+            } else {
+                $this->db->query("ROLLBACK");
+                $msg = "There is some problem to update user work. Please try again later.";
+                $error_occured = true;
+            }
+        }
+
+        if($error_occured == true) {
+            $array = array(
+                            "status"        => 'failed',
+                            "message"       => $msg,
+                        );
+        } else {
+
+            $array = array(
+                           "status"   => 'success',
+                           "result"   => $user_info,
+                           "message"  => $msg,
+                           );
+        }
+        displayJsonEncode($array);
+    }
+
+    // Get user Profile Work
+    public function getUserProfileWork() {
+        $UserId         = $this->input->post('user_id');
+        $UserProfileId  = $this->input->post('user_profile_id');
+        
+        if($UserId == "") {
+            $msg = "Please select user";
+            $error_occured = true;
+        } else if($UserProfileId == "") {
+            $msg = "Please select user profile";
+            $error_occured = true;
+        } else {
+
+            $user_info = $this->User_Model->getUserProfileWork($UserProfileId);
+            if(count($user_info) > 0) {
+                $msg = "User work detail found.";
+            } else {
+                $msg = "There is no any work detail for this user";
+                $error_occured = true;
+            }
+        }
+
+        if($error_occured == true) {
+            $array = array(
+                            "status"        => 'failed',
+                            "message"       => $msg,
+                        );
+        } else {
+
+            $array = array(
+                           "status"   => 'success',
+                           "result"   => $user_info,
+                           "message"  => $msg,
+                           );
+        }
+        displayJsonEncode($array);
+    }
+
+    // Get More Detail About User Profile
     public function getMoreDetailAboutUserProfile() {
         $UserId         = $this->input->post('user_id');
         $UserProfileId  = $this->input->post('user_profile_id');
@@ -1228,11 +1337,14 @@ class Userprofile extends CI_Controller {
             $error_occured = true;
         } else {
             $user_info = array();
-            $user_info_address      = $this->User_Model->getUserProfileAddress($UserProfileId);
-            $user_info_education    = $this->User_Model->getUserProfileEducation($UserProfileId);
+            $user_info_address['Profile']       = $this->User_Model->getUserProfileInformation($UserProfileId, $UserProfileId);
+            //$user_info_address['Address']       = $this->User_Model->getUserProfileAddress($UserProfileId);
+            $user_info_education['Education']   = $this->User_Model->getUserProfileEducation($UserProfileId);
+            $user_info_work['Work']             = $this->User_Model->getUserProfileWork($UserProfileId);
 
             $user_info = array_merge($user_info, $user_info_address);
             $user_info = array_merge($user_info, $user_info_education);
+            $user_info = array_merge($user_info, $user_info_work);
             if(count($user_info) > 0) {
                 $msg = "User more information detail found.";
             } else {

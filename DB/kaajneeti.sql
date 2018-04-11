@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Apr 09, 2018 at 01:19 PM
+-- Generation Time: Apr 11, 2018 at 12:21 PM
 -- Server version: 5.6.16
 -- PHP Version: 5.5.9
 
@@ -1329,10 +1329,10 @@ CREATE TABLE IF NOT EXISTS `PaymentTransactionLog` (
 --
 
 INSERT INTO `PaymentTransactionLog` (`PaymentTransactionLogId`, `PaymentGatewayId`, `TransactionId`, `PaymentBy`, `PaymentTo`, `TransactionDate`, `TransactionAmount`, `TransactionShippingAmount`, `DebitOrCredit`, `TransactionStatus`, `TransactionComment`, `AddedOn`) VALUES
-(1, 1, 'TE454534', 4, 4, '2018-05-01 14:10:00', 45.00, 0.00, 1, 1, 'This is payment for support', '2018-04-06 13:26:34'),
-(2, 1, 'TE454534', 4, 4, '2018-05-01 14:10:00', 45.00, 0.00, 1, 1, 'This is payment for support', '2018-04-06 13:27:24'),
-(3, 1, 'TE454534', 4, 4, '2018-05-01 14:10:00', 45.00, 0.00, 1, 1, 'This is payment for support', '2018-04-06 13:28:20'),
-(4, 1, 'TE454534', 4, 4, '2018-05-01 14:10:00', 45.00, 0.00, 1, 1, 'This is payment for support', '2018-04-06 13:29:06');
+(1, 1, 'TE454534575474', 2, 4, '2018-05-01 14:10:00', 45.00, 0.00, 0, 1, 'This is payment for support', '2018-04-06 13:26:34'),
+(2, 1, 'TE454534343', 4, 2, '2018-05-01 14:10:00', 45.00, 0.00, 1, 1, 'This is payment for support', '2018-04-06 13:27:24'),
+(3, 1, 'TE4545340999', 2, 4, '2018-05-01 14:10:00', 45.00, 0.00, 0, 1, 'This is payment for support', '2018-04-06 13:28:20'),
+(4, 1, 'TE45413444534', 4, 2, '2018-05-01 14:10:00', 45.00, 0.00, 1, 1, 'This is payment for support', '2018-04-06 13:29:06');
 
 -- --------------------------------------------------------
 
@@ -3022,7 +3022,7 @@ CREATE TABLE IF NOT EXISTS `User` (
 --
 
 INSERT INTO `User` (`UserId`, `UserUniqueId`, `UserName`, `UserPassword`, `UserMpin`, `UserEmail`, `UserMobile`, `DateOfBirth`, `Gender`, `MaritalStatus`, `UserStatus`, `LoginDeviceToken`, `LoginOtp`, `LoginStatus`, `LoginOtpValidTill`, `ActivationCode`, `ResetPasswordCode`, `ResetPasswordCodeValidTill`, `ProfilePhotoId`, `CoverPhotoId`, `FacebookProfileId`, `GoogleProfileId`, `LinkedinProfileId`, `TwitterProfileId`, `DeviceLantitude`, `DeviceLongitude`, `AddedOn`, `UpdatedOn`, `DeactivatedOn`) VALUES
-(1, '2520942731521629994988224977', 'rajesh1may', 'e10adc3949ba59abbe56e057f20f883e', 0, 'rajesh1may@gmail.com', '+919911529958', '1981-05-01', 1, 1, 1, NULL, NULL, 1, '0000-00-00 00:00:00', NULL, '', '2018-03-21 12:54:54', 22, 0, '', '', '', '', NULL, NULL, '2018-03-21 11:59:54', '2018-04-09 13:06:33', '0000-00-00 00:00:00'),
+(1, '2520942731521629994988224977', 'rajesh1may', 'e10adc3949ba59abbe56e057f20f883e', 0, 'rajesh1may@gmail.com', '+919911529958', '1981-05-01', 1, 1, 1, NULL, NULL, 1, '0000-00-00 00:00:00', NULL, '', '2018-03-21 12:54:54', 23, 0, '', '', '', '', NULL, NULL, '2018-03-21 11:59:54', '2018-04-09 13:49:10', '0000-00-00 00:00:00'),
 (2, '1409071411521714669242916526', 'ramesh', '6fc42c4388ed6f0c5a91257f096fef3c', 0, 'ramesh@gmail.com', '342389042390', NULL, 1, 0, 1, NULL, NULL, 1, '0000-00-00 00:00:00', NULL, '', NULL, 0, 0, '', '', '', '', NULL, NULL, '2018-03-22 11:31:09', '2018-03-22 11:31:09', '0000-00-00 00:00:00'),
 (3, '54206465915228287681193773594', 'gaurav', '29be54a52396750258d886abc5417fda', 0, 'gaurav@ritvigroup.com', '432423432423', NULL, 1, 0, 1, NULL, NULL, 1, '0000-00-00 00:00:00', NULL, '', NULL, 0, 0, '', '', '', '', NULL, NULL, '2018-04-04 09:59:28', '2018-04-04 09:59:28', '0000-00-00 00:00:00'),
 (4, '128573488715228288222039744858', 'vaidehi', '5772f5dd7afb90241fe9265becd65703', 0, 'vaidehi@gmail.com', '89898989898', NULL, 2, 0, 1, NULL, NULL, 1, '0000-00-00 00:00:00', NULL, '', NULL, 0, 0, '', '', '', '', NULL, NULL, '2018-04-04 10:00:22', '2018-04-04 10:00:22', '0000-00-00 00:00:00');
@@ -3076,6 +3076,30 @@ CREATE TABLE IF NOT EXISTS `UserFavUser` (
 INSERT INTO `UserFavUser` (`UserFavUserId`, `UserProfileId`, `FriendUserProfileId`, `FavOn`) VALUES
 (2, 1, 4, '2018-03-23 10:15:27'),
 (3, 2, 4, '2018-03-23 10:15:27');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `UserFollow`
+--
+
+CREATE TABLE IF NOT EXISTS `UserFollow` (
+  `UserFriendId` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `UserProfileId` bigint(20) unsigned NOT NULL DEFAULT '0',
+  `FollowUserProfileId` bigint(20) unsigned NOT NULL DEFAULT '0',
+  `FollowOn` datetime DEFAULT NULL,
+  PRIMARY KEY (`UserFriendId`),
+  KEY `user_id` (`FollowUserProfileId`,`UserProfileId`),
+  KEY `user_profile_id` (`UserProfileId`),
+  KEY `friend_user_profile_id` (`FollowUserProfileId`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=6 ;
+
+--
+-- Dumping data for table `UserFollow`
+--
+
+INSERT INTO `UserFollow` (`UserFriendId`, `UserProfileId`, `FollowUserProfileId`, `FollowOn`) VALUES
+(5, 1, 4, '2018-04-11 08:42:25');
 
 -- --------------------------------------------------------
 
@@ -3141,7 +3165,7 @@ CREATE TABLE IF NOT EXISTS `UserPhoto` (
   `AddedOn` datetime NOT NULL,
   `UpdatedOn` datetime NOT NULL,
   PRIMARY KEY (`UserPhotoId`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=23 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=24 ;
 
 --
 -- Dumping data for table `UserPhoto`
@@ -3169,7 +3193,8 @@ INSERT INTO `UserPhoto` (`UserPhotoId`, `UserId`, `UserAlbumId`, `PhotoPath`, `P
 (19, 1, 1, '20180409124340PM-1523270620-PROFILE-596006677.jpg', 1, '2018-04-09 12:43:40', '2018-04-09 12:43:40'),
 (20, 1, 1, '20180409130349PM-1523271829-PROFILE-1681086949.jpg', 1, '2018-04-09 13:03:49', '2018-04-09 13:03:49'),
 (21, 1, 1, '20180409130501PM-1523271901-PROFILE-714903216.jpg', 1, '2018-04-09 13:05:01', '2018-04-09 13:05:01'),
-(22, 1, 1, '20180409130540PM-1523271940-PROFILE-877259365.jpg', 1, '2018-04-09 13:05:40', '2018-04-09 13:05:40');
+(22, 1, 1, '20180409130540PM-1523271940-PROFILE-877259365.jpg', 1, '2018-04-09 13:05:40', '2018-04-09 13:05:40'),
+(23, 1, 1, '20180409134910PM-1523274550-PROFILE-900297407.jpg', 1, '2018-04-09 13:49:10', '2018-04-09 13:49:10');
 
 -- --------------------------------------------------------
 
@@ -3191,6 +3216,7 @@ CREATE TABLE IF NOT EXISTS `UserProfile` (
   `DateOfBirth` date DEFAULT NULL,
   `Gender` varchar(20) DEFAULT NULL,
   `PoliticalPartyId` bigint(20) DEFAULT NULL,
+  `UserBio` text,
   `Address` varchar(200) DEFAULT NULL,
   `City` varchar(100) DEFAULT NULL,
   `District` varchar(100) DEFAULT NULL,
@@ -3203,11 +3229,14 @@ CREATE TABLE IF NOT EXISTS `UserProfile` (
   `Ward` varchar(100) DEFAULT NULL,
   `State` varchar(100) DEFAULT NULL,
   `ZipCode` varchar(100) DEFAULT NULL,
+  `Country` varchar(100) DEFAULT NULL,
   `Mobile` varchar(20) DEFAULT NULL,
   `AltMobile` varchar(20) DEFAULT NULL,
+  `Skill` text,
   `ProfilePhotoId` bigint(20) unsigned DEFAULT NULL,
   `CoverPhotoId` bigint(20) unsigned NOT NULL,
   `ProfileStatus` int(11) DEFAULT '0',
+  `UserInterest` varchar(200) DEFAULT NULL,
   `WebsiteUrl` text,
   `FacebookPageUrl` text,
   `TwitterPageUrl` text,
@@ -3227,15 +3256,97 @@ CREATE TABLE IF NOT EXISTS `UserProfile` (
 -- Dumping data for table `UserProfile`
 --
 
-INSERT INTO `UserProfile` (`UserProfileId`, `UserId`, `UserTypeId`, `ParentUserId`, `UserRoleId`, `FirstName`, `MiddleName`, `LastName`, `Email`, `UserProfileDeviceToken`, `DateOfBirth`, `Gender`, `PoliticalPartyId`, `Address`, `City`, `District`, `Tehsil`, `Thana`, `Block`, `VillagePanchayat`, `Village`, `TownArea`, `Ward`, `State`, `ZipCode`, `Mobile`, `AltMobile`, `ProfilePhotoId`, `CoverPhotoId`, `ProfileStatus`, `WebsiteUrl`, `FacebookPageUrl`, `TwitterPageUrl`, `GooglePageUrl`, `AddedOn`, `UpdatedOn`, `AddedBy`, `UpdatedBy`) VALUES
-(1, 1, 1, 0, 0, 'Rajesh', '', '', 'rajesh1may@gmail.com', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'New Delhi', NULL, '+919911529958', '+919911529958', NULL, 0, 1, NULL, NULL, NULL, NULL, '2018-03-21 11:59:54', '2018-03-27 13:09:53', 1, 1),
-(2, 1, 2, 0, 0, 'Rajesh', '', 'Kumar', 'rajesh1may@gmail.com', NULL, NULL, NULL, 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'New Delhi', NULL, '+919911529958', '+919911529958', NULL, 0, 1, 'http://facebook.com/rajesh1mayweb', 'http://facebook.com/rajesh1may', 'http://twitter.com/rajesh1may', 'http://google.com/rajesh1may', '2018-03-21 11:59:54', '2018-04-09 13:05:40', 1, 2),
-(3, 2, 1, 0, 0, 'RameshCitizen', NULL, 'Kumar', 'ramesh@gmail.com', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '342389042390', NULL, NULL, 0, 1, NULL, NULL, NULL, NULL, '2018-03-22 11:31:09', '2018-03-22 11:31:09', 2, 2),
-(4, 2, 2, 0, 0, 'RameshLeader', NULL, 'Kumar', 'ramesh@gmail.com', NULL, NULL, NULL, 2, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '342389042390', NULL, NULL, 0, 1, NULL, NULL, NULL, NULL, '2018-03-22 11:31:09', '2018-03-22 11:31:09', 2, 2),
-(5, 3, 1, 0, 0, 'Gaurav', NULL, 'Gautam', 'gaurav@ritvigroup.com', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '432423432423', NULL, NULL, 0, 1, NULL, NULL, NULL, NULL, '2018-04-04 09:59:28', '2018-04-04 09:59:28', 3, 3),
-(6, 3, 2, 0, 0, 'Gaurav', NULL, 'Gautam', 'gaurav@ritvigroup.com', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '432423432423', NULL, NULL, 0, 1, NULL, NULL, NULL, NULL, '2018-04-04 09:59:28', '2018-04-04 09:59:28', 3, 3),
-(7, 4, 1, 0, 0, 'Vaidehi', NULL, 'RitviGroup', 'vaidehi@gmail.com', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '89898989898', NULL, NULL, 0, 1, NULL, NULL, NULL, NULL, '2018-04-04 10:00:22', '2018-04-04 10:00:22', 4, 4),
-(8, 4, 2, 0, 0, 'Vaidehi', NULL, 'RitviGroup', 'vaidehi@gmail.com', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '89898989898', NULL, NULL, 0, 1, NULL, NULL, NULL, NULL, '2018-04-04 10:00:22', '2018-04-04 10:00:22', 4, 4);
+INSERT INTO `UserProfile` (`UserProfileId`, `UserId`, `UserTypeId`, `ParentUserId`, `UserRoleId`, `FirstName`, `MiddleName`, `LastName`, `Email`, `UserProfileDeviceToken`, `DateOfBirth`, `Gender`, `PoliticalPartyId`, `UserBio`, `Address`, `City`, `District`, `Tehsil`, `Thana`, `Block`, `VillagePanchayat`, `Village`, `TownArea`, `Ward`, `State`, `ZipCode`, `Country`, `Mobile`, `AltMobile`, `Skill`, `ProfilePhotoId`, `CoverPhotoId`, `ProfileStatus`, `UserInterest`, `WebsiteUrl`, `FacebookPageUrl`, `TwitterPageUrl`, `GooglePageUrl`, `AddedOn`, `UpdatedOn`, `AddedBy`, `UpdatedBy`) VALUES
+(1, 1, 1, 0, 0, 'Rajesh', '', '', 'rajesh1may@gmail.com', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'New Delhi', NULL, NULL, '+919911529958', '+919911529958', NULL, NULL, 0, 1, NULL, NULL, NULL, NULL, NULL, '2018-03-21 11:59:54', '2018-03-27 13:09:53', 1, 1),
+(2, 1, 2, 0, 0, 'Rajesh', '', 'Kumar', 'rajesh1may@gmail.com', NULL, NULL, NULL, 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'New Delhi', NULL, NULL, '+919911529958', '+919911529958', NULL, NULL, 0, 1, NULL, 'http://facebook.com/rajesh1mayweb', 'http://facebook.com/rajesh1may', 'http://twitter.com/rajesh1may', 'http://google.com/rajesh1may', '2018-03-21 11:59:54', '2018-04-09 13:49:10', 1, 2),
+(3, 2, 1, 0, 0, 'RameshCitizen', NULL, 'Kumar', 'ramesh@gmail.com', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '342389042390', NULL, NULL, NULL, 0, 1, NULL, NULL, NULL, NULL, NULL, '2018-03-22 11:31:09', '2018-03-22 11:31:09', 2, 2),
+(4, 2, 2, 0, 0, 'RameshLeader', NULL, 'Kumar', 'ramesh@gmail.com', NULL, NULL, NULL, 2, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '342389042390', NULL, NULL, NULL, 0, 1, NULL, NULL, NULL, NULL, NULL, '2018-03-22 11:31:09', '2018-03-22 11:31:09', 2, 2),
+(5, 3, 1, 0, 0, 'Gaurav', NULL, 'Gautam', 'gaurav@ritvigroup.com', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '432423432423', NULL, NULL, NULL, 0, 1, NULL, NULL, NULL, NULL, NULL, '2018-04-04 09:59:28', '2018-04-04 09:59:28', 3, 3),
+(6, 3, 2, 0, 0, 'Gaurav', NULL, 'Gautam', 'gaurav@ritvigroup.com', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '432423432423', NULL, NULL, NULL, 0, 1, NULL, NULL, NULL, NULL, NULL, '2018-04-04 09:59:28', '2018-04-04 09:59:28', 3, 3),
+(7, 4, 1, 0, 0, 'Vaidehi', NULL, 'RitviGroup', 'vaidehi@gmail.com', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '89898989898', NULL, NULL, NULL, 0, 1, NULL, NULL, NULL, NULL, NULL, '2018-04-04 10:00:22', '2018-04-04 10:00:22', 4, 4),
+(8, 4, 2, 0, 0, 'Vaidehi', NULL, 'RitviGroup', 'vaidehi@gmail.com', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '89898989898', NULL, NULL, NULL, 0, 1, NULL, NULL, NULL, NULL, NULL, '2018-04-04 10:00:22', '2018-04-04 10:00:22', 4, 4);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `UserProfileAddress`
+--
+
+CREATE TABLE IF NOT EXISTS `UserProfileAddress` (
+  `UserProfileAddressId` bigint(20) NOT NULL AUTO_INCREMENT,
+  `UserProfileId` bigint(20) NOT NULL,
+  `Address` varchar(200) DEFAULT NULL,
+  `City` varchar(200) DEFAULT NULL,
+  `State` varchar(200) DEFAULT NULL,
+  `Landmark` varchar(200) DEFAULT NULL,
+  `Country` varchar(200) DEFAULT NULL,
+  `Pincode` varchar(50) DEFAULT NULL,
+  `Status` int(11) NOT NULL DEFAULT '0',
+  `Default` int(11) NOT NULL DEFAULT '0',
+  `HomeWork` int(11) NOT NULL DEFAULT '1',
+  `PrivatePublic` int(11) NOT NULL DEFAULT '0',
+  `AddedOn` datetime DEFAULT NULL,
+  `UpdatedOn` datetime DEFAULT NULL,
+  PRIMARY KEY (`UserProfileAddressId`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=3 ;
+
+--
+-- Dumping data for table `UserProfileAddress`
+--
+
+INSERT INTO `UserProfileAddress` (`UserProfileAddressId`, `UserProfileId`, `Address`, `City`, `State`, `Landmark`, `Country`, `Pincode`, `Status`, `Default`, `HomeWork`, `PrivatePublic`, `AddedOn`, `UpdatedOn`) VALUES
+(1, 2, 'D 22', 'Girdharpur Sunarsi, Modern railway city', 'Uttart pradesh', 'New Modern height', 'India', '203009', 1, 0, 0, 1, '2018-04-10 08:51:31', '2018-04-10 09:02:04'),
+(2, 2, 'D 22', 'Girdharpur Sunarsi, Modern railway city', 'Uttart pradesh', 'New Modern height', 'India', '203009', 1, 0, 0, 1, '2018-04-10 09:01:24', '2018-04-10 09:01:24');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `UserProfileEducation`
+--
+
+CREATE TABLE IF NOT EXISTS `UserProfileEducation` (
+  `UserProfileEducationId` bigint(20) NOT NULL AUTO_INCREMENT,
+  `UserProfileId` bigint(20) NOT NULL,
+  `Qualification` varchar(200) DEFAULT NULL,
+  `QualificationLocation` varchar(200) DEFAULT NULL,
+  `QualificationUniversity` varchar(200) DEFAULT NULL,
+  `QualificationFrom` date DEFAULT NULL,
+  `QualificationTo` date DEFAULT NULL,
+  `Persuing` int(11) NOT NULL DEFAULT '0',
+  `PrivatePublic` int(11) NOT NULL DEFAULT '0',
+  `Status` int(11) NOT NULL DEFAULT '0',
+  `AddedOn` datetime DEFAULT NULL,
+  `UpdatedOn` datetime DEFAULT NULL,
+  PRIMARY KEY (`UserProfileEducationId`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ;
+
+--
+-- Dumping data for table `UserProfileEducation`
+--
+
+INSERT INTO `UserProfileEducation` (`UserProfileEducationId`, `UserProfileId`, `Qualification`, `QualificationLocation`, `QualificationUniversity`, `QualificationFrom`, `QualificationTo`, `Persuing`, `PrivatePublic`, `Status`, `AddedOn`, `UpdatedOn`) VALUES
+(1, 2, 'MCA', 'Allahabad', 'Uttart pradesh Technical University', '2005-06-01', '2005-06-30', 0, 1, 1, '2018-04-10 10:30:21', '2018-04-10 10:30:21');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `UserProfileWork`
+--
+
+CREATE TABLE IF NOT EXISTS `UserProfileWork` (
+  `UserProfileWorkId` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `UserProfileId` bigint(20) unsigned NOT NULL,
+  `WorkPosition` varchar(200) DEFAULT NULL,
+  `WorkPlace` varchar(200) DEFAULT NULL,
+  `WorkLocation` varchar(255) DEFAULT NULL,
+  `WorkFrom` date NOT NULL,
+  `WorkTo` date NOT NULL,
+  `CurrentlyWorking` int(11) NOT NULL DEFAULT '0',
+  `PrivatePublic` int(11) NOT NULL DEFAULT '0',
+  `AddedOn` datetime DEFAULT NULL,
+  `UpdatedOn` datetime DEFAULT NULL,
+  PRIMARY KEY (`UserProfileWorkId`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 

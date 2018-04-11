@@ -63,8 +63,11 @@
                             <div class="portlet-header">
                                 <div class="caption">Plan</div>
                                 <div class="actions">
-                                    <a href="<?=base_url();?>plan/createplan" class="btn btn-info btn-xs"><i class="fa fa-plus"></i>&nbsp;Create New Plan</a>&nbsp;
-                                    <?php /* &nbsp;
+                                    
+                                    <a data-target="#modal-stackable" data-toggle="modal" href="javascript:void(0);" onClick="return displayCreatePlanYourGoal();" title="Let's begin with your Goal" class="btn btn-info btn-xs"><i class="fa fa-plus"></i>&nbsp;Create Plan</a>&nbsp;
+
+                                    <?php /*<a href="<?=base_url();?>plan/createplan" class="btn btn-info btn-xs"><i class="fa fa-plus"></i>&nbsp;Create New Plan</a>&nbsp;
+                                     &nbsp;
                                     <div class="btn-group"><a href="#" data-toggle="dropdown"
                                                               class="btn btn-warning btn-xs dropdown-toggle"><i
                                             class="fa fa-wrench"></i>&nbsp;
@@ -132,6 +135,18 @@
 
         <!--END FOOTER--><!--END PAGE WRAPPER--></div>
 </div>
+
+<div id="modal-stackable" tabindex="-1" role="dialog" aria-labelledby="modal-stackable-label" aria-hidden="true" class="modal fade" style="display: none;">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            
+        </div>
+    </div>
+</div>
+
+<script src="<?php echo base_url(); ?>assets/js/sweetalert-dev.js"></script> 
+<script src="<?php echo base_url(); ?>assets/js/sweetalert.min.js"></script> 
+
 <script src="<?=base_url();?>assets/js/jquery-1.10.2.min.js"></script>
 <script src="<?=base_url();?>assets/js/jquery-migrate-1.2.1.min.js"></script>
 <script src="<?=base_url();?>assets/js/jquery-ui.js"></script>
@@ -158,6 +173,72 @@
 <!--CORE JAVASCRIPT-->
 <script src="<?=base_url();?>assets/js/main.js"></script>
 <!--LOADING SCRIPTS FOR PAGE-->
+<script src="<?=base_url();?>assets/vendors/bootstrap-datepicker/js/bootstrap-datepicker.js"></script>
+<script src="<?=base_url();?>assets/vendors/bootstrap-daterangepicker/daterangepicker.js"></script>
+<script src="<?=base_url();?>assets/vendors/moment/moment.js"></script>
+<script src="<?=base_url();?>assets/vendors/bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js"></script>
+<script src="<?=base_url();?>assets/vendors/bootstrap-timepicker/js/bootstrap-timepicker.js"></script>
+<script src="<?=base_url();?>assets/vendors/bootstrap-clockface/js/clockface.js"></script>
+<script src="<?=base_url();?>assets/vendors/bootstrap-colorpicker/js/bootstrap-colorpicker.js"></script>
+<script src="<?=base_url();?>assets/vendors/bootstrap-switch/js/bootstrap-switch.min.js"></script>
+<script src="<?=base_url();?>assets/vendors/jquery-maskedinput/jquery-maskedinput.js"></script>
+<script src="<?=base_url();?>assets/vendors/charCount.js"></script>
+<script src="<?=base_url();?>assets/js/form-components.js"></script>
+
+
+
+<script src="<?=base_url();?>assets/vendors/jquery-validate/jquery.validate.min.js"></script>
+<script src="<?=base_url();?>assets/vendors/jquery-steps/js/jquery.steps.min.js"></script>
+<script src="<?=base_url();?>assets/vendors/jquery-bootstrap-wizard/jquery.bootstrap.wizard.min.js"></script>
+<script src="<?=base_url();?>assets/js/form-wizard.js"></script>
+
+
+
+<script src="<?=base_url();?>assets/vendors/mixitup/src/jquery.mixitup.js"></script>
+<script src="<?=base_url();?>assets/vendors/lightbox/js/lightbox.min.js"></script>
+<script src="<?=base_url();?>assets/js/page-gallery.js"></script>
+
+<script>
+    function displayCreatePlanYourGoal() {
+
+        $.post("<?php echo base_url(); ?>plan/createPlanYourGoal", {'display': 'Y'},
+            function (data, status) {
+                if(data != '') {
+                    $('.modal-content').html(data);
+                } else {
+                    $('.modal-content').html(data);
+                }
+            });
+    }
+
+    function goToNextScreen() {
+        var plan_title          = $("#plan_title").val();
+
+        if (plan_title.length > 0) {            
+            
+
+            $.post("<?php echo base_url(); ?>plan/createplan", {
+                                                            poll_question: poll_question, 
+                                                            },
+                function (data, status) {
+                   
+                    if (data.status === "failed") {
+                        sweetAlert("Oops...", data.message, "error");
+                        return false;
+                    } else { 
+                        $this.button('Submit');
+                        if (data.status === "success") {
+                            window.location.href="poll";
+                        }
+                    }
+                });
+
+        } else {
+            sweetAlert("Oops...", "Please enter subject or title of history", "error");
+            return false;
+        }
+    };
+</script>
 
 </body>
 </html>

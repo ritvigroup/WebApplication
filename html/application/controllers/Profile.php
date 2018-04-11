@@ -29,6 +29,9 @@ class Profile extends CI_Controller {
         
         if($this->uri->segment(3) != '') {
 
+            $_POST['user_id'] = $this->session->userdata('UserId');
+            $_POST['user_profile_id'] = $this->session->userdata('LeaderProfileId');
+            
             $_POST['unique_profile_id'] = $this->uri->segment(3);
             $json_encode = post_curl(API_CALL_PATH.'userprofile/getUserAllProfileInformationByUniqueProfileId', $this->input->post(), $this->curl);
 

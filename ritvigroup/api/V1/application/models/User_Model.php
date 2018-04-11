@@ -14,6 +14,7 @@ class User_Model extends CI_Model {
 
         $this->UserProfileAddressTbl    = 'UserProfileAddress';
         $this->UserProfileEducationTbl  = 'UserProfileEducation';
+        $this->UserProfileWorkTbl       = 'UserProfileWork';
 
         $this->genderTbl            = 'Gender';
         $this->politicalPartyTbl    = 'PoliticalParty';
@@ -44,7 +45,7 @@ class User_Model extends CI_Model {
         }
     }
 
-
+    // Login Mobile With Pin
     public function loginMobileMpin($mobile, $mpin) {
         $this->db->select('UserId, UserStatus');
         $this->db->from($this->userTbl);
@@ -55,7 +56,7 @@ class User_Model extends CI_Model {
         return $query;
     }
 
-    
+    // Verify Mobile Mpin
     public function verifyMobileMpin($mobile, $mpin) {
         $query = $this->loginMobileMpin($mobile, $mpin);
         $result = $query->row_array();
@@ -66,7 +67,7 @@ class User_Model extends CI_Model {
         }
     }
 
-    
+    // Mobile Exist for user 
     public function userMobileExist($mobile) {
         $this->db->select('UserId, UserStatus');
         $this->db->from($this->userTbl);
@@ -81,7 +82,7 @@ class User_Model extends CI_Model {
         }
     }
 
-
+    // Username exist for user
     public function userUsernameExist($username) {
         $this->db->select('UserId, UserStatus, UserEmail');
         $this->db->from($this->userTbl);
@@ -96,7 +97,7 @@ class User_Model extends CI_Model {
         }
     }
 
-
+    // User Mobile with Mpin exist
     public function userMobileWithMpinExist($mobile) {
         $this->db->select('UserId, UserStatus, UserMpin');
         $this->db->from($this->userTbl);
@@ -111,7 +112,7 @@ class User_Model extends CI_Model {
         }
     }
 
-
+    // User Exist username email mobile
     public function userExistForUsernameEmailMobile($UserName, $UserEmail, $UserMobile) {
         $this->db->select('UserId, UserStatus, UserName, UserEmail, UserMobile');
         $this->db->from($this->userTbl);
@@ -128,34 +129,7 @@ class User_Model extends CI_Model {
         }
     }
 
-
-    public function updateLoginStatus($UserId, $updateData) {
-        $this->db->where('UserId', $UserId);
-        $this->db->update($this->userTbl, $updateData);
-    }
-
-
-    public function updateUserData($UserId, $updateData) {
-        $this->db->where('UserId', $UserId);
-        $this->db->update($this->userTbl, $updateData);
-    }
-
-
-    public function updateUserProfileData($UserProfileId, $updateData) {
-        $this->db->where('UserProfileId', $UserProfileId);
-        $this->db->update($this->userProfileTbl, $updateData);
-
-        //print_r($this->db->last_query());
-
-        //echo "Affected rows: ".$this->db->affected_rows();
-        if($this->db->affected_rows() > 0) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-
+    // Get User Detail [$FriendUserId, $UserProfileId, $full information]
     public function getUserDetail($FriendUserId, $UserProfileId, $full_information = 0) {
         if(isset($FriendUserId) && $FriendUserId > 0) {
 
@@ -190,7 +164,7 @@ class User_Model extends CI_Model {
         return $user_detail;
     }
 
-
+    // Get User Deatail of Citizen
     public function getUserDetailCitizen($FriendUserId, $UserProfileId) {
         if(isset($FriendUserId) && $FriendUserId > 0) {
 
@@ -215,7 +189,7 @@ class User_Model extends CI_Model {
         return $user_detail;
     }
 
-
+    // Get user detail of Leader
     public function getUserDetailLeader($FriendUserId, $UserProfileId) {
         if(isset($FriendUserId) && $FriendUserId > 0) {
 
@@ -240,7 +214,7 @@ class User_Model extends CI_Model {
         return $user_detail;
     }
 
-
+    // Get User Detail SubLeader
     public function getUserDetailSubLeader($FriendUserId, $UserProfileId) {
         if(isset($FriendUserId) && $FriendUserId > 0) {
 
@@ -265,7 +239,7 @@ class User_Model extends CI_Model {
         return $user_detail;
     }
 
-
+    // Get user Detail All [Citizen, Leader, Sub Leader]
     public function getUserDetailAll($FriendUserId, $UserProfileId) {
         if(isset($FriendUserId) && $FriendUserId > 0) {
 
@@ -298,7 +272,7 @@ class User_Model extends CI_Model {
         return $user_detail;
     }
 
-
+    // Get User Profile User Information
     public function getUserProfileWithUserInformation($FriendUserProfileId, $UserProfileId) {
         $profile = $this->getUserProfileInformation($FriendUserProfileId, $UserProfileId);
         $detail = $this->getUserDetail($profile['UserId'], $UserProfileId, 0);
@@ -311,7 +285,7 @@ class User_Model extends CI_Model {
         return $return;
     }
 
-
+    // Get User Profile Information
     public function getUserProfileInformation($FriendUserProfileId, $UserProfileId = 0) {
 
         $query = $this->db->query("SELECT up.*, pp.PoliticalPartyName FROM ".$this->userProfileTbl." AS up 
@@ -337,6 +311,7 @@ class User_Model extends CI_Model {
                                 "City"                          => (($res_u['City'] != NULL) ? $res_u['City'] : ""),
                                 "State"                         => (($res_u['State'] != NULL) ? $res_u['State'] : ""),
                                 "ZipCode"                       => (($res_u['ZipCode'] != NULL) ? $res_u['ZipCode'] : ""),
+                                "Country"                       => (($res_u['Country'] != NULL) ? $res_u['Country'] : ""),
                                 "Mobile"                        => (($res_u['Mobile'] != NULL) ? $res_u['Mobile'] : ""),
                                 "AltMobile"                     => (($res_u['AltMobile'] != NULL) ? $res_u['AltMobile'] : ""),
                                 "ProfileStatus"                 => (($res_u['ProfileStatus'] != NULL) ? $res_u['ProfileStatus'] : ""),
@@ -385,13 +360,28 @@ class User_Model extends CI_Model {
                     $user_data_array = array_merge($user_data_array, array('MyFriend' => 0)); // Fresh
                 }
             }
+
+            // Following and Follower
+            $follow_response = $this->checkUserFollow($UserProfileId, $FriendUserProfileId);
+            if($follow_response['UserProfileId'] > 0) {
+                $user_data_array = array_merge($user_data_array, array('Following' => 1)); // Following
+            } else {
+                $user_data_array = array_merge($user_data_array, array('Following' => 0)); // Following
+            }
+            $follow_response = $this->checkUserFollow($FriendUserProfileId, $UserProfileId);
+            if($follow_response['UserProfileId'] > 0) {
+                $user_data_array = array_merge($user_data_array, array('Follower' => 1)); // Follower
+            } else {
+                $user_data_array = array_merge($user_data_array, array('Follower' => 0)); // Follower
+            }
+
         } else {
             $user_data_array = array_merge($user_data_array, array('MyFriend' => -1)); // Self Profile
         }
         return $user_data_array;
     }
 
-
+    // Get Citizen Profile Information
     public function getCitizenProfileInformation($UserId, $UserProfileId) {
         $this->db->select('UserProfileId');
         $this->db->from($this->userProfileTbl);
@@ -403,7 +393,7 @@ class User_Model extends CI_Model {
         return $this->getUserProfileInformation($res_u['UserProfileId'], $UserProfileId);
     }
 
-
+    // Get Leader Profile Information
     public function getLeaderProfileInformation($UserId, $UserProfileId) {
         $this->db->select('UserProfileId');
         $this->db->from($this->userProfileTbl);
@@ -415,6 +405,7 @@ class User_Model extends CI_Model {
         return $this->getUserProfileInformation($res_u['UserProfileId'], $UserProfileId);
     }
 
+    // Get Subleader profile Information
     public function getSubLeaderProfileInformation($UserId, $UserProfileId) {
         $this->db->select('UserProfileId');
         $this->db->from($this->userProfileTbl);
@@ -432,7 +423,7 @@ class User_Model extends CI_Model {
         return $sub_leader;
     }
 
-
+    // Search Citizen profile
     public function searchCitizenProfiles($UserProfileId, $search) {
 
         if(is_array($search)) {
@@ -486,7 +477,7 @@ class User_Model extends CI_Model {
         return $user_profiles;
     }
 
-
+    // Search Leader Profile
     public function searchLeaderProfiles($UserProfileId, $search) {
         if(is_array($search)) {
             $this->db->select('up.UserProfileId, up.UserId');
@@ -551,7 +542,7 @@ class User_Model extends CI_Model {
         return $user_profiles;
     }
 
-
+    // Search SubLeader Profile
     public function searchSubLeaderProfiles($UserProfileId, $search) {
         if(is_array($search)) {
             $this->db->select('UserProfileId, UserId');
@@ -594,7 +585,7 @@ class User_Model extends CI_Model {
         return $user_profiles;
     }
 
-
+    // Search All User Profiles
     public function searchAllUserProfiles($UserProfileId, $search) {
         if(is_array($search)) {
             $this->db->select('UserProfileId, UserTypeId, UserId');
@@ -641,7 +632,7 @@ class User_Model extends CI_Model {
         return $user_profiles;
     }
 
-
+    // Return User Deatil
     public function returnUserDetail($res_u, $user_profile_id = 0) {
         $UserId             = $res_u['UserId'];
         $UserUniqueId       = $res_u['UserUniqueId'];
@@ -686,7 +677,7 @@ class User_Model extends CI_Model {
         return $user_data_array;
     }
 
-    
+    // Validate User Mobile with OTP
     public function userMobileOtpValidate($mobile, $otp) {
         $this->db->select('UserId, UserStatus');
         $this->db->from($this->userTbl);
@@ -700,7 +691,7 @@ class User_Model extends CI_Model {
         return $result;
     }
 
-
+    // Get User Mobile Reset Code Validate
     public function userMobileResetcodeValidate($mobile, $reset_code) {
         $this->db->select('UserId, UserStatus');
         $this->db->from($this->userTbl);
@@ -714,7 +705,7 @@ class User_Model extends CI_Model {
         return $result;
     }
 
-    
+    // Insert User Log
     public function insertUserLog($insertData) {
         $this->db->insert($this->userLogTbl, $insertData);
         if($this->db->affected_rows()) {
@@ -724,21 +715,21 @@ class User_Model extends CI_Model {
         }
     }
 
-
+    // Insert User
     public function insertUser($insertData) {
         $this->db->insert($this->userTbl, $insertData);
 
         return $this->db->insert_id();
     }
 
-
+    // Insert User Profile
     public function insertUserProfile($insertData) {
         $this->db->insert($this->userProfileTbl, $insertData);
 
         return $this->db->insert_id();
     }
 
-
+    // Validate User Social profile for Login
     public function validateUserSocialProfileLogin($id, $social_type) {
 
         $this->db->select('UserId, UserStatus');
@@ -763,7 +754,7 @@ class User_Model extends CI_Model {
         }
     }
 
-
+    // get User Information
     public function getUserInformation($UserId) {
         $this->db->select('UserId, UserStatus');
         $this->db->from($this->userTbl);
@@ -774,7 +765,7 @@ class User_Model extends CI_Model {
         return $result;
     }
 
-
+    // Get User Information by Unique Profile Id
     public function getUserInformationByUniqueProfileId($UserUniqueId) {
         $this->db->select('UserId, UserStatus');
         $this->db->from($this->userTbl);
@@ -785,7 +776,7 @@ class User_Model extends CI_Model {
         return $result;
     }
 
-
+    // Validate Mobile exist for another user
     public function isUserMobileExist($mobile) {
         $this->db->select('UserId, UserStatus');
         $this->db->from($this->userTbl);
@@ -796,7 +787,7 @@ class User_Model extends CI_Model {
         return $result;
     }
 
-
+    // Validate Email exist for another user
     public function isUserEmailExist($email) {
         $this->db->select('UserId, UserStatus');
         $this->db->from($this->userTbl);
@@ -807,7 +798,7 @@ class User_Model extends CI_Model {
         return $result;
     }
 
-
+    // Create User Album for User
     public function createUserAlbum($UserId, $photoTitle, $photoDescription) {
 
         $this->db->select('UserAlbumId');
@@ -836,24 +827,7 @@ class User_Model extends CI_Model {
         return $album_id;
     }
 
-
-    public function insertUserPhoto($UserId, $album_id, $profile_image, $photoTitle, $photoDescription) {
-        $insertData = array(
-                            'UserId'            => $UserId,
-                            'UserAlbumId'       => $album_id,
-                            'PhotoPath'         => $profile_image,
-                            'PhotoStatus'       => 1,
-                            'AddedOn'           => date('Y-m-d H:i:s'),
-                            'UpdatedOn'         => date('Y-m-d H:i:s'),
-                        );
-        $this->db->insert($this->userPhotoTbl, $insertData);
-
-        $photo_id = $this->db->insert_id();
-
-        return $photo_id;
-    }
-
-
+    // Auto generate Username
     public function autoGenerateUserName() {
         $UserName = "kaajneeti".time();
         $this->db->select('UserId');
@@ -867,7 +841,7 @@ class User_Model extends CI_Model {
         return $UserName;
     }
 
-
+    // Auto Generate User Unique Id
     public function autoGenerateUserUniqueId() {
         $UserUniqueId = mt_rand().time().rand();
         $this->db->select('UserId');
@@ -881,7 +855,7 @@ class User_Model extends CI_Model {
         return $UserUniqueId;
     }
 
-
+    // Auto Geneerate Reset Password Code
     public function autoGenerateResetPasswordCode() {
         $ResetPasswordCode = mt_rand().time().rand();
         $this->db->select('UserId');
@@ -895,7 +869,7 @@ class User_Model extends CI_Model {
         return $ResetPasswordCode;
     }
 
-
+    // Save user Photo on server
     public function saveUserPhoto($photo_cover = 'photo', $UserId, $profile_or_cover = 1) {
 
         $photo_id = 0;
@@ -936,11 +910,27 @@ class User_Model extends CI_Model {
 
             return $photo_id;
             
-        }
-        
+        }    
     }
 
-    
+    // Save User Photo
+    public function insertUserPhoto($UserId, $album_id, $profile_image, $photoTitle, $photoDescription) {
+        $insertData = array(
+                            'UserId'            => $UserId,
+                            'UserAlbumId'       => $album_id,
+                            'PhotoPath'         => $profile_image,
+                            'PhotoStatus'       => 1,
+                            'AddedOn'           => date('Y-m-d H:i:s'),
+                            'UpdatedOn'         => date('Y-m-d H:i:s'),
+                        );
+        $this->db->insert($this->userPhotoTbl, $insertData);
+
+        $photo_id = $this->db->insert_id();
+
+        return $photo_id;
+    }
+
+    // Get User Citizen Dabhboard 
     public function getUserCitizenDashboard($UserId) {
         $user_dashboard[] = array(
                                     'UserId' => 1,
@@ -954,7 +944,7 @@ class User_Model extends CI_Model {
                                     );
     }
 
-    
+    // Is exist user mobile
     public function isExistUserMobile($mobile, $UserId) {
         $this->db->select('UserId, UserStatus');
         $this->db->from($this->userTbl);
@@ -968,7 +958,7 @@ class User_Model extends CI_Model {
         }
     }
 
-
+    // Is existt User Email
     public function isExistUserEmail($email, $UserId) {
         $this->db->select('UserId, UserStatus');
         $this->db->from($this->userTbl);
@@ -982,7 +972,7 @@ class User_Model extends CI_Model {
         }
     }
 
-
+    // Validate User and User Profile Mobile
     public function isExistUserAndUserProfileMobile($mobile, $UserId) {
         $this->db->select('UserId, UserStatus');
         $this->db->from($this->userTbl);
@@ -1008,7 +998,7 @@ class User_Model extends CI_Model {
         }
     }
 
-
+    // Validate User and User Profile Email
     public function isExistUserAndUserProfileEmail($email, $UserId) {
         $this->db->select('UserId, UserStatus');
         $this->db->from($this->userTbl);
@@ -1031,7 +1021,7 @@ class User_Model extends CI_Model {
         }
     }
 
-
+    // Validate User and User Profile Alternate Mobile
     public function isExistUserAndUserProfileAltMobile($alt_mobile, $UserId) {
         $this->db->select('UserId, UserStatus');
         $this->db->from($this->userTbl);
@@ -1057,8 +1047,7 @@ class User_Model extends CI_Model {
         }
     }
 
-
-
+    // Exist Reset Password Code
     public function existResetPasswordCode($resetpassword) {
         $this->db->select('UserId, UserStatus');
         $this->db->from($this->userTbl);
@@ -1072,7 +1061,7 @@ class User_Model extends CI_Model {
         }
     }
 
-
+    // Check user set as favourite
     public function checkUserSetAsFavourite($UserProfileId, $FriendUserProfileId) {
         $this->db->select('UserProfileId, FriendUserProfileId');
         $this->db->from($this->userFavUserTbl);
@@ -1086,7 +1075,7 @@ class User_Model extends CI_Model {
         }
     }
 
-
+    // Check User Follow
     public function checkUserFollow($UserProfileId, $FollowUserProfileId) {
         $this->db->select('UserProfileId, FollowUserProfileId');
         $this->db->from($this->UserFollowTbl);
@@ -1100,7 +1089,7 @@ class User_Model extends CI_Model {
         }
     }
 
-
+    // Check User Friend Request
     public function checkUserFriendRequest($UserProfileId, $FriendUserProfileId) {
         /*$this->db->select('UserProfileId, FriendUserProfileId');
         $this->db->from($this->UserFriendTbl);
@@ -1126,7 +1115,7 @@ class User_Model extends CI_Model {
         }
     }
 
-
+    // Accept user Friend Request
     public function acceptUserFriendRequest($UserProfileId, $FriendUserProfileId) {
 
         $insertData = array(
@@ -1149,6 +1138,7 @@ class User_Model extends CI_Model {
         return true;
     }
 
+    // send User Frined Request
     public function sendUserFriendRequest($UserProfileId, $FriendUserProfileId) {
         $insertData = array(
                             'UserProfileId'         => $UserProfileId,
@@ -1160,6 +1150,7 @@ class User_Model extends CI_Model {
         return true;
     }
 
+    // Delete User Friend Request
     public function deleteUserFriendRequest($UserProfileId, $FriendUserProfileId) {
         $this->db->where('UserProfileId', $UserProfileId);
         $this->db->where('FriendUserProfileId', $FriendUserProfileId);
@@ -1172,7 +1163,7 @@ class User_Model extends CI_Model {
         return true;
     }
 
-
+    // Cancel User Friend Request
     public function cancelUserFriendRequest($UserProfileId, $FriendUserProfileId) {
 
         $updateData = array(
@@ -1186,7 +1177,7 @@ class User_Model extends CI_Model {
         return true;
     }
 
-
+    // Undo User Profile Friend Request
     public function undoUserProfileFriendRequest($UserProfileId, $FriendUserProfileId) {
         $this->db->where('UserProfileId', $UserProfileId);
         $this->db->where('FriendUserProfileId', $FriendUserProfileId);
@@ -1195,35 +1186,35 @@ class User_Model extends CI_Model {
         return true;
     }
 
-
+    // Insert User Favourite User
     public function insertUserFavUser($insertData) {
         $this->db->insert($this->userFavUserTbl, $insertData);
 
         return $this->db->insert_id();
     }
 
-
+    // Delete User Favourite user
     public function deleteUserFavUser($UserProfileId, $FriendUserProfileId) {
         $this->db->where('UserProfileId', $UserProfileId);
         $this->db->where('FriendUserProfileId', $FriendUserProfileId);
         $this->db->delete($this->userFavUserTbl);
     }
 
-
+    // Insert User Follow User
     public function insertUserFollowUser($insertData) {
         $this->db->insert($this->UserFollowTbl, $insertData);
 
         return $this->db->insert_id();
     }
 
-
+    // Delete user follow User
     public function deleteUserFollowUser($UserProfileId, $FollowUserProfileId) {
         $this->db->where('UserProfileId', $UserProfileId);
         $this->db->where('FollowUserProfileId', $FollowUserProfileId);
         $this->db->delete($this->UserFollowTbl);
     }
 
-
+    // Get My All Followers
     public function getMyAllFollowers($UserId, $UserProfileId) {
 
         $query = $this->db->query("SELECT ufu.*, up.UserId 
@@ -1243,8 +1234,7 @@ class User_Model extends CI_Model {
         return $follow_user;
     }
 
-
-
+    // Get My All Followings
     public function getMyAllFollowings($UserId, $UserProfileId) {
 
         $query = $this->db->query("SELECT ufu.*, up.UserId 
@@ -1264,7 +1254,7 @@ class User_Model extends CI_Model {
         return $follow_user;
     }
 
-
+    // Get My All Favourite Leader
     public function getMyAllFavouriteLeader($UserId, $UserProfileId) {
 
         $query = $this->db->query("SELECT ufu.*, up.UserId 
@@ -1285,7 +1275,7 @@ class User_Model extends CI_Model {
         return $fav_leader;
     }
 
-
+    // Get My All Friend Request
     public function getMyAllFriendRequest($UserProfileId) {
         $query = $this->db->query("SELECT uf.UserProfileId, uf.RequestSentOn 
                                         FROM ".$this->UserFriendTbl." AS uf 
@@ -1308,6 +1298,7 @@ class User_Model extends CI_Model {
         return $friend_requests;
     }
 
+    // Get My All Request To Friends
     public function getMyAllRequestToFriends($UserProfileId) {
         $query = $this->db->query("SELECT uf.FriendUserProfileId, uf.RequestSentOn 
                                         FROM ".$this->UserFriendTbl." AS uf 
@@ -1329,7 +1320,7 @@ class User_Model extends CI_Model {
         return $request_friends;
     }
 
-
+    // Get My All Friends
     public function getMyAllFriends($UserProfileId) {
         $query = $this->db->query("SELECT uf.FriendUserProfileId 
                                         FROM ".$this->UserFriendTbl." AS uf 
@@ -1349,7 +1340,7 @@ class User_Model extends CI_Model {
         return $friends;
     }
 
-
+    // Get All Gender
     public function getAllGender() {
         $this->db->select('*');
         $this->db->from($this->genderTbl);
@@ -1367,6 +1358,7 @@ class User_Model extends CI_Model {
         }
     }
 
+    // Return Gender
     public function returnGender($result) {
         $detail = array(
                         'GenderId'       => $result['GenderId'],
@@ -1376,7 +1368,7 @@ class User_Model extends CI_Model {
         return $detail;
     }
 
-
+    // Update Profile Address
     public function updateProfileAddress($UserProfileId, $post_data) {
         $address_id     = is_array($post_data['address_id']) ? $post_data['address_id'] : explode('~', $post_data['address_id']);
         $address        = is_array($post_data['address']) ? $post_data['address'] : explode('~', $post_data['address']);
@@ -1438,7 +1430,7 @@ class User_Model extends CI_Model {
         }
     }
 
-
+    // Get user Profile Address
     public function getUserProfileAddress($UserProfileId) {
 
         $user_profile_address = array();
@@ -1459,7 +1451,7 @@ class User_Model extends CI_Model {
         }
     }
 
-
+    // Return User Profile Address
     public function returnUserProfileAddress($result) {
         $detail = array(
                         'UserProfileAddressId'      => $result['UserProfileAddressId'],
@@ -1482,7 +1474,7 @@ class User_Model extends CI_Model {
         return $detail;
     }
 
-
+    // Update Profile Education
     public function updateProfileEducation($UserProfileId, $post_data) {
         $education_id   = is_array($post_data['education_id']) ? $post_data['education_id'] : explode('~', $post_data['education_id']);
         $qualification  = is_array($post_data['qualification']) ? $post_data['qualification'] : explode('~', $post_data['qualification']);
@@ -1538,7 +1530,7 @@ class User_Model extends CI_Model {
         }
     }
 
-
+    // Get User Profile Education
     public function getUserProfileEducation($UserProfileId) {
 
         $user_profile_education = array();
@@ -1555,11 +1547,11 @@ class User_Model extends CI_Model {
             }
             return $user_profile_education;
         } else {
-            return false;
+            return $user_profile_education;
         }
     }
 
-
+    // Return User Profile Education
     public function returnUserProfileEducation($result) {
         $detail = array(
                         'UserProfileEducationId'    => $result['UserProfileEducationId'],
@@ -1581,8 +1573,126 @@ class User_Model extends CI_Model {
     }
 
 
-    public function sendFollowRequest($UserProfileId, $FriendUserProfileId) {
-        
+    // Update Profile Work
+    public function updateProfileWork($UserProfileId, $post_data) {
+        $work_id    = is_array($post_data['work_id']) ? $post_data['work_id'] : explode('~', $post_data['work_id']);
+        $work       = is_array($post_data['work']) ? $post_data['work'] : explode('~', $post_data['work']);
+        $place      = is_array($post_data['place']) ? $post_data['place'] : explode('~', $post_data['place']);
+        $location   = is_array($post_data['location']) ? $post_data['location'] : explode('~', $post_data['location']);
+        $from       = is_array($post_data['from']) ? $post_data['from'] : explode('~', $post_data['from']);
+        $to         = is_array($post_data['to']) ? $post_data['to'] : explode('~', $post_data['to']);
+        $currently  = is_array($post_data['currently']) ? $post_data['currently'] : explode('~', $post_data['currently']);
+        $private_public = is_array($post_data['private_public']) ? $post_data['private_public'] : explode('~', $post_data['private_public']);
+
+        $j = 0;
+
+        for($i = 0; $i < count($work); $i++) {
+            if($work_id[$i] > 0) {
+                $update_work = array(
+                                    'UserProfileId'     => $UserProfileId,
+                                    'WorkPosition'      => $work[$i],
+                                    'WorkPlace'         => $place[$i],
+                                    'WorkLocation'      => $location[$i],
+                                    'WorkFrom'          => $from[$i],
+                                    'WorkTo'            => $to[$i],
+                                    'CurrentlyWorking'  => $currently[$i],
+                                    'PrivatePublic'     => $private_public[$i],
+                                    'UpdatedOn'         => date('Y-m-d H:i:s'),
+                                    );
+                $this->db->where('UserProfileWorkId', $work_id[$i]);
+                $this->db->update($this->UserProfileWorkTbl, $update_work);
+
+                $j++;
+            } else {
+                $update_work = array(
+                                    'UserProfileId'     => $UserProfileId,
+                                    'WorkPosition'      => $work[$i],
+                                    'WorkPlace'         => $place[$i],
+                                    'WorkLocation'      => $location[$i],
+                                    'WorkFrom'          => $from[$i],
+                                    'WorkTo'            => $to[$i],
+                                    'CurrentlyWorking'  => $currently[$i],
+                                    'PrivatePublic'     => $private_public[$i],
+                                    'AddedOn'           => date('Y-m-d H:i:s'),
+                                    'UpdatedOn'         => date('Y-m-d H:i:s'),
+                                    );
+                 $this->db->insert($this->UserProfileWorkTbl, $update_work);
+                 $j++;
+            }
+        }
+        if($j > 0) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    // Get User Profile Work
+    public function getUserProfileWork($UserProfileId) {
+
+        $user_profile_work = array();
+        $this->db->select('*');
+        $this->db->from($this->UserProfileWorkTbl);
+        $this->db->where('UserProfileId', $UserProfileId);
+        $this->db->order_by('UserProfileWorkId', 'ASC');
+        $query = $this->db->get();
+        $result = $query->result_array();
+        if ($query->num_rows() > 0) {
+            $user_profile_work = array();
+            foreach($result AS $key => $result) {
+                $user_profile_work[] = $this->returnUserProfileWork($result);
+            }
+            return $user_profile_work;
+        } else {
+            return $user_profile_work;
+        }
+    }
+
+    // Return User Profile Work
+    public function returnUserProfileWork($result) {
+        $detail = array(
+                        'UserProfileWorkId'         => $result['UserProfileWorkId'],
+                        'UserProfileId'             => $result['UserProfileId'],
+                        'WorkPosition'              => $result['WorkPosition'],
+                        'WorkPlace'                 => $result['WorkPlace'],
+                        'WorkLocation'              => $result['WorkLocation'],
+                        'WorkFrom'                  => $result['WorkFrom'],
+                        'WorkTo'                    => $result['WorkTo'],
+                        'CurrentlyWorking'          => $result['CurrentlyWorking'],
+                        'PrivatePublic'             => $result['PrivatePublic'],
+                        'AddedOn'                   => return_time_ago($result['AddedOn']),
+                        'UpdatedOn'                 => return_time_ago($result['UpdatedOn']),
+                        'AddedOnTime'               => $result['AddedOn'],
+                        'UpdatedOnTime'             => $result['UpdatedOn'],
+                        );
+        return $detail;
+    }
+
+    // Update Login Status
+    public function updateLoginStatus($UserId, $updateData) {
+        $this->db->where('UserId', $UserId);
+        $this->db->update($this->userTbl, $updateData);
+    }
+
+    // Update User Data
+    public function updateUserData($UserId, $updateData) {
+        $this->db->where('UserId', $UserId);
+        $this->db->update($this->userTbl, $updateData);
+    }
+
+    // Update User Profile Data
+    public function updateUserProfileData($UserProfileId, $updateData) {
+        $this->db->where('UserProfileId', $UserProfileId);
+        $this->db->update($this->userProfileTbl, $updateData);
+
+        //print_r($this->db->last_query());
+
+        //echo "Affected rows: ".$this->db->affected_rows();
+        if($this->db->affected_rows() > 0) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
 

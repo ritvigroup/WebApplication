@@ -1,5 +1,9 @@
 <?php
 if($result->UserId > 0) {
+
+    // echo '<pre>';
+    // print_r($result);
+    // echo '</pre>';
     $UserDetail = $result;
 
     $UserName   = $UserDetail->UserName;
@@ -14,6 +18,25 @@ if($result->UserId > 0) {
     $Gender         = $UserDetail->Gender;
     $MaritalStatus  = $UserDetail->MaritalStatus;
     $Mobile         = $UserDetail->UserProfileLeader->Mobile;
+
+    $Address = '';
+    if($UserDetail->UserProfileLeader->Address != '') {
+        $Address .= $UserDetail->UserProfileLeader->Address.', ';
+    }
+    if($UserDetail->UserProfileLeader->City != '') {
+        $Address .= $UserDetail->UserProfileLeader->City.', ';
+    }
+    if($UserDetail->UserProfileLeader->State != '') {
+        $Address .= $UserDetail->UserProfileLeader->State.', ';
+    }
+    if($UserDetail->UserProfileLeader->ZipCode != '') {
+        $Address .= $UserDetail->UserProfileLeader->ZipCode.', ';
+    }
+    if($UserDetail->UserProfileLeader->Country != '') {
+        $Address .= $UserDetail->UserProfileLeader->Country.', ';
+    }
+
+    $Address = ($Address != '') ? substr($Address, 0, -2) : '';
 
     $WebsiteUrl         = $UserDetail->UserProfileLeader->WebsiteUrl;
     $FacebookPageUrl    = $UserDetail->UserProfileLeader->FacebookPageUrl;
@@ -113,12 +136,10 @@ if($result->UserId > 0) {
                                         <td><?php echo $Name; ?></td>
                                     </tr>
                                     <tr>
-                                        <td width="50%">Email</td>
-                                        <td><?php echo $Email; ?></td>
-                                    </tr>
-                                    <tr>
                                         <td width="50%">Address</td>
-                                        <td>Street 123, Avenue 45, Country</td>
+                                        <td>
+                                            <?php echo $Address; ?>
+                                        </td>
                                     </tr>
                                     <tr>
                                         <td width="50%">Status</td>

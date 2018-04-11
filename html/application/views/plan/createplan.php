@@ -100,128 +100,338 @@
 
                                 <div class="row">
                                     <div class="col-md-12">
-                                        <div class="form-group"><label for="user_type"
-                                                                       class="control-label">What do you want to be: <span
-                                                class='require'>*</span></label>
-
-                                                <select name="user_type" id="user_type" class="form-control">
-                                                    <option value="">-Select-</option>
-                                                    <?php
-                                                    foreach($UserType AS $user_type) {
-                                                        echo '<option value="'.$user_type->UserTypeId.'">'.$user_type->TypeName.'</option>';
-                                                    }
-                                                    ?>
-                                                </select>
-                                        </div>
-                                    </div>
-                                </div>
-                                
-                                <h3 class="mbxl">Plan your goal today</h3>
-                                
-                                <div class="row">
-                                    <div class="col-md-12">
                                         <div class="form-group">
-                                            <label for="state_id_city_id" class="control-label">Geography</label>
-                                            <select name="state_id_city_id" id="state_id_city_id" class="form-control" onChange="return getCityDetailByStateIdCityId(this.value);">
-                                                <option value="">-Select-</option>
-                                                <?php
-                                                foreach($City AS $city) {
-                                                    echo '<option value="'.$city->StateId.'_'.$city->CityId.'">'.$city->CityName.'</option>';
-                                                }
-                                                ?>
-                                            </select>
-                                        </div>
-                                    </div>
-                                </div>
 
+                                                <h2>Your goal to be: <?php echo $plan_title; ?></h2>
 
-                                <div class="row">
-                                    <div class="col-md-12">
-                                        <div class="form-group">
-                                            Total Population: <input type="text" class="form-control" name="total_population" id="total_population" readonly="readonly"><br>
-                                            Male Population: <input type="text" class="form-control" name="male_population" id="male_population" readonly="readonly"><br>
-                                            Female Population: <input type="text" class="form-control" name="female_population" id="female_population" readonly="readonly"><br>
-                                            Between 18-30 Yrs. Population: <input type="text" class="form-control" name="above_18_30_population" id="above_18_30_population" readonly="readonly"><br>
-                                            Between 31-50 Yrs. Population: <input type="text" class="form-control" name="above_31_50_population" id="above_31_50_population" readonly="readonly"><br>
-                                            Between 51-60 Yrs. Population: <input type="text" class="form-control" name="above_51_60_population" id="above_51_60_population" readonly="readonly"><br>
-                                            Above 60 Yrs. Population: <input type="text" class="form-control" name="above_60_population" id="above_60_population" readonly="readonly"><br>
-                                            Total Area: <input type="text" class="form-control" name="total_area" id="total_area" readonly="readonly"><br>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <h3 class="mbxl">Target People</h3>
-                                <div class="row">
-                                    <div class="col-md-12">
-                                        <div class="form-group">
-                                            Target Population: <input type="text" class="form-control" name="target_total_population" id="target_total_population"><br>
-                                            Target Male Population: <input type="text" class="form-control" name="target_male_population" id="target_male_population"><br>
-                                            Target Female Population: <input type="text" class="form-control" name="target_female_population" id="target_female_population"><br>
-                                            Target Between 18-30 Yrs. Population: <input type="text" class="form-control" name="target_above_18_30_population" id="target_above_18_30_population"><br>
-                                            Target Between 31-50 Yrs. Population: <input type="text" class="form-control" name="target_above_31_50_population" id="target_above_31_50_population"><br>
-                                            Target Between 51-60 Yrs. Population: <input type="text" class="form-control" name="target_above_51_60_population" id="target_above_51_60_population"><br>
-                                            Target Above 60 Yrs. Population: <input type="text" class="form-control" name="target_above_60_population" id="target_above_60_population"><br>
-                                            Target Total Area: <input type="text" class="form-control" name="target_total_area" id="target_total_area"><br>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="row">
-                                    <div class="col-md-3">
-                                        <div class="form-group"><label for="team_size"
-                                                                       class="control-label">Male Team Size <span
-                                                class='require'>*</span></label>
-                                             <input type="text" class="form-control" name="male_team_size" id="male_team_size"><br>
-                                            Female Team Size: <span
-                                                class='require'>*</span><input type="text" class="form-control" name="female_team_size" id="female_team_size"><br>
-
-                                        </div>
-                                    </div>
-
-                                    <div class="col-md-3">
-                                        <div class="form-group"><label for="total_event"
-                                                                       class="control-label">Total Event to Conduct:  <span
-                                                class='require'>*</span></label>
-                                            <input type="text" class="form-control" name="total_event" id="total_event">
-
-                                        </div>
-                                    </div>
-
-                                    <div class="col-md-3">
-                                        <div class="form-group"><label for="total_vehicle"
-                                                                       class="control-label">Total Vehicle Needed:  <span
-                                                class='require'>*</span></label>
-                                            <input type="text" class="form-control" name="total_vehicle" id="total_vehicle">
-
-                                        </div>
-                                    </div>
-
-                                    <div class="col-md-3">
-                                        <div class="form-group"><label for="total_budget"
-                                                                       class="control-label">Budget <span
-                                                class='require'>*</span></label>
-                                            <input type="text" class="form-control" name="total_budget" id="total_budget">
-
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="row">
-                                    <div class="col-md-4">
-                                        <div class="form-group"><label for="start_date"
-                                                                       class="control-label">Funds Required<span
-                                                class='require'>*</span></label><br>
-                                                <?php
-                                                foreach($Fund AS $fund) {
-                                                    echo '<input type="checkbox" name="funds" value="'.$fund->FundId.'">'.$fund->FundName.'</br>';
-                                                }
-                                                ?>
+                                                <input type="hidden" name="plan_title" value="<?php echo $plan_title; ?>">
                                                 
                                         </div>
                                     </div>
                                 </div>
+
+                                <h3 class="mbxl">Lets define your Timeline</h3>
+                                
+                                <div class="row">
+                                    <div class="col-md-6 controls">
+                                        <div class="form-group">
+                                            <label for="start_date" class="control-label">Start date</label>
+                                            <input type="text" name="start_date" id="start_date" value="2018-04-05" data-date-format="yyyy-mm-dd" placeholder="yyyy-mm-dd" class="datepicker-normal form-control">
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-6 controls">
+                                        <div class="form-group">
+                                            <label for="end_date" class="control-label">End Date</label>
+                                            <input type="text" name="end_date" id="end_date" value="2019-04-05" data-date-format="yyyy-mm-dd" placeholder="yyyy-mm-dd" class="datepicker-normal form-control">
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <h3 class="mbxl">Lets define your Geography</h3>
+                                
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="target_area" class="control-label">Target Area</label>
+                                            <input type="text" name="target_area" id="target_area" class="form-control" value="Ghaziabad">
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="specific_area" class="control-label">Specific Area</label>
+                                            <input type="text" name="specific_area" id="specific_area" class="form-control" value="Indira Puram">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <h3 class="mbxl" style="text-align: center;"><button class="btn">Show !</button></h3>
+
+                                <div class="row">
+                                    <div class="col-md-2">
+                                        <div class="form-group">
+                                            Total Population: <input type="text" class="form-control" name="total_population" id="total_population" readonly="readonly" value="7876767676">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <div class="form-group">
+                                            Male Population: <input type="text" class="form-control" name="male_population" id="male_population" readonly="readonly" value="2332432432"><br>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-2">
+                                        <div class="form-group">
+                                            Female Population: <input type="text" class="form-control" name="female_population" id="female_population" readonly="readonly" value="5342352353"><br>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-2">
+                                        <div class="form-group">
+                                            >18 < 30 Yrs.: <input type="text" class="form-control" name="above_18_30_population" id="above_18_30_population" readonly="readonly" value="34235325"><br>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-2">
+                                        <div class="form-group">
+                                            > 31 < 50 Yrs.: <input type="text" class="form-control" name="above_31_50_population" id="above_31_50_population" readonly="readonly" value="34523523"><br>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-2">
+                                        <div class="form-group">
+                                            > 51 < 60 Yrs.: <input type="text" class="form-control" name="above_51_60_population" id="above_51_60_population" readonly="readonly" value="34325233"><br>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-2">
+                                        <div class="form-group">
+                                            > 60 Yrs.: <input type="text" class="form-control" name="above_60_population" id="above_60_population" readonly="readonly" value="11212121"><br>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-2">
+                                        <div class="form-group">
+                                            Total Area: <input type="text" class="form-control" name="total_area" id="total_area" readonly="readonly" value="1345665 sq. ft."><br>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <h3 class="mbxl">Let's connect people</h3>
+                                <div class="row">
+                                    <div class="col-md-2">
+                                        <div class="form-group">
+                                            Target Population: <input type="text" class="form-control" name="target_total_population" id="target_total_population" value="3432432432"><br>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <div class="form-group">
+                                            Target Male Population: <input type="text" class="form-control" name="target_male_population" id="target_male_population" value="2312312312"><br>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <div class="form-group">
+                                            Target Female Population: <input type="text" class="form-control" name="target_female_population" id="target_female_population" value="435345345"><br>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <div class="form-group">
+                                            Target > 18 < 30 Yrs.: <input type="text" class="form-control" name="target_above_18_30_population" id="target_above_18_30_population" value="35325325"><br>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <div class="form-group">
+                                            Target > 31 < 50 Yrs.: <input type="text" class="form-control" name="target_above_31_50_population" id="target_above_31_50_population" value="325324324"><br>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <div class="form-group">
+                                            Target > 51 < 60 Yrs.: <input type="text" class="form-control" name="target_above_51_60_population" id="target_above_51_60_population" value="3523523523"><br>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <div class="form-group">
+                                            Target > 60 Yrs.: <input type="text" class="form-control" name="target_above_60_population" id="target_above_60_population" value="232"><br>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <div class="form-group">
+                                            Target Total Area: <input type="text" class="form-control" name="target_total_area" id="target_total_area" value="222322 sq. ft."><br>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-2">
+                                        <div class="form-group">
+                                            Religion: 
+                                            <select class="form-control" name="religion" id="religion">
+                                                <option value="">All</option>
+                                                <option value="">Hindu</option>
+                                                <option value="">Muslim</option>
+                                                <option value="">Sikh</option>
+                                                <option value="">Cristian</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-2">
+                                        <div class="form-group">
+                                            Caste: 
+                                            <select class="form-control" name="caste" id="caste">
+                                                <option value="">All</option>
+                                                <option value="">ST</option>
+                                                <option value="">SC</option>
+                                                <option value="">OBC</option>
+                                                <option value="">General</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                                <h3 class="mbxl">Let's plan your team</h3>
+
+                                <div class="row">
+                                    
+                                    <table width="100%" class="table">
+                                        <tr>
+                                            <td style="text-align: center;font-weight: bold;"></td>
+                                            <td style="text-align: center;font-weight: bold;">Kaajneeti Suggested Team Size</td>
+                                            <td style="text-align: center;font-weight: bold;">Your Planned Team Size</td>
+                                            <td style="text-align: center;font-weight: bold;">Total Paid Team</td>
+                                            <td style="text-align: center;font-weight: bold;">Paid Team Expenses</td>
+                                        </tr>
+                                        <tr>
+                                            <td style="text-align: center">Male</td>
+                                            <td><input type="text" class="form-control" style="text-align: center" value="20"></td>
+                                            <td><input type="text" class="form-control" style="text-align: center" value="15"></td>
+                                            <td><input type="text" class="form-control" style="text-align: center" value="2"></td>
+                                            <td><input type="text" class="form-control" style="text-align: center" value="20000"></td>
+                                        </tr>
+                                        <tr>
+                                            <td style="text-align: center">Female</td>
+                                            <td><input type="text" class="form-control" style="text-align: center" value="25"></td>
+                                            <td><input type="text" class="form-control" style="text-align: center" value="10"></td>
+                                            <td><input type="text" class="form-control" style="text-align: center" value="5"></td>
+                                            <td><input type="text" class="form-control" style="text-align: center" value="50000"></td>
+                                        </tr>
+                                    </table>
+                                </div>
+
+                                <h3 class="mbxl">Let's plan your action strategy <a href="javascript:void(0);" class="small btn btn-default addmorestrategy">Add More</a></h3>
+                                <div class="row">
+                                    <table width="100%" class="table" id="stategy_table">
+                                        <tr>
+                                            <td style="text-align: center;font-weight: bold;">Particular</td>
+                                            <td style="text-align: center;font-weight: bold;">Kaajneeti Suggested</td>
+                                            <td style="text-align: center;font-weight: bold;">Your Planned</td>
+                                        </tr>
+                                        <tr>
+                                            <td style="text-align: center">Rally</td>
+                                            <td><input type="text" class="form-control" style="text-align: center" value="3"></td>
+                                            <td><input type="text" class="form-control" style="text-align: center" value="2"></td>
+                                        </tr>
+                                        <tr>
+                                            <td style="text-align: center">Road Show</td>
+                                            <td><input type="text" class="form-control" style="text-align: center" value="13"></td>
+                                            <td><input type="text" class="form-control" style="text-align: center" value="5"></td>
+                                        </tr>
+                                        <tr>
+                                            <td style="text-align: center">T-Shirt Campaign</td>
+                                            <td><input type="text" class="form-control" style="text-align: center" value="30"></td>
+                                            <td><input type="text" class="form-control" style="text-align: center" value="4"></td>
+                                        </tr>
+                                    </table>
+                                    
+                                </div>
+
+                                <h3 class="mbxl">Let's plan your media <a href="javascript:void(0);" class="small btn btn-default addmoremedia">Add More</a></h3>
+                                <div class="row">
+                                    <table width="100%" class="table" id="media_table">
+                                        <tr>
+                                            <td style="text-align: center;font-weight: bold;">Particular</td>
+                                            <td style="text-align: center;font-weight: bold;">Kaajneeti Suggested</td>
+                                            <td style="text-align: center;font-weight: bold;">Your Planned</td>
+                                        </tr>
+                                        <tr>
+                                            <td style="text-align: center">Print Media</td>
+                                            <td><input type="text" class="form-control" style="text-align: center" value="13"></td>
+                                            <td><input type="text" class="form-control" style="text-align: center" value="22"></td>
+                                        </tr>
+                                        <tr>
+                                            <td style="text-align: center">Articles</td>
+                                            <td><input type="text" class="form-control" style="text-align: center" value="3"></td>
+                                            <td><input type="text" class="form-control" style="text-align: center" value="35"></td>
+                                        </tr>
+                                        <tr>
+                                            <td style="text-align: center">Posters</td>
+                                            <td><input type="text" class="form-control" style="text-align: center" value="34"></td>
+                                            <td><input type="text" class="form-control" style="text-align: center" value="54"></td>
+                                        </tr>
+                                    </table>
+                                    
+                                </div>
+
+
+                                <h3 class="mbxl">Let's plan your campaigns</h3>
+                                <div class="row">
+                                    <table width="100%" class="table">
+                                        <tr>
+                                            <td style="text-align: center">Print Media</td>
+                                            <td><input type="text" class="form-control" style="text-align: center" value="13"></td>
+                                            <td><input type="text" class="form-control" style="text-align: center" value="22"></td>
+                                        </tr>
+                                        <tr>
+                                            <td style="text-align: center">Articles</td>
+                                            <td><input type="text" class="form-control" style="text-align: center" value="3"></td>
+                                            <td><input type="text" class="form-control" style="text-align: center" value="35"></td>
+                                        </tr>
+                                        <tr>
+                                            <td style="text-align: center">Posters</td>
+                                            <td><input type="text" class="form-control" style="text-align: center" value="34"></td>
+                                            <td><input type="text" class="form-control" style="text-align: center" value="54"></td>
+                                        </tr>
+                                    </table>
+                                    
+                                </div>
+
+                                <h3 class="mbxl">Let's plan your fleet</h3>
+                                <div class="row">
+                                    <table width="100%" class="table">
+                                        <tr>
+                                            <td style="text-align: center;font-weight: bold;">&nbsp;</td>
+                                            <td style="text-align: center;font-weight: bold;">Suggested</td>
+                                            <td style="text-align: center;font-weight: bold;">Suggested Budget</td>
+                                            <td style="text-align: center;font-weight: bold;">Plan</td>
+                                            <td style="text-align: center;font-weight: bold;">Estimated</td>
+                                        </tr>
+                                        <tr>
+                                            <td style="text-align: center">Cars</td>
+                                            <td><input type="text" class="form-control" style="text-align: center" value="13"></td>
+                                            <td><input type="text" class="form-control" style="text-align: center" value="50000"></td>
+                                            <td><input type="text" class="form-control" style="text-align: center" value="22"></td>
+                                            <td><input type="text" class="form-control" style="text-align: center" value="22"></td>
+                                        </tr>
+                                        <tr>
+                                            <td style="text-align: center">Bikes</td>
+                                            <td><input type="text" class="form-control" style="text-align: center" value="3"></td>
+                                            <td><input type="text" class="form-control" style="text-align: center" value="70000"></td>
+                                            <td><input type="text" class="form-control" style="text-align: center" value="35"></td>
+                                            <td><input type="text" class="form-control" style="text-align: center" value="35"></td>
+                                        </tr>
+                                        <tr>
+                                            <td style="text-align: center">Bus</td>
+                                            <td><input type="text" class="form-control" style="text-align: center" value="34"></td>
+                                            <td><input type="text" class="form-control" style="text-align: center" value="20000"></td>
+                                            <td><input type="text" class="form-control" style="text-align: center" value="54"></td>
+                                            <td><input type="text" class="form-control" style="text-align: center" value="54"></td>
+                                        </tr>
+                                    </table>
+                                    
+                                </div>
+
+
+                                <h3 class="mbxl">Funds Required</h3>
+                                <div class="row">
+                                    <table width="100%" class="table">
+                                        <tr>
+                                            <?php foreach($Fund AS $fund) { ?>
+                                            <td style="text-align: center;font-weight: bold;"><?php echo $fund->FundName; ?></td>
+                                            <?php } ?>
+                                        </tr>
+                                        <tr>
+                                            <?php foreach($Fund AS $fund) { ?>
+                                            <td><input type="text" class="form-control" style="text-align: center" value="1110"></td>
+                                            <?php } ?>
+                                        </tr>
+                                    </table>
+                                    
+                                </div>
+
+                                
+
+                                
                             </div>
-                            <div class="form-group"><button type="submit" class="btn btn-success plan_button">Submit&nbsp;<i class="fa fa-chevron-circle-right"></i></button></div>
+                            <!-- <div class="form-group"><button type="submit" class="btn btn-success plan_button">Submit&nbsp;<i class="fa fa-chevron-circle-right"></i></button></div> -->
                         </div>
                     </div>
                 </div>
@@ -278,9 +488,7 @@
 
 
 <script src="<?=base_url();?>assets/vendors/jquery-validate/jquery.validate.min.js"></script>
-<script src="<?=base_url();?>assets/vendors/jquery-steps/js/jquery.steps.min.js"></script>
-<script src="<?=base_url();?>assets/vendors/jquery-bootstrap-wizard/jquery.bootstrap.wizard.min.js"></script>
-<script src="<?=base_url();?>assets/js/form-wizard.js"></script>
+<script src="<?=base_url();?>assets/js/extra-profile.js"></script>
 
 <script>
     function getCityDetailByStateIdCityId(state_id_city_id) {
@@ -311,6 +519,26 @@
         );
     }
 
+
+    document.querySelector('.addmorestrategy').onclick = function () {
+        
+        var html_add = '<tr>';
+        html_add += '<td style="text-align: center"><input type="text" name=""></td>';
+        html_add += '<td><input type="text" class="form-control" style="text-align: center" value="0"></td>';
+        html_add += '<td><input type="text" class="form-control" style="text-align: center" value="0"></td>';
+        html_add += '</tr>';
+        $('#stategy_table').append(html_add);
+    };
+
+
+    document.querySelector('.addmoremedia').onclick = function () {
+        var html_add = '<tr>';
+        html_add += '<td style="text-align: center"><input type="text" name=""></td>';
+        html_add += '<td><input type="text" class="form-control" style="text-align: center" value="0"></td>';
+        html_add += '<td><input type="text" class="form-control" style="text-align: center" value="0"></td>';
+        html_add += '</tr>';
+        $('#media_table').append(html_add);
+    };
 
     document.querySelector('.plan_button').onclick = function () {
         var $this = $(this);
