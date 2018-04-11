@@ -2,7 +2,9 @@
 <nav id="sidebar" role="navigation" class="navbar-default navbar-static-side">
     <div class="sidebar-collapse menu-scroll">
         <ul id="side-menu" class="nav">
+            
             <li class="user-panel">
+                <?php /*
                 <div class="thumb"><img src="<?php echo $this->session->userdata('UserProfilePic'); ?>"
                                         alt="" class="img-circle"/></div>
                 <div class="info"><p><?php echo $this->session->userdata('UserName'); ?></p>
@@ -18,7 +20,9 @@
                     </ul>
                 </div>
                 <div class="clearfix"></div>
+                */ ?>
             </li>
+            
             <li class="<?php if($request_uri['4'] == "dashboard") {?>active<?php } ?>"><a href="<?=base_url();?>leader/dashboard"><i class="fa fa-tachometer fa-fw">
                 <div class="icon-bg bg-orange"></div>
             </i><span class="menu-title">Dashboard</span></a></li>

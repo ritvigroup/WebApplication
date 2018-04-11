@@ -22,6 +22,17 @@ class Plan extends CI_Controller {
         }
 
     }
+
+    public function createPlanYourGoal() {
+        $data = array();
+      
+        if (!$this->input->is_ajax_request()) {
+           exit('Error');
+        }
+        $_POST['user_profile_id'] = $this->session->userdata('LeaderProfileId');
+        
+        $this->load->view('plan/createPlanYourGoal',$data);
+    }
     
     
     public function plan() {
@@ -130,6 +141,8 @@ class Plan extends CI_Controller {
 
             return false;
         }
+
+        $data['plan_title'] = $this->input->post('plan_title');
 
         $this->load->view('plan/createplan',$data);
     }

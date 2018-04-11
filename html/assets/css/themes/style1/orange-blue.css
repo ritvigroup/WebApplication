@@ -134,7 +134,7 @@ hr {
 @media (min-width: 768px) {
   #page-wrapper {
     position: relative;
-    margin: 0 0 0 250px;
+    margin: 0 0 0 200px;
     padding: 0;
   }
 }
@@ -147,7 +147,7 @@ hr {
   border: 0;
 }
 #topbar .navbar-header {
-  width: 250px;
+  width: 200px;
   height: 100%;
   background: #2f4355;
   text-align: center;
@@ -157,7 +157,7 @@ hr {
   line-height: 20px;
   color: #ffffff;
   height: 100%;
-  width: 100%;
+  width: 80%;
 }
 #topbar .navbar-header #logo span.fa {
   display: none;
@@ -166,7 +166,7 @@ hr {
   display: block;
   font-weight: bold;
   font-family: 'Oswald', sans-serif;
-  font-size: 30px;
+  font-size: 20px;
 }
 #topbar .topbar-main {
   display: block;
@@ -1168,7 +1168,7 @@ hr {
   .navbar-static-side {
     z-index: 1;
     position: absolute;
-    width: 250px;
+    width: 200px;
   }
 }
 .right-sidebar #topbar .navbar-header {

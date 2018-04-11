@@ -2,7 +2,7 @@
 if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
 /**
- * User Profile Management
+ * User Connect / Friend / Follow Profile Management
 */
 
 class Userconnect extends CI_Controller {
@@ -19,7 +19,337 @@ class Userconnect extends CI_Controller {
         $this->device_os 		= $this->input->post('device_os');
     }
 
+    // Add leader in your favourite List
+    public function setLeaderAsFavourite() {
+        $UserId                 = $this->input->post('user_id');
+        $UserProfileId          = $this->input->post('user_profile_id');
+        $FriendUserProfileId    = $this->input->post('friend_user_profile_id');
+        
+        if($UserId == "") {
+            $msg = "Please select user";
+            $error_occured = true;
+        } else if($UserProfileId == "") {
+            $msg = "Please select user profile";
+            $error_occured = true;
+        } else if($FriendUserProfileId == "") {
+            $msg = "Please select friend user profile";
+            $error_occured = true;
+        } else {
 
+            $UserProfileDetail = $this->User_Model->checkUserSetAsFavourite($UserProfileId, $FriendUserProfileId);
+
+            if($UserProfileDetail['UserProfileId'] > 0) {
+                $this->db->query("BEGIN");
+                $this->User_Model->deleteUserFavUser($UserProfileId, $FriendUserProfileId);
+                $this->db->query("COMMIT");
+                $msg = "User profile removed from favourite successfully";
+                $favourite = 0;
+            } else {
+                $this->db->query("BEGIN");
+                $insertData = array(
+                                    'UserProfileId'         => $UserProfileId,
+                                    'FriendUserProfileId'   => $FriendUserProfileId,
+                                    'FavOn'                 => date('Y-m-d H:i:s'),
+                                );
+                $this->User_Model->insertUserFavUser($insertData);
+                $this->db->query("COMMIT");
+                $msg = "This user is set as favourite";
+                $favourite = 1;
+            }
+        }
+
+        if($error_occured == true) {
+            $array = array(
+                            "status"        => 'failed',
+                            "message"       => $msg,
+                        );
+        } else {
+
+            $array = array(
+                           "status"      => 'success',
+                           "message"     => $msg,
+                           "favourite"     => $favourite,
+                           );
+        }
+        displayJsonEncode($array);
+    }
+
+    // Remove Leader from Favourite List
+    public function removeLeaderAsFavourite() {
+        $UserId                 = $this->input->post('user_id');
+        $UserProfileId          = $this->input->post('user_profile_id');
+        $FriendUserProfileId    = $this->input->post('friend_user_profile_id');
+        
+        if($UserId == "") {
+            $msg = "Please select user";
+            $error_occured = true;
+        } else if($UserProfileId == "") {
+            $msg = "Please select user profile";
+            $error_occured = true;
+        } else if($FriendUserProfileId == "") {
+            $msg = "Please select friend user profile";
+            $error_occured = true;
+        } else {
+
+            $UserProfileDetail = $this->User_Model->checkUserSetAsFavourite($UserProfileId, $FriendUserProfileId);
+
+            if($UserProfileDetail['UserProfileId'] > 0) {
+                $this->db->query("BEGIN");
+                $this->User_Model->deleteUserFavUser($UserProfileId, $FriendUserProfileId);
+                $this->db->query("COMMIT");
+                $msg = "User profile removed from favourite successfully";
+            } else {
+                $msg = "This user is not in your favourite list";
+                $error_occured = true;
+            }
+        }
+
+        if($error_occured == true) {
+            $array = array(
+                            "status"        => 'failed',
+                            "message"       => $msg,
+                        );
+        } else {
+
+            $array = array(
+                           "status"      => 'success',
+                           "message"     => $msg,
+                           );
+        }
+        displayJsonEncode($array);
+    }
+
+    // Get My All Favourite Leader
+    public function getMyAllFavouriteLeader() {
+        $error_occured = false;
+        $UserId         = $this->input->post('user_id');
+        $UserProfileId  = $this->input->post('user_profile_id');
+        
+                
+        if($UserId == "") {
+            $msg = "Please select user";
+            $error_occured = true;
+        } else if($UserProfileId == "") {
+            $msg = "Please select user profile";
+            $error_occured = true;
+        } else {
+
+            $fav_leader = $this->User_Model->getMyAllFavouriteLeader($UserId, $UserProfileId);
+
+            if(count($fav_leader) > 0) {
+
+                $msg = "Favourite leader found successfully";
+
+            } else {
+                $msg = "No leader in your favourite list.";
+                $error_occured = true;
+            }
+        }
+
+        if($error_occured == true) {
+            $array = array(
+                            "status"        => 'failed',
+                            "message"       => $msg,
+                        );
+        } else {
+
+            $array = array(
+                           "status"     => 'success',
+                           "result"    => $fav_leader,
+                           "message"    => $msg,
+                           );
+        }
+        displayJsonEncode($array);
+    }
+
+
+    // Follow Unfollow user profile
+    public function setFollowUnfollowUser() {
+        $UserId                 = $this->input->post('user_id');
+        $UserProfileId          = $this->input->post('user_profile_id');
+        $FollowUserProfileId    = $this->input->post('friend_user_profile_id');
+        
+        if($UserId == "") {
+            $msg = "Please select user";
+            $error_occured = true;
+        } else if($UserProfileId == "") {
+            $msg = "Please select user profile";
+            $error_occured = true;
+        } else if($FollowUserProfileId == "") {
+            $msg = "Please select friend user profile";
+            $error_occured = true;
+        } else {
+
+            $UserProfileDetail = $this->User_Model->checkUserFollow($UserProfileId, $FollowUserProfileId);
+
+            if($UserProfileDetail['UserProfileId'] > 0) {
+                $this->db->query("BEGIN");
+                $this->User_Model->deleteUserFollowUser($UserProfileId, $FollowUserProfileId);
+                $this->db->query("COMMIT");
+                $msg = "User profile unfollow successfully";
+                $follow = 0;
+            } else {
+                $this->db->query("BEGIN");
+                $insertData = array(
+                                    'UserProfileId'         => $UserProfileId,
+                                    'FollowUserProfileId'   => $FollowUserProfileId,
+                                    'FollowOn'              => date('Y-m-d H:i:s'),
+                                );
+                $this->User_Model->insertUserFollowUser($insertData);
+                $this->db->query("COMMIT");
+                $msg = "Follow successfull";
+                $follow = 1;
+            }
+        }
+
+        if($error_occured == true) {
+            $array = array(
+                            "status"        => 'failed',
+                            "message"       => $msg,
+                        );
+        } else {
+
+            $array = array(
+                           "status"      => 'success',
+                           "message"     => $msg,
+                           "follow"     => $follow,
+                           );
+        }
+        displayJsonEncode($array);
+    }
+
+    // Unfollow User profile
+    public function setUnfollowUser() {
+        $UserId                 = $this->input->post('user_id');
+        $UserProfileId          = $this->input->post('user_profile_id');
+        $FollowUserProfileId    = $this->input->post('friend_user_profile_id');
+        
+        if($UserId == "") {
+            $msg = "Please select user";
+            $error_occured = true;
+        } else if($UserProfileId == "") {
+            $msg = "Please select user profile";
+            $error_occured = true;
+        } else if($FollowUserProfileId == "") {
+            $msg = "Please select friend user profile";
+            $error_occured = true;
+        } else {
+
+            $UserProfileDetail = $this->User_Model->checkUserFollow($UserProfileId, $FollowUserProfileId);
+
+            if($UserProfileDetail['UserProfileId'] > 0) {
+                $this->db->query("BEGIN");
+                $this->User_Model->deleteUserFollowUser($UserProfileId, $FollowUserProfileId);
+                $this->db->query("COMMIT");
+                $msg = "User profile unfollow successfully";
+            } else {
+                $msg = "This user is not in your follow list";
+                $error_occured = true;
+            }
+        }
+
+        if($error_occured == true) {
+            $array = array(
+                            "status"        => 'failed',
+                            "message"       => $msg,
+                        );
+        } else {
+
+            $array = array(
+                           "status"      => 'success',
+                           "message"     => $msg,
+                           );
+        }
+        displayJsonEncode($array);
+    }
+
+    // Get My All Followers
+    public function getMyAllFollowers() {
+        $error_occured = false;
+        $UserId         = $this->input->post('user_id');
+        $UserProfileId  = $this->input->post('user_profile_id');
+        
+                
+        if($UserId == "") {
+            $msg = "Please select user";
+            $error_occured = true;
+        } else if($UserProfileId == "") {
+            $msg = "Please select user profile";
+            $error_occured = true;
+        } else {
+
+            $followers = $this->User_Model->getMyAllFollowers($UserId, $UserProfileId);
+
+            if(count($followers) > 0) {
+
+                $msg = "Follow user found successfully";
+
+            } else {
+                $msg = "No followers found.";
+                $error_occured = true;
+            }
+        }
+
+        if($error_occured == true) {
+            $array = array(
+                            "status"   => 'failed',
+                            "message"  => $msg,
+                        );
+        } else {
+
+            $array = array(
+                           "status"    => 'success',
+                           "result"    => $followers,
+                           "message"   => $msg,
+                           );
+        }
+        displayJsonEncode($array);
+    }
+
+    // Get My All Followings
+    public function getMyAllFollowings() {
+        $error_occured = false;
+        $UserId         = $this->input->post('user_id');
+        $UserProfileId  = $this->input->post('user_profile_id');
+        
+                
+        if($UserId == "") {
+            $msg = "Please select user";
+            $error_occured = true;
+        } else if($UserProfileId == "") {
+            $msg = "Please select user profile";
+            $error_occured = true;
+        } else {
+
+            $followings = $this->User_Model->getMyAllFollowings($UserId, $UserProfileId);
+
+            if(count($followings) > 0) {
+
+                $msg = "Followings found successfully";
+
+            } else {
+                $msg = "No following users found.";
+                $error_occured = true;
+            }
+        }
+
+        if($error_occured == true) {
+            $array = array(
+                            "status"        => 'failed',
+                            "message"       => $msg,
+                        );
+        } else {
+
+            $array = array(
+                           "status"     => 'success',
+                           "result"     => $followings,
+                           "message"    => $msg,
+                           );
+        }
+        displayJsonEncode($array);
+    }
+
+    // Friend Request Sent
     public function sendUserProfileFriendRequest() {
         $UserId                 = $this->input->post('user_id');
         $UserProfileId          = $this->input->post('user_profile_id');
@@ -94,7 +424,7 @@ class Userconnect extends CI_Controller {
         displayJsonEncode($array);
     }
 
-
+    // Cancel User friend request
     public function cancelUserProfileFriendRequest() {
         $UserId                 = $this->input->post('user_id');
         $UserProfileId          = $this->input->post('user_profile_id');
@@ -149,7 +479,7 @@ class Userconnect extends CI_Controller {
         displayJsonEncode($array);
     }
 
-
+    // Undo Friend Request 
     public function undoUserProfileFriendRequest() {
         $UserId                 = $this->input->post('user_id');
         $UserProfileId          = $this->input->post('user_profile_id');
@@ -186,7 +516,7 @@ class Userconnect extends CI_Controller {
         displayJsonEncode($array);
     }
 
-
+    // Get All Incomming Friend Request
     public function getMyAllFriendRequest($UserProfileId) {
         $UserId                 = $this->input->post('user_id');
         $UserProfileId          = $this->input->post('user_profile_id');
@@ -226,7 +556,7 @@ class Userconnect extends CI_Controller {
         displayJsonEncode($array);
     }
 
-
+    // Get All Outgoing Friend Request
     public function getMyAllRequestToFriends($UserProfileId) {
         $UserId                 = $this->input->post('user_id');
         $UserProfileId          = $this->input->post('user_profile_id');
@@ -266,8 +596,7 @@ class Userconnect extends CI_Controller {
         displayJsonEncode($array);
     }
 
-
-
+    // Get My All Friends
     public function getMyAllFriends($UserProfileId) {
         $UserId                 = $this->input->post('user_id');
         $UserProfileId          = $this->input->post('user_profile_id');

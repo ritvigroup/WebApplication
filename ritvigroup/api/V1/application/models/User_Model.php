@@ -10,6 +10,7 @@ class User_Model extends CI_Model {
         $this->userLogTbl           = 'UserLog';
         $this->userFavUserTbl       = 'UserFavUser';
         $this->UserFriendTbl        = 'UserFriend';
+        $this->UserFollowTbl        = 'UserFollow';
 
         $this->UserProfileAddressTbl    = 'UserProfileAddress';
         $this->UserProfileEducationTbl  = 'UserProfileEducation';
@@ -1086,6 +1087,20 @@ class User_Model extends CI_Model {
     }
 
 
+    public function checkUserFollow($UserProfileId, $FollowUserProfileId) {
+        $this->db->select('UserProfileId, FollowUserProfileId');
+        $this->db->from($this->UserFollowTbl);
+        $this->db->where('UserProfileId', $UserProfileId);
+        $this->db->where('FollowUserProfileId', $FollowUserProfileId);
+        $query = $this->db->get();
+        if ($query->num_rows() > 0) {
+            return $result = $query->row_array();
+        } else {
+            return false;
+        }
+    }
+
+
     public function checkUserFriendRequest($UserProfileId, $FriendUserProfileId) {
         /*$this->db->select('UserProfileId, FriendUserProfileId');
         $this->db->from($this->UserFriendTbl);
@@ -1192,6 +1207,61 @@ class User_Model extends CI_Model {
         $this->db->where('UserProfileId', $UserProfileId);
         $this->db->where('FriendUserProfileId', $FriendUserProfileId);
         $this->db->delete($this->userFavUserTbl);
+    }
+
+
+    public function insertUserFollowUser($insertData) {
+        $this->db->insert($this->UserFollowTbl, $insertData);
+
+        return $this->db->insert_id();
+    }
+
+
+    public function deleteUserFollowUser($UserProfileId, $FollowUserProfileId) {
+        $this->db->where('UserProfileId', $UserProfileId);
+        $this->db->where('FollowUserProfileId', $FollowUserProfileId);
+        $this->db->delete($this->UserFollowTbl);
+    }
+
+
+    public function getMyAllFollowers($UserId, $UserProfileId) {
+
+        $query = $this->db->query("SELECT ufu.*, up.UserId 
+                                        FROM ".$this->UserFollowTbl." AS ufu 
+                                        LEFT JOIN ".$this->userProfileTbl." up ON ufu.UserProfileId = up.UserProfileId
+                                        WHERE 
+                                            ufu.`FollowUserProfileId` = '".$UserProfileId."'");
+
+        $res_u = $query->result_array();
+
+        $follow_user = array();
+
+        foreach($res_u AS $key => $result) {
+            $follow_user[] = $this->getUserProfileWithUserInformation($result['UserProfileId'], $UserProfileId);
+        }
+
+        return $follow_user;
+    }
+
+
+
+    public function getMyAllFollowings($UserId, $UserProfileId) {
+
+        $query = $this->db->query("SELECT ufu.*, up.UserId 
+                                        FROM ".$this->UserFollowTbl." AS ufu 
+                                        LEFT JOIN ".$this->userProfileTbl." up ON ufu.FollowUserProfileId = up.UserProfileId
+                                        WHERE 
+                                            ufu.`UserProfileId` = '".$UserProfileId."'");
+
+        $res_u = $query->result_array();
+
+        $follow_user = array();
+
+        foreach($res_u AS $key => $result) {
+            $follow_user[] = $this->getUserProfileWithUserInformation($result['FollowUserProfileId'], $UserProfileId);
+        }
+
+        return $follow_user;
     }
 
 

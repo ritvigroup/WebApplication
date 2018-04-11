@@ -6,10 +6,14 @@
                 <button type="button" data-toggle="collapse" data-target=".sidebar-collapse" class="navbar-toggle"><span
                         class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span
                         class="icon-bar"></span><span class="icon-bar"></span></button>
-                <a id="logo" href="index.html" class="navbar-brand"><span class="fa fa-rocket"></span><span
+                <a id="logo" href="<?=base_url();?>leader/dashboard" class="navbar-brand"><span class="fa fa-rocket"></span><span
                         class="logo-text">Kaajneeti</span><span style="display: none" class="logo-text-icon">KN</span></a>
+
+                <!-- <a id="menu-toggle" href="#" class="hidden-xs"><i class="fa fa-bars"></i></a> -->
+
             </div>
-            <div class="topbar-main"><a id="menu-toggle" href="#" class="hidden-xs"><i class="fa fa-bars"></i></a>
+            <div class="topbar-main">
+                <a id="menu-toggle" href="#" class="hidden-xs"><i class="fa fa-bars"></i></a>
                 <ul class="nav navbar-nav    ">
                     <li class="active"><a href="<?=base_url();?>leader/dashboard">Dashboard</a></li>
                     <li><a href="javascript:;" data-toggle="dropdown" class="dropdown-toggle">Layouts
@@ -177,6 +181,7 @@
                             class="fa fa-search"></i></a></span></div>
                 </form>
                 <ul class="nav navbar navbar-top-links navbar-right mbn">
+                    <?php /*
                     <li class="dropdown"><a data-hover="dropdown" href="#" class="dropdown-toggle"><i
                             class="fa fa-bell fa-fw"></i><span class="badge badge-green">3</span></a>
                         <ul class="dropdown-menu dropdown-alerts">
@@ -310,6 +315,7 @@
                             <li class="last"><a href="page-blog-item.html" target="_blank">See all tasks</a></li>
                         </ul>
                     </li>
+                    */ ?>
                     <li class="dropdown topbar-user"><a data-hover="dropdown" href="#" class="dropdown-toggle"><img
                             src="<?php echo $this->session->userdata('UserProfilePic'); ?>" alt=""
                             class="img-responsive img-circle"/>&nbsp;<span class="hidden-xs"><?php echo $this->session->userdata('UserName'); ?> </span>&nbsp;<span
@@ -326,6 +332,7 @@
                             <li><a href="<?=base_url();?>leader/logout"><i class="fa fa-key"></i>Log Out</a></li>
                         </ul>
                     </li>
+                    <?php /*
                     <li id="topbar-chat" class="hidden-xs"><a href="javascript:void(0)" class="btn-chat"><i
                             class="fa fa-comments"></i><span class="badge badge-info">3</span></a></li>
                     <li class="dropdown hidden-xs"><!--BEGIN THEME SETTING--><a id="theme-setting" href="javascript:;"
@@ -395,7 +402,9 @@
                                 </ul>
                             </li>
                         </ul>
-                        <!--END THEME SETTING--></li>
+                        <!--END THEME SETTING-->
+                    </li>
+                    */ ?>
                 </ul>
             </div>
         </nav>
