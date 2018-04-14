@@ -147,5 +147,18 @@ class Plan extends CI_Controller {
         $this->load->view('plan/createplan',$data);
     }
 
+
+    public function newplan() {
+        $data = array();
+        $this->load->view('plan/newplan',$data);
+    }
+
+
+    public function nextScreen() {
+        $data = array();
+        $data['next_screen'] = $this->input->post('next_screen');
+        $this->load->view('plan/nextScreen',$data);
+    }
+
     
 }

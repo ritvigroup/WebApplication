@@ -226,6 +226,40 @@ defined('SUGGESTION_THUMB_DIR')        OR define('SUGGESTION_THUMB_DIR', UPLOAD_
 defined('SUGGESTION_THUMB_URL')        OR define('SUGGESTION_THUMB_URL', SITE_PATH.UPLOAD_DIR.'/suggestion/thumbnail/');
 
 
+// Email
+defined('EMAIL_AUDIO_DIR')        OR define('EMAIL_AUDIO_DIR', UPLOAD_DIR.'/email/audio/');
+defined('EMAIL_AUDIO_URL')        OR define('EMAIL_AUDIO_URL', SITE_PATH.UPLOAD_DIR.'/email/audio/');
+
+defined('EMAIL_DOC_DIR')        	OR define('EMAIL_DOC_DIR', UPLOAD_DIR.'/email/document/');
+defined('EMAIL_DOC_URL')        	OR define('EMAIL_DOC_URL', SITE_PATH.UPLOAD_DIR.'/email/document/');
+
+defined('EMAIL_IMAGE_DIR')        OR define('EMAIL_IMAGE_DIR', UPLOAD_DIR.'/email/image/');
+defined('EMAIL_IMAGE_URL')        OR define('EMAIL_IMAGE_URL', SITE_PATH.UPLOAD_DIR.'/email/image/');
+
+defined('EMAIL_VIDEO_DIR')        OR define('EMAIL_VIDEO_DIR', UPLOAD_DIR.'/email/video/');
+defined('EMAIL_VIDEO_URL')        OR define('EMAIL_VIDEO_URL', SITE_PATH.UPLOAD_DIR.'/email/video/');
+
+defined('EMAIL_THUMB_DIR')        OR define('EMAIL_THUMB_DIR', UPLOAD_DIR.'/email/thumbnail/');
+defined('EMAIL_THUMB_URL')        OR define('EMAIL_THUMB_URL', SITE_PATH.UPLOAD_DIR.'/email/thumbnail/');
+
+
+// Social
+defined('SOCIAL_AUDIO_DIR')        OR define('SOCIAL_AUDIO_DIR', UPLOAD_DIR.'/social/audio/');
+defined('SOCIAL_AUDIO_URL')        OR define('SOCIAL_AUDIO_URL', SITE_PATH.UPLOAD_DIR.'/social/audio/');
+
+defined('SOCIAL_DOC_DIR')        	OR define('SOCIAL_DOC_DIR', UPLOAD_DIR.'/social/document/');
+defined('SOCIAL_DOC_URL')        	OR define('SOCIAL_DOC_URL', SITE_PATH.UPLOAD_DIR.'/social/document/');
+
+defined('SOCIAL_IMAGE_DIR')        OR define('SOCIAL_IMAGE_DIR', UPLOAD_DIR.'/social/image/');
+defined('SOCIAL_IMAGE_URL')        OR define('SOCIAL_IMAGE_URL', SITE_PATH.UPLOAD_DIR.'/social/image/');
+
+defined('SOCIAL_VIDEO_DIR')        OR define('SOCIAL_VIDEO_DIR', UPLOAD_DIR.'/social/video/');
+defined('SOCIAL_VIDEO_URL')        OR define('SOCIAL_VIDEO_URL', SITE_PATH.UPLOAD_DIR.'/social/video/');
+
+defined('SOCIAL_THUMB_DIR')        OR define('SOCIAL_THUMB_DIR', UPLOAD_DIR.'/social/thumbnail/');
+defined('SOCIAL_THUMB_URL')        OR define('SOCIAL_THUMB_URL', SITE_PATH.UPLOAD_DIR.'/social/thumbnail/');
+
+
 // Document
 defined('DOC_DIR') OR define('DOC_DIR', UPLOAD_DIR.'/doc/document/');
 defined('DOC_URL') OR define('DOC_URL', SITE_PATH.UPLOAD_DIR.'/doc/document/');

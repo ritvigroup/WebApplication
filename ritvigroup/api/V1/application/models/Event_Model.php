@@ -16,7 +16,7 @@ class Event_Model extends CI_Model {
 
 
     public function generateEventUniqueId() {
-        $EventUniqueId = "C".mt_rand().time();
+        $EventUniqueId = "EVENT".mt_rand().time();
         $this->db->select('EventUniqueId');
         $this->db->from($this->eventTbl);
         $this->db->where('EventUniqueId', $EventUniqueId);

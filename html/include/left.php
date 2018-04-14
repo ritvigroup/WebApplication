@@ -46,7 +46,7 @@
                 <div class="icon-bg bg-orange"></div>
             </i><span class="menu-title">Listen</span></a></li>
 
-            <li class="<?php if($request_uri['4'] == "poll") {?>active<?php } ?>"><a href="<?=base_url();?>poll/poll"><i class="fa fa-tachometer fa-fw">
+            <li class="<?php if($request_uri['4'] == "influence") {?>active<?php } ?>"><a href="<?=base_url();?>influence/influence"><i class="fa fa-tachometer fa-fw">
                 <div class="icon-bg bg-orange"></div>
             </i><span class="menu-title">Influence</span></a></li>
 
