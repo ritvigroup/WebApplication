@@ -131,20 +131,10 @@
 <script src="<?=base_url();?>assets/vendors/charCount.js"></script>
 <script src="<?=base_url();?>assets/js/form-components.js"></script>
 
-
-
-<script src="<?=base_url();?>assets/vendors/jquery-validate/jquery.validate.min.js"></script>
-<script src="<?=base_url();?>assets/vendors/jquery-steps/js/jquery.steps.min.js"></script>
-<script src="<?=base_url();?>assets/vendors/jquery-bootstrap-wizard/jquery.bootstrap.wizard.min.js"></script>
-<script src="<?=base_url();?>assets/js/form-wizard.js"></script>
-
-
-
-<script src="<?=base_url();?>assets/vendors/mixitup/src/jquery.mixitup.js"></script>
-<script src="<?=base_url();?>assets/vendors/lightbox/js/lightbox.min.js"></script>
-<script src="<?=base_url();?>assets/js/page-gallery.js"></script>
-
 <script>
+        $( document ).ready(function() {
+            
+        });
     function nextScreen(next_screen_id) {
 
         $.post("<?php echo base_url(); ?>plan/nextScreen", {'next_screen': next_screen_id},
@@ -154,8 +144,10 @@
                 } else {
                     $('.modal-content').html(data);
                 }
+                $('.datepicker').datepicker();
             });
     }
+
 
 
     function prevScreen(next_screen_id) {
@@ -167,11 +159,17 @@
                 } else {
                     $('.modal-content').html(data);
                 }
+                $('.datepicker').datepicker();
             });
     }
 
     
 </script>
-
+<script>
+    function resetFormPage() {
+        //$('#create_plan_form').reset();
+        document.create_plan_form.reset();
+    }
+</script>
 </body>
 </html>

@@ -56,12 +56,19 @@
                 <div class="clearfix"></div>
             </div>
             <!--END TITLE & BREADCRUMB PAGE--><!--BEGIN CONTENT-->
+
+            <?php
+
+            // echo '<pre>';
+            // print_r($result);
+            // echo '</pre>';
+            ?>
             <div class="page-content">
                 <div id="tab-general">
                     <div id="sum_box" class="row mbl">
                         <div class="col-sm-6 col-md-3">
                             <div class="panel profit db mbm">
-                                <div class="panel-body"><p class="icon"><i class="icon fa fa-shopping-cart"></i></p><h4
+                                <div class="panel-body"><p class="icon"><i class="icon fa fa-paper-plane"></i></p><h4
                                         class="value"><span data-counter="" data-start="10" data-end="<?php echo $result->TotalComplaintReceived; ?>" data-step="1"
                                                             data-duration="0"></span><span><?php echo $result->TotalComplaintReceived; ?></span></h4> 
 
@@ -73,7 +80,7 @@
                         </div>
                         <div class="col-sm-6 col-md-3">
                             <div class="panel profit db mbm">
-                                <div class="panel-body"><p class="icon"><i class="icon fa fa-shopping-cart"></i></p><h4
+                                <div class="panel-body"><p class="icon"><i class="icon fa fa-comment"></i></p><h4
                                         class="value"><span data-counter="" data-start="10" data-end="<?php echo $result->TotalComplaint; ?>" data-step="1"
                                                             data-duration="0"></span><span><?php echo $result->TotalComplaint; ?></span></h4> 
 
@@ -85,7 +92,7 @@
                         </div>
                         <div class="col-sm-6 col-md-3">
                             <div class="panel income db mbm">
-                                <div class="panel-body"><p class="icon"><i class="icon fa fa-money"></i></p><h4
+                                <div class="panel-body"><p class="icon"><i class="icon fa fa-calendar"></i></p><h4
                                         class="value"><span><?php echo $result->TotalEvent; ?></span></h4>
 
                                     <p class="description"><a href="<?=base_url();?>event/event">Events</a></p>
@@ -96,7 +103,7 @@
                         </div>
                         <div class="col-sm-6 col-md-3">
                             <div class="panel task db mbm">
-                                <div class="panel-body"><p class="icon"><i class="icon fa fa-signal"></i></p><h4
+                                <div class="panel-body"><p class="icon"><i class="icon fa fa-lightbulb-o"></i></p><h4
                                         class="value"><span><?php echo $result->TotalSuggestionReceived; ?></span></h4>
 
                                     <p class="description"><a href="<?=base_url();?>suggestion/suggestionReceived">Suggestion Received</a></p>
@@ -107,7 +114,7 @@
                         </div>
                         <div class="col-sm-6 col-md-3">
                             <div class="panel task db mbm">
-                                <div class="panel-body"><p class="icon"><i class="icon fa fa-signal"></i></p><h4
+                                <div class="panel-body"><p class="icon"><i class="icon fa fa-lightbulb-o"></i></p><h4
                                         class="value"><span><?php echo $result->TotalSuggestion; ?></span></h4>
 
                                     <p class="description"><a href="<?=base_url();?>suggestion/suggestion">My Suggestion</a></p>
@@ -118,7 +125,7 @@
                         </div>
                         <div class="col-sm-6 col-md-3">
                             <div class="panel visit db mbm">
-                                <div class="panel-body"><p class="icon"><i class="icon fa fa-group"></i></p><h4
+                                <div class="panel-body"><p class="icon"><i class="icon fa fa-list-ul"></i></p><h4
                                         class="value"><span><?php echo $result->TotalPoll; ?></span></h4>
 
                                     <p class="description"><a href="<?=base_url();?>poll/poll">Poll</a></p>
@@ -130,7 +137,7 @@
 
                         <div class="col-sm-6 col-md-3">
                             <div class="panel visit db mbm">
-                                <div class="panel-body"><p class="icon"><i class="icon fa fa-money"></i></p><h4
+                                <div class="panel-body"><p class="icon"><i class="icon fa fa-envelope"></i></p><h4
                                         class="value"><span><?php echo $result->TotalPost; ?></span></h4>
 
                                     <p class="description"><a href="<?=base_url();?>post/post">Post</a></p>
@@ -141,7 +148,7 @@
                         </div>
                         <div class="col-sm-6 col-md-3">
                             <div class="panel visit db mbm">
-                                <div class="panel-body"><p class="icon"><i class="icon fa fa-signal"></i></p><h4
+                                <div class="panel-body"><p class="icon"><i class="icon fa fa-info-circle"></i></p><h4
                                         class="value"><span><?php echo $result->TotalInformation; ?></span></h4>
 
                                     <p class="description"><a href="<?=base_url();?>information/information">Information</a></p>
@@ -149,6 +156,34 @@
                                     
                                 </div>
                             </div>
+                        </div>
+                    </div>
+
+                    <?php
+                    $overall_report = array(
+                                            'Complaint Received' => $result->TotalComplaintReceived,
+                                            'My Complaint' => $result->TotalComplaint,
+                                            'Events' => $result->TotalEvent,
+                                            'Suggestion Received' => $result->TotalSuggestionReceived,
+                                            'Suggestion' => $result->TotalSuggestion,
+                                            'Information' => $result->TotalInformation,
+                                            'Posts' => $result->TotalPost,
+                                            'Poll' => $result->TotalPoll,
+                                            );
+                    ?>
+
+                    <div class="portlet box">
+                        <div class="portlet-header">
+                            <div class="caption">Overall listen report</div>
+                            <!-- <div class="tools">
+                                <i class="fa fa-chevron-up"></i>
+                                <i data-toggle="modal" data-target="#modal-config" class="fa fa-cog"></i>
+                                <i class="fa fa-refresh"></i>
+                                <i class="fa fa-times"></i>
+                            </div> -->
+                        </div>
+                        <div class="portlet-body">
+                            <div id="pie-with-legend"></div>
                         </div>
                     </div>                    
                 </div>
@@ -198,9 +233,6 @@
 <!--CORE JAVASCRIPT-->
 <script src="<?=base_url();?>assets/js/main.js"></script>
 <!--LOADING SCRIPTS FOR PAGE-->
-<script src="<?=base_url();?>assets/vendors/bootstrap-datepicker/js/bootstrap-datepicker.js"></script>
-<script src="<?=base_url();?>assets/vendors/bootstrap-daterangepicker/daterangepicker.js"></script>
-<script src="<?=base_url();?>assets/vendors/moment/moment.js"></script>
 <script src="<?=base_url();?>assets/vendors/bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js"></script>
 <script src="<?=base_url();?>assets/vendors/bootstrap-timepicker/js/bootstrap-timepicker.js"></script>
 <script src="<?=base_url();?>assets/vendors/bootstrap-clockface/js/clockface.js"></script>
@@ -212,17 +244,57 @@
 
 
 
-<script src="<?=base_url();?>assets/vendors/jquery-validate/jquery.validate.min.js"></script>
-<script src="<?=base_url();?>assets/vendors/jquery-steps/js/jquery.steps.min.js"></script>
-<script src="<?=base_url();?>assets/vendors/jquery-bootstrap-wizard/jquery.bootstrap.wizard.min.js"></script>
-<script src="<?=base_url();?>assets/js/form-wizard.js"></script>
+<script src="<?=base_url();?>assets/vendors/jquery-highcharts/highcharts.js"></script>
+<script src="<?=base_url();?>assets/vendors/jquery-highcharts/data.js"></script>
+<script src="<?=base_url();?>assets/vendors/jquery-highcharts/drilldown.js"></script>
+<script src="<?=base_url();?>assets/vendors/jquery-highcharts/exporting.js"></script>
+<!-- <script src="<?=base_url();?>assets/js/charts-highchart-pie.js"></script> -->
 
-
-
-<script src="<?=base_url();?>assets/vendors/mixitup/src/jquery.mixitup.js"></script>
-<script src="<?=base_url();?>assets/vendors/lightbox/js/lightbox.min.js"></script>
-<script src="<?=base_url();?>assets/js/page-gallery.js"></script>
-
+<script>
+$('#pie-with-legend').highcharts({
+        chart: {
+            plotBackgroundColor: null,
+            plotBorderWidth: null,
+            plotShadow: false
+        },
+        title: {
+            text: 'Overall report'
+        },
+        tooltip: {
+            pointFormat: '{series.name}: <b>{point.percentage:.1f}</b>'
+        },
+        plotOptions: {
+            pie: {
+                allowPointSelect: true,
+                cursor: 'pointer',
+                dataLabels: {
+                    enabled: false
+                },
+                showInLegend: true
+            }
+        },
+        series: [{
+            type: 'pie',
+            name: 'Percentage',
+            data: [
+                <?php foreach($overall_report AS $total_summary_key => $total_summary_val) { ?>
+                    ['<?php echo $total_summary_key; ?>',   <?php echo $total_summary_val; ?>],
+                <?php } ?>
+                // ['Firefox',   45.0],
+                // ['IE',       26.8],
+                // {
+                //     name: 'Chrome',
+                //     y: 12.8,
+                //     sliced: true,
+                //     selected: true
+                // },
+                // ['Safari',    8.5],
+                // ['Opera',     6.2],
+                // ['Others',   0.7]
+            ]
+        }]
+    });
+</script>
 
 <script>
 function openListenDetail(event_id) {
