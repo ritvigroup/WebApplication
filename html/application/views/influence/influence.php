@@ -87,7 +87,7 @@
                                                 <th width="20%" class="header">Subject</th>
                                                 <th width="50%" class="header">Message</th>
                                                 <th width="15%" class="header">On</th>
-                                                <th width="9%" class="header">Action</th>
+                                                <!-- <th width="9%" class="header">Action</th> -->
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -100,7 +100,7 @@
                                                         <td><a data-target="#modal-stackable" data-toggle="modal" href="javascript:void(0);" onClick="return viewEmail('<?php echo $email_sent->EmailSentUniqueId; ?>');"><?php echo $email_sent->EmailSubject; ?></a></td>
                                                         <td><?php echo substr(strip_tags($email_sent->EmailMessage), 0, 100); ?></td>
                                                         <td><?php echo $email_sent->SentOn; ?></td>
-                                                        <td><button type="button" class="btn btn-red btn-xs"><i class="fa fa-trash"></i>&nbsp;Delete</button></td>
+                                                        <!-- <td><button type="button" class="btn btn-red btn-xs"><i class="fa fa-trash"></i>&nbsp;Delete</button></td> -->
                                                     </tr>
                                                 <?php } ?>
                                             <?php } ?>
@@ -108,6 +108,7 @@
                                     </table>
                                 </div>
                             </div>
+                            
                             <div id="table-color-tab" class="tab-pane fade">
                                 <a data-target="#modal-stackable" data-toggle="modal" href="javascript:void(0);" class="btn btn-success" style="float: right" onClick="return smsCompose();">Compose</a>
                                 <div class="row">
@@ -118,7 +119,7 @@
                                                 <th width="20%" class="header">To</th>
                                                 <th width="60%" class="header">Message</th>
                                                 <th width="15%" class="header">On</th>
-                                                <th width="9%" class="header">Action</th>
+                                                <!-- <th width="9%" class="header">Action</th> -->
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -129,7 +130,7 @@
                                                         <td><a data-target="#modal-stackable" data-toggle="modal" href="javascript:void(0);" onClick="return viewSms('<?php echo $sms_sent->SmsSentUniqueId; ?>');"><?php echo $sms_sent->SmsTo; ?></a></td>
                                                         <td><?php echo substr(strip_tags($sms_sent->SmsMessage), 0, 100); ?></td>
                                                         <td><?php echo $sms_sent->SentOn; ?></td>
-                                                        <td><button type="button" class="btn btn-red btn-xs"><i class="fa fa-trash"></i>&nbsp;Delete</button></td>
+                                                        <!-- <td><button type="button" class="btn btn-red btn-xs"><i class="fa fa-trash"></i>&nbsp;Delete</button></td> -->
                                                     </tr>
                                                 <?php } ?>
                                             <?php } ?>
@@ -150,7 +151,7 @@
                                                 <th width="20%" class="header">Subject</th>
                                                 <th width="50%" class="header">Message</th>
                                                 <th width="15%" class="header">On</th>
-                                                <th width="9%" class="header">Action</th>
+                                                <!-- <th width="9%" class="header">Action</th> -->
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -163,7 +164,7 @@
                                                         <td><a data-target="#modal-stackable" data-toggle="modal" href="javascript:void(0);" onClick="return viewSocial('<?php echo $social_sent->SocialSentUniqueId; ?>');"><?php echo $social_sent->SocialSubject; ?></a></td>
                                                         <td><?php echo substr(strip_tags($social_sent->SocialMessage), 0, 100); ?></td>
                                                         <td><?php echo $social_sent->SentOn; ?></td>
-                                                        <td><button type="button" class="btn btn-red btn-xs"><i class="fa fa-trash"></i>&nbsp;Delete</button></td>
+                                                        <!-- <td><button type="button" class="btn btn-red btn-xs"><i class="fa fa-trash"></i>&nbsp;Delete</button></td> -->
                                                     </tr>
                                                 <?php } ?>
                                             <?php } ?>

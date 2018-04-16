@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-<head><title>My Request to Friends</title>
+<head><title>My Team</title>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -49,90 +49,93 @@
         <div id="page-wrapper"><!--BEGIN TITLE & BREADCRUMB PAGE-->
             <div id="title-breadcrumb-option-demo" class="page-title-breadcrumb">
                 <div class="page-header pull-left">
-                    <div class="page-title">Request Sent</div>
+                    <div class="page-title">My Team</div>
                 </div>
                 <ol class="breadcrumb page-breadcrumb">
                     <li><i class="fa fa-home"></i>&nbsp;<a href="<?=base_url();?>leader/home">Home</a>&nbsp;&nbsp;<i
                             class="fa fa-angle-right"></i>&nbsp;&nbsp;</li>
-                    <li><a href="<?=base_url();?>leader/team">Organise</a>&nbsp;&nbsp;<i class="fa fa-angle-right"></i>&nbsp;&nbsp;</li>
-                    <li class="active">Request Sent</li>
+                    <li><a href="<?=base_url();?>organize/team">My Team</a>&nbsp;&nbsp;<i class="fa fa-angle-right"></i>&nbsp;&nbsp;</li>
+                    <li class="active">My Team</li>
                 </ol>
 
                 <div class="clearfix"></div>
             </div>
             <!--END TITLE & BREADCRUMB PAGE--><!--BEGIN CONTENT-->
+
+            <?php
+            // echo '<pre>';
+            // print_r($MyTeam);
+            // echo '</pre>';
+            ?>
             <div class="page-content">
                 <div class="row">
                     <div class="col-md-12">
                         <div class="portlet box">
                             <div class="portlet-header">
-                                <div class="caption">Request Sent</div>
+                                <div class="caption">My Team</div>
                                 <div class="actions">
-                                    <?php echo $this->plan_links; ?>
+                                    <a data-target="#modal-stackable" data-toggle="modal" href="javascript:void(0);" class="btn btn-info btn-xs" onClick="return newTeam();"><i class="fa fa-plus"></i>&nbsp;New Team</a>&nbsp;
+                                    <a href="<?=base_url();?>organize/fleet" class="btn btn-info btn-xs"><i class="fa fa-plus"></i>&nbsp;Fleet</a>&nbsp;
+                                    <a href="<?=base_url();?>organize/documents" class="btn btn-info btn-xs"><i class="fa fa-plus"></i>&nbsp;Documents</a>&nbsp;
                                 </div>
                             </div>
 
                             <div class="portlet-body">
                                 <div class="row mbm">
                                     <div class="col-lg-12">
-
                                         <div class="table-responsive">
                                             <table id="table_id"
                                                    class="table table-hover table-striped table-bordered table-advanced tablesorter display">
                                                 <thead>
+                                                <tr>
+                                                    <th style="width: 3%; padding: 10px; background: #efefef"><input
+                                                            type="checkbox" class="checkall"/></th>
+                                                    <th>Pic</th>
+                                                    <th>Name</th>
+                                                    <th>Email</th>
+                                                    <th>Status</th>
+                                                    <th>Added On</th>
+                                                    <th>Action</th>
+
+                                                </tr>
+
+                                                <?php 
+                                                if(count($MyTeam->result) > 0) { ?>
+                                                <tbody>
+                                                <?php foreach($MyTeam->result AS $my_team) { ?>
+                                                    <?php
+                                                    $Status = ($my_team->user_profile_detail->profile->ProfileStatus == 1) ? 'Active' : 'Not Accepted';
+
+                                                    $UserProfileHrefLink = base_url().'profile/subprofile/'.$my_team->user_profile_detail->user_info->UserUniqueId.'/'.$my_team->user_profile_detail->profile->UserProfileId;
+
+                                                    if($my_team->user_profile_detail->profile->ProfilePhotoPath != '') {
+                                                        $profile_pic = ($my_team->user_profile_detail->profile->ProfilePhotoPath != '') ? $my_team->user_profile_detail->profile->ProfilePhotoPath : base_url().'assets/images/default-user.png';
+                                                    } else {
+                                                        $profile_pic = ($my_team->user_profile_detail->user_info->ProfilePhotoPath != '') ? $my_team->user_profile_detail->user_info->ProfilePhotoPath : base_url().'assets/images/default-user.png';
+                                                    }
+
+                                                    ?>
                                                     <tr>
-                                                        <th style="width: 3%; padding: 10px; background: #efefef"><input
-                                                                type="checkbox" class="checkall"/></th>
-                                                        <th>Pic</th>
-                                                        <th>Name</th>
-                                                        <th>Email</th>
-                                                        <th>Gender</th>
-                                                        <th>Party</th>
-                                                        <th>Request On</th>
-                                                        <th>Action</th>
+                                                        <td><input type="checkbox"/></td>
+                                                        <td><img
+                                                    src="<?php echo $profile_pic; ?>"
+                                                    style="border: 1px solid #fff; box-shadow: 0 2px 3px rgba(0,0,0,0.25);width: 50px; height: 50px;"
+                                                    class="img-circle"/></td>
+                                                        <td><a href="<?php echo $UserProfileHrefLink; ?>" target="_blank"><?php echo $my_team->user_profile_detail->profile->FirstName.' '.$my_team->user_profile_detail->profile->LastName; ?></a></td>
+                                                        <td><?php echo $my_team->user_profile_detail->profile->Email; ?></td>
+                                                        <td><?php echo $Status; ?></td>
+                                                        <td><?php echo $my_team->user_profile_detail->profile->AddedOn; ?></td>
+                                                        <td>
+                                                            <button type="button" class="btn btn-default btn-xs"><i
+                                                                    class="fa fa-edit"></i>&nbsp;
+                                                                Edit
+                                                            </button>
+                                                        </td>
                                                     </tr>
-
-                                                    <?php if(count($result) > 0) {?>
-                                                        <?php foreach($result AS $user) { ?>
-                                                            <?php
-                                                            $ProfilePhotoPath = ($user->user_profile_detail->user_info->ProfilePhotoPath != '') ? $user->user_profile_detail->user_info->ProfilePhotoPath : base_url().'assets/images/default-user.png';
-
-
-                                                            
-                                                            $Gender = ($user->user_profile_detail->user_info->Gender == 1) ? 'Male' : (($user->user_profile_detail->user_info->Gender == 2) ? 'Female' : 'Other');
-
-                                                            $UserProfileHrefLink = base_url().'profile/profile/'.$user->user_profile_detail->user_info->UserUniqueId;
-
-                                                            ?>
-                                                        <tbody class="media-thumb" id="request_id_<?php echo $user->user_profile_detail->profile->UserProfileId; ?>">
-                                                            <tr>
-                                                                <td><input type="checkbox"></td>
-                                                                <td><span class="img-shadow"><img
-                                                                src="<?php echo $ProfilePhotoPath; ?>"
-                                                                style="border: 1px solid #fff; box-shadow: 0 2px 3px rgba(0,0,0,0.25);width: 40px; height: 40px;"
-                                                                class="img-circle"/></span></td>
-                                                                <td><a href="<?php echo $UserProfileHrefLink; ?>" target="_blank"><h6 class="media-heading"><?php echo $user->user_profile_detail->profile->FirstName.' '.$user->user_profile_detail->profile->LastName?></h6></a>
-                                                                    
-                                                                </td>
-                                                                <td>
-                                                                    <div><?php echo $user->user_profile_detail->profile->Email; ?></div>
-                                                                </td>
-                                                                <td><span class="label label-success"><?php echo $Gender; ?></span></td>
-                                                                <td><span class="label label-warning"><?php echo $leader_profile->UserProfileLeader->PoliticalPartyName; ?></span></td>
-                                                                <td><?php echo date('d-M-Y h:i A', strtotime($user->RequestSentOn)); ?></td>
-                                                                <td>
-                                                                    <button type="button" class="btn btn-danger btn-xs" onClick="return cancelRequest(<?php echo $user->user_profile_detail->profile->UserProfileId; ?>);"><i
-                                                                            class="fa fa-trash-o"></i>&nbsp;
-                                                                        Cancel Request
-                                                                    </button>
-                                                                </td>
-                                                            </tr>
-                                                        </tbody>
-                                                        <?php } ?>
-                                                    <?php } else { ?>
-                                                    
-                                                    <?php } ?>
-                                                    
+                                                <?php } ?>
+                                                
+                                                </tbody>
+                                                <?php }  ?> 
                                                 </thead>
                                             </table>
                                         </div>
@@ -150,6 +153,15 @@
 
         <!--END FOOTER--><!--END PAGE WRAPPER--></div>
 </div>
+
+<div id="modal-stackable" tabindex="-1" role="dialog" aria-labelledby="modal-stackable-label" aria-hidden="true" class="modal fade" style="display: none;">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            
+        </div>
+    </div>
+</div>
+
 <script src="<?php echo base_url(); ?>assets/js/sweetalert-dev.js"></script> 
 <script src="<?php echo base_url(); ?>assets/js/sweetalert.min.js"></script> 
 
@@ -195,25 +207,17 @@
 <script src="<?=base_url();?>assets/js/table-datatables.js"></script>
 
 <script>
-function cancelRequest(id) {
+    function newTeam() {
 
-    if (id > 0) {
-        $.post("<?php echo base_url(); ?>connect/undoUserProfileFriendRequest", {id: id},
+        $.post("<?php echo base_url(); ?>organize/newTeam", {'display': 'Y'},
             function (data, status) {
-
-               if (data.status === "failed") {
-                    
-                    sweetAlert("Oops...", data.message, "error");
-                    return false;
+                if(data != '') {
+                    $('.modal-content').html(data);
                 } else {
-                    $('#request_id_'+id).html('<td colspan="100%" style="text-align: center;">'+data.message+'</td>');
+                    $('.modal-content').html(data);
                 }
             });
-    } else {
-        sweetAlert("Oops...", "Please select user to cancel", "error");
-        return false;
     }
-}
 </script>
 
 </body>

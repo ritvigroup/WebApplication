@@ -202,5 +202,49 @@ class Leader extends CI_Controller {
         }
         displayJsonEncode($array);
     }
+
+
+    public function getMyAllCreatedTeam() {
+        $error_occured = false;
+
+        $UserId             = $this->input->post('user_id');
+        $UserProfileId      = $this->input->post('user_profile_id');
+
+       
+        if($UserId == "") {
+            $msg = "Please select user";
+            $error_occured = true;
+        } else if($UserId == "") {
+            $msg = "Please select user";
+            $error_occured = true;
+        } else if($UserProfileId == "") {
+            $msg = "Please select user profile";
+            $error_occured = true;
+        } else {
+        
+            $my_team = $this->User_Model->getMyAllCreatedTeam($UserId);
+            if(count($my_team) > 0) {
+                $msg = "My team found";
+            } else {
+                $msg = "No any team found";
+                $error_occured = true;
+            }
+        }
+
+        if($error_occured == true) {
+            $array = array(
+                            "status"        => 'failed',
+                            "message"       => $msg,
+                        );
+        } else {
+
+            $array = array(
+                           "status"     => 'success',
+                           "result"     => $my_team,
+                           "message"    => $msg,
+                           );
+        }
+        displayJsonEncode($array);
+    }
 }
 

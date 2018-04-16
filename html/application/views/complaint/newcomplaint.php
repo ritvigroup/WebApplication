@@ -44,6 +44,11 @@
           class="style-change color-change">
     <link type="text/css" rel="stylesheet" href="<?=base_url();?>assets/css/style-responsive.css">
 
+    <style>
+    .file_display { float: left;overflow: hidden; width: 80px; height: 100px;border: 1px solid #f9efef; margin: 0 10px 10px 0;padding: 5px; }
+    .file_display p {position: absolute; padding: 0px 4px; background: #333; color: white; top: 0; left: 0;}
+    </style>
+
 </head>
 <body class=" ">
 <div>
@@ -186,6 +191,7 @@
                                         <div class="form-group">
                                             <label for="complaint_member" class="control-label">Complaint Members</label>
                                             <select id="complaint_member" name="complaint_member" multiple="multiple" class="form-control">
+                                                <option value="">None</option>
                                                 <?php
                                                 foreach($MyFriend->result AS $my_friend) {
                                                     echo '<option value="'.$my_friend->user_profile_detail->profile->UserProfileId.'">'.$my_friend->user_profile_detail->profile->FirstName." ".$my_friend->user_profile_detail->profile->LastName.'</option>';
@@ -200,13 +206,25 @@
                                     <div class="col-md-12">
                                         <div class="form-group"><label for="files"
                                                                        class="control-label">Select Files</label>
-                                            <input type="file" name="file[]" class="form-control fileUploadForm" multiple="true"/><br>
+                                            <input type="file" name="file[]" id="select_files" class="form-control fileUploadForm" multiple="true" /><br>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12" id="previewImage">
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="form-group" style="float: right;">
+                                            <button type="submit" class="btn btn-success complaint_button">Submit&nbsp;<i class="fa fa-chevron-circle-right"></i></button>
                                         </div>
                                     </div>
                                 </div>
 
                             </div>
-                            <div class="form-group"><button type="submit" class="btn btn-success complaint_button">Submit&nbsp;<i class="fa fa-chevron-circle-right"></i></button></div>
+                            
                         </div>
                     </div>
                 </div>
@@ -262,11 +280,6 @@
 
 
 
-<script src="<?=base_url();?>assets/vendors/jquery-validate/jquery.validate.min.js"></script>
-<script src="<?=base_url();?>assets/vendors/jquery-steps/js/jquery.steps.min.js"></script>
-<script src="<?=base_url();?>assets/vendors/jquery-bootstrap-wizard/jquery.bootstrap.wizard.min.js"></script>
-<script src="<?=base_url();?>assets/js/form-wizard.js"></script>
-
 <script>
     var prev_leader_leader = '';
     function searchLeader() {
@@ -293,7 +306,69 @@
             //sweetAlert("Oops...", "Please enter something to search leaders", "error");
             return false;
         }
-    };
+    }
+
+    var selDiv = "";
+        
+    document.addEventListener("DOMContentLoaded", init, false);
+    
+    function init() {
+        document.querySelector('#select_files').addEventListener('change', handleFileSelect, false);
+        selDiv = document.querySelector("#previewImage");
+    }
+        
+    function handleFileSelect(e) {
+        
+        if(!e.target.files || !window.FileReader) return;
+
+        selDiv.innerHTML = "";
+        
+        var files = e.target.files;
+        var filesArr = Array.prototype.slice.call(files);
+        var i = j = 0;
+        filesArr.forEach(function(f) {
+            var f = files[i];
+            /*if(!f.type.match("image.*")) {
+                //return;
+
+            } else {*/
+
+                var file_type_array = {
+                                        'video/mp4'             : 'default-mp4-file.png',
+                                        'application/pdf'       : 'default-pdf-file.png',
+                                        'application/vnd.openxmlformats-officedocument.wordprocessingml.document' : 'default-doc-file.png',
+                                        'application/msword'    : 'default-doc-file.png',
+                                        'text/plain'            : 'default-txt-file.png',
+                                        'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' : 'default-xls-file.png',
+                                        'application/vnd.ms-excel'  : 'default-xls-file.png'
+                                        };
+
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    //var html = '<img src="' + e.target.result + '" style="width: 100px; height: 100px">' + f.name + '<br clear="left"/>';
+
+                    if(f.type.match('image')) {
+                        var html = '<div class="col-md-1 file_display"><p>'+(j+1)+'</p><img src="' + e.target.result + '" style="width: 60px; height: 60px; margin: 0 10px 10px 0;"><br />' + f.name + '</div>';
+                    } else {
+
+                        var default_image = '<?php echo base_url();?>assets/images/default-file.png';
+                        $.each(file_type_array, function( index, value ) {
+                            if(index == f.type) {
+                                default_image = '<?php echo base_url();?>assets/images/'+file_type_array[index];
+                            }
+                        });
+                        var html = '<div class="col-md-1 file_display"><p>'+(j+1)+'</p><img src="'+default_image+'" style="width: 60px; height: 60px; margin: 0 10px 10px 0;"><br />' + f.name + '</div>';
+                    }
+                    j++;
+                    selDiv.innerHTML += html;   
+                                
+                }
+                reader.readAsDataURL(f); 
+            //}
+            i++;
+        });
+        
+    }
 
 
     document.querySelector('.complaint_button').onclick = function () {

@@ -26,6 +26,11 @@
     <link type="text/css" rel="stylesheet" href="<?=base_url();?>assets/vendors/bootstrap-timepicker/css/bootstrap-timepicker.min.css">
     <link type="text/css" rel="stylesheet" href="<?=base_url();?>assets/vendors/bootstrap-clockface/css/clockface.css">
     <link type="text/css" rel="stylesheet" href="<?=base_url();?>assets/vendors/bootstrap-switch/css/bootstrap-switch.css">
+
+    <link type="text/css" rel="stylesheet" href="<?=base_url();?>assets/vendors/DataTables/media/css/jquery.dataTables.css">
+    <link type="text/css" rel="stylesheet"
+          href="<?=base_url();?>assets/vendors/DataTables/extensions/TableTools/css/dataTables.tableTools.min.css">
+
     <!--Loading style vendors-->
     <link type="text/css" rel="stylesheet" href="<?=base_url();?>assets/vendors/animate.css/animate.css">
     <link type="text/css" rel="stylesheet" href="<?=base_url();?>assets/vendors/jquery-pace/pace.css">
@@ -70,7 +75,9 @@
                         <div class="portlet box">
                             <div class="portlet-header">
                                 <div class="caption">Search Profile</div>
-                                <?php echo $this->plan_links; ?>
+                                <div class="actions">
+                                    <?php echo $this->plan_links; ?>
+                                </div>
                             </div>
 
 
@@ -111,8 +118,20 @@
                                         
                                     </table>
                                 </div>
-                                <div class="table-responsive" id="search_result_show">
-                                    
+                            </div>
+                            <div class="table-responsive" id="search_result_show">
+                                <div class="portlet-body">
+                                    <div class="row mbm">
+                                        <div class="col-lg-12">
+                                            <h3>Search Result</h3>
+                                            <div class="table-responsive">
+                                                <table id="table_id"
+                                                       class="table table-hover table-striped table-bordered table-advanced tablesorter display">
+
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -168,11 +187,11 @@
 <script src="<?=base_url();?>assets/js/form-components.js"></script>
 
 
-
-<script src="<?=base_url();?>assets/vendors/jquery-validate/jquery.validate.min.js"></script>
-<script src="<?=base_url();?>assets/vendors/jquery-steps/js/jquery.steps.min.js"></script>
-<script src="<?=base_url();?>assets/vendors/jquery-bootstrap-wizard/jquery.bootstrap.wizard.min.js"></script>
-<script src="<?=base_url();?>assets/js/form-wizard.js"></script>
+<!--LOADING SCRIPTS FOR PAGE-->
+<script src="<?=base_url();?>assets/vendors/DataTables/media/js/jquery.dataTables.js"></script>
+<script src="<?=base_url();?>assets/vendors/DataTables/media/js/dataTables.bootstrap.js"></script>
+<script src="<?=base_url();?>assets/vendors/DataTables/extensions/TableTools/js/dataTables.tableTools.min.js"></script>
+<script src="<?=base_url();?>assets/js/table-datatables.js"></script>
 
 <script>
 function searchLeader() {
@@ -189,8 +208,10 @@ function searchLeader() {
                     sweetAlert("Error", data.message, "error");
                     return false;
                 } else {
-                    $('#search_result_show').html(data);
+                    $('#table_id').html(data);
                 }
+
+                $('#table_id').DataTable();
             });
     } else {
         sweetAlert("Error", "Please enter or select something to search", "error");

@@ -196,6 +196,51 @@ class Userprofile extends CI_Controller {
         displayJsonEncode($array);
     }
 
+    // Get User Profile Information With Unique Id Check and Also with Profile Id
+    public function getUserprofileFriendsprofileInformationUniqueIdCheck() {
+        $error_occured = false;
+        $UserProfileId          = $this->input->post('user_profile_id');
+        $unique_profile_id      = $this->input->post('unique_profile_id');
+        $FriendUserProfileId    = $this->input->post('friend_user_profile_id');
+        
+        if($UserProfileId == "") {
+            $msg = "Please select user profile";
+            $error_occured = true;
+        } else if($FriendUserProfileId == "") {
+            $msg = "Please select friend user profile";
+            $error_occured = true;
+        } else {
+
+            $res_u = $this->User_Model->getUserprofileFriendsprofileInformationUniqueIdCheck($unique_profile_id, $FriendUserProfileId, $UserProfileId);
+
+            if($res_u['user_profile_detail']['user_info']['UserId'] > 0) {
+                
+                $profile = $res_u;
+
+                $msg = "Friend profile information found successfully";
+
+            } else {
+                $msg = "No user profile Found";
+                $error_occured = true;
+            }
+        }
+
+        if($error_occured == true) {
+            $array = array(
+                            "status"        => 'failed',
+                            "message"       => $msg,
+                        );
+        } else {
+
+            $array = array(
+                           "status"     => 'success',
+                           "result"    => $profile,
+                           "message"    => $msg,
+                           );
+        }
+        displayJsonEncode($array);
+    }
+
     // Search Citizen Profiles
     public function searchCitizenProfiles() {
         $error_occured = false;

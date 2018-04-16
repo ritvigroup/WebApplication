@@ -222,7 +222,7 @@ class Influence extends CI_Controller {
             $msg = "Please enter sms sent to";
             $error_occured = true;
         } else if($SmsMessage == "") {
-            $msg = "Please enter sms";
+            $msg = "Please enter sms message";
             $error_occured = true;
         } else {
 
@@ -233,6 +233,7 @@ class Influence extends CI_Controller {
             $insertData = array(
                                 'SmsSentUniqueId'   => $SmsSentUniqueId,
                                 'UserProfileId'     => $UserProfileId,
+                                'SmsTo'             => $SmsTo,
                                 'SmsMessage'        => $SmsMessage,
                                 'SentOn'            => date('Y-m-d H:i:s'),
                             );

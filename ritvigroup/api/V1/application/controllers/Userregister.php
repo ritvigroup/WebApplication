@@ -173,6 +173,13 @@ class Userregister extends CI_Controller {
 
                         $UserCitizenProfileId = $this->User_Model->insertUserProfile($insertData);
 
+                        $updateData = array(
+                            'AddedBy'   => $UserCitizenProfileId,
+                            'UpdatedBy' => $UserCitizenProfileId,
+                            'UpdatedOn' => date('Y-m-d H:i:s'),
+                        );
+                        $this->User_Model->updateUserProfileData($UserCitizenProfileId, $updateData);
+
                         $insertData = array(
                                             'UserId'                    => $UserId,
                                             'UserTypeId'                => 2,
@@ -189,6 +196,13 @@ class Userregister extends CI_Controller {
                                         );
 
                         $UserLeaderProfileId = $this->User_Model->insertUserProfile($insertData);
+
+                        $updateData = array(
+                            'AddedBy'   => $UserLeaderProfileId,
+                            'UpdatedBy' => $UserLeaderProfileId,
+                            'UpdatedOn' => date('Y-m-d H:i:s'),
+                        );
+                        $this->User_Model->updateUserProfileData($UserLeaderProfileId, $updateData);
 
                         if($UserCitizenProfileId > 0 && $UserLeaderProfileId > 0) {
                             $this->db->query("COMMIT");
@@ -323,6 +337,13 @@ class Userregister extends CI_Controller {
 
                     $UserCitizenProfileId = $this->User_Model->insertUserProfile($insertData);
 
+                    $updateData = array(
+                                        'AddedBy'   => $UserCitizenProfileId,
+                                        'UpdatedBy' => $UserCitizenProfileId,
+                                        'UpdatedOn' => date('Y-m-d H:i:s'),
+                                        );
+                    $this->User_Model->updateUserProfileData($UserCitizenProfileId, $updateData);
+
                     // Leader
                     $insertData = array(
                                         'UserId'                    => $UserId,
@@ -341,6 +362,13 @@ class Userregister extends CI_Controller {
                                     );
 
                     $UserLeaderProfileId = $this->User_Model->insertUserProfile($insertData);
+
+                    $updateData = array(
+                                        'AddedBy'   => $UserLeaderProfileId,
+                                        'UpdatedBy' => $UserLeaderProfileId,
+                                        'UpdatedOn' => date('Y-m-d H:i:s'),
+                                        );
+                    $this->User_Model->updateUserProfileData($UserLeaderProfileId, $updateData);
 
                     if($UserCitizenProfileId > 0 && $UserLeaderProfileId > 0) {
                         $this->db->query("COMMIT");
@@ -454,6 +482,13 @@ class Userregister extends CI_Controller {
 
                     $UserCitizenProfileId = $this->User_Model->insertUserProfile($insertData);
 
+                    $updateData = array(
+                                        'AddedBy'   => $UserCitizenProfileId,
+                                        'UpdatedBy' => $UserCitizenProfileId,
+                                        'UpdatedOn' => date('Y-m-d H:i:s'),
+                                        );
+                    $this->User_Model->updateUserProfileData($UserCitizenProfileId, $updateData);
+
                     $insertData = array(
                                         'UserId'                    => $UserId,
                                         'UserTypeId'                => 2,
@@ -469,6 +504,13 @@ class Userregister extends CI_Controller {
                                     );
 
                     $UserLeaderProfileId = $this->User_Model->insertUserProfile($insertData);
+
+                    $updateData = array(
+                                        'AddedBy'   => $UserLeaderProfileId,
+                                        'UpdatedBy' => $UserLeaderProfileId,
+                                        'UpdatedOn' => date('Y-m-d H:i:s'),
+                                        );
+                    $this->User_Model->updateUserProfileData($UserLeaderProfileId, $updateData);
 
                     if($UserCitizenProfileId > 0 && $UserLeaderProfileId > 0) {
 
@@ -636,6 +678,101 @@ class Userregister extends CI_Controller {
             $array = array(
                            "status"         => 'success',
                            "result"         => $user_info,
+                           "message"        => $msg,
+                           );
+        }
+        displayJsonEncode($array);
+    }
+
+
+    public function saveUserProfile() {
+        $error_occured = false;
+        $user_profile_id = $this->input->post('user_profile_id'); // Added By User Profile Id
+        
+        $friend_profile = $this->input->post('friend_profile'); // Selected User Profile Id
+        $first_name = $this->input->post('first_name'); // Created First Name
+        $last_name = $this->input->post('last_name'); // Created last Name
+        $email = $this->input->post('email'); // Created Email
+        
+        if($user_profile_id == "") {
+            $msg = "Please select user profile";
+            $error_occured = true;
+        } else if($friend_profile == "") {
+            $msg = "Please select user to create user profile";
+            $error_occured = true;
+        } else if($first_name == "") {
+            $msg = "Please enter first name";
+            $error_occured = true;
+        } else if($last_name == "") {
+            $msg = "Please enter last name";
+            $error_occured = true;
+        } else if($email == "") {
+            $msg = "Please enter email";
+            $error_occured = true;
+        } else {
+
+            $user_detail = $this->User_Model->getUserProfileInformation($user_profile_id);
+            $friend_user_detail = $this->User_Model->getUserProfileInformation($friend_profile);
+
+            if($friend_user_detail['UserId'] > 0) {
+                $UserId = $friend_user_detail['UserId'];
+
+                $insertData = array(
+                                    'UserId'                    => $UserId,
+                                    'UserTypeId'                => 3,
+                                    'ParentUserId'              => $user_detail['UserId'],
+                                    'FirstName'                 => $first_name,
+                                    'LastName'                  => $last_name,
+                                    'Email'                     => $email,
+                                    'UserProfileDeviceToken'    => '',
+                                    'Mobile'                    => '',
+                                    'ProfileStatus'             => 1,
+                                    'AddedBy'                   => $user_profile_id,
+                                    'UpdatedBy'                 => $user_profile_id,
+                                    'AddedOn'                   => date('Y-m-d H:i:s'),
+                                    'UpdatedOn'                 => date('Y-m-d H:i:s'),
+                                );
+
+                $ProfileId = $this->User_Model->insertUserProfile($insertData);
+
+                if($ProfileId > 0) {
+
+                    $this->User_Model->saveUserProfilePhoto('photo', $user_detail['UserId'], $ProfileId, 1);
+
+                    $to      = 'rajesh1may@gmail.com';
+                    $subject = 'the subject';
+                    $message = 'hello';
+                    $headers = 'From: webmaster@example.com' . "\r\n" .
+                        'Reply-To: webmaster@example.com' . "\r\n" .
+                        'X-Mailer: PHP/' . phpversion();
+
+                    mail($to, $subject, $message, $headers);
+
+                    $this->db->query("COMMIT");
+                    $msg = "User saved successfully";
+                } else {
+                    $this->db->query("ROLLBACK");
+                    $msg = "Error: Problem to save user";
+                    $error_occured = true;
+                }
+
+            } else {
+                $this->db->query("ROLLBACK");
+                $msg = "Error: User not saved.";
+                $error_occured = true;
+            }
+        }
+
+        if($error_occured == true) {
+            $array = array(
+                            "status"        => 'failed',
+                            "message"       => $msg,
+                        );
+        } else {
+
+            $array = array(
+                           "status"         => 'success',
+                           "result"     => $user_info,
                            "message"        => $msg,
                            );
         }

@@ -34,7 +34,7 @@
         var message_text    = $("#message_text").val();
 
 
-        if (sms_text.length > 0) {
+        if (sms_text.length > 0 && message_text.length > 0) {
             $this.button('Uploading...');
 
             
@@ -53,7 +53,7 @@
             });
 
         } else {
-            sweetAlert("Oops...", "Please enter event name", "error");
+            sweetAlert("Oops...", "Please enter to and message", "error");
             return false;
         }
     };

@@ -18,6 +18,11 @@
           href="<?=base_url();?>assets/vendors/jquery-ui-1.10.4.custom/css/ui-lightness/jquery-ui-1.10.4.custom.min.css">
     <link type="text/css" rel="stylesheet" href="<?=base_url();?>assets/vendors/font-awesome/css/font-awesome.min.css">
     <link type="text/css" rel="stylesheet" href="<?=base_url();?>assets/vendors/bootstrap/css/bootstrap.min.css">
+
+    <link type="text/css" rel="stylesheet" href="<?=base_url();?>assets/vendors/DataTables/media/css/jquery.dataTables.css">
+    <link type="text/css" rel="stylesheet"
+          href="<?=base_url();?>assets/vendors/DataTables/extensions/TableTools/css/dataTables.tableTools.min.css">
+
     <!--LOADING STYLESHEET FOR PAGE--><!--Loading style vendors-->
     <link type="text/css" rel="stylesheet" href="<?=base_url();?>assets/vendors/animate.css/animate.css">
     <link type="text/css" rel="stylesheet" href="<?=base_url();?>assets/vendors/jquery-pace/pace.css">
@@ -67,39 +72,44 @@
                                     <a href="<?=base_url();?>complaint/complaintReceived" class="btn btn-info btn-xs"><i class="fa fa-plus"></i>&nbsp;Complaint Received</a>&nbsp;
                                 </div>
                             </div>
-                            <div class="portlet-body pan">
-                                <div class="table-responsive">
-                                    <table id="user-last-logged-table"
-                                           class="table table-striped table-hover thumb-small">
-                                        <thead>
-                                        <tr class="condensed">
-                                            <th scope="col"><span class="column-sorter"></span></th>
-                                            <th scope="col">Id<span class="column-sorter"></span></th>
-                                            <th scope="col">Subject<span class="column-sorter"></span></th>
-                                            <th scope="col">Department<span class="column-sorter"></span></th>
-                                            <th scope="col">Applicant<span class="column-sorter"></span></th>
-                                            <th scope="col">Status<span class="column-sorter"></span></th>
-                                            <th scope="col">Assigned On<span class="column-sorter"></span></th>
-                                        </tr>
-                                        </thead>
-                                        <?php 
-                                        if(count($result) > 0) { ?>
-                                        <tbody class="media-thumb">
-                                        <?php foreach($result AS $complaint) { ?>
-                                            <tr>
-                                                <td></td>
+                            <div class="portlet-body">
+                                <div class="row mbm">
+                                    <div class="col-lg-12">
+                                        <div class="table-responsive">
+                                            <table id="table_id" class="table table-hover table-striped table-bordered table-advanced tablesorter display">
+                                                <thead>
+                                                    <tr class="condensed">
+                                                        <th scope="col"><span class="column-sorter"></span></th>
+                                                        <th scope="col">Id<span class="column-sorter"></span></th>
+                                                        <th scope="col">Subject<span class="column-sorter"></span></th>
+                                                        <th scope="col">Department<span class="column-sorter"></span></th>
+                                                        <th scope="col">Applicant<span class="column-sorter"></span></th>
+                                                        <th scope="col">Status<span class="column-sorter"></span></th>
+                                                        <th scope="col">Assigned On<span class="column-sorter"></span></th>
+                                                    </tr>
+                                                    <tbody>
+                                                    <?php 
+                                                    if(count($result) > 0) { ?>
+                                                    
+                                                        <?php foreach($result AS $complaint) { ?>
+                                                            <tr>
+                                                                <td></td>
 
-                                                <td><a href="<?=base_url();?>complaint/complaintTimeline/<?php echo $complaint->ComplaintUniqueId; ?>"><?php echo $complaint->ComplaintUniqueId; ?></a></td>
-                                                <td><?php echo $complaint->ComplaintSubject; ?></td>
-                                                <td><?php echo $complaint->ComplaintDepartment; ?></td>
-                                                <td><?php echo $complaint->ApplicantName; ?></td>
-                                                <td><?php echo $complaint->ComplaintStatusName; ?></td>
-                                                <td><?php echo $complaint->AddedOn; ?></td>
-                                            </tr>
-                                        <?php } ?>
-                                        </tbody>
-                                        <?php }  ?>                                        
-                                    </table>
+                                                                <td><a href="<?=base_url();?>complaint/complaintTimeline/<?php echo $complaint->ComplaintUniqueId; ?>"><?php echo $complaint->ComplaintUniqueId; ?></a></td>
+                                                                <td><?php echo $complaint->ComplaintSubject; ?></td>
+                                                                <td><?php echo $complaint->ComplaintDepartment; ?></td>
+                                                                <td><?php echo $complaint->ApplicantName; ?></td>
+                                                                <td><?php echo $complaint->ComplaintStatusName; ?></td>
+                                                                <td><?php echo $complaint->AddedOn; ?></td>
+                                                            </tr>
+                                                        <?php } ?>
+                                                    
+                                                    <?php }  ?>
+                                                    </tbody>
+                                                </thead>
+                                            </table>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -165,10 +175,10 @@
 
 
 
-<script src="<?=base_url();?>assets/vendors/jquery-validate/jquery.validate.min.js"></script>
-<script src="<?=base_url();?>assets/vendors/jquery-steps/js/jquery.steps.min.js"></script>
-<script src="<?=base_url();?>assets/vendors/jquery-bootstrap-wizard/jquery.bootstrap.wizard.min.js"></script>
-<script src="<?=base_url();?>assets/js/form-wizard.js"></script>
+<script src="<?=base_url();?>assets/vendors/DataTables/media/js/jquery.dataTables.js"></script>
+<script src="<?=base_url();?>assets/vendors/DataTables/media/js/dataTables.bootstrap.js"></script>
+<script src="<?=base_url();?>assets/vendors/DataTables/extensions/TableTools/js/dataTables.tableTools.min.js"></script>
+<script src="<?=base_url();?>assets/js/table-datatables.js"></script>
 
 
 

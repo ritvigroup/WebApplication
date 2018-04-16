@@ -285,11 +285,32 @@ class User_Model extends CI_Model {
         return $return;
     }
 
+
+    // Get User Profile User Information by Unique Id and Profile Id
+    public function getUserprofileFriendsprofileInformationUniqueIdCheck($UserUniqueId, $FriendUserProfileId, $UserProfileId) {
+        
+        $profile = $this->getUserProfileInformation($FriendUserProfileId, $UserProfileId);
+        $detail = $this->getUserDetail($profile['UserId'], $UserProfileId, 0);
+
+        $return['user_profile_detail'] = array(
+                                'user_info' => $detail,
+                                'profile' => $profile,
+                            );
+
+        return $return;
+    }
+
+
     // Get User Profile Information
     public function getUserProfileInformation($FriendUserProfileId, $UserProfileId = 0) {
 
-        $query = $this->db->query("SELECT up.*, pp.PoliticalPartyName FROM ".$this->userProfileTbl." AS up 
+        $query = $this->db->query("SELECT up.*, pp.PoliticalPartyName, 
+                                            uph.PhotoPath AS UserProfilePhoto, 
+                                            uch.PhotoPath AS UserCoverPhoto 
+                                        FROM ".$this->userProfileTbl." AS up 
                                         LEFT JOIN ".$this->politicalPartyTbl." AS pp ON up.PoliticalPartyId = pp.PoliticalPartyId
+                                        LEFT JOIN ".$this->userPhotoTbl." uph ON up.ProfilePhotoId = uph.UserPhotoId
+                                        LEFT JOIN ".$this->userPhotoTbl." uch ON up.CoverPhotoId = uch.UserPhotoId
                                         WHERE 
                                             up.`UserProfileId` = '".$FriendUserProfileId."'");
 
@@ -317,6 +338,10 @@ class User_Model extends CI_Model {
                                 "ProfileStatus"                 => (($res_u['ProfileStatus'] != NULL) ? $res_u['ProfileStatus'] : ""),
                                 "AddedBy"                       => (($res_u['AddedBy'] != NULL) ? $res_u['AddedBy'] : ""),
                                 "UpdatedBy"                     => (($res_u['UpdatedBy'] != NULL) ? $res_u['UpdatedBy'] : ""),
+                                "ProfilePhotoId"                => (($res_u['ProfilePhotoId'] != NULL) ? $res_u['ProfilePhotoId'] : ""),
+                                "ProfilePhotoPath"              => (($res_u['UserProfilePhoto'] != NULL) ? PROFILE_IMAGE_URL.$res_u['UserProfilePhoto'] : ""),
+                                "CoverPhotoId"                  => (($res_u['CoverPhotoId'] != NULL) ? $res_u['CoverPhotoId'] : ""),
+                                "CoverPhotoPath"                => (($res_u['UserCoverPhoto'] != NULL) ? PROFILE_IMAGE_URL.$res_u['UserCoverPhoto'] : ""),
                                 
                                 "WebsiteUrl"                    => (($res_u['WebsiteUrl'] != NULL) ? $res_u['WebsiteUrl'] : ""),
                                 "FacebookPageUrl"               => (($res_u['FacebookPageUrl'] != NULL) ? $res_u['FacebookPageUrl'] : ""),
@@ -930,6 +955,51 @@ class User_Model extends CI_Model {
         return $photo_id;
     }
 
+
+    // Save user profile Photo on server
+    public function saveUserProfilePhoto($photo_cover = 'photo', $UserId, $UserProfileId, $profile_or_cover = 1) {
+
+        $photo_id = 0;
+        $profile_file = basename($_FILES[$photo_cover]['name']);
+        if($profile_file != '') {
+            $profile_image = date('YmdHisA').'-'.time().'-PROFILE-'.mt_rand().'.'.end(explode('.', $profile_file));
+
+            $path = PROFILE_IMAGE_DIR.$profile_image;
+            $source = $_FILES[$photo_cover]['tmp_name'];
+
+            $upload_result = uploadFileOnServer($source, $path);
+
+            // Create album and save that photo
+            if($profile_or_cover == 1) {
+                $photoTitle = 'Profile';
+                $photoDescription = 'My Profile';
+            } else if($profile_or_cover == 2) {
+                $photoTitle = 'Cover';
+                $photoDescription = 'My Cover Photo';
+            }
+            $album_id = $this->createUserAlbum($UserId, $photoTitle, $photoDescription);
+
+            $photo_id = $this->insertUserPhoto($UserId, $album_id, $profile_image, $photoTitle, $photoDescription);
+
+            if($profile_or_cover == 1) {
+                $updateData = array(
+                                    'ProfilePhotoId' => $photo_id,
+                                    'UpdatedOn' => date('Y-m-d H:i:s'),
+                                    );
+            }
+            if($profile_or_cover == 2) {
+                $updateData = array(
+                                    'CoverPhotoId' => $photo_id,
+                                    'UpdatedOn' => date('Y-m-d H:i:s'),
+                                    );
+            }
+            $this->updateUserProfileData($UserProfileId, $updateData);
+
+            return $photo_id;
+            
+        }    
+    }
+
     // Get User Citizen Dabhboard 
     public function getUserCitizenDashboard($UserId) {
         $user_dashboard[] = array(
@@ -1338,6 +1408,27 @@ class User_Model extends CI_Model {
         }
 
         return $friends;
+    }
+
+    // Get My All Created Team for Leader
+    public function getMyAllCreatedTeam($UserId) {
+
+        $my_team = array();
+        $sql = "SELECT up.UserProfileId 
+                                        FROM ".$this->userProfileTbl." AS up 
+                                        WHERE 
+                                            up.`ParentUserId` = '".$UserId."'
+                                        AND up.UserTypeId = '3' 
+                                        ORDER BY up.AddedOn DESC";
+        $query = $this->db->query($sql);
+
+        $res_u = $query->result_array();
+
+        foreach($res_u AS $key => $result) {
+            $my_team[] = $this->getUserProfileWithUserInformation($result['UserProfileId'], $UserProfileId);
+        }
+
+        return $my_team;
     }
 
     // Get All Gender
