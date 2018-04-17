@@ -14,10 +14,14 @@
             </div>
             <div class="topbar-main">
                 <a id="menu-toggle" href="#" class="hidden-xs"><i class="fa fa-bars"></i></a>
+
+
                 <ul class="nav navbar-nav    ">
                     <li class="active"><a href="<?=base_url();?>leader/dashboard">Dashboard</a></li>
                     <li><a href="javascript:;" data-toggle="dropdown" class="dropdown-toggle">Layouts
                         &nbsp;<i class="fa fa-angle-down"></i></a>
+
+
                         <ul class="dropdown-menu">
                             <li><a href="#">Left Sidebar</a></li>
                             <li><a href="#">Right Sidebar</a></li>
@@ -316,10 +320,34 @@
                         </ul>
                     </li>
                     */ ?>
+
+                    <li class="dropdown"><a data-hover="dropdown" href="#" class="dropdown-toggle"><i
+                            class="fa fa-plus-circle fa-2x" style="font-size: 20px;"></i><span class="badge badge-yellow"></span></a>
+                        <ul class="dropdown-menu dropdown-tasks">
+                            <li><a href="<?=base_url();?>plan/plan"><i class="fa fa-pencil-square-o"></i>Plan</a></li>
+                            <li class="divider"></li>
+                            <li><a href="<?=base_url();?>organize/team"><i class="fa fa-users"></i>Team</a></li>
+                            <li><a href="<?=base_url();?>organize/fleet"><i class="fa fa-car"></i>Fleet</a></li>
+                            <li><a href="<?=base_url();?>organize/documents"><i class="fa fa-file-text"></i>Documents</a></li>
+                            <li class="divider"></li>
+                            <li><a href="<?=base_url();?>event/newevent"><i class="fa fa-calendar"></i>Event</a></li>
+                            <li class="divider"></li>
+                            <li><a href="<?=base_url();?>post/newpost"><i class="fa fa fa-envelope"></i>Post</a></li>
+                            <li><a href="<?=base_url();?>poll/newpoll"><i class="fa fa-list-ul"</i></i>Poll</a></li>
+                            <li><a href="<?=base_url();?>complaint/newcomplaint"><i class="fa fa-comment"></i>Complaint</a></li>
+                            <li><a href="<?=base_url();?>information/newinformation"><i class="fa fa-info-circle"></i>Information</a></li>
+                            <li class="divider"></li>
+                            <li><a href="<?=base_url();?>suggestion/newsuggestion"><i class="fa fa-lightbulb-o"></i>Suggestion</a></li>
+                            
+                            <li class="last"></li>
+                        </ul>
+                    </li>
+
                     <li class="dropdown topbar-user"><a data-hover="dropdown" href="#" class="dropdown-toggle"><img
                             src="<?php echo $this->session->userdata('UserProfilePic'); ?>" alt=""
                             class="img-responsive img-circle"/>&nbsp;<span class="hidden-xs"><?php echo $this->session->userdata('UserName'); ?> </span>&nbsp;<span
                             class="caret"></span></a>
+
                         <ul class="dropdown-menu dropdown-user pull-right">
                             <li><a href="<?=base_url();?>profile/profile"><i class="fa fa-user"></i>My Profile</a></li>
                             <li><a href="<?=base_url();?>leader/calendar"><i class="fa fa-calendar"></i>My Calendar</a></li>

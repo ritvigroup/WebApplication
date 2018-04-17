@@ -19,6 +19,8 @@
     <link type="text/css" rel="stylesheet" href="<?=base_url();?>assets/vendors/font-awesome/css/font-awesome.min.css">
     <link type="text/css" rel="stylesheet" href="<?=base_url();?>assets/vendors/bootstrap/css/bootstrap.min.css">
 
+    <link type="text/css" rel="stylesheet" href="<?php echo base_url(); ?>assets/css/sweetalert.css?ver=1.04">
+
     <link type="text/css" rel="stylesheet" href="<?=base_url();?>assets/vendors/DataTables/media/css/jquery.dataTables.css">
     <link type="text/css" rel="stylesheet"
           href="<?=base_url();?>assets/vendors/DataTables/extensions/TableTools/css/dataTables.tableTools.min.css">
@@ -93,6 +95,7 @@
                                                     <th>Pic</th>
                                                     <th>Name</th>
                                                     <th>Email</th>
+                                                    <th>Department</th>
                                                     <th>Status</th>
                                                     <th>Added On</th>
                                                     <th>Action</th>
@@ -123,6 +126,7 @@
                                                     class="img-circle"/></td>
                                                         <td><a href="<?php echo $UserProfileHrefLink; ?>" target="_blank"><?php echo $my_team->user_profile_detail->profile->FirstName.' '.$my_team->user_profile_detail->profile->LastName; ?></a></td>
                                                         <td><?php echo $my_team->user_profile_detail->profile->Email; ?></td>
+                                                        <td><?php echo $my_team->user_profile_detail->profile->DepartmentName; ?></td>
                                                         <td><?php echo $Status; ?></td>
                                                         <td><?php echo $my_team->user_profile_detail->profile->AddedOn; ?></td>
                                                         <td>

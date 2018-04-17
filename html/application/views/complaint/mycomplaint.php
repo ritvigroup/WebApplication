@@ -97,7 +97,7 @@
 
                                                                 <td><a href="<?=base_url();?>complaint/complaintTimeline/<?php echo $complaint->ComplaintUniqueId; ?>"><?php echo $complaint->ComplaintUniqueId; ?></a></td>
                                                                 <td><?php echo $complaint->ComplaintSubject; ?></td>
-                                                                <td><?php echo $complaint->ComplaintDepartment; ?></td>
+                                                                <td><?php echo $complaint->DepartmentName; ?></td>
                                                                 <td><?php echo $complaint->ApplicantName; ?></td>
                                                                 <td><?php echo $complaint->ComplaintStatusName; ?></td>
                                                                 <td><?php echo $complaint->AddedOn; ?></td>

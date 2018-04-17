@@ -29,32 +29,32 @@
 
             <li class="<?php if($request_uri['4'] == "plan") {?>active<?php } ?>">
                 <a href="<?=base_url();?>plan/plan">
-                    <i class="fa fa-tachometer fa-fw"><div class="icon-bg bg-orange"></div></i><span class="menu-title">Plan</span>
+                    <i class="fa fa-pencil-square-o fa-fw"><div class="icon-bg bg-orange"></div></i><span class="menu-title">Plan</span>
                 </a>
             </li>
 
-            <li class="<?php if($request_uri['4'] == "team") {?>active<?php } ?>"><a href="<?=base_url();?>organize/team"><i class="fa fa-tachometer fa-fw">
+            <li class="<?php if($request_uri['4'] == "organize") {?>active<?php } ?>"><a href="<?=base_url();?>organize/team"><i class="fa fa-sitemap fa-fw">
                 <div class="icon-bg bg-orange"></div>
             </i><span class="menu-title">Organize</span></a></li>
 
-            <li class="<?php if($request_uri['4'] == "complaint") {?>active<?php } ?>"><a href="<?=base_url();?>connect/myfriends"><i class="fa fa-tachometer fa-fw">
+            <li class="<?php if($request_uri['4'] == "complaint") {?>active<?php } ?>"><a href="<?=base_url();?>connect/myfriends"><i class="fa fa-share-alt-square fa-fw">
                 <div class="icon-bg bg-orange"></div>
             </i><span class="menu-title">Connect</span></a></li>
 
 
-            <li class="<?php if($request_uri['4'] == "event") {?>active<?php } ?>"><a href="<?=base_url();?>listen/listen"><i class="fa fa-tachometer fa-fw">
+            <li class="<?php if($request_uri['4'] == "event") {?>active<?php } ?>"><a href="<?=base_url();?>listen/listen"><i class="fa fa-headphones fa-fw">
                 <div class="icon-bg bg-orange"></div>
             </i><span class="menu-title">Listen</span></a></li>
 
-            <li class="<?php if($request_uri['4'] == "influence") {?>active<?php } ?>"><a href="<?=base_url();?>influence/influence"><i class="fa fa-tachometer fa-fw">
+            <li class="<?php if($request_uri['4'] == "influence") {?>active<?php } ?>"><a href="<?=base_url();?>influence/influence"><i class="fa fa-arrows-alt fa-fw">
                 <div class="icon-bg bg-orange"></div>
             </i><span class="menu-title">Influence</span></a></li>
 
-            <li class="<?php if($request_uri['4'] == "suggestion") {?>active<?php } ?>"><a href="<?=base_url();?>suggestion/suggestion"><i class="fa fa-tachometer fa-fw">
+            <li class="<?php if($request_uri['4'] == "suggestion") {?>active<?php } ?>"><a href="<?=base_url();?>suggestion/suggestion"><i class="fa fa-refresh fa-fw">
                 <div class="icon-bg bg-orange"></div>
             </i><span class="menu-title">Convert</span></a></li>
 
-            <li class="<?php if($request_uri['4'] == "report") {?>active<?php } ?>"><a href="<?=base_url();?>report/report"><i class="fa fa-tachometer fa-fw">
+            <li class="<?php if($request_uri['4'] == "report") {?>active<?php } ?>"><a href="<?=base_url();?>report/report"><i class="fa fa-file-text-o fa-fw">
                 <div class="icon-bg bg-orange"></div>
             </i><span class="menu-title">Reports</span></a></li>
 

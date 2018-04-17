@@ -18,6 +18,11 @@
           href="<?=base_url();?>assets/vendors/jquery-ui-1.10.4.custom/css/ui-lightness/jquery-ui-1.10.4.custom.min.css">
     <link type="text/css" rel="stylesheet" href="<?=base_url();?>assets/vendors/font-awesome/css/font-awesome.min.css">
     <link type="text/css" rel="stylesheet" href="<?=base_url();?>assets/vendors/bootstrap/css/bootstrap.min.css">
+
+    <link type="text/css" rel="stylesheet" href="<?=base_url();?>assets/vendors/DataTables/media/css/jquery.dataTables.css">
+    <link type="text/css" rel="stylesheet"
+          href="<?=base_url();?>assets/vendors/DataTables/extensions/TableTools/css/dataTables.tableTools.min.css">
+
     <!--LOADING STYLESHEET FOR PAGE--><!--Loading style vendors-->
     <link type="text/css" rel="stylesheet" href="<?=base_url();?>assets/vendors/animate.css/animate.css">
     <link type="text/css" rel="stylesheet" href="<?=base_url();?>assets/vendors/jquery-pace/pace.css">
@@ -68,38 +73,46 @@
                                     <a href="<?=base_url();?>suggestion/suggestion" class="btn btn-info btn-xs"><i class="fa fa-plus"></i>&nbsp;My Suggestion</a>&nbsp;
                                 </div>
                             </div>
-                            <div class="portlet-body pan">
-                                <div class="table-responsive">
-                                    <table id="user-last-logged-table"
-                                           class="table table-striped table-hover thumb-small">
-                                        <thead>
-                                        <tr class="condensed">
-                                            <th scope="col"><span class="column-sorter"></span></th>
-                                            <th scope="col">Title<span class="column-sorter"></span></th>
-                                            <th scope="col">Description<span class="column-sorter"></span></th>
-                                            <th scope="col">Applicant Name<span class="column-sorter"></span></th>
-                                            <th scope="col">Posted On<span class="column-sorter"></span></th>
-                                            <th scope="col">Status<span class="column-sorter"></span></th>
-                                        </tr>
-                                        </thead>
-                                        <?php 
-                                        if(count($result) > 0) { ?>
-                                        <tbody class="media-thumb">
-                                        <?php foreach($result AS $suggestion) { ?>
-                                            <?php $SuggestionStatus  = (($suggestion->SuggestionStatus == 1) ? 'Active' : 'In-Active'); ?>
-                                            <?php $AddedOn    = (($suggestion->AddedOn == '0000-00-00 00:00:00') ? '' : date('d-M-Y h:i A', strtotime($suggestion->AddedOn))); ?>
-                                            <tr>
-                                                <td></td>
-                                                <td><?php echo $suggestion->SuggestionSubject; ?></td>
-                                                <td><?php echo $suggestion->SuggestionDescription; ?></td>
-                                                <td><?php echo $suggestion->ApplicantName; ?></td>
-                                                <td><?php echo $suggestion->AddedOn; ?></td>
-                                                <td><?php echo $SuggestionStatus; ?></td>
-                                            </tr>
-                                        <?php }  ?>
-                                        </tbody>
-                                        <?php }  ?>                                        
-                                    </table>
+                            
+                            <div class="portlet-body">
+                                <div class="row mbm">
+                                    <div class="col-lg-12">
+                                        <div class="table-responsive">
+                                            <table id="table_id"
+                                                   class="table table-hover table-striped table-bordered table-advanced tablesorter display">
+                                                <thead>
+                                                <tr>
+                                                    <th scope="col"><span class="column-sorter"><input type="checkbox"></span></th>
+                                                    <th scope="col">Title<span class="column-sorter"></span></th>
+                                                    <th scope="col">Description<span class="column-sorter"></span></th>
+                                                    <th scope="col">Applicant Name<span class="column-sorter"></span></th>
+                                                    <th scope="col">Posted On<span class="column-sorter"></span></th>
+                                                    <th scope="col">Status<span class="column-sorter"></span></th>
+                                                </tr>
+                                                
+                                                <tbody class="media-thumb">
+                                                <?php 
+                                                if(count($result) > 0) { ?>
+                                                
+                                                <?php foreach($result AS $suggestion) { ?>
+                                                    <?php $SuggestionStatus  = (($suggestion->SuggestionStatus == 1) ? 'Active' : 'In-Active'); ?>
+                                                    <?php $AddedOn    = (($suggestion->AddedOn == '0000-00-00 00:00:00') ? '' : date('d-M-Y h:i A', strtotime($suggestion->AddedOn))); ?>
+                                                    <tr>
+                                                        <td><input type="checkbox"></td>
+                                                        <td><?php echo $suggestion->SuggestionSubject; ?></td>
+                                                        <td><?php echo $suggestion->SuggestionDescription; ?></td>
+                                                        <td><?php echo $suggestion->ApplicantName; ?></td>
+                                                        <td><?php echo $suggestion->AddedOn; ?></td>
+                                                        <td><?php echo $SuggestionStatus; ?></td>
+                                                    </tr>
+                                                <?php }  ?>
+                                                
+                                                <?php }  ?>
+                                                </tbody>
+                                                </thead>
+                                            </table>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -113,6 +126,9 @@
 
         <!--END FOOTER--><!--END PAGE WRAPPER--></div>
 </div>
+<script src="<?php echo base_url(); ?>assets/js/sweetalert-dev.js"></script> 
+<script src="<?php echo base_url(); ?>assets/js/sweetalert.min.js"></script> 
+
 <script src="<?=base_url();?>assets/js/jquery-1.10.2.min.js"></script>
 <script src="<?=base_url();?>assets/js/jquery-migrate-1.2.1.min.js"></script>
 <script src="<?=base_url();?>assets/js/jquery-ui.js"></script>
@@ -139,6 +155,19 @@
 <!--CORE JAVASCRIPT-->
 <script src="<?=base_url();?>assets/js/main.js"></script>
 <!--LOADING SCRIPTS FOR PAGE-->
-
+<script src="<?=base_url();?>assets/vendors/moment/moment.js"></script>
+<script src="<?=base_url();?>assets/vendors/bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js"></script>
+<script src="<?=base_url();?>assets/vendors/bootstrap-timepicker/js/bootstrap-timepicker.js"></script>
+<script src="<?=base_url();?>assets/vendors/bootstrap-clockface/js/clockface.js"></script>
+<script src="<?=base_url();?>assets/vendors/bootstrap-colorpicker/js/bootstrap-colorpicker.js"></script>
+<script src="<?=base_url();?>assets/vendors/bootstrap-switch/js/bootstrap-switch.min.js"></script>
+<script src="<?=base_url();?>assets/vendors/jquery-maskedinput/jquery-maskedinput.js"></script>
+<script src="<?=base_url();?>assets/vendors/charCount.js"></script>
+<script src="<?=base_url();?>assets/js/form-components.js"></script>
+<!--LOADING SCRIPTS FOR PAGE-->
+<script src="<?=base_url();?>assets/vendors/DataTables/media/js/jquery.dataTables.js"></script>
+<script src="<?=base_url();?>assets/vendors/DataTables/media/js/dataTables.bootstrap.js"></script>
+<script src="<?=base_url();?>assets/vendors/DataTables/extensions/TableTools/js/dataTables.tableTools.min.js"></script>
+<script src="<?=base_url();?>assets/js/table-datatables.js"></script>
 </body>
 </html>

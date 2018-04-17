@@ -18,6 +18,11 @@
           href="<?=base_url();?>assets/vendors/jquery-ui-1.10.4.custom/css/ui-lightness/jquery-ui-1.10.4.custom.min.css">
     <link type="text/css" rel="stylesheet" href="<?=base_url();?>assets/vendors/font-awesome/css/font-awesome.min.css">
     <link type="text/css" rel="stylesheet" href="<?=base_url();?>assets/vendors/bootstrap/css/bootstrap.min.css">
+
+    <link type="text/css" rel="stylesheet" href="<?=base_url();?>assets/vendors/DataTables/media/css/jquery.dataTables.css">
+    <link type="text/css" rel="stylesheet"
+          href="<?=base_url();?>assets/vendors/DataTables/extensions/TableTools/css/dataTables.tableTools.min.css">
+
     <!--LOADING STYLESHEET FOR PAGE--><!--Loading style vendors-->
     <link type="text/css" rel="stylesheet" href="<?=base_url();?>assets/vendors/animate.css/animate.css">
     <link type="text/css" rel="stylesheet" href="<?=base_url();?>assets/vendors/jquery-pace/pace.css">
@@ -62,45 +67,49 @@
                         <div class="portlet box">
                             <div class="portlet-header">
                                 <div class="caption">My Polls</div>
-                                <div class="actions"><a href="<?=base_url();?>poll/newpoll" class="btn btn-info btn-xs"><i class="fa fa-plus"></i>&nbsp;
-                                    New Poll</a>
+                                <div class="actions">
+                                    <a href="<?=base_url();?>poll/newpoll" class="btn btn-info btn-xs"><i class="fa fa-plus"></i>&nbsp; New Poll</a>
                                 </div>
                             </div>
 
-                            <div class="portlet-body pan">
-                                <div class="table-responsive">
-                                    <table id="user-last-logged-table"
-                                           class="table table-striped table-hover thumb-small">
-                                        <thead>
-                                        <tr class="condensed">
-                                            <th scope="col"><span class="column-sorter"></span></th>
-                                            <th scope="col">Question<span class="column-sorter"></span></th>
-                                            <th scope="col">Privacy<span class="column-sorter"></span></th>
-                                            <th scope="col">Start Date<span class="column-sorter"></span></th>
-                                            <th scope="col">End Sate<span class="column-sorter"></span></th>
-                                            <th scope="col">Status<span class="column-sorter"></span></th>
-                                        </tr>
-                                        </thead>
-                                        <?php 
-                                        if(count($result) > 0) { ?>
-                                        <tbody class="media-thumb">
-                                        <?php foreach($result AS $poll) { ?>
-                                            <?php $PollStatus  = (($poll->polldata->PollStatus == 1) ? 'Active' : 'In-Active'); ?>
-                                            <?php $PollPrivacy  = (($poll->polldata->PollPrivacy == 1) ? 'Public' : 'Private'); ?>
-                                            <?php $ValidFromDate    = (($poll->polldata->ValidFromDate == '0000-00-00 00:00:00') ? '' : date('d-M-Y h:i A', strtotime($poll->polldata->ValidFromDate))); ?>
-                                            <?php $ValidEndDate    = (($poll->polldata->ValidEndDate == '0000-00-00 00:00:00') ? '' : date('d-M-Y h:i A', strtotime($poll->polldata->ValidEndDate))); ?>
-                                            <tr>
-                                                <td></td>
-                                                <td><?php echo $poll->polldata->PollQuestion; ?></td>
-                                                <td><?php echo $PollPrivacy; ?></td>
-                                                <td><?php echo $ValidFromDate; ?></td>
-                                                <td><?php echo $ValidEndDate; ?></td>
-                                                <td><?php echo $PollStatus; ?></td>
-                                            </tr>
-                                        <?php }  ?>
-                                        </tbody>
-                                        <?php }  ?>                                        
-                                    </table>
+                            <div class="portlet-body">
+                                <div class="row mbm">
+                                    <div class="col-lg-12">
+                                        <div class="table-responsive">
+                                            <table id="table_id"
+                                                   class="table table-hover table-striped table-bordered table-advanced tablesorter display">
+                                                <thead>
+                                                <tr>
+                                                    <th scope="col"><span class="column-sorter"><input type="checkbox"></span></th>
+                                                    <th scope="col">Question<span class="column-sorter"></span></th>
+                                                    <th scope="col">Privacy<span class="column-sorter"></span></th>
+                                                    <th scope="col">Start Date<span class="column-sorter"></span></th>
+                                                    <th scope="col">End Sate<span class="column-sorter"></span></th>
+                                                    <th scope="col">Status<span class="column-sorter"></span></th>
+                                                </tr>
+                                                </thead>
+                                                <?php 
+                                                if(count($result) > 0) { ?>
+                                                <tbody class="media-thumb">
+                                                <?php foreach($result AS $poll) { ?>
+                                                    <?php $PollStatus  = (($poll->polldata->PollStatus == 1) ? 'Active' : 'In-Active'); ?>
+                                                    <?php $PollPrivacy  = (($poll->polldata->PollPrivacy == 1) ? 'Public' : 'Private'); ?>
+                                                    <?php $ValidFromDate    = (($poll->polldata->ValidFromDate == '0000-00-00 00:00:00') ? '' : date('d-M-Y h:i A', strtotime($poll->polldata->ValidFromDate))); ?>
+                                                    <?php $ValidEndDate    = (($poll->polldata->ValidEndDate == '0000-00-00 00:00:00') ? '' : date('d-M-Y h:i A', strtotime($poll->polldata->ValidEndDate))); ?>
+                                                    <tr>
+                                                        <td><input type="checkbox"></td>
+                                                        <td><?php echo $poll->polldata->PollQuestion; ?></td>
+                                                        <td><?php echo $PollPrivacy; ?></td>
+                                                        <td><?php echo $ValidFromDate; ?></td>
+                                                        <td><?php echo $ValidEndDate; ?></td>
+                                                        <td><?php echo $PollStatus; ?></td>
+                                                    </tr>
+                                                <?php }  ?>
+                                                </tbody>
+                                                <?php }  ?>                                        
+                                            </table>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -114,6 +123,9 @@
 
         <!--END FOOTER--><!--END PAGE WRAPPER--></div>
 </div>
+<script src="<?php echo base_url(); ?>assets/js/sweetalert-dev.js"></script> 
+<script src="<?php echo base_url(); ?>assets/js/sweetalert.min.js"></script> 
+
 <script src="<?=base_url();?>assets/js/jquery-1.10.2.min.js"></script>
 <script src="<?=base_url();?>assets/js/jquery-migrate-1.2.1.min.js"></script>
 <script src="<?=base_url();?>assets/js/jquery-ui.js"></script>
@@ -140,6 +152,20 @@
 <!--CORE JAVASCRIPT-->
 <script src="<?=base_url();?>assets/js/main.js"></script>
 <!--LOADING SCRIPTS FOR PAGE-->
+<script src="<?=base_url();?>assets/vendors/moment/moment.js"></script>
+<script src="<?=base_url();?>assets/vendors/bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js"></script>
+<script src="<?=base_url();?>assets/vendors/bootstrap-timepicker/js/bootstrap-timepicker.js"></script>
+<script src="<?=base_url();?>assets/vendors/bootstrap-clockface/js/clockface.js"></script>
+<script src="<?=base_url();?>assets/vendors/bootstrap-colorpicker/js/bootstrap-colorpicker.js"></script>
+<script src="<?=base_url();?>assets/vendors/bootstrap-switch/js/bootstrap-switch.min.js"></script>
+<script src="<?=base_url();?>assets/vendors/jquery-maskedinput/jquery-maskedinput.js"></script>
+<script src="<?=base_url();?>assets/vendors/charCount.js"></script>
+<script src="<?=base_url();?>assets/js/form-components.js"></script>
+<!--LOADING SCRIPTS FOR PAGE-->
+<script src="<?=base_url();?>assets/vendors/DataTables/media/js/jquery.dataTables.js"></script>
+<script src="<?=base_url();?>assets/vendors/DataTables/media/js/dataTables.bootstrap.js"></script>
+<script src="<?=base_url();?>assets/vendors/DataTables/extensions/TableTools/js/dataTables.tableTools.min.js"></script>
+<script src="<?=base_url();?>assets/js/table-datatables.js"></script>
 
 </body>
 </html>

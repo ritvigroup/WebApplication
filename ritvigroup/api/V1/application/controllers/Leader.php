@@ -11,6 +11,7 @@ class Leader extends CI_Controller {
         parent::__construct();
 
         $this->load->model('User_Model');
+        $this->load->model('Complaint_Model');
         $this->load->model('Event_Model');
         $this->load->model('Information_Model');
         $this->load->model('Poll_Model');

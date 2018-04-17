@@ -395,7 +395,7 @@ hr {
   color: #FFFFFF;
 }
 #topbar .navbar-top-links li.topbar-user a {
-  padding: 12px 15px 11px;
+  padding: 12px 15px 9px;
 }
 #topbar .navbar-top-links li.topbar-user a img {
   margin-right: 5px;
@@ -7774,7 +7774,7 @@ fieldset[disabled] .btn-white.active {
   cursor: pointer;
 }
 .portlet .portlet-body {
-  background: #FFFFFF;
+  background: #fff;
   padding: 15px;
   clear: both;
   border-bottom-right-radius: 0 !important;
@@ -8963,4 +8963,30 @@ ul.chats li.out .message {
 .define-area2{
   border:1px solid #000;
    padding: 1%;
-  bo
+  border-radius: 5px;
+  margin-top: 22px;
+}
+.target-area3{
+  margin-top: 20px;
+}
+
+.fa-trash-o{
+  text-align: left;
+  display: block;
+  margin-left: 20px;
+  float: left;
+}
+.fa-plus-circle{
+  font-size: 18px; 
+
+}
+
+.dropdown-tasks li a i{
+  color: #777777 !important;
+  margin-right: 5px;
+}
+.dropdown-tasks li a {
+  padding: 10px !important;
+
+}
+

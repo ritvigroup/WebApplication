@@ -18,6 +18,7 @@ class User_Model extends CI_Model {
 
         $this->genderTbl            = 'Gender';
         $this->politicalPartyTbl    = 'PoliticalParty';
+        $this->DepartmentTbl        = 'Department';
     }
 
     // Login with username with password
@@ -304,11 +305,12 @@ class User_Model extends CI_Model {
     // Get User Profile Information
     public function getUserProfileInformation($FriendUserProfileId, $UserProfileId = 0) {
 
-        $query = $this->db->query("SELECT up.*, pp.PoliticalPartyName, 
+        $query = $this->db->query("SELECT up.*, d.DepartmentName, pp.PoliticalPartyName, 
                                             uph.PhotoPath AS UserProfilePhoto, 
                                             uch.PhotoPath AS UserCoverPhoto 
                                         FROM ".$this->userProfileTbl." AS up 
                                         LEFT JOIN ".$this->politicalPartyTbl." AS pp ON up.PoliticalPartyId = pp.PoliticalPartyId
+                                        LEFT JOIN ".$this->DepartmentTbl." AS d ON up.UserDepartment = d.DepartmentId
                                         LEFT JOIN ".$this->userPhotoTbl." uph ON up.ProfilePhotoId = uph.UserPhotoId
                                         LEFT JOIN ".$this->userPhotoTbl." uch ON up.CoverPhotoId = uch.UserPhotoId
                                         WHERE 
@@ -325,6 +327,7 @@ class User_Model extends CI_Model {
                                 "MiddleName"                    => (($res_u['MiddleName'] != NULL) ? $res_u['MiddleName'] : ""),
                                 "LastName"                      => (($res_u['LastName'] != NULL) ? $res_u['LastName'] : ""),
                                 "Email"                         => (($res_u['Email'] != NULL) ? $res_u['Email'] : ""),
+                                "DepartmentName"                => (($res_u['DepartmentName'] != NULL) ? $res_u['DepartmentName'] : ""),
                                 "UserProfileDeviceToken"        => (($res_u['UserProfileDeviceToken'] != NULL) ? $res_u['UserProfileDeviceToken'] : ""),
                                 "PoliticalPartyId"              => (($res_u['PoliticalPartyId'] > 0) ? $res_u['PoliticalPartyId'] : "0"),
                                 "PoliticalPartyName"            => (($res_u['PoliticalPartyName'] != NULL) ? $res_u['PoliticalPartyName'] : ""),

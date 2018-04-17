@@ -156,6 +156,13 @@ class Organize extends CI_Controller {
            exit('Error');
         }
         $_POST['user_profile_id'] = $this->session->userdata('LeaderProfileId');
+
+        $json_encode = post_curl(API_CALL_PATH.'complaint/getAllDepartment', $this->input->post(), $this->curl);
+
+        $json_decode = json_decode($json_encode);
+        if(count($json_decode->result) > 0) {
+            $data['Department'] = $json_decode;
+        }
         
         $this->load->view('organize/newTeam',$data);
     }
@@ -175,6 +182,7 @@ class Organize extends CI_Controller {
                                 'first_name'        => $this->input->post('first_name'),
                                 'last_name'         => $this->input->post('last_name'),
                                 'email'             => $this->input->post('email'),
+                                'department'        => $this->input->post('department'),
                                 );
 
             if($_FILES['file']['name'] != '') {

@@ -83,8 +83,9 @@
                                 <a data-target="#modal-stackable" data-toggle="modal" href="javascript:void(0);" class="btn btn-success" style="float: right" onClick="return emailCompose();">Compose</a>
                                 <div class="row">
                                     <br>
-                                    <table class="table table-hover table-striped table-bordered table-advanced tableEmail">
-                                        <thead>
+                                    <div class="table-responsive">
+                                        <table id="table_id" class="table table-hover table-striped table-bordered table-advanced tablesorter display">
+                                            <thead>
                                             <tr>
                                                 <th width="1%"><input type="checkbox"></th>
                                                 <th width="1%" class="header"><i class="fa fa-paperclip" style="float: right;"></i></th>
@@ -94,8 +95,7 @@
                                                 <th width="15%" class="header">On</th>
                                                 <!-- <th width="9%" class="header">Action</th> -->
                                             </tr>
-                                        </thead>
-                                        <tbody>
+                                            <tbody>
                                             <?php if(count($EmailSent) > 0) { ?>
                                                 <?php foreach($EmailSent AS $email_sent) { ?>
                                                     <tr>
@@ -109,16 +109,19 @@
                                                     </tr>
                                                 <?php } ?>
                                             <?php } ?>
-                                        </tbody>
-                                    </table>
+                                            </tbody>
+                                            </thead>
+                                        </table>
+                                    </div>
                                 </div>
                             </div>
                             
                             <div id="table-color-tab" class="tab-pane fade">
                                 <a data-target="#modal-stackable" data-toggle="modal" href="javascript:void(0);" class="btn btn-success" style="float: right" onClick="return smsCompose();">Compose</a>
                                 <div class="row">
-                                    <table class="table table-hover table-striped table-bordered table-advanced tableEmail">
-                                        <thead>
+                                    <div class="table-responsive">
+                                        <table id="table_id" class="table table-hover table-striped table-bordered table-advanced tablesorter display">
+                                            <thead>
                                             <tr>
                                                 <th width="1%"><input type="checkbox"></th>
                                                 <th width="20%" class="header">To</th>
@@ -126,8 +129,8 @@
                                                 <th width="15%" class="header">On</th>
                                                 <!-- <th width="9%" class="header">Action</th> -->
                                             </tr>
-                                        </thead>
-                                        <tbody>
+                                            
+                                            <tbody>
                                             <?php if(count($SmsSent) > 0) { ?>
                                                 <?php foreach($SmsSent AS $sms_sent) { ?>
                                                     <tr>
@@ -139,16 +142,20 @@
                                                     </tr>
                                                 <?php } ?>
                                             <?php } ?>
-                                        </tbody>
-                                    </table>
+                                            </tbody>
+                                            </thead>
+                                        </table>
+                                    </div>
                                 </div>
                             </div>
                                  
                             <div id="table-size-tab" class="tab-pane fade">
                                 <a data-target="#modal-stackable" data-toggle="modal" href="javascript:void(0);" class="btn btn-success" style="float: right" onClick="return socialCompose();">Post</a>
                                 <div class="row">
-                                    <table class="table table-hover table-striped table-bordered table-advanced tableEmail">
-                                        <thead>
+                                    <div class="table-responsive">
+                                        <table id="table_id"
+                                               class="table table-hover table-striped table-bordered table-advanced tablesorter display">
+                                            <thead>
                                             <tr>
                                                 <th width="1%"><input type="checkbox"></th>
                                                 <th width="1%" class="header"><i class="fa fa-paperclip" style="float: right;"></i></th>
@@ -158,8 +165,8 @@
                                                 <th width="15%" class="header">On</th>
                                                 <!-- <th width="9%" class="header">Action</th> -->
                                             </tr>
-                                        </thead>
-                                        <tbody>
+                                        
+                                            
                                             <?php if(count($SocialSent) > 0) { ?>
                                                 <?php foreach($SocialSent AS $social_sent) { ?>
                                                     <tr>
@@ -173,9 +180,11 @@
                                                     </tr>
                                                 <?php } ?>
                                             <?php } ?>
-                                            
-                                        </tbody>
-                                    </table>
+                                            <tbody>
+                                            </tbody>
+                                            </thead>
+                                        </table>
+                                    </div>
                                 </div>
                             </div>
                                 

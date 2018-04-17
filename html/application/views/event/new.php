@@ -86,22 +86,30 @@
                                 <h3 class="mbxl">Save Your New Event</h3>
 
                                 <div class="row">
-                                    <div class="col-md-12">
+                                    <div class="col-md-6">
                                         <div class="form-group"><label for="event_name"
                                                                        class="control-label">Title <span
-                                                class='require'>*</span></label><input id="event_name" name="event_name"
-                                                                                       type="text"
-                                                                                       placeholder="Event Title"
-                                                                                       class="form-control"/><i
+                                                class='require'>*</span></label><input id="event_name" name="event_name" type="text" placeholder="Event Title" class="form-control" onkeyup="return showPreviewTextAfterType('event_name', 'prev_event_name');" /><i
                                                 class="alert alert-hide">Oops! Forgot something? Let try
                                             again.</i>
                                         </div>
                                     </div>
+                                
+
+
+                                    <div class="col-md-6">
+                                                <div class="form-group"><label for="event_location" class="control-label">Location<span class='require'>*</span></label>
+
+                                                    <div class="input-icon right"><i class="fa fa-location-arrow"></i><input id="event_location" name="event_location" type="text" placeholder="Event Location" class="form-control"></div>
+                                                </div>
+                                            </div>
+
+
                                 </div>
                                 
                                 <div class="row">
                                     <div class="col-md-12">
-                                        <div class="form-group">
+                                        <div class="form-group event-form" style="margin-top: 15px;">
                                             <label for="event_description" class="control-label">Description</label>
                                             <textarea
                                                 id="event_description" name="event_description" type="text" placeholder="Event Description"
@@ -111,19 +119,9 @@
                                     </div>
                                 </div>
                                 <div class="row">
-                                    <div class="col-md-4">
-                                        <div class="form-group"><label for="event_location"
-                                                                       class="control-label">Location <span
-                                                class='require'>*</span></label><input id="event_location" name="event_location"
-                                                                                       type="text"
-                                                                                       placeholder="Event Location"
-                                                                                       class="form-control"/><i
-                                                class="alert alert-hide">Oops! Forgot something? Let try
-                                            again.</i>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <div class="form-group"><label for="start_date"
+                        
+                                    <div class="col-md-6">
+                                        <div class="form-group"  style="margin-top: 15px;"><label for="start_date"
                                                                        class="control-label">Start Date <span
                                                 class='require'>*</span></label>
                                                 <div class="input-group datetimepicker-default date">
@@ -132,8 +130,8 @@
                                                 
                                         </div>
                                     </div>
-                                    <div class="col-md-4">
-                                        <div class="form-group">
+                                    <div class="col-md-6">
+                                        <div class="form-group"  style="margin-top: 15px;">
                                             <label for="end_date" class="control-label">End Date <span
                                                 class='require'>*</span></label>
                                             <div class="input-group datetimepicker-default date">
@@ -141,44 +139,53 @@
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-                                    
 
+
+                                </div>
 
                                 <div class="row">
-                                    <div class="col-md-4">
-                                        <div class="form-group">
+
+                                          <div class="col-md-12">
+                                        <div class="form-group"  style="margin-top: 15px;">
                                             <label class="control-label">Every <span class='require'>*</span></label>
                                             <input id="year" name="every_year" type="radio" class="form-control"/>Year
                                             <input id="month" name="every_year" type="radio" class="form-control"/>Month
                                         </div>
                                     </div>
+                                  
                                 </div>
                                 <div class="row">
-                                    <div class="col-md-4">
-                                        <div class="form-group"><label for="search_attendee"
-                                                                       class="control-label">Search</label>
-                                            <input id="search_attendee" type="text" name="search" placeholder="search.." class="form-control"/>
+                                    <div class="col-md-6">
+                                        <div class="form-group" style="margin-top: 15px;"><label for="search_attendee"
+                                                                       class="control-label">Event Attendees</label>
+                                            <input id="search_attendee" type="text" name="search" placeholder="search.." class="form-control"/ style="position: relative;">
+
+                                             <div class="form-group pull-right">
+
+                                                <i class="fa fa-search search_button " aria-hidden="true" style="position: absolute; margin-top: -22px; margin-left: -20px;"></i></div>
+
+                                        </div>
+
+
+                                    </div>
+
+                                             <div class="col-md-6">
+                                        <div class="form-group"  style="margin-top: 15px;"><label for="files"
+                                                                       class="control-label">Select Event Images</label>
+                                            <input type="file" name="file[]" class="form-control fileUploadForm" multiple="true"/><br>
                                         </div>
                                     </div>
-                                    <div class="col-md-4">
-                                        <div class="form-group"><label>&nbsp;</label><input type="button" class="search_button" value="Search"></div>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <div class="form-group"><label for="event_attendee"
-                                                                       class="control-label">Event Attendees</label><select
-                                                id="event_attendee" name="event_attendee" multiple class="form-control">
-                                            <option value="">Select Attendee</option>
-                                        </select></div>
-                                    </div>
+                                 
+                        
                                 </div>
 
                                 <div class="row">
-                                    <div class="col-md-12">
-                                        <div class="form-group"><label for="files"
-                                                                       class="control-label">Select Photo</label>
-                                            <input type="file" name="file[]" class="form-control fileUploadForm" multiple="true"/><br>
-                                        </div>
+                                           <div class="col-md-6">
+                                        <div class="form-group"><label for="event_attendee"
+                                                                       class="control-label"></label><select
+                                                id="event_attendee" name="event_attendee" multiple class="form-control">
+                                            <option value="">Select Attendee</option>
+                                        </select></div>
                                     </div>
                                 </div>
 
@@ -186,6 +193,7 @@
                             <div class="form-group"><button type="submit" class="btn btn-success event_button">Submit&nbsp;<i class="fa fa-chevron-circle-right"></i></button></div>
                         </div>
                     </div>
+                </div>
                 </div>
                 
             </div>
@@ -238,13 +246,11 @@
 <script src="<?=base_url();?>assets/js/form-components.js"></script>
 
 
-
-<script src="<?=base_url();?>assets/vendors/jquery-validate/jquery.validate.min.js"></script>
-<script src="<?=base_url();?>assets/vendors/jquery-steps/js/jquery.steps.min.js"></script>
-<script src="<?=base_url();?>assets/vendors/jquery-bootstrap-wizard/jquery.bootstrap.wizard.min.js"></script>
-<script src="<?=base_url();?>assets/js/form-wizard.js"></script>
-
 <script>
+
+    function showPreviewTextAfterType(from_text_field, show_where_id) {
+        $('#'+show_where_id).html($('#'+from_text_field).val());
+    }
     document.querySelector('.search_button').onclick = function () {
         var search_attendee = $("#search_attendee").val();
 

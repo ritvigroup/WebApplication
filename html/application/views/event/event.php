@@ -18,6 +18,11 @@
           href="<?=base_url();?>assets/vendors/jquery-ui-1.10.4.custom/css/ui-lightness/jquery-ui-1.10.4.custom.min.css">
     <link type="text/css" rel="stylesheet" href="<?=base_url();?>assets/vendors/font-awesome/css/font-awesome.min.css">
     <link type="text/css" rel="stylesheet" href="<?=base_url();?>assets/vendors/bootstrap/css/bootstrap.min.css">
+
+    <link type="text/css" rel="stylesheet" href="<?=base_url();?>assets/vendors/DataTables/media/css/jquery.dataTables.css">
+    <link type="text/css" rel="stylesheet"
+          href="<?=base_url();?>assets/vendors/DataTables/extensions/TableTools/css/dataTables.tableTools.min.css">
+
     <!--LOADING STYLESHEET FOR PAGE--><!--Loading style vendors-->
     <link type="text/css" rel="stylesheet" href="<?=base_url();?>assets/vendors/animate.css/animate.css">
     <link type="text/css" rel="stylesheet" href="<?=base_url();?>assets/vendors/jquery-pace/pace.css">
@@ -66,40 +71,46 @@
                                     New Event</a>
                                 </div>
                             </div>
-                            <div class="portlet-body pan">
-                                <div class="table-responsive">
-                                    <table id="user-last-logged-table"
-                                           class="table table-striped table-hover thumb-small">
-                                        <thead>
-                                        <tr class="condensed">
-                                            <th scope="col"><span class="column-sorter"></span></th>
-                                            <th scope="col">Name<span class="column-sorter"></span></th>
-                                            <th scope="col">Location<span class="column-sorter"></span></th>
-                                            <th scope="col">Start Date<span class="column-sorter"></span></th>
-                                            <th scope="col">End Sate<span class="column-sorter"></span></th>
-                                            <th scope="col">Status<span class="column-sorter"></span></th>
-                                        </tr>
-                                        </thead>
-                                        <?php 
-                                        if(count($result) > 0) { ?>
-                                        <tbody class="media-thumb">
-                                        <?php foreach($result AS $event) { ?>
-                                            <?php $EventStatus  = (($event->eventdata->EventStatus == 1) ? 'Active' : 'In-Active'); ?>
-                                            <?php $StartDate    = (($event->eventdata->StartDate == '0000-00-00 00:00:00') ? '' : date('d-M-Y h:i A', strtotime($event->eventdata->StartDate))); ?>
-                                            <?php $EndDate    = (($event->eventdata->EndDate == '0000-00-00 00:00:00') ? '' : date('d-M-Y h:i A', strtotime($event->eventdata->EndDate))); ?>
-                                            <tr>
-                                                <td></td>
+                            <div class="portlet-body">
+                                <div class="row mbm">
+                                    <div class="col-lg-12">
+                                        <div class="table-responsive">
+                                            <table id="table_id"
+                                                   class="table table-hover table-striped table-bordered table-advanced tablesorter display">
+                                                <thead>
+                                                <tr>
+                                                    <th scope="col"><input type="checkbox"></th>
+                                                    <th scope="col">Name<span class="column-sorter"></span></th>
+                                                    <th scope="col">Location<span class="column-sorter"></span></th>
+                                                    <th scope="col">Start Date<span class="column-sorter"></span></th>
+                                                    <th scope="col">End Sate<span class="column-sorter"></span></th>
+                                                    <th scope="col">Status<span class="column-sorter"></span></th>
+                                                </tr>
+                                                <tbody class="media-thumb">
+                                                <?php 
+                                                if(count($result) > 0) { ?>
+                                                
+                                                <?php foreach($result AS $event) { ?>
+                                                    <?php $EventStatus  = (($event->eventdata->EventStatus == 1) ? 'Active' : 'In-Active'); ?>
+                                                    <?php $StartDate    = (($event->eventdata->StartDate == '0000-00-00 00:00:00') ? '' : date('d-M-Y h:i A', strtotime($event->eventdata->StartDate))); ?>
+                                                    <?php $EndDate    = (($event->eventdata->EndDate == '0000-00-00 00:00:00') ? '' : date('d-M-Y h:i A', strtotime($event->eventdata->EndDate))); ?>
+                                                    <tr>
+                                                        <td><input type="checkbox"></td>
 
-                                                <td><a data-target="#modal-stackable" data-toggle="modal" onClick="return openEventDetail(<?php echo $event->eventdata->EventId; ?>);" href="javascript:void(0);"><?php echo $event->eventdata->EventName; ?></a></td>
-                                                <td><?php echo $event->eventdata->EventLocation; ?></td>
-                                                <td><?php echo $StartDate; ?></td>
-                                                <td><?php echo $EndDate; ?></td>
-                                                <td><?php echo $EventStatus; ?></td>
-                                            </tr>
-                                        <?php }  ?>
-                                        </tbody>
-                                        <?php }  ?>                                        
-                                    </table>
+                                                        <td><a data-target="#modal-stackable" data-toggle="modal" onClick="return openEventDetail(<?php echo $event->eventdata->EventId; ?>);" href="javascript:void(0);"><?php echo $event->eventdata->EventName; ?></a></td>
+                                                        <td><?php echo $event->eventdata->EventLocation; ?></td>
+                                                        <td><?php echo $StartDate; ?></td>
+                                                        <td><?php echo $EndDate; ?></td>
+                                                        <td><?php echo $EventStatus; ?></td>
+                                                    </tr>
+                                                <?php }  ?>
+                                                
+                                                <?php }  ?>
+                                                </tbody>
+                                                </thead>
+                                            </table>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -151,8 +162,6 @@
 <!--CORE JAVASCRIPT-->
 <script src="<?=base_url();?>assets/js/main.js"></script>
 <!--LOADING SCRIPTS FOR PAGE-->
-<script src="<?=base_url();?>assets/vendors/bootstrap-datepicker/js/bootstrap-datepicker.js"></script>
-<script src="<?=base_url();?>assets/vendors/bootstrap-daterangepicker/daterangepicker.js"></script>
 <script src="<?=base_url();?>assets/vendors/moment/moment.js"></script>
 <script src="<?=base_url();?>assets/vendors/bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js"></script>
 <script src="<?=base_url();?>assets/vendors/bootstrap-timepicker/js/bootstrap-timepicker.js"></script>
@@ -162,19 +171,11 @@
 <script src="<?=base_url();?>assets/vendors/jquery-maskedinput/jquery-maskedinput.js"></script>
 <script src="<?=base_url();?>assets/vendors/charCount.js"></script>
 <script src="<?=base_url();?>assets/js/form-components.js"></script>
-
-
-
-<script src="<?=base_url();?>assets/vendors/jquery-validate/jquery.validate.min.js"></script>
-<script src="<?=base_url();?>assets/vendors/jquery-steps/js/jquery.steps.min.js"></script>
-<script src="<?=base_url();?>assets/vendors/jquery-bootstrap-wizard/jquery.bootstrap.wizard.min.js"></script>
-<script src="<?=base_url();?>assets/js/form-wizard.js"></script>
-
-
-
-<script src="<?=base_url();?>assets/vendors/mixitup/src/jquery.mixitup.js"></script>
-<script src="<?=base_url();?>assets/vendors/lightbox/js/lightbox.min.js"></script>
-<script src="<?=base_url();?>assets/js/page-gallery.js"></script>
+<!--LOADING SCRIPTS FOR PAGE-->
+<script src="<?=base_url();?>assets/vendors/DataTables/media/js/jquery.dataTables.js"></script>
+<script src="<?=base_url();?>assets/vendors/DataTables/media/js/dataTables.bootstrap.js"></script>
+<script src="<?=base_url();?>assets/vendors/DataTables/extensions/TableTools/js/dataTables.tableTools.min.js"></script>
+<script src="<?=base_url();?>assets/js/table-datatables.js"></script>
 
 
 <script>
