@@ -190,6 +190,36 @@ class Event_Model extends CI_Model {
     }
 
 
+    // Get All Event Where Myself Associated
+    public function getAllEventWhereMyselfAssociated($UserProfileId) {
+        $events = array();
+        if(isset($UserProfileId) && $UserProfileId > 0) {
+
+            $this->db->select('e.EventId');
+            $this->db->from($this->eventAttendeeTbl.' AS ea');
+            $this->db->join($this->eventTbl.' AS e', 'ea.EventId = e.EventId', 'LEFT');
+            $this->db->where('ea.UserProfileId', $UserProfileId);
+            $this->db->where('ea.EventApprovedStatus !=', -1); // Declined
+            $this->db->order_by('e.StartDate', 'DESC');
+            $query = $this->db->get();
+
+            //echo $this->db->last_query();
+            
+            $res = $query->result_array();
+
+            foreach($res AS $key => $result) {
+                $events[] = array(
+                                'feedtype' => 'event',
+                                'eventdata' => $this->getEventDetail($result['EventId'], $UserProfileId),
+                                );
+            }
+        } else {
+            $events = array();
+        }
+        return $events;
+    }
+
+
     public function getEventLikeByUserProfileId($EventId, $UserProfileId) {
         $event_like_detail = array();
         if(isset($EventId) && $EventId > 0 && isset($UserProfileId) && $UserProfileId > 0) {
@@ -238,6 +268,9 @@ class Event_Model extends CI_Model {
         $EndDate            = (($res['EndDate'] != NULL) ? $res['EndDate'] : "");
         $EveryYear          = (($res['EveryYear'] != NULL) ? $res['EveryYear'] : "");
         $EveryMonth         = (($res['EveryMonth'] != NULL) ? $res['EveryMonth'] : "");
+
+        $EventPrivacy       = (($res['EventPrivacy'] != NULL) ? $res['EventPrivacy'] : ""); // 1 = Public , 0 = Private
+        
         $EventStatus        = $res['EventStatus'];
 
         $AddedOn            = return_time_ago($res['AddedOn']);
@@ -267,6 +300,7 @@ class Event_Model extends CI_Model {
                                 "EveryYear"          => $EveryYear,
                                 "EveryMonth"         => $EveryMonth,
                                 "EventStatus"        => $EventStatus,
+                                "EventPrivacy"       => $EventPrivacy,
                                 "AddedOn"            => $AddedOn,
                                 "AddedOnTime"        => $res['AddedOn'],
                                 "UpdatedOn"          => $UpdatedOn,

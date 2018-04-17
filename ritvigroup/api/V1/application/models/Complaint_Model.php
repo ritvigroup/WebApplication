@@ -7,6 +7,8 @@ class Complaint_Model extends CI_Model {
         $this->userProfileTbl       = 'UserProfile';
         $this->attachmentTypeTbl    = 'AttachmentType';
 
+        $this->DepartmentTbl            = 'Department';
+
         $this->complaintTbl             = 'Complaint';
         $this->complaintAssignedTbl     = 'ComplaintAssigned';
         $this->complaintAttachmentTbl   = 'ComplaintAttachment';
@@ -29,6 +31,21 @@ class Complaint_Model extends CI_Model {
             $this->generateComplaintUniqueId();
         }
         return $ComplaintUniqueId;
+    }
+
+
+    public function getAllDepartment() {
+        $result = array();
+        $this->db->select('*');
+        $this->db->from($this->DepartmentTbl);
+        $this->db->where('DepartmentStatus', 1);
+        $this->db->order_by('DepartmentName', 'ASC');
+        $query = $this->db->get();
+        
+        if ($query->num_rows() > 0) {
+            $result = $query->result_array();
+        }
+        return $result;
     }
 
 
@@ -282,8 +299,16 @@ class Complaint_Model extends CI_Model {
         $complaints = array();
         if(isset($UserProfileId) && $UserProfileId > 0) {
 
-            $query = $this->db->query("SELECT ComplaintId FROM $this->complaintMemberTbl WHERE `UserProfileId` = '".$UserProfileId."'");
+            $this->db->select('cm.ComplaintId');
+            $this->db->from($this->complaintMemberTbl.' AS cm');
+            $this->db->join($this->complaintTbl.' AS c', 'cm.ComplaintId = c.ComplaintId', 'LEFT');
+            $this->db->where('cm.UserProfileId', $UserProfileId);
+            $this->db->where('cm.AcceptedYesNo !=', -1); // Declined
+            $this->db->order_by('c.AddedOn', 'DESC');
+            $query = $this->db->get();
 
+            //echo $this->db->last_query();
+            
             $res = $query->result_array();
 
             foreach($res AS $key => $result) {
@@ -339,6 +364,24 @@ class Complaint_Model extends CI_Model {
     }
 
 
+    // Reject Complaint Invitations
+    public function rejectComplaintInvitations($UserProfileId, $ComplaintId) {
+        if($ComplaintId > 0) {
+            $this->db->where('ComplaintId', $ComplaintId);
+            $this->db->where('UserProfileId', $UserProfileId);
+
+            $updateData = array(
+                                'AcceptedYesNo' => -1,
+                                'RejectedOn' => date('Y-m-d H:i:s'),
+                                );
+
+            $this->db->update($this->complaintMemberTbl, $updateData);
+            return true;
+        } 
+        return false;
+    }
+
+
     // Get Complaint Detail By Unique Id
     public function getComplaintDetailByUniqueId($ComplaintUniqueId) {
         $complaint_detail = array();
@@ -360,9 +403,10 @@ class Complaint_Model extends CI_Model {
         $complaint_detail = array();
         if(isset($ComplaintId) && $ComplaintId > 0) {
 
-            $query = $this->db->query("SELECT c.*, cs.StatusName AS ComplaintStatusName 
+            $query = $this->db->query("SELECT c.*, cs.StatusName AS ComplaintStatusName, d.DepartmentName AS DepartmentName 
                                             FROM ".$this->complaintTbl." AS c 
                                             LEFT JOIN ".$this->complaintStatusTbl." AS cs ON c.ComplaintStatus = cs.ComplaintStatusId
+                                            LEFT JOIN ".$this->DepartmentTbl." AS d ON c.ComplaintDepartment = d.DepartmentId
                                             WHERE 
                                                 c.ComplaintId = '".$ComplaintId."'");
 
@@ -383,8 +427,15 @@ class Complaint_Model extends CI_Model {
         $ApplicantName          = $res['ApplicantName'];
         $ApplicantFatherName    = $res['ApplicantFatherName'];
         $ComplaintDepartment    = $res['ComplaintDepartment'];
+        $DepartmentName         = $res['DepartmentName'];
+        $ComplaintPrivacy       = $res['ComplaintPrivacy']; // 1 = Public , 0 = Private
         $AddedBy                = $res['AddedBy'];
         
+        $ComplaintPlace         = (($res['ComplaintPlace'] != NULL) ? $res['ComplaintPlace'] : "");
+        $ComplaintAddress       = (($res['ComplaintAddress'] != NULL) ? $res['ComplaintAddress'] : "");
+        $ComplaintLatitude      = (($res['ComplaintLatitude'] != NULL) ? $res['ComplaintLatitude'] : "");
+        $ComplaintLongitude     = (($res['ComplaintLongitude'] != NULL) ? $res['ComplaintLongitude'] : "");
+
         $ComplaintSubject       = (($res['ComplaintSubject'] != NULL) ? $res['ComplaintSubject'] : "");
         $ComplaintDescription   = (($res['ComplaintDescription'] != NULL) ? $res['ComplaintDescription'] : "");
         $ComplaintStatus        = $res['ComplaintStatus'];
@@ -405,10 +456,18 @@ class Complaint_Model extends CI_Model {
                                 "ApplicantName"             => $ApplicantName,
                                 "ApplicantFatherName"       => $ApplicantFatherName,
                                 "ComplaintDepartment"       => $ComplaintDepartment,
+                                "DepartmentName"            => $DepartmentName,
+                                "ComplaintPrivacy"          => $ComplaintPrivacy,
                                 "ComplaintSubject"          => $ComplaintSubject,
                                 "ComplaintDescription"      => $ComplaintDescription,
                                 "ComplaintStatus"           => $ComplaintStatus,
                                 "ComplaintStatusName"       => $ComplaintStatusName,
+                                
+                                "ComplaintPlace"            => $ComplaintPlace,
+                                "ComplaintAddress"          => $ComplaintAddress,
+                                "ComplaintLatitude"         => $ComplaintLatitude,
+                                "ComplaintLongitude"        => $ComplaintLongitude,
+
                                 "AddedOn"                   => $AddedOn,
                                 "AddedOnTime"               => $res['AddedOn'],
                                 "UpdatedOn"                 => $UpdatedOn,

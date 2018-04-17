@@ -26,7 +26,7 @@ class Poll extends CI_Controller {
 
         $UserProfileId      = $this->input->post('user_profile_id');
         $PollQuestion       = $this->input->post('poll_question');
-        $PollPrivacy        = $this->input->post('poll_privacy');
+        $PollPrivacy        = $this->input->post('poll_privacy'); // 1 = Public, 0 = Private
         $ValidFromDate      = $this->input->post('valid_from_date');
         $ValidEndDate       = $this->input->post('valid_end_date');
 

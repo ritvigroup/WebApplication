@@ -183,7 +183,7 @@
                             </div> -->
                         </div>
                         <div class="portlet-body">
-                            <div id="pie-with-legend"></div>
+                            <div id="pie-with-gradient-fill"></div>
                         </div>
                     </div>                    
                 </div>
@@ -251,49 +251,76 @@
 <!-- <script src="<?=base_url();?>assets/js/charts-highchart-pie.js"></script> -->
 
 <script>
-$('#pie-with-legend').highcharts({
-        chart: {
-            plotBackgroundColor: null,
-            plotBorderWidth: null,
-            plotShadow: false
-        },
-        title: {
-            text: 'Overall report'
-        },
-        tooltip: {
-            pointFormat: '{series.name}: <b>{point.percentage:.1f}</b>'
-        },
-        plotOptions: {
-            pie: {
-                allowPointSelect: true,
-                cursor: 'pointer',
-                dataLabels: {
-                    enabled: false
-                },
-                showInLegend: true
+/*$('#pie-with-legend').highcharts({
+    chart: {
+        plotBackgroundColor: null,
+        plotBorderWidth: null,
+        plotShadow: false
+    },
+    title: {
+        text: 'Overall report'
+    },
+    tooltip: {
+        pointFormat: '{series.name}: <b>{point.percentage:.1f}</b>'
+    },
+    plotOptions: {
+        pie: {
+            allowPointSelect: true,
+            cursor: 'pointer',
+            dataLabels: {
+                enabled: false
+            },
+            showInLegend: true
+        }
+    },
+    series: [{
+        type: 'pie',
+        name: 'Percentage',
+        data: [
+            <?php foreach($overall_report AS $total_summary_key => $total_summary_val) { ?>
+                ['<?php echo $total_summary_key; ?>',   <?php echo $total_summary_val; ?>],
+            <?php } ?>
+        ]
+    }]
+});*/
+
+// Build the chart
+$('#pie-with-gradient-fill').highcharts({
+    chart: {
+        plotBackgroundColor: null,
+        plotBorderWidth: null,
+        plotShadow: false
+    },
+    title: {
+        text: 'Overall Report'
+    },
+    tooltip: {
+        pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+    },
+    plotOptions: {
+        pie: {
+            allowPointSelect: true,
+            cursor: 'pointer',
+            dataLabels: {
+                enabled: true,
+                color: '#000000',
+                connectorColor: '#000000',
+                formatter: function() {
+                    return '<b>'+ this.point.name +'</b>: '+ this.percentage.toFixed(2) +' %';
+                }
             }
-        },
-        series: [{
-            type: 'pie',
-            name: 'Percentage',
-            data: [
-                <?php foreach($overall_report AS $total_summary_key => $total_summary_val) { ?>
-                    ['<?php echo $total_summary_key; ?>',   <?php echo $total_summary_val; ?>],
-                <?php } ?>
-                // ['Firefox',   45.0],
-                // ['IE',       26.8],
-                // {
-                //     name: 'Chrome',
-                //     y: 12.8,
-                //     sliced: true,
-                //     selected: true
-                // },
-                // ['Safari',    8.5],
-                // ['Opera',     6.2],
-                // ['Others',   0.7]
-            ]
-        }]
-    });
+        }
+    },
+    series: [{
+        type: 'pie',
+        name: 'Browser share',
+        data: [
+            <?php foreach($overall_report AS $total_summary_key => $total_summary_val) { ?>
+                ['<?php echo $total_summary_key; ?>',   <?php echo $total_summary_val; ?>],
+            <?php } ?>
+        ]
+    }]
+});
 </script>
 
 <script>

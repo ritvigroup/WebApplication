@@ -32,6 +32,9 @@ class Event extends CI_Controller {
         $EndDate            = $this->input->post('end_date');
         $EveryYear          = $this->input->post('every_year');
         $EveryMonth         = $this->input->post('every_month');
+        $EventPrivacy       = $this->input->post('privacy'); // 1= Public , 0 = Private
+
+        $EventPrivacy = ($EventPrivacy > 0) ? $EventPrivacy : 0;
 
         $event_attendee = $this->input->post('event_attendee'); // Should be multiple profiles in array
 
@@ -57,6 +60,7 @@ class Event extends CI_Controller {
                                 'EndDate'           => date('Y-m-d H:i:s', strtotime($EndDate)),
                                 'EveryYear'         => $EveryYear,
                                 'EveryMonth'        => $EveryMonth,
+                                'EventPrivacy'      => $EventPrivacy,
                                 'EventStatus'       => 1,
                                 'AddedBy'           => $UserProfileId,
                                 'UpdatedBy'         => $UserProfileId,
@@ -194,8 +198,7 @@ class Event extends CI_Controller {
         displayJsonEncode($array);
     }
 
-    
-    
+        
     public function getEventDetail() {
         $error_occured = false;
 
@@ -248,6 +251,42 @@ class Event extends CI_Controller {
         } else {
 
             $events = $this->Event_Model->getMyAllEvent($UserProfileId);
+            if(count($events) > 0) {
+                $msg = "Event fetched successfully";
+            } else {
+                $msg = "No event added by you";
+                $error_occured = true;
+            }
+        }
+
+        if($error_occured == true) {
+            $array = array(
+                            "status"        => 'failed',
+                            "message"       => $msg,
+                        );
+        } else {
+
+            $array = array(
+                           "status"     => 'success',
+                           "result"     => $events,
+                           "message"    => $msg,
+                           );
+        }
+        displayJsonEncode($array);
+    }
+
+
+    public function getAllEventWhereMyselfAssociated() {
+        $error_occured = false;
+
+        $UserProfileId   = $this->input->post('user_profile_id');
+        
+        if($UserProfileId == "") {
+            $msg = "Please select your profile";
+            $error_occured = true;
+        } else {
+
+            $events = $this->Event_Model->getAllEventWhereMyselfAssociated($UserProfileId);
             if(count($events) > 0) {
                 $msg = "Event fetched successfully";
             } else {

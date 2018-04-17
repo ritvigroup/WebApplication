@@ -169,6 +169,7 @@ class Post_Model extends CI_Model {
         $PostLocation       = (($res['PostLocation'] != NULL) ? $res['PostLocation'] : "");
         $PostDescription    = (($res['PostDescription'] != NULL) ? $res['PostDescription'] : "");
         $PostURL            = (($res['PostURL'] != NULL) ? $res['PostURL'] : "");
+        $PostPrivacy        = (($res['PostPrivacy'] != NULL) ? $res['PostPrivacy'] : "");
         
         $AddedOn            = return_time_ago($res['AddedOn']);
         $UpdatedOn          = return_time_ago($res['UpdatedOn']);
@@ -185,6 +186,9 @@ class Post_Model extends CI_Model {
                                 "PostLocation"          => $PostLocation,
                                 "PostDescription"       => $PostDescription,
                                 "PostURL"               => $PostURL,
+                                
+                                "PostPrivacy"           => $PostPrivacy,
+                                
                                 "AddedOn"               => $AddedOn,
                                 "AddedOnTime"           => $res['AddedOn'],
                                 "UpdatedOn"             => $UpdatedOn,

@@ -18,6 +18,11 @@
           href="<?=base_url();?>assets/vendors/jquery-ui-1.10.4.custom/css/ui-lightness/jquery-ui-1.10.4.custom.min.css">
     <link type="text/css" rel="stylesheet" href="<?=base_url();?>assets/vendors/font-awesome/css/font-awesome.min.css">
     <link type="text/css" rel="stylesheet" href="<?=base_url();?>assets/vendors/bootstrap/css/bootstrap.min.css">
+
+    <link type="text/css" rel="stylesheet" href="<?=base_url();?>assets/vendors/DataTables/media/css/jquery.dataTables.css">
+    <link type="text/css" rel="stylesheet"
+          href="<?=base_url();?>assets/vendors/DataTables/extensions/TableTools/css/dataTables.tableTools.min.css">
+
     <!--LOADING STYLESHEET FOR PAGE--><!--Loading style vendors-->
     <link type="text/css" rel="stylesheet" href="<?=base_url();?>assets/vendors/animate.css/animate.css">
     <link type="text/css" rel="stylesheet" href="<?=base_url();?>assets/vendors/jquery-pace/pace.css">
@@ -67,53 +72,55 @@
                                 </div>
                                 
                             </div>
-                            <div class="portlet-body pan">
-                                <div class="table-responsive">
-                                    <table id="user-last-logged-table"
-                                           class="table table-striped table-hover thumb-small">
-                                        <thead>
-                                        <tr class="condensed">
-                                            <th scope="col"><span class="column-sorter"></span></th>
-                                            <th scope="col">Transaction Id<span class="column-sorter"></span></th>
-                                            <th scope="col">Payment Gateway<span class="column-sorter"></span></th>
-                                            <th scope="col">Comment<span class="column-sorter"></span></th>
-                                            <th scope="col">From<span class="column-sorter"></span></th>
-                                            <th scope="col">To<span class="column-sorter"></span></th>
-                                            <th scope="col">Debit/Credit<span class="column-sorter"></span></th>
-                                            <th scope="col">Amount<span class="column-sorter"></span></th>
-                                            <th scope="col">Status<span class="column-sorter"></span></th>
-                                            <th scope="col">Transaction On<span class="column-sorter"></span></th>
-                                        </tr>
-                                        </thead>
-                                        <?php 
-                                        if(count($result) > 0) { ?>
-                                            <tbody class="media-thumb">
-                                            <?php foreach($result AS $payment) { ?>
-                                                <?php
-                                                $debit_or_credit = ($payment->DebitOrCredit == 1) ? 'Credit' : 'Debit';
-                                                $status = ($payment->TransactionStatus == 1) ? 'Success' : 'Failed';
-                                                $plus_minus = ($payment->DebitOrCredit == 1) ? '' : '-';
-                                                ?>
+                            <div class="portlet-body">
+                                <div class="row mbm">
+                                    <div class="col-lg-12">
+                                        <div class="table-responsive">
+                                            <table id="table_id"
+                                                   class="table table-hover table-striped table-bordered table-advanced tablesorter display">
+                                                <thead>
                                                 <tr>
-                                                    <td></td>
-                                                    <td><?php echo $payment->TransactionId; ?></td>
-                                                    <td><?php echo $payment->PaymentGatewayName; ?></td>
-                                                    <td><?php echo $payment->TransactionComment; ?></td>
-                                                    <td><a href="<?=base_url();?>profile/profile/<?php echo $payment->PaymentBy->user_profile_detail->user_info->UserUniqueId; ?>" target="_blank"><?php echo $payment->PaymentBy->user_profile_detail->profile->FirstName.' '.$payment->PaymentBy->user_profile_detail->profile->LastName; ?></a></td>
-                                                    <td><a href="<?=base_url();?>profile/profile/<?php echo $payment->PaymentTo->user_profile_detail->user_info->UserUniqueId; ?>" target="_blank"><?php echo $payment->PaymentTo->user_profile_detail->profile->FirstName.' '.$payment->PaymentTo->user_profile_detail->profile->LastName; ?></a></td>
-                                                    <td><?php echo $debit_or_credit; ?></td>
-                                                    <td><?php echo $plus_minus; ?> &#8377; <?php echo $payment->TransactionAmount; ?></td>
-                                                    <td><?php echo $status; ?></td>
-                                                    <td><?php echo $payment->AddedOn; ?></td>
+                                                    <th scope="col">Id<span class="column-sorter"></span></th>
+                                                    <th scope="col">Gateway<span class="column-sorter"></span></th>
+                                                    <th scope="col">Comment<span class="column-sorter"></span></th>
+                                                    <th scope="col">From<span class="column-sorter"></span></th>
+                                                    <th scope="col">To<span class="column-sorter"></span></th>
+                                                    <th scope="col">Debit/Credit<span class="column-sorter"></span></th>
+                                                    <th scope="col">Amount<span class="column-sorter"></span></th>
+                                                    <th scope="col">Status<span class="column-sorter"></span></th>
+                                                    <th scope="col">On<span class="column-sorter"></span></th>
                                                 </tr>
-                                            <?php } ?>
-                                            </tbody>
-                                        <?php } else { ?>
-                                        <tr>
-                                            <td colspan="100%" align="center">No Payment Record found</td>
-                                        </tr>
-                                        <?php } ?>                                        
-                                    </table>
+                                                <tbody class="media-thumb">
+                                                <?php 
+                                                if(count($result) > 0) { ?>
+                                                    
+                                                    <?php foreach($result AS $payment) { ?>
+                                                        <?php
+                                                        $debit_or_credit = ($payment->DebitOrCredit == 1) ? 'Credit' : 'Debit';
+                                                        $status = ($payment->TransactionStatus == 1) ? 'Success' : 'Failed';
+                                                        $plus_minus = ($payment->DebitOrCredit == 1) ? '' : '-';
+                                                        ?>
+                                                        <tr>
+                                                            <td><?php echo $payment->TransactionId; ?></td>
+                                                            <td><?php echo $payment->PaymentGatewayName; ?></td>
+                                                            <td><?php echo $payment->TransactionComment; ?></td>
+                                                            <td><a href="<?=base_url();?>profile/profile/<?php echo $payment->PaymentBy->user_profile_detail->user_info->UserUniqueId; ?>" target="_blank"><?php echo $payment->PaymentBy->user_profile_detail->profile->FirstName.' '.$payment->PaymentBy->user_profile_detail->profile->LastName; ?></a></td>
+                                                            <td><a href="<?=base_url();?>profile/profile/<?php echo $payment->PaymentTo->user_profile_detail->user_info->UserUniqueId; ?>" target="_blank"><?php echo $payment->PaymentTo->user_profile_detail->profile->FirstName.' '.$payment->PaymentTo->user_profile_detail->profile->LastName; ?></a></td>
+                                                            <td><?php echo $debit_or_credit; ?></td>
+                                                            <td><?php echo $plus_minus; ?> &#8377; <?php echo $payment->TransactionAmount; ?></td>
+                                                            <td><?php echo $status; ?></td>
+                                                            <td><?php echo $payment->AddedOn; ?></td>
+                                                        </tr>
+                                                    <?php } ?>
+                                                    
+                                                <?php } else { ?>
+                                                
+                                                <?php } ?> 
+                                                </tbody>
+                                                </thead>                                       
+                                            </table>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -165,8 +172,6 @@
 <!--CORE JAVASCRIPT-->
 <script src="<?=base_url();?>assets/js/main.js"></script>
 <!--LOADING SCRIPTS FOR PAGE-->
-<script src="<?=base_url();?>assets/vendors/bootstrap-datepicker/js/bootstrap-datepicker.js"></script>
-<script src="<?=base_url();?>assets/vendors/bootstrap-daterangepicker/daterangepicker.js"></script>
 <script src="<?=base_url();?>assets/vendors/moment/moment.js"></script>
 <script src="<?=base_url();?>assets/vendors/bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js"></script>
 <script src="<?=base_url();?>assets/vendors/bootstrap-timepicker/js/bootstrap-timepicker.js"></script>
@@ -176,19 +181,11 @@
 <script src="<?=base_url();?>assets/vendors/jquery-maskedinput/jquery-maskedinput.js"></script>
 <script src="<?=base_url();?>assets/vendors/charCount.js"></script>
 <script src="<?=base_url();?>assets/js/form-components.js"></script>
-
-
-
-<script src="<?=base_url();?>assets/vendors/jquery-validate/jquery.validate.min.js"></script>
-<script src="<?=base_url();?>assets/vendors/jquery-steps/js/jquery.steps.min.js"></script>
-<script src="<?=base_url();?>assets/vendors/jquery-bootstrap-wizard/jquery.bootstrap.wizard.min.js"></script>
-<script src="<?=base_url();?>assets/js/form-wizard.js"></script>
-
-
-
-<script src="<?=base_url();?>assets/vendors/mixitup/src/jquery.mixitup.js"></script>
-<script src="<?=base_url();?>assets/vendors/lightbox/js/lightbox.min.js"></script>
-<script src="<?=base_url();?>assets/js/page-gallery.js"></script>
+<!--LOADING SCRIPTS FOR PAGE-->
+<script src="<?=base_url();?>assets/vendors/DataTables/media/js/jquery.dataTables.js"></script>
+<script src="<?=base_url();?>assets/vendors/DataTables/media/js/dataTables.bootstrap.js"></script>
+<script src="<?=base_url();?>assets/vendors/DataTables/extensions/TableTools/js/dataTables.tableTools.min.js"></script>
+<script src="<?=base_url();?>assets/js/table-datatables.js"></script>
 
 
 </body>

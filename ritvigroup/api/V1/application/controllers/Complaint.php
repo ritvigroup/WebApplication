@@ -20,6 +20,43 @@ class Complaint extends CI_Controller {
         $this->device_os 		= $this->input->post('device_os');
     }
 
+
+    public function getAllDepartment() {
+        $error_occured = false;
+
+        $UserProfileId   = $this->input->post('user_profile_id');
+        
+        if($UserProfileId == "") {
+            $msg = "Please select your profile";
+            $error_occured = true;
+        } else {
+
+            $department = $this->Complaint_Model->getAllDepartment();
+            if(count($department) > 0) {
+                $msg = "Department fetched successfully";
+            } else {
+                $msg = "No department found";
+                $error_occured = true;
+            }
+        }
+
+        if($error_occured == true) {
+            $array = array(
+                            "status"        => 'failed',
+                            "message"       => $msg,
+                        );
+        } else {
+
+            $array = array(
+                           "status"     => 'success',
+                           "result"     => $department,
+                           "message"    => $msg,
+                           );
+        }
+        displayJsonEncode($array);
+    }
+
+
     public function getAllComplaintType() {
         $error_occured = false;
 
@@ -55,6 +92,7 @@ class Complaint extends CI_Controller {
         displayJsonEncode($array);
     }
 
+
     public function postMyComplaint() {
 		$error_occured = false;
 
@@ -65,6 +103,25 @@ class Complaint extends CI_Controller {
         $ApplicantName          = $this->input->post('applicant_name');
         $ApplicantFatherName    = $this->input->post('applicant_father_name');
         $ApplicantMobile        = $this->input->post('applicant_mobile');
+        $department             = $this->input->post('department');
+
+        $address                = $this->input->post('address');
+        $place                  = $this->input->post('place');
+        $latitude               = $this->input->post('latitude');
+        $longitude              = $this->input->post('longitude');
+        
+        $ComplaintPrivacy       = $this->input->post('privacy'); // 1 = Public, 0 = Private
+        $schedule_date          = $this->input->post('schedule_date');
+
+        $ComplaintStatus = 1;
+        if($schedule_date != '') {
+            $ScheduleOn = date('Y-m-d 00:00:00', strtotime($schedule_date));
+            if(strtotime($ScheduleOn) != strtotime(date('Y-m-d 00:00:00'))) {
+                $ComplaintStatus = 0;
+            }
+        } else {
+            $ScheduleOn = date('Y-m-d H:i:s');
+        }
 
         $AssignedTo             = $this->input->post('assign_to_profile_id'); // Assign to Favourite Leader/Sub-Leader
 
@@ -91,8 +148,19 @@ class Complaint extends CI_Controller {
                                 'ApplicantName'             => $ApplicantName,
                                 'ApplicantFatherName'       => $ApplicantFatherName,
                                 'ApplicantMobile'           => $ApplicantMobile,
-                                'ComplaintStatus'           => 1,
+                                'ComplaintStatus'           => $ComplaintStatus,
+                                'ComplaintDepartment'       => $department,
+                                
+                                'ComplaintPrivacy'          => $ComplaintPrivacy,
+
+                                'ComplaintPlace'            => $place,
+                                'ComplaintAddress'          => $address,
+                                'ComplaintLatitude'         => $latitude,
+                                'ComplaintLongitude'        => $longitude,
+                                
+                                'ScheduleOn'                => $ScheduleOn,
                                 'AddedBy'                   => $UserProfileId,
+                                'UpdatedBy'                 => $UserProfileId,
                                 'AddedOn'                   => date('Y-m-d H:i:s'),
                                 'UpdatedOn'                 => date('Y-m-d H:i:s'),
                             );
@@ -180,6 +248,57 @@ class Complaint extends CI_Controller {
                            "status"             => 'success',
                            "result"   => $complaint_detail,
                            "message"            => $msg,
+                           );
+        }
+        displayJsonEncode($array);
+    }
+
+
+    // Reject Complaint Invitation
+    public function rejectComplaintInvitations() {
+        $error_occured = false;
+
+        $UserProfileId      = $this->input->post('user_profile_id');
+        $ComplaintId        = $this->input->post('complaint_id');
+        
+        if($UserProfileId == "") {
+            $msg = "Please select your profile";
+            $error_occured = true;
+        } else if($ComplaintId == "") {
+            $msg = "Please select complaint";
+            $error_occured = true;
+        } else {
+
+            $this->db->query("BEGIN");
+
+            $InvitationAccept = $this->Complaint_Model->rejectComplaintInvitations($UserProfileId, $ComplaintId);
+
+            if($InvitationAccept == true) {
+                
+                $complaint_detail = $this->Complaint_Model->getComplaintDetail($ComplaintId);
+
+                $this->db->query("COMMIT");
+
+                $msg = "Complaint invitation rejected successfully";
+
+            } else {
+                $this->db->query("ROLLBACK");
+                $msg = "Error occured";
+                $error_occured = true;
+            }
+        }
+
+        if($error_occured == true) {
+            $array = array(
+                            "status"        => 'failed',
+                            "message"       => $msg,
+                        );
+        } else {
+
+            $array = array(
+                           "status"   => 'success',
+                           "result"   => $complaint_detail,
+                           "message"  => $msg,
                            );
         }
         displayJsonEncode($array);
@@ -293,15 +412,15 @@ class Complaint extends CI_Controller {
 
         if($error_occured == true) {
             $array = array(
-                            "status"        => 'failed',
-                            "message"       => $msg,
+                            "status"    => 'failed',
+                            "message"   => $msg,
                         );
         } else {
 
             $array = array(
-                           "status"       => 'success',
-                           "result"   => $complaints,
-                           "message"      => $msg,
+                           "status"     => 'success',
+                           "result"     => $complaints,
+                           "message"    => $msg,
                            );
         }
         displayJsonEncode($array);

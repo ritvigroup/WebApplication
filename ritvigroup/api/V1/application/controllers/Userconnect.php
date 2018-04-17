@@ -637,5 +637,44 @@ class Userconnect extends CI_Controller {
     }
 
 
+    // Search My Friends, Followers and Followings
+    public function searchMyFriendFollowerAndFollowing() {
+        $error_occured = false;
+        $UserProfileId = $this->input->post('user_profile_id');
         
+        $search = $this->input->post('search');
+        $search = trim($search);
+                
+        if($UserProfileId == "") {
+            $msg = "Please select user profile";
+            $error_occured = true;
+        } else {
+
+            $res_u = $this->User_Model->searchMyFriendFollowerAndFollowing($UserProfileId, $search);
+
+            if(count($res_u) > 0) {
+
+                $msg = "Profile information found successfully";
+
+            } else {
+                $msg = "No user profile Found";
+                $error_occured = true;
+            }
+        }
+
+        if($error_occured == true) {
+            $array = array(
+                            "status"        => 'failed',
+                            "message"       => $msg,
+                        );
+        } else {
+
+            $array = array(
+                           "status"     => 'success',
+                           "result"    => $res_u,
+                           "message"    => $msg,
+                           );
+        }
+        displayJsonEncode($array);
+    }
 }

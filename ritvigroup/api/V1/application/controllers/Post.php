@@ -60,6 +60,9 @@ class Post extends CI_Controller {
         $PostLocation       = $this->input->post('location');
         $PostDescription    = $this->input->post('description');
         $PostURL            = $this->input->post('url');
+        $PostPrivacy        = $this->input->post('privacy'); // 1 = Public, 0 = Private
+
+        $PostPrivacy = ($PostPrivacy == 1) ? $PostPrivacy : 0;
 
         $post_tag = $this->input->post('post_tag');
         
@@ -81,6 +84,7 @@ class Post extends CI_Controller {
                                 'PostLocation'      => $PostLocation,
                                 'PostDescription'   => $PostDescription,
                                 'PostURL'           => $PostURL,
+                                'PostPrivacy'       => $PostPrivacy,
                                 'AddedOn'           => date('Y-m-d H:i:s'),
                                 'UpdatedOn'         => date('Y-m-d H:i:s'),
                             );
