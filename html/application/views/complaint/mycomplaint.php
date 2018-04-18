@@ -95,11 +95,11 @@
                                                             <tr>
                                                                 <td></td>
 
-                                                                <td><a href="<?=base_url();?>complaint/complaintTimeline/<?php echo $complaint->ComplaintUniqueId; ?>"><?php echo $complaint->ComplaintUniqueId; ?></a></td>
+                                                                <td><a data-target="#modal-stackable" data-toggle="modal" href="javascript:void(0);" onClick="return displayComplaintDitail('<?php echo $complaint->ComplaintUniqueId; ?>');" title="View Complaint Detail"><?php echo $complaint->ComplaintUniqueId; ?></a></td>
                                                                 <td><?php echo $complaint->ComplaintSubject; ?></td>
                                                                 <td><?php echo $complaint->DepartmentName; ?></td>
                                                                 <td><?php echo $complaint->ApplicantName; ?></td>
-                                                                <td><?php echo $complaint->ComplaintStatusName; ?></td>
+                                                                <td><a href="<?=base_url();?>complaint/complaintTimeline/<?php echo $complaint->ComplaintUniqueId; ?>"><?php echo $complaint->ComplaintStatusName; ?></a></td>
                                                                 <td><?php echo $complaint->AddedOn; ?></td>
                                                             </tr>
                                                         <?php } ?>
@@ -180,12 +180,18 @@
 <script src="<?=base_url();?>assets/vendors/DataTables/extensions/TableTools/js/dataTables.tableTools.min.js"></script>
 <script src="<?=base_url();?>assets/js/table-datatables.js"></script>
 
+<script>
+    function displayComplaintDitail(complaint_unique_id) {
 
-
-<script src="<?=base_url();?>assets/vendors/mixitup/src/jquery.mixitup.js"></script>
-<script src="<?=base_url();?>assets/vendors/lightbox/js/lightbox.min.js"></script>
-<script src="<?=base_url();?>assets/js/page-gallery.js"></script>
-
-
+        $.post("<?php echo base_url(); ?>complaint/complaintViewDetail/"+complaint_unique_id, {'display': 'Y'},
+            function (data, status) {
+                if(data != '') {
+                    $('.modal-content').html(data);
+                } else {
+                    $('.modal-content').html(data);
+                }
+            });
+    }
+</script>
 </body>
 </html>

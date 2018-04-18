@@ -20,7 +20,7 @@ class Suggestion extends CI_Controller {
         $this->device_os 		= $this->input->post('device_os');
     }
 
-
+    // Save my suggestion
     public function postMySuggestion() {
 		$error_occured = false;
 
@@ -96,7 +96,7 @@ class Suggestion extends CI_Controller {
         displayJsonEncode($array);
     }
     
-    
+    // Get Suggestion Detail
     public function getSuggestionDetail() {
         $error_occured = false;
 
@@ -137,7 +137,7 @@ class Suggestion extends CI_Controller {
         displayJsonEncode($array);
     }
 
-
+    // Get my all suggestion
     public function getMyAllSuggestion() {
         $error_occured = false;
 
@@ -173,7 +173,7 @@ class Suggestion extends CI_Controller {
         displayJsonEncode($array);
     }
 
-
+    // Get all assigned suggestion to me
     public function getAllAssignedSuggestionToMe() {
         $error_occured = false;
 
@@ -208,6 +208,163 @@ class Suggestion extends CI_Controller {
         }
         displayJsonEncode($array);
     }
+
+    // Get Suggestion Detail By Unique Id
+    public function getSuggestionDetailByUniqueId() {
+        $error_occured = false;
+
+        $UserProfileId      = $this->input->post('user_profile_id');
+        $SuggestionUniqueId  = $this->input->post('suggestion_unique_id');
+
+
+        if($UserProfileId == "") {
+            $msg = "Please select your profile";
+            $error_occured = true;
+        } else if($SuggestionUniqueId == "") {
+            $msg = "Please select suggestion";
+            $error_occured = true;
+        } else {
+
+            $suggestion_detail = $this->Suggestion_Model->getSuggestionDetailByUniqueId($SuggestionUniqueId);
+
+            if(count($suggestion_detail) > 0) {
+                $msg = "Suggestion fetched successfully";
+            } else {
+                $msg = "Suggestion not found";
+                $error_occured = true;
+            }
+        }
+
+        if($error_occured == true) {
+            $array = array(
+                            "status"        => 'failed',
+                            "message"       => $msg,
+                        );
+        } else {
+
+            $array = array(
+                           "status"             => 'success',
+                           "result"   => $suggestion_detail,
+                           "message"            => $msg,
+                           );
+        }
+        displayJsonEncode($array);
+    }
+
+    // Save Suggestion History
+    public function saveSuggestionHistory() {
+        $error_occured = false;
+
+        $UserProfileId              = $this->input->post('user_profile_id');
+        $SuggestionId                = $this->input->post('suggestion_id');
+        $ParentSuggestionHistoryId   = $this->input->post('history_id');
+        $HistoryTitle               = $this->input->post('title');
+        $HistoryDescription         = $this->input->post('description');
+                
+        if($UserProfileId == "") {
+            $msg = "Please select your profile";
+            $error_occured = true;
+        } else if($SuggestionId == "") {
+            $msg = "Please enter suggestion id";
+            $error_occured = true;
+        } else if($HistoryTitle == "") {
+            $msg = "Please enter title";
+            $error_occured = true;
+        } else if($HistoryDescription == "") {
+            $msg = "Please enter description";
+            $error_occured = true;
+        } else {
+
+            $this->db->query("BEGIN");
+
+            $ParentSuggestionHistoryId = ($ParentSuggestionHistoryId > 0) ? $ParentSuggestionHistoryId : 0;
+
+            $insertData = array(
+                                'SuggestionId'               => $SuggestionId,
+                                'ParentSuggestionHistoryId'  => $ParentSuggestionHistoryId,
+                                'HistoryTitle'              => $HistoryTitle,
+                                'HistoryDescription'        => $HistoryDescription,
+                                'HistoryStatus'             => 1,
+                                'AddedBy'                   => $UserProfileId,
+                                'AddedOn'                   => date('Y-m-d H:i:s'),
+                            );
+            $SuggestionHistoryId = $this->Suggestion_Model->saveMySuggestionHistory($insertData);
+
+            if($SuggestionHistoryId > 0) {
+
+                $this->Suggestion_Model->saveMySuggestionHistoryAttachment($SuggestionHistoryId, $UserProfileId, $_FILES['file']);
+
+                $suggestion_history_detail = $this->Suggestion_Model->getSuggestionHistoryDetail($SuggestionHistoryId);
+                
+                $this->db->query("COMMIT");
+
+                $msg = "Suggestion history saved successfully";
+
+            } else {
+                $this->db->query("ROLLBACK");
+                $msg = "Suggestion history not saved. Error occured";
+                $error_occured = true;
+            }
+        }
+
+        if($error_occured == true) {
+            $array = array(
+                            "status"        => 'failed',
+                            "message"       => $msg,
+                        );
+        } else {
+
+            $array = array(
+                           "status"     => 'success',
+                           "result"     => $suggestion_history_detail,
+                           "message"    => $msg,
+                           );
+        }
+        displayJsonEncode($array);
+    }
+
+    // Get Suggestion History
+    public function getSuggestionHistory() {
+        $error_occured = false;
+
+        $UserProfileId   = $this->input->post('user_profile_id');
+        $SuggestionId     = $this->input->post('suggestion_id');
+        
+        if($UserProfileId == "") {
+            $msg = "Please select your profile";
+            $error_occured = true;
+        } else if($SuggestionId == "") {
+            $msg = "Please select suggestion";
+            $error_occured = true;
+        } else {
+
+            $suggestion_history_detail = $this->Suggestion_Model->getSuggestionHistory($SuggestionId);
+
+            if(count($suggestion_history_detail) > 0) {
+                $msg = "Suggestion fetched successfully";
+            } else {
+                $msg = "Suggestion not found";
+                $error_occured = true;
+            }
+        }
+
+        if($error_occured == true) {
+            $array = array(
+                            "status"        => 'failed',
+                            "message"       => $msg,
+                        );
+        } else {
+
+            $array = array(
+                           "status"     => 'success',
+                           "result"     => $suggestion_history_detail,
+                           "message"    => $msg,
+                           );
+        }
+        displayJsonEncode($array);
+    }
+
+
 
 }
 

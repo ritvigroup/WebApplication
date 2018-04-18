@@ -20,7 +20,7 @@ class Complaint extends CI_Controller {
         $this->device_os 		= $this->input->post('device_os');
     }
 
-
+    // Get All Department
     public function getAllDepartment() {
         $error_occured = false;
 
@@ -56,7 +56,7 @@ class Complaint extends CI_Controller {
         displayJsonEncode($array);
     }
 
-
+    // Get all Complaint Types
     public function getAllComplaintType() {
         $error_occured = false;
 
@@ -92,7 +92,7 @@ class Complaint extends CI_Controller {
         displayJsonEncode($array);
     }
 
-
+    // Save Complaint
     public function postMyComplaint() {
 		$error_occured = false;
 
@@ -304,7 +304,7 @@ class Complaint extends CI_Controller {
         displayJsonEncode($array);
     }
     
-
+    // Get Complaint Detail By Unique Id
     public function getComplaintDetailByUniqueId() {
         $error_occured = false;
 
@@ -346,7 +346,7 @@ class Complaint extends CI_Controller {
         displayJsonEncode($array);
     }
 
-    
+    // Get Complaint Detail
     public function getComplaintDetail() {
         $error_occured = false;
 
@@ -387,7 +387,7 @@ class Complaint extends CI_Controller {
         displayJsonEncode($array);
     }
 
-
+    // Get My All Complaint
     public function getMyAllComplaint() {
         $error_occured = false;
 
@@ -426,7 +426,7 @@ class Complaint extends CI_Controller {
         displayJsonEncode($array);
     }
 
-
+    // get All Complaint Where Myself Associated
     public function getAllComplaintWhereMyselfAssociated() {
         $error_occured = false;
 
@@ -463,6 +463,7 @@ class Complaint extends CI_Controller {
     }
 
 
+    // Get All Assiged Complaint To Me [LEADER]
     public function getAllAssignedComplaintToMe() {
         $error_occured = false;
 
@@ -499,6 +500,7 @@ class Complaint extends CI_Controller {
     }
 
 
+    // Save COmplaint History
     public function saveComplaintHistory() {
         $error_occured = false;
 
@@ -574,7 +576,7 @@ class Complaint extends CI_Controller {
         displayJsonEncode($array);
     }
 
-
+    // Get Complaint History
     public function getComplaintHistory() {
         $error_occured = false;
 

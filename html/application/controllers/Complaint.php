@@ -32,6 +32,44 @@ class Complaint extends CI_Controller {
         $this->load->view('complaint/complaintHistoryForm',$data);
     }
 
+
+    public function complaintViewDetail() {
+        $data = array();
+      
+        if (!$this->input->is_ajax_request()) {
+           exit('Error');
+        }
+        $_POST['user_profile_id'] = $this->session->userdata('LeaderProfileId');
+        $_POST['complaint_unique_id'] = $this->uri->segment(3);
+        $json_encode = post_curl(API_CALL_PATH.'complaint/getComplaintDetailByUniqueId', $this->input->post(), $this->curl);
+
+        $json_decode = json_decode($json_encode);
+
+        $_POST['complaint_id'] = $json_decode->result->ComplaintId;
+
+        $json_encode = post_curl(API_CALL_PATH.'complaint/getComplaintDetail', $this->input->post(), $this->curl);
+
+        $json_decode = json_decode($json_encode);
+        if(count($json_decode->result) > 0) {
+            $data['ComplaintDetail'] = $json_decode;
+        }
+        
+        $json_encode = post_curl(API_CALL_PATH.'complaint/getComplaintHistory', $this->input->post(), $this->curl);
+
+        $json_decode = json_decode($json_encode);
+        if(count($json_decode->result) > 0) {
+            $data['ComplaintHistory'] = $json_decode;
+        }
+
+        // echo '<pre>';
+        // print_r($data);
+        // echo '</pre>';
+        
+        $this->load->view('complaint/complaintViewDetail',$data);
+    }
+
+
+
     public function mycomplaint() {
         $data = array();
       

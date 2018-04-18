@@ -14,7 +14,7 @@ class Suggestion_Model extends CI_Model {
         $this->suggestionHistoryAttachmentTbl   = 'SuggestionHistoryAttachment';
     }
 
-
+    // Generate Suggestion Unique Id
     public function generateSuggestionUniqueId() {
         $SuggestionUniqueId = "S".mt_rand().time();
         $this->db->select('SuggestionUniqueId');
@@ -28,7 +28,7 @@ class Suggestion_Model extends CI_Model {
         return $SuggestionUniqueId;
     }
 
-
+    // Save My Suggestion
     public function saveMySuggestion($insertData) {
         $this->db->insert($this->suggestionTbl, $insertData);
 
@@ -37,7 +37,16 @@ class Suggestion_Model extends CI_Model {
         return $suggestion_id;
     }
 
+    // Save my Suggestion History
+    public function saveMySuggestionHistory($insertData) {
+        $this->db->insert($this->suggestionHistoryTbl, $insertData);
 
+        $suggestion_history_id = $this->db->insert_id();
+
+        return $suggestion_history_id;
+    }
+    
+    // Assign Suggestion To leader or Sub Leader
     public function assignSuggestionToLeaderSubLeader($SuggestionId, $UserProfileId, $AssignedTo) {
         $insertData = array(
                             'SuggestionId'      => $SuggestionId,
@@ -49,7 +58,7 @@ class Suggestion_Model extends CI_Model {
         return true;
     }
 
-
+    // Save my suggestion attachment
     public function saveMySuggestionAttachment($SuggestionId, $UserProfileId, $suggestion_attachment) {
         $j = 0;
         for($i = 0; $i < count($suggestion_attachment['name']); $i++) {
@@ -103,7 +112,60 @@ class Suggestion_Model extends CI_Model {
         return true;
     }
 
+    // Save My Suggestion History Attachment
+    public function saveMySuggestionHistoryAttachment($SuggestionHistoryId, $UserProfileId, $suggestion_history_attachment) {
+        $j = 0;
+        for($i = 0; $i < count($suggestion_history_attachment['name']); $i++) {
 
+            $upload_file_name = $suggestion_history_attachment['name'][$i];
+            
+            if($upload_file_name != '') {
+
+                $AttachmentTypeId = $this->getAttachmentTypeId($upload_file_name);
+
+                $AttachmentFile = date('YmdHisA').'-'.time().'-SUGGESTION-HISTORY-'.mt_rand().'.'.end(explode('.', $upload_file_name));
+
+                if($AttachmentTypeId == 1) {
+                    $path = SUGGESTION_IMAGE_DIR;
+                } else if($AttachmentTypeId == 2) {
+                    $path = SUGGESTION_VIDEO_DIR;
+                } else if($AttachmentTypeId == 4) {
+                    $path = SUGGESTION_AUDIO_DIR;
+                } else {
+                    $path = SUGGESTION_DOC_DIR;
+                }
+                $path = $path.$AttachmentFile;
+                $source = $suggestion_history_attachment['tmp_name'][$i];
+
+                $upload_result = uploadFileOnServer($source, $path);
+
+                $AttachmentThumb = '';
+                if($_FILES['thumb']['name'][$i] != '') {
+                    $AttachmentThumb = date('YmdHisA').'-'.time().'-SUGGESTION-HISTORY-THUMB-'.mt_rand().'.'.end(explode('.', $_FILES['thumb']['name'][$i]));
+                    $path = SUGGESTION_IMAGE_DIR.$AttachmentThumb;
+                    $source = $_FILES['thumb']['tmp_name'][$i];
+
+                    $upload_result = uploadFileOnServer($source, $path);
+                }
+
+                $insertData = array(
+                                    'SuggestionHistoryId'    => $SuggestionHistoryId,
+                                    'AttachmentTypeId'      => $AttachmentTypeId,
+                                    'AttachmentFile'        => $AttachmentFile,
+                                    'AttachmentOrginalFile' => $upload_file_name,
+                                    'AttachmentThumb'       => $AttachmentThumb,
+                                    'AttachmentOrder'       => $j,
+                                    'AttachmentStatus'      => 1,
+                                    'AddedBy'               => $UserProfileId,
+                                    'AddedOn'               => date('Y-m-d H:i:s'),
+                                    );
+                $this->db->insert($this->suggestionHistoryAttachmentTbl, $insertData);
+            }
+        }
+        return true;
+    }
+
+    // Get Attachment Type id
     public function getAttachmentTypeId($file_name) {
         $photo_file_array = array('jpg', 'jpeg', 'bmp', 'png');
         $doc_file_array = array('doc', 'docx', 'xls', 'pdf', 'txt');
@@ -125,7 +187,7 @@ class Suggestion_Model extends CI_Model {
         return $AttachmentTypeId;
     }
 
-
+    // Validate Attachment Extension
     public function validateAttachmentExtension($extension) {
         $query = $this->db->query("SELECT AttachmentTypeId FROM ".$this->attachmentTypeTbl." 
                                                         WHERE 
@@ -139,7 +201,7 @@ class Suggestion_Model extends CI_Model {
         }
     }
 
-
+    // Get My All Suggestion
     public function getMyAllSuggestion($UserProfileId) {
         $suggestions = array();
         if(isset($UserProfileId) && $UserProfileId > 0) {
@@ -157,7 +219,7 @@ class Suggestion_Model extends CI_Model {
         return $suggestions;
     }
 
-
+    // Get All Assigned Suggestion To me
     public function getAllAssignedSuggestionToMe($UserProfileId) {
         $suggestions = array();
         if(isset($UserProfileId) && $UserProfileId > 0) {
@@ -178,7 +240,23 @@ class Suggestion_Model extends CI_Model {
         return $suggestions;
     }
 
-    
+    // Get Suggestion Detail By Unique Id
+    public function getSuggestionDetailByUniqueId($SuggestionUniqueId) {
+        $suggestion_detail = array();
+        if(isset($SuggestionUniqueId) && $SuggestionUniqueId != '') {
+
+            $query = $this->db->query("SELECT * FROM $this->suggestionTbl WHERE SuggestionUniqueId = '".$SuggestionUniqueId."'");
+
+            $res = $query->row_array();
+
+            $suggestion_detail = $this->returnSuggestionDetail($res);
+        } else {
+            $suggestion_detail = array();
+        }
+        return $suggestion_detail;
+    }
+
+    // Get Suggestion Detail
     public function getSuggestionDetail($SuggestionId) {
         $suggestion_detail = array();
         if(isset($SuggestionId) && $SuggestionId > 0) {
@@ -194,7 +272,7 @@ class Suggestion_Model extends CI_Model {
         return $suggestion_detail;
     }
 
-    
+    // Return Suggestion Detail
     public function returnSuggestionDetail($res) {
         $SuggestionId           = $res['SuggestionId'];
         $SuggestionUniqueId     = $res['SuggestionUniqueId'];
@@ -215,6 +293,7 @@ class Suggestion_Model extends CI_Model {
 
         $SuggestionProfile       = $this->User_Model->getUserProfileWithUserInformation($AddedBy);
         $SuggestionAttachment    = $this->getSuggestionAttachment($SuggestionId);
+        $CountSuggestionHistory  = $this->getCountSuggestionHistory($SuggestionId);
 
         $user_data_array = array(
                                 "SuggestionId"              => $SuggestionId,
@@ -234,12 +313,12 @@ class Suggestion_Model extends CI_Model {
                                 "UpdatedOnTime"             => $res['UpdatedOn'],
                                 "SuggestionProfile"         => $SuggestionProfile,
                                 "SuggestionAttachment"      => $SuggestionAttachment,
+                                "CountSuggestionHistory"    => $CountSuggestionHistory,
                                 );
         return $user_data_array;
     }
 
-
-
+    // Get Suggestion Attachment
     public function getSuggestionAttachment($SuggestionId) {
         
         $SuggestionAttachment = array();
@@ -289,6 +368,139 @@ class Suggestion_Model extends CI_Model {
 
         return $SuggestionAttachment;
     }
-    
+
+
+    // Start Count Suggestion History
+    public function getCountSuggestionHistory($SuggestionId) {
+        $count_suggestion = 0;
+        if(isset($SuggestionId) && $SuggestionId > 0) {
+
+            $query = $this->db->query("SELECT SuggestionHistoryId FROM $this->suggestionHistoryTbl WHERE SuggestionId = '".$SuggestionId."' ORDER BY AddedOn DESC");
+
+            $count_suggestion = $query->num_rows();
+        }
+        return $count_suggestion;
+    }
+
+    // Start Get All Suggestion History
+    public function getSuggestionHistory($SuggestionId) {
+        $suggestion_history_detail = array();
+        if(isset($SuggestionId) && $SuggestionId > 0) {
+
+            $query = $this->db->query("SELECT SuggestionHistoryId FROM $this->suggestionHistoryTbl WHERE SuggestionId = '".$SuggestionId."' ORDER BY AddedOn DESC");
+
+            $res = $query->result_array();
+            foreach($res AS $key => $result) {
+                $suggestion_history_detail[] = $this->getSuggestionHistoryDetail($result['SuggestionHistoryId']);
+            }
+
+        } else {
+            $suggestion_history_detail = array();
+        }
+        return $suggestion_history_detail;
+    }
+
+    // Start Get Suggestion History Detail
+    public function getSuggestionHistoryDetail($SuggestionHistoryId) {
+        $suggestion_history_detail = array();
+        if(isset($SuggestionHistoryId) && $SuggestionHistoryId > 0) {
+
+            $query = $this->db->query("SELECT * FROM $this->suggestionHistoryTbl WHERE SuggestionHistoryId = '".$SuggestionHistoryId."'");
+
+            $res = $query->row_array();
+            
+            $suggestion_history_detail = $this->returnSuggestionHistoryDetail($res);
+
+        } else {
+            $suggestion_history_detail = array();
+        }
+        return $suggestion_history_detail;
+    }
+
+    // Return Suggestion Histpory Detail with Attachement and history history
+    public function returnSuggestionHistoryDetail($res) {
+        $SuggestionHistoryId         = $res['SuggestionHistoryId'];
+        $SuggestionId                = $res['SuggestionId'];
+        $ParentSuggestionHistoryId   = $res['ParentSuggestionHistoryId'];
+        $AddedBy                    = $res['AddedBy'];
+        
+        $HistoryTitle           = (($res['HistoryTitle'] != NULL) ? $res['HistoryTitle'] : "");
+        $HistoryDescription     = (($res['HistoryDescription'] != NULL) ? $res['HistoryDescription'] : "");
+        $HistoryStatus          = $res['HistoryStatus'];
+
+        $AddedOn                = return_time_ago($res['AddedOn']);
+
+        $SuggestionHistoryProfile       = $this->User_Model->getUserProfileWithUserInformation($AddedBy);
+        $SuggestionHistoryAttachment    = $this->getSuggestionHistoryAttachment($SuggestionHistoryId);
+
+        $SuggestionHistoryHistory       = $this->getSuggestionHistoryDetail($ParentSuggestionHistoryId);
+
+        $data_array = array(
+                            "SuggestionHistoryId"           => $SuggestionHistoryId,
+                            "SuggestionId"                  => $SuggestionId,
+                            "ParentSuggestionHistoryId"     => $ParentSuggestionHistoryId,
+                            "HistoryTitle"                  => $HistoryTitle,
+                            "HistoryDescription"            => $HistoryDescription,
+                            "HistoryStatus"                 => $HistoryStatus,
+                            "AddedOn"                       => $AddedOn,
+                            "AddedOnTime"                   => $res['AddedOn'],
+                            "SuggestionHistoryProfile"      => $SuggestionHistoryProfile,
+                            "SuggestionHistoryAttachment"   => $SuggestionHistoryAttachment,
+                            "SuggestionHistoryHistory"      => $SuggestionHistoryHistory,
+                            );
+        return $data_array;
+    }
+
+    // get Suggestion History Attachments
+    public function getSuggestionHistoryAttachment($SuggestionHistoryId) {
+        
+        $SuggestionHistoryAttachment = array();
+
+        $query = $this->db->query("SELECT sha.*, at.TypeName 
+                                            FROM ".$this->suggestionHistoryAttachmentTbl." AS sha 
+                                            LEFT JOIN ".$this->attachmentTypeTbl." at ON sha.AttachmentTypeId = at.AttachmentTypeId
+                                            WHERE 
+                                                sha.`SuggestionHistoryId` = '".$SuggestionHistoryId."'");
+
+        $res = $query->result_array();
+
+
+        foreach($res AS $key => $result) {
+            $AttachmentTypeId = $result['AttachmentTypeId'];
+
+            $AddedBy = $result['AddedBy'];
+            $AttachmentProfile = $this->User_Model->getUserProfileWithUserInformation($AddedBy);
+
+            if($AttachmentTypeId == 1) {
+                $path = SUGGESTION_IMAGE_URL;
+            } else if($AttachmentTypeId == 2) {
+                $path = SUGGESTION_VIDEO_URL;
+            } else if($AttachmentTypeId == 4) {
+                $path = SUGGESTION_AUDIO_URL;
+            } else {
+                $path = SUGGESTION_DOC_URL;
+            }
+
+            $AttachmentThumb = ($result['AttachmentThumb'] != '') ? SUGGESTION_IMAGE_URL.$result['AttachmentThumb'] : '';
+
+            $SuggestionHistoryAttachment[] = array(
+                                                'SuggestionHistoryAttachmentId'     => $result['SuggestionHistoryAttachmentId'],
+                                                'SuggestionHistoryId'               => $result['SuggestionHistoryId'],
+                                                'AttachmentTypeId'                  => $result['AttachmentTypeId'],
+                                                'AttachmentType'                    => $result['TypeName'],
+                                                'AttachmentFile'                    => $path.$result['AttachmentFile'],
+                                                'AttachmentThumb'                   => $AttachmentThumb,
+                                                'AttachmentOrginalFile'             => $result['AttachmentOrginalFile'],
+                                                'AttachmentOrder'                   => $result['AttachmentOrder'],
+                                                'AttachmentStatus'                  => $result['AttachmentStatus'],
+                                                'AddedBy'                           => $AttachmentProfile,
+                                                'AddedOn'                           => return_time_ago($result['AddedOn']),
+                                                'AddedOnTime'                       => ($result['AddedOn']),
+                                                );
+        }
+
+        return $SuggestionHistoryAttachment;
+    }
+
 
 }

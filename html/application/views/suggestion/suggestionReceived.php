@@ -85,6 +85,7 @@
                                                     <th scope="col">Title<span class="column-sorter"></span></th>
                                                     <th scope="col">Description<span class="column-sorter"></span></th>
                                                     <th scope="col">Applicant Name<span class="column-sorter"></span></th>
+                                                    <th scope="col">Reply<span class="column-sorter"></span></th>
                                                     <th scope="col">Posted On<span class="column-sorter"></span></th>
                                                     <th scope="col">Status<span class="column-sorter"></span></th>
                                                 </tr>
@@ -93,13 +94,21 @@
                                                 if(count($result) > 0) { ?>
                                                 
                                                 <?php foreach($result AS $suggestion) { ?>
-                                                    <?php $SuggestionStatus  = (($suggestion->SuggestionStatus == 1) ? 'Active' : 'In-Active'); ?>
-                                                    <?php $AddedOn    = (($suggestion->AddedOn == '0000-00-00 00:00:00') ? '' : date('d-M-Y h:i A', strtotime($suggestion->AddedOn))); ?>
+                                                    <?php
+                                                        $SuggestionStatus  = (($suggestion->SuggestionStatus == 1) ? 'Active' : 'In-Active'); 
+                                                        $AddedOn    = (($suggestion->AddedOn == '0000-00-00 00:00:00') ? '' : date('d-M-Y h:i A', strtotime($suggestion->AddedOn))); 
+                                                        $CountSuggestionHistory = $suggestion->CountSuggestionHistory;
+                                                        $displayCountSuggestionHistory = 'No';
+                                                        if($CountSuggestionHistory > 0) {
+                                                            $displayCountSuggestionHistory = 'Yes ('.$CountSuggestionHistory.')';
+                                                        }
+                                                    ?>
                                                     <tr>
                                                         <td><input type="checkbox"></td>
-                                                        <td><?php echo $suggestion->SuggestionSubject; ?></td>
+                                                        <td><a data-target="#modal-stackable" data-toggle="modal" href="javascript:void(0);" onClick="return displaySuggestionDitail('<?php echo $suggestion->SuggestionUniqueId; ?>');" title="View Suggestion Detail"><?php echo $suggestion->SuggestionSubject; ?></a></td>
                                                         <td><?php echo $suggestion->SuggestionDescription; ?></td>
                                                         <td><?php echo $suggestion->ApplicantName; ?></td>
+                                                        <td><a href="<?=base_url();?>suggestion/suggestionTimeline/<?php echo $suggestion->SuggestionUniqueId; ?>"><?php echo $displayCountSuggestionHistory; ?></a></td>
                                                         <td><?php echo $suggestion->AddedOn; ?></td>
                                                         <td><?php echo $SuggestionStatus; ?></td>
                                                     </tr>
@@ -124,6 +133,16 @@
 
         <!--END FOOTER--><!--END PAGE WRAPPER--></div>
 </div>
+
+<div id="modal-stackable" tabindex="-1" role="dialog" aria-labelledby="modal-stackable-label" aria-hidden="true" class="modal fade" style="display: none;">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            
+        </div>
+    </div>
+</div>
+
+
 <script src="<?php echo base_url(); ?>assets/js/sweetalert-dev.js"></script> 
 <script src="<?php echo base_url(); ?>assets/js/sweetalert.min.js"></script> 
 
@@ -167,6 +186,20 @@
 <script src="<?=base_url();?>assets/vendors/DataTables/media/js/dataTables.bootstrap.js"></script>
 <script src="<?=base_url();?>assets/vendors/DataTables/extensions/TableTools/js/dataTables.tableTools.min.js"></script>
 <script src="<?=base_url();?>assets/js/table-datatables.js"></script>
+
+<script>
+    function displaySuggestionDitail(suggestion_unique_id) {
+
+        $.post("<?php echo base_url(); ?>suggestion/suggestionViewDetail/"+suggestion_unique_id, {'display': 'Y'},
+            function (data, status) {
+                if(data != '') {
+                    $('.modal-content').html(data);
+                } else {
+                    $('.modal-content').html(data);
+                }
+            });
+    }
+</script>
 
 </body>
 </html>

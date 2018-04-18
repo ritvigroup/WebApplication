@@ -20,6 +20,53 @@ class Suggestion extends CI_Controller {
         }
        
 
+    }
+
+    public function suggestionHistoryForm() {
+        $data = array();
+      
+        if (!$this->input->is_ajax_request()) {
+           exit('Error');
+        }
+        $_POST['user_profile_id'] = $this->session->userdata('LeaderProfileId');
+        
+        $this->load->view('suggestion/suggestionHistoryForm',$data);
+    }
+
+
+    public function suggestionViewDetail() {
+        $data = array();
+      
+        if (!$this->input->is_ajax_request()) {
+           exit('Error');
+        }
+        $_POST['user_profile_id'] = $this->session->userdata('LeaderProfileId');
+        $_POST['suggestion_unique_id'] = $this->uri->segment(3);
+        $json_encode = post_curl(API_CALL_PATH.'suggestion/getSuggestionDetailByUniqueId', $this->input->post(), $this->curl);
+
+        $json_decode = json_decode($json_encode);
+
+        $_POST['suggestion_id'] = $json_decode->result->SuggestionId;
+
+        $json_encode = post_curl(API_CALL_PATH.'suggestion/getSuggestionDetail', $this->input->post(), $this->curl);
+
+        $json_decode = json_decode($json_encode);
+        if(count($json_decode->result) > 0) {
+            $data['SuggestionDetail'] = $json_decode;
+        }
+        
+        $json_encode = post_curl(API_CALL_PATH.'suggestion/getSuggestionHistory', $this->input->post(), $this->curl);
+
+        $json_decode = json_decode($json_encode);
+        if(count($json_decode->result) > 0) {
+            $data['SuggestionHistory'] = $json_decode;
+        }
+
+        // echo '<pre>';
+        // print_r($data);
+        // echo '</pre>';
+        
+        $this->load->view('suggestion/suggestionViewDetail',$data);
     }  
     
 
@@ -69,6 +116,57 @@ class Suggestion extends CI_Controller {
             return false;
         }
         $this->load->view('suggestion/new',$data);
+    }
+
+    public function suggestionTimeline() {
+        $data = array();
+      
+        $_POST['user_profile_id'] = $this->session->userdata('LeaderProfileId');
+
+        $_POST['suggestion_unique_id'] = $this->uri->segment(3);
+        $json_encode = post_curl(API_CALL_PATH.'suggestion/getSuggestionDetailByUniqueId', $this->input->post(), $this->curl);
+
+        $json_decode = json_decode($json_encode);
+
+        $_POST['suggestion_id'] = $json_decode->result->SuggestionId;
+
+        $json_encode = post_curl(API_CALL_PATH.'suggestion/getSuggestionDetail', $this->input->post(), $this->curl);
+
+        $json_decode = json_decode($json_encode);
+        if(count($json_decode->result) > 0) {
+            $data['SuggestionDetail'] = $json_decode;
+        }
+        
+        $json_encode = post_curl(API_CALL_PATH.'suggestion/getSuggestionHistory', $this->input->post(), $this->curl);
+
+        $json_decode = json_decode($json_encode);
+        if(count($json_decode->result) > 0) {
+            $data['SuggestionHistory'] = $json_decode;
+        }
+
+        // Save Suggestion History
+        if($this->input->post('title') != '') {
+
+            $post_data = $this->input->post();
+
+
+            for($i = 0; $i < count($_FILES['file']['name']); $i++) {
+                if($_FILES['file']['name'][$i] != '') {
+
+                    //$post_data = array_merge($post_data, array('file['.$i.']' => '@'.($_FILES['file']['tmp_name'][$i]).''));
+                    $post_data = array_merge($post_data, array('file['.$i.']' => getCurlValue($_FILES['file']['tmp_name'][$i], $_FILES['file']['type'][$i], $_FILES['file']['name'][$i])));
+                }
+            }
+            $json_decode = post_curl_with_files(API_CALL_PATH.'suggestion/saveSuggestionHistory', $post_data, $this->curl);
+
+            header('Content-type: application/json');
+
+            echo $json_decode;
+
+            return false;
+        }
+        
+        $this->load->view('suggestion/suggestionTimeline',$data);
     }
 
 }
