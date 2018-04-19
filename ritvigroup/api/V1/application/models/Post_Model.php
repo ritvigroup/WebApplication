@@ -63,11 +63,21 @@ class Post_Model extends CI_Model {
 
                 $upload_result = uploadFileOnServer($source, $path);
 
+                $AttachmentThumb = '';
+                if($_FILES['thumb']['name'][$i] != '') {
+                    $AttachmentThumb = date('YmdHisA').'-'.time().'-POST-THUMB-'.mt_rand().'.'.end(explode('.', $_FILES['thumb']['name'][$i]));
+                    $path = POST_IMAGE_DIR.$AttachmentThumb;
+                    $source = $_FILES['thumb']['tmp_name'][$i];
+
+                    $upload_result = uploadFileOnServer($source, $path);
+                }
+
                 $insertData = array(
                                     'PostId'                => $PostId,
                                     'AttachmentTypeId'      => $AttachmentTypeId,
                                     'AttachmentFile'        => $AttachmentFile,
                                     'AttachmentOrginalFile' => $upload_file_name,
+                                    'AttachmentThumb'       => $AttachmentThumb,
                                     'AttachmentOrder'       => $j,
                                     'AttachmentStatus'      => 1,
                                     'AddedBy'               => $UserProfileId,
@@ -251,6 +261,11 @@ class Post_Model extends CI_Model {
             } else {
                 $path = POST_DOC_URL;
             }
+
+            $AttachmentThumb = $result['AttachmentThumb'];
+            if($AttachmentThumb != '') {
+                $AttachmentThumb = POST_IMAGE_URL.$AttachmentThumb;
+            }
             $PostAttachment[] = array(
                                 'PostAttachmentId'          => $result['PostAttachmentId'],
                                 'PostId'                    => $result['PostId'],
@@ -258,6 +273,7 @@ class Post_Model extends CI_Model {
                                 'AttachmentType'            => $result['TypeName'],
                                 'AttachmentFile'            => $path.$result['AttachmentFile'],
                                 'AttachmentOrginalFile'     => $result['AttachmentOrginalFile'],
+                                'AttachmentThumb'           => $AttachmentThumb,
                                 'AttachmentOrder'           => $result['AttachmentOrder'],
                                 'AttachmentStatus'          => $result['AttachmentStatus'],
                                 'AddedOn'                   => return_time_ago($result['AddedOn']),

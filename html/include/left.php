@@ -3,7 +3,7 @@
     <div class="sidebar-collapse menu-scroll">
         <ul id="side-menu" class="nav">
             
-            <li class="user-panel">
+            <li class="user-panel" style="padding: 0px;">
                 <?php /*
                 <div class="thumb"><img src="<?php echo $this->session->userdata('UserProfilePic'); ?>"
                                         alt="" class="img-circle"/></div>

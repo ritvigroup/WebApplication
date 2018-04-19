@@ -36,6 +36,8 @@ class Citizen extends CI_Controller {
 
         $UserId             = $this->input->post('user_id');
         $UserProfileId      = $this->input->post('user_profile_id');
+        $start              = (($this->input->post('start') > 0) ? $this->input->post('start') : 0);
+        $end                = (($this->input->post('end') > 0) ? $this->input->post('end') : 10);
 
        
         if($UserId == "") {
@@ -66,7 +68,7 @@ class Citizen extends CI_Controller {
 
             SELECT SuggestionId AS Id, 'Suggestion' AS DataType, AddedOn AS DateAdded FROM `Suggestion` WHERE `SuggestionStatus` = '1' AND `AddedBy` = '".$UserProfileId."'
 
-            ORDER BY DateAdded DESC LIMIT 0,50";
+            ORDER BY DateAdded DESC LIMIT $start,$end";
 
 
             //echo $sql;die;
