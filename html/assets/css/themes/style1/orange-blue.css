@@ -1174,7 +1174,7 @@ hr {
   .navbar-static-side {
     z-index: 1;
     position: absolute;
-    width: 200px;
+    width: 155px;
   }
 }
 .right-sidebar #topbar .navbar-header {
