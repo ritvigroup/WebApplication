@@ -1,5 +1,5 @@
 <?php $request_uri = explode("/", $_SERVER['REQUEST_URI']); ?>
-<nav id="sidebar" role="navigation" class="navbar-default navbar-static-side">
+<nav id="sidebar" role="navigation" class="navbar-default navbar-static-side" style="width: 155px;">
     <div class="sidebar-collapse menu-scroll">
         <ul id="side-menu" class="nav">
             

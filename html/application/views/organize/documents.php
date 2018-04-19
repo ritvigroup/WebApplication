@@ -115,6 +115,30 @@
                             </div>
 
                             <div class="portlet-body">
+
+                                <div class="row"> 
+                                        
+                                       <div class="col-md-1"> <i class="fa fa-folder fa-4x" aria-hidden="true" style="color: #e5cb5c;"></i><br>Folder</div>
+                                        
+                                        <div class="col-md-1"><i class="fa fa-folder fa-4x" aria-hidden="true" style="color: #e5cb5c;"></i><br>Folder</div>
+                                        <div class="col-md-1"><i class="fa fa-folder fa-4x" aria-hidden="true" style="color: #e5cb5c;"></i><br>Folder</div>
+
+
+                                        <div class="col-md-1"><i class="fa fa-folder fa-4x" aria-hidden="true" style="color: #e5cb5c;"></i><br>Folder</div>
+                                        <div class="col-md-1"><i class="fa fa-folder fa-4x" aria-hidden="true" style="color: #e5cb5c;"></i><br>Folder</div>
+                                        <div class="col-md-1"><i class="fa fa-folder fa-4x" aria-hidden="true" style="color: #e5cb5c;"></i><br>Folder</div>
+
+
+                                        <div class="col-md-1"><i class="fa fa fa-folder fa-4x" aria-hidden="true" style="color: #e5cb5c;"></i><br>Folder</div>
+                                        
+                                        <div class="col-md-1"><i class="fa fa fa-folder fa-4x" aria-hidden="true" style="color: #e5cb5c;"></i><br>Folder</div>
+                                        <div class="col-md-1"><i class="fa fa-folder fa-4x" aria-hidden="true" style="color: #e5cb5c;"></i><br>Folder</div>
+
+
+                                        <div class="col-md-1"><i class="fa fa fa-folder fa-4x" aria-hidden="true" style="color: #e5cb5c;"></i><br>Folder</div>
+                                        <div class="col-md-1"><i class="fa fa fa-folder fa-4x" aria-hidden="true" style="color: #e5cb5c;"></i><br>Folder</div>
+                                        <div class="col-md-1"><i class="fa fa-folder fa-4x" aria-hidden="true" style="color: #e5cb5c;"></i><br>Folder</div>
+                                </div>
                                 <h3 class="mbxl">Documents</h3>
                                 <div class="table-responsive">
                                     <table id="user-last-logged-table"
@@ -201,11 +225,6 @@
 <script src="<?=base_url();?>assets/js/form-components.js"></script>
 
 
-
-<script src="<?=base_url();?>assets/vendors/jquery-validate/jquery.validate.min.js"></script>
-<script src="<?=base_url();?>assets/vendors/jquery-steps/js/jquery.steps.min.js"></script>
-<script src="<?=base_url();?>assets/vendors/jquery-bootstrap-wizard/jquery.bootstrap.wizard.min.js"></script>
-<script src="<?=base_url();?>assets/js/form-wizard.js"></script>
 
 <script>
 

@@ -185,44 +185,9 @@
                             class="fa fa-search"></i></a></span></div>
                 </form>
                 <ul class="nav navbar navbar-top-links navbar-right mbn">
-                    <?php /*
-                    <li class="dropdown"><a data-hover="dropdown" href="#" class="dropdown-toggle"><i
-                            class="fa fa-bell fa-fw"></i><span class="badge badge-green">3</span></a>
-                        <ul class="dropdown-menu dropdown-alerts">
-                            <li><p>You have 14 new notifications</p></li>
-                            <li>
-                                <div class="dropdown-slimscroll">
-                                    <ul>
-                                        <li><a href="extra-user-list.html" target="_blank"><span
-                                                class="label label-blue"><i class="fa fa-comment"></i></span>New Comment<span
-                                                class="pull-right text-muted small">4 mins ago</span></a></li>
-                                        <li><a href="extra-user-list.html" target="_blank"><span
-                                                class="label label-violet"><i class="fa fa-twitter"></i></span>3 New
-                                            Followers<span class="pull-right text-muted small">12 mins ago</span></a>
-                                        </li>
-                                        <li><a href="extra-user-list.html" target="_blank"><span
-                                                class="label label-pink"><i class="fa fa-envelope"></i></span>Message
-                                            Sent<span class="pull-right text-muted small">15 mins ago</span></a></li>
-                                        <li><a href="extra-user-list.html" target="_blank"><span
-                                                class="label label-green"><i class="fa fa-tasks"></i></span>New
-                                            Task<span class="pull-right text-muted small">18 mins ago</span></a></li>
-                                        <li><a href="extra-user-list.html" target="_blank"><span
-                                                class="label label-yellow"><i class="fa fa-upload"></i></span>Server
-                                            Rebooted<span class="pull-right text-muted small">19 mins ago</span></a>
-                                        </li>
-                                        <li><a href="extra-user-list.html" target="_blank"><span
-                                                class="label label-green"><i class="fa fa-tasks"></i></span>New
-                                            Task<span class="pull-right text-muted small">2 days ago</span></a></li>
-                                        <li><a href="extra-user-list.html" target="_blank"><span
-                                                class="label label-pink"><i class="fa fa-envelope"></i></span>Message
-                                            Sent<span class="pull-right text-muted small">5 days ago</span></a></li>
-                                    </ul>
-                                </div>
-                            </li>
-                            <li class="last"><a href="extra-user-list.html" class="text-right">See all alerts</a></li>
-                        </ul>
-                    </li>
-                    <li class="dropdown"><a data-hover="dropdown" href="#" class="dropdown-toggle"><i
+                    
+                    
+                    <?php /*<li class="dropdown"><a data-hover="dropdown" href="#" class="dropdown-toggle"><i
                             class="fa fa-envelope fa-fw"></i><span class="badge badge-orange">7</span></a>
                         <ul class="dropdown-menu dropdown-messages">
                             <li><p>You have 14 new messages</p></li>
@@ -320,6 +285,10 @@
                         </ul>
                     </li>
                     */ ?>
+                  <li style="color: #fff; border-right:1px solid #fff; padding-right: 10px; float: left; padding-top: 10px;">Free Edition  <br><span style="color: skyblue; font-size: 12px;">Upgrade</span></li>
+
+
+                 
 
                     <li class="dropdown"><a data-hover="dropdown" href="#" class="dropdown-toggle"><i
                             class="fa fa-plus-circle fa-2x" style="font-size: 20px;"></i><span class="badge badge-yellow"></span></a>
@@ -343,26 +312,49 @@
                         </ul>
                     </li>
 
-                    <li class="dropdown topbar-user"><a data-hover="dropdown" href="#" class="dropdown-toggle"><img
-                            src="<?php echo $this->session->userdata('UserProfilePic'); ?>" alt=""
-                            class="img-responsive img-circle"/>&nbsp;<span class="hidden-xs"><?php echo $this->session->userdata('UserName'); ?> </span>&nbsp;<span
-                            class="caret"></span></a>
+                        <li id="topbar-chat" class="hidden-xs">
+                        <a href="javascript:void(0)" class="btn-chat"><i
+                            class="fa fa-comments"></i><span class="badge badge-info"></span></a></li>
 
-                        <ul class="dropdown-menu dropdown-user pull-right">
-                            <li><a href="<?=base_url();?>profile/profile"><i class="fa fa-user"></i>My Profile</a></li>
-                            <li><a href="<?=base_url();?>leader/calendar"><i class="fa fa-calendar"></i>My Calendar</a></li>
-                            <li><a href="<?=base_url();?>leader/myinbox"><i class="fa fa-envelope"></i>My Inbox<span
-                                    class="badge badge-danger">3</span></a></li>
-                            <li><a href="#"><i class="fa fa-tasks"></i>My Tasks<span
-                                    class="badge badge-success">7</span></a></li>
-                            <li class="divider"></li>
-                            <li><a href="<?=base_url();?>leader/lock-screen"><i class="fa fa-lock"></i>Lock Screen</a></li>
-                            <li><a href="<?=base_url();?>leader/logout"><i class="fa fa-key"></i>Log Out</a></li>
+   <li class="dropdown"><a data-hover="dropdown" href="#" class="dropdown-toggle"><i
+                            class="fa fa-bell fa-fw"></i><span class="badge badge-green"></span></a>
+                        <ul class="dropdown-menu dropdown-alerts">
+                            <li><p>You have 14 new notifications</p></li>
+                            <li>
+                                <div class="dropdown-slimscroll">
+                                    <ul>
+                                        <li><a href="extra-user-list.html" target="_blank"><span
+                                                class="label label-blue"><i class="fa fa-comment"></i></span>New Comment<span
+                                                class="pull-right text-muted small">4 mins ago</span></a></li>
+                                        <li><a href="extra-user-list.html" target="_blank"><span
+                                                class="label label-violet"><i class="fa fa-twitter"></i></span>3 New
+                                            Followers<span class="pull-right text-muted small">12 mins ago</span></a>
+                                        </li>
+                                        <li><a href="extra-user-list.html" target="_blank"><span
+                                                class="label label-pink"><i class="fa fa-envelope"></i></span>Message
+                                            Sent<span class="pull-right text-muted small">15 mins ago</span></a></li>
+                                        <li><a href="extra-user-list.html" target="_blank"><span
+                                                class="label label-green"><i class="fa fa-tasks"></i></span>New
+                                            Task<span class="pull-right text-muted small">18 mins ago</span></a></li>
+                                        <li><a href="extra-user-list.html" target="_blank"><span
+                                                class="label label-yellow"><i class="fa fa-upload"></i></span>Server
+                                            Rebooted<span class="pull-right text-muted small">19 mins ago</span></a>
+                                        </li>
+                                        <li><a href="extra-user-list.html" target="_blank"><span
+                                                class="label label-green"><i class="fa fa-tasks"></i></span>New
+                                            Task<span class="pull-right text-muted small">2 days ago</span></a></li>
+                                        <li><a href="extra-user-list.html" target="_blank"><span
+                                                class="label label-pink"><i class="fa fa-envelope"></i></span>Message
+                                            Sent<span class="pull-right text-muted small">5 days ago</span></a></li>
+                                    </ul>
+                                </div>
+                            </li>
+                            <li class="last"><a href="extra-user-list.html" class="text-right">See all alerts</a></li>
                         </ul>
                     </li>
-                    <?php /*
-                    <li id="topbar-chat" class="hidden-xs"><a href="javascript:void(0)" class="btn-chat"><i
-                            class="fa fa-comments"></i><span class="badge badge-info">3</span></a></li>
+              
+                    <?php /**/ ?>
+                
                     <li class="dropdown hidden-xs"><!--BEGIN THEME SETTING--><a id="theme-setting" href="javascript:;"
                                                                                 data-hover="dropdown" data-step="1"
                                                                                 data-intro="&lt;b&gt;Header&lt;/b&gt;, &lt;b&gt;sidebar&lt;/b&gt;, &lt;b&gt;border style&lt;/b&gt; and &lt;b&gt;color&lt;/b&gt;, all of them can change for you to create the best"
@@ -432,7 +424,29 @@
                         </ul>
                         <!--END THEME SETTING-->
                     </li>
-                    */ ?>
+
+
+
+
+                    <li class="dropdown topbar-user"><a data-hover="dropdown" href="#" class="dropdown-toggle"><img
+                            src="<?php echo $this->session->userdata('UserProfilePic'); ?>" alt=""
+                            class="img-responsive img-circle"/>&nbsp;<span class="hidden-xs"><?php  $this->session->userdata('UserName'); ?> </span>&nbsp;<span
+                            class="caret"></span></a>
+
+                        <ul class="dropdown-menu dropdown-user pull-right">
+                            <li><a href="<?=base_url();?>profile/profile"><i class="fa fa-user"></i>My Profile</a></li>
+                            <li><a href="<?=base_url();?>leader/calendar"><i class="fa fa-calendar"></i>My Calendar</a></li>
+                            <li><a href="<?=base_url();?>leader/myinbox"><i class="fa fa-envelope"></i>My Inbox<span
+                                    class="badge badge-danger">3</span></a></li>
+                            <li><a href="#"><i class="fa fa-tasks"></i>My Tasks<span
+                                    class="badge badge-success">7</span></a></li>
+                            <li class="divider"></li>
+                            <li><a href="<?=base_url();?>leader/lock-screen"><i class="fa fa-lock"></i>Lock Screen</a></li>
+                            <li><a href="<?=base_url();?>leader/logout"><i class="fa fa-key"></i>Log Out</a></li>
+                        </ul>
+                    </li>
+
+                    <?php /**/ ?>
                 </ul>
             </div>
         </nav>

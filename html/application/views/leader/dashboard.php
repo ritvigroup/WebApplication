@@ -69,53 +69,127 @@
             <div class="page-content">
                 <div id="tab-general">
                     <div id="sum_box" class="row mbl">
-                        <div class="col-sm-6 col-md-3">
-                            <div class="panel profit db mbm">
-                                <div class="panel-body"><p class="icon"><i class="icon fa fa-shopping-cart"></i></p><h4
-                                        class="value"><span data-counter="" data-start="10" data-end="50" data-step="1"
-                                                            data-duration="0"></span><span>36</span></h4>
-
-                                    <p class="description">Total Coommunication</p>
-
-                                    <div class="progress progress-sm mbn">
-                                        <div role="progressbar" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100"
-                                             style="width: 80%;" class="progress-bar progress-bar-success"><span
-                                                class="sr-only">80% Complete (success)</span></div>
-                                    </div>
-                                </div>
+                        <div class="col-sm-6 col-md-4">
+                           
+                            <div class="panel panel-white">
+                            <div class="panel-heading">Ordered Lists</div>
+                            <div class="panel-body">
+                                <ol>
+                                    <li>Lorem ipsum dolor sit amet</li>
+                                    <li>Consectetur adipiscing elit</li>
+                                    <li>Integer molestie lorem at massa</li>
+                                    <li>Facilisis in pretium nisl aliquet</li>
+                                    <li>Nulla volutpat aliquam velit</li>
+                                    <li>Faucibus porta lacus fringilla vel</li>
+                                    <li>Aenean sit amet erat nunc</li>
+                                    <li>Eget porttitor lorem</li>
+                                </ol>
                             </div>
                         </div>
-                        <div class="col-sm-6 col-md-3">
-                            <div class="panel income db mbm">
-                                <div class="panel-body"><p class="icon"><i class="icon fa fa-money"></i></p><h4
-                                        class="value"><span>157</span></h4>
-
-                                    <p class="description">Complaint</p>
-
-                                    <div class="progress progress-sm mbn">
-                                        <div role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"
-                                             style="width: 60%;" class="progress-bar progress-bar-info"><span
-                                                class="sr-only">60% Complete (success)</span></div>
-                                    </div>
-                                </div>
+                               
+                            
+                           
+                        </div>
+                        <div class="col-sm-6 col-md-4">
+                          
+                            
+                                      <div class="panel panel-white">
+                            <div class="panel-heading">Unordered Lists</div>
+                            <div class="panel-body">
+                                <ul>
+                                    <li>Lorem ipsum dolor sit amet</li>
+                                    <li>Consectetur adipiscing elit</li>
+                                    <li>Integer molestie lorem at massa</li>
+                                    <li>Facilisis in pretium nisl aliquet</li>
+                                    <li>Nulla volutpat aliquam velit
+                                        <ul>
+                                            <li>Phasellus iaculis neque</li>
+                                            <li>Purus sodales ultricies</li>
+                                            <li>Vestibulum laoreet porttitor sem</li>
+                                            <li>Ac tristique libero volutpat at</li>
+                                        </ul>
+                                    </li>
+                                    <li>Faucibus porta lacus fringilla vel</li>
+                                    <li>Aenean sit amet erat nunc</li>
+                                    <li>Eget porttitor lorem</li>
+                                </ul>
                             </div>
                         </div>
-                        <div class="col-sm-6 col-md-3">
-                            <div class="panel task db mbm">
-                                <div class="panel-body"><p class="icon"><i class="icon fa fa-signal"></i></p><h4
-                                        class="value"><span>17.9</span></h4>
-
-                                    <p class="description">Suggestion</p>
-
-                                    <div class="progress progress-sm mbn">
-                                        <div role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"
-                                             style="width: 50%;" class="progress-bar progress-bar-danger"><span
-                                                class="sr-only">50% Complete (success)</span></div>
-                                    </div>
-                                </div>
+                             
+                          
+                        </div>
+                        <div class="col-sm-6 col-md-4">
+                               <div class="panel panel-white">
+                            <div class="panel-heading">Lists With Font Awesome</div>
+                            <div class="panel-body">
+                                <ul class="list-icon">
+                                    <li>Lorem ipsum dolor sit amet</li>
+                                    <li>Consectetur adipiscing elit</li>
+                                    <li>Integer molestie lorem at massa</li>
+                                    <li>Facilisis in pretium nisl aliquet</li>
+                                    <li>Nulla volutpat aliquam velit</li>
+                                    <li>Faucibus porta lacus fringilla vel</li>
+                                    <li>Aenean sit amet erat nunc</li>
+                                    <li>Eget porttitor lorem</li>
+                                </ul>
                             </div>
                         </div>
-                        <div class="col-sm-6 col-md-3">
+                        </div>
+
+                                   <div class="col-sm-6 col-md-4">
+                             <div class="panel panel-white">
+                            <div class="panel-heading">Unstyled Lists</div>
+                            <div class="panel-body">
+                                <ul class="list-unstyled">
+                                    <li>Lorem ipsum dolor sit amet</li>
+                                    <li>Consectetur adipiscing elit</li>
+                                    <li>Integer molestie lorem at massa</li>
+                                    <li>Facilisis in pretium nisl aliquet</li>
+                                    <li>Nulla volutpat aliquam velit</li>
+                                    <li>Faucibus porta lacus fringilla vel</li>
+                                    <li>Aenean sit amet erat nunc</li>
+                                    <li>Eget porttitor lorem</li>
+                                </ul>
+                            </div>
+                        </div>
+                        </div>
+                        <div class="col-sm-6 col-md-4">
+                               <div class="panel panel-white">
+                            <div class="panel-heading">Inline Lists</div>
+                            <div class="panel-body">
+                                <ol class="list-inline">
+                                    <li>1.Lorem ipsum</li>
+                                    <li>2.Consectetur</li>
+                                    <li>3.Integer</li>
+                                </ol>
+                            </div>
+                        </div>
+                        </div>
+                        <div class="col-sm-6 col-md-4">
+                            <div class="panel panel-white">
+                            <div class="panel-heading">Description Lists</div>
+                            <div class="panel-body">
+                                <dl>
+                                    <dt>Description lists</dt>
+                                    <dd>A description list is perfect for defining terms.</dd>
+                                    <dt>Euismod</dt>
+                                    <dd>Vestibulum id ligula porta felis euismod semper eget lacinia odio sem nec
+                                        elit.
+                                    </dd>
+                                    <dd>Donec id elit non mi porta gravida at eget metus.</dd>
+                                    <dt>Malesuada porta</dt>
+                                    <dd>Etiam porta sem malesuada magna mollis euismod.</dd>
+                                </dl>
+                            </div>
+                        </div>
+                        </div>
+
+                 
+                  
+
+
+
+                  <!--       <div class="col-sm-6 col-md-3">
                             <div class="panel visit db mbm">
                                 <div class="panel-body"><p class="icon"><i class="icon fa fa-group"></i></p><h4
                                         class="value"><span>78,450.00</span></h4>
@@ -129,169 +203,10 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        </div> -->
                     </div>
-                    <div class="row mbl">
-                        <div class="col-lg-8">
-                            
-                            <div class="row">
-                                        <div class="col-md-12">
-                                        <div class="portlet box">
-                                        <div class="portlet-header">
-                                <div class="caption">Recent Communication</div>
-                                <div class="tools">
-                                <div class="row"><div class="col-lg-5  "><div class="btn-group"> <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Complaint<span class="caret"></span></button> <ul class="dropdown-menu"> <li><a href="#" class="dropdown-item">Suggestion</a></li> <li><a href="#" class="dropdown-item">Group Complain</a></li><li><a href="#" class="dropdown-item">Other Complain</a></li>  </ul> </div></div>
-                                <div class="col-lg-5 "><div class="btn-group"> <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Today <span class="caret"></span></button> <ul class="dropdown-menu"> <li><a href="#" class="dropdown-item">Last 2 Days</a></li> <li><a href="#" class="dropdown-item">Last 7 Days</a></li>  </ul> </div></div>
-                                <div class="col-lg-2 no-padding"><i class="fa fa-refresh"></i></div>
-                                                 
-                                                 </div>
-                                                 </div>
-                            </div>
-                            
-                         
-                                 <div class="portlet-body">
-                                 <div id="area-chart-spline" style="width: 100%; height:300px"></div>
-                                  </div>
-                                  </div>
-                                  </div>
-                                        
-                                    </div>
-                        </div>
-                        <div class="col-lg-4">
-                           <div class="portlet box prolet-primary">
-                                <div class="portlet-header">
-                                    <div class="caption ">Campaign
-                                    </div>
-                                    <div class="tools">
-                                <div class="row">
-                                <div class="col-lg-10 "><div class="btn-group btn-tab-group">
-                                        <button type="button" class="btn btn-white btn-tab">Online</button>
-                                        <button type="button" class="btn btn-white btn-tab">Offline</button>
-                                     </div></div>
-                                <div class="col-lg-2 no-padding"><i class="fa fa-refresh"></i></div>
-                                                 
-                                                 </div>
-                                                 </div>
-                                </div>
-                                <div class="portlet-body">
-                                    <div class="ads-resume">
-                                        <div class="ads-info">
-                                        <div class="ads-progress"><span data-toggle="counter" data-end="55" data-suffix="%" class="ads-progress-counter">55%</span><span class="ads-progress-title">Click</span>
-                                        <div class="progress">
-                                        <div style="width: 55%" class="progress-bar progress-bar-primary"></div>
-                                        </div>
-                                        </div>
-                                        <div id="ads-chart-legend" class="ads-legend"><table style="font-size:smaller;color:#545454"><tbody><tr><td class="legendColorBox"><div style="border:1px solid #ccc;padding:1px"><div style="width:4px;height:0;border:5px solid rgb(62,211,151);overflow:hidden"></div></div></td><td class="legendLabel">Google ads</td></tr><tr><td class="legendColorBox"><div style="border:1px solid #ccc;padding:1px"><div style="width:4px;height:0;border:5px solid rgb(44,193,133);overflow:hidden"></div></div></td><td class="legendLabel">Facebook</td></tr></tbody></table></div>
-                                        </div>
-                                        <div class="ads-users">
-                                        <div class="widget-chart-container">
-                                         <img src="<?=base_url();?>assets/images/campaign.jpg">
-                                        </div>
-                                        </div>
-                                        </div>
-                                         <div class="compaign-update">
-                                          <img src="<?=base_url();?>assets/images/graph.jpg">
-                                              </div>                              
-                                </div>
-                            </div> 
-                        </div>
-                    </div>
-                    <div class="row mbl">
-                        <div class="col-md-4">
-                            <div class="portlet box">
-                                <div class="portlet-header  ">
-                                    <div class="caption  ">Connection
-                                    </div>
-                                    <div class="tools">
-                                <i class="fa fa-refresh"></i>
-                                </div>
-                                </div>
-                                <div style="overflow: hidden;" class="portlet-body">
-                                    <div class="row">
-                                        <div class="col-lg-6">
-                                        <div class="widget-value-title">
-                                        <div class="widget-value">232</div>
-                                        <div class="widget-title">Total Connection</div>
-                                        </div>
-                                        </div>
+                 
 
-                                        <div class="col-lg-6">
-                                        <div class="widget-value-title">
-                                        <div class="widget-value">5432</div>
-                                        <div class="widget-title">New Connection</div>
-                                        </div>
-                                         
-                                        </div>
-
-                                        <div class="col-lg-6">
-                                        <div class="widget-value-title">
-                                        <div class="widget-value">890</div>
-                                        <div class="widget-title">Assign for Communication</div>
-                                        </div>
-                                         </div>
-
-                                        <div class="col-lg-6">
-                                        <div class="widget-value-title">
-                                        <div class="widget-value">643</div>
-                                        <div class="widget-title"> Not assign for Communication</div>
-                                        </div>
-                                         </div>
-
-
-                                        </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="portlet box">
-                                <div class="portlet-header  ">
-                                    <div class="caption ">Broadcast
-                                    </div>
-                                    <div class="tools">
-                                <i class="fa fa-refresh"></i>
-                                </div>
-                                </div>
-                                <div style="overflow: hidden;" class="portlet-body">
-                                    <div class="table-responsive">
-                                    <table class="table table-striped table-bordered table-hover">
-                                        <thead>
-                                        <tr>
-                                            <th>#</th>
-                                            <th>Post Name   </th>
-                                            <th>Likes</th>
-                                            <th>Comments</th>
-                                                 </tr>
-                                        </thead>
-                                        <tbody>
-                                        <tr>
-                                            <td>1</td>
-                                            <td>Meeting schedule    </td>
-                                            <td>87K</td>
-                                            <td>12K</td>
-                                        </tr>
-                                        
-                                         <tr>
-                                            <td>2</td>
-                                            <td>Meeting schedule    </td>
-                                            <td>87K</td>
-                                            <td>12K</td>
-                                        </tr>
-                                         <tr>
-                                            <td>3</td>
-                                            <td>Meeting schedule    </td>
-                                            <td>87K</td>
-                                            <td>12K</td>
-                                        </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                         <div id="my-calendar"></div>
-                        </div>
-                    </div>
                     
                 </div>
             </div>
