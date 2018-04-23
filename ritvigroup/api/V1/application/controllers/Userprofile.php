@@ -412,6 +412,89 @@ class Userprofile extends CI_Controller {
         }
         displayJsonEncode($array);
     }
+
+    // Update User Profile Bio
+    public function updateUserProfileBio() {
+        $error_occured = false;
+        $UserId = $this->input->post('user_id');
+        $UserProfileId = $this->input->post('user_profile_id');
+        $UserBio = $this->input->post('user_bio');
+        
+        if($UserId == "") {
+            $msg = "Please select user";
+            $error_occured = true;
+        } else if($UserProfileId == "") {
+            $msg = "Please select user profile";
+            $error_occured = true;
+        } else {
+
+            $updateData = array(
+                                'UserBio'       => $UserBio,
+                                'UpdatedOn'     => date('Y-m-d H:i:s'),
+                                'UpdatedBy'     => $UserProfileId,
+                            );
+
+            $this->User_Model->updateUserProfileData($UserProfileId, $updateData);
+
+            $user_info = $this->User_Model->getUserProfileInformation($UserProfileId, $UserProfileId);
+
+            $msg = "User profile bio updated successfully";
+
+        }
+
+        if($error_occured == true) {
+            $array = array(
+                            "status"        => 'failed',
+                            "message"       => $msg,
+                        );
+        } else {
+
+            $array = array(
+                           "status"   => 'success',
+                           "result"   => $user_info,
+                           "message"  => $msg,
+                           );
+        }
+        displayJsonEncode($array);
+    }
+
+    // Update User Profile Photo
+    public function updateUserProfilePhoto() {
+        $error_occured = false;
+        $UserId = $this->input->post('user_id');
+        $UserProfileId = $this->input->post('user_profile_id');
+        
+        if($UserId == "") {
+            $msg = "Please select user";
+            $error_occured = true;
+        } else if($UserProfileId == "") {
+            $msg = "Please select user profile";
+            $error_occured = true;
+        } else {
+
+            $this->User_Model->saveUserProfilePhoto('photo', $UserId, $UserProfileId, 1);
+
+            $user_info = $this->User_Model->getUserProfileInformation($UserProfileId, $UserProfileId);
+
+            $msg = "User profile photo updated successfully";
+
+        }
+
+        if($error_occured == true) {
+            $array = array(
+                            "status"        => 'failed',
+                            "message"       => $msg,
+                        );
+        } else {
+
+            $array = array(
+                           "status"   => 'success',
+                           "result"   => $user_info,
+                           "message"  => $msg,
+                           );
+        }
+        displayJsonEncode($array);
+    }
     
     // Remove Profile Picutre
     public function removeProfilePicture() {
@@ -674,6 +757,8 @@ class Userprofile extends CI_Controller {
         $pincode        = $this->input->post('pincode');
         $country        = $this->input->post('country');
         $email          = $this->input->post('email');
+        $bio          	= $this->input->post('bio');
+        $MaritalStatus 	= $this->input->post('martial_status');
         $mobile         = $this->input->post('mobile');
         $alt_mobile     = $this->input->post('alt_mobile');
 
@@ -770,6 +855,8 @@ class Userprofile extends CI_Controller {
 
                 $updateData2 = array(
                                     'AltMobile'     => $alt_mobile,
+                                    'UserBio'       => $bio,
+                                    'MaritalStatus' => $MaritalStatus,
                                     'City'          => $city,
                                     'State'         => $state,
                                     'ZipCode'       => $pincode,
@@ -781,9 +868,11 @@ class Userprofile extends CI_Controller {
 
                 if($this->User_Model->updateUserProfileData($UserProfileId, $updateData)) {
                     
-                    $this->User_Model->saveUserPhoto('photo', $UserId, 1);
+                    //$this->User_Model->saveUserPhoto('photo', $UserId, 1);
 
-                    $user_info = $this->User_Model->getUserDetail($UserId, 0, 0);
+                    $this->User_Model->saveUserProfilePhoto('photo', $UserId, $UserProfileId, 1);
+
+                    $user_info = $this->User_Model->getUserDetail($UserId, 0, 1);
 
                     $this->db->query("COMMIT");
                     $msg = "User profile updated successfully";
@@ -1152,6 +1241,59 @@ class Userprofile extends CI_Controller {
         displayJsonEncode($array);
     }
 
+
+    // Delete Profile Address
+    public function deleteProfileAddress() {
+        $UserId         = $this->input->post('user_id');
+        $UserProfileId  = $this->input->post('user_profile_id');
+        
+        $address_id        = $this->input->post('address_id');
+
+        if($UserId == "") {
+            $msg = "Please select user";
+            $error_occured = true;
+        } else if($UserProfileId == "") {
+            $msg = "Please select user profile";
+            $error_occured = true;
+        } else if($address_id == "") {
+            $msg = "Please select address";
+            $error_occured = true;
+        } else {
+
+            $this->db->query("BEGIN");
+
+            $address_save = $this->User_Model->deleteProfileAddress($UserProfileId, $address_id);
+
+            if($address_save == true) {
+                
+                $user_info = $this->User_Model->getUserProfileAddress($UserProfileId);
+
+                $this->db->query("COMMIT");
+                $msg = "User address deleted successfully";
+
+            } else {
+                $this->db->query("ROLLBACK");
+                $msg = "There is some problem to delete user address. Please try again later.";
+                $error_occured = true;
+            }
+        }
+
+        if($error_occured == true) {
+            $array = array(
+                            "status"        => 'failed',
+                            "message"       => $msg,
+                        );
+        } else {
+
+            $array = array(
+                           "status"   => 'success',
+                           "result"   => $user_info,
+                           "message"  => $msg,
+                           );
+        }
+        displayJsonEncode($array);
+    }
+
     // Get User Profile Address
     public function getUserProfileAddress() {
         $UserId         = $this->input->post('user_id');
@@ -1221,6 +1363,59 @@ class Userprofile extends CI_Controller {
             } else {
                 $this->db->query("ROLLBACK");
                 $msg = "There is some problem to update user education. Please try again later.";
+                $error_occured = true;
+            }
+        }
+
+        if($error_occured == true) {
+            $array = array(
+                            "status"        => 'failed',
+                            "message"       => $msg,
+                        );
+        } else {
+
+            $array = array(
+                           "status"   => 'success',
+                           "result"   => $user_info,
+                           "message"  => $msg,
+                           );
+        }
+        displayJsonEncode($array);
+    }
+
+
+    // Delete Profile Education
+    public function deleteProfileEducation() {
+        $UserId         = $this->input->post('user_id');
+        $UserProfileId  = $this->input->post('user_profile_id');
+        
+        $qualification_id  = $this->input->post('qualification_id');
+
+        if($UserId == "") {
+            $msg = "Please select user";
+            $error_occured = true;
+        } else if($UserProfileId == "") {
+            $msg = "Please select user profile";
+            $error_occured = true;
+        } else if($qualification_id == "") {
+            $msg = "Please select qualification";
+            $error_occured = true;
+        } else {
+
+            $this->db->query("BEGIN");
+
+            $qualification_save = $this->User_Model->deleteProfileEducation($UserProfileId, $qualification_id);
+
+            if($qualification_save == true) {
+                
+                $user_info = $this->User_Model->getUserProfileEducation($UserProfileId);
+
+                $this->db->query("COMMIT");
+                $msg = "User address deleted successfully";
+
+            } else {
+                $this->db->query("ROLLBACK");
+                $msg = "There is some problem to delete user education. Please try again later.";
                 $error_occured = true;
             }
         }
@@ -1331,6 +1526,59 @@ class Userprofile extends CI_Controller {
         displayJsonEncode($array);
     }
 
+
+    // Delete Profile Work
+    public function deleteProfileWork() {
+        $UserId         = $this->input->post('user_id');
+        $UserProfileId  = $this->input->post('user_profile_id');
+        
+        $work_id  = $this->input->post('work_id');
+
+        if($UserId == "") {
+            $msg = "Please select user";
+            $error_occured = true;
+        } else if($UserProfileId == "") {
+            $msg = "Please select user profile";
+            $error_occured = true;
+        } else if($work_id == '') {
+            $msg = "Please select work id";
+            $error_occured = true;
+        } else {
+
+            $this->db->query("BEGIN");
+
+            $work_save = $this->User_Model->deleteProfileWork($UserProfileId, $work_id);
+
+            if($work_save == true) {
+                
+                $user_info = $this->User_Model->getUserProfileWork($UserProfileId);
+
+                $this->db->query("COMMIT");
+                $msg = "User work deleted successfully";
+
+            } else {
+                $this->db->query("ROLLBACK");
+                $msg = "There is some problem to delete user work. Please try again later.";
+                $error_occured = true;
+            }
+        }
+
+        if($error_occured == true) {
+            $array = array(
+                            "status"        => 'failed',
+                            "message"       => $msg,
+                        );
+        } else {
+
+            $array = array(
+                           "status"   => 'success',
+                           "result"   => $user_info,
+                           "message"  => $msg,
+                           );
+        }
+        displayJsonEncode($array);
+    }
+
     // Get user Profile Work
     public function getUserProfileWork() {
         $UserId         = $this->input->post('user_id');
@@ -1383,7 +1631,7 @@ class Userprofile extends CI_Controller {
         } else {
             $user_info = array();
             $user_info_address['Profile']       = $this->User_Model->getUserProfileInformation($UserProfileId, $UserProfileId);
-            //$user_info_address['Address']       = $this->User_Model->getUserProfileAddress($UserProfileId);
+            $user_info_address['Address']       = $this->User_Model->getUserProfileAddress($UserProfileId);
             $user_info_education['Education']   = $this->User_Model->getUserProfileEducation($UserProfileId);
             $user_info_work['Work']             = $this->User_Model->getUserProfileWork($UserProfileId);
 
@@ -1413,4 +1661,93 @@ class Userprofile extends CI_Controller {
         }
         displayJsonEncode($array);
     }
+
+
+    // Get More Detail About Friend User Profile
+    public function getMoreDetailAboutFriendUserProfile() {
+        $UserProfileId          = $this->input->post('user_profile_id');
+        $FriendUserProfileId    = $this->input->post('friend_user_profile_id');
+        
+        if($UserProfileId == "") {
+            $msg = "Please select user profile";
+            $error_occured = true;
+        } else if($FriendUserProfileId == "") {
+            $msg = "Please select friend user profile";
+            $error_occured = true;
+        } else {
+            $user_info = array();
+            //$user_info_address['UserInfo']      = $this->User_Model->getUserProfileWithUserInformation($FriendUserProfileId, $UserProfileId);
+            $user_info_address['Profile']       = $this->User_Model->getUserProfileInformation($FriendUserProfileId, $UserProfileId);
+            $user_info_address['Address']       = $this->User_Model->getUserProfileAddress($FriendUserProfileId);
+            $user_info_education['Education']   = $this->User_Model->getUserProfileEducation($FriendUserProfileId);
+            $user_info_work['Work']             = $this->User_Model->getUserProfileWork($FriendUserProfileId);
+            $user_info_friend['Friend']         = $this->User_Model->getUserProrifleMinFriendList($FriendUserProfileId, $UserProfileId);
+
+            $user_info = array_merge($user_info, $user_info_address);
+            $user_info = array_merge($user_info, $user_info_education);
+            $user_info = array_merge($user_info, $user_info_work);
+            $user_info = array_merge($user_info, $user_info_friend);
+            if(count($user_info) > 0) {
+                $msg = "User more information detail found.";
+            } else {
+                $msg = "There is no more information detail for this user";
+                $error_occured = true;
+            }
+        }
+
+        if($error_occured == true) {
+            $array = array(
+                            "status"        => 'failed',
+                            "message"       => $msg,
+                        );
+        } else {
+
+            $array = array(
+                           "status"   => 'success',
+                           "result"   => $user_info,
+                           "message"  => $msg,
+                           );
+        }
+        displayJsonEncode($array);
+    }
+
+
+    // Get User Profile Friend List
+    public function getUserProfileFriendList() {
+        $UserProfileId          = $this->input->post('user_profile_id');
+        $FriendUserProfileId    = $this->input->post('friend_user_profile_id');
+        
+        if($UserProfileId == "") {
+            $msg = "Please select user profile";
+            $error_occured = true;
+        } else if($FriendUserProfileId == "") {
+            $msg = "Please select friend user profile";
+            $error_occured = true;
+        } else {
+            $user_friend_list = $this->User_Model->getUserProrifleFriendList($FriendUserProfileId, $UserProfileId);
+
+            if(count($user_friend_list) > 0) {
+                $msg = "User more information detail found.";
+            } else {
+                $msg = "There is no more friend for this user";
+                $error_occured = true;
+            }
+        }
+
+        if($error_occured == true) {
+            $array = array(
+                            "status"        => 'failed',
+                            "message"       => $msg,
+                        );
+        } else {
+
+            $array = array(
+                           "status"   => 'success',
+                           "result"   => $user_friend_list,
+                           "message"  => $msg,
+                           );
+        }
+        displayJsonEncode($array);
+    }
+
 }

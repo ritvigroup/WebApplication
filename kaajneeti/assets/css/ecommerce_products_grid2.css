@@ -1,0 +1,315 @@
+/*!
+ * Adminbag v1.3 (http://adminbag-v1.3.bittyfox.com/)
+ * Copyright AdminBag Company © 2017 
+ * 
+ */
+
+/*------------------------------------------------
+
+ecommerce products grid
+
+-------------------------------------------------*/
+
+
+.text-grid {
+     float: left;
+    margin-top: 10px;
+    padding: 1px 11px;
+    width: 100%;
+}
+
+.text-grid {
+    padding: 1px 11px;
+}
+
+.medium {
+    color: #e7505a;
+    font-size: 14px;
+    text-align: right;
+}
+
+.content-grid {
+    float: left;
+    margin-top: 15px;
+    text-align: left;
+    width: 100%;
+}
+
+.listBox p {
+    text-align: left;
+    text-transform: uppercase;
+}
+
+.paddingNone{padding: 0;}
+
+.col-md-3.TumFBox.listBox {
+   border: 1px solid #f1f1f1;
+    padding: 5px;
+    position: relative;
+}
+
+.TumFBox.listBox:hover {
+   border: 1px solid #ddd;
+}
+
+
+.TumFBox .quick-view {
+    display: none;
+    font-size: 15px;
+    text-transform: uppercase;
+    color: #fff;
+    position: absolute;
+    left: 50%;
+    top: 40%;
+    margin: -21px 0 0 -53px;
+    padding: 7px 0;
+    background: rgba(0, 0, 0, 0.2);
+    width: 107px;
+    text-align: center;
+    -moz-box-shadow: rgba(0, 0, 0, 0.16) 0 2px 8px;
+    -webkit-box-shadow: rgba(0, 0, 0, 0.16) 0 2px 8px;
+    box-shadow: rgba(0, 0, 0, 0.16) 0 2px 8px;
+    -moz-transition: all 0.2s ease;
+    -o-transition: all 0.2s ease;
+    -webkit-transition: all 0.2s ease;
+    transition: all 0.2s ease; }
+
+.TumFBox:hover .quick-view   {display: block;}
+.TumFBox  .quick-view:hover {
+      background: rgba(0, 0, 0, 0.7); }
+
+
+
+
+.left-sidebar-title {
+    display: block;
+}
+
+.left-sidebar-title h3 {
+    background: #fff none repeat scroll 0 0;
+    color: #323333;
+    font-size: 14px;
+    font-weight: 700;
+    padding: 27px 20px;
+    text-transform: uppercase;
+}
+
+.left-layout {
+    background: #fff none repeat scroll 0 0;
+    display: block;
+    margin: 20px 0;
+    padding: 0 20px 10px;
+}
+
+.single-layout {
+    border-bottom: 1px solid #cccccc;
+    display: block;
+    padding: 30px 0 20px;
+}
+
+.layout-title h4 {
+    color: #323333;
+    font-size: 13px;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+.layout-list ul li {
+    display: block;
+    padding: 4px 0;
+}
+
+.layout-list ul li a::before {
+    content: "";
+    font-family: fontawesome;
+    left: 0;
+    position: absolute;
+    top: 10px;
+}
+
+.layout-list ul li a {
+    color: #777777;
+    display: block;
+    padding: 10px 20px;
+    position: relative;
+    text-decoration: none;
+}
+
+.layout-list > ul {
+    margin: 0;
+    padding: 0;
+}
+
+.filterLeftBox{
+    width: 20%;
+}
+
+
+.filterRihgtBox{
+    width: 80%;
+}
+
+.single-product {
+    background: #ffffff none repeat scroll 0 0;
+    border: 1px solid #ebebeb;
+    overflow: hidden;
+    padding-bottom: 10px;
+    text-align: center;
+}
+
+
+.single-product-details {
+    background: #ffffff none repeat scroll 0 0;
+    padding: 30px 10px 20px 40px;
+    font-family: arial;
+}
+
+.qty-button input.input-text {
+    background: #ffffff none repeat scroll 0 0;
+    border: 2px solid #444444;
+    color: #363636;
+    height: 40px;
+    text-align: center;
+    width: 90px;
+}
+
+.shop-review .add-to-cart {
+    text-align: left;
+}
+
+.shop-review {
+    padding-right: 30px;
+    text-align: left;
+}
+
+
+.shop-review .product-name {
+    margin: 10px 0;
+}
+
+
+.single-product-details .product-name h3 a {
+    font-size: 20px;
+}
+
+.sin-rating {
+    border-bottom: 1px solid #444444;
+    margin: 40px 0;
+    overflow: hidden;
+}
+
+
+.product-details .product-name h3 a {
+    color: #323334;
+    font-size: 16px;
+    font-weight: 700;
+    line-height: 20px;
+    text-transform: initial;
+}
+
+
+.single-product-details .price-box span {
+    font-size: 18px;
+    font-weight: 700;
+    margin: 0;
+    padding-right: 10px;
+}
+
+.single-product-details p.in-stock {
+    color: #444444;
+    margin: 0;
+    padding-top: 25px;
+}
+
+.single-product-details p.in-stock span {
+    color: #f3652a;
+}
+
+.price-box .new-price {
+    color: #f3652a;
+    font-size: 14px;
+}
+
+.price-box .old-price {
+    color: #bbbbbb;
+    font-size: 13px;
+    text-decoration: line-through;
+}
+
+.single-product-details .product-reveiw p {
+    color: #444444;
+}
+.product-reveiw {
+    margin: 25px 0 35px;
+}
+
+.cart .add-to-cart button:hover {
+    color:#f3652a;
+    border:2px solid #f3652a;
+}
+.cart .add-to-cart button {
+  background: rgba(0, 0, 0, 0) none repeat scroll 0 0;
+  border: 2px solid #444;
+  color: #444;
+  display: inline-block;
+  font-size: 13px;
+  font-weight: 700;
+  margin-left: 20px;
+  padding: 9px 20px;
+  text-transform: uppercase;
+}
+
+.qty-button, .add-to-cart {
+    display: inline-block;
+}
+
+.social-button-img {
+    display: block;
+    margin: 16px 0;
+}
+
+.simpleLens-lens-image {
+    background: #ffffff none repeat scroll 0 0;
+    float: left;
+    padding: 15px;
+    width: 100%;
+}
+
+.simpleLens-lens-image img{width: 100%;}
+
+
+.galTuBox {
+    background: #ffffff none repeat scroll 0 0;
+    display: inline-block;
+    list-style: outside none none;
+    margin: auto;
+    padding: 0 0 0 10px;
+    width: 100%;
+}
+
+.galTuBox li{
+    float: left;
+    width: 30%;
+    background: #fff;
+    padding: 5px;
+}
+
+.galTuBox li img{
+    width: 100%;
+    border: 1px solid #fff;
+}
+
+.galTuBox li.active img {
+    border: 1px solid #222222;
+}
+.TumFBox img {
+    width: 100%;
+}
+/*----------------------*/
+
+@media (max-width: 768px) {
+.filterLeftBox, .filterRihgtBox {
+    width: 100%;
+}
+
+}

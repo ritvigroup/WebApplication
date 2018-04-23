@@ -1,0 +1,325 @@
+/*
+ *
+ *   This is style for skin config Use only in demo theme
+ *
+*/
+.theme-config {
+  position: absolute;
+  top: 90px;
+  right: 0;
+  overflow: hidden;
+}
+.theme-config-box {
+  margin-right: -220px;
+  position: relative;
+  z-index: 2000;
+  transition-duration: 0.8s;
+}
+.theme-config-box.open {
+  margin-right: 0;
+}
+.spin-icon {
+  background: #222;
+  position: absolute;
+  padding: 7px 10px 7px 13px;
+  border-radius: 20px 0 0 20px;
+  font-size: 16px;
+  top: 6px;
+  left: 0;
+  width: 40px;
+  color: #fff;
+  cursor: pointer;
+}
+.skin-setttings {
+  width: 220px;
+  margin-left: 40px;
+  background: #f3f3f4;
+}
+.skin-setttings .title {
+  background: #efefef;
+  text-align: center;
+  text-transform: uppercase;
+  font-weight: 600;
+  display: block;
+  padding: 10px 15px;
+  font-size: 12px;
+}
+.setings-item {
+  padding: 10px 30px;
+}
+.setings-item.skin {
+  text-align: center;
+}
+.setings-item .switch {
+  float: right;
+}
+.skin-name a {
+  text-transform: uppercase;
+}
+.setings-item a {
+  color: #fff;
+}
+.viewAllThemes {
+    background-color: #222222;
+    color: #ffffff;
+    text-align: center;
+    font-weight: 600;
+    margin-top: 10px; 
+}
+
+/* TOOGLE SWICH */
+.onoffswitch {
+  position: relative;
+  width: 64px;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+}
+.onoffswitch-checkbox {
+  display: none;
+}
+.onoffswitch-label {
+  display: block;
+  overflow: hidden;
+  cursor: pointer;
+  border: 2px solid #e7505a;
+  border-radius: 2px;
+}
+ .onoffswitch-inner {
+  width: 200%;
+  margin-left: -100%;
+  display: block;
+  -moz-transition: margin 0.3s ease-in 0s;
+  -webkit-transition: margin 0.3s ease-in 0s;
+  -o-transition: margin 0.3s ease-in 0s;
+  transition: margin 0.3s ease-in 0s;
+}
+.onoffswitch-inner:before,
+.onoffswitch-inner:after {
+  float: left;
+  width: 50%;
+  height: 20px;
+  padding: 0;
+  line-height: 20px;
+  font-size: 12px;
+  color: white;
+  font-family: Trebuchet, Arial, sans-serif;
+  font-weight: bold;
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+}
+.onoffswitch-inner:before {
+  content: "ON";
+  padding-left: 10px;
+  background-color: #e7505a;
+  color: #FFFFFF;
+}
+.onoffswitch-inner:after {
+  content: "OFF";
+  padding-right: 10px;
+  background-color: #FFFFFF;
+  color: #999999;
+  text-align: right;
+}
+.onoffswitch-switch {
+  width: 20px;
+  margin: 0;
+  background: #FFFFFF;
+  border: 2px solid #e7505a;
+  border-radius: 2px;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: 44px;
+  -moz-transition: all 0.3s ease-in 0s;
+  -webkit-transition: all 0.3s ease-in 0s;
+  -o-transition: all 0.3s ease-in 0s;
+  transition: all 0.3s ease-in 0s;
+}
+.onoffswitch-checkbox:checked + .onoffswitch-label .onoffswitch-inner {
+  margin-left: 0;
+}
+.onoffswitch-checkbox:checked + .onoffswitch-label .onoffswitch-switch {
+  right: 0;
+}
+.request-form {
+    background:#49b6d6 none repeat scroll 0 0;
+    color:#fefefe;
+    height:100%;
+    left:0;
+    position:fixed;
+    top:0;
+    width:100%;
+    z-index:99999;
+    overflow-y:auto;
+    transform:translateY(-100%);
+    transition:all 0.3s ease-in-out 0s;
+    visibility:hidden;
+    font-family:arial;
+}
+.request-form.open {
+    height:100%;
+    opacity:1;
+    transform:translateY(0px);
+    visibility:visible;
+    width:100%;
+}
+.crossrightsingle {
+    position:fixed;
+    right:15px;
+    top:20px;
+    z-index:11;
+    cursor:pointer
+}
+.crossrightsingle a {
+    padding:20px;
+    color:#fff;
+    font-weight:700;
+-webkit-transition:color .3s;
+-moz-transition:color .3s;
+transition:color .3s
+}
+.crossrightsingle a::after, .crossrightsingle a::before {
+position:absolute;
+width:40px;
+left:0;
+top:50%;
+height:2px;
+margin-top:-1px;
+background:#fff;
+content:'';
+z-index:-1;
+pointer-events:none
+}
+.crossrightsingle a::before {
+-webkit-transition:-webkit-transform .3s, opacity .3s;
+-moz-transition:-moz-transform .3s, opacity .3s;
+transition:transform .3s, opacity .3s;
+-webkit-transform:rotate(45deg);
+-moz-transform:rotate(45deg);
+transform:rotate(45deg);
+-ms-transform:rotate(45deg)
+}
+.crossrightsingle a::after {
+-webkit-transition:-webkit-transform .3s, opacity .3s;
+-moz-transition:-moz-transform .3s, opacity .3s;
+transition:transform .3s, opacity .3s;
+-webkit-transform:rotate(-45deg);
+-moz-transform:rotate(-45deg);
+transform:rotate(-45deg);
+-ms-transform:rotate(-45deg)
+}
+.crossrightsingle a:focus, .crossrightsingle a:hover {
+    color:#fff
+}
+.crossrightsingle a:focus::after, .crossrightsingle a:focus::before, .crossrightsingle a:hover::after, .crossrightsingle a:hover::before {
+opacity:.7;
+-webkit-transform:rotate(0);
+-moz-transform:rotate(0);
+transform:rotate(0);
+-ms-transform:rotate(0)
+}
+
+/* img hover*/
+
+.viewDemo {
+    background: rgba(0, 0, 0, 0.4) none repeat scroll 0 0;
+    bottom: 0;
+    box-sizing: border-box;
+    color: #ffffff;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 700;
+    height: 100%;
+    left: 0;
+    letter-spacing: 1px;
+    padding: 35% 0;
+    position: absolute;
+    right: 0;
+    text-align: center;
+    text-transform: uppercase;
+    transition: opacity 0.5s ease 0s;
+    width: 100%;
+    z-index: 1;
+    display: none;
+}
+
+.hover14 figure:hover .viewDemo {
+   display: block;}
+
+.img-responsive {
+    border: 1px solid #dddddd;
+    width: 100%;
+}
+
+.column::after {
+    content: '';
+    clear: both;
+    display: block;
+}
+.column div {
+    position: relative;
+    float: left;    
+}
+
+.column div span {
+    color: #fff;
+    display: table;
+    font-family: arial;
+    font-size: 16px;
+    padding: 4px;
+    text-align: center;
+    text-transform: uppercase;
+    width: 100%;
+}
+.hover14.column.row {
+    margin-bottom: 15px;
+}
+figure {   
+    margin: 0;
+    padding: 0;
+    background: #fff;
+    overflow: hidden;
+}
+
+.hover14 a:hover{ text-decoration: none;}
+figure:hover+span {    
+  
+}
+.hover14 figure {
+    position: relative;
+}
+.hover14 figure::before {
+    position: absolute;
+    top: 0;
+    left: -75%;
+    z-index: 2;
+    display: block;
+    content: '';
+    width: 50%;
+    height: 100%;
+    background: -webkit-linear-gradient(left, rgba(255,255,255,0) 0%, rgba(255,255,255,.3) 100%);
+    background: linear-gradient(to right, rgba(255,255,255,0) 0%, rgba(255,255,255,.3) 100%);
+    -webkit-transform: skewX(-25deg);
+    transform: skewX(-25deg);
+}
+.hover14 figure:hover::before {
+    -webkit-animation: shine .75s;
+    animation: shine .75s;
+}
+@-webkit-keyframes shine {
+    100% {
+        left: 125%;
+    }
+}
+@keyframes shine {
+    100% {
+        left: 125%;
+    }
+}
+
+.gohome {
+    background-color: rgba(41, 171, 164,0.8);
+    text-align: center;
+}

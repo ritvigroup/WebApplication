@@ -1,0 +1,29 @@
+/*!
+ * Adminbag v1.3 (http://adminbag-v1.3.bittyfox.com/)
+ * Copyright AdminBag Company © 2017 
+ * 
+ */
+
+/*------------------------------------------------
+
+search result page
+
+-------------------------------------------------*/
+
+
+.search-result {
+    display: inline-block;
+}
+
+.search-result h3 a {
+    color: #337ab7;
+}
+
+.search-result h3  {
+   margin-bottom: 5px;
+}
+
+.search-result .sub-d{
+  font-size: 14px;
+  color: #ccc;
+}

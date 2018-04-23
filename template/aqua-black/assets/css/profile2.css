@@ -1,0 +1,332 @@
+/*!
+ * Adminbag v1.3 (http://adminbag-v1.3.bittyfox.com/)
+ * Copyright AdminBag Company © 2017 
+ * 
+ */
+
+/*------------------------------------------------
+
+PROFILE 2
+
+-------------------------------------------------*/
+
+
+.profile-header {
+    color: #fff;
+    display: block;
+    margin-left: 220px;
+    position: relative;
+    text-align: center;
+    text-shadow: 0 0 3px rgba(0, 0, 0, 0.5);
+}
+
+.page-sidebar-closed .profile-header{
+  margin-left:45px;
+}
+.social-feed-box {   
+    margin-bottom: 20px;
+}
+
+
+.profile-cover::before {
+   background-image: url("../images/pro2-c-bg.jpg");
+    background-position: center top;
+    background-size: 100%;
+    content: "";
+    height: 100%;
+    left: 0;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: -1;
+}
+
+.profile-cover::after {
+    background-color: rgba(38, 50, 56, 0.6);
+    content: "";
+    height: 100%;
+    left: 0;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: -1;
+}
+
+
+.profile-container {
+    margin-left: auto;
+    margin-right: auto;
+    max-width: 1000px;
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+.profile-card {
+    margin-left: auto;
+    margin-right: auto;
+    padding-bottom: 96px;
+    padding-top: 96px;
+    display: table;
+    width: 100%;
+}
+
+.profile-avetar {
+    display: table-cell;
+    padding-right: 30px;
+    vertical-align: top;
+}
+
+.profile-avetar-img {
+    background-color: #fff;
+    border: 3px solid #fff;
+    border-radius: 50%;
+}
+
+.profile-overview {
+    display: table-cell;
+    margin-top: 0;
+    padding-bottom: 0;
+    text-align: left;
+    vertical-align: middle;
+    width: 10000px;
+}
+.profile-name {
+    color: inherit;
+    display: inline-block;
+    font-size: 34px;
+    font-weight: 400;
+    line-height: 34px;
+    margin-bottom: 15px;
+    margin-right: 15px;
+    margin-top: 0;
+    vertical-align: top;
+}
+
+
+
+.profile-follow-btn {
+    bottom: auto;
+    display: inline-block;
+    left: auto;
+    margin-bottom: 15px;
+    position: relative;
+    transform: none;
+    width: auto;
+}
+
+.profile-info {
+    display: table-cell;
+    margin-top: 0;
+    padding-left: 30px;
+    vertical-align: middle;
+}
+
+.profile-nav {
+    display: inline-block;
+    list-style: outside none none;
+    margin-bottom: 0;
+    padding-left: 0;
+    white-space: nowrap;
+}
+
+.profile-nav > li {
+    display: inline-block;
+}
+
+.profile-nav > li > a {
+    color: rgba(255, 255, 255, 0.75);
+    display: block;
+    font-size: 16px;
+    font-weight: 600;
+    line-height: 20px;
+    padding: 15px 10px;
+    position: relative;
+    text-align: center;
+}
+
+.profile-nav-heading {
+    color: #fff;
+    line-height: 1;
+    margin-bottom: 0;
+    margin-top: 0;
+}
+
+.profile-tabs {
+    bottom: 0;
+    left: 0;
+    line-height: 0;
+    position: absolute;
+    width: 100%;
+}
+
+.profile-nav {
+    display: inline-block;
+    list-style: outside none none;
+    margin-bottom: 0;
+    padding-left: 0;
+    white-space: nowrap;
+}
+.profile-nav > li {
+    display: inline-block;
+}
+
+.profile-nav > li.active > a::after {
+    border-color: transparent transparent #f3f3f4;
+    border-style: solid;
+    border-width: 10px;
+    bottom: 0;
+    content: " ";
+    height: 0;
+    left: 50%;
+    pointer-events: none;
+    position: absolute;
+    transform: translateX(-50%);
+    width: 0;
+    z-index: 15;
+}
+
+.link-inverted {
+    color: #2ab4c0;
+}
+
+/*pro-2*/
+.profile-page .page-content{
+    background: #29aba4;
+}
+
+.profile-content {
+  border-top: none !important;
+}
+.profile-stats {
+  margin-right: 10px;
+}
+.profile-image {
+  width: 120px;
+  float: left;
+}
+.profile-image img {
+  width: 96px;
+  height: 96px;
+}
+.profile-info {
+  margin-left: 120px;
+}
+.feed-activity-list .feed-element {
+  border-bottom: 1px solid #e7eaec;
+}
+.feed-element:first-child {
+  margin-top: 0;
+}
+.feed-element {
+  padding-bottom: 15px;
+}
+.feed-element,
+.feed-element .media {
+  margin-top: 15px;
+}
+.feed-element,
+.media-body {
+  overflow: hidden;
+}
+.feed-element > .pull-left {
+  margin-right: 10px;
+}
+.feed-element img.img-circle,
+.dropdown-messages-box img.img-circle {
+  width: 38px;
+  height: 38px;
+}
+.feed-element .well {
+  border: 1px solid #e7eaec;
+  box-shadow: none;
+  margin-top: 10px;
+  margin-bottom: 5px;
+  padding: 10px 20px;
+  font-size: 11px;
+  line-height: 16px;
+}
+.feed-element .actions {
+  margin-top: 10px;
+}
+.feed-element .photos {
+  margin: 10px 0;
+}
+.feed-photo {
+  max-height: 180px;
+  border-radius: 4px;
+  overflow: hidden;
+  margin-right: 10px;
+  margin-bottom: 10px;
+}
+.file-list li {
+  padding: 5px 10px;
+  font-size: 11px;
+  border-radius: 2px;
+  border: 1px solid #e7eaec;
+  margin-bottom: 5px;
+}
+.file-list li a {
+  color: inherit;
+}
+.file-list li a:hover {
+  color: #1ab394;
+}
+.user-friends img {
+  width: 42px;
+  height: 42px;
+  margin-bottom: 5px;
+  margin-right: 5px;
+}
+
+.profile-img-box{
+  position: relative;
+}
+.profile-img-box .pro-like {
+    bottom: 5px;
+    color: #fff;
+    font-size: 20px;
+    left: 5px;
+    position: absolute;
+}
+.profile-img-box .pro-like  .fa{
+   font-size: 30px;
+}
+
+.profile-img-box .pro-like:hover .fa{
+   color: #ed6b75;
+}
+
+
+
+@media (max-width: 768px) {
+/*profile II*/
+.page-sidebar-closed .profile-header, .profile-header {
+    margin-left: 0;
+}
+.page-sidebar-closed.page-sidebar-fixed .page-sidebar {
+    width: 100%;
+}
+
+.profile-info {   
+     display: table-row;
+}
+
+.profile-overview {
+    display: table-row;
+  }
+  .profile-avetar {
+    display: table-row;
+  }
+
+  .profile-card {
+    display: table;
+    margin-left: auto;
+    margin-right: auto;
+    padding-bottom: 48px;
+    padding-top: 40px;
+    width: 100%;
+}
+.profile-avetar-img {   
+    margin-bottom: 20px;
+}
+}

@@ -326,6 +326,9 @@ class User_Model extends CI_Model {
                                 "FirstName"                     => (($res_u['FirstName'] != NULL) ? $res_u['FirstName'] : ""),
                                 "MiddleName"                    => (($res_u['MiddleName'] != NULL) ? $res_u['MiddleName'] : ""),
                                 "LastName"                      => (($res_u['LastName'] != NULL) ? $res_u['LastName'] : ""),
+                                "DateOfBirth"                   => (($res_u['DateOfBirth'] != '0000-00-00') ? $res_u['DateOfBirth'] : ""),
+                                "Gender"                        => (($res_u['Gender'] != NULL) ? $res_u['Gender'] : ""),
+                                "MaritalStatus"                 => (($res_u['MaritalStatus'] != NULL) ? $res_u['MaritalStatus'] : ""),
                                 "Email"                         => (($res_u['Email'] != NULL) ? $res_u['Email'] : ""),
                                 "DepartmentName"                => (($res_u['DepartmentName'] != NULL) ? $res_u['DepartmentName'] : ""),
                                 "UserProfileDeviceToken"        => (($res_u['UserProfileDeviceToken'] != NULL) ? $res_u['UserProfileDeviceToken'] : ""),
@@ -338,6 +341,7 @@ class User_Model extends CI_Model {
                                 "Country"                       => (($res_u['Country'] != NULL) ? $res_u['Country'] : ""),
                                 "Mobile"                        => (($res_u['Mobile'] != NULL) ? $res_u['Mobile'] : ""),
                                 "AltMobile"                     => (($res_u['AltMobile'] != NULL) ? $res_u['AltMobile'] : ""),
+                                "UserBio"                       => (($res_u['UserBio'] != NULL) ? $res_u['UserBio'] : ""),
                                 "ProfileStatus"                 => (($res_u['ProfileStatus'] != NULL) ? $res_u['ProfileStatus'] : ""),
                                 "AddedBy"                       => (($res_u['AddedBy'] != NULL) ? $res_u['AddedBy'] : ""),
                                 "UpdatedBy"                     => (($res_u['UpdatedBy'] != NULL) ? $res_u['UpdatedBy'] : ""),
@@ -1440,10 +1444,10 @@ class User_Model extends CI_Model {
         $this->db->from($this->genderTbl);
         $this->db->where('GenderStatus', 1);
         $query = $this->db->get();
-        $result = $query->result_array();
+        $res = $query->result_array();
         if ($query->num_rows() > 0) {
             $gender = array();
-            foreach($result AS $key => $result) {
+            foreach($res AS $key => $result) {
                 $gender[] = $this->returnGender($result);
             }
             return $gender;
@@ -1524,6 +1528,16 @@ class User_Model extends CI_Model {
         }
     }
 
+
+    // Delete Profile Address
+    public function deleteProfileAddress($UserProfileId, $address_id) {
+        $this->db->where('UserProfileId', $UserProfileId);
+        $this->db->where('UserProfileAddressId', $address_id);
+        $this->db->delete($this->UserProfileAddressTbl);
+
+        return true;
+    }
+
     // Get user Profile Address
     public function getUserProfileAddress($UserProfileId) {
 
@@ -1533,15 +1547,15 @@ class User_Model extends CI_Model {
         $this->db->where('UserProfileId', $UserProfileId);
         $this->db->order_by('UserProfileAddressId', 'ASC');
         $query = $this->db->get();
-        $result = $query->result_array();
+        $res = $query->result_array();
         if ($query->num_rows() > 0) {
             $user_profile_address = array();
-            foreach($result AS $key => $result) {
+            foreach($res AS $key => $result) {
                 $user_profile_address[] = $this->returnUserProfileAddress($result);
             }
             return $user_profile_address;
         } else {
-            return false;
+            return $user_profile_address;
         }
     }
 
@@ -1624,6 +1638,16 @@ class User_Model extends CI_Model {
         }
     }
 
+
+    // Delete Profile Education
+    public function deleteProfileEducation($UserProfileId, $qualification_id) {
+        $this->db->where('UserProfileId', $UserProfileId);
+        $this->db->where('UserProfileEducationId', $qualification_id);
+        $this->db->delete($this->UserProfileEducationTbl);
+
+        return true;
+    }
+
     // Get User Profile Education
     public function getUserProfileEducation($UserProfileId) {
 
@@ -1633,10 +1657,10 @@ class User_Model extends CI_Model {
         $this->db->where('UserProfileId', $UserProfileId);
         $this->db->order_by('UserProfileEducationId', 'ASC');
         $query = $this->db->get();
-        $result = $query->result_array();
+        $res = $query->result_array();
         if ($query->num_rows() > 0) {
             $user_profile_education = array();
-            foreach($result AS $key => $result) {
+            foreach($res AS $key => $result) {
                 $user_profile_education[] = $this->returnUserProfileEducation($result);
             }
             return $user_profile_education;
@@ -1721,6 +1745,15 @@ class User_Model extends CI_Model {
         }
     }
 
+
+    // Delete Profile Work
+    public function deleteProfileWork($UserProfileId, $work_id) {
+        $this->db->where('UserProfileId', $UserProfileId);
+        $this->db->where('UserProfileWorkId', $work_id);
+        $this->db->delete($this->UserProfileWorkTbl);
+        return true;
+    }
+
     // Get User Profile Work
     public function getUserProfileWork($UserProfileId) {
 
@@ -1730,10 +1763,10 @@ class User_Model extends CI_Model {
         $this->db->where('UserProfileId', $UserProfileId);
         $this->db->order_by('UserProfileWorkId', 'ASC');
         $query = $this->db->get();
-        $result = $query->result_array();
+        $res = $query->result_array();
         if ($query->num_rows() > 0) {
             $user_profile_work = array();
-            foreach($result AS $key => $result) {
+            foreach($res AS $key => $result) {
                 $user_profile_work[] = $this->returnUserProfileWork($result);
             }
             return $user_profile_work;
@@ -1878,6 +1911,66 @@ class User_Model extends CI_Model {
         }
 
         return $follow_user;
+    }
+
+
+    // Minimum Friend List of User
+    public function getUserProrifleMinFriendList($FriendUserProfileId, $UserProfileId = 0) {
+
+        $minimum_friend_show = 6;
+        $user_friends = array();
+        $sql = "SELECT uf.FriendUserProfileId 
+                                        FROM ".$this->UserFriendTbl." AS uf  
+                                        LEFT JOIN ".$this->userProfileTbl." up ON uf.FriendUserProfileId = up.UserProfileId 
+                                        WHERE 
+                                            uf.`UserProfileId` = '".$FriendUserProfileId."'
+                                        AND uf.RequestAccepted = '1'"; 
+
+        $sql .= " ORDER BY uf.RequestAcceptedOn DESC LIMIT 0, $minimum_friend_show";
+
+        $query = $this->db->query($sql);
+
+        $res = $query->result_array();
+
+        if ($query->num_rows() > 0) {
+            $user_friends = array();
+            foreach($res AS $key => $result) {
+                $user_friends[] = $this->getUserProfileInformation($result['FriendUserProfileId'], $UserProfileId);
+            }
+            return $user_friends;
+        } else {
+            return $user_friends;
+        }
+    }
+
+
+
+    // Friend List of User
+    public function getUserProrifleFriendList($FriendUserProfileId, $UserProfileId = 0) {
+
+        $user_friends = array();
+        $sql = "SELECT uf.FriendUserProfileId 
+                                        FROM ".$this->UserFriendTbl." AS uf  
+                                        LEFT JOIN ".$this->userProfileTbl." up ON uf.FriendUserProfileId = up.UserProfileId 
+                                        WHERE 
+                                            uf.`UserProfileId` = '".$FriendUserProfileId."'
+                                        AND uf.RequestAccepted = '1'"; 
+
+        $sql .= " ORDER BY uf.RequestAcceptedOn DESC";
+
+        $query = $this->db->query($sql);
+
+        $res = $query->result_array();
+
+        if ($query->num_rows() > 0) {
+            $user_friends = array();
+            foreach($res AS $key => $result) {
+                $user_friends[] = $this->getUserProfileInformation($result['FriendUserProfileId'], $UserProfileId);
+            }
+            return $user_friends;
+        } else {
+            return $user_friends;
+        }
     }
 
     

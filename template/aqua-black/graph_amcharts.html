@@ -1,0 +1,938 @@
+<!DOCTYPE html>
+<html lang="en">
+
+
+<!-- Mirrored from adminbag-v1.3.bittyfox.com/default/aqua-black/graph_amcharts.html by HTTrack Website Copier/3.x [XR&CO'2010], Tue, 17 Apr 2018 10:08:19 GMT -->
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Admin-Bag | angular and html  amchart </title>
+	<!-- Bootstrap -->
+	<link href="assets/css/bootstrap.min.css" rel="stylesheet">
+	<!-- amcharts -->
+	<link rel="stylesheet" href="assets/css/export.css" type="text/css" media="all" />
+	<!-- slimscroll -->
+	<link href="assets/css/jquery.slimscroll.css" rel="stylesheet">
+	<!-- Fontes -->
+	<link href="assets/css/font-awesome.min.css" rel="stylesheet">
+	<link href="assets/css/simple-line-icons.css" rel="stylesheet">
+	<link href="assets/css/flotCart.css" rel="stylesheet">
+	<!-- all buttons css -->
+	<link href="assets/css/buttons.css" rel="stylesheet">
+	<!-- animate css -->
+<link href="assets/css/animate.css" rel="stylesheet">
+<!-- adminbag main css -->
+	<link href="assets/css/main.css" rel="stylesheet">
+	<!-- aqua black theme css -->
+	<link href="assets/css/aqua-black.css" rel="stylesheet">
+	<!-- media css for responsive  -->
+	<link href="assets/css/main.media.css" rel="stylesheet">
+	<!--[if lt IE 9]> <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script> <![endif]-->
+	<!--[if lt IE 9]> <script src="dist/html5shiv.js"></script> <![endif]-->
+</head>
+
+<body class="page-header-fixed ">
+	<div class="page-header navbar navbar-fixed-top">
+		<!-- BEGIN HEADER INNER -->
+		<div class="page-header-inner ">
+			<!-- BEGIN LOGO -->
+			<div class="page-logo">
+				<a href="index.html"> <img class="logo-default" alt="logo" src="assets/images/logo.png"> </a>
+			</div>
+			<div class="library-menu"> <span class="one">-</span> <span class="two">-</span> <span class="three">-</span> </div>
+			<!-- END LOGO -->
+			<!-- BEGIN TOP NAVIGATION MENU -->
+			<div class="top-menu">
+				<ul class="nav navbar-nav pull-right">
+					<li class="dropdown">
+						<a href="#" data-toggle="dropdown" class="dropdown-toggle count-info"> <i class="fa fa-envelope"></i> <span class="badge badge-info">6</span> </a>
+						<ul class="dropdown-menu dropdown-messages menuBig">
+							<li>
+								<div class="dropdown-messages-box">
+									<a class="pull-left" href="profile.html"> <img src="assets/images/teem/a7.jpg" class="img-circle" alt="image"> </a>
+									<div class="media-body"> <small class="pull-right">46h ago</small> <strong>Mike Loreipsum</strong> started following <strong>Olivia Wenscombe</strong>.
+										<br>
+										<small class="text-muted">3 days ago at 7:58 pm - 10.06.2014</small> </div>
+								</div>
+							</li>
+							<li class="divider"></li>
+							<li>
+								<div class="dropdown-messages-box">
+									<a class="pull-left" href="profile.html"> <img src="assets/images/teem/a4.jpg" class="img-circle" alt="image"> </a>
+									<div class="media-body "> <small class="pull-right text-navy">5h ago</small> <strong> Alex Smith </strong> started following <strong>Olivia Wenscombe</strong>.
+										<br>
+										<small class="text-muted">Yesterday 1:21 pm - 11.06.2014</small> </div>
+								</div>
+							</li>
+							<li class="divider"></li>
+							<li>
+								<div class="dropdown-messages-box">
+									<a class="pull-left" href="profile.html"> <img src="assets/images/teem/a3.jpg" class="img-circle" alt="image"> </a>
+									<div class="media-body "> <small class="pull-right">23h ago</small> <strong>Olivia Wenscombe</strong> love <strong>Sophie </strong>. <br>
+										<small class="text-muted">2 days ago at 2:30 am - 11.06.2014</small> </div>
+								</div>
+							</li>
+							<li class="divider"></li>
+							<li>
+								<div class="text-center link-block">
+									<a href="mailbox.html"> <i class="fa fa-envelope"></i> <strong>Read All Messages</strong> </a>
+								</div>
+							</li>
+						</ul>
+					</li>
+					<li class="dropdown">
+						<a href="#" data-toggle="dropdown" class="dropdown-toggle count-info"> <i class="fa fa-bell"></i> <span class="badge badge-primary">8</span> </a>
+						<ul class="dropdown-menu dropdown-alerts menuBig">
+							<li>
+								<a href="mailbox.html">
+									<div> <i class="fa fa-envelope fa-fw"></i> You have 16 messages <span class="pull-right text-muted small">4 minutes ago</span>										</div>
+								</a>
+							</li>
+							<li class="divider"></li>
+							<li>
+								<a href="profile.html">
+									<div> <i class="fa fa-twitter fa-fw"></i> 3 New Followers <span class="pull-right text-muted small">12 minutes ago</span>										</div>
+								</a>
+							</li>
+							<li class="divider"></li>
+							<li>
+								<a href="grid_options.html">
+									<div> <i class="fa fa-upload fa-fw"></i> Server Rebooted <span class="pull-right text-muted small">4 minutes ago</span>										</div>
+								</a>
+							</li>
+							<li class="divider"></li>
+							<li>
+								<div class="text-center link-block">
+									<a href="mailbox.html"> <strong>See All Alerts</strong> <i class="fa fa-angle-right"></i> </a>
+								</div>
+							</li>
+						</ul>
+					</li>
+					<!-- START USER LOGIN DROPDOWN -->
+					<li class="dropdown dropdown-user">
+						<a data-close-others="true" data-hover="dropdown" data-toggle="dropdown" class="dropdown-toggle" href="javascript:;">
+						<img src="assets/images/teem/a10.jpg" class="img-circle" alt=""> <span class="username username-hide-on-mobile"> Susan Wenscombe</span>							<i class="fa fa-angle-down"></i> </a>
+						<ul class="dropdown-menu dropdown-menu-default">
+							<li>
+								<a href="profile.html"> <i class="icon-user"></i> My Profile </a>
+
+</li>
+<li>
+<a href="profile_2.html"> <i class="icon-user"></i> Profile-2 </a>
+							</li>
+							<li>
+								<a href="calendar.html"> <i class="icon-calendar"></i> My Calendar </a>
+							</li>
+							<li>
+								<a href="mailbox.html"> <i class="icon-envelope-open"></i> My Inbox <span class="badge badge-danger"> 3 </span> </a>
+							</li>
+							<li>
+								<a href="dashboard2.html"> <i class="icon-rocket"></i> My Tasks <span class="badge badge-success"> 7 </span> </a>
+							</li>
+							<li class="divider"> </li>
+							<li>
+								<a href="lockscreen.html"> <i class="icon-lock"></i> Lock Screen </a>
+							</li>
+							<li>
+								<a href="login.html"> <i class="icon-key"></i> Log Out </a>
+							</li>
+						</ul>
+					</li>
+					<!-- END USER LOGIN DROPDOWN -->
+				</ul>
+			</div>
+			<!-- END TOP NAVIGATION MENU -->
+		</div>
+		<!-- END HEADER INNER -->
+	</div>
+	<div class="clearfix"> </div>
+	<div class="page-container">
+		<!-- Start page sidebar wrapper -->
+		<div class="page-sidebar-wrapper">
+			<div class="page-sidebar">
+				<ul class="page-sidebar-menu  page-header-fixed ">
+					<li class="sidebar-search-wrapper">
+						<!-- START RESPONSIVE SEARCH FORM -->
+						<form class="sidebar-search  " action="http://adminbag-v1.3.bittyfox.com/default/aqua-black/search_results.html" method="POST">
+							<a href="javascript:;" class="remove"> <i class="icon-close"></i> </a>
+							<div class="input-group">
+								<input type="text" class="form-control" placeholder="Search...">
+								<span class="input-group-btn"> <a href="javascript:;" class="btn submit"> <i class="icon-magnifier"></i> </a> </span>								</div>
+						</form>
+						<!-- END RESPONSIVE SEARCH FORM -->
+					</li>
+					<li class="nav-item ">
+						<a class="nav-link nav-toggle" href="javascript:;"> <i class="fa fa-th-large"></i> <span class="title">Dashboard</span> <span class="arrow"></span> </a>
+						<ul class="sub-menu">
+							<li class="nav-item ">
+								<a class="nav-link" href="index.html"> <span class="title">Dashboard 1</span> </a>
+							</li>
+							<li class="nav-item">
+								<a class="nav-link" href="dashboard2.html"> <span class="title">Dashboard 2</span> </a>
+							</li>
+							<li class="nav-item">
+								<a class="nav-link" href="dashboard3.html"> <span class="title">Dashboard 3</span> </a>
+							</li>
+							<li class="nav-item">
+								<a class="nav-link" href="dashboard4.html"> <span class="title">Dashboard 4</span> </a>
+							</li>
+						</ul>
+					</li>
+					<li class="nav-item"> <a class="nav-link" href="widgets.html"> <i class="fa fa-flash"></i> <span class="title">Widget</span> </a></li>
+<li class="heading">
+<h3 class="uppercase">Features</h3>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link nav-toggle" href="javascript:;"> <i class="fa fa-diamond"></i> <span class="title">UI Features</span> <span class="arrow"></span> </a>
+						<ul class="sub-menu">
+							<li class="nav-item">
+								<a class="nav-link" href="ui_colors.html" > <span class="title">Color Library</span> </a>
+							</li>
+							<li class="nav-item">
+								<a class="nav-link" href="ui_buttons.html"> <span class="title">Buttons</span> </a>
+							</li>
+							<li class="nav-item">
+								<a class="nav-link" href="ui_icons.html" > <span class="title">Font Icons</span> </a>
+							</li>
+							<li class="nav-item">
+								<a class="nav-link" href="ui_tabs.html"> <span class="title">Tabs</span> </a>
+							</li>
+							<li class="nav-item">
+								<a class="nav-link" href="timeline.html"> <span class="title">Timeline</span> </a>
+							</li>
+							<li class="nav-item">
+								<a class="nav-link" href="timeline_horizontal.html"> <span class="title">Timeline Horizontal</span> </a>
+							</li>
+							<li class="nav-item">
+								<a class="nav-link" href="ui_form.html"> <span class="title">Form UI</span> </a>
+							</li>
+							<li class="nav-item">
+								<a class="nav-link" href="ui_grids.html"> <span class="title">Grids</span> </a>
+							</li>
+							<li class="nav-item">
+								<a class="nav-link" href="ui_panels.html"> <span class="title">Panels UI</span> </a>
+							</li>
+							<li class="nav-item">
+								<a class="nav-link" href="ui_typography.html"> <span class="title">Typography</span> </a>
+							</li>
+							<li class="nav-item">
+								<a class="nav-link" href="alerts_Modal_Tooltip.html"> <span class="title">Alerts & Modal</span> </a>
+							</li>
+							<li class="nav-item">
+								<a class="nav-link" href="badges_labels_progress.html"> <span class="title">Badges, Labels & Progress</span> </a>
+							</li>
+							<li class="nav-item">
+								<a class="nav-link" href="MediaObjects_Thumbnails.html"> <span class="title">Media Objects</span> </a>
+							</li>
+						</ul>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link nav-toggle" href="javascript:;"> <i class="fa fa-flask"></i> <span class="title">Components</span> <span class="arrow"></span> </a>
+						<ul class="sub-menu">
+							<li class="nav-item">
+								<a class="nav-link" href="components_datetime_pickers.html"> <span class="title">Date &amp; Time Pickers</span> </a>
+							</li>
+							<li class="nav-item">
+								<a class="nav-link" href="components_colourPikar.html"> <span class="title">Color Pickers</span> <span class="badge badge-danger">8</span> </a>
+							</li>
+							<li class="nav-item">
+								<a class="nav-link" href="components_dropDown.html"> <span class="title">Dropdowns</span> </a>
+							</li>
+							<li class="nav-item">
+								<a class="nav-link" href="components_multi_select.html"> <span class="title">Multi Select</span> </a>
+							</li>
+							<li class="nav-item">
+								<a class="nav-link" href="components_fileinput.html" > <span class="title">Bootstrap File Input</span></a>
+							</li>
+							<li class="nav-item">
+								<a class="nav-link" href="components_autocomplete.html"> <span class="title">Autocomplete</span> </a>
+							</li>
+							<li class="nav-item">
+								<a class="nav-link" href="components_RangeSlider.html"> <span class="title">RangeSlider</span> </a>
+							</li>
+							<li class="nav-item">
+								<a class="nav-link" href="components_Image_Cropping.html"> <span class="title">Image Cropping</span> </a>
+							</li>
+							<li class="nav-item">
+								<a class="nav-link" href="components_Text_Editing.html"> <span class="title">Text Editor</span> </a>
+							</li>
+						</ul>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link nav-toggle" href="javascript:;"> <i class="fa fa-table"></i> <span class="title">Tables</span> <span class="arrow"></span> </a>
+						<ul class="sub-menu">
+							<li class="nav-item">
+								<a class="nav-link nav-toggle" href="table_static_basic.html"> <span class="title">Static Tables</span> </a>
+							</li>
+							<li class="nav-item">
+								<a class="nav-link nav-toggle" href="table_datatables.html"> <span class="title">Datatables</span> </a>
+							</li>
+						</ul>
+					</li>
+					<li class="nav-item active open">
+						<a class="nav-link nav-toggle" href="javascript:;"> <i class="fa fa-bar-chart-o"></i> <span class="title">Charts</span> <span class="arrow"></span> </a>
+						<ul class="sub-menu">
+							<li class="nav-item active">
+								<a class="nav-link" href="graph_amcharts.html"> <span class="title">amChart</span> </a>
+							</li>
+							<li class="nav-item">
+								<a class="nav-link" href="graph_chartjs.html"> <span class="title">ChartJS</span> </a>
+							</li>
+							<li class="nav-item">
+								<a class="nav-link" href="graph_flotchart.html"> <span class="title">Flot Charts</span> </a>
+							</li>
+							<li class="nav-item">
+								<a class="nav-link" href="graph_google.html"> <span class="title"> Google Charts </span> </a>
+							</li>
+							<li class="nav-item">
+								<a class="nav-link" href="graph_morris.html"> <span class="title"> Morris Chart </span> </a>
+							</li>
+							<li class="nav-item">
+								<a class="nav-link" href="graph_peity.html"> <span class="title"> Peity Chart </span> </a>
+							</li>
+							<li class="nav-item">
+								<a class="nav-link" href="graph_sparkline.html"> <span class="title"> Sparkline Charts </span> </a>
+							</li>
+						</ul>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link nav-toggle" href="javascript:;"> <i class="fa fa-map"></i> <span class="title">Maps</span> <span class="arrow"></span> </a>
+						<ul class="sub-menu">
+							<li class="nav-item">
+								<a class="nav-link" href="maps_google.html" > <span class="title">Google Maps</span> </a>
+							</li>
+							<li class="nav-item  "><a class="nav-link" href="maps_vector.html"><span class="title">Vector Maps</span> </a></li>
+						</ul>
+					</li>
+					<li class="heading">
+						<h3 class="uppercase">Layouts</h3>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link nav-toggle" href="javascript:;"> <i class="icon-layers"></i> <span class="title">Page Layouts</span> <span class="arrow"></span> </a>
+						<ul class="sub-menu">
+							<li class="nav-item">
+								<a class="nav-link" href="layout_blank_page.html"> <span class="title">Blank Page</span> </a>
+							</li>
+							<li class="nav-item">
+								<a class="nav-link" href="layout_Boxed_Page.html"> <span class="title">Boxed Page</span> </a>
+							</li>
+							<li class="nav-item">
+								<a class="nav-link" href="layout_footer_fixed.html"> <span class="title">Fixed Footer 
+
+</span> </a>
+							</li>
+							<li class="nav-item">
+								<a class="nav-link" href="layout_search_on_header.html"> <span class="title">Search On Header</span> </a>
+							</li>
+							<li class="nav-item">
+								<a class="nav-link" href="layout_sidebar_closed.html"> <span class="title">Closed Sidebar</span> </a>
+							</li>
+							<li class="nav-item">
+								<a class="nav-link" href="layout_sidebar_fixed.html"> <span class="title">Fixed Sidebar</span> </a>
+							</li>
+							<li class="nav-item">
+								<a class="nav-link" href="layout_sidebar_menu_light.html"> <span class="title">Light Sidebar Menu</span> </a>
+							</li>
+							<li class="nav-item">
+								<a class="nav-link" href="layout_white.html"> <span class="title">White Page</span> </a>
+							</li>
+						</ul>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link nav-toggle" href="javascript:;"> <i class="icon-paper-plane"></i> <span class="title">Horizontal Menu</span> <span class="arrow"></span> </a>
+						<ul class="sub-menu">
+							<li class="nav-item">
+								<a class="nav-link" href="layout_menu_dark.html"> <span class="title">Dark Horizontal Menu </span> </a>
+							</li>
+							<li class="nav-item">
+								<a class="nav-link" href="layout_menu_light.html"> <span class="title">Light Horizontal Menu </span> </a>
+							</li>
+						</ul>
+					</li>
+					<li class="heading">
+						<h3 class="uppercase">Pages</h3>
+					</li>
+					<li> <a class="nav-link nav-toggle" href="javascript:;"><i class="fa fa-envelope"></i> <span class="title">Mailbox </span><span class="label label-warning pull-right">16/70</span></a>
+						<ul class="sub-menu">
+							<li class="nav-item"><a class="nav-link" href="mailbox.html">Inbox</a></li>
+							<li class="nav-item"><a class="nav-link" href="mail_detail.html">Email view</a></li>
+							<li class="nav-item"><a class="nav-link" href="mail_compose.html">Compose email</a></li>
+							<li class="nav-item"><a class="nav-link" href="email_template.html">Email templates</a></li>
+						</ul>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" href="calendar.html"> <i class="icon-calendar"></i> <span class="title">Calendar</span> </a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link nav-toggle" href="javascript:;"> <i class="fa fa-shopping-cart"></i> <span class="title">E-commerce</span> <span class="arrow"></span> </a>
+						<ul class="sub-menu">
+							<li class="nav-item"><a class="nav-link" href="ecommerce_products_grid1.html">Products grid I</a></li>
+							<li class="nav-item"><a class="nav-link" href="ecommerce_products_grid2.html">Products grid II </a></li>
+							<li class="nav-item"><a class="nav-link" href="ecommerce_product_list.html">Products list</a></li>
+							<li class="nav-item"><a class="nav-link" href="ecommerce_product_detail.html">Product detail</a></li>
+							<li class="nav-item"><a class="nav-link" href="ecommerce-cart.html">Cart</a></li>
+						</ul>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link nav-toggle" href="javascript:;"> <i class="fa fa-picture-o"></i> <span class="title">Gallery</span> <span class="arrow"></span> </a>
+						<ul class="sub-menu">
+							<li class="nav-item"><a class="nav-link" href="lightbox_gallery.html">Lightbox Gallery</a></li>
+							<li class="nav-item"><a class="nav-link" href="slick_carousel.html">Slick Carousel</a></li>
+							<li class="nav-item"><a class="nav-link" href="carousel.html">Bootstrap Carousel</a></li>
+						</ul>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link nav-toggle" href="javascript:;"> <i class="fa fa-desktop"></i> <span class="title">Apps</span> <span class="arrow"></span> </a>
+						<ul class="sub-menu">
+							<li class="nav-item"><a class="nav-link" href="projects.html">Projects</a></li>
+							<li class="nav-item"><a class="nav-link" href="calendar.html">Calendar</a></li>
+							<li class="nav-item"><a class="nav-link" href="issue_tracker.html">Issue tracker</a></li>
+							<li class="nav-item"><a class="nav-link" href="blog.html">Blog</a></li>
+							<li class="nav-item"><a class="nav-link" href="article.html">Article</a></li>
+							<li class="nav-item"><a class="nav-link" href="faq.html">FAQ</a></li>
+							<li class="nav-item">
+								<a class="nav-link" href="timeline.html" > <span class="title">Timeline</span> </a>
+							</li>
+							<li class="nav-item">
+								<a class="nav-link" href="timeline_horizontal.html"> <span class="title">Timeline Horizontal</span> </a>
+							</li>
+						</ul>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link nav-toggle" href="javascript:;"> <i class="icon-user"></i> <span class="title">User</span> <span class="arrow"></span> </a>
+						<ul class="sub-menu">
+							<li class="nav-item"><a class="nav-link" href="profile.html">Profile</a></li>
+							<li class="nav-item"><a class="nav-link" href="profile_2.html">Profile-2</a></li>
+							<li class="nav-item"><a class="nav-link" href="contacts.html">Contacts</a></li>
+							<li class="nav-item"><a class="nav-link" href="contacts_2.html">Contacts-2</a></li>
+							<li class="nav-item"><a class="nav-link" href="search_results.html">Search results</a></li>
+							<li class="nav-item"><a class="nav-link" href="lockscreen.html">Lockscreen</a></li>
+							<li class="nav-item"><a class="nav-link" href="invoice.html">Invoice</a></li>
+							<li class="nav-item"><a class="nav-link" href="login.html">Login</a></li>
+							<li class="nav-item"><a class="nav-link" href="login_v2.html">Login 2</a></li>
+							<li class="nav-item"><a class="nav-link" href="forgot_password.html">Forget password</a></li>
+							<li class="nav-item"><a class="nav-link" href="register.html">Register</a></li>
+							<li class="nav-item"><a class="nav-link" href="register_v2.html">Register 2</a></li>
+							<li class="nav-item"><a class="nav-link" href="404.html">404 Page</a></li>
+							<li class="nav-item"><a class="nav-link" href="500.html">500 Page</a></li>
+						</ul>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link nav-toggle" href="javascript:;"> <i class="fa fa-sitemap"></i> <span class="title">Multi Level Menu</span> <span class="arrow "></span> </a>
+						<ul class="sub-menu">
+							<li class="nav-item"> <a class="nav-link nav-toggle" href="javascript:;"> Item 1 <span class="arrow"></span> </a>
+								<ul class="sub-menu">
+									<li class="nav-item"> <a class="nav-link" href="javascript:;"> Arrow Toggle <span class="arrow nav-toggle"></span> </a>
+										<ul class="sub-menu">
+											<li class="nav-item"> <a class="nav-link" href="#"> Sample Link 1</a> </li>
+											<li class="nav-item"> <a class="nav-link" href="#"> Sample Link 1</a> </li>
+											<li class="nav-item"> <a class="nav-link" href="#"> Sample Link 1</a> </li>
+										</ul>
+									</li>
+									<li class="nav-item"> <a class="nav-link" href="#"> Sample Link 1</a> </li>
+									<li class="nav-item"> <a class="nav-link" href="#"> Sample Link 2</a> </li>
+									<li class="nav-item"> <a class="nav-link" href="#"> Sample Link 3</a> </li>
+								</ul>
+							</li>
+							<li class="nav-item"> <a class="nav-link" href="javascript:;"> Arrow Toggle <span class="arrow nav-toggle"></span> </a>
+								<ul class="sub-menu">
+									<li class="nav-item"> <a class="nav-link" href="#"> Sample Link 1</a> </li>
+									<li class="nav-item"> <a class="nav-link" href="#"> Sample Link 1</a> </li>
+									<li class="nav-item"> <a class="nav-link" href="#"> Sample Link 1</a> </li>
+								</ul>
+							</li>
+							<li class="nav-item"> <a class="nav-link" href="#"> Item 3 </a> </li>
+						</ul>
+					</li>
+				</ul>
+			</div>
+		</div>
+		<!-- End page sidebar wrapper -->
+		<!-- Start page content wrapper -->
+		<div class="page-content-wrapper animated fadeInRight">
+			<div class="page-content">
+				<div class="row wrapper border-bottom page-heading">
+					<div class="col-lg-12">
+						<h2>amChart </h2>
+						<ol class="breadcrumb">
+							<li> <a href="index.html">Home</a> </li>
+							<li> <a>Graphs</a> </li>
+							<li class="active"> <strong>amChart</strong> </li>
+						</ol>
+					</div>
+				</div>
+				<div class="wrapper-content ">
+					<!-- Bar Chart-->
+					<div class="row">
+						<div class="col-lg-12">
+							<p> You can download and use all amCharts products for free. The only limitation of the free version is that a small link
+								to this web site will be displayed in the top left corner of your charts. If you would like to use charts without
+								this link, or you appreciate the software and would like to support its creators, please purchase a commercial license
+								</p>
+							<p> For more info please check out <a target="_blank" class="btn aqua btn-outline  btn-xs" href="https://www.amcharts.com/">Documentation</a>								</p>
+						</div>
+						<div class="col-lg-12">
+							<div class="ibox float-e-margins">
+								<div class="ibox-title">
+									<h5>Bar Chart <small>With custom colors.</small></h5>
+									<div class="ibox-tools">
+										<a class="collapse-link" data-toggle="collapse" data-target="#demo"> <i class="fa fa-chevron-up"></i><i class="fa fa-chevron-down"></i> </a>
+										<a href="#" data-toggle="dropdown" class="dropdown-toggle">
+										<i class="fa fa-wrench"></i> </a>
+										<ul class="dropdown-menu dropdown-user">
+											<li><a href="#">Config option 1</a> </li>
+											<li><a href="#">Config option 2</a> </li>
+										</ul>
+										<a class="close-link"> <i class="fa fa-times"></i> </a>
+									</div>
+								</div>
+								<div class="ibox-content collapse in" id="demo">
+									<div class="chartdiv-container">
+										<div id="chartdiv"></div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<!-- Duration on Value Axis -->
+					<div class="row">
+						<div class="col-lg-12">
+							<div class="ibox float-e-margins">
+								<div class="ibox-title">
+									<h5>Duration on Value Axis </h5>
+									<div class="ibox-tools">
+										<a class="collapse-link" data-toggle="collapse" data-target="#demo1"> <i class="fa fa-chevron-up"></i><i class="fa fa-chevron-down"></i> </a>
+										<a href="#" data-toggle="dropdown" class="dropdown-toggle">
+										<i class="fa fa-wrench"></i> </a>
+										<ul class="dropdown-menu dropdown-user">
+											<li><a href="#">Config option 1</a> </li>
+											<li><a href="#">Config option 2</a> </li>
+										</ul>
+										<a class="close-link"> <i class="fa fa-times"></i> </a>
+									</div>
+								</div>
+								<div class="ibox-content collapse in" id="demo1">
+									<div class="chartdiv-container">
+										<div id="chartValueAxis"></div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<!-- Gantt chart -->
+					<div class="row">
+						<div class="col-lg-12">
+							<div class="ibox float-e-margins">
+								<div class="ibox-title">
+									<h5>Gantt chart</h5>
+									<div class="ibox-tools">
+										<a class="collapse-link" data-toggle="collapse" data-target="#demo2"> <i class="fa fa-chevron-up"></i><i class="fa fa-chevron-down"></i> </a>
+										<a href="#" data-toggle="dropdown" class="dropdown-toggle">
+										<i class="fa fa-wrench"></i> </a>
+										<ul class="dropdown-menu dropdown-user">
+											<li><a href="#">Config option 1</a> </li>
+											<li><a href="#">Config option 2</a> </li>
+										</ul>
+										<a class="close-link"> <i class="fa fa-times"></i> </a>
+									</div>
+								</div>
+								<div class="ibox-content collapse in" id="demo2">
+									<div class="chartdiv-container">
+										<div id="ganttChart"></div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<!-- 3D Cylinder Chart  -->
+					<div class="row">
+						<div class="col-lg-12">
+							<div class="ibox float-e-margins">
+								<div class="ibox-title">
+									<h5>3D Cylinder Chart </h5>
+									<div class="ibox-tools">
+										<a class="collapse-link" data-toggle="collapse" data-target="#demo3"> <i class="fa fa-chevron-up"></i><i class="fa fa-chevron-down"></i> </a>
+										<a href="#" data-toggle="dropdown" class="dropdown-toggle">
+										<i class="fa fa-wrench"></i> </a>
+										<ul class="dropdown-menu dropdown-user">
+											<li><a href="#">Config option 1</a> </li>
+											<li><a href="#">Config option 2</a> </li>
+										</ul>
+										<a class="close-link"> <i class="fa fa-times"></i> </a>
+									</div>
+								</div>
+								<div class="ibox-content collapse in" id="demo3">
+									<div class="chartdiv-container">
+										<div id="cylinderChart"></div>
+										<div class="container-fluid">
+											<div class="row text-center" style="overflow:hidden;">
+												<div class="col-sm-3" style="float: none !important;display: inline-block;">
+													<label class="text-left">Top Radius:</label>
+													<input class="chart-input2" data-property="topRadius" type="range" min="0" max="1.5" value="1" step="0.01" />
+												</div>
+												<div class="col-sm-3" style="float: none !important;display: inline-block;">
+													<label class="text-left">Angle:</label>
+													<input class="chart-input2" data-property="angle" type="range" min="0" max="89" value="30" step="1" />
+												</div>
+												<div class="col-sm-3" style="float: none !important;display: inline-block;">
+													<label class="text-left">Depth:</label>
+													<input class="chart-input2" data-property="depth3D" type="range" min="1" max="120" value="40" step="1" />
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<!-- 3D Column Chart -->
+					<div class="row">
+						<div class="col-lg-12">
+							<div class="ibox float-e-margins">
+								<div class="ibox-title">
+									<h5>3D Cylinder Chart </h5>
+									<div class="ibox-tools">
+										<a class="collapse-link" data-toggle="collapse" data-target="#demo4"> <i class="fa fa-chevron-up"></i><i class="fa fa-chevron-down"></i> </a>
+										<a href="#" data-toggle="dropdown" class="dropdown-toggle">
+										<i class="fa fa-wrench"></i> </a>
+										<ul class="dropdown-menu dropdown-user">
+											<li><a href="#">Config option 1</a> </li>
+											<li><a href="#">Config option 2</a> </li>
+										</ul>
+										<a class="close-link"> <i class="fa fa-times"></i> </a>
+									</div>
+								</div>
+								<div class="ibox-content collapse in" id="demo4">
+									<div class="chartdiv-container">
+										<div id="ColumnChart"></div>
+										<div class="container-fluid">
+											<div class="row text-center" style="overflow:hidden;">
+												<div class="col-sm-3" style="float: none !important;display: inline-block;">
+													<label class="text-left">Angle:</label>
+													<input class="chart-input3" data-property="angle" type="range" min="0" max="89" value="30" step="1" />
+												</div>
+												<div class="col-sm-3" style="float: none !important;display: inline-block;">
+													<label class="text-left">Depth:</label>
+													<input class="chart-input3" data-property="depth3D" type="range" min="1" max="120" value="20" step="1" />
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<!-- Bar and line chart mix  -->
+					<div class="row">
+						<div class="col-lg-12">
+							<div class="ibox float-e-margins">
+								<div class="ibox-title">
+									<h5>Bar and line chart mix </h5>
+									<div class="ibox-tools">
+										<a class="collapse-link" data-toggle="collapse" data-target="#demo5"> <i class="fa fa-chevron-up"></i><i class="fa fa-chevron-down"></i> </a>
+										<a href="#" data-toggle="dropdown" class="dropdown-toggle">
+										<i class="fa fa-wrench"></i> </a>
+										<ul class="dropdown-menu dropdown-user">
+											<li><a href="#">Config option 1</a> </li>
+											<li><a href="#">Config option 2</a> </li>
+										</ul>
+										<a class="close-link"> <i class="fa fa-times"></i> </a>
+									</div>
+								</div>
+								<div class="ibox-content collapse in" id="demo5">
+									<div class="chartdiv-container">
+										<div id="Bar-line"></div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<!-- Date Based Data  -->
+					<div class="row">
+						<div class="col-lg-12">
+							<div class="ibox float-e-margins">
+								<div class="ibox-title">
+									<h5>Date Based Data </h5>
+									<div class="ibox-tools">
+										<a class="collapse-link" data-toggle="collapse" data-target="#demo6"> <i class="fa fa-chevron-up"></i><i class="fa fa-chevron-down"></i> </a>
+										<a href="#" data-toggle="dropdown" class="dropdown-toggle">
+										<i class="fa fa-wrench"></i> </a>
+										<ul class="dropdown-menu dropdown-user">
+											<li><a href="#">Config option 1</a> </li>
+											<li><a href="#">Config option 2</a> </li>
+										</ul>
+										<a class="close-link"> <i class="fa fa-times"></i> </a>
+									</div>
+								</div>
+								<div class="ibox-content collapse in" id="demo6">
+									<div class="chartdiv-container">
+										<div id="DateBasedData"></div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<!-- Line With Changing Color   -->
+					<div class="row">
+						<div class="col-lg-12">
+							<div class="ibox float-e-margins">
+								<div class="ibox-title">
+									<h5>Line With Changing Color </h5>
+									<div class="ibox-tools">
+										<a class="collapse-link" data-toggle="collapse" data-target="#demo7"> <i class="fa fa-chevron-up"></i><i class="fa fa-chevron-down"></i> </a>
+										<a href="#" data-toggle="dropdown" class="dropdown-toggle">
+										<i class="fa fa-wrench"></i> </a>
+										<ul class="dropdown-menu dropdown-user">
+											<li><a href="#">Config option 1</a> </li>
+											<li><a href="#">Config option 2</a> </li>
+										</ul>
+										<a class="close-link"> <i class="fa fa-times"></i> </a>
+									</div>
+								</div>
+								<div class="ibox-content collapse in" id="demo7">
+									<div class="chartdiv-container">
+										<div id="LineChangingColor"></div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<!--Trend Lines  -->
+					<div class="row">
+						<div class="col-lg-12">
+							<div class="ibox float-e-margins">
+								<div class="ibox-title">
+									<h5>Trend Lines </h5>
+									<div class="ibox-tools">
+										<a class="collapse-link" data-toggle="collapse" data-target="#demo8"> <i class="fa fa-chevron-up"></i><i class="fa fa-chevron-down"></i> </a>
+										<a href="#" data-toggle="dropdown" class="dropdown-toggle">
+										<i class="fa fa-wrench"></i> </a>
+										<ul class="dropdown-menu dropdown-user">
+											<li><a href="#">Config option 1</a> </li>
+											<li><a href="#">Config option 2</a> </li>
+										</ul>
+										<a class="close-link"> <i class="fa fa-times"></i> </a>
+									</div>
+								</div>
+								<div class="ibox-content collapse in" id="demo8">
+									<div class="chartdiv-container">
+										<div id="trendLines"></div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<!-- Simple Pie Chart   -->
+					<div class="row">
+						<div class="col-lg-12">
+							<div class="ibox float-e-margins">
+								<div class="ibox-title">
+									<h5> Simple Pie Chart </h5>
+									<div class="ibox-tools">
+										<a class="collapse-link" data-toggle="collapse" data-target="#demo9"> <i class="fa fa-chevron-up"></i><i class="fa fa-chevron-down"></i> </a>
+										<a href="#" data-toggle="dropdown" class="dropdown-toggle">
+										<i class="fa fa-wrench"></i> </a>
+										<ul class="dropdown-menu dropdown-user">
+											<li><a href="#">Config option 1</a> </li>
+											<li><a href="#">Config option 2</a> </li>
+										</ul>
+										<a class="close-link"> <i class="fa fa-times"></i> </a>
+									</div>
+								</div>
+								<div class="ibox-content collapse in" id="demo9">
+									<div class="chartdiv-container">
+										<div id="simplePieChart"></div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<!-- 3D Donut Chart   -->
+					<div class="row">
+						<div class="col-lg-12">
+							<div class="ibox float-e-margins">
+								<div class="ibox-title">
+									<h5> 3D Donut Chart </h5>
+									<div class="ibox-tools">
+										<a class="collapse-link" data-toggle="collapse" data-target="#demo10"> <i class="fa fa-chevron-up"></i><i class="fa fa-chevron-down"></i> </a>
+										<a href="#" data-toggle="dropdown" class="dropdown-toggle">
+										<i class="fa fa-wrench"></i> </a>
+										<ul class="dropdown-menu dropdown-user">
+											<li><a href="#">Config option 1</a> </li>
+											<li><a href="#">Config option 2</a> </li>
+										</ul>
+										<a class="close-link"> <i class="fa fa-times"></i> </a>
+									</div>
+								</div>
+								<div class="ibox-content collapse in" id="demo10">
+									<div class="chartdiv-container">
+										<div id="donutChart"></div>
+										<div class="container-fluid">
+											<div class="row text-center" style="overflow:hidden;">
+												<div class="col-sm-3" style="float: none !important;display: inline-block;">
+													<label class="text-left">Angle:</label>
+													<input class="chart-input1" data-property="angle" type="range" min="0" max="60" value="30" step="1" />
+												</div>
+												<div class="col-sm-3" style="float: none !important;display: inline-block;">
+													<label class="text-left">Depth:</label>
+													<input class="chart-input1" data-property="depth3D" type="range" min="1" max="50" value="10" step="1" />
+												</div>
+												<div class="col-sm-3" style="float: none !important;display: inline-block;">
+													<label class="text-left">Inner-Radius:</label>
+													<input class="chart-input1" data-property="innerRadius" type="range" min="0" max="90" value="50" step="1" />
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<!-- Pyramid Chart    -->
+					<div class="row">
+						<div class="col-lg-12">
+							<div class="ibox float-e-margins">
+								<div class="ibox-title">
+									<h5> Pyramid Chart </h5>
+									<div class="ibox-tools">
+										<a class="collapse-link" data-toggle="collapse" data-target="#demo11"> <i class="fa fa-chevron-up"></i><i class="fa fa-chevron-down"></i> </a>
+										<a href="#" data-toggle="dropdown" class="dropdown-toggle">
+										<i class="fa fa-wrench"></i> </a>
+										<ul class="dropdown-menu dropdown-user">
+											<li><a href="#">Config option 1</a> </li>
+											<li><a href="#">Config option 2</a> </li>
+										</ul>
+										<a class="close-link"> <i class="fa fa-times"></i> </a>
+									</div>
+								</div>
+								<div class="ibox-content collapse in" id="demo11">
+									<div class="chartdiv-container">
+										<div id="pyramidChart"></div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<!--  Polar Chart    -->
+					<div class="row">
+						<div class="col-lg-12">
+							<div class="ibox float-e-margins">
+								<div class="ibox-title">
+									<h5> Polar Chart </h5>
+									<div class="ibox-tools">
+										<a class="collapse-link" data-toggle="collapse" data-target="#demo12"> <i class="fa fa-chevron-up"></i><i class="fa fa-chevron-down"></i> </a>
+										<a href="#" data-toggle="dropdown" class="dropdown-toggle">
+										<i class="fa fa-wrench"></i> </a>
+										<ul class="dropdown-menu dropdown-user">
+											<li><a href="#">Config option 1</a> </li>
+											<li><a href="#">Config option 2</a> </li>
+										</ul>
+										<a class="close-link"> <i class="fa fa-times"></i> </a>
+									</div>
+								</div>
+								<div class="ibox-content collapse in" id="demo12">
+									<div class="chartdiv-container">
+										<div id="polarChart"></div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<!--  Intraday Data   -->
+					<div class="row">
+						<div class="col-lg-12">
+							<div class="ibox float-e-margins">
+								<div class="ibox-title">
+									<h5> Stock Chart </h5>
+									<div class="ibox-tools">
+										<a class="collapse-link" data-toggle="collapse" data-target="#demo13"> <i class="fa fa-chevron-up"></i><i class="fa fa-chevron-down"></i> </a>
+										<a href="#" data-toggle="dropdown" class="dropdown-toggle">
+										<i class="fa fa-wrench"></i> </a>
+										<ul class="dropdown-menu dropdown-user">
+											<li><a href="#">Config option 1</a> </li>
+											<li><a href="#">Config option 2</a> </li>
+										</ul>
+										<a class="close-link"> <i class="fa fa-times"></i> </a>
+									</div>
+								</div>
+								<div class="ibox-content collapse in" id="demo13">
+									<div class="chartdiv-container">
+										<div id="stockChart"></div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<!--  Flight routes map    -->
+					<div class="row">
+						<div class="col-lg-12">
+							<div class="ibox float-e-margins">
+								<div class="ibox-title">
+									<h5> Flight routes map </h5>
+									<div class="ibox-tools">
+										<a class="collapse-link" data-toggle="collapse" data-target="#demo14"> <i class="fa fa-chevron-up"></i><i class="fa fa-chevron-down"></i> </a>
+										<a href="#" data-toggle="dropdown" class="dropdown-toggle">
+										<i class="fa fa-wrench"></i> </a>
+										<ul class="dropdown-menu dropdown-user">
+											<li><a href="#">Config option 1</a> </li>
+											<li><a href="#">Config option 2</a> </li>
+										</ul>
+										<a class="close-link"> <i class="fa fa-times"></i> </a>
+									</div>
+								</div>
+								<div class="ibox-content collapse in" id="demo14">
+									<div class="chartdiv-container">
+										<div id="flightRoutes"></div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				
+<!-- start footer -->
+<div class="footer">
+					<div class="pull-right">
+						<ul class="list-inline">
+							<li><a title="" href="index.html">Dashboard</a></li>
+							<li><a title="" href="mailbox.html"> Inbox </a></li>
+							<li><a title="" href="blog.html">Blog</a></li>
+							<li><a title="" href="contacts.html">Contacts</a></li>
+						</ul>
+					</div>
+					<div> <strong>Copyright</strong> AdminBag Company &copy; 2017 </div>
+				</div>
+			</div>
+		</div>
+		<!-- Go top -->
+		<a href="#" class="scrollup"><i class="fa fa-chevron-up"></i></a>
+		<!-- Go top -->
+		<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+		<script src="assets/js/vendor/jquery.min.js"></script>
+		<!-- bootstrap js -->
+		<script src="assets/js/vendor/bootstrap.min.js"></script>
+		<!-- flot chart -->
+		<script src="assets/js/vendor/amcharts/amcharts.js"></script>
+		<script src="assets/js/vendor/amcharts/serial.js"></script>
+		<script src="assets/js/vendor/amcharts/pie.js"></script>
+		<script src="assets/js/vendor/amcharts/gantt.js"></script>
+		<script src="assets/js/vendor/amcharts/funnel.js"></script>
+		<script src="assets/js/vendor/amcharts/radar.js"></script>
+		<script src="assets/js/vendor/amcharts/amstock.js"></script>
+		<script src="assets/js/vendor/amcharts/ammap.js"></script>
+		<script src="assets/js/vendor/amcharts/worldLow.js"></script>
+		<script src="assets/js/vendor/amcharts/light.js"></script>
+		<script src="assets/js/vendor/amcharts/export.min.js"></script>
+		<script type="text/javascript" src="assets/js/vendor/amcharts.js"></script>
+		<!-- slimscroll js -->
+		<script type="text/javascript" src="assets/js/vendor/jquery.slimscroll.js"></script>
+		<!-- pace js -->
+<script src="assets/js/vendor/pace/pace.min.js"></script>
+<!-- main js -->
+		<script src="assets/js/main.js"></script>
+</body>
+
+
+<!-- Mirrored from adminbag-v1.3.bittyfox.com/default/aqua-black/graph_amcharts.html by HTTrack Website Copier/3.x [XR&CO'2010], Tue, 17 Apr 2018 10:08:19 GMT -->
+</html>

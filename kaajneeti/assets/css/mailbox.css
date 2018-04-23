@@ -1,0 +1,292 @@
+/*!
+ * Adminbag v1.3 (http://adminbag-v1.3.bittyfox.com/)
+ * Copyright AdminBag Company © 2017 
+ * 
+ */
+
+/*------------------------------------------------
+FILE MANAGER
+MAILBOX
+Inbox
+------------------------------------------------*/
+
+
+/*------------------------------------------------
+
+FILE MANAGER
+
+-------------------------------------------------*/
+
+.file-box {
+  float: left;
+  width: 220px;
+}
+.file-manager h5 {
+  text-transform: uppercase;
+}
+.file-manager {
+  list-style: none outside none;
+  margin: 0;
+  padding: 0;
+}
+.folder-list li a {
+  color: #666666;
+  display: block;
+  padding: 5px 0;
+}
+.folder-list li {
+  border-bottom: 1px solid #e7eaec;
+  display: block;
+}
+.folder-list li i {
+  margin-right: 8px;
+  color: #3d4d5d;
+}
+.category-list li a {
+  color: #666666;
+  display: block;
+  padding: 5px 0;
+}
+.category-list li {
+  display: block;
+}
+.category-list li i {
+  margin-right: 8px;
+  color: #3d4d5d;
+}
+.category-list li a .text-navy {
+  color: #1ab394;
+}
+.category-list li a .text-primary {
+  color: #1c84c6;
+}
+.category-list li a .text-info {
+  color: #23c6c8;
+}
+.category-list li a .text-danger {
+  color: #EF5352;
+}
+.category-list li a .text-warning {
+  color: #F8AC59;
+}
+.file-manager h5.tag-title {
+  margin-top: 20px;
+}
+.tag-list li {
+  float: left;
+}
+.tag-list li a {
+  font-size: 10px;
+  background-color: #f3f3f4;
+  padding: 5px 12px;
+  color: inherit;
+  border-radius: 2px;
+  border: 1px solid #e7eaec;
+  margin-right: 5px;
+  margin-top: 5px;
+  display: block;
+}
+.file {
+  border: 1px solid #e7eaec;
+  padding: 0;
+  background-color: #ffffff;
+  position: relative;
+  margin-bottom: 20px;
+  margin-right: 20px;
+}
+.file-manager .hr-line-dashed {
+  margin: 15px 0;
+}
+.file .icon,
+.file .image {
+  height: 100px;
+  overflow: hidden;
+}
+.file .icon {
+  padding: 15px 10px;
+  text-align: center;
+}
+.file-control {
+  color: inherit;
+  font-size: 11px;
+  margin-right: 10px;
+}
+.file-control.active {
+  text-decoration: underline;
+}
+.file .icon i {
+  font-size: 70px;
+  color: #dadada;
+}
+.file .file-name {
+  padding: 10px;
+  background-color: #f8f8f8;
+  border-top: 1px solid #e7eaec;
+}
+.file-name small {
+  color: #676a6c;
+}
+.corner {
+  position: absolute;
+  display: inline-block;
+  width: 0;
+  height: 0;
+  line-height: 0;
+  border: 0.6em solid transparent;
+  border-right: 0.6em solid #f1f1f1;
+  border-bottom: 0.6em solid #f1f1f1;
+  right: 0em;
+  bottom: 0em;
+}
+a.compose-mail {
+  padding: 8px 10px;
+}
+.mail-search {
+  max-width: 300px;
+}
+
+/*------------------------------------------------
+
+MAILBOX
+
+-------------------------------------------------*/
+
+.mail-box {
+  background-color: #ffffff;
+  border: 1px solid #e7eaec;
+  border-top: 0;
+  padding: 0;
+  margin-bottom: 20px;
+}
+.mail-box-header {
+  background-color: #ffffff;
+  border: 1px solid #e7eaec;
+  border-bottom: 0;
+  padding: 15px;
+}
+.mail-box-header h2 {
+  margin-top: 0;
+}
+.mailbox-content .tag-list li a {
+  background: #ffffff;
+   -webkit-transition: all 0.35s ease-in-out;
+  -moz-transition: all 0.35s ease-in-out;
+  -o-transition: all 0.35s ease-in-out;
+  transition: all 0.35s ease-in-out;
+}
+
+.mailbox-content .tag-list li a:hover {
+  background: #222;  
+  color: #fff;
+}
+
+.mail-body {
+  border-top: 1px solid #e7eaec;
+  padding: 15px;
+}
+.mail-text {
+  border-top: 1px solid #e7eaec;
+}
+.mail-text .note-toolbar {
+  padding: 10px 15px;
+}
+.mail-body .form-group {
+  margin-bottom: 5px;
+}
+.mail-text .note-editor .note-toolbar {
+  background-color: #F9F8F8;
+}
+.mail-attachment {
+  border-top: 1px solid #e7eaec;
+  padding: 20px;
+  font-size: 12px;
+}
+.mailbox-content {
+  background: none;
+  border: none;
+  padding: 10px;
+}
+.mail-ontact {
+  width: 23%;
+}
+
+.unread td {
+    background-color: #f9f8f8;
+}
+.unread td a, .unread td {
+    color: inherit;
+    font-weight: 600;
+}
+
+.read td a, .read td {
+    color: inherit;
+    font-weight: normal;
+}
+table.table-mail tr td {
+    padding: 15px;
+}
+
+.tag-list, .folder-list, .tag-title, .folder-list, .category-list{
+   list-style: outside none none;
+    padding: 0;
+}
+a:hover, a:focus {
+    text-decoration: none;
+}
+.btn-white {
+    background: white none repeat scroll 0 0;
+    border: 1px solid #e7eaec;
+    color: inherit;
+}
+
+ .mail-text #editor { 
+    padding: 25px;
+}
+
+
+/*------------------------------------------------
+
+Inbox
+
+-------------------------------------------------*/
+
+
+.inbox-contacts-list {
+    display: inline-block;
+    list-style: outside none none;
+    padding: 0;
+    width: 100%;
+}
+
+.inbox-contacts-list li{
+ width: 100%;
+ float: left;
+}
+
+.inbox-contacts-list li img{
+ border-radius: 50% !important;
+    height: 30px;
+    width: 30px;
+}
+
+.inbox-contacts-list li > a .contact-name {
+    display: inline-block;
+    padding-left: 5px;
+}
+
+.inbox-contacts-list li > a .contact-status {
+    border: 1px solid #ffffff;
+    border-radius: 50% !important;
+    height: 9px;
+    left: 22px;
+    position: absolute;
+    top: 30px;
+    width: 9px;
+}
+
+.inbox-contacts-list li > a {
+    color: #3f444a;
+    display: block;
+     padding: 8px 0;
+    position: relative;
+}

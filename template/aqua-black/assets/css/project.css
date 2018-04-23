@@ -1,0 +1,79 @@
+/*!
+ * Adminbag v1.3 (http://adminbag-v1.3.bittyfox.com/)
+ * Copyright AdminBag Company © 2017 
+ * 
+ */
+
+/*------------------------------------------------
+
+PROJECTS
+
+-------------------------------------------------*/
+
+.project-people,
+.project-actions {
+  text-align: right;
+  vertical-align: middle;
+}
+dd.project-people {
+  text-align: left;
+  margin-top: 5px;
+}
+.project-people img {
+  width: 32px;
+  height: 32px;
+}
+.project-title a {
+  font-size: 14px;
+  color: #676a6c;
+  font-weight: 600;
+}
+.project-list table tr td {
+  border-top: none;
+  border-bottom: 1px solid #e7eaec;
+  padding: 15px 10px;
+  vertical-align: middle;
+}
+.project-manager .tag-list li a {
+  font-size: 10px;
+  background-color: white;
+  padding: 5px 12px;
+  color: inherit;
+  border-radius: 2px;
+  border: 1px solid #e7eaec;
+  margin-right: 5px;
+  margin-top: 5px;
+  display: block;
+}
+.project-files li a {
+  font-size: 11px;
+  color: #676a6c;
+  margin-left: 10px;
+  line-height: 22px;
+}
+.project-list .dataTables_filter{
+    display: none;
+
+}
+.project-list  table.dataTable{
+  border: none; 
+  border-top:1px solid #e7eaec;
+}
+.project-list .table-bordered > tbody > tr > td, .project-list .table-bordered > tbody > tr > th, .project-list .table-bordered > tfoot > tr > td, .project-list .table-bordered > tfoot > tr > th, .project-list .table-bordered > thead > tr > td, .project-list .table-bordered > thead > tr > th {
+    border-right: none;
+    border-bottom: 1px solid #e7eaec;
+}
+.project-list table.table-bordered.dataTable tbody th, .project-list table.table-bordered.dataTable tbody td {
+    border-bottom-width: 1px;
+}
+
+.project-list table.dataTable.dtr-inline.collapsed > tbody > tr > td:first-child::before, .project-list table.dataTable.dtr-inline.collapsed > tbody > tr > th:first-child::before{
+  top: 36%;
+}
+
+@media (max-width: 768px) {
+.project-list a{
+  display: block;
+}
+}
+
