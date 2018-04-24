@@ -12,6 +12,7 @@ class Payment extends CI_Controller {
 
         $this->load->model('User_Model');
         $this->load->model('Payment_Model');
+        $this->load->model('Systemconfig_Model');
 
         $this->device_token 	= $this->input->post('device_token');
         $this->location_lant 	= $this->input->post('location_lant');
@@ -278,6 +279,7 @@ class Payment extends CI_Controller {
     }
 
 
+    // Get My Total Wallet Amout
     public function getMyTotalWalletAmount() {
         $error_occured = false;
 
@@ -314,6 +316,7 @@ class Payment extends CI_Controller {
     }
 
 
+    // Get My All Transaction Log
     public function getMyAllPointTransactionLog() {
         $error_occured = false;
 
@@ -350,6 +353,7 @@ class Payment extends CI_Controller {
     }
 
 
+    // Get My Total Points Detail
     public function getMyTotalPointDetail() {
         $error_occured = false;
 
@@ -379,6 +383,193 @@ class Payment extends CI_Controller {
             $array = array(
                            "status"     => 'success',
                            "result"     => $point_log,
+                           "message"    => $msg,
+                           );
+        }
+        displayJsonEncode($array);
+    }
+
+
+    // Convert My Point To Rupee
+    public function convertPointToRupee() {
+        $error_occured = false;
+
+        $UserProfileId      = $this->input->post('user_profile_id');
+        $point              = $this->input->post('point');
+        
+        if($UserProfileId == "") {
+            $msg = "Please select your profile";
+            $error_occured = true;
+        } else if($point < 100) {
+            $msg = "Please enter point greater than 100";
+            $error_occured = true;
+        } else {
+
+            $point_log = $this->Payment_Model->getMyTotalPointDetail($UserProfileId);
+            
+
+            if($point_log['MyPointBalance'] < $point) {
+                $msg = "You have no sufficient points to covert into rupee";
+                $error_occured = true;
+            } else {
+                $point_rate = $this->Systemconfig_Model->getSystemConfigurationByConfigName('ConvertRateFromPointToMoney');
+
+                $MyPointBalance = $point_log['MyPointBalance'];
+
+
+                $point_ratio = $point_rate['SystemConfigValue'];
+                $point_ratio = str_replace('{', '', $point_ratio);
+                $point_ratio = str_replace('}', '', $point_ratio);
+
+                $point_ratio_exp = explode(':', $point_ratio);
+
+                $transaction_amount = number_format(($point / $point_ratio_exp[0]), 2, '.', '');
+
+                $TransactionComment = 'Converted point to rupee';
+
+                $TransactionId = time().$UserProfileId.mt_rand().rand();
+
+                $insertData = array(
+                                    'PaymentGatewayId'          => 0,
+                                    'TransactionId'             => $TransactionId,
+                                    'PaymentBy'                 => $UserProfileId,
+                                    'PaymentTo'                 => $UserProfileId,
+                                    'TransactionDate'           => date('Y-m-d H:i:s'),
+                                    'TransactionAmount'         => $transaction_amount,
+                                    'TransactionShippingAmount' => 0.00,
+                                    'DebitOrCredit'             => 1,
+                                    'TransactionStatus'         => 1,
+                                    'TransactionComment'        => $TransactionComment,
+                                    'AddedOn'                   => date('Y-m-d H:i:s'),
+                                );
+                $PaymentTransactionLogId = $this->Payment_Model->savePaymentTransactionLog($insertData);
+
+                $insertPointData = array(
+                                        'PointByName'           => 'PointToRupee',
+                                        'PointById'             => 0,
+                                        'TransactionId'         => $TransactionId,
+                                        'PaymentBy'             => $UserProfileId,
+                                        'PaymentTo'             => $UserProfileId,
+                                        'TransactionDate'       => date('Y-m-d H:i:s'),
+                                        'AddedOn'               => date('Y-m-d H:i:s'),
+                                        'TransactionPoint'      => $point,
+                                        'TransactionChargePoint' => 0,
+                                        'DebitOrCredit'         => 0,
+                                        'TransactionStatus'     => 1,
+                                        'TransactionComment'    => $TransactionComment,
+                                        );
+
+                $this->db->insert('PointTransactionLog', $insertPointData);
+
+                $point_log = $this->Payment_Model->getMyTotalPointDetail($UserProfileId);
+
+                $msg = "Point converted to rupee successfully";
+            }
+        }
+
+        if($error_occured == true) {
+            $array = array(
+                            "status"        => 'failed',
+                            "message"       => $msg,
+                        );
+        } else {
+
+            $array = array(
+                           "status"     => 'success',
+                           "result"     => $point_log,
+                           "message"    => $msg,
+                           );
+        }
+        displayJsonEncode($array);
+    }
+
+
+    // Convert My Rupee To Point
+    public function convertRupeeToPoint() {
+        $error_occured = false;
+
+        $UserProfileId      = $this->input->post('user_profile_id');
+        $rupee              = $this->input->post('rupee');
+        
+        if($UserProfileId == "") {
+            $msg = "Please select your profile";
+            $error_occured = true;
+        } else if($rupee < 10) {
+            $msg = "Please enter rupee greater than 10";
+            $error_occured = true;
+        } else {
+
+            $wallet_log = $this->Payment_Model->getMyTotalWalletAmount($UserProfileId);
+
+            if($wallet_log['MyWalletBalance'] < $rupee) {
+                $msg = "You have no sufficient points to covert into rupee";
+                $error_occured = true;
+            } else {
+                $rupee_rate = $this->Systemconfig_Model->getSystemConfigurationByConfigName('ConvertRateFromMoneyToPoint');
+
+                $MyWalletBalance = $wallet_log['MyWalletBalance'];
+
+
+                $rupee_ratio = $rupee_rate['SystemConfigValue'];
+                $rupee_ratio = str_replace('{', '', $rupee_ratio);
+                $rupee_ratio = str_replace('}', '', $rupee_ratio);
+
+                $rupee_ratio_exp = explode(':', $rupee_ratio);
+
+                $transaction_point = number_format(($rupee * $rupee_ratio_exp[1]), 2, '.', '');
+
+                $TransactionComment = 'Converted rupee to point';
+
+                $TransactionId = time().$UserProfileId.mt_rand().rand();
+
+                $insertData = array(
+                                    'PaymentGatewayId'          => 0,
+                                    'TransactionId'             => $TransactionId,
+                                    'PaymentBy'                 => $UserProfileId,
+                                    'PaymentTo'                 => $UserProfileId,
+                                    'TransactionDate'           => date('Y-m-d H:i:s'),
+                                    'TransactionAmount'         => $rupee,
+                                    'TransactionShippingAmount' => 0.00,
+                                    'DebitOrCredit'             => 0,
+                                    'TransactionStatus'         => 1,
+                                    'TransactionComment'        => $TransactionComment,
+                                    'AddedOn'                   => date('Y-m-d H:i:s'),
+                                );
+                $PaymentTransactionLogId = $this->Payment_Model->savePaymentTransactionLog($insertData);
+
+                $insertPointData = array(
+                                        'PointByName'           => 'RupeeToPoint',
+                                        'PointById'             => 0,
+                                        'TransactionId'         => $TransactionId,
+                                        'PaymentBy'             => $UserProfileId,
+                                        'PaymentTo'             => $UserProfileId,
+                                        'TransactionDate'       => date('Y-m-d H:i:s'),
+                                        'AddedOn'               => date('Y-m-d H:i:s'),
+                                        'TransactionPoint'      => $transaction_point,
+                                        'TransactionChargePoint' => 0,
+                                        'DebitOrCredit'         => 1,
+                                        'TransactionStatus'     => 1,
+                                        'TransactionComment'    => $TransactionComment,
+                                        );
+
+                $this->db->insert('PointTransactionLog', $insertPointData);
+
+                $wallet_log = $this->Payment_Model->getMyTotalWalletAmount($UserProfileId);
+
+                $msg = "Rupee converted to point successfully";
+            }
+        }
+
+        if($error_occured == true) {
+            $array = array(
+                            "status"        => 'failed',
+                            "message"       => $msg,
+                        );
+        } else {
+
+            $array = array(
+                           "status"     => 'success',
+                           "result"     => $wallet_log,
                            "message"    => $msg,
                            );
         }

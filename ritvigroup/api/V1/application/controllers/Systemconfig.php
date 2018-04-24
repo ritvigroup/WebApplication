@@ -10,6 +10,8 @@ class Systemconfig extends CI_Controller {
     public function __construct() {
         parent::__construct();
 
+        $this->load->model('Systemconfig_Model');
+
         $this->device_token 	= $this->input->post('device_token');
         $this->location_lant 	= $this->input->post('location_lant');
         $this->location_long 	= $this->input->post('location_long');
@@ -21,28 +23,29 @@ class Systemconfig extends CI_Controller {
     public function getAllSystemConfig() {
         $error_occured = false;
        
-        $result = array();
-        $sql = "SELECT * FROM `SystemConfig`";
-        $query = $this->db->query($sql);
-        $res = $query->result_array();
+        
+        $result = $this->Systemconfig_Model->getSystemConfiguration();
 
-        if(count($res) > 0) {
-            foreach($res AS $key => $val) {
-            
-                $result[] = array(
-                                'SystemConfigName' => $val['SystemConfigName'],
-                                'SystemConfigValue' => $val['SystemConfigValue'],
-                                );
-            }
+        if(count($result) > 0) {
             $msg = "System configuration found";
+        } else {
+            $msg = "No configuation set.";
+            $error_occured = true;
         }
-            
-        $array = array(
-                       "status"     => 'success',
-                       "result"     => $result,
-                       "message"    => $msg,
-                       );
 
+        if($error_occured == true) {
+            $array = array(
+                            "status"        => 'failed',
+                            "message"       => $msg,
+                        );
+        } else {
+
+            $array = array(
+                           "status"     => 'success',
+                           "result"     => $result,
+                           "message"    => $msg,
+                           );
+        }
         displayJsonEncode($array);
     }
 }

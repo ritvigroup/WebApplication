@@ -115,6 +115,10 @@ class Poll extends CI_Controller {
                 $msg = "Poll not found";
                 $error_occured = true;
             }
+
+            $validate_poll_already = $this->Poll_Model->validateUserProfileAlreadyPolled($PollId, $UserProfileId);
+
+            $poll_detail = array_merge($poll_detail, array('MeParticipated' => $validate_poll_already));
         }
 
         if($error_occured == true) {
@@ -210,6 +214,7 @@ class Poll extends CI_Controller {
 
                 if($PollParticipationId > 0) {
 
+                    // Added Points by Poll
                     if($poll_detail['AddedBy'] != $UserProfileId) {
                         $insertPointData = array(
                                                 'PointByName'           => 'Poll',
@@ -234,6 +239,10 @@ class Poll extends CI_Controller {
 
                     $poll_detail = $this->Poll_Model->getPollDetail($PollId);
 
+                    $validate_poll_already = $this->Poll_Model->validateUserProfileAlreadyPolled($PollId, $UserProfileId);
+
+                    $poll_detail = array_merge($poll_detail, array('MeParticipated' => $validate_poll_already));
+
 
                     $msg = "Poll answer submitted successfully";
 
@@ -253,9 +262,9 @@ class Poll extends CI_Controller {
         } else {
 
             $array = array(
-                           "status"             => 'success',
+                           "status"       => 'success',
                            "result"       => $poll_detail,
-                           "message"            => $msg,
+                           "message"      => $msg,
                            );
         }
         displayJsonEncode($array);

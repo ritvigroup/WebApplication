@@ -315,7 +315,7 @@ class Event extends CI_Controller {
     public function AttendEventByApproval() {
         $error_occured = false;
 
-        $UserProfileId      = $this->input->post('user_profile_id');
+        $UserProfileId  = $this->input->post('user_profile_id');
         $EventId        = $this->input->post('event_id');
         
         if($UserProfileId == "") {
@@ -328,7 +328,7 @@ class Event extends CI_Controller {
 
             $this->db->query("BEGIN");
 
-            $validate_poll_already = $this->Poll_Model->validateUserProfileAlreadyPolled($PollId, $UserProfileId);
+            $validate_poll_already = $this->Event_Model->validateUserProfileAlreadyPolled($PollId, $UserProfileId);
 
             if($validate_poll_already > 0) { 
                 $this->db->query("ROLLBACK");
@@ -375,6 +375,76 @@ class Event extends CI_Controller {
                            "status"             => 'success',
                            "result"       => $poll_detail,
                            "message"            => $msg,
+                           );
+        }
+        displayJsonEncode($array);
+    }
+
+
+    public function saveMyEventInterest() {
+        $error_occured = false;
+
+        $UserProfileId  = $this->input->post('user_profile_id');
+        $EventId        = $this->input->post('event_id');
+        $interest_type  = $this->input->post('interest_type');
+        
+        if($UserProfileId == "") {
+            $msg = "Please select your profile";
+            $error_occured = true;
+        } else if($EventId == "") {
+            $msg = "Please select event to approve";
+            $error_occured = true;
+        } else if($interest_type == "0") {
+            $msg = "Please select your interest type";
+            $error_occured = true;
+        } else {
+
+            $this->db->query("BEGIN");
+
+            $validate_event_already = $this->Event_Model->validateUserProfileAlreadyInterested($EventId, $UserProfileId);
+
+            if($validate_poll_already > 0) { 
+                $this->db->query("ROLLBACK");
+                $msg = "You had already shows your interest";
+                $error_occured = true;
+            } else {
+
+                $insertData = array(
+                                    'EventId'           => $EventId,
+                                    'UserProfileId'     => $UserProfileId,
+                                    'InterestType'      => $interest_type,
+                                    'AddedOn'           => date('Y-m-d H:i:s'),
+                                );
+                $EventInterestId = $this->Event_Model->saveMyEventInterest($insertData);
+
+                if($EventInterestId > 0) {
+
+                    $this->db->query("COMMIT");
+                    
+                    $event_detail = $this->Event_Model->getEventDetail($EventId, $UserProfileId);
+
+
+                    $msg = "Event Interest submitted successfully";
+
+                } else {
+                    $this->db->query("ROLLBACK");
+                    $msg = "Event Interest not saved. Error occured";
+                    $error_occured = true;
+                }
+            }
+        }
+
+        if($error_occured == true) {
+            $array = array(
+                            "status"        => 'failed',
+                            "message"       => $msg,
+                        );
+        } else {
+
+            $array = array(
+                           "status"       => 'success',
+                           "result"       => $event_detail,
+                           "message"      => $msg,
                            );
         }
         displayJsonEncode($array);
