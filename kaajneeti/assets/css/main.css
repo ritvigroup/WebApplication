@@ -118,6 +118,12 @@ a:focus {
     outline: none;
     outline-offset: -2px;
 }
+.search-result{
+    margin-top: 20px;
+}
+.submit-button{
+    margin-top: 20px;
+}
 
 
 
@@ -210,6 +216,7 @@ h1.block, h2.block, h3.block, h4.block, h5.block, h6.block {
 .panel {
     border-radius:0;
 }
+
 
 .datetimepicker-inline {
     border: 1px solid #ddd;
@@ -395,7 +402,8 @@ Button css
 }
 
 .aqua-bg {
-    background-color:#49b6d6;
+        background-image: url("https://www.suchtv.pk/media/k2/items/cache/22435fe4b1de63940b419e02f6c52b6a_XL.jpg");
+    
 }
 
 .purple-bg {
@@ -716,11 +724,14 @@ ibox class
 
 .widgets-container {
     background: #fff none repeat scroll 0 0;
-    border: 1px solid #e7eaec;
+ 
     box-sizing: border-box;
     margin: 0 auto 0;
     padding: 15px;
     width: 100%;
+}
+.form-group2{
+
 }
 
 
@@ -2088,7 +2099,7 @@ Error, Login & Lockscreen
     background: #fff none repeat scroll 0 0;
     height: 100%;
     margin: 0 auto;
-    max-width: 315px;
+    width: 320px;
     padding: 20px;
     position: absolute;
     right: 0;
@@ -2098,20 +2109,28 @@ Error, Login & Lockscreen
 .passwordBox {
     max-width: 460px;
     margin: 0 auto;
-    padding: 35px 20px 20px 20px;
+    padding: 0px 0px 20px 0px;
 }
 
 .login-copyright {
-    color: #e6e6e6;
+    color: #000;
     margin-top: 8px;
     text-align: center;
 }
 
 .login .logo {
-    margin: 60px auto 0;
-    padding: 15px;
+    margin: 0px auto 0;
+    padding: 0px;
     text-align: center;
 }
+.login .logo h1{
+    font-size: 80px;
+    letter-spacing: -5.1px;
+    margin: 0;
+    color:#e6e6e6;
+}
+
+
 
 .login .logo img {
     width: 180px;
@@ -2123,12 +2142,14 @@ Error, Login & Lockscreen
     font-weight: 800;
     letter-spacing: -10px;
     margin-bottom: 0;
+    font-family:roboto;
 }
 
 .middle-box h1, .loginColumns h1 {
     font-size: 80px;
     letter-spacing: -5.1px;
     margin: 0;
+    font-family: roboto;
 }
 
 .wrapper .middle-box {
@@ -2251,7 +2272,7 @@ Error, Login & Lockscreen
 }
 
 .login-layout-full::before {
- background-image: url("../images/login-bg/1.jpg");
+ background-image: url("https://www.suchtv.pk/media/k2/items/cache/22435fe4b1de63940b419e02f6c52b6a_XL.jpg");
  background-position: center top;
  background-size: cover;
  content: "";
@@ -2941,7 +2962,17 @@ Page Sidebar
     position: relative;
     transition: all 0.4s ease 0s;
 }
-
+.page-content2{
+    margin-left: 0px !important;
+}
+.profit{
+    margin-top: 30px;
+}
+.listen-footer{
+     background-color: #fff;
+     border-top: 1px solid #ddd;
+    
+}
 .page-sidebar {
     float: left;
     margin-right: -100%;
@@ -2949,6 +2980,67 @@ Page Sidebar
     width: 220px;
     transition: all 0.4s ease 0s;
     z-index: 999;
+}
+.footer-text{
+    color: #000;
+}
+#sum_box h4 span:last-child{
+    font-size: 25px;
+}
+.icon{
+    font-size: 50px;
+    margin-bottom: 0px;
+    float: right;
+}
+
+element.style {
+}
+#sum_box .icon .fa-paper-plane {
+    color: #d9534f;
+}
+#sum_box .icon .fa-comment {
+    color: #d9534f;
+}
+#sum_box .icon.fa-calendar {
+    color: #5bc0de;
+}
+#sum_box .icon.fa-lightbulb-o {
+    color: #5cb85c;
+}
+#sum_box .icon.fa-list-ul {
+    color: #f0ad4e;
+}
+#sum_box .icon.fa-envelope {
+    color: #5bc0de;
+}
+.connect-footer{
+    width: 1129px;
+      background-color: #fff;
+     border-top: 1px solid #ddd;
+     margin-left: 220px;
+
+}
+#sum_box .icon.fa-info-circle {
+    color: #f0ad4e;
+}
+#sum_box .db:hover {
+    background: #33485c;
+    color: #fff;
+}
+#sum_box .db:hover .icon{
+    color: #fff;
+}
+.profit-color{
+color: #777777;
+
+}
+a:hover{
+    text-decoration: none;
+}
+.portlet-header{
+        background: #ffffff;
+    border-bottom: 1px solid #e5e5e5;
+        padding: 8px 15px;
 }
 
 .page-header-fixed .page-container {
@@ -3728,3 +3820,60 @@ WIDGETS
 .glyphicon.fa {
   font-family: "FontAwesome";
 }
+/*.profile-avetar-img {
+    background-color: #fff;
+    border: 3px solid #fff !important;
+    border-radius: 50%;
+    width: 128px !important;
+    height: 128px;
+}
+.profile-overview {
+    display: table-cell;
+    margin-top: 0;
+    padding-bottom: 0;
+    text-align: left;
+    vertical-align: middle;
+    width: 10000px;
+}
+
+.profile-name {
+    color: inherit;
+    display: inline-block;
+    font-size: 34px;
+    font-weight: 400;
+    line-height: 34px;
+    margin-bottom: 15px;
+    margin-right: 15px;
+    margin-top: 0;
+    vertical-align: top;
+}
+.jumbotron h1{
+    font-size: 34px;
+}
+.profile-info {
+    display: table-cell;
+    margin-top: 0;
+    padding-left: 30px;
+    vertical-align: middle;
+}
+.profile-nav {
+    display: inline-block;
+    list-style: outside none none;
+    margin-bottom: 0;
+    padding-left: 0;
+    white-space: nowrap;
+}
+.profile-nav-heading {
+    color: #fff;
+    line-height: 1;
+    margin-bottom: 0;
+    margin-top: 0;
+}
+.jumbotron p {
+    margin-bottom: 15px;
+    font-size: 12px;
+    font-weight: 200;
+}
+.profile-nav > li > a{
+    color:#fff;
+}*/

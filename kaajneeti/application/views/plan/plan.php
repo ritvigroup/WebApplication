@@ -103,7 +103,7 @@
 <script src="<?php echo base_url(); ?>assets/js/sweetalert-dev.js"></script> 
 <script src="<?php echo base_url(); ?>assets/js/sweetalert.min.js"></script> 
 
-?php  require_once './include/scroll_top.php';?>
+<?php  require_once './include/scroll_top.php';?>
 
 </body>
 

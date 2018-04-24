@@ -20,7 +20,7 @@
         <!-- Start page content wrapper -->
         <div class="page-content-wrapper animated fadeInRight">
             <div class="page-content">
-                <div class="page-content">
+                <div class="page-content page-content2">
                     <div id="tab-general">
                         <div id="sum_box" class="row mbl">
                             <div class="col-sm-6 col-md-3">
@@ -29,7 +29,7 @@
                                             class="value"><span data-counter="" data-start="10" data-end="<?php echo $result->TotalComplaintReceived; ?>" data-step="1"
                                                                 data-duration="0"></span><span><?php echo $result->TotalComplaintReceived; ?></span></h4> 
 
-                                        <p class="description"><a href="<?=base_url();?>complaint/complaintReceived">Complaint Received</a></p>
+                                        <p class="description"><a href="<?=base_url();?>complaint/complaintReceived" class="profit-color">Complaint Received</a></p>
 
                                         
                                     </div>
@@ -41,29 +41,29 @@
                                             class="value"><span data-counter="" data-start="10" data-end="<?php echo $result->TotalComplaint; ?>" data-step="1"
                                                                 data-duration="0"></span><span><?php echo $result->TotalComplaint; ?></span></h4> 
 
-                                        <p class="description"><a href="<?=base_url();?>complaint/mycomplaint">My Complaint</a></p>
+                                        <p class="description"><a href="<?=base_url();?>complaint/mycomplaint" class="profit-color">My Complaint</a></p>
 
                                         
                                     </div>
                                 </div>
                             </div>
                             <div class="col-sm-6 col-md-3">
-                                <div class="panel income db mbm">
+                                <div class="panel profit income db mbm">
                                     <div class="panel-body"><p class="icon"><i class="icon fa fa-calendar"></i></p><h4
                                             class="value"><span><?php echo $result->TotalEvent; ?></span></h4>
 
-                                        <p class="description"><a href="<?=base_url();?>event/event">Events</a></p>
+                                        <p class="description"><a href="<?=base_url();?>event/event" class="profit-color">Events</a></p>
 
                                         
                                     </div>
                                 </div>
                             </div>
                             <div class="col-sm-6 col-md-3">
-                                <div class="panel task db mbm">
+                                <div class="panel profit task db mbm">
                                     <div class="panel-body"><p class="icon"><i class="icon fa fa-lightbulb-o"></i></p><h4
                                             class="value"><span><?php echo $result->TotalSuggestionReceived; ?></span></h4>
 
-                                        <p class="description"><a href="<?=base_url();?>suggestion/suggestionReceived">Suggestion Received</a></p>
+                                        <p class="description"><a href="<?=base_url();?>suggestion/suggestionReceived" class="profit-color">Suggestion Received</a></p>
 
                                         
                                     </div>
@@ -74,7 +74,7 @@
                                     <div class="panel-body"><p class="icon"><i class="icon fa fa-lightbulb-o"></i></p><h4
                                             class="value"><span><?php echo $result->TotalSuggestion; ?></span></h4>
 
-                                        <p class="description"><a href="<?=base_url();?>suggestion/suggestion">My Suggestion</a></p>
+                                        <p class="description"><a href="<?=base_url();?>suggestion/suggestion" class="profit-color">My Suggestion</a></p>
 
                                         
                                     </div>
@@ -85,7 +85,7 @@
                                     <div class="panel-body"><p class="icon"><i class="icon fa fa-list-ul"></i></p><h4
                                             class="value"><span><?php echo $result->TotalPoll; ?></span></h4>
 
-                                        <p class="description"><a href="<?=base_url();?>poll/poll">Poll</a></p>
+                                        <p class="description"><a href="<?=base_url();?>poll/poll" class="profit-color">Poll</a></p>
 
                                         
                                     </div>
@@ -97,7 +97,7 @@
                                     <div class="panel-body"><p class="icon"><i class="icon fa fa-envelope"></i></p><h4
                                             class="value"><span><?php echo $result->TotalPost; ?></span></h4>
 
-                                        <p class="description"><a href="<?=base_url();?>post/post">Post</a></p>
+                                        <p class="description"><a href="<?=base_url();?>post/post" class="profit-color">Post</a></p>
 
                                         
                                     </div>
@@ -108,7 +108,7 @@
                                     <div class="panel-body"><p class="icon"><i class="icon fa fa-info-circle"></i></p><h4
                                             class="value"><span><?php echo $result->TotalInformation; ?></span></h4>
 
-                                        <p class="description"><a href="<?=base_url();?>information/information">Information</a></p>
+                                        <p class="description"><a href="<?=base_url();?>information/information" class="profit-color">Information</a></p>
 
                                         
                                     </div>
@@ -139,10 +139,46 @@
                                     <i class="fa fa-times"></i>
                                 </div> -->
                             </div>
-                            <div class="portlet-body">
-                                <div id="pie-with-gradient-fill"></div>
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <div class="ibox float-e-margins">
+                                        <div class="ibox-title">
+                                            <h5>Pie Chart 3 </h5>
+                                            <div class="ibox-tools">
+                                                <a class="collapse-link" data-toggle="collapse" data-target="#demo8"> <i class="fa fa-chevron-up"></i><i class="fa fa-chevron-down"></i> </a>
+                                                <a href="#" data-toggle="dropdown" class="dropdown-toggle">
+                                                <i class="fa fa-wrench"></i> </a>
+                                                <ul class="dropdown-menu dropdown-user">
+                                                    <li><a href="#">Config option 1</a> </li>
+                                                    <li><a href="#">Config option 2</a> </li>
+                                                </ul>
+                                                <a class="close-link"> <i class="fa fa-times"></i> </a>
+                                            </div>
+                                        </div>
+                                        <div class="ibox-content collapse in" id="demo8">
+                                            <div class="demo-container">
+                                                <div id="pieChart3" class="demo-placeholder"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
+                            
                         </div>                    
+                    </div>
+                </div>
+                <div class="panel-footer listen-footer">
+                    
+                    <div class="row">
+                        <div class="col-md-6"><p><strong>Copyright</strong>" 2018 © Kaajneeti All Right Reserved "</p></div>
+                         <div class="col-md-6"><div class="pull-right">
+        <ul class="list-inline">
+            <li><a title="Dashboard" href="http://localhost/kaajneeti/leader/dashboard" class="footer-text">Dashboard</a></li>
+            <li><a title="Inbox" href="" class="footer-text"> Inbox </a></li>
+            <li><a title="Blog" href="" class="footer-text">Blog</a></li>
+            <li><a title="Contacts" href="" class="footer-text">Contacts</a></li>
+        </ul>
+    </div></div>
                     </div>
                 </div>
             </div>
@@ -152,7 +188,7 @@
                 <div class="clearfix"> </div>
                 <!-- End projects list -->
                 
-                <?php  require_once './include/footer.php';?>
+                <!-- <?php  require_once './include/foote';?> -->
 
             </div>
         </div>
@@ -163,7 +199,7 @@
 
 </body>
 
-<?php  require_once './include/js.php';?>
+<?php  //require_once './include/js.php';?>
 
 
 <div id="modal-stackable" tabindex="-1" role="dialog" aria-labelledby="modal-stackable-label" aria-hidden="true" class="modal fade" style="display: none;">
@@ -174,7 +210,24 @@
     </div>
 </div>
 
-
+<script src="<?=base_url();?>assets/js/vendor/jquery.min.js"></script>
+    <!-- bootstrap js -->
+<script src="<?=base_url();?>assets/js/vendor/bootstrap.min.js"></script>
+<!-- flot chart -->
+    <script type="text/javascript" src="assets/js/vendor/flotCart/jquery.js"></script>
+    <script type="text/javascript" src="assets/js/vendor/flotCart/jquery.flot.js"></script>
+    <script type="text/javascript" src="assets/js/vendor/flotCart/jquery.flot.stack.js"></script>
+    <script type="text/javascript" src="assets/js/vendor/flotCart/jquery.flot.categories.js"></script>
+    <script type="text/javascript" src="assets/js/vendor/flotCart/jquery.flot.crosshair.js"></script>
+    <script type="text/javascript" src="assets/js/vendor/flotCart/jquery.flot.pie.js"></script>
+    <script type="text/javascript" src="assets/js/vendor/flotCart.js"></script>
+    <!-- slimscroll js -->
+<!-- slimscroll js -->
+<script type="text/javascript" src="<?=base_url();?>assets/js/vendor/jquery.slimscroll.js"></script>
+<!-- pace js -->
+<script src="<?=base_url();?>assets/js/vendor/pace/pace.min.js"></script>
+<!-- main js -->
+<script src="<?=base_url();?>assets/js/main.js"></script>
 
 <script>
 /*$('#pie-with-legend').highcharts({
@@ -211,43 +264,49 @@
 });*/
 
 // Build the chart
-$('#pie-with-gradient-fill').highcharts({
-    chart: {
-        plotBackgroundColor: null,
-        plotBorderWidth: null,
-        plotShadow: false
-    },
-    title: {
-        text: 'Overall Report'
-    },
-    tooltip: {
-        pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
-    },
-    plotOptions: {
-        pie: {
-            allowPointSelect: true,
-            cursor: 'pointer',
-            dataLabels: {
-                enabled: true,
-                color: '#000000',
-                connectorColor: '#000000',
-                formatter: function() {
-                    return '<b>'+ this.point.name +'</b>: '+ this.percentage.toFixed(2) +' %';
-                }
-            }
-        }
-    },
-    series: [{
-        type: 'pie',
-        name: 'Browser share',
-        data: [
-            <?php foreach($overall_report AS $total_summary_key => $total_summary_val) { ?>
-                ['<?php echo $total_summary_key; ?>',   <?php echo $total_summary_val; ?>],
-            <?php } ?>
-        ]
-    }]
-});
+// $('#pie-with-gradient-fill').highcharts({
+//     chart: {
+//         plotBackgroundColor: null,
+//         plotBorderWidth: null,
+//         plotShadow: false
+//     },
+//     title: {
+//         text: 'Overall Report'
+//     },
+//     tooltip: {
+//         pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+//     },
+//     plotOptions: {
+//         pie: {
+//             allowPointSelect: true,
+//             cursor: 'pointer',
+//             dataLabels: {
+//                 enabled: true,
+//                 color: '#000000',
+//                 connectorColor: '#000000',
+//                 formatter: function() {
+//                     return '<b>'+ this.point.name +'</b>: '+ this.percentage.toFixed(2) +' %';
+//                 }
+//             }
+//         }
+//     },
+//     series: [{
+//         type: 'pie',
+//         name: 'Browser share',
+//         data: [
+//             <?php foreach($overall_report AS $total_summary_key => $total_summary_val) { ?>
+//                 ['<?php echo $total_summary_key; ?>',   <?php echo $total_summary_val; ?>],
+//             <?php } ?>
+//         ]
+//     }]
+// });
+
 </script>
+
+
+    
+
+
 
 <script>
 function openListenDetail(event_id) {
@@ -260,11 +319,22 @@ function openListenDetail(event_id) {
                 } else {
                     $('.modal-content').html(data);
                 }
+
+
+
             });
+
+        
+
+
+
     } else {
         sweetAlert("Oops...", "Please enter something to search leaders", "error");
         return false;
     }
+
+
+
 }
 </script>
 </body>
