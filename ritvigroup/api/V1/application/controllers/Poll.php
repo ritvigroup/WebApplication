@@ -187,6 +187,8 @@ class Poll extends CI_Controller {
 
             $this->db->query("BEGIN");
 
+            $poll_detail = $this->Poll_Model->getPollDetail($PollId);
+
             $validate_poll_already = $this->Poll_Model->validateUserProfileAlreadyPolled($PollId, $UserProfileId);
 
             if($validate_poll_already > 0) { 
@@ -208,8 +210,28 @@ class Poll extends CI_Controller {
 
                 if($PollParticipationId > 0) {
 
+                    if($poll_detail['AddedBy'] != $UserProfileId) {
+                        $insertPointData = array(
+                                                'PointByName'           => 'Poll',
+                                                'PointById'             => $PollId,
+                                                'TransactionId'         => time().mt_rand().rand(),
+                                                'PaymentBy'             => $UserProfileId,
+                                                'PaymentTo'             => $UserProfileId,
+                                                'TransactionDate'       => date('Y-m-d H:i:s'),
+                                                'AddedOn'               => date('Y-m-d H:i:s'),
+                                                'TransactionPoint'      => 200,
+                                                'TransactionChargePoint' => 0,
+                                                'DebitOrCredit'         => 1,
+                                                'TransactionStatus'     => 1,
+                                                'TransactionComment'    => 'Participated in Poll: '.$poll_detail['PollUniqueId'].', Name: '.$poll_detail['PollQuestion'],
+                                                );
+
+                        $this->db->insert('PointTransactionLog', $insertPointData);
+                    }
+
                     $this->db->query("COMMIT");
                     
+
                     $poll_detail = $this->Poll_Model->getPollDetail($PollId);
 
 

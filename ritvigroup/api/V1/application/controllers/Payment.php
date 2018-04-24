@@ -314,6 +314,77 @@ class Payment extends CI_Controller {
     }
 
 
+    public function getMyAllPointTransactionLog() {
+        $error_occured = false;
+
+        $UserProfileId   = $this->input->post('user_profile_id');
+        
+        if($UserProfileId == "") {
+            $msg = "Please select your profile";
+            $error_occured = true;
+        } else {
+
+            $point_log = $this->Payment_Model->getMyAllPointTransactionLog($UserProfileId);
+            if(count($point_log) > 0) {
+                $msg = "Point Log fetched successfully";
+            } else {
+                $msg = "No point log found";
+                $error_occured = true;
+            }
+        }
+
+        if($error_occured == true) {
+            $array = array(
+                            "status"        => 'failed',
+                            "message"       => $msg,
+                        );
+        } else {
+
+            $array = array(
+                           "status"     => 'success',
+                           "result"     => $point_log,
+                           "message"    => $msg,
+                           );
+        }
+        displayJsonEncode($array);
+    }
+
+
+    public function getMyTotalPointDetail() {
+        $error_occured = false;
+
+        $UserProfileId   = $this->input->post('user_profile_id');
+        
+        if($UserProfileId == "") {
+            $msg = "Please select your profile";
+            $error_occured = true;
+        } else {
+
+            $point_log = $this->Payment_Model->getMyTotalPointDetail($UserProfileId);
+            if(count($point_log) > 0) {
+                $msg = "Points fetched successfully";
+            } else {
+                $msg = "No point found";
+                $error_occured = true;
+            }
+        }
+
+        if($error_occured == true) {
+            $array = array(
+                            "status"        => 'failed',
+                            "message"       => $msg,
+                        );
+        } else {
+
+            $array = array(
+                           "status"     => 'success',
+                           "result"     => $point_log,
+                           "message"    => $msg,
+                           );
+        }
+        displayJsonEncode($array);
+    }
+
     
 }
 
