@@ -45,280 +45,420 @@ $profile_pic = ($UserDetail->ProfilePhotoPath != '') ? $UserDetail->ProfilePhoto
         
         <?php  require_once './include/left.php';?>
 
-        <div class="page-content-wrapper animated fadeInRight">
-            <div class="page-content">
-                <div class="row  border-bottom white-bg dashboard-header">
-                    <div class="col-md-12">
-                        <div class="row">
-                            <div class="col-md-3">
-                                <div class="form-group">
-                                    <div class="text-center mbl"><img
-                                            src="<?php echo $profile_pic; ?>"
-                                            style="border: 5px solid #fff; box-shadow: 0 2px 3px rgba(0,0,0,0.25);width: 150px; height: 150px;"
-                                            class="img-circle"/></div>
-                                </div>
-                                <table class="table table-striped table-hover">
-                                    <tbody>
-                                    <tr>
-                                        <td width="50%">User Name</td>
-                                        <td><?php echo $UserName; ?></td>
-                                    </tr>
-                                    <tr>
-                                        <td width="50%">Name</td>
-                                        <td><?php echo $Name; ?></td>
-                                    </tr>
-                                    <tr>
-                                        <td width="50%">Email</td>
-                                        <td><?php echo $Email; ?></td>
-                                    </tr>
-                                    <tr>
-                                        <td width="50%">Address</td>
-                                        <td>Street 123, Avenue 45, Country</td>
-                                    </tr>
-                                    <tr>
-                                        <td width="50%">Status</td>
-                                        <td><span class="label label-success"><?php echo $Status; ?></span></td>
-                                    </tr>
-                                    <tr>
-                                        <td width="50%">Rating</td>
-                                        <td><i class="fa fa-star text-yellow fa-fw"></i><i
-                                                class="fa fa-star text-yellow fa-fw"></i><i
-                                                class="fa fa-star text-yellow fa-fw"></i><i
-                                                class="fa fa-star text-yellow fa-fw"></i><i
-                                                class="fa fa-star text-yellow fa-fw"></i></td>
-                                    </tr>
-                                    <tr>
-                                        <td width="50%">Join Since</td>
-                                        <td><?php echo $AddedOn; ?></td>
-                                    </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                            <div class="col-md-9">
-                                <ul class="nav nav-tabs ul-edit responsive">
-                                    <li class="active"><a href="#tab-edit" data-toggle="tab"><i class="fa fa-edit"></i>&nbsp;
-                                        Edit Profile</a></li>
-                                </ul>
-                                <div id="generalTabContent" class="tab-content">
-                                    <div id="tab-edit" class="tab-pane fade in active">
-                                        <div class="row">
-                                            <div class="col-md-9">
-                                                <div class="tab-content">
-                                                    <div id="tab-profile-setting" class="tab-pane fade in active">
-                                                        <form action="" class="form-horizontal" onSubmit="return false;">
-                                                            <div class="form-group"><label
-                                                                    class="col-sm-3 control-label">First Name</label>
-
-                                                                <div class="col-sm-9 controls"><input type="text" id="first_name" value="<?php echo $FirstName; ?>"
-                                                                                                      placeholder="first name"
-                                                                                                      class="form-control"/>
-                                                                </div>
-                                                            </div>
-                                                            <div class="form-group"><label
-                                                                    class="col-sm-3 control-label">Last Name</label>
-
-                                                                <div class="col-sm-9 controls"><input type="text" id="last_name" value="<?php echo $LastName; ?>"
-                                                                                                      placeholder="last name"
-                                                                                                      class="form-control"/>
-                                                                </div>
-                                                            </div>
-                                                            <div class="form-group"><label
-                                                                    class="col-sm-3 control-label">Gender</label>
-
-                                                                <div class="col-sm-9 controls">
-                                                                    <div class="radio-list">
-                                                                        <label class="radio-inline"><input type="radio" value="1" name="gender" <?php if($Gender == 1) { ?> checked="checked"<?php } ?> />&nbsp;Male</label>
-                                                                        <label class="radio-inline"><input type="radio" value="2" name="gender" <?php if($Gender == 2) { ?> checked="checked"<?php } ?> />&nbsp;Female</label>
-                                                                        <label class="radio-inline"><input type="radio" value="3" name="gender" <?php if($Gender == 3) { ?> checked="checked"<?php } ?> />&nbsp;Other</label>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                            <div class="form-group"><label
-                                                                    class="col-sm-3 control-label">Birthday</label>
-
-                                                                <div class="col-sm-9 controls">
-                                                                    <div class="row">
-                                                                        <div class="col-xs-6"><input type="text" id="date_of_birth" value="<?php echo $DateOfBirth; ?>"
-                                                                                                     data-date-format="yyyy-mm-dd"
-                                                                                                     placeholder="yyyy-mm-dd"
-                                                                                                     class="datepicker-normal form-control"/>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                            <div class="form-group"><label
-                                                                    class="col-sm-3 control-label">Marital
-                                                                Status</label>
-
-                                                                <div class="col-sm-9 controls">
-                                                                    <div class="row">
-                                                                        <div class="col-xs-6"><select
-                                                                                class="form-control" id="martial_status">
-                                                                            <option value="0" <?php if($MaritalStatus == 0) { ?> selected="selected"<?php } ?> >Single</option>
-                                                                            <option value="1" <?php if($MaritalStatus == 1) { ?> selected="selected"<?php } ?> >Married</option>
-                                                                        </select></div>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                            
-                                                            <div class="form-group"><label
-                                                                    class="col-sm-3 control-label">Profile Pic</label>
-
-                                                                <div class="col-sm-9 controls">
-                                                                    <input type="file" name="file" id="file">
-                                                                </div>
-                                                            </div>
-                                                            <div class="form-group mbn"><label
-                                                                    class="col-sm-3 control-label"></label>
-
-                                                                <div class="col-sm-9 controls">
-                                                                    <button type="submit" class="btn btn-success profile_setting" onClick="return submit_profile_setting();"><i
-                                                                            class="fa fa-save"></i>&nbsp;
-                                                                        Save
-                                                                    </button>
-                                                                    &nbsp; &nbsp;<a href="javascript:void(0);" class="btn btn-default">Cancel</a>
-                                                                </div>
-                                                            </div>
-                                                        </form>
-                                                    </div>
-                                                    <div id="tab-account-setting" class="tab-pane fade">
-                                                        <form action="" class="form-horizontal" onSubmit="return false;">
-                                                            <div class="form-body">
-                                                                <div class="form-group"><label
-                                                                        class="col-sm-3 control-label">Email</label>
-
-                                                                    <div class="col-sm-9 controls"><input type="email" id="email" value="<?php echo $Email; ?>" placeholder="email@yourcompany.com"class="form-control"  readonly disabled="disabled" />
-                                                                    </div>
-                                                                </div>
-                                                                <div class="form-group"><label
-                                                                        class="col-sm-3 control-label">Username</label>
-
-                                                                    <div class="col-sm-9 controls"><input type="text" value="<?php echo $UserName; ?>" readonly disabled="disabled" placeholder="username" class="form-control"/>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="form-group"><label
-                                                                        class="col-sm-3 control-label">Password</label>
-
-                                                                    <div class="col-sm-9 controls">
-                                                                        <div class="row">
-                                                                            <div class="col-xs-6"><input type="password" id="password" placeholder="" class="form-control" autocomplete="off" />
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="form-group"><label
-                                                                        class="col-sm-3 control-label">Confirm
-                                                                    Password</label>
-
-                                                                    <div class="col-sm-9 controls">
-                                                                        <div class="row">
-                                                                            <div class="col-xs-6"><input type="password" id="confirm_password" placeholder="" class="form-control" autocomplete="off" />
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="form-group mbn"><label
-                                                                        class="col-sm-3 control-label"></label>
-
-                                                                    <div class="col-sm-9 controls">
-                                                                        <button type="submit" class="btn btn-success account_setting" onClick="return submit_account_setting();"><i
-                                                                                class="fa fa-save"></i>&nbsp;
-                                                                            Save
-                                                                        </button>
-                                                                        &nbsp; &nbsp;<a href="javascript:void(0);" class="btn btn-default">Cancel</a>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </form>
-                                                    </div>
-                                                    <div id="tab-contact-setting" class="tab-pane fade">
-                                                        <form action="" class="form-horizontal" onSubmit="return false;">
-                                                            <div class="form-group"><label
-                                                                    class="col-sm-3 control-label">Mobile Phone</label>
-
-                                                                <div class="col-sm-9 controls"><input type="text" id="mobile" value="<?php echo $Mobile; ?>" placeholder="0-123-456-789" readonly disabled="disabled" class="form-control"/>
-                                                                </div>
-                                                            </div>
-                                                            <div class="form-group"><label
-                                                                    class="col-sm-3 control-label">Website</label>
-
-                                                                <div class="col-sm-9 controls"><input type="text" id="website_url" value="<?php echo $WebsiteUrl; ?>"
-                                                                                                      placeholder="http://www.mywebsite.com"
-                                                                                                      class="form-control"/>
-                                                                </div>
-                                                            </div>
-                                                            <div class="form-group"><label
-                                                                    class="col-sm-3 control-label">Facebook</label>
-
-                                                                <div class="col-sm-9 controls"><input type="text" id="facebook_url" value="<?php echo $FacebookPageUrl; ?>" 
-                                                                                                      placeholder="https://www.facebook.com"
-                                                                                                      class="form-control"/>
-                                                                </div>
-                                                            </div>
-                                                            <div class="form-group"><label
-                                                                    class="col-sm-3 control-label">Twitter</label>
-
-                                                                <div class="col-sm-9 controls"><input type="text" id="twitter_url" value="<?php echo $TwitterPageUrl; ?>"
-                                                                                                      placeholder="https://www.twitter.com"
-                                                                                                      class="form-control"/>
-                                                                </div>
-                                                            </div>
-                                                             <div class="form-group"><label
-                                                                    class="col-sm-3 control-label">Google</label>
-
-                                                                <div class="col-sm-9 controls"><input type="text" id="google_url" value="<?php echo $GooglePageUrl; ?>"
-                                                                                                      placeholder="https://www.google.com"
-                                                                                                      class="form-control"/>
-                                                                </div>
-                                                            </div>
-                                                            <div class="form-group mbn"><label
-                                                                    class="col-sm-3 control-label"></label>
-
-                                                                <div class="col-sm-9 controls">
-                                                                    <button type="submit" class="btn btn-success contact_setting" onClick="return submit_contact_setting();"><i
-                                                                            class="fa fa-save"></i>&nbsp;
-                                                                        Save
-                                                                    </button>
-                                                                    &nbsp; &nbsp;<a href="javascript:void(0);" class="btn btn-default">Cancel</a>
-                                                                </div>
-                                                            </div>
-                                                        </form>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-3">
-                                                <ul class="nav nav-pills nav-stacked">
-                                                    <li class="active"><a href="#tab-profile-setting" data-toggle="tab"><i
-                                                            class="fa fa-folder-open"></i>&nbsp;
-                                                        Profile Setting</a></li>
-                                                    <li><a href="#tab-account-setting" data-toggle="tab"><i
-                                                            class="fa fa-cogs"></i>&nbsp;
-                                                        Account Setting</a></li>
-                                                    <li><a href="#tab-contact-setting" data-toggle="tab"><i
-                                                            class="fa fa-envelope-o"></i>&nbsp;
-                                                        Contact Setting</a></li>
-                                                </ul>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+ <!-- End page sidebar wrapper -->
+  <!-- Start page content wrapper -->
+  <div class="page-content-wrapper animated fadeInRight">
+    <div class="profile-header">
+      <div class="profile-cover">
+        <div class="profile-container">
+          <div class="profile-card">
+            <div class="profile-avetar"> <img class="profile-avetar-img" src="<?=base_url();?>assets/images/teem/a5.jpg" alt="Teddy Wilson" width="128" height="128"> </div>
+            <div class="profile-overview">
+              <h1 class="profile-name"> Ariadne </h1>
+              <a class="aqua btn uppercase" href="#">Follow</a>
+              <p>There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don't. If you are going to use a passage of Lorem Ipsum, you need to be sure there isn't anything embarrassing .</p>
             </div>
-            <!-- stat timeline and feed  -->
-                <div class="top20">
-                    
-                    <div class="clearfix"> </div>
-                    <!-- End projects list -->
-                    
-                    <?php  require_once './include/footer.php';?>
-
-                </div>
+            <div class="profile-info">
+              <ul class="profile-nav">
+                <li> <a href="#">
+                  <h3 class="profile-nav-heading">2,193</h3>
+                  <em> <small>posts</small> </em> </a> </li>
+                <li> <a href="#">
+                  <h3 class="profile-nav-heading">40M</h3>
+                  <em> <small>followers</small> </em> </a> </li>
+                <li> <a href="#">
+                  <h3 class="profile-nav-heading">300</h3>
+                  <em> <small>following</small> </em> </a> </li>
+              </ul>
             </div>
+          </div>
+          <div class="profile-tabs">
+            <ul class="profile-nav">
+              <li class="active"> <a href="#">Posts</a> </li>
+              <li><a href="#">Followers</a></li>
+              <li><a href="#">Following</a></li>
+            </ul>
+          </div>
         </div>
+      </div>
     </div>
+    <div class="page-content">
+      <div class="wrapper-content ">
+        <div class="row">
+          <!-- start feeds  -->
+          <div class="col-sm-4">
+            <div class="social-feed-box">
+              <div class="pull-right social-action dropdown">
+                <button class="dropdown-toggle btn-white" data-toggle="dropdown"> <i class="fa fa-angle-down"></i> </button>
+                <ul class="dropdown-menu m-t-xs">
+                  <li><a href="#">Mute</a></li>
+                  <li><a href="#">Block</a></li>
+                  <li><a href="#">Report</a></li>
+                </ul>
+              </div>
+              <div class="social-avatar"> <a class="pull-left" href="#"> <img src="<?=base_url();?>assets/images/teem/a9.jpg" alt="image"> </a>
+                <div class="media-body"> <a href="#">Mitch Buchannon </a> <small class="text-muted">Today 9:00 pm - 11.06.20117</small> </div>
+              </div>
+              <div class="social-body"> <img alt="" class="img-responsive" src="<?=base_url();?>assets/images/gallery/5.jpg">
+                <div class="btn-group">
+                  <button class="btn btn-white btn-xs"><i class="fa fa-thumbs-up"></i> Like this!</button>
+                  <button class="btn btn-white btn-xs"><i class="fa fa-comments"></i> Comment</button>
+                  <button class="btn btn-white btn-xs"><i class="fa fa-share"></i> Share</button>
+                </div>
+              </div>
+              <div class="social-footer">
+                <div class="social-comment"> <a class="pull-left" href="#"> <img src="<?=base_url();?>assets/images/teem/a1.jpg" alt="image"> </a>
+                  <div class="media-body"> <a href="#">Mitch Buchannon </a> Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam euismod eleifend ipsum, at posuere augue. Pellentesque mi felis, aliquam at iaculis eu, mi felis, aliquam at iaculis mi felis, aliquam at iaculis finibus eu ex. Integer efficitur tincidunt malesuada. Sed sit amet molestie elit, vel placerat ipsum. <br>
+                    <a class="small" href="#"><i class="fa fa-thumbs-up"></i> 26 Like this!</a> - <small class="text-muted">12.06.2014</small> </div>
+                </div>
+                <div class="social-comment"> <a class="pull-left" href="#"> <img src="<?=base_url();?>assets/images/teem/a2.jpg" alt="image"> </a>
+                  <div class="media-body"> <a href="#">Robert Angier </a> Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam euismod eleifend ipsum, at posuere augue. <br>
+                    <a class="small" href="#"><i class="fa fa-thumbs-up"></i> 11 Like this!</a> - <small class="text-muted">2.01.2017</small> </div>
+                </div>
+                <div class="social-comment"> <a class="pull-left" href="#"> <img src="<?=base_url();?>assets/images/teem/a1.jpg" alt="image"> </a>
+                  <div class="media-body"> <a href="#"> Jordan Belfort </a> Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam euismod eleifend ipsum, at posuere augue. <br>
+                    <a class="small" href="#"><i class="fa fa-thumbs-up"></i> 11 Like this!</a> - <small class="text-muted">2.01.2017</small> </div>
+                </div>
+                <div class="social-comment"> <a class="pull-left" href="#"> <img src="<?=base_url();?>assets/images/teem/a10.jpg" alt="image"> </a>
+                  <div class="media-body">
+                    <textarea placeholder="Write comment..." class="form-control"></textarea>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="social-feed-box">
+              <div class="pull-right social-action dropdown">
+                <button class="dropdown-toggle btn-white" data-toggle="dropdown"> <i class="fa fa-angle-down"></i> </button>
+                <ul class="dropdown-menu m-t-xs">
+                  <li><a href="#">Mute</a></li>
+                  <li><a href="#">Block</a></li>
+                  <li><a href="#">Report</a></li>
+                </ul>
+              </div>
+              <div class="social-avatar"> <a class="pull-left" href="#"> <img src="<?=base_url();?>assets/images/teem/a10.jpg" alt="image"> </a>
+                <div class="media-body"> <a href="#"> Jordan Belfort </a> <small class="text-muted">Today 9:00 pm - 11.06.20117</small> </div>
+              </div>
+              <div class="social-body">
+                <p> Lorem Ipsum as their default model text, and a search for 'lorem ipsum' will uncover many web sites still in their infancy. Packages and web page editors now use Lorem Ipsum as their default model text. </p>
+                <img alt="" class="img-responsive" src="<?=base_url();?>assets/images/gallery/2.jpg">
+                <div class="btn-group">
+                  <button class="btn btn-white btn-xs"><i class="fa fa-thumbs-up"></i> Like this!</button>
+                  <button class="btn btn-white btn-xs"><i class="fa fa-comments"></i> Comment</button>
+                  <button class="btn btn-white btn-xs"><i class="fa fa-share"></i> Share</button>
+                </div>
+              </div>
+              <div class="social-footer">
+                <div class="social-comment"> <a class="pull-left" href="#"> <img src="<?=base_url();?>assets/images/teem/a1.jpg" alt="image"> </a>
+                  <div class="media-body"> <a href="#">Mitch Buchannon </a> Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam euismod eleifend ipsum, at posuere augue. Pellentesque mi felis, aliquam at iaculis eu, mi felis, aliquam at iaculis mi felis, aliquam at iaculis finibus eu ex. Integer efficitur tincidunt malesuada. Sed sit amet molestie elit, vel placerat ipsum. <br>
+                    <a class="small" href="#"><i class="fa fa-thumbs-up"></i> 26 Like this!</a> - <small class="text-muted">12.06.2014</small> </div>
+                </div>
+                <div class="social-comment"> <a class="pull-left" href="#"> <img src="<?=base_url();?>assets/images/teem/a2.jpg" alt="image"> </a>
+                  <div class="media-body"> <a href="#">Robert Angier </a> Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam euismod eleifend ipsum, at posuere augue. <br>
+                    <a class="small" href="#"><i class="fa fa-thumbs-up"></i> 11 Like this!</a> - <small class="text-muted">2.01.2017</small> </div>
+                </div>
+                <div class="social-comment"> <a class="pull-left" href="#"> <img src="<?=base_url();?>assets/images/teem/a1.jpg" alt="image"> </a>
+                  <div class="media-body"> <a href="#"> Jordan Belfort </a> Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam euismod eleifend ipsum, at posuere augue. <br>
+                    <a class="small" href="#"><i class="fa fa-thumbs-up"></i> 11 Like this!</a> - <small class="text-muted">2.01.2017</small> </div>
+                </div>
+                <div class="social-comment"> <a class="pull-left" href="#"> <img src="<?=base_url();?>assets/images/teem/a10.jpg" alt="image"> </a>
+                  <div class="media-body">
+                    <textarea placeholder="Write comment..." class="form-control"></textarea>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="social-feed-box">
+              <div class="pull-right social-action dropdown">
+                <button class="dropdown-toggle btn-white" data-toggle="dropdown"> <i class="fa fa-angle-down"></i> </button>
+                <ul class="dropdown-menu m-t-xs">
+                  <li><a href="#">Mute</a></li>
+                  <li><a href="#">Block</a></li>
+                  <li><a href="#">Report</a></li>
+                </ul>
+              </div>
+              <div class="social-avatar"> <a class="pull-left" href="#"> <img src="<?=base_url();?>assets/images/teem/a10.jpg" alt="image"> </a>
+                <div class="media-body"> <a href="#"> Jordan Belfort </a> <small class="text-muted">Today 9:00 pm - 11.06.20117</small> </div>
+              </div>
+              <div class="social-body"> <img alt="" class="img-responsive" src="<?=base_url();?>assets/images/gallery/6.jpg">
+                <div class="btn-group">
+                  <button class="btn btn-white btn-xs"><i class="fa fa-thumbs-up"></i> Like this!</button>
+                  <button class="btn btn-white btn-xs"><i class="fa fa-comments"></i> Comment</button>
+                  <button class="btn btn-white btn-xs"><i class="fa fa-share"></i> Share</button>
+                </div>
+              </div>
+              <div class="social-footer">
+                <div class="social-comment"> <a class="pull-left" href="#"> <img src="<?=base_url();?>assets/images/teem/a1.jpg" alt="image"> </a>
+                  <div class="media-body"> <a href="#">Mitch Buchannon </a> Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam euismod eleifend ipsum, at posuere augue. Pellentesque mi felis, aliquam at iaculis eu, mi felis, aliquam at iaculis mi felis, aliquam at iaculis finibus eu ex. Integer efficitur tincidunt malesuada. Sed sit amet molestie elit, vel placerat ipsum. <br>
+                    <a class="small" href="#"><i class="fa fa-thumbs-up"></i> 26 Like this!</a> - <small class="text-muted">12.06.2014</small> </div>
+                </div>
+                <div class="social-comment"> <a class="pull-left" href="#"> <img src="<?=base_url();?>assets/images/teem/a2.jpg" alt="image"> </a>
+                  <div class="media-body"> <a href="#">Robert Angier </a> Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam euismod eleifend ipsum, at posuere augue. <br>
+                    <a class="small" href="#"><i class="fa fa-thumbs-up"></i> 11 Like this!</a> - <small class="text-muted">2.01.2017</small> </div>
+                </div>
+                <div class="social-comment"> <a class="pull-left" href="#"> <img src="<?=base_url();?>assets/images/teem/a1.jpg" alt="image"> </a>
+                  <div class="media-body"> <a href="#"> Jordan Belfort </a> Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam euismod eleifend ipsum, at posuere augue. <br>
+                    <a class="small" href="#"><i class="fa fa-thumbs-up"></i> 11 Like this!</a> - <small class="text-muted">2.01.2017</small> </div>
+                </div>
+                <div class="social-comment"> <a class="pull-left" href="#"> <img src="<?=base_url();?>assets/images/teem/a10.jpg" alt="image"> </a>
+                  <div class="media-body">
+                    <textarea placeholder="Write comment..." class="form-control"></textarea>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-4">
+            <div class="social-feed-box">
+              <div class="pull-right social-action dropdown">
+                <button class="dropdown-toggle btn-white" data-toggle="dropdown"> <i class="fa fa-angle-down"></i> </button>
+                <ul class="dropdown-menu m-t-xs">
+                  <li><a href="#">Mute</a></li>
+                  <li><a href="#">Block</a></li>
+                  <li><a href="#">Report</a></li>
+                </ul>
+              </div>
+              <div class="social-avatar"> <a class="pull-left" href="#"> <img src="<?=base_url();?>assets/images/teem/a9.jpg" alt="image"> </a>
+                <div class="media-body"> <a href="#">Mitch Buchannon </a> <small class="text-muted">Today 9:00 pm - 11.06.20117</small> </div>
+              </div>
+              <div class="social-body">
+                <p> Lorem Ipsum as their default model text, and a search for 'lorem ipsum' will uncover many web sites still in their infancy. Packages and web page editors now use Lorem Ipsum as their default model text. </p>
+                <img alt="" class="img-responsive" src="assets/images/gallery/3.jpg">
+                <div class="btn-group">
+                  <button class="btn btn-white btn-xs"><i class="fa fa-thumbs-up"></i> Like this!</button>
+                  <button class="btn btn-white btn-xs"><i class="fa fa-comments"></i> Comment</button>
+                  <button class="btn btn-white btn-xs"><i class="fa fa-share"></i> Share</button>
+                </div>
+              </div>
+              <div class="social-footer">
+                <div class="social-comment"> <a class="pull-left" href="#"> <img src="<?=base_url();?>assets/images/teem/a1.jpg" alt="image"> </a>
+                  <div class="media-body"> <a href="#">Mitch Buchannon </a> Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam euismod eleifend ipsum, at posuere augue. Pellentesque mi felis, aliquam at iaculis eu, mi felis, aliquam at iaculis mi felis, aliquam at iaculis finibus eu ex. Integer efficitur tincidunt malesuada. Sed sit amet molestie elit, vel placerat ipsum. <br>
+                    <a class="small" href="#"><i class="fa fa-thumbs-up"></i> 26 Like this!</a> - <small class="text-muted">12.06.2014</small> </div>
+                </div>
+                <div class="social-comment"> <a class="pull-left" href="#"> <img src="<?=base_url();?>assets/images/teem/a2.jpg" alt="image"> </a>
+                  <div class="media-body"> <a href="#">Robert Angier </a> Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam euismod eleifend ipsum, at posuere augue. <br>
+                    <a class="small" href="#"><i class="fa fa-thumbs-up"></i> 11 Like this!</a> - <small class="text-muted">2.01.2017</small> </div>
+                </div>
+                <div class="social-comment"> <a class="pull-left" href="#"> <img src="<?=base_url();?>assets/images/teem/a1.jpg" alt="image"> </a>
+                  <div class="media-body"> <a href="#"> Jordan Belfort </a> Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam euismod eleifend ipsum, at posuere augue. <br>
+                    <a class="small" href="#"><i class="fa fa-thumbs-up"></i> 11 Like this!</a> - <small class="text-muted">2.01.2017</small> </div>
+                </div>
+                <div class="social-comment"> <a class="pull-left" href="#"> <img src="<?=base_url();?>assets/images/teem/a10.jpg" alt="image"> </a>
+                  <div class="media-body">
+                    <textarea placeholder="Write comment..." class="form-control"></textarea>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="social-feed-box">
+              <div class="pull-right social-action dropdown">
+                <button class="dropdown-toggle btn-white" data-toggle="dropdown"> <i class="fa fa-angle-down"></i> </button>
+                <ul class="dropdown-menu m-t-xs">
+                  <li><a href="#">Mute</a></li>
+                  <li><a href="#">Block</a></li>
+                  <li><a href="#">Report</a></li>
+                </ul>
+              </div>
+              <div class="social-avatar"> <a class="pull-left" href="#"> <img src="<?=base_url();?>assets/images/teem/a10.jpg" alt="image"> </a>
+                <div class="media-body"> <a href="#"> Jordan Belfort </a> <small class="text-muted">Today 9:00 pm - 11.06.20117</small> </div>
+              </div>
+              <div class="social-body"> <img alt="" class="img-responsive" src="assets/images/gallery/9.jpg">
+                <div class="btn-group">
+                  <button class="btn btn-white btn-xs"><i class="fa fa-thumbs-up"></i> Like this!</button>
+                  <button class="btn btn-white btn-xs"><i class="fa fa-comments"></i> Comment</button>
+                  <button class="btn btn-white btn-xs"><i class="fa fa-share"></i> Share</button>
+                </div>
+              </div>
+              <div class="social-footer">
+                <div class="social-comment"> <a class="pull-left" href="#"> <img src="<?=base_url();?>assets/images/teem/a1.jpg" alt="image"> </a>
+                  <div class="media-body"> <a href="#">Mitch Buchannon </a> Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam euismod eleifend ipsum, at posuere augue. Pellentesque mi felis, aliquam at iaculis eu, mi felis, aliquam at iaculis mi felis, aliquam at iaculis finibus eu ex. Integer efficitur tincidunt malesuada. Sed sit amet molestie elit, vel placerat ipsum. <br>
+                    <a class="small" href="#"><i class="fa fa-thumbs-up"></i> 26 Like this!</a> - <small class="text-muted">12.06.2014</small> </div>
+                </div>
+                <div class="social-comment"> <a class="pull-left" href="#"> <img src="<?=base_url();?>assets/images/teem/a2.jpg" alt="image"> </a>
+                  <div class="media-body"> <a href="#">Robert Angier </a> Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam euismod eleifend ipsum, at posuere augue. <br>
+                    <a class="small" href="#"><i class="fa fa-thumbs-up"></i> 11 Like this!</a> - <small class="text-muted">2.01.2017</small> </div>
+                </div>
+                <div class="social-comment"> <a class="pull-left" href="#"> <img src="<?=base_url();?>assets/images/teem/a10.jpg" alt="image"> </a>
+                  <div class="media-body">
+                    <textarea placeholder="Write comment..." class="form-control"></textarea>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="social-feed-box">
+              <div class="pull-right social-action dropdown">
+                <button class="dropdown-toggle btn-white" data-toggle="dropdown"> <i class="fa fa-angle-down"></i> </button>
+                <ul class="dropdown-menu m-t-xs">
+                  <li><a href="#">Mute</a></li>
+                  <li><a href="#">Block</a></li>
+                  <li><a href="#">Report</a></li>
+                </ul>
+              </div>
+              <div class="social-avatar"> <a class="pull-left" href="#"> <img src="<?=base_url();?>assets/images/teem/a10.jpg" alt="image"> </a>
+                <div class="media-body"> <a href="#"> Jordan Belfort </a> <small class="text-muted">Today 9:00 pm - 11.06.20117</small> </div>
+              </div>
+              <div class="social-body"> <img alt="" class="img-responsive" src="<?=base_url();?>assets/images/gallery/5.jpg">
+                <div class="btn-group">
+                  <button class="btn btn-white btn-xs"><i class="fa fa-thumbs-up"></i> Like this!</button>
+                  <button class="btn btn-white btn-xs"><i class="fa fa-comments"></i> Comment</button>
+                  <button class="btn btn-white btn-xs"><i class="fa fa-share"></i> Share</button>
+                </div>
+              </div>
+              <div class="social-footer">
+                <div class="social-comment"> <a class="pull-left" href="#"> <img src="<?=base_url();?>assets/images/teem/a1.jpg" alt="image"> </a>
+                  <div class="media-body"> <a href="#">Mitch Buchannon </a> Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam euismod eleifend ipsum, at posuere augue. Pellentesque mi felis, aliquam at iaculis eu, mi felis, aliquam at iaculis mi felis, aliquam at iaculis finibus eu ex. Integer efficitur tincidunt malesuada. Sed sit amet molestie elit, vel placerat ipsum. <br>
+                    <a class="small" href="#"><i class="fa fa-thumbs-up"></i> 26 Like this!</a> - <small class="text-muted">12.06.2014</small> </div>
+                </div>
+                <div class="social-comment"> <a class="pull-left" href="#"> <img src="<?=base_url();?>assets/images/teem/a2.jpg" alt="image"> </a>
+                  <div class="media-body"> <a href="#">Robert Angier </a> Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam euismod eleifend ipsum, at posuere augue. <br>
+                    <a class="small" href="#"><i class="fa fa-thumbs-up"></i> 11 Like this!</a> - <small class="text-muted">2.01.2017</small> </div>
+                </div>
+                <div class="social-comment"> <a class="pull-left" href="#"> <img src="<?=base_url();?>assets/images/teem/a10.jpg" alt="image"> </a>
+                  <div class="media-body">
+                    <textarea placeholder="Write comment..." class="form-control"></textarea>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-4">
+            <div class="social-feed-box">
+              <div class="pull-right social-action dropdown">
+                <button class="dropdown-toggle btn-white" data-toggle="dropdown"> <i class="fa fa-angle-down"></i> </button>
+                <ul class="dropdown-menu m-t-xs">
+                  <li><a href="#">Mute</a></li>
+                  <li><a href="#">Block</a></li>
+                  <li><a href="#">Report</a></li>
+                </ul>
+              </div>
+              <div class="social-avatar"> <a class="pull-left" href="#"> <img src="<?=base_url();?>assets/images/teem/a9.jpg" alt="image"> </a>
+                <div class="media-body"> <a href="#">Mitch Buchannon </a> <small class="text-muted">Today 9:00 pm - 11.06.20117</small> </div>
+              </div>
+              <div class="social-body">
+                <p> Lorem Ipsum as their default model text, and a search for 'lorem ipsum' will uncover many web sites still in their infancy. Packages and web page editors now use Lorem Ipsum as their default model text. </p>
+                <img alt="" class="img-responsive" src="<?=base_url();?>assets/images/gallery/4.jpg">
+                <div class="btn-group">
+                  <button class="btn btn-white btn-xs"><i class="fa fa-thumbs-up"></i> Like this!</button>
+                  <button class="btn btn-white btn-xs"><i class="fa fa-comments"></i> Comment</button>
+                  <button class="btn btn-white btn-xs"><i class="fa fa-share"></i> Share</button>
+                </div>
+              </div>
+              <div class="social-footer">
+                <div class="social-comment"> <a class="pull-left" href="#"> <img src="<?=base_url();?>assets/images/teem/a1.jpg" alt="image"> </a>
+                  <div class="media-body"> <a href="#">Mitch Buchannon </a> Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam euismod eleifend ipsum, at posuere augue. Pellentesque mi felis, aliquam at iaculis eu, mi felis, aliquam at iaculis mi felis, aliquam at iaculis finibus eu ex. Integer efficitur tincidunt malesuada. Sed sit amet molestie elit, vel placerat ipsum. <br>
+                    <a class="small" href="#"><i class="fa fa-thumbs-up"></i> 26 Like this!</a> - <small class="text-muted">12.06.2014</small> </div>
+                </div>
+                <div class="social-comment"> <a class="pull-left" href="#"> <img src="<?=base_url();?>assets/images/teem/a2.jpg" alt="image"> </a>
+                  <div class="media-body"> <a href="#">Robert Angier </a> Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam euismod eleifend ipsum, at posuere augue. <br>
+                    <a class="small" href="#"><i class="fa fa-thumbs-up"></i> 11 Like this!</a> - <small class="text-muted">2.01.2017</small> </div>
+                </div>
+                <div class="social-comment"> <a class="pull-left" href="#"> <img src="<?=base_url();?>assets/images/teem/a1.jpg" alt="image"> </a>
+                  <div class="media-body"> <a href="#"> Jordan Belfort </a> Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam euismod eleifend ipsum, at posuere augue. <br>
+                    <a class="small" href="#"><i class="fa fa-thumbs-up"></i> 11 Like this!</a> - <small class="text-muted">2.01.2017</small> </div>
+                </div>
+                <div class="social-comment"> <a class="pull-left" href="#"> <img src="<?=base_url();?>assets/images/teem/a10.jpg" alt="image"> </a>
+                  <div class="media-body">
+                    <textarea placeholder="Write comment..." class="form-control"></textarea>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="social-feed-box">
+              <div class="pull-right social-action dropdown">
+                <button class="dropdown-toggle btn-white" data-toggle="dropdown"> <i class="fa fa-angle-down"></i> </button>
+                <ul class="dropdown-menu m-t-xs">
+                  <li><a href="#">Mute</a></li>
+                  <li><a href="#">Block</a></li>
+                  <li><a href="#">Report</a></li>
+                </ul>
+              </div>
+              <div class="social-avatar"> <a class="pull-left" href="#"> <img src="<?=base_url();?>assets/images/teem/a10.jpg" alt="image"> </a>
+                <div class="media-body"> <a href="#"> Jordan Belfort </a> <small class="text-muted">Today 9:00 pm - 11.06.20117</small> </div>
+              </div>
+              <div class="social-body"> <img alt="" class="img-responsive" src="<?=base_url();?>assets/images/gallery/8.jpg">
+                <div class="btn-group">
+                  <button class="btn btn-white btn-xs"><i class="fa fa-thumbs-up"></i> Like this!</button>
+                  <button class="btn btn-white btn-xs"><i class="fa fa-comments"></i> Comment</button>
+                  <button class="btn btn-white btn-xs"><i class="fa fa-share"></i> Share</button>
+                </div>
+              </div>
+              <div class="social-footer">
+                <div class="social-comment"> <a class="pull-left" href="#"> <img src="<?=base_url();?>assets/images/teem/a1.jpg" alt="image"> </a>
+                  <div class="media-body"> <a href="#">Mitch Buchannon </a> Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam euismod eleifend ipsum, at posuere augue. Pellentesque mi felis, aliquam at iaculis eu, mi felis, aliquam at iaculis mi felis, aliquam at iaculis finibus eu ex. Integer efficitur tincidunt malesuada. Sed sit amet molestie elit, vel placerat ipsum. <br>
+                    <a class="small" href="#"><i class="fa fa-thumbs-up"></i> 26 Like this!</a> - <small class="text-muted">12.06.2014</small> </div>
+                </div>
+                <div class="social-comment"> <a class="pull-left" href="#"> <img src="<?=base_url();?>assets/images/teem/a2.jpg" alt="image"> </a>
+                  <div class="media-body"> <a href="#">Robert Angier </a> Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam euismod eleifend ipsum, at posuere augue. <br>
+                    <a class="small" href="#"><i class="fa fa-thumbs-up"></i> 11 Like this!</a> - <small class="text-muted">2.01.2017</small> </div>
+                </div>
+                <div class="social-comment"> <a class="pull-left" href="#"> <img src="<?=base_url();?>assets/images/teem/a1.jpg" alt="image"> </a>
+                  <div class="media-body"> <a href="#"> Jordan Belfort </a> Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam euismod eleifend ipsum, at posuere augue. <br>
+                    <a class="small" href="#"><i class="fa fa-thumbs-up"></i> 11 Like this!</a> - <small class="text-muted">2.01.2017</small> </div>
+                </div>
+                <div class="social-comment"> <a class="pull-left" href="#"> <img src="<?=base_url();?>assets/images/teem/a10.jpg" alt="image"> </a>
+                  <div class="media-body">
+                    <textarea placeholder="Write comment..." class="form-control"></textarea>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="social-feed-box">
+              <div class="pull-right social-action dropdown">
+                <button class="dropdown-toggle btn-white" data-toggle="dropdown"> <i class="fa fa-angle-down"></i> </button>
+                <ul class="dropdown-menu m-t-xs">
+                  <li><a href="#">Mute</a></li>
+                  <li><a href="#">Block</a></li>
+                  <li><a href="#">Report</a></li>
+                </ul>
+              </div>
+              <div class="social-avatar"> <a class="pull-left" href="#"> <img src="<?=base_url();?>assets/images/teem/a10.jpg" alt="image"> </a>
+                <div class="media-body"> <a href="#"> Jordan Belfort </a> <small class="text-muted">Today 9:00 pm - 11.06.20117</small> </div>
+              </div>
+              <div class="social-body"> <img alt="" class="img-responsive" src="<?=base_url();?>assets/images/gallery/4.jpg">
+                <div class="btn-group">
+                  <button class="btn btn-white btn-xs"><i class="fa fa-thumbs-up"></i> Like this!</button>
+                  <button class="btn btn-white btn-xs"><i class="fa fa-comments"></i> Comment</button>
+                  <button class="btn btn-white btn-xs"><i class="fa fa-share"></i> Share</button>
+                </div>
+              </div>
+              <div class="social-footer">
+                <div class="social-comment"> <a class="pull-left" href="#"> <img src="<?=base_url();?>assets/images/teem/a1.jpg" alt="image"> </a>
+                  <div class="media-body"> <a href="#">Mitch Buchannon </a> Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam euismod eleifend ipsum, at posuere augue. Pellentesque mi felis, aliquam at iaculis eu, mi felis, aliquam at iaculis mi felis, aliquam at iaculis finibus eu ex. Integer efficitur tincidunt malesuada. Sed sit amet molestie elit, vel placerat ipsum. <br>
+                    <a class="small" href="#"><i class="fa fa-thumbs-up"></i> 26 Like this!</a> - <small class="text-muted">12.06.2014</small> </div>
+                </div>
+                <div class="social-comment"> <a class="pull-left" href="#"> <img src="<?=base_url();?>assets/images/teem/a2.jpg" alt="image"> </a>
+                  <div class="media-body"> <a href="#">Robert Angier </a> Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam euismod eleifend ipsum, at posuere augue. <br>
+                    <a class="small" href="#"><i class="fa fa-thumbs-up"></i> 11 Like this!</a> - <small class="text-muted">2.01.2017</small> </div>
+                </div>
+                <div class="social-comment"> <a class="pull-left" href="#"> <img src="<?=base_url();?>assets/images/teem/a1.jpg" alt="image"> </a>
+                  <div class="media-body"> <a href="#"> Jordan Belfort </a> Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam euismod eleifend ipsum, at posuere augue. <br>
+                    <a class="small" href="#"><i class="fa fa-thumbs-up"></i> 11 Like this!</a> - <small class="text-muted">2.01.2017</small> </div>
+                </div>
+                <div class="social-comment"> <a class="pull-left" href="#"> <img src="<?=base_url();?>assets/images/teem/a10.jpg" alt="image"> </a>
+                  <div class="media-body">
+                    <textarea placeholder="Write comment..." class="form-control"></textarea>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- End feeds  -->
+        </div>
+      </div>
+      
+<!-- start footer -->
+<div class="footer">
+        <div class="pull-right">
+          <ul class="list-inline">
+            <li><a title="" href="index.html">Dashboard</a></li>
+            <li><a title="" href="mailbox.html"> Inbox </a></li>
+            <li><a title="" href="blog.html">Blog</a></li>
+            <li><a title="" href="contacts.html">Contacts</a></li>
+          </ul>
+        </div>
+        <div> <strong>Copyright</strong> AdminBag Company &copy; 2017 </div>
+      </div>
+    </div>
+  </div>
     
     <?php  require_once './include/scroll_top.php';?>
 

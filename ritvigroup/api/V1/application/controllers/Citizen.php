@@ -86,12 +86,12 @@ class Citizen extends CI_Controller {
                     } else if($val['DataType'] == "Event") {
                         $Data[] = array(
                                         'feedtype' => 'event',
-                                        'eventdata' => $this->Event_Model->getEventDetail($val['Id']),
+                                        'eventdata' => $this->Event_Model->getEventDetail($val['Id'], $UserProfileId),
                                         );
                     } else if($val['DataType'] == "Poll") {
                         $Data[] = array(
                                         'feedtype' => 'poll',
-                                        'polldata' => $this->Poll_Model->getPollDetail($val['Id']),
+                                        'polldata' => $this->Poll_Model->getPollDetail($val['Id'], $UserProfileId),
                                         );
                     } else if($val['DataType'] == "Complaint") {
                         $Data[] = array(

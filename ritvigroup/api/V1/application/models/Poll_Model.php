@@ -73,7 +73,7 @@ class Poll_Model extends CI_Model {
             foreach($res AS $key => $result) {
                 $polls[] = array(
                                 'feedtype' => 'poll',
-                                'polldata' => $this->getPollDetail($result['PollId']),
+                                'polldata' => $this->getPollDetail($result['PollId'], $UserProfileId),
                                 );
             }
         } else {
@@ -84,7 +84,7 @@ class Poll_Model extends CI_Model {
 
 
     
-    public function getPollDetail($PollId) {
+    public function getPollDetail($PollId, $UserProfileId) {
         $poll_detail = array();
         if(isset($PollId) && $PollId > 0) {
 
@@ -93,7 +93,7 @@ class Poll_Model extends CI_Model {
             $res = $query->row_array();
 
             if($res['PollId'] > 0) {
-                $poll_detail = $this->returnPollDetail($res);
+                $poll_detail = $this->returnPollDetail($res, $UserProfileId);
             } 
         } else {
             $poll_detail = array();
@@ -102,7 +102,7 @@ class Poll_Model extends CI_Model {
     }
 
     
-    public function returnPollDetail($res) {
+    public function returnPollDetail($res, $UserProfileId) {
         $PollId             = $res['PollId'];
         $PollUniqueId       = $res['PollUniqueId'];
         $AddedBy            = $res['AddedBy'];
@@ -123,6 +123,8 @@ class Poll_Model extends CI_Model {
         $PollTotalParticipation = $this->getPollTotalParticipation($PollId);
         $PollAnswerWithTotalParticipation = $this->getPollAnswerWithTotalParticipation($PollId);
 
+        $validate_poll_already = $this->validateUserProfileAlreadyPolled($PollId, $UserProfileId);
+
         $user_data_array = array(
                                 "PollId"                    => $PollId,
                                 "PollUniqueId"              => $PollUniqueId,
@@ -139,6 +141,8 @@ class Poll_Model extends CI_Model {
                                 //"PollAnswer"                => $PollAnswer,
                                 "PollTotalParticipation"    => $PollTotalParticipation,
                                 "PollAnswerWithTotalParticipation"    => $PollAnswerWithTotalParticipation,
+                                
+                                "MeParticipated"            => $validate_poll_already,
                                 );
         return $user_data_array;
     }

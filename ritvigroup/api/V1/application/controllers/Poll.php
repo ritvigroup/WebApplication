@@ -65,7 +65,7 @@ class Poll extends CI_Controller {
                 
                 $this->Poll_Model->saveMyPollAnswer($PollId, $UserProfileId, $poll_answer);
                 
-                $poll_detail = $this->Poll_Model->getPollDetail($PollId);
+                $poll_detail = $this->Poll_Model->getPollDetail($PollId, $UserProfileId);
 
                 $msg = "Poll created successfully";
 
@@ -107,7 +107,7 @@ class Poll extends CI_Controller {
             $error_occured = true;
         } else {
 
-            $poll_detail = $this->Poll_Model->getPollDetail($PollId);
+            $poll_detail = $this->Poll_Model->getPollDetail($PollId, $UserProfileId);
 
             if(count($poll_detail) > 0) {
                 $msg = "Poll fetched successfully";
@@ -115,10 +115,6 @@ class Poll extends CI_Controller {
                 $msg = "Poll not found";
                 $error_occured = true;
             }
-
-            $validate_poll_already = $this->Poll_Model->validateUserProfileAlreadyPolled($PollId, $UserProfileId);
-
-            $poll_detail = array_merge($poll_detail, array('MeParticipated' => $validate_poll_already));
         }
 
         if($error_occured == true) {
@@ -191,7 +187,7 @@ class Poll extends CI_Controller {
 
             $this->db->query("BEGIN");
 
-            $poll_detail = $this->Poll_Model->getPollDetail($PollId);
+            $poll_detail = $this->Poll_Model->getPollDetail($PollId, $UserProfileId);
 
             $validate_poll_already = $this->Poll_Model->validateUserProfileAlreadyPolled($PollId, $UserProfileId);
 
@@ -237,12 +233,7 @@ class Poll extends CI_Controller {
                     $this->db->query("COMMIT");
                     
 
-                    $poll_detail = $this->Poll_Model->getPollDetail($PollId);
-
-                    $validate_poll_already = $this->Poll_Model->validateUserProfileAlreadyPolled($PollId, $UserProfileId);
-
-                    $poll_detail = array_merge($poll_detail, array('MeParticipated' => $validate_poll_already));
-
+                    $poll_detail = $this->Poll_Model->getPollDetail($PollId, $UserProfileId);
 
                     $msg = "Poll answer submitted successfully";
 
