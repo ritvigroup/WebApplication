@@ -26,11 +26,9 @@
                     <div class="col-md-12">
                         <div class="portlet box">
                             <div class="portlet-header">
-                                <h1>Complaint Received</h1>
-                                <div class="actions">
-                                    <a href="<?=base_url();?>complaint/newcomplaint" class="btn btn-info btn-xs"><i class="fa fa-plus"></i>&nbsp;New Complaint</a>&nbsp;
-                                    <a href="<?=base_url();?>complaint/mycomplaint" class="btn btn-info btn-xs"><i class="fa fa-plus"></i>&nbsp;My Complaint</a>&nbsp;
-                                </div>
+                                <ol class="breadcrumb page-breadcrumb">
+                                    <?php echo $this->complaint_links; ?>
+                                </ol>
                             </div>
                             <div class="portlet-body">
                                 <div class="row mbm">
@@ -74,8 +72,7 @@
                         </div>
                     </div>
                 </div>
-            </div>
-            <!-- stat timeline and feed  -->
+                <!-- stat timeline and feed  -->
                 <div class="top20">
                     
                     <div class="clearfix"> </div>

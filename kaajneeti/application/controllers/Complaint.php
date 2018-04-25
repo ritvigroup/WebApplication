@@ -19,6 +19,12 @@ class Complaint extends CI_Controller {
             redirect('leader/login');
         }
 
+        $this->complaint_links = '
+            <li><a href="'.base_url().'complaint/complaintReceived">Complaint Received</a>&nbsp;&nbsp;</li>
+            <li><a href="'.base_url().'complaint/mycomplaint">My Complaint</a>&nbsp;&nbsp;</li>
+            <li><a href="'.base_url().'complaint/newcomplaint">New Complaint</a>&nbsp;&nbsp;</li>
+        ';
+
     }  
     
     public function complaintHistoryForm() {

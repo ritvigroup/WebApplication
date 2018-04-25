@@ -24,10 +24,9 @@
                     <div class="col-md-12">
                         <div class="portlet box">
                             <div class="portlet-header">
-                                <h1>Invitations</h1>
-                                <div class="actions">
-                                    <?php echo $this->plan_links; ?>
-                                </div>
+                                <ol class="breadcrumb page-breadcrumb">
+                                    <?php echo $this->connect_links; ?>
+                                </ol>
                             </div>
 
                             <div class="portlet-body">

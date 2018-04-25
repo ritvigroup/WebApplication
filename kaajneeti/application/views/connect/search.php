@@ -22,15 +22,48 @@
             <div class="page-content">
                 <div class="row  border-bottom white-bg dashboard-header">
                     <div class="col-md-12">
-                        <div class="portlet box">
+                        <div class="portlet box ">
                             <div class="portlet-header">
-                                <h1>Search Profile</h1>
-                                <div class="actions">
-                                    <?php echo $this->plan_links; ?>
+                                <ol class="breadcrumb page-breadcrumb">
+                                    <?php echo $this->connect_links; ?>
+                                </ol>
+                            </div>
+                            <div class="row">
+                                
+                                <div class="col-md-4">
+                                    <input type="text" id="search_text" class="form-control" autocomplete="off" placeholder="Search">
                                 </div>
+                                 <div class="col-md-4">
+                                          <select id="gender" class="form-control">
+                                                    <option value="">-Gender-</option>
+                                                    <?php foreach($Gender AS $gender) { ?>
+                                                    <option value="<?php echo $gender->GenderId; ?>"><?php echo $gender->GenderName; ?></option>
+                                                    <?php } ?>
+                                                </select>
+
+                                 </div>
+
+                                <div class="col-md-4">
+                                         <select id="political_party" class="form-control">
+                                                    <option value="">-political_party-</option>
+                                                    <?php foreach($PoliticalParty AS $political_party) { ?>
+                                                    <option value="<?php echo $political_party->PoliticalPartyId; ?>"><?php echo $political_party->PoliticalPartyName; ?></option>
+                                                    <?php } ?>
+                                                </select>
+                                </div>
+
+
+
+                            </div>
+                            <div class="row">
+                                <div class="col-md-4 submit-button"><input type="button" value="Submit" onClick="return searchLeader();"></div>
+                                <div class="col-md-4"></div>
+                                <div class="col-md-4"></div>
                             </div>
 
 
+
+<!-- 
                             <div class="portlet-body pan">
                                 <div class="table-responsive">
                                     <table id="user-last-logged-table"
@@ -68,11 +101,11 @@
                                         
                                     </table>
                                 </div>
-                            </div>
+                            </div> -->
                             <div class="table-responsive" id="search_result_show">
                                 <div class="portlet-body">
                                     <div class="row mbm">
-                                        <div class="col-lg-12">
+                                        <div class="col-lg-12 search-result">
                                             <h3>Search Result</h3>
                                             <div class="table-responsive">
                                                 <table id="table_id"

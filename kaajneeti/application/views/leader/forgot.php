@@ -32,15 +32,17 @@
 </head>
 
 <body class="aqua-bg  login">
+     <div class="middle-box loginscreen ">
+    <div class="widgets-container">
     <div class="logo">
-        <h1>Kaajneeti</h1>
+        <h1 class="logo-name">KaajNeeti</h1>
     </div>
     <div class="passwordBox">
         <div class="row">
             <div class="col-md-12">
                 <div class="widgets-container">
                     <h2 class="font-bold">Forgot password</h2>
-                    <p> Enter your email address and your password will be reset and emailed to you. </p>
+                    <p> Enter your Username and your password will be reset and emailed to you. </p>
                     <div class="row">
                         <div class="col-lg-12">
                             <div class="form-group">
@@ -54,9 +56,11 @@
             </div>
         </div>
         <div class="row">
-            <div class="col-md-12 login-copyright"> <small>Developed at: <a href="http://www.ritvigroup.com" target="_blank" style="color: white;">Ritvi Innovation Pvt. Ltd.</a> &copy; 2016-2017</small> </div>
+            <div class="col-md-12 login-copyright"> <small>Developed at: <a href="http://www.ritvigroup.com" target="_blank" style="color: #49b6d6;">Ritvi Innovation Pvt. Ltd.</a> &copy; 2016-2017</small> </div>
         </div>
     </div>
+</div>
+</div>
 </body>
 
 

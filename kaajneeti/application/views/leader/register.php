@@ -41,7 +41,7 @@
         <div>
         
         </div>
-        <h3>Register to Admin-Bag</h3>
+        <h3>Register to KaajNeeti</h3>
         <p>Create account to see it in action.</p>
         <div class="form-group"><input type="text" required="" placeholder="Email" name="email" class="form-control signup_email" maxlength="100"></div>
         <div class="form-group"><input type="text" required="" placeholder="Mobile" name="mobile" class="form-control signup_mobile" maxlength="20"></div>

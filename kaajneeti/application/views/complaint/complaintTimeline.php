@@ -1,37 +1,38 @@
 <!DOCTYPE html>
 <html lang="en">
-<head><title>Complaint History</title>
+<head><title>My Complaint</title>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="cache-control" content="no-cache">
     <meta http-equiv="expires" content="Thu, 19 Nov 1900 08:52:00 GMT">
+
     <?php  require_once './include/css.php';?>
+
 </head>
 <body class="page-header-fixed ">
-    
+
     <?php  require_once './include/top.php';?>
 
     <div class="clearfix"> </div>
     <div class="page-container">
-        
+
         <?php  require_once './include/left.php';?>
 
         <!-- Start page content wrapper -->
         <div class="page-content-wrapper animated fadeInRight">
             <div class="page-content">
                 <div class="row  border-bottom white-bg dashboard-header">
-                    <?php
-                    // echo '<pre>';
-                    // print_r($ComplaintDetail);
-                    // print_r($ComplaintHistory);
-                    // echo '</pre>';
-                    ?>
                     <div class="col-md-12">
-                        
-                        <div class="tab-content tab-edit">
-                            <div id="non-responsive" class="tab-pane fade in active">
-                                <div class="row">
+                        <div class="portlet box">
+                            <div class="portlet-header">
+                                <ol class="breadcrumb page-breadcrumb">
+                                    <?php echo $this->complaint_links; ?>
+                                    <li class="active"><a href="javascript:void(0);">Timeline</a>&nbsp;&nbsp;</li>
+                                </ol>
+                            </div>
+                            <div class="portlet-body">
+                                <div class="row mbm">
                                     <div class="col-lg-12">
                                         <div class="timeline-centered">
                                             <?php
@@ -42,7 +43,7 @@
                                                 $left_aligned = ($count % 2) ? '' : ' left-aligned';
                                                 ?>
                                                 <?php
-                                                $datetime = date('d M,Y h:i', strtotime($complaint_history->AddedOnTime));
+                                                $datetime = date('d M, Y h:i', strtotime($complaint_history->AddedOnTime));
                                                 $datetime_ago = $complaint_history->AddedOn;
 
                                                 $UserProfileHrefLink = base_url().'profile/profile/'.$complaint_history->ComplaintHistoryProfile->user_profile_detail->user_info->UserUniqueId;
@@ -84,12 +85,12 @@
                                             <article class="timeline-entry <?php echo $left_aligned; ?>">
                                                 <div class="timeline-entry-inner">
                                                     <?php
-                                                    $datetime = date('d M,Y h:i', strtotime($ComplaintDetail->result->AddedOnTime));
+                                                    $datetime = date('d M, Y h:i', strtotime($ComplaintDetail->result->AddedOnTime));
                                                     $datetime_ago = $ComplaintDetail->result->AddedOn;
                                                     ?>
                                                     <time datetime="<?php echo $datetime; ?>" class="timeline-time"><span><?php echo $datetime_ago; ?></span><span><?php echo $datetime; ?></span>
                                                     </time>
-                                                    <div class="timeline-icon bg-yellow"><i class="fa fa-camera"></i>
+                                                    <div class="timeline-icon bg-yellow"><i class="fa fa-exclamation"></i>
                                                     </div>
                                                     <div class="timeline-label">
                                                         <h2 class="timeline-title"><?php echo $ComplaintDetail->result->ComplaintSubject; ?></h2>
@@ -156,29 +157,28 @@
                         </div>
                     </div>
                 </div>
-                <!-- stat timeline and feed  -->
                 <div class="top20">
-                    
+
                     <div class="clearfix"> </div>
-                    <!-- End projects list -->
-                    
+
                     <?php  require_once './include/footer.php';?>
 
                 </div>
             </div>
         </div>
     </div>
-    
+
     <?php  require_once './include/scroll_top.php';?>
 
 </body>
 
 <?php  require_once './include/js.php';?>
 
+
 <div id="modal-stackable" tabindex="-1" role="dialog" aria-labelledby="modal-stackable-label" aria-hidden="true" class="modal fade" style="display: none;">
     <div class="modal-dialog">
         <div class="modal-content">
-            
+
         </div>
     </div>
 </div>
