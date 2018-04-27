@@ -96,7 +96,7 @@ class Post extends CI_Controller {
                 
                 $this->Post_Model->saveMyPostAttachment($PostId, $UserProfileId, $_FILES['file']);
 
-                $post_detail = $this->Post_Model->getPostDetail($PostId);
+                $post_detail = $this->Post_Model->getPostDetail($PostId, $UserProfileId);
 
                 $this->db->query("COMMIT");
 
@@ -140,7 +140,7 @@ class Post extends CI_Controller {
             $error_occured = true;
         } else {
 
-            $post_detail = $this->Post_Model->getPostDetail($PostId);
+            $post_detail = $this->Post_Model->getPostDetail($PostId, $UserProfileId);
             $msg = "Post fetched successfully";
         }
 

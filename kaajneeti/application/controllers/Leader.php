@@ -27,25 +27,7 @@ class Leader extends CI_Controller {
         $this->load->view('leader/login',$data);
     }
     
-    public function verify()
-	{
-        $email = $this->input->post('email');
-        $password= $this->input->post('password');
-        $data['res'] = $this->login_model->verify($email,$password);
-        if(!empty($data['res']))
-        {
-            $this->session->set_userdata('userid',$data['res']['customer_id']);
-            $this->session->set_userdata('firstname',$data['res']['first_name']);
-            $this->session->set_userdata('lastname',$data['res']['last_name']);
-            $this->session->set_userdata('email',$data['res']['email']);
-            redirect(base_url());
-        }
-        else
-        {
-            $this->session->set_flashdata('error','Invalid EmailID OR Password. Please Try Again.');
-            redirect('leader/login');
-        }
-    }
+
 
     public function fblogin() {
     	if($this->facebook->is_authenticated()){
@@ -97,28 +79,27 @@ class Leader extends CI_Controller {
 
         if($this->input->method(TRUE) == "POST") {
 
+            $_POST['login_type'] = 2;
+
             $json = post_curl(API_CALL_PATH.'userlogin/loginUsernamePassword', $this->input->post(), $this->curl);
 
             $json_decode = json_decode($json);
+            
             if($json_decode->status == "success") {
 
                 $UserId = $json_decode->result->UserId;
-                $UserName = $json_decode->result->UserName;
-                $UserName = $json_decode->result->UserName;
+                $UserProfileId = $json_decode->result->UserProfileId;
+                $FirstName = $json_decode->result->FirstName;
+                $LastName = $json_decode->result->LastName;
+
+                $Name = $FirstName.' '.$LastName;
                 $UserProfilePic = ($json_decode->result->ProfilePhotoPath != '') ? $json_decode->result->ProfilePhotoPath : base_url().'assets/images/default-user.png';
                 
-                if($UserId > 0) {
-                    $CitizenProfileId   = $json_decode->result->UserProfileCitizen->UserProfileId;
-                    $LeaderProfileId    = $json_decode->result->UserProfileLeader->UserProfileId;
-
+                if($UserProfileId > 0) {
                     $this->session->set_userdata('UserId', $UserId);
-                    $this->session->set_userdata('UserName', $UserName);
+                    $this->session->set_userdata('Name', $Name);
                     $this->session->set_userdata('UserProfilePic', $UserProfilePic);
-                    $this->session->set_userdata('CitizenProfileId', $CitizenProfileId);
-                    $this->session->set_userdata('LeaderProfileId', $LeaderProfileId);
-
-
-                    
+                    $this->session->set_userdata('UserProfileId', $UserProfileId);
                 }
             } else {
                 
@@ -146,15 +127,11 @@ class Leader extends CI_Controller {
                 $UserId = $json_decode->result->UserId;
                 
                 if($UserId > 0) {
-                    $CitizenProfileId   = $json_decode->result->UserProfileCitizen->UserProfileId;
-                    $LeaderProfileId    = $json_decode->result->UserProfileLeader->UserProfileId;
+                    $UserProfileId   = $json_decode->result->UserProfileCitizen->UserProfileId;
 
                     $this->session->set_userdata('UserId', $UserId);
-                    $this->session->set_userdata('CitizenProfileId', $CitizenProfileId);
-                    $this->session->set_userdata('LeaderProfileId', $LeaderProfileId);
-
-
-                    
+                    $this->session->set_userdata('UserProfileId', $UserProfileId);
+                   
                 }
             } else {
                 
@@ -227,7 +204,8 @@ class Leader extends CI_Controller {
 			'UserId'		=> '',
 		));
             
-		$this->session->unset_userdata('UserId');
+        $this->session->unset_userdata('UserId');
+		$this->session->unset_userdata('UserProfileId');
 		$this->session->sess_destroy();
 		redirect('leader/login');
 	}
@@ -238,6 +216,7 @@ class Leader extends CI_Controller {
 
         // Remove user data from session
         $this->session->unset_userdata('UserId');
+        $this->session->unset_userdata('UserProfileId');
         $this->session->sess_destroy();
         // Redirect to login page
         redirect('leader/login');
@@ -254,7 +233,7 @@ class Leader extends CI_Controller {
         $data = array();
 
         $_POST['user_id'] = $this->session->userdata('UserId');
-        $_POST['user_profile_id'] = $this->session->userdata('LeaderProfileId');
+        $_POST['user_profile_id'] = $this->session->userdata('UserProfileId');
 
         $json_encode = post_curl(API_CALL_PATH.'leader/getAllHomePageData', $this->input->post(), $this->curl);
         
@@ -403,7 +382,7 @@ class Leader extends CI_Controller {
 
         if($this->session->userdata('UserId') > 0) {
             $_POST['user_id'] = $this->session->userdata('UserId');
-            $_POST['user_profile_id'] = $this->session->userdata('LeaderProfileId');
+            $_POST['user_profile_id'] = $this->session->userdata('UserProfileId');
             $json = post_curl(API_CALL_PATH.'userprofile/searchLeaderProfiles', $this->input->post(), $this->curl);
 
             $json_decode = json_decode($json);

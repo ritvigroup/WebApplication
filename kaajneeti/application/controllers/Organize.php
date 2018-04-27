@@ -34,7 +34,7 @@ class Organize extends CI_Controller {
 
            
         if($this->input->method(TRUE) == "POST") {
-            $_POST['user_profile_id'] = $this->session->userdata('LeaderProfileId');
+            $_POST['user_profile_id'] = $this->session->userdata('UserProfileId');
 
             $post_data = $this->input->post();
 
@@ -47,7 +47,7 @@ class Organize extends CI_Controller {
             return false;
         }
         
-        $_POST['user_profile_id'] = $this->session->userdata('LeaderProfileId');
+        $_POST['user_profile_id'] = $this->session->userdata('UserProfileId');
         $json_encode = post_curl(API_CALL_PATH.'document/getMyAllDocumentFolder', $this->input->post(), $this->curl);
 
         $json_decode = json_decode($json_encode);
@@ -64,7 +64,7 @@ class Organize extends CI_Controller {
 
            
         if($this->input->method(TRUE) == "POST") {
-            $_POST['user_profile_id'] = $this->session->userdata('LeaderProfileId');
+            $_POST['user_profile_id'] = $this->session->userdata('UserProfileId');
 
 
             $post_data = $this->input->post();
@@ -84,7 +84,7 @@ class Organize extends CI_Controller {
 
             return false;
         }
-        $_POST['user_profile_id'] = $this->session->userdata('LeaderProfileId');
+        $_POST['user_profile_id'] = $this->session->userdata('UserProfileId');
 
         $json_encode = post_curl(API_CALL_PATH.'document/getMyAllDocumentFolder', $this->input->post(), $this->curl);
 
@@ -111,7 +111,7 @@ class Organize extends CI_Controller {
 
            
         if($this->input->method(TRUE) == "POST") {
-            $_POST['user_profile_id'] = $this->session->userdata('LeaderProfileId');
+            $_POST['user_profile_id'] = $this->session->userdata('UserProfileId');
 
             $post_data = array(
                                 'user_profile_id' => $this->input->post('user_profile_id'),
@@ -128,7 +128,7 @@ class Organize extends CI_Controller {
             return false;
         }
         
-        $_POST['user_profile_id'] = $this->session->userdata('LeaderProfileId');
+        $_POST['user_profile_id'] = $this->session->userdata('UserProfileId');
         $json_encode = post_curl(API_CALL_PATH.'fleet/getAllVehicle', $this->input->post(), $this->curl);
 
         $json_decode = json_decode($json_encode);
@@ -153,7 +153,7 @@ class Organize extends CI_Controller {
         if (!$this->input->is_ajax_request()) {
            exit('Error');
         }
-        $_POST['user_profile_id'] = $this->session->userdata('LeaderProfileId');
+        $_POST['user_profile_id'] = $this->session->userdata('UserProfileId');
 
         $json_encode = post_curl(API_CALL_PATH.'complaint/getAllDepartment', $this->input->post(), $this->curl);
 
@@ -172,7 +172,7 @@ class Organize extends CI_Controller {
         if (!$this->input->is_ajax_request()) {
            exit('Error');
         }
-        $_POST['user_profile_id'] = $this->session->userdata('LeaderProfileId');
+        $_POST['user_profile_id'] = $this->session->userdata('UserProfileId');
 
         $_POST['unique_profile_id'] = $this->uri->segment(3);
         $json_encode = post_curl(API_CALL_PATH.'userprofile/getUserAllProfileInformationByUniqueProfileId', $this->input->post(), $this->curl);
@@ -197,7 +197,7 @@ class Organize extends CI_Controller {
         $data = array();
 
         $_POST['user_id'] = $this->session->userdata('UserId');
-        $_POST['user_profile_id'] = $this->session->userdata('LeaderProfileId');
+        $_POST['user_profile_id'] = $this->session->userdata('UserProfileId');
            
         if($this->input->method(TRUE) == "POST" && $this->input->post('save_user') == 'Y') {
 

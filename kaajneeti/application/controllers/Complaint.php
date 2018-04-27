@@ -33,7 +33,7 @@ class Complaint extends CI_Controller {
         if (!$this->input->is_ajax_request()) {
            exit('Error');
         }
-        $_POST['user_profile_id'] = $this->session->userdata('LeaderProfileId');
+        $_POST['user_profile_id'] = $this->session->userdata('UserProfileId');
         
         $this->load->view('complaint/complaintHistoryForm',$data);
     }
@@ -45,7 +45,7 @@ class Complaint extends CI_Controller {
         if (!$this->input->is_ajax_request()) {
            exit('Error');
         }
-        $_POST['user_profile_id'] = $this->session->userdata('LeaderProfileId');
+        $_POST['user_profile_id'] = $this->session->userdata('UserProfileId');
         $_POST['complaint_unique_id'] = $this->uri->segment(3);
         $json_encode = post_curl(API_CALL_PATH.'complaint/getComplaintDetailByUniqueId', $this->input->post(), $this->curl);
 
@@ -79,7 +79,7 @@ class Complaint extends CI_Controller {
     public function mycomplaint() {
         $data = array();
       
-        $_POST['user_profile_id'] = $this->session->userdata('LeaderProfileId');
+        $_POST['user_profile_id'] = $this->session->userdata('UserProfileId');
         $json_encode = post_curl(API_CALL_PATH.'complaint/getMyAllComplaint', $this->input->post(), $this->curl);
 
         $json_decode = json_decode($json_encode);
@@ -94,7 +94,7 @@ class Complaint extends CI_Controller {
     public function complaintReceived() {
         $data = array();
       
-        $_POST['user_profile_id'] = $this->session->userdata('LeaderProfileId');
+        $_POST['user_profile_id'] = $this->session->userdata('UserProfileId');
         $json_encode = post_curl(API_CALL_PATH.'complaint/getAllAssignedComplaintToMe', $this->input->post(), $this->curl);
 
         $json_decode = json_decode($json_encode);
@@ -115,7 +115,7 @@ class Complaint extends CI_Controller {
         $data = array();
 
         $_POST['user_id']           = $this->session->userdata('UserId');
-        $_POST['user_profile_id']   = $this->session->userdata('LeaderProfileId');
+        $_POST['user_profile_id']   = $this->session->userdata('UserProfileId');
 
         if($this->input->method(TRUE) == "POST") {
             
@@ -181,7 +181,7 @@ class Complaint extends CI_Controller {
     public function complaintTimeline() {
         $data = array();
       
-        $_POST['user_profile_id'] = $this->session->userdata('LeaderProfileId');
+        $_POST['user_profile_id'] = $this->session->userdata('UserProfileId');
 
         $_POST['complaint_unique_id'] = $this->uri->segment(3);
         $json_encode = post_curl(API_CALL_PATH.'complaint/getComplaintDetailByUniqueId', $this->input->post(), $this->curl);
@@ -225,8 +225,12 @@ class Complaint extends CI_Controller {
 
             return false;
         }
+
+        echo '<pre>';
+        print_r($data);
+        echo '</pre>';
         
-        $this->load->view('complaint/complaintTimeline',$data);
+        $this->load->view('complaint/complaintTimeline', $data);
     }
 
 

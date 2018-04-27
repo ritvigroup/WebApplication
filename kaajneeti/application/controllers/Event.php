@@ -25,7 +25,7 @@ class Event extends CI_Controller {
     public function event() {
         $data = array();
       
-        $_POST['user_profile_id'] = $this->session->userdata('LeaderProfileId');
+        $_POST['user_profile_id'] = $this->session->userdata('UserProfileId');
         $json_encode = post_curl(API_CALL_PATH.'event/getMyAllEvent', $this->input->post(), $this->curl);
 
         $json_decode = json_decode($json_encode);
@@ -42,7 +42,7 @@ class Event extends CI_Controller {
 
            
         if($this->input->method(TRUE) == "POST") {
-            $_POST['user_profile_id'] = $this->session->userdata('LeaderProfileId');
+            $_POST['user_profile_id'] = $this->session->userdata('UserProfileId');
 
 
             $post_data = $this->input->post();
@@ -86,7 +86,7 @@ class Event extends CI_Controller {
         if (!$this->input->is_ajax_request()) {
            exit('Error');
         }
-        $_POST['user_profile_id'] = $this->session->userdata('LeaderProfileId');
+        $_POST['user_profile_id'] = $this->session->userdata('UserProfileId');
         $_POST['event_id'] = $this->input->post('event_id');
         $json_encode = post_curl(API_CALL_PATH.'event/getEventDetail', $this->input->post(), $this->curl);
 

@@ -56,7 +56,7 @@
                                                     <?php $ValidEndDate    = (($poll->polldata->ValidEndDate == '0000-00-00 00:00:00') ? '' : date('d-M-Y h:i A', strtotime($poll->polldata->ValidEndDate))); ?>
                                                     <tr>
                                                         <td><input type="checkbox"></td>
-                                                        <td><?php echo $poll->polldata->PollQuestion; ?></td>
+                                                        <td><a data-target="#modal-stackable" data-toggle="modal" href="javascript:void(0);" onClick="return displayPollDitail('<?php echo $poll->polldata->PollUniqueId; ?>');" title="View Poll Detail"><?php echo $poll->polldata->PollQuestion; ?></a></td>
                                                         <td><?php echo $PollPrivacy; ?></td>
                                                         <td><?php echo $ValidFromDate; ?></td>
                                                         <td><?php echo $ValidEndDate; ?></td>
@@ -88,17 +88,36 @@
 
 <?php  require_once './include/scroll_top.php';?>
 
-</body>
 
 <?php  require_once './include/js.php';?>
 
+<div id="modal-stackable" tabindex="-1" role="dialog" aria-labelledby="modal-stackable-label" aria-hidden="true" class="modal fade" style="display: none;">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            
+        </div>
+    </div>
+</div>
+
 <script>
 $(document).ready(function() {
-        // Flexible table
+    // Flexible table
 
-        $('#table_id').DataTable();
+    $('#table_id').DataTable();
 
-    });
+});
+
+function displayPollDitail(poll_unique_id) {
+
+    $.post("<?php echo base_url(); ?>poll/pollDetail/"+poll_unique_id, {'display': 'Y', 'poll_unique_id': poll_unique_id},
+        function (data, status) {
+            if(data != '') {
+                $('.modal-content').html(data);
+            } else {
+                $('.modal-content').html(data);
+            }
+        });
+}
 </script>
 </body>
 </html>

@@ -121,6 +121,43 @@ class Poll_Model extends CI_Model {
     }
 
 
+    public function getAttachmentTypeId($file_name) {
+        $photo_file_array = array('jpg', 'jpeg', 'bmp', 'png');
+        $doc_file_array = array('doc', 'docx', 'xls', 'pdf', 'txt');
+        $video_file_array = array('mp4', 'dat', '3gp');
+        $audio_file_array = array('mp3', 'wav');
+
+        $file_extension = strtolower(end(explode('.', $file_name)));
+
+        $AttachmentTypeId = $this->validateAttachmentExtension($extension);
+        if(@in_array($file_extension, $photo_file_array)) {
+            $AttachmentTypeId = 1;
+        } else if(@in_array($file_extension, $video_file_array)) {
+            $AttachmentTypeId = 2;
+        } else if(@in_array($file_extension, $audio_file_array)) {
+            $AttachmentTypeId = 4;
+        } else {
+            $AttachmentTypeId = 3;
+        }
+        return $AttachmentTypeId;
+    }
+
+
+    public function validateAttachmentExtension($extension) {
+        $query = $this->db->query("SELECT AttachmentTypeId FROM ".$this->attachmentTypeTbl." 
+                                                        WHERE 
+                                                            `TypeExtensions` LIKE '%".$extension."%'");
+
+        $res_u = $query->row_array();
+        if($res_u['AttachmentTypeId'] > 0) {
+            return $res_u['AttachmentTypeId'];
+        } else {
+            return 0;
+        }
+    }
+
+
+
     public function participatePollWithAnswer($insertData) {
         $this->db->insert($this->pollParticipationTbl, $insertData);
 
@@ -148,6 +185,23 @@ class Poll_Model extends CI_Model {
             $polls = array();
         }
         return $polls;
+    }
+
+
+    public function getPollDetailByUniqueId($PollUniqueId, $UserProfileId) {
+        $poll_detail = array();
+        if(isset($PollUniqueId) && $PollUniqueId != '') {
+            $query = $this->db->query("SELECT * FROM $this->pollTbl WHERE PollUniqueId = '".$PollUniqueId."'");
+
+            $res = $query->row_array();
+
+            if($res['PollId'] > 0) {
+                $poll_detail = $this->returnPollDetail($res, $UserProfileId);
+            } 
+        } else {
+            $poll_detail = array();
+        }
+        return $poll_detail;
     }
 
 
@@ -185,7 +239,7 @@ class Poll_Model extends CI_Model {
         $AddedOn            = return_time_ago($res['AddedOn']);
         $UpdatedOn          = return_time_ago($res['UpdatedOn']);
 
-        $PollProfile        = $this->User_Model->getUserProfileWithUserInformation($AddedBy);
+        $PollProfile        = $this->User_Model->getUserProfileInformation($AddedBy);
         //$PollAnswer         = $this->getPollAnswer($PollId);
         
         $PollTotalParticipation = $this->getPollTotalParticipation($PollId);

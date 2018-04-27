@@ -211,7 +211,7 @@ class Suggestion_Model extends CI_Model {
             $res = $query->result_array();
 
             foreach($res AS $key => $result) {
-                $suggestions[] = $this->getSuggestionDetail($result['SuggestionId']);
+                $suggestions[] = $this->getSuggestionDetail($result['SuggestionId'], $UserProfileId);
             }
         } else {
             $suggestions = array();
@@ -232,7 +232,7 @@ class Suggestion_Model extends CI_Model {
             $res = $query->result_array();
 
             foreach($res AS $key => $result) {
-                $suggestions[] = $this->getSuggestionDetail($result['SuggestionId']);
+                $suggestions[] = $this->getSuggestionDetail($result['SuggestionId'], $UserProfileId);
             }
         } else {
             $suggestions = array();
@@ -241,7 +241,7 @@ class Suggestion_Model extends CI_Model {
     }
 
     // Get Suggestion Detail By Unique Id
-    public function getSuggestionDetailByUniqueId($SuggestionUniqueId) {
+    public function getSuggestionDetailByUniqueId($SuggestionUniqueId, $UserProfileId) {
         $suggestion_detail = array();
         if(isset($SuggestionUniqueId) && $SuggestionUniqueId != '') {
 
@@ -249,7 +249,7 @@ class Suggestion_Model extends CI_Model {
 
             $res = $query->row_array();
 
-            $suggestion_detail = $this->returnSuggestionDetail($res);
+            $suggestion_detail = $this->returnSuggestionDetail($res, $UserProfileId);
         } else {
             $suggestion_detail = array();
         }
@@ -257,7 +257,7 @@ class Suggestion_Model extends CI_Model {
     }
 
     // Get Suggestion Detail
-    public function getSuggestionDetail($SuggestionId) {
+    public function getSuggestionDetail($SuggestionId, $UserProfileId) {
         $suggestion_detail = array();
         if(isset($SuggestionId) && $SuggestionId > 0) {
 
@@ -265,7 +265,7 @@ class Suggestion_Model extends CI_Model {
 
             $res = $query->row_array();
 
-            $suggestion_detail = $this->returnSuggestionDetail($res);
+            $suggestion_detail = $this->returnSuggestionDetail($res, $UserProfileId);
         } else {
             $suggestion_detail = array();
         }
@@ -273,7 +273,7 @@ class Suggestion_Model extends CI_Model {
     }
 
     // Return Suggestion Detail
-    public function returnSuggestionDetail($res) {
+    public function returnSuggestionDetail($res, $UserProfileId) {
         $SuggestionId           = $res['SuggestionId'];
         $SuggestionUniqueId     = $res['SuggestionUniqueId'];
         $ApplicantName          = $res['ApplicantName'];
@@ -291,9 +291,9 @@ class Suggestion_Model extends CI_Model {
         $AddedOn            = return_time_ago($res['AddedOn']);
         $UpdatedOn          = return_time_ago($res['UpdatedOn']);
 
-        $SuggestionProfile       = $this->User_Model->getUserProfileWithUserInformation($AddedBy);
-        $SuggestionAttachment    = $this->getSuggestionAttachment($SuggestionId);
-        $CountSuggestionHistory  = $this->getCountSuggestionHistory($SuggestionId);
+        $SuggestionProfile       = $this->User_Model->getUserProfileInformation($AddedBy, $UserProfileId);
+        $SuggestionAttachment    = $this->getSuggestionAttachment($SuggestionId, $UserProfileId);
+        $CountSuggestionHistory  = $this->getCountSuggestionHistory($SuggestionId, $UserProfileId);
 
         $user_data_array = array(
                                 "SuggestionId"              => $SuggestionId,
@@ -319,7 +319,7 @@ class Suggestion_Model extends CI_Model {
     }
 
     // Get Suggestion Attachment
-    public function getSuggestionAttachment($SuggestionId) {
+    public function getSuggestionAttachment($SuggestionId, $UserProfileId) {
         
         $SuggestionAttachment = array();
 
@@ -371,7 +371,7 @@ class Suggestion_Model extends CI_Model {
 
 
     // Start Count Suggestion History
-    public function getCountSuggestionHistory($SuggestionId) {
+    public function getCountSuggestionHistory($SuggestionId, $UserProfileId) {
         $count_suggestion = 0;
         if(isset($SuggestionId) && $SuggestionId > 0) {
 
@@ -383,7 +383,7 @@ class Suggestion_Model extends CI_Model {
     }
 
     // Start Get All Suggestion History
-    public function getSuggestionHistory($SuggestionId) {
+    public function getSuggestionHistory($SuggestionId, $UserProfileId) {
         $suggestion_history_detail = array();
         if(isset($SuggestionId) && $SuggestionId > 0) {
 
@@ -391,7 +391,7 @@ class Suggestion_Model extends CI_Model {
 
             $res = $query->result_array();
             foreach($res AS $key => $result) {
-                $suggestion_history_detail[] = $this->getSuggestionHistoryDetail($result['SuggestionHistoryId']);
+                $suggestion_history_detail[] = $this->getSuggestionHistoryDetail($result['SuggestionHistoryId'], $UserProfileId);
             }
 
         } else {
@@ -401,7 +401,7 @@ class Suggestion_Model extends CI_Model {
     }
 
     // Start Get Suggestion History Detail
-    public function getSuggestionHistoryDetail($SuggestionHistoryId) {
+    public function getSuggestionHistoryDetail($SuggestionHistoryId, $UserProfileId) {
         $suggestion_history_detail = array();
         if(isset($SuggestionHistoryId) && $SuggestionHistoryId > 0) {
 
@@ -409,7 +409,7 @@ class Suggestion_Model extends CI_Model {
 
             $res = $query->row_array();
             
-            $suggestion_history_detail = $this->returnSuggestionHistoryDetail($res);
+            $suggestion_history_detail = $this->returnSuggestionHistoryDetail($res, $UserProfileId);
 
         } else {
             $suggestion_history_detail = array();
@@ -418,7 +418,7 @@ class Suggestion_Model extends CI_Model {
     }
 
     // Return Suggestion Histpory Detail with Attachement and history history
-    public function returnSuggestionHistoryDetail($res) {
+    public function returnSuggestionHistoryDetail($res, $UserProfileId) {
         $SuggestionHistoryId         = $res['SuggestionHistoryId'];
         $SuggestionId                = $res['SuggestionId'];
         $ParentSuggestionHistoryId   = $res['ParentSuggestionHistoryId'];
@@ -430,10 +430,10 @@ class Suggestion_Model extends CI_Model {
 
         $AddedOn                = return_time_ago($res['AddedOn']);
 
-        $SuggestionHistoryProfile       = $this->User_Model->getUserProfileWithUserInformation($AddedBy);
-        $SuggestionHistoryAttachment    = $this->getSuggestionHistoryAttachment($SuggestionHistoryId);
+        $SuggestionHistoryProfile       = $this->User_Model->getUserProfileInformation($AddedBy, $UserProfileId);
+        $SuggestionHistoryAttachment    = $this->getSuggestionHistoryAttachment($SuggestionHistoryId, $UserProfileId);
 
-        $SuggestionHistoryHistory       = $this->getSuggestionHistoryDetail($ParentSuggestionHistoryId);
+        $SuggestionHistoryHistory       = $this->getSuggestionHistoryDetail($ParentSuggestionHistoryId, $UserProfileId);
 
         $data_array = array(
                             "SuggestionHistoryId"           => $SuggestionHistoryId,
@@ -452,7 +452,7 @@ class Suggestion_Model extends CI_Model {
     }
 
     // get Suggestion History Attachments
-    public function getSuggestionHistoryAttachment($SuggestionHistoryId) {
+    public function getSuggestionHistoryAttachment($SuggestionHistoryId, $UserProfileId) {
         
         $SuggestionHistoryAttachment = array();
 
@@ -469,7 +469,7 @@ class Suggestion_Model extends CI_Model {
             $AttachmentTypeId = $result['AttachmentTypeId'];
 
             $AddedBy = $result['AddedBy'];
-            $AttachmentProfile = $this->User_Model->getUserProfileWithUserInformation($AddedBy);
+            $AttachmentProfile = $this->User_Model->getUserProfileInformation($AddedBy, $UserProfileId);
 
             if($AttachmentTypeId == 1) {
                 $path = SUGGESTION_IMAGE_URL;

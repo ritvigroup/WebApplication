@@ -26,7 +26,7 @@ class Connect extends CI_Controller {
 
     public function sendUserProfileFriendRequest() {
         $_POST['user_id'] = $this->session->userdata('UserId');
-        $_POST['user_profile_id'] = $this->session->userdata('LeaderProfileId');
+        $_POST['user_profile_id'] = $this->session->userdata('UserProfileId');
         $_POST['friend_user_profile_id'] = $this->input->post('id');
 
         $json_encode = post_curl(API_CALL_PATH.'userconnect/sendUserProfileFriendRequest', $this->input->post(), $this->curl);
@@ -40,7 +40,7 @@ class Connect extends CI_Controller {
 
     public function undoUserProfileFriendRequest() {
         $_POST['user_id'] = $this->session->userdata('UserId');
-        $_POST['user_profile_id'] = $this->session->userdata('LeaderProfileId');
+        $_POST['user_profile_id'] = $this->session->userdata('UserProfileId');
         $_POST['friend_user_profile_id'] = $this->input->post('id');
 
         $json_encode = post_curl(API_CALL_PATH.'userconnect/undoUserProfileFriendRequest', $this->input->post(), $this->curl);
@@ -54,7 +54,7 @@ class Connect extends CI_Controller {
 
     public function cancelUserProfileFriendRequest() {
         $_POST['user_id'] = $this->session->userdata('UserId');
-        $_POST['user_profile_id'] = $this->session->userdata('LeaderProfileId');
+        $_POST['user_profile_id'] = $this->session->userdata('UserProfileId');
         $_POST['friend_user_profile_id'] = $this->input->post('id');
 
         $json_encode = post_curl(API_CALL_PATH.'userconnect/cancelUserProfileFriendRequest', $this->input->post(), $this->curl);
@@ -70,7 +70,7 @@ class Connect extends CI_Controller {
         $data = array();
       
         $_POST['user_id'] = $this->session->userdata('UserId');
-        $_POST['user_profile_id'] = $this->session->userdata('LeaderProfileId');
+        $_POST['user_profile_id'] = $this->session->userdata('UserProfileId');
         $json_encode = post_curl(API_CALL_PATH.'userconnect/getMyAllFriends', $this->input->post(), $this->curl);
 
         $json_decode = json_decode($json_encode);
@@ -86,7 +86,7 @@ class Connect extends CI_Controller {
         $data = array();
         
         $_POST['user_id'] = $this->session->userdata('UserId');
-        $_POST['user_profile_id'] = $this->session->userdata('LeaderProfileId');
+        $_POST['user_profile_id'] = $this->session->userdata('UserProfileId');
         $json_encode = post_curl(API_CALL_PATH.'userconnect/getMyAllFriendRequest', $this->input->post(), $this->curl);
 
         $json_decode = json_decode($json_encode);
@@ -102,7 +102,7 @@ class Connect extends CI_Controller {
         $data = array();
       
         $_POST['user_id'] = $this->session->userdata('UserId');
-        $_POST['user_profile_id'] = $this->session->userdata('LeaderProfileId');
+        $_POST['user_profile_id'] = $this->session->userdata('UserProfileId');
 
         $json_encode = post_curl(API_CALL_PATH.'userconnect/getMyAllRequestToFriends', $this->input->post(), $this->curl);
 
@@ -119,7 +119,7 @@ class Connect extends CI_Controller {
         $data = array();
       
         $_POST['user_id'] = $this->session->userdata('UserId');
-        $_POST['user_profile_id'] = $this->session->userdata('LeaderProfileId');
+        $_POST['user_profile_id'] = $this->session->userdata('UserProfileId');
 
         $json_encode = post_curl(API_CALL_PATH.'userprofile/getAllPoliticalParty', $this->input->post(), $this->curl);
 
@@ -144,7 +144,7 @@ class Connect extends CI_Controller {
       
         $error = false;
         $_POST['user_id'] = $this->session->userdata('UserId');
-        $_POST['user_profile_id'] = $this->session->userdata('LeaderProfileId');
+        $_POST['user_profile_id'] = $this->session->userdata('UserProfileId');
 
         $search_text = $this->input->post('search_text');
         $gender = $this->input->post('gender');

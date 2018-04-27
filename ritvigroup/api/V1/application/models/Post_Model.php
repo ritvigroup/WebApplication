@@ -150,14 +150,14 @@ class Post_Model extends CI_Model {
 
 
     
-    public function getPostDetail($PostId) {
+    public function getPostDetail($PostId, $UserProfileId = 0) {
         if(isset($PostId) && $PostId > 0) {
 
             $query = $this->db->query("SELECT * FROM $this->postTbl WHERE PostId = '".$PostId."'");
 
             $res = $query->row_array();
 
-            $post_detail = $this->returnPostDetail($res);
+            $post_detail = $this->returnPostDetail($res, $UserProfileId);
         } else {
             $post_detail = array();
         }
@@ -165,9 +165,9 @@ class Post_Model extends CI_Model {
     }
 
     
-    public function returnPostDetail($res) {
+    public function returnPostDetail($res, $UserProfileId = 0) {
         $PostId             = $res['PostId'];
-        $UserProfileId      = $res['UserProfileId'];
+        $AddedBy            = $res['UserProfileId'];
         
         $PostTitle          = (($res['PostTitle'] != NULL) ? $res['PostTitle'] : "");
         $PostStatus         = $res['PostStatus'];
@@ -184,13 +184,13 @@ class Post_Model extends CI_Model {
         $AddedOn            = return_time_ago($res['AddedOn']);
         $UpdatedOn          = return_time_ago($res['UpdatedOn']);
 
-        $PostProfile = $this->User_Model->getUserProfileWithUserInformation($UserProfileId);
+        $PostProfile = $this->User_Model->getUserProfileInformation($AddedBy, $UserProfileId);
         $PostTag = $this->getPostTag($PostId);
         $PostAttachment = $this->getPostAttachment($PostId);
 
         $user_data_array = array(
                                 "PostId"                => $PostId,
-                                "UserProfileId"         => $UserProfileId,
+                                "UserProfileId"         => $AddedBy,
                                 "PostTitle"             => $PostTitle,
                                 "PostStatus"            => $PostStatus,
                                 "PostLocation"          => $PostLocation,
@@ -227,7 +227,7 @@ class Post_Model extends CI_Model {
         $res = $query->result_array();
 
         foreach($res AS $key => $result) {
-            $PostTag[] = $this->User_Model->getUserProfileWithUserInformation($result['UserProfileId']);
+            $PostTag[] = $this->User_Model->getUserProfileInformation($result['UserProfileId']);
             //$PostTag[] = $result['UserProfileId'];
         }
 

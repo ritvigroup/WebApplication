@@ -303,7 +303,7 @@ class Event_Model extends CI_Model {
         $AddedOn            = return_time_ago($res['AddedOn']);
         $UpdatedOn          = return_time_ago($res['UpdatedOn']);
 
-        $EventProfile       = $this->User_Model->getUserProfileWithUserInformation($AddedBy);
+        $EventProfile       = $this->User_Model->getUserProfileInformation($AddedBy);
         $EventAttendee      = $this->getEventAttendee($EventId);
         $EventAttachment    = $this->getEventAttachment($EventId);
         $TotalEventLike     = $this->getTotalEventLike($EventId);
@@ -362,7 +362,7 @@ class Event_Model extends CI_Model {
         $res = $query->result_array();
 
         foreach($res AS $key => $result) {
-            $EventAttendee[] = $this->User_Model->getUserProfileWithUserInformation($result['UserProfileId']);
+            $EventAttendee[] = $this->User_Model->getUserProfileInformation($result['UserProfileId']);
         }
 
         return $EventAttendee;
@@ -433,7 +433,7 @@ class Event_Model extends CI_Model {
         $LikedOn                = return_time_ago($res['LikedOn']);
         $LikedOnTime            = ($res['LikedOn']);
 
-        $EventLikeProfile       = $this->User_Model->getUserProfileWithUserInformation($EventUserProfileId);
+        $EventLikeProfile       = $this->User_Model->getUserProfileInformation($EventUserProfileId);
         $TotalEventLike         = $this->getTotalEventLike($EventId);
 
         $EventLikedByMe = 0;
@@ -501,7 +501,7 @@ class Event_Model extends CI_Model {
                                 'AttachmentThumb'       => $AttachmentThumb,
                                 'AttachmentOrder'       => $result['AttachmentOrder'],
                                 'AttachmentStatus'      => $result['AttachmentStatus'],
-                                'AddedBy'               => $this->User_Model->getUserProfileWithUserInformation($result['AddedBy']),
+                                'AddedBy'               => $this->User_Model->getUserProfileInformation($result['AddedBy']),
                                 'AddedOn'               => return_time_ago($result['AddedOn']),
                                 'AddedOnTime'           => $result['AddedOn'],
                                 );

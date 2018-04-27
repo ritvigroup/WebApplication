@@ -81,7 +81,7 @@ class Citizen extends CI_Controller {
                     if($val['DataType'] == "Post") {
                         $Data[] = array(
                                         'feedtype' => 'post',
-                                        'postdata' => $this->Post_Model->getPostDetail($val['Id']),
+                                        'postdata' => $this->Post_Model->getPostDetail($val['Id'], $UserProfileId),
                                         );
                     } else if($val['DataType'] == "Event") {
                         $Data[] = array(
@@ -96,12 +96,12 @@ class Citizen extends CI_Controller {
                     } else if($val['DataType'] == "Complaint") {
                         $Data[] = array(
                                         'feedtype' => 'complaint',
-                                        'complaintdata' => $this->Complaint_Model->getComplaintDetail($val['Id']),
+                                        'complaintdata' => $this->Complaint_Model->getComplaintDetail($val['Id'], $UserProfileId),
                                         );
                     } else if($val['DataType'] == "Suggestion") {
                         $Data[] = array(
                                         'feedtype' => 'suggestion',
-                                        'suggestiondata' => $this->Suggestion_Model->getSuggestionDetail($val['Id']),
+                                        'suggestiondata' => $this->Suggestion_Model->getSuggestionDetail($val['Id'], $UserProfileId),
                                         );
                     } else {
                         $Data = array();

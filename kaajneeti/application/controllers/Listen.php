@@ -26,7 +26,7 @@ class Listen extends CI_Controller {
         $data = array();
       
         $_POST['user_id'] = $this->session->userdata('UserId');
-        $_POST['user_profile_id'] = $this->session->userdata('LeaderProfileId');
+        $_POST['user_profile_id'] = $this->session->userdata('UserProfileId');
         $json_encode = post_curl(API_CALL_PATH.'leader/getMyAllSummaryTotal', $this->input->post(), $this->curl);
 
         $json_decode = json_decode($json_encode);

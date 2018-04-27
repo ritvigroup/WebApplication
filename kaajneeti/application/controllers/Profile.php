@@ -29,7 +29,7 @@ class Profile extends CI_Controller {
         if($this->uri->segment(3) != '' && $this->uri->segment(4) != '') {
 
             $_POST['user_id'] = $this->session->userdata('UserId');
-            $_POST['user_profile_id'] = $this->session->userdata('LeaderProfileId');
+            $_POST['user_profile_id'] = $this->session->userdata('UserProfileId');
             
             $_POST['unique_profile_id'] = $this->uri->segment(3);
             $_POST['friend_user_profile_id']   = $this->uri->segment(4);
@@ -50,7 +50,7 @@ class Profile extends CI_Controller {
         if($this->uri->segment(3) != '') {
 
             $_POST['user_id'] = $this->session->userdata('UserId');
-            $_POST['user_profile_id'] = $this->session->userdata('LeaderProfileId');
+            $_POST['user_profile_id'] = $this->session->userdata('UserProfileId');
             
             $_POST['unique_profile_id'] = $this->uri->segment(3);
             $json_encode = post_curl(API_CALL_PATH.'userprofile/getUserAllProfileInformationByUniqueProfileId', $this->input->post(), $this->curl);
@@ -63,7 +63,7 @@ class Profile extends CI_Controller {
             $this->load->view('profile/friendprofile',$data);
         } else {
             $_POST['user_id'] = $this->session->userdata('UserId');
-            $_POST['user_profile_id'] = $this->session->userdata('LeaderProfileId');
+            $_POST['user_profile_id'] = $this->session->userdata('UserProfileId');
 
 
             if($this->input->method(TRUE) == "POST" && $this->input->post('first_name') != '') {
@@ -143,7 +143,7 @@ class Profile extends CI_Controller {
 
         if($this->session->userdata('UserId') > 0) {
             $_POST['state_id_city_id'] = $this->input->post('state_id_city_id');
-            $_POST['user_profile_id'] = $this->session->userdata('LeaderProfileId');
+            $_POST['user_profile_id'] = $this->session->userdata('UserProfileId');
             $json = post_curl(API_CALL_PATH.'plan/searchCity', $this->input->post(), $this->curl);
 
             echo $json->result;
@@ -161,7 +161,7 @@ class Profile extends CI_Controller {
 
         if($this->session->userdata('UserId') > 0) {
             $_POST['state_id_city_id'] = $this->input->post('state_id_city_id');
-            $_POST['user_profile_id'] = $this->session->userdata('LeaderProfileId');
+            $_POST['user_profile_id'] = $this->session->userdata('UserProfileId');
             $json = post_curl(API_CALL_PATH.'plan/searchCityByCityId', $this->input->post(), $this->curl);
 
             $json_decode = json_decode($json);
@@ -178,7 +178,7 @@ class Profile extends CI_Controller {
     public function createplan() {
         $data = array();
 
-        $_POST['user_profile_id'] = $this->session->userdata('LeaderProfileId');
+        $_POST['user_profile_id'] = $this->session->userdata('UserProfileId');
         $json_encode = post_curl(API_CALL_PATH.'plan/getAllNonDefaultUserType', $this->input->post(), $this->curl);
 
         $json_decode = json_decode($json_encode);

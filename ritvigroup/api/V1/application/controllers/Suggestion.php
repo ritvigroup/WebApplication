@@ -67,7 +67,7 @@ class Suggestion extends CI_Controller {
                 
                 $this->Suggestion_Model->saveMySuggestionAttachment($SuggestionId, $UserProfileId, $_FILES['file']);
 
-                $suggestion_detail = $this->Suggestion_Model->getSuggestionDetail($SuggestionId);
+                $suggestion_detail = $this->Suggestion_Model->getSuggestionDetail($SuggestionId, $UserProfileId);
 
                 $this->db->query("COMMIT");
 
@@ -101,7 +101,7 @@ class Suggestion extends CI_Controller {
         $error_occured = false;
 
         $UserProfileId   = $this->input->post('user_profile_id');
-        $SuggestionId          = $this->input->post('suggestion_id');
+        $SuggestionId    = $this->input->post('suggestion_id');
         
         if($UserProfileId == "") {
             $msg = "Please select your profile";
@@ -111,7 +111,7 @@ class Suggestion extends CI_Controller {
             $error_occured = true;
         } else {
 
-            $suggestion_detail = $this->Suggestion_Model->getSuggestionDetail($SuggestionId);
+            $suggestion_detail = $this->Suggestion_Model->getSuggestionDetail($SuggestionId, $UserProfileId);
 
             if(count($suggestion_detail) > 0) {
                 $msg = "Suggestion fetched successfully";
@@ -225,7 +225,7 @@ class Suggestion extends CI_Controller {
             $error_occured = true;
         } else {
 
-            $suggestion_detail = $this->Suggestion_Model->getSuggestionDetailByUniqueId($SuggestionUniqueId);
+            $suggestion_detail = $this->Suggestion_Model->getSuggestionDetailByUniqueId($SuggestionUniqueId, $UserProfileId);
 
             if(count($suggestion_detail) > 0) {
                 $msg = "Suggestion fetched successfully";
@@ -294,7 +294,7 @@ class Suggestion extends CI_Controller {
 
                 $this->Suggestion_Model->saveMySuggestionHistoryAttachment($SuggestionHistoryId, $UserProfileId, $_FILES['file']);
 
-                $suggestion_history_detail = $this->Suggestion_Model->getSuggestionHistoryDetail($SuggestionHistoryId);
+                $suggestion_history_detail = $this->Suggestion_Model->getSuggestionHistoryDetail($SuggestionHistoryId, $UserProfileId);
                 
                 $this->db->query("COMMIT");
 
@@ -338,7 +338,7 @@ class Suggestion extends CI_Controller {
             $error_occured = true;
         } else {
 
-            $suggestion_history_detail = $this->Suggestion_Model->getSuggestionHistory($SuggestionId);
+            $suggestion_history_detail = $this->Suggestion_Model->getSuggestionHistory($SuggestionId, $UserProfileId);
 
             if(count($suggestion_history_detail) > 0) {
                 $msg = "Suggestion fetched successfully";

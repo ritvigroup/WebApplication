@@ -22,11 +22,12 @@ class Userregister extends CI_Controller {
 
     public function registerWithSocial() {
 		$error_occured = false;
-        $id = $this->input->post('id');
-        $name = $this->input->post('name');
-        $email = $this->input->post('email');
-        $mobile = $this->input->post('mobile');
-        $social_type = $this->input->post('social_type');
+        $id             = $this->input->post('id');
+        $name           = $this->input->post('name');
+        $email          = $this->input->post('email');
+        $mobile         = $this->input->post('mobile');
+        $social_type    = $this->input->post('social_type');
+        $login_type     = $this->input->post('login_type');
         
         if($id == "") {
 			$msg = "Please select your id";
@@ -47,8 +48,6 @@ class Userregister extends CI_Controller {
                 );
                 
                 $this->User_Model->updateLoginStatus($UserId, $updateData);
-
-                $user_info = $this->User_Model->getUserDetail($UserId);
 
                 $msg = "User logged in successfully";
 
@@ -110,8 +109,6 @@ class Userregister extends CI_Controller {
 					                );
 
 		            $this->User_Model->insertUserLog($insertData);
-
-		            $user_info = $this->User_Model->getUserDetail($UserId);
 
                 	$msg = "User logged in successfully";
 
@@ -206,7 +203,7 @@ class Userregister extends CI_Controller {
 
                         if($UserCitizenProfileId > 0 && $UserLeaderProfileId > 0) {
                             $this->db->query("COMMIT");
-                            $user_info = $this->User_Model->getUserDetail($UserId);
+
                             $msg = "User registered and logged in successfully";
                         } else {
                             $this->db->query("ROLLBACK");
@@ -221,19 +218,25 @@ class Userregister extends CI_Controller {
                     }
                 }
             }
+
+            if($login_type == '' || $login_type == 1) {
+                $user_profile = $this->User_Model->getCitizenProfileInformation($UserId);
+            } else if($login_type == 2) {
+                $user_profile = $this->User_Model->getLeaderProfileInformation($UserId);
+            }
         }
 
         if($error_occured == true) {
             $array = array(
-                            "status"        => 'failed',
-                            "message"       => $msg,
+                            "status"    => 'failed',
+                            "message"   => $msg,
                         );
         } else {
 
             $array = array(
-                           "status"         => 'success',
-                           "result"	    => $user_info,
-                           "message"        => $msg,
+                           "status"     => 'success',
+                           "result"	    => $user_profile,
+                           "message"    => $msg,
                            );
         }
         displayJsonEncode($array);
@@ -250,6 +253,7 @@ class Userregister extends CI_Controller {
         $firstname          = $this->input->post('firstname');
         $lastname           = $this->input->post('lastname');
         $gender             = $this->input->post('gender');
+        $login_type         = $this->input->post('login_type');
         
         if($username == "") {
             $msg = "Please enter your username";
@@ -372,7 +376,7 @@ class Userregister extends CI_Controller {
 
                     if($UserCitizenProfileId > 0 && $UserLeaderProfileId > 0) {
                         $this->db->query("COMMIT");
-                        $user_info = $this->User_Model->getUserDetailAll($UserId);
+
                         $msg = "User registered and logged in successfully";
                     } else {
                         $this->db->query("ROLLBACK");
@@ -386,6 +390,12 @@ class Userregister extends CI_Controller {
                     $error_occured = true;
                 }
             }
+
+            if($login_type == '' || $login_type == 1) {
+                $user_profile = $this->User_Model->getCitizenProfileInformation($UserId);
+            } else if($login_type == 2) {
+                $user_profile = $this->User_Model->getLeaderProfileInformation($UserId);
+            }
         }
 
         if($error_occured == true) {
@@ -397,7 +407,7 @@ class Userregister extends CI_Controller {
 
             $array = array(
                            "status"         => 'success',
-                           "result"         => $user_info,
+                           "result"         => $user_profile,
                            "message"        => $msg,
                            );
         }
@@ -407,7 +417,8 @@ class Userregister extends CI_Controller {
 
     public function registerMobile() {
 		$error_occured = false;
-        $mobile = $this->input->post('mobile');
+        $mobile     = $this->input->post('mobile');
+        $login_type = $this->input->post('login_type');
         
         if($mobile == "") {
             $msg = "Please enter your mobile number";
@@ -524,8 +535,6 @@ class Userregister extends CI_Controller {
 
                         $this->db->query("COMMIT");
 
-                        $user_info = $this->User_Model->getUserDetail($UserId);
-
                         $msg = "Otp send to your mobile for verification.";
                     } else {
                         $this->db->query("ROLLBACK");
@@ -539,6 +548,13 @@ class Userregister extends CI_Controller {
                     $error_occured = true;
                 }    
             }
+
+            if($login_type == '' || $login_type == 1) {
+                $user_profile = $this->User_Model->getCitizenProfileInformation($UserId);
+            } else if($login_type == 2) {
+                $user_profile = $this->User_Model->getLeaderProfileInformation($UserId);
+            }
+
 		}
 
 		if($error_occured == true) {
@@ -555,7 +571,7 @@ class Userregister extends CI_Controller {
 			$array = array(
 			               "status" 		=> 'success',
 						   "message"		=> $msg,
-						   "result"			=> $user_info,
+						   "result"			=> $user_profile,
 			               );
 		}
         displayJsonEncode($array);
@@ -565,7 +581,8 @@ class Userregister extends CI_Controller {
     public function validateMobileOtp() {
 		$error_occured = false;
         $mobile 		= $this->input->post('mobile');
-        $otp 			= $this->input->post('otp');
+        $otp            = $this->input->post('otp');
+        $login_type		= $this->input->post('login_type');
         
         if($mobile == "") {
             $msg = "Please enter your mobile number";
@@ -587,7 +604,11 @@ class Userregister extends CI_Controller {
                 
                 $this->User_Model->updateLoginStatus($UserId, $updateData);
 
-                $user_info = $this->User_Model->getUserDetail($UserId);
+                if($login_type == '' || $login_type == 1) {
+                    $user_profile = $this->User_Model->getCitizenProfileInformation($UserId);
+                } else if($login_type == 2) {
+                    $user_profile = $this->User_Model->getLeaderProfileInformation($UserId);
+                }
                 
 
                 $msg = "OPT validated successfully";
@@ -604,9 +625,9 @@ class Userregister extends CI_Controller {
 						);
 		} else {
 			$array = array(
-			               "status" 		=> 'success',
-						   "result"	      => $user_info,
-						   "message"		=> $msg,
+			               "status"       => 'success',
+						   "result"	      => $user_profile,
+						   "message"	  => $msg,
 			               );
 		}
         displayJsonEncode($array);
@@ -618,6 +639,7 @@ class Userregister extends CI_Controller {
         $mobile         = $this->input->post('mobile');
         $mpin           = $this->input->post('mpin');
         $mpin_confirm   = $this->input->post('mpin_confirm');
+        $login_type     = $this->input->post('login_type');
         
         if($mobile == "") {
             $msg = "Please enter your mobile number";
@@ -648,8 +670,6 @@ class Userregister extends CI_Controller {
                 
                 $this->User_Model->updateUserData($UserId, $updateData);
 
-                $user_info = $this->User_Model->getUserDetail($UserId);
-
                 $insertData = array(
                                     'UserId'        => $UserId,
                                     'DeviceTokenId' => $this->device_token,
@@ -661,6 +681,11 @@ class Userregister extends CI_Controller {
                                 );
                 $this->User_Model->insertUserLog($insertData);
                 
+                if($login_type == '' || $login_type == 1) {
+                    $user_profile = $this->User_Model->getCitizenProfileInformation($UserId);
+                } else if($login_type == 2) {
+                    $user_profile = $this->User_Model->getLeaderProfileInformation($UserId);
+                }
 
                 $msg = "Mpin set successfully";
             } else {
@@ -677,7 +702,7 @@ class Userregister extends CI_Controller {
         } else {
             $array = array(
                            "status"         => 'success',
-                           "result"         => $user_info,
+                           "result"         => $user_profile,
                            "message"        => $msg,
                            );
         }
@@ -751,7 +776,7 @@ class Userregister extends CI_Controller {
                         'Reply-To: webmaster@example.com' . "\r\n" .
                         'X-Mailer: PHP/' . phpversion();
 
-                    mail($to, $subject, $message, $headers);
+                    @mail($to, $subject, $message, $headers);
 
                     $this->db->query("COMMIT");
                     $msg = "User saved successfully";

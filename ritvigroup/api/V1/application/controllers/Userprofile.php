@@ -548,6 +548,61 @@ class Userprofile extends CI_Controller {
         displayJsonEncode($array);
     }
 
+
+    // Remove User Profile Picutre
+    public function removeUserProfilePicture() {
+        $error_occured = false;
+        $UserId = $this->input->post('user_id');
+        $UserProfileId = $this->input->post('user_profile_id');
+        
+        if($UserId == "") {
+            $msg = "Please select user";
+            $error_occured = true;
+        } else if($UserProfileId == "") {
+            $msg = "Please select user profile";
+            $error_occured = true;
+        } else {
+
+            $user_profile = $this->User_Model->getUserProfileInformation($UserProfileId, $UserProfileId);
+
+            if($user_profile['ProfileStatus'] == '1') {
+
+                $updateData = array(
+                                    'ProfilePhotoId' => 0,
+                                    'UpdatedOn' => date('Y-m-d H:i:s'),
+                                    );
+                
+                $this->User_Model->updateUserProfileData($UserProfileId, $updateData);
+                
+                $user_profile = $this->User_Model->getUserProfileInformation($UserProfileId, $UserProfileId);
+
+                $msg = "User profile photo removed successfully";
+
+            } else if($user_profile['ProfileStatus'] != '1') {
+                $msg = "User in no longer active.";
+                $error_occured = true;
+            } else {
+                $msg = "No User Found";
+                $error_occured = true;
+            }
+        }
+
+        if($error_occured == true) {
+            $array = array(
+                            "status"        => 'failed',
+                            "message"       => $msg,
+                        );
+        } else {
+
+            $array = array(
+                           "status"         => 'success',
+                           "result"         => $user_profile,
+                           "message"        => $msg,
+                           );
+        }
+        displayJsonEncode($array);
+    }
+
     // Remove Cover Profile Picture
     public function removeCoverProfilePicture() {
         $error_occured = false;

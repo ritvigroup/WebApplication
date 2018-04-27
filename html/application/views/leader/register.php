@@ -112,7 +112,7 @@ $('input[type="radio"]').iCheck({
 //END CHECKBOX & RADIO</script>
 
 <script>
-    document.querySelector('.signup_button').onclick = function () {
+    /*document.querySelector('.signup_button').onclick = function () {
         var $this = $(this);
         var signup_email = $(".signup_email").val();
         var signup_mobile = $(".signup_mobile").val();
@@ -187,7 +187,7 @@ $('input[type="radio"]').iCheck({
                     }
                 });
         }
-    };
+    };*/
 </script> 
 
 </body>

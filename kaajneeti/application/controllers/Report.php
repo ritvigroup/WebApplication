@@ -30,7 +30,7 @@ class Report extends CI_Controller {
     public function report() {
         $data = array();
 
-        $_POST['user_profile_id'] = $this->session->userdata('LeaderProfileId');
+        $_POST['user_profile_id'] = $this->session->userdata('UserProfileId');
         $json_encode = post_curl(API_CALL_PATH.'payment/getMyTotalWalletAmount', $this->input->post(), $this->curl);
 
         $json_decode = json_decode($json_encode);
@@ -45,7 +45,7 @@ class Report extends CI_Controller {
     public function paymentTransaction() {
         $data = array();
       
-        $_POST['user_profile_id'] = $this->session->userdata('LeaderProfileId');
+        $_POST['user_profile_id'] = $this->session->userdata('UserProfileId');
         $json_encode = post_curl(API_CALL_PATH.'payment/getMyAllPaymentTransactionLog', $this->input->post(), $this->curl);
 
         $json_decode = json_decode($json_encode);
@@ -65,7 +65,7 @@ class Report extends CI_Controller {
     public function paymentSent() {
         $data = array();
       
-        $_POST['user_profile_id'] = $this->session->userdata('LeaderProfileId');
+        $_POST['user_profile_id'] = $this->session->userdata('UserProfileId');
         $json_encode = post_curl(API_CALL_PATH.'payment/getMyAllPaymentDebitTransactionLog', $this->input->post(), $this->curl);
 
         $json_decode = json_decode($json_encode);
@@ -85,7 +85,7 @@ class Report extends CI_Controller {
     public function paymentReceived() {
         $data = array();
       
-        $_POST['user_profile_id'] = $this->session->userdata('LeaderProfileId');
+        $_POST['user_profile_id'] = $this->session->userdata('UserProfileId');
         $json_encode = post_curl(API_CALL_PATH.'payment/getMyAllPaymentCreditTransactionLog', $this->input->post(), $this->curl);
 
         $json_decode = json_decode($json_encode);

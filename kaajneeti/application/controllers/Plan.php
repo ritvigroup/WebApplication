@@ -29,7 +29,7 @@ class Plan extends CI_Controller {
         if (!$this->input->is_ajax_request()) {
            exit('Error');
         }
-        $_POST['user_profile_id'] = $this->session->userdata('LeaderProfileId');
+        $_POST['user_profile_id'] = $this->session->userdata('UserProfileId');
         
         $this->load->view('plan/createPlanYourGoal',$data);
     }
@@ -38,7 +38,7 @@ class Plan extends CI_Controller {
     public function plan() {
         $data = array();
         
-        $_POST['user_profile_id'] = $this->session->userdata('LeaderProfileId');
+        $_POST['user_profile_id'] = $this->session->userdata('UserProfileId');
         $json_encode = post_curl(API_CALL_PATH.'plan/getMyAllPlan', $this->input->post(), $this->curl);
 
         $json_decode = json_decode($json_encode);
@@ -56,7 +56,7 @@ class Plan extends CI_Controller {
 
         if($this->session->userdata('UserId') > 0) {
             $_POST['state_id_city_id'] = $this->input->post('state_id_city_id');
-            $_POST['user_profile_id'] = $this->session->userdata('LeaderProfileId');
+            $_POST['user_profile_id'] = $this->session->userdata('UserProfileId');
             $json = post_curl(API_CALL_PATH.'plan/searchCity', $this->input->post(), $this->curl);
 
             echo $json->result;
@@ -73,7 +73,7 @@ class Plan extends CI_Controller {
 
         if($this->session->userdata('UserId') > 0) {
             $_POST['state_id_city_id'] = $this->input->post('state_id_city_id');
-            $_POST['user_profile_id'] = $this->session->userdata('LeaderProfileId');
+            $_POST['user_profile_id'] = $this->session->userdata('UserProfileId');
             $json = post_curl(API_CALL_PATH.'plan/searchCityByCityId', $this->input->post(), $this->curl);
 
             $json_decode = json_decode($json);
@@ -90,7 +90,7 @@ class Plan extends CI_Controller {
     public function createplan() {
         $data = array();
 
-        $_POST['user_profile_id'] = $this->session->userdata('LeaderProfileId');
+        $_POST['user_profile_id'] = $this->session->userdata('UserProfileId');
         $json_encode = post_curl(API_CALL_PATH.'plan/getAllNonDefaultUserType', $this->input->post(), $this->curl);
 
         $json_decode = json_decode($json_encode);

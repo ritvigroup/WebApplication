@@ -46,9 +46,9 @@
                                                 $datetime = date('d M, Y h:i', strtotime($complaint_history->AddedOnTime));
                                                 $datetime_ago = $complaint_history->AddedOn;
 
-                                                $UserProfileHrefLink = base_url().'profile/profile/'.$complaint_history->ComplaintHistoryProfile->user_profile_detail->user_info->UserUniqueId;
+                                                $UserProfileHrefLink = base_url().'profile/profile/'.$complaint_history->ComplaintHistoryProfile->UserUniqueId;
 
-                                                $By = $complaint_history->ComplaintHistoryProfile->user_profile_detail->profile->FirstName. ' '.$complaint_history->ComplaintHistoryProfile->user_profile_detail->profile->LastName;
+                                                $By = $complaint_history->ComplaintHistoryProfile->FirstName. ' '.$complaint_history->ComplaintHistoryProfile->LastName;
                                                 ?>
                                                 <article class="timeline-entry <?php echo $left_aligned; ?>">
                                                     <div class="timeline-entry-inner">
@@ -103,11 +103,11 @@
                                                             echo '<p>';
                                                             foreach($ComplaintMember AS $complaint_member) {
                                                                 if((int) $complaint_member->AcceptedYesNo == 1) {
-                                                                    $UserProfileHrefLink = base_url().'profile/profile/'.$complaint_member->user_profile_detail->user_info->UserUniqueId;
+                                                                    $UserProfileHrefLink = base_url().'profile/profile/'.$complaint_member->UserUniqueId;
                                                                     echo '<a href="'.$UserProfileHrefLink.'" target="_blank">';
-                                                                    echo $complaint_member->user_profile_detail->profile->FirstName;
+                                                                    echo $complaint_member->FirstName;
                                                                     echo ' ';
-                                                                    echo $complaint_member->user_profile_detail->profile->LastName;
+                                                                    echo $complaint_member->LastName;
                                                                     echo '</a>';
                                                                     echo ',&nbsp;';
                                                                 }
@@ -128,9 +128,9 @@
                                                             echo '</p>';
                                                         }
 
-                                                        $UserProfileHrefLink = base_url().'profile/profile/'.$ComplaintDetail->result->ComplaintProfile->user_profile_detail->user_info->UserUniqueId;
+                                                        $UserProfileHrefLink = base_url().'profile/profile/'.$ComplaintDetail->result->ComplaintProfile->UserUniqueId;
 
-                                                        $By = $ComplaintDetail->result->ComplaintProfile->user_profile_detail->profile->FirstName.' '.$ComplaintDetail->result->ComplaintProfile->user_profile_detail->profile->LastName;
+                                                        $By = $ComplaintDetail->result->ComplaintProfile->FirstName.' '.$ComplaintDetail->result->ComplaintProfile->LastName;
 
                                                         ?>
                                                         <p style="text-align: right;">By- <a href="<?php echo $UserProfileHrefLink; ?>" target="_blank"><?php echo $By; ?></a></p>
@@ -202,6 +202,7 @@
         var progress_title          = $("#progress_title").val();
         var progress_description    = $("#progress_description").val();
         var progess_status          = $("#progress_status").val();
+
 
         if (progress_title.length > 0) {            
             var form_data = new FormData($('input[name^="file"]'));

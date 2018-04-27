@@ -174,7 +174,7 @@ class Complaint extends CI_Controller {
                 
                 $this->Complaint_Model->saveMyComplaintAttachment($ComplaintId, $UserProfileId, $_FILES['file']);
 
-                $complaint_detail = $this->Complaint_Model->getComplaintDetail($ComplaintId);
+                $complaint_detail = $this->Complaint_Model->getComplaintDetail($ComplaintId, $UserProfileId);
 
                 $this->db->query("COMMIT");
 
@@ -224,7 +224,7 @@ class Complaint extends CI_Controller {
 
             if($InvitationAccept == true) {
                 
-                $complaint_detail = $this->Complaint_Model->getComplaintDetail($ComplaintId);
+                $complaint_detail = $this->Complaint_Model->getComplaintDetail($ComplaintId, $UserProfileId);
 
                 $this->db->query("COMMIT");
 
@@ -275,7 +275,7 @@ class Complaint extends CI_Controller {
 
             if($InvitationAccept == true) {
                 
-                $complaint_detail = $this->Complaint_Model->getComplaintDetail($ComplaintId);
+                $complaint_detail = $this->Complaint_Model->getComplaintDetail($ComplaintId, $UserProfileId);
 
                 $this->db->query("COMMIT");
 
@@ -320,7 +320,7 @@ class Complaint extends CI_Controller {
             $error_occured = true;
         } else {
 
-            $complaint_detail = $this->Complaint_Model->getComplaintDetailByUniqueId($ComplaintUniqueId);
+            $complaint_detail = $this->Complaint_Model->getComplaintDetailByUniqueId($ComplaintUniqueId, $UserProfileId);
 
             if(count($complaint_detail) > 0) {
                 $msg = "Complaint fetched successfully";
@@ -361,7 +361,7 @@ class Complaint extends CI_Controller {
             $error_occured = true;
         } else {
 
-            $complaint_detail = $this->Complaint_Model->getComplaintDetail($ComplaintId);
+            $complaint_detail = $this->Complaint_Model->getComplaintDetail($ComplaintId, $UserProfileId);
 
             if(count($complaint_detail) > 0) {
                 $msg = "Complaint fetched successfully";
@@ -547,7 +547,7 @@ class Complaint extends CI_Controller {
 
                 $this->Complaint_Model->updateComplaint($UserProfileId, $ComplaintId, $current_status);
 
-                $complaint_history_detail = $this->Complaint_Model->getComplaintHistoryDetail($ComplaintHistoryId);
+                $complaint_history_detail = $this->Complaint_Model->getComplaintHistoryDetail($ComplaintHistoryId, $UserProfileId);
                 
                 $this->db->query("COMMIT");
 
@@ -591,7 +591,7 @@ class Complaint extends CI_Controller {
             $error_occured = true;
         } else {
 
-            $complaint_history_detail = $this->Complaint_Model->getComplaintHistory($ComplaintId);
+            $complaint_history_detail = $this->Complaint_Model->getComplaintHistory($ComplaintId, $UserProfileId);
 
             if(count($complaint_history_detail) > 0) {
                 $msg = "Complaint fetched successfully";

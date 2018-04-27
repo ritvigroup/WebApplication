@@ -28,7 +28,7 @@ class Suggestion extends CI_Controller {
         if (!$this->input->is_ajax_request()) {
            exit('Error');
         }
-        $_POST['user_profile_id'] = $this->session->userdata('LeaderProfileId');
+        $_POST['user_profile_id'] = $this->session->userdata('UserProfileId');
         
         $this->load->view('suggestion/suggestionHistoryForm',$data);
     }
@@ -40,7 +40,7 @@ class Suggestion extends CI_Controller {
         if (!$this->input->is_ajax_request()) {
            exit('Error');
         }
-        $_POST['user_profile_id'] = $this->session->userdata('LeaderProfileId');
+        $_POST['user_profile_id'] = $this->session->userdata('UserProfileId');
         $_POST['suggestion_unique_id'] = $this->uri->segment(3);
         $json_encode = post_curl(API_CALL_PATH.'suggestion/getSuggestionDetailByUniqueId', $this->input->post(), $this->curl);
 
@@ -73,7 +73,7 @@ class Suggestion extends CI_Controller {
     public function suggestion() {
         $data = array();
       
-        $_POST['user_profile_id'] = $this->session->userdata('LeaderProfileId');
+        $_POST['user_profile_id'] = $this->session->userdata('UserProfileId');
         $json_encode = post_curl(API_CALL_PATH.'suggestion/getMyAllSuggestion', $this->input->post(), $this->curl);
 
         $json_decode = json_decode($json_encode);
@@ -88,7 +88,7 @@ class Suggestion extends CI_Controller {
     public function suggestionReceived() {
         $data = array();
       
-        $_POST['user_profile_id'] = $this->session->userdata('LeaderProfileId');
+        $_POST['user_profile_id'] = $this->session->userdata('UserProfileId');
         $json_encode = post_curl(API_CALL_PATH.'suggestion/getAllAssignedSuggestionToMe', $this->input->post(), $this->curl);
 
         $json_decode = json_decode($json_encode);
@@ -105,7 +105,7 @@ class Suggestion extends CI_Controller {
 
            
         if($this->input->method(TRUE) == "POST") {
-            $_POST['user_profile_id'] = $this->session->userdata('LeaderProfileId');
+            $_POST['user_profile_id'] = $this->session->userdata('UserProfileId');
 
             $json_decode = post_curl(API_CALL_PATH.'suggestion/postMySuggestion', $this->input->post(), $this->curl);
 
@@ -121,7 +121,7 @@ class Suggestion extends CI_Controller {
     public function suggestionTimeline() {
         $data = array();
       
-        $_POST['user_profile_id'] = $this->session->userdata('LeaderProfileId');
+        $_POST['user_profile_id'] = $this->session->userdata('UserProfileId');
 
         $_POST['suggestion_unique_id'] = $this->uri->segment(3);
         $json_encode = post_curl(API_CALL_PATH.'suggestion/getSuggestionDetailByUniqueId', $this->input->post(), $this->curl);

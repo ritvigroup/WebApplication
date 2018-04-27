@@ -28,7 +28,7 @@ class Influence extends CI_Controller {
         if (!$this->input->is_ajax_request()) {
            exit('Error');
         }
-        $_POST['user_profile_id'] = $this->session->userdata('LeaderProfileId');
+        $_POST['user_profile_id'] = $this->session->userdata('UserProfileId');
         
         $this->load->view('influence/emailCompose',$data);
     }
@@ -40,7 +40,7 @@ class Influence extends CI_Controller {
         if (!$this->input->is_ajax_request()) {
            exit('Error');
         }
-        $_POST['user_profile_id'] = $this->session->userdata('LeaderProfileId');
+        $_POST['user_profile_id'] = $this->session->userdata('UserProfileId');
         
         $this->load->view('influence/smsCompose',$data);
     }
@@ -52,7 +52,7 @@ class Influence extends CI_Controller {
         if (!$this->input->is_ajax_request()) {
            exit('Error');
         }
-        $_POST['user_profile_id'] = $this->session->userdata('LeaderProfileId');
+        $_POST['user_profile_id'] = $this->session->userdata('UserProfileId');
         
         $this->load->view('influence/socialCompose',$data);
     }
@@ -64,7 +64,7 @@ class Influence extends CI_Controller {
         if (!$this->input->is_ajax_request()) {
            exit('Error');
         }
-        $_POST['user_profile_id'] = $this->session->userdata('LeaderProfileId');
+        $_POST['user_profile_id'] = $this->session->userdata('UserProfileId');
         $_POST['email_unique_id'] = $this->input->post('email_unique_id');
 
         $json_encode = post_curl(API_CALL_PATH.'influence/getEmailSentByUniqueId', $this->input->post(), $this->curl);
@@ -85,7 +85,7 @@ class Influence extends CI_Controller {
         if (!$this->input->is_ajax_request()) {
            exit('Error');
         }
-        $_POST['user_profile_id'] = $this->session->userdata('LeaderProfileId');
+        $_POST['user_profile_id'] = $this->session->userdata('UserProfileId');
         $_POST['sms_unique_id'] = $this->input->post('sms_unique_id');
 
         $json_encode = post_curl(API_CALL_PATH.'influence/getSmsSentByUniqueId', $this->input->post(), $this->curl);
@@ -105,7 +105,7 @@ class Influence extends CI_Controller {
         if (!$this->input->is_ajax_request()) {
            exit('Error');
         }
-        $_POST['user_profile_id'] = $this->session->userdata('LeaderProfileId');
+        $_POST['user_profile_id'] = $this->session->userdata('UserProfileId');
         $_POST['social_unique_id'] = $this->input->post('social_unique_id');
 
         $json_encode = post_curl(API_CALL_PATH.'influence/getSocialSentByUniqueId', $this->input->post(), $this->curl);
@@ -123,7 +123,7 @@ class Influence extends CI_Controller {
     public function email() {
         $data = array();
       
-        $_POST['user_profile_id'] = $this->session->userdata('LeaderProfileId');
+        $_POST['user_profile_id'] = $this->session->userdata('UserProfileId');
 
         if($this->input->post('save_email') == "Y") {
             $post_data = $this->input->post();
@@ -160,7 +160,7 @@ class Influence extends CI_Controller {
     public function sms() {
         $data = array();
       
-        $_POST['user_profile_id'] = $this->session->userdata('LeaderProfileId');
+        $_POST['user_profile_id'] = $this->session->userdata('UserProfileId');
 
         if($this->input->post('save_sms') == "Y") {
             $post_data = $this->input->post();
@@ -188,7 +188,7 @@ class Influence extends CI_Controller {
     public function social() {
         $data = array();
       
-        $_POST['user_profile_id'] = $this->session->userdata('LeaderProfileId');
+        $_POST['user_profile_id'] = $this->session->userdata('UserProfileId');
 
 
         if($this->input->post('save_social') == "Y") {

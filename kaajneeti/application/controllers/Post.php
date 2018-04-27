@@ -25,7 +25,7 @@ class Post extends CI_Controller {
     public function post() {
         $data = array();
       
-        $_POST['user_profile_id'] = $this->session->userdata('LeaderProfileId');
+        $_POST['user_profile_id'] = $this->session->userdata('UserProfileId');
         $json_encode = post_curl(API_CALL_PATH.'post/getMyAllPost', $this->input->post(), $this->curl);
 
         $json_decode = json_decode($json_encode);
@@ -40,7 +40,7 @@ class Post extends CI_Controller {
     public function newpost() {
         $data = array();
         if($this->input->method(TRUE) == "POST") {
-            $_POST['user_profile_id'] = $this->session->userdata('LeaderProfileId');
+            $_POST['user_profile_id'] = $this->session->userdata('UserProfileId');
 
 
             $post_data = $this->input->post();
@@ -78,7 +78,7 @@ class Post extends CI_Controller {
         if (!$this->input->is_ajax_request()) {
            exit('Error');
         }
-        $_POST['user_profile_id'] = $this->session->userdata('LeaderProfileId');
+        $_POST['user_profile_id'] = $this->session->userdata('UserProfileId');
         $_POST['post_id'] = $this->input->post('post_id');
         $json_encode = post_curl(API_CALL_PATH.'post/getPostDetail', $this->input->post(), $this->curl);
 

@@ -22,11 +22,12 @@ class Userlogin extends CI_Controller {
 
     public function loginWithSocial() {
 		$error_occured = false;
-        $id = $this->input->post('id');
-        $name = $this->input->post('name');
-        $email = $this->input->post('email');
-        $mobile = $this->input->post('mobile');
-        $social_type = $this->input->post('social_type');
+        $id             = $this->input->post('id');
+        $name           = $this->input->post('name');
+        $email          = $this->input->post('email');
+        $mobile         = $this->input->post('mobile');
+        $social_type    = $this->input->post('social_type');
+        $login_type     = $this->input->post('login_type');
         
         if($id == "") {
 			$msg = "Please select your id";
@@ -47,8 +48,6 @@ class Userlogin extends CI_Controller {
                 );
                 
                 $this->User_Model->updateLoginStatus($UserId, $updateData);
-
-                $user_info = $this->User_Model->getUserDetail($UserId);
 
                 $msg = "User logged in successfully";
 
@@ -110,8 +109,6 @@ class Userlogin extends CI_Controller {
 					                );
 
 		            $this->User_Model->insertUserLog($insertData);
-
-		            $user_info = $this->User_Model->getUserDetailAll($UserId);
 
                 	$msg = "User logged in successfully";
 
@@ -192,7 +189,6 @@ class Userlogin extends CI_Controller {
 
                         if($UserCitizenProfileId > 0 && $UserLeaderProfileId > 0) {
                             $this->db->query("COMMIT");
-                            $user_info = $this->User_Model->getUserDetailAll($UserId);
                             $msg = "User registered and logged in successfully";
                         } else {
                             $this->db->query("ROLLBACK");
@@ -207,18 +203,24 @@ class Userlogin extends CI_Controller {
                     }
                 }
             }
+
+            if($login_type == '' || $login_type == 1) {
+                $user_profile = $this->User_Model->getCitizenProfileInformation($UserId);
+            } else if($login_type == 2) {
+                $user_profile = $this->User_Model->getLeaderProfileInformation($UserId);
+            }
         }
 
         if($error_occured == true) {
             $array = array(
-                            "status"        => 'failed',
-                            "message"       => $msg,
+                            "status"    => 'failed',
+                            "message"   => $msg,
                         );
         } else {
 
             $array = array(
                            "status"     => 'success',
-                           "result"  => $user_info,
+                           "result"     => $user_profile,
                            "message"    => $msg,
                            );
         }
@@ -228,8 +230,9 @@ class Userlogin extends CI_Controller {
 
 	public function loginUsernamePassword() {
 		$error_occured = false;
-        $username = $this->input->post('username');
-        $password = $this->input->post('password');
+        $username       = $this->input->post('username');
+        $password       = $this->input->post('password');
+        $login_type     = $this->input->post('login_type');
         
         if($username == "") {
             $msg = "Please enter your username";
@@ -251,7 +254,11 @@ class Userlogin extends CI_Controller {
                 
                 $this->User_Model->updateLoginStatus($UserId, $updateData);
 
-                $user_info = $this->User_Model->getUserDetailAll($UserId);
+                if($login_type == '' || $login_type == 1) {
+                    $user_profile = $this->User_Model->getCitizenProfileInformation($UserId);
+                } else if($login_type == 2) {
+                    $user_profile = $this->User_Model->getLeaderProfileInformation($UserId);
+                }
 
                 $msg = "User logged in successfully";
             } else {
@@ -269,7 +276,7 @@ class Userlogin extends CI_Controller {
 
             $array = array(
                            "status"         => 'success',
-                           "result"	     => $user_info,
+                           "result"	        => $user_profile,
                            "message"        => $msg,
                            );
         }
@@ -279,8 +286,9 @@ class Userlogin extends CI_Controller {
 
     public function loginMobileMpin() {
 		$error_occured = false;
-        $mobile = $this->input->post('mobile');
-        $mpin = $this->input->post('mpin');
+        $mobile     = $this->input->post('mobile');
+        $mpin       = $this->input->post('mpin');
+        $login_type = $this->input->post('login_type');
         
         if($mobile == "") {
             $msg = "Please enter your mobile number";
@@ -302,7 +310,11 @@ class Userlogin extends CI_Controller {
                 
                 $this->User_Model->updateLoginStatus($UserId, $updateData);
 
-                $user_info = $this->User_Model->getUserDetail($UserId);
+                if($login_type == '' || $login_type == 1) {
+                    $user_profile = $this->User_Model->getCitizenProfileInformation($UserId);
+                } else if($login_type == 2) {
+                    $user_profile = $this->User_Model->getLeaderProfileInformation($UserId);
+                }
 
                 $msg = "User logged in successfully";
             } else {
@@ -313,15 +325,15 @@ class Userlogin extends CI_Controller {
 
         if($error_occured == true) {
             $array = array(
-                            "status"        => 'failed',
-                            "message"       => $msg,
+                            "status"    => 'failed',
+                            "message"   => $msg,
                         );
         } else {
 
             $array = array(
-                           "status"      => 'success',
-                           "result"	 => $user_info,
-                           "message"     => $msg,
+                           "status"     => 'success',
+                           "result"	    => $user_profile,
+                           "message"    => $msg,
                            );
         }
         displayJsonEncode($array);
@@ -330,7 +342,8 @@ class Userlogin extends CI_Controller {
     
     public function loginMobile() {
 		$error_occured = false;
-        $mobile = $this->input->post('mobile');
+        $mobile         = $this->input->post('mobile');
+        $login_type     = $this->input->post('login_type');
         
         if($mobile == "") {
             $msg = "Please enter your mobile number";
@@ -388,6 +401,7 @@ class Userlogin extends CI_Controller {
 		$error_occured = false;
         $mobile 		= $this->input->post('mobile');
         $otp 			= $this->input->post('otp');
+        $login_type     = $this->input->post('login_type');
         
         if($mobile == "") {
             $msg = "Please enter your mobile number";
@@ -409,7 +423,11 @@ class Userlogin extends CI_Controller {
                 
                 $this->User_Model->updateLoginStatus($UserId, $updateData);
 
-                $user_info = $this->User_Model->getUserDetail($UserId);
+                if($login_type == '' || $login_type == 1) {
+                    $user_profile = $this->User_Model->getCitizenProfileInformation($UserId);
+                } else if($login_type == 2) {
+                    $user_profile = $this->User_Model->getLeaderProfileInformation($UserId);
+                }
                 
                 $insertData = array(
 				                    'UserId' 		=> $UserId,
@@ -431,14 +449,14 @@ class Userlogin extends CI_Controller {
 
 		if($error_occured == true) {
 			$array = array(
-							"status" 		=> 'failed',
-							"message" 		=> $msg,
+							"status" 	  => 'failed',
+							"message" 	  => $msg,
 						);
 		} else {
 			$array = array(
-			               "status" 	    => 'success',
-						   "result"	    => $user_info,
-						   "message"		=> $msg,
+			               "status" 	  => 'success',
+						   "result"	      => $user_profile,
+						   "message"	  => $msg,
 			               );
 		}
         displayJsonEncode($array);

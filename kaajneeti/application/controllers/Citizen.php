@@ -37,7 +37,7 @@ class Citizen extends CI_Controller {
 
         if($this->session->userdata('UserId') > 0) {
             $_POST['user_id'] = $this->session->userdata('UserId');
-            $_POST['user_profile_id'] = $this->session->userdata('LeaderProfileId');
+            $_POST['user_profile_id'] = $this->session->userdata('UserProfileId');
             $json = post_curl(API_CALL_PATH.'userprofile/searchCitizenProfiles', $this->input->post(), $this->curl);
 
             $json_decode = json_decode($json);

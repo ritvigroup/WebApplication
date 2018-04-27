@@ -128,9 +128,50 @@ class Poll extends CI_Controller {
         } else {
 
             $array = array(
-                           "status"             => 'success',
+                           "status"        => 'success',
                            "result"        => $poll_detail,
-                           "message"            => $msg,
+                           "message"       => $msg,
+                           );
+        }
+        displayJsonEncode($array);
+    }
+
+
+    public function getPollDetailByUniqueId() {
+        $error_occured = false;
+
+        $UserProfileId   = $this->input->post('user_profile_id');
+        $PollUniqueId    = $this->input->post('poll_unique_id');
+        
+        if($UserProfileId == "") {
+            $msg = "Please select your profile";
+            $error_occured = true;
+        } else if($PollUniqueId == "") {
+            $msg = "Please select poll";
+            $error_occured = true;
+        } else {
+
+            $poll_detail = $this->Poll_Model->getPollDetailByUniqueId($PollUniqueId, $UserProfileId);
+
+            if(count($poll_detail) > 0) {
+                $msg = "Poll fetched successfully";
+            } else {
+                $msg = "Poll not found";
+                $error_occured = true;
+            }
+        }
+
+        if($error_occured == true) {
+            $array = array(
+                            "status"        => 'failed',
+                            "message"       => $msg,
+                        );
+        } else {
+
+            $array = array(
+                           "status"        => 'success',
+                           "result"        => $poll_detail,
+                           "message"       => $msg,
                            );
         }
         displayJsonEncode($array);

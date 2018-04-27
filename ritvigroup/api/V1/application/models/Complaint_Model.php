@@ -283,7 +283,7 @@ class Complaint_Model extends CI_Model {
             $complaint_array = array();
             foreach($res AS $key => $result) {
                 if(!@in_array($result['complaint_array'], $complaint_array)) {
-                    $complaints[] = $this->getComplaintDetail($result['ComplaintId']);
+                    $complaints[] = $this->getComplaintDetail($result['ComplaintId'], $UserProfileId);
                     $complaint_array[] = $result['ComplaintId'];
                 }
             }
@@ -312,7 +312,7 @@ class Complaint_Model extends CI_Model {
             $res = $query->result_array();
 
             foreach($res AS $key => $result) {
-                $complaints[] = $this->getComplaintDetail($result['ComplaintId']);
+                $complaints[] = $this->getComplaintDetail($result['ComplaintId'], $UserProfileId);
             }
         } else {
             $complaints = array();
@@ -337,7 +337,7 @@ class Complaint_Model extends CI_Model {
             $res = $query->result_array();
 
             foreach($res AS $key => $result) {
-                $complaints[] = $this->getComplaintDetail($result['ComplaintId']);
+                $complaints[] = $this->getComplaintDetail($result['ComplaintId'], $UserProfileId);
             }
         } else {
             $complaints = array();
@@ -383,7 +383,7 @@ class Complaint_Model extends CI_Model {
 
 
     // Get Complaint Detail By Unique Id
-    public function getComplaintDetailByUniqueId($ComplaintUniqueId) {
+    public function getComplaintDetailByUniqueId($ComplaintUniqueId, $UserProfileId) {
         $complaint_detail = array();
         if(isset($ComplaintUniqueId) && $ComplaintUniqueId != '') {
 
@@ -391,7 +391,7 @@ class Complaint_Model extends CI_Model {
 
             $res = $query->row_array();
 
-            $complaint_detail = $this->returnComplaintDetail($res);
+            $complaint_detail = $this->returnComplaintDetail($res, $UserProfileId);
         } else {
             $complaint_detail = array();
         }
@@ -399,7 +399,7 @@ class Complaint_Model extends CI_Model {
     }
 
     // Get Complaint Detail
-    public function getComplaintDetail($ComplaintId) {
+    public function getComplaintDetail($ComplaintId, $UserProfileId) {
         $complaint_detail = array();
         if(isset($ComplaintId) && $ComplaintId > 0) {
 
@@ -412,7 +412,7 @@ class Complaint_Model extends CI_Model {
 
             $res = $query->row_array();
 
-            $complaint_detail = $this->returnComplaintDetail($res);
+            $complaint_detail = $this->returnComplaintDetail($res, $UserProfileId);
         } else {
             $complaint_detail = array();
         }
@@ -420,7 +420,7 @@ class Complaint_Model extends CI_Model {
     }
 
     // Return Complaint Detail
-    public function returnComplaintDetail($res) {
+    public function returnComplaintDetail($res, $UserProfileId) {
         $ComplaintId            = $res['ComplaintId'];
         $ComplaintUniqueId      = $res['ComplaintUniqueId'];
         $ComplaintTypeId        = $res['ComplaintTypeId'];
@@ -444,9 +444,9 @@ class Complaint_Model extends CI_Model {
         $AddedOn            = return_time_ago($res['AddedOn']);
         $UpdatedOn          = return_time_ago($res['UpdatedOn']);
 
-        $ComplaintProfile       = $this->User_Model->getUserProfileWithUserInformation($AddedBy);
-        $ComplaintMember        = $this->getComplaintMember($ComplaintId);
-        $ComplaintAttachment    = $this->getComplaintAttachment($ComplaintId);
+        $ComplaintProfile       = $this->User_Model->getUserProfileInformation($AddedBy, $UserProfileId);
+        $ComplaintMember        = $this->getComplaintMember($ComplaintId, $UserProfileId);
+        $ComplaintAttachment    = $this->getComplaintAttachment($ComplaintId, $UserProfileId);
         //$ComplaintHistory       = $this->getComplaintHistory($ComplaintId);
 
         $user_data_array = array(
@@ -482,7 +482,7 @@ class Complaint_Model extends CI_Model {
 
 
     // Get Complaint Member Attached
-    public function getComplaintMember($ComplaintId) {
+    public function getComplaintMember($ComplaintId, $UserProfileId) {
         
         $ComplaintMember = array();
 
@@ -496,7 +496,7 @@ class Complaint_Model extends CI_Model {
         $res = $query->result_array();
 
         foreach($res AS $key => $result) {
-            $user_detail = $this->User_Model->getUserProfileWithUserInformation($result['UserProfileId']);
+            $user_detail = $this->User_Model->getUserProfileInformation($result['UserProfileId'], $UserProfileId);
             $user_detail = array_merge($user_detail, array('AcceptedYesNo' => $result['AcceptedYesNo']));
             $user_detail = array_merge($user_detail, array('AcceptedOn' => $result['AcceptedOn']));
             $ComplaintMember[] = $user_detail;
@@ -507,7 +507,7 @@ class Complaint_Model extends CI_Model {
 
 
     // Get Complaint Attachement
-    public function getComplaintAttachment($ComplaintId) {
+    public function getComplaintAttachment($ComplaintId, $UserProfileId) {
         
         $ComplaintAttachment = array();
 
@@ -524,7 +524,7 @@ class Complaint_Model extends CI_Model {
             $AttachmentTypeId = $result['AttachmentTypeId'];
 
             $AddedBy = $result['AddedBy'];
-            $AttachmentProfile = $this->User_Model->getUserProfileWithUserInformation($AddedBy);
+            $AttachmentProfile = $this->User_Model->getUserProfileInformation($AddedBy, $UserProfileId);
 
             if($AttachmentTypeId == 1) {
                 $path = COMPLAINT_IMAGE_URL;
@@ -555,7 +555,7 @@ class Complaint_Model extends CI_Model {
     }
 
     // Start Get All Complaint History
-    public function getComplaintHistory($ComplaintId) {
+    public function getComplaintHistory($ComplaintId, $UserProfileId) {
         $complaint_history_detail = array();
         if(isset($ComplaintId) && $ComplaintId > 0) {
 
@@ -563,7 +563,7 @@ class Complaint_Model extends CI_Model {
 
             $res = $query->result_array();
             foreach($res AS $key => $result) {
-                $complaint_history_detail[] = $this->getComplaintHistoryDetail($result['ComplaintHistoryId']);
+                $complaint_history_detail[] = $this->getComplaintHistoryDetail($result['ComplaintHistoryId'], $UserProfileId);
             }
 
         } else {
@@ -573,7 +573,7 @@ class Complaint_Model extends CI_Model {
     }
 
     // Start Get Complaint History Detail
-    public function getComplaintHistoryDetail($ComplaintHistoryId) {
+    public function getComplaintHistoryDetail($ComplaintHistoryId, $UserProfileId) {
         $complaint_history_detail = array();
         if(isset($ComplaintHistoryId) && $ComplaintHistoryId > 0) {
 
@@ -581,7 +581,7 @@ class Complaint_Model extends CI_Model {
 
             $res = $query->row_array();
             
-            $complaint_history_detail = $this->returnComplaintHistoryDetail($res);
+            $complaint_history_detail = $this->returnComplaintHistoryDetail($res, $UserProfileId);
 
         } else {
             $complaint_history_detail = array();
@@ -590,7 +590,7 @@ class Complaint_Model extends CI_Model {
     }
 
     // Return Complaint Histpory Detail with Attachement and history history
-    public function returnComplaintHistoryDetail($res) {
+    public function returnComplaintHistoryDetail($res, $UserProfileId) {
         $ComplaintHistoryId         = $res['ComplaintHistoryId'];
         $ComplaintId                = $res['ComplaintId'];
         $ParentComplaintHistoryId   = $res['ParentComplaintHistoryId'];
@@ -602,10 +602,10 @@ class Complaint_Model extends CI_Model {
 
         $AddedOn                = return_time_ago($res['AddedOn']);
 
-        $ComplaintHistoryProfile       = $this->User_Model->getUserProfileWithUserInformation($AddedBy);
-        $ComplaintHistoryAttachment    = $this->getComplaintHistoryAttachment($ComplaintHistoryId);
+        $ComplaintHistoryProfile       = $this->User_Model->getUserProfileInformation($AddedBy, $UserProfileId);
+        $ComplaintHistoryAttachment    = $this->getComplaintHistoryAttachment($ComplaintHistoryId, $UserProfileId);
 
-        $ComplaintHistoryHistory       = $this->getComplaintHistoryDetail($ParentComplaintHistoryId);
+        $ComplaintHistoryHistory       = $this->getComplaintHistoryDetail($ParentComplaintHistoryId, $UserProfileId);
 
         $data_array = array(
                             "ComplaintHistoryId"            => $ComplaintHistoryId,
@@ -625,7 +625,7 @@ class Complaint_Model extends CI_Model {
 
 
     // get Complaint History Attachments
-    public function getComplaintHistoryAttachment($ComplaintHistoryId) {
+    public function getComplaintHistoryAttachment($ComplaintHistoryId, $UserProfileId) {
         
         $ComplaintHistoryAttachment = array();
 
@@ -642,7 +642,7 @@ class Complaint_Model extends CI_Model {
             $AttachmentTypeId = $result['AttachmentTypeId'];
 
             $AddedBy = $result['AddedBy'];
-            $AttachmentProfile = $this->User_Model->getUserProfileWithUserInformation($AddedBy);
+            $AttachmentProfile = $this->User_Model->getUserProfileInformation($AddedBy, $UserProfileId);
 
             if($AttachmentTypeId == 1) {
                 $path = COMPLAINT_IMAGE_URL;
