@@ -99,6 +99,79 @@ class Payment extends CI_Controller {
         displayJsonEncode($array);
     }
 
+
+    // Get My Total Wallet Amount and Points
+    public function getMyTotalWalletAmountAndPoints() {
+        $error_occured = false;
+
+        $UserProfileId   = $this->input->post('user_profile_id');
+        
+        if($UserProfileId == "") {
+            $msg = "Please select your profile";
+            $error_occured = true;
+        } else {
+
+            $payment_log = $this->Payment_Model->getMyTotalWalletAmountAndPoints($UserProfileId);
+            if(count($payment_log) > 0) {
+                $msg = "Wallet and point fetched successfully";
+            } else {
+                $msg = "No wallet found";
+                $error_occured = true;
+            }
+        }
+
+        if($error_occured == true) {
+            $array = array(
+                            "status"        => 'failed',
+                            "message"       => $msg,
+                        );
+        } else {
+
+            $array = array(
+                           "status"     => 'success',
+                           "result"     => $payment_log,
+                           "message"    => $msg,
+                           );
+        }
+        displayJsonEncode($array);
+    }
+
+    // Get My Payment and Point Transaction Log
+    public function getMyAllPaymentAndPointTransactionLog() {
+        $error_occured = false;
+
+        $UserProfileId   = $this->input->post('user_profile_id');
+        
+        if($UserProfileId == "") {
+            $msg = "Please select your profile";
+            $error_occured = true;
+        } else {
+
+            $payment_log = $this->Payment_Model->getMyAllPaymentAndPointTransactionLog($UserProfileId);
+            if(count($payment_log) > 0) {
+                $msg = "Payment and Point Log fetched successfully";
+            } else {
+                $msg = "No Payment log found";
+                $error_occured = true;
+            }
+        }
+
+        if($error_occured == true) {
+            $array = array(
+                            "status"        => 'failed',
+                            "message"       => $msg,
+                        );
+        } else {
+
+            $array = array(
+                           "status"     => 'success',
+                           "result"     => $payment_log,
+                           "message"    => $msg,
+                           );
+        }
+        displayJsonEncode($array);
+    }
+
     
     public function savePaymentTransactionLog() {
         $error_occured = false;
@@ -171,6 +244,7 @@ class Payment extends CI_Controller {
     }
 
 
+    /***************************** OLD *********************************/
     public function getMyAllPaymentTransactionLog() {
         $error_occured = false;
 
@@ -575,6 +649,8 @@ class Payment extends CI_Controller {
         }
         displayJsonEncode($array);
     }
+
+
 
     
 }

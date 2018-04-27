@@ -120,7 +120,7 @@ class Influence extends CI_Controller {
 
 
     
-    public function influence() {
+    public function email() {
         $data = array();
       
         $_POST['user_profile_id'] = $this->session->userdata('LeaderProfileId');
@@ -145,6 +145,23 @@ class Influence extends CI_Controller {
             exit();
         }
 
+
+        $json_encode = post_curl(API_CALL_PATH.'influence/getMySentEmail', $this->input->post(), $this->curl);
+
+        $json_decode = json_decode($json_encode);
+        if(count($json_decode->result) > 0) {
+            $data['EmailSent'] = $json_decode->result;
+        }
+        
+        $this->load->view('influence/email',$data);
+    }
+
+    
+    public function sms() {
+        $data = array();
+      
+        $_POST['user_profile_id'] = $this->session->userdata('LeaderProfileId');
+
         if($this->input->post('save_sms') == "Y") {
             $post_data = $this->input->post();
 
@@ -155,6 +172,23 @@ class Influence extends CI_Controller {
             echo $json_decode;
             exit();
         }
+
+
+        $json_encode = post_curl(API_CALL_PATH.'influence/getMySentSms', $this->input->post(), $this->curl);
+
+        $json_decode = json_decode($json_encode);
+        if(count($json_decode->result) > 0) {
+            $data['SmsSent'] = $json_decode->result;
+        }
+        
+        $this->load->view('influence/sms',$data);
+    }
+
+
+    public function social() {
+        $data = array();
+      
+        $_POST['user_profile_id'] = $this->session->userdata('LeaderProfileId');
 
 
         if($this->input->post('save_social') == "Y") {
@@ -177,20 +211,6 @@ class Influence extends CI_Controller {
             exit();
         }
 
-        $json_encode = post_curl(API_CALL_PATH.'influence/getMySentEmail', $this->input->post(), $this->curl);
-
-        $json_decode = json_decode($json_encode);
-        if(count($json_decode->result) > 0) {
-            $data['EmailSent'] = $json_decode->result;
-        }
-
-        $json_encode = post_curl(API_CALL_PATH.'influence/getMySentSms', $this->input->post(), $this->curl);
-
-        $json_decode = json_decode($json_encode);
-        if(count($json_decode->result) > 0) {
-            $data['SmsSent'] = $json_decode->result;
-        }
-
 
         $json_encode = post_curl(API_CALL_PATH.'influence/getMySentSocial', $this->input->post(), $this->curl);
 
@@ -199,7 +219,7 @@ class Influence extends CI_Controller {
             $data['SocialSent'] = $json_decode->result;
         }
         
-        $this->load->view('influence/influence',$data);
+        $this->load->view('influence/social',$data);
     }
 
 }

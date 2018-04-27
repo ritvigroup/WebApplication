@@ -61,10 +61,13 @@ class Poll extends CI_Controller {
 
             if($PollId > 0) {
 
+                
+                $this->Poll_Model->saveMyPollImage($PollId, $_FILES['question']);
+
+                $this->Poll_Model->saveMyPollAnswer($PollId, $UserProfileId, $poll_answer, $_FILES['file']);
+                
                 $this->db->query("COMMIT");
-                
-                $this->Poll_Model->saveMyPollAnswer($PollId, $UserProfileId, $poll_answer);
-                
+
                 $poll_detail = $this->Poll_Model->getPollDetail($PollId, $UserProfileId);
 
                 $msg = "Poll created successfully";

@@ -25,7 +25,10 @@
                         <div class="portlet box ">
                             <div class="portlet-header">
                                 <ol class="breadcrumb page-breadcrumb">
-                                    <?php echo $this->connect_links; ?>
+                                    <li><a href="<?php echo base_url(); ?>connect/myfriends">My Connection</a>&nbsp;</li>
+                                    <li class="activelink"><a href="<?php echo base_url(); ?>connect/search">Search</a>&nbsp;</li>
+                                    <li><a href="<?php echo base_url(); ?>connect/invitation">Incomming</a>&nbsp;</li>
+                                    <li><a href="<?php echo base_url(); ?>connect/requestsent">Outgoing</a>&nbsp;</li>
                                 </ol>
                             </div>
                             <div class="row">
@@ -33,27 +36,23 @@
                                 <div class="col-md-4">
                                     <input type="text" id="search_text" class="form-control" autocomplete="off" placeholder="Search">
                                 </div>
-                                 <div class="col-md-4">
-                                          <select id="gender" class="form-control">
-                                                    <option value="">-Gender-</option>
-                                                    <?php foreach($Gender AS $gender) { ?>
-                                                    <option value="<?php echo $gender->GenderId; ?>"><?php echo $gender->GenderName; ?></option>
-                                                    <?php } ?>
-                                                </select>
-
-                                 </div>
-
                                 <div class="col-md-4">
-                                         <select id="political_party" class="form-control">
-                                                    <option value="">-political_party-</option>
-                                                    <?php foreach($PoliticalParty AS $political_party) { ?>
-                                                    <option value="<?php echo $political_party->PoliticalPartyId; ?>"><?php echo $political_party->PoliticalPartyName; ?></option>
-                                                    <?php } ?>
-                                                </select>
+                                    <select id="gender" class="form-control">
+                                        <option value="">-All Gender-</option>
+                                        <?php foreach($Gender AS $gender) { ?>
+                                        <option value="<?php echo $gender->GenderId; ?>"><?php echo $gender->GenderName; ?></option>
+                                        <?php } ?>
+                                    </select>
                                 </div>
 
-
-
+                                <div class="col-md-4">
+                                    <select id="political_party" class="form-control">
+                                        <option value="">-All Political Party-</option>
+                                        <?php foreach($PoliticalParty AS $political_party) { ?>
+                                        <option value="<?php echo $political_party->PoliticalPartyId; ?>"><?php echo $political_party->PoliticalPartyName; ?></option>
+                                        <?php } ?>
+                                    </select>
+                                </div>
                             </div>
                             <div class="row">
                                 <div class="col-md-4 submit-button"><input type="button" value="Submit" onClick="return searchLeader();"></div>
@@ -63,50 +62,11 @@
 
 
 
-<!-- 
-                            <div class="portlet-body pan">
-                                <div class="table-responsive">
-                                    <table id="user-last-logged-table"
-                                           class="table table-striped table-hover thumb-small">
-                                        <tr>
-                                            <td>Search:</td>
-                                            <td><input type="text" id="search_text" class="form-control" autocomplete="off"></td>
-                                        </tr>
-                                        <tr>
-                                            <td>Gender:</td>
-                                            <td>
-                                                <select id="gender" class="form-control">
-                                                    <option value="">-All-</option>
-                                                    <?php foreach($Gender AS $gender) { ?>
-                                                    <option value="<?php echo $gender->GenderId; ?>"><?php echo $gender->GenderName; ?></option>
-                                                    <?php } ?>
-                                                </select>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>Political Party:</td>
-                                            <td>
-                                                <select id="political_party" class="form-control">
-                                                    <option value="">-All-</option>
-                                                    <?php foreach($PoliticalParty AS $political_party) { ?>
-                                                    <option value="<?php echo $political_party->PoliticalPartyId; ?>"><?php echo $political_party->PoliticalPartyName; ?></option>
-                                                    <?php } ?>
-                                                </select>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td colspan="2"><input type="button" value="Search" onClick="return searchLeader();"></td>
-                                        </tr>
-                                        
-                                        
-                                    </table>
-                                </div>
-                            </div> -->
                             <div class="table-responsive" id="search_result_show">
                                 <div class="portlet-body">
                                     <div class="row mbm">
                                         <div class="col-lg-12 search-result">
-                                            <h3>Search Result</h3>
+                                            <h1>Search Result</h1>
                                             <div class="table-responsive">
                                                 <table id="table_id"
                                                        class="table table-hover table-striped table-bordered table-advanced tablesorter display">
@@ -117,22 +77,23 @@
                                     </div>
                                 </div>
                             </div>
+
                         </div>
                     </div>
                 </div>
-            </div>
-            <!-- stat timeline and feed  -->
-            <div class="top20">
-                
-                <div class="clearfix"> </div>
-                <!-- End projects list -->
-                
-                <?php  require_once './include/footer.php';?>
+            
+                <!-- stat timeline and feed  -->
+                <div class="top20">
+                    
+                    <div class="clearfix"> </div>
+                    <!-- End projects list -->
+                    
+                    <?php  require_once './include/footer.php';?>
 
+                </div>
             </div>
         </div>
     </div>
-</div>
 
 <?php  require_once './include/scroll_top.php';?>
 

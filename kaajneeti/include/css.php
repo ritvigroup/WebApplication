@@ -1,6 +1,14 @@
 <link rel="shortcut icon" href="<?=base_url();?>assets/images/favicon.ico">
 <!-- Bootstrap -->
 <link href="<?=base_url();?>assets/css/bootstrap.min.css" rel="stylesheet">
+
+<!-- morris -->
+<link href="<?=base_url();?>assets/css/morris.css" rel="stylesheet">
+<!-- Bootstrap -->
+<link href="<?=base_url();?>assets/css/bootstrap-datetimepicker.min.css" rel="stylesheet" media="screen">
+<link rel="stylesheet" type="text/css" href="<?=base_url();?>assets/css/daterangepicker.css" />
+
+
 <!-- slimscroll -->
 <link href="<?=base_url();?>assets/css/jquery.slimscroll.css" rel="stylesheet">
 <!-- project -->

@@ -36,7 +36,42 @@ class Poll_Model extends CI_Model {
     }
 
 
-    public function saveMyPollAnswer($PollId, $UserProfileId, $poll_answer) {
+    public function saveMyPollImage($PollId, $poll_image) {
+
+        $upload_file_name = $poll_image['name'];
+        
+        if($upload_file_name != '') {
+
+            $AttachmentTypeId = $this->getAttachmentTypeId($upload_file_name);
+
+            $AttachmentFile = date('YmdHisA').'-'.time().'-POLL-'.mt_rand().'.'.end(explode('.', $upload_file_name));
+
+            if($AttachmentTypeId == 1) {
+                $path = POLL_IMAGE_DIR;
+            } else if($AttachmentTypeId == 2) {
+                $path = POLL_VIDEO_DIR;
+            } else if($AttachmentTypeId == 4) {
+                $path = POLL_AUDIO_DIR;
+            } else {
+                $path = POLL_DOC_DIR;
+            }
+            $path = $path.$AttachmentFile;
+            $source = $poll_image['tmp_name'];
+
+            $upload_result = uploadFileOnServer($source, $path);
+
+            $updateData = array(
+                                'PollImage'   => $AttachmentFile,
+                                'UpdatedOn'   => date('Y-m-d H:i:s'),
+                                );
+            $this->db->where('PollId', $PollId);
+            $this->db->update($this->pollTbl, $updateData);
+        }
+    }
+
+
+    public function saveMyPollAnswer($PollId, $UserProfileId, $poll_answer, $poll_answer_image) {
+        $i = 0;
         foreach($poll_answer AS $answer) {
             $insertData = array(
                                 'PollId'             => $PollId,
@@ -48,6 +83,39 @@ class Poll_Model extends CI_Model {
                                 'UpdatedOn'          => date('Y-m-d H:i:s'),
                                 );
             $this->db->insert($this->pollAnswerTbl, $insertData);
+
+            $PollAnswerId = $this->db->insert_id();
+
+            $upload_file_name = $poll_answer_image['name'][$i];
+        
+            if($upload_file_name != '') {
+
+                $AttachmentTypeId = $this->getAttachmentTypeId($upload_file_name);
+
+                $AttachmentFile = date('YmdHisA').'-'.time().'-POLL-ANSWER-'.mt_rand().'.'.end(explode('.', $upload_file_name));
+
+                if($AttachmentTypeId == 1) {
+                    $path = POLL_IMAGE_DIR;
+                } else if($AttachmentTypeId == 2) {
+                    $path = POLL_VIDEO_DIR;
+                } else if($AttachmentTypeId == 4) {
+                    $path = POLL_AUDIO_DIR;
+                } else {
+                    $path = POLL_DOC_DIR;
+                }
+                $path = $path.$AttachmentFile;
+                $source = $poll_answer_image['tmp_name'][$i];
+
+                $upload_result = uploadFileOnServer($source, $path);
+
+                $updateData = array(
+                                    'PollAnswerImage'   => $AttachmentFile,
+                                    'UpdatedOn'         => date('Y-m-d H:i:s'),
+                                    );
+                $this->db->where('PollAnswerId', $PollAnswerId);
+                $this->db->update($this->pollAnswerTbl, $updateData);
+            }
+            $i++;
         }
         return true;
     }
@@ -138,6 +206,7 @@ class Poll_Model extends CI_Model {
                                 "UpdatedOn"                 => $UpdatedOn,
                                 "UpdatedOnTime"             => $res['UpdatedOn'],
                                 "PollProfile"               => $PollProfile,
+                                'PollImage'                 => (($res['PollImage'] != '') ? POLL_IMAGE_URL.$res['PollImage'] : ''),
                                 //"PollAnswer"                => $PollAnswer,
                                 "PollTotalParticipation"    => $PollTotalParticipation,
                                 "PollAnswerWithTotalParticipation"    => $PollAnswerWithTotalParticipation,
@@ -184,6 +253,7 @@ class Poll_Model extends CI_Model {
                                     'PollAnswerId'      => $result['PollAnswerId'],
                                     'PollId'            => $result['PollId'],
                                     'PollAnswer'        => $result['PollAnswer'],
+                                    'PollAnswerImage'   => (($result['PollAnswerImage'] != '') ? POLL_IMAGE_URL.$result['PollAnswerImage'] : ''),
                                     'PollAnswerStatus'  => $result['PollAnswerStatus'],
                                     'TotalAnswerdMe'    => $this->getPollAnswerTotalParticipation($result['PollAnswerId']),
                                 );

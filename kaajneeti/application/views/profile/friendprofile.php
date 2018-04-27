@@ -121,8 +121,8 @@ if($result->UserId > 0) {
                         </div>
                     </div>
                 </div>
-            </div>
-            <!-- stat timeline and feed  -->
+    
+                <!-- stat timeline and feed  -->
                 <div class="top20">
                     
                     <div class="clearfix"> </div>

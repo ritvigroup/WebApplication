@@ -25,13 +25,17 @@
                         <div class="portlet box">
                             <div class="portlet-header">
                                 <ol class="breadcrumb page-breadcrumb">
-                                    <?php echo $this->connect_links; ?>
+                                    <li><a href="<?php echo base_url(); ?>connect/myfriends">My Connection</a>&nbsp;</li>
+                                    <li><a href="<?php echo base_url(); ?>connect/search">Search</a>&nbsp;</li>
+                                    <li class="activelink"><a href="<?php echo base_url(); ?>connect/invitation">Incomming</a>&nbsp;</li>
+                                    <li><a href="<?php echo base_url(); ?>connect/requestsent">Outgoing</a>&nbsp;</li>
                                 </ol>
                             </div>
 
                             <div class="portlet-body">
                                 <div class="row mbm">
                                     <div class="col-lg-12">
+                                        <?php /*
                                         <div class="table-responsive">
                                             <table id="table_id"
                                                    class="table table-hover table-striped table-bordered table-advanced tablesorter display">
@@ -89,29 +93,39 @@
                                                     
                                                     <?php } ?>
                                                     
-                                                    </thead>
-                                                </table>
-                                            </div>
+                                                </thead>
+                                            </table>
                                         </div>
+                                        */ ?>
+
+                                        <?php if(count($result) > 0) {?>
+                                            <?php foreach($result AS $user) { ?>
+                                                
+                                                <?php $this->CI->showUser($user); ?>
+                                                
+                                            <?php } ?>
+                                        <?php } ?>
+                                        
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            <!-- stat timeline and feed  -->
-            <div class="top20">
                 
-                <div class="clearfix"> </div>
-                <!-- End projects list -->
-                
-                <?php  require_once './include/footer.php';?>
+            
+                <!-- stat timeline and feed  -->
+                <div class="top20">
+                    
+                    <div class="clearfix"> </div>
+                    <!-- End projects list -->
+                    
+                    <?php  require_once './include/footer.php';?>
 
+                </div>
             </div>
         </div>
     </div>
-</div>
 
 <?php  require_once './include/scroll_top.php';?>
 

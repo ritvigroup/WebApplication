@@ -24,8 +24,6 @@ class Organize extends CI_Controller {
 
     public function organize() {
         $data = array();
-      
-        
         
         $this->load->view('organize/organize',$data);
     }
@@ -165,6 +163,33 @@ class Organize extends CI_Controller {
         }
         
         $this->load->view('organize/newTeam',$data);
+    }
+
+
+    public function editTeam() {
+        $data = array();
+      
+        if (!$this->input->is_ajax_request()) {
+           exit('Error');
+        }
+        $_POST['user_profile_id'] = $this->session->userdata('LeaderProfileId');
+
+        $_POST['unique_profile_id'] = $this->uri->segment(3);
+        $json_encode = post_curl(API_CALL_PATH.'userprofile/getUserAllProfileInformationByUniqueProfileId', $this->input->post(), $this->curl);
+
+        $json_decode = json_decode($json_encode);
+        if(count($json_decode->result) > 0) {
+            $data['SubLeaderDetail'] = $json_decode;
+        }
+
+        $json_encode = post_curl(API_CALL_PATH.'complaint/getAllDepartment', $this->input->post(), $this->curl);
+
+        $json_decode = json_decode($json_encode);
+        if(count($json_decode->result) > 0) {
+            $data['Department'] = $json_decode;
+        }
+        
+        $this->load->view('organize/editTeam',$data);
     }
 
 

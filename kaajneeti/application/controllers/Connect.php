@@ -3,9 +3,12 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Connect extends CI_Controller {
 
+    public $CI = NULL;
+
     public function __construct()
     {
         parent::__construct();
+        $this->CI = & get_instance();
         
         $this->device_token     = gethostname();
         $this->location_lant    = $this->input->post('location_lant');
@@ -18,14 +21,6 @@ class Connect extends CI_Controller {
         } else {
             redirect('leader/login');
         }
-
-
-        $this->connect_links = '
-        <li><a href="'.base_url().'connect/myfriends">&nbsp;My Connection</a>&nbsp;</li>
-        <li><a href="'.base_url().'connect/search">&nbsp;Search</a>&nbsp;</li>
-        <li><a href="'.base_url().'connect/invitation">&nbsp;Invitation</a>&nbsp;</li>
-        <li><a href="'.base_url().'connect/requestsent">&nbsp;Request</a>&nbsp;</li>';
-
     }
 
 
@@ -206,6 +201,64 @@ class Connect extends CI_Controller {
         } else {
             echo '';
         }
+    }
+
+
+    public function showUser($user) {
+        $ProfilePhotoPath = ($user->user_profile_detail->user_info->ProfilePhotoPath != '') ? $user->user_profile_detail->user_info->ProfilePhotoPath : base_url().'assets/images/default-user.png';
+
+
+        
+        $Gender = ($user->user_profile_detail->user_info->Gender == 1) ? 'Male' : (($user->user_profile_detail->user_info->Gender == 2) ? 'Female' : 'Other');
+
+        $UserProfileHrefLink = base_url().'profile/profile/'.$user->user_profile_detail->user_info->UserUniqueId;
+
+        ?>
+        <div class="note note-info" style="float: left;" id="request_id_<?php echo $user->user_profile_detail->profile->UserProfileId; ?>">
+            <div style="float: left;">
+                <span class="img-shadow"><img src="<?php echo $ProfilePhotoPath; ?>" style="border: 1px solid #fff; box-shadow: 0 2px 3px rgba(0,0,0,0.25);width: 80px; height: 80px; margin-right: 15px;" class="img-circle"/></span>
+            </div>
+            <div style="float: left;">
+                <h4 class="block"><a href="<?php echo $UserProfileHrefLink; ?>" target="_blank"><?php echo $user->user_profile_detail->profile->FirstName.' '.$user->user_profile_detail->profile->LastName?></a></h4>
+                <p><?php echo $user->user_profile_detail->profile->Email; ?></p>
+                <p><?php echo $Gender; ?>, <span class="label label-warning"><?php echo $leader_profile->UserProfileLeader->PoliticalPartyName; ?></span>, <?php echo date('d-M-Y h:i A', strtotime($user->RequestSentOn)); ?></p>
+            </div>
+            <div style="float: right;">
+                <button type="button" class="btn btn-danger" onClick="return cancelRequest(<?php echo $user->user_profile_detail->profile->UserProfileId; ?>);"><i class="fa fa-trash-o"></i>&nbsp; Delete</button>
+
+                <?php if($leader_profile->UserProfileLeader->MyFriend == 0) { ?>
+                <button type="button" class="btn btn-success btn-xs" onClick="return sendRequest(<?php echo $leader_profile->UserProfileLeader->UserProfileId; ?>);"><i
+                        class="fa fa-plus-o"></i>&nbsp;
+                    Add Friend
+                </button>
+                <?php } else if($leader_profile->UserProfileLeader->MyFriend == 1) { ?>
+                <button type="button" class="btn btn-danger btn-xs" onClick="return cancelRequest(<?php echo $leader_profile->UserProfileLeader->UserProfileId; ?>);"><i
+                        class="fa fa-trash-o"></i>&nbsp;
+                    Cancel Request
+                </button>
+                <?php } else if($leader_profile->UserProfileLeader->MyFriend == 2) { ?>
+                <button type="button" class="btn btn-success btn-xs" onClick="return acceptRequest(<?php echo $leader_profile->UserProfileLeader->UserProfileId; ?>);"><i
+                        class="fa fa-plus-o"></i>&nbsp;
+                    Accept Request
+                </button>
+                <button type="button" class="btn btn-danger btn-xs" onClick="return deleteRequest(<?php echo $leader_profile->UserProfileLeader->UserProfileId; ?>);"><i
+                        class="fa fa-trash-o"></i>&nbsp;
+                    Delete Request
+                </button>
+                <?php } else if($leader_profile->UserProfileLeader->MyFriend == 3) { ?>
+                <button type="button" class="btn btn-danger btn-xs" onClick="return unFriend(<?php echo $leader_profile->UserProfileLeader->UserProfileId; ?>);"><i
+                        class="fa fa-trash-o"></i>&nbsp;
+                    Unfriend
+                </button>
+                <?php } else if($leader_profile->UserProfileLeader->MyFriend == 4) { ?>
+
+                <?php } else { ?>
+                <?php } ?>
+
+                
+            </div>
+        </div>
+        <?php
     }
 
 }

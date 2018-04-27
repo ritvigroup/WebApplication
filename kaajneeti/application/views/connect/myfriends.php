@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-<head><title>My Friends</title>
+<head><title>My Connections</title>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -22,20 +22,22 @@
             <div class="page-content">
                 <div class="row  border-bottom white-bg dashboard-header">
                     <div class="col-md-12">
-                        <div class="portlet box">
+                        <div class="portlet box ">
                             <div class="portlet-header">
                                 <ol class="breadcrumb page-breadcrumb">
-                                    <?php echo $this->connect_links; ?>
+                                    <li class="activelink"><a href="<?php echo base_url(); ?>connect/myfriends">My Connection</a>&nbsp;</li>
+                                    <li><a href="<?php echo base_url(); ?>connect/search">Search</a>&nbsp;</li>
+                                    <li><a href="<?php echo base_url(); ?>connect/invitation">Incomming</a>&nbsp;</li>
+                                    <li><a href="<?php echo base_url(); ?>connect/requestsent">Outgoing</a>&nbsp;</li>
                                 </ol>
                             </div>
 
                              <div class="portlet-body">
                                 <div class="row mbm">
                                     <div class="col-lg-12">
-
+                                        <?php /*
                                         <div class="table-responsive">
-                                            <table id="table_id"
-                                                   class="table table-hover table-striped table-bordered table-advanced tablesorter display">
+                                            <table id="table_id" class="table table-hover table-striped table-bordered table-advanced tablesorter display">
                                                 <thead>
                                                     <tr>
                                                         <th style="width: 3%; padding: 10px; background: #efefef"><input
@@ -78,35 +80,45 @@
                                                                     </button>
                                                                 </td>
                                                             </tr>
-                                                        
+                                                            </tbody>
                                                         <?php } ?>
                                                     <?php } else { ?>
                                                     
                                                     <?php } ?>
-                                                    </tbody>
-                                                    </thead>
-                                                </table>
-                                            </div>
+                                                    
+                                                </thead>
+                                            </table>
                                         </div>
+                                        */ ?>
+
+                                        <?php if(count($result) > 0) {?>
+                                            <?php foreach($result AS $user) { ?>
+                                                
+                                                <?php $this->CI->showUser($user); ?>
+                                                
+                                            <?php } ?>
+                                        <?php } ?>
+                                        
                                     </div>
                                 </div>
                             </div>
+
                         </div>
                     </div>
                 </div>
-            </div>
-            <!-- stat timeline and feed  -->
-            <div class="top20">
-                
-                <div class="clearfix"> </div>
-                <!-- End projects list -->
-                
-                <?php  require_once './include/footer.php';?>
+            
+                <!-- stat timeline and feed  -->
+                <div class="top20">
+                    
+                    <div class="clearfix"> </div>
+                    <!-- End projects list -->
+                    
+                    <?php  require_once './include/footer.php';?>
 
+                </div>
             </div>
         </div>
     </div>
-</div>
 
 <?php  require_once './include/scroll_top.php';?>
 
@@ -137,7 +149,7 @@ function unFriend(id) {
                 }
             });
     } else {
-        sweetAlert("Oops...", "Please select user to unfriend", "error");
+        sweetAlert("Oops...", "Please select user to disconnect", "error");
         return false;
     }
 }

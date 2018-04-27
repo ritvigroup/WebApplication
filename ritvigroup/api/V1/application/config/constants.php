@@ -140,6 +140,24 @@ defined('LIKE_IMAGE_DIR')        OR define('LIKE_IMAGE_DIR', UPLOAD_DIR.'/emotio
 defined('LIKE_IMAGE_URL')        OR define('LIKE_IMAGE_URL', SITE_PATH.UPLOAD_DIR.'/emotions/');
 
 
+// Poll
+defined('POLL_AUDIO_DIR')        OR define('POLL_AUDIO_DIR', UPLOAD_DIR.'/poll/audio/');
+defined('POLL_AUDIO_URL')        OR define('POLL_AUDIO_URL', SITE_PATH.UPLOAD_DIR.'/poll/audio/');
+
+defined('POLL_DOC_DIR')        	OR define('POLL_DOC_DIR', UPLOAD_DIR.'/poll/document/');
+defined('POLL_DOC_URL')        	OR define('POLL_DOC_URL', SITE_PATH.UPLOAD_DIR.'/poll/document/');
+
+defined('POLL_IMAGE_DIR')        OR define('POLL_IMAGE_DIR', UPLOAD_DIR.'/poll/image/');
+defined('POLL_IMAGE_URL')        OR define('POLL_IMAGE_URL', SITE_PATH.UPLOAD_DIR.'/poll/image/');
+
+defined('POLL_VIDEO_DIR')        OR define('POLL_VIDEO_DIR', UPLOAD_DIR.'/poll/video/');
+defined('POLL_VIDEO_URL')        OR define('POLL_VIDEO_URL', SITE_PATH.UPLOAD_DIR.'/poll/video/');
+
+defined('POLL_THUMB_DIR')        OR define('POLL_THUMB_DIR', UPLOAD_DIR.'/poll/thumbnail/');
+defined('POLL_THUMB_URL')        OR define('POLL_THUMB_URL', SITE_PATH.UPLOAD_DIR.'/poll/thumbnail/');
+
+
+
 // Posts
 defined('POST_AUDIO_DIR')        OR define('POST_AUDIO_DIR', UPLOAD_DIR.'/post/audio/');
 defined('POST_AUDIO_URL')        OR define('POST_AUDIO_URL', SITE_PATH.UPLOAD_DIR.'/post/audio/');

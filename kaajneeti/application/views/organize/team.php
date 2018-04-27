@@ -25,6 +25,7 @@
                 <div class="row  border-bottom white-bg dashboard-header">
                     <div class="col-md-12">
                         <div class="portlet box">
+                            <?php /*
                             <div class="portlet-header">
                                 <h1>My Team</h1>
                                 <div class="actions">
@@ -32,6 +33,14 @@
                                     <a href="<?=base_url();?>organize/fleet" class="btn btn-info btn-xs"><i class="fa fa-plus"></i>&nbsp;Fleet</a>&nbsp;
                                     <a href="<?=base_url();?>organize/documents" class="btn btn-info btn-xs"><i class="fa fa-plus"></i>&nbsp;Documents</a>&nbsp;
                                 </div>
+                            </div>
+                            */ ?>
+
+                            <div class="portlet-header">
+                                <ol class="breadcrumb page-breadcrumb">
+                                    <li class="activelink"><a data-target="#modal-stackable" data-toggle="modal" href="javascript:void(0);" onClick="return newTeam();">New Team</a></li>
+                                    <li><a href="<?=base_url();?>organize/documents">Document</a>&nbsp;&nbsp;</li>
+                                </ol>
                             </div>
 
                             <div class="portlet-body">
@@ -82,7 +91,7 @@
                                                         <td><?php echo $Status; ?></td>
                                                         <td><?php echo $my_team->user_profile_detail->profile->AddedOn; ?></td>
                                                         <td>
-                                                            <button type="button" class="btn btn-default btn-xs"><i
+                                                            <button type="button" class="btn btn-default btn-xs" data-target="#modal-stackable" data-toggle="modal" href="javascript:void(0);" onClick="return editTeam('<?php echo $my_team->user_profile_detail->user_info->UserUniqueId; ?>');"><i
                                                                     class="fa fa-edit"></i>&nbsp;
                                                                 Edit
                                                             </button>
@@ -142,6 +151,19 @@
     function newTeam() {
 
         $.post("<?php echo base_url(); ?>organize/newTeam", {'display': 'Y'},
+            function (data, status) {
+                if(data != '') {
+                    $('.modal-content').html(data);
+                } else {
+                    $('.modal-content').html(data);
+                }
+            });
+    }
+
+
+    function editTeam(unique_profile_id) {
+
+        $.post("<?php echo base_url(); ?>organize/editTeam/"+unique_profile_id, {'display': 'Y'},
             function (data, status) {
                 if(data != '') {
                     $('.modal-content').html(data);

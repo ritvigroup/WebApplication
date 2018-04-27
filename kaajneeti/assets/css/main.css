@@ -114,7 +114,7 @@ a, button, code, div, input, label, li, p, pre, select, span, svg, table, td, te
     border-radius: 0 !important;
 }
 
-.active a:focus {
+.activelink {
     outline: none;
     outline-offset: -2px;
     border-bottom: 2px solid red;
@@ -3047,9 +3047,9 @@ a:hover{
     text-decoration: none;
 }
 .portlet-header{
-        background: #ffffff;
-    border-bottom: 1px solid #e5e5e5;
-        padding: 8px 15px;
+    *background: #ffffff;
+    *border-bottom: 1px solid #e5e5e5;
+    padding: 8px 0px;
 }
 
 .page-header-fixed .page-container {

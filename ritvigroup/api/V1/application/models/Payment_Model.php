@@ -201,9 +201,9 @@ class Payment_Model extends CI_Model {
     public function returnPaymentTransactionLogDetail($res) {
         $PaymentTransactionLogId    = $res['PaymentTransactionLogId'];
         $PaymentGatewayId           = $res['PaymentGatewayId'];
-        $PaymentGatewayName         = $res['PaymentGatewayName'];
         
        
+        $PaymentGatewayName         = (($res['PaymentGatewayName'] != NULL) ? $res['PaymentGatewayName'] : "");
         $TransactionId              = (($res['TransactionId'] != NULL) ? $res['TransactionId'] : "");
         $TransactionDate            = (($res['TransactionDate'] != NULL) ? $res['TransactionDate'] : "");
         $TransactionAmount          = (($res['TransactionAmount'] != NULL) ? $res['TransactionAmount'] : "");
@@ -427,4 +427,142 @@ class Payment_Model extends CI_Model {
         }
         return $log_detail;
     }
+
+
+    ////////////////// ============= NEW ==================/////////////////
+    // Get My Total Wallet Amount and Points
+    public function getMyTotalWalletAmountAndPoints($UserProfileId) {
+        $log_detail = array(
+                            'MyWalletBalance'       => 0.00,
+                            'TotalWalletDebit'      => 0.00,
+                            'TotalWalletCredit'     => 0.00,
+                            'MyPointBalance'        => 0,
+                            'TotalPointDebit'       => 0,
+                            'TotalPointCredit'      => 0,
+                            );
+
+        if(isset($UserProfileId) && $UserProfileId > 0) {
+
+            $this->db->select('SUM(TransactionPoint) AS TotalPointDebit');
+            $this->db->from($this->PointTransactionLogTbl);
+            $this->db->where('DebitOrCredit', 0);
+            $this->db->where('TransactionStatus', 1);
+            $this->db->group_start();
+            $this->db->where('PaymentBy', $UserProfileId);
+            $this->db->or_where('PaymentTo', $UserProfileId);
+            $this->db->group_end();
+            $query = $this->db->get();
+            
+            $TotalPointDebit = 0;
+            if ($query->num_rows() > 0) {
+                $res = $query->row_array();
+                $TotalPointDebit = ($res['TotalPointDebit'] > 0) ? $res['TotalPointDebit'] : 0;
+            }
+
+            $this->db->select('SUM(TransactionPoint) AS TotalPointCredit');
+            $this->db->from($this->PointTransactionLogTbl);
+            $this->db->where('DebitOrCredit', 1);
+            $this->db->where('TransactionStatus', 1);
+            $this->db->group_start();
+            $this->db->where('PaymentBy', $UserProfileId);
+            $this->db->or_where('PaymentTo', $UserProfileId);
+            $this->db->group_end();
+            $query = $this->db->get();
+            
+            $TotalPointCredit = 0;
+            if ($query->num_rows() > 0) {
+                $res = $query->row_array();
+                $TotalPointCredit = ($res['TotalPointCredit'] > 0) ? $res['TotalPointCredit'] : 0;
+            }
+           
+
+            $this->db->select('SUM(TransactionAmount) AS TotalWalletDebit');
+            $this->db->from($this->PaymentTransactionLogTbl);
+            $this->db->where('DebitOrCredit', 0);
+            $this->db->where('TransactionStatus', 1);
+            $this->db->group_start();
+            $this->db->where('PaymentBy', $UserProfileId);
+            $this->db->or_where('PaymentTo', $UserProfileId);
+            $this->db->group_end();
+            $query = $this->db->get();
+            
+            $TotalWalletDebit = 0.00;
+            if ($query->num_rows() > 0) {
+                $res = $query->row_array();
+                $TotalWalletDebit = ($res['TotalWalletDebit'] > 0) ? $res['TotalWalletDebit'] : 0.00;
+            }
+
+            $this->db->select('SUM(TransactionAmount) AS TotalWalletCredit');
+            $this->db->from($this->PaymentTransactionLogTbl);
+            $this->db->where('DebitOrCredit', 1);
+            $this->db->where('TransactionStatus', 1);
+            $this->db->group_start();
+            $this->db->where('PaymentBy', $UserProfileId);
+            $this->db->or_where('PaymentTo', $UserProfileId);
+            $this->db->group_end();
+            $query = $this->db->get();
+            
+            $TotalWalletCredit = 0.00;
+            if ($query->num_rows() > 0) {
+                $res = $query->row_array();
+                $TotalWalletCredit = ($res['TotalWalletCredit'] > 0) ? $res['TotalWalletCredit'] : 0.00;
+            }
+
+            $log_detail = array(
+                            'MyPointBalance'        => ($TotalPointCredit - $TotalPointDebit),
+                            'TotalPointDebit'       => $TotalPointDebit,
+                            'TotalPointCredit'      => $TotalPointCredit,
+                            'MyWalletBalance'       => number_format(($TotalWalletCredit - $TotalWalletDebit), 2, '.', ''),
+                            'TotalWalletDebit'      => number_format($TotalWalletDebit, 2, '.', ''),
+                            'TotalWalletCredit'     => number_format($TotalWalletCredit, 2, '.', ''),
+                            );
+            
+        }
+        return $log_detail;
+    }
+
+
+    // Get My Payment And Point Transaction Log
+    public function getMyAllPaymentAndPointTransactionLog($UserProfileId) {
+        $log_detail = array();
+        if(isset($UserProfileId) && $UserProfileId > 0) {
+
+            $sql = "SELECT 'Payment' AS PaymentPointType, `PaymentTransactionLogId` AS LogId, `AddedOn` AS DateAdded 
+                                                FROM ".$this->PaymentTransactionLogTbl." 
+                                            WHERE 
+                                                (`PaymentBy`= '".$UserProfileId."' OR `PaymentTo` = '".$UserProfileId."')";
+            $sql .= " UNION ";
+
+            $sql .= "SELECT 'Point' AS PaymentPointType, `PointTransactionLogId` AS LogId, `AddedOn` AS DateAdded 
+                                                FROM ".$this->PointTransactionLogTbl." 
+                                            WHERE 
+                                                (`PaymentBy`= '".$UserProfileId."' OR `PaymentTo` = '".$UserProfileId."')";
+            $sql .= " ORDER BY `DateAdded` DESC LIMIT 0, 200";
+
+            $query = $this->db->query($sql);
+            
+            if ($query->num_rows() > 0) {
+                $res = $query->result_array();
+                foreach($res AS $key => $result) {
+
+                    if($result['PaymentPointType'] == 'Payment') {
+                        $log_detail[] = array(
+                                            'feedtype'      => 'payment',
+                                            'paymentdata'   => $this->getPaymentTransactionLogDetail($result['LogId']),
+                                            );
+                    } else if($result['PaymentPointType'] == 'Point') {
+                        $log_detail[] = array(
+                                            'feedtype'      => 'point',
+                                            'pointdata'     => $this->getPointTransactionLogDetail($result['LogId']),
+                                            );
+                    }
+                }
+            }
+            
+        } else {
+            $log_detail = array();
+        }
+        return $log_detail;
+    }
+    
 }

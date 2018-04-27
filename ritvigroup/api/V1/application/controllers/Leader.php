@@ -36,6 +36,8 @@ class Leader extends CI_Controller {
 
         $UserId             = $this->input->post('user_id');
         $UserProfileId      = $this->input->post('user_profile_id');
+        $start              = (($this->input->post('start') > 0) ? $this->input->post('start') : 0);
+        $end                = (($this->input->post('end') > 0) ? $this->input->post('end') : 10);
 
        
         if($UserId == "") {
@@ -58,9 +60,18 @@ class Leader extends CI_Controller {
 
             SELECT PostId AS Id, 'Post' AS DataType, AddedOn AS DateAdded FROM `Post` WHERE `PostStatus` = '1' AND `UserProfileId` = '".$UserProfileId."'
 
-            ORDER BY DateAdded DESC LIMIT 0,50
-            
-            ";
+            UNION 
+
+            SELECT ComplaintId AS Id, 'Complaint' AS DataType, AddedOn AS DateAdded FROM `Complaint` WHERE `ComplaintStatus` = '1' AND `AddedBy` = '".$UserProfileId."'
+
+            UNION 
+
+            SELECT SuggestionId AS Id, 'Suggestion' AS DataType, AddedOn AS DateAdded FROM `Suggestion` WHERE `SuggestionStatus` = '1' AND `AddedBy` = '".$UserProfileId."'
+
+            ORDER BY DateAdded DESC LIMIT $start,$end";
+
+
+            //echo $sql;die;
             $query = $this->db->query($sql);
             $res = $query->result_array();
 
@@ -75,12 +86,22 @@ class Leader extends CI_Controller {
                     } else if($val['DataType'] == "Event") {
                         $Data[] = array(
                                         'feedtype' => 'event',
-                                        'eventdata' => $this->Event_Model->getEventDetail($val['Id']),
+                                        'eventdata' => $this->Event_Model->getEventDetail($val['Id'], $UserProfileId),
                                         );
                     } else if($val['DataType'] == "Poll") {
                         $Data[] = array(
                                         'feedtype' => 'poll',
-                                        'polldata' => $this->Poll_Model->getPollDetail($val['Id']),
+                                        'polldata' => $this->Poll_Model->getPollDetail($val['Id'], $UserProfileId),
+                                        );
+                    } else if($val['DataType'] == "Complaint") {
+                        $Data[] = array(
+                                        'feedtype' => 'complaint',
+                                        'complaintdata' => $this->Complaint_Model->getComplaintDetail($val['Id']),
+                                        );
+                    } else if($val['DataType'] == "Suggestion") {
+                        $Data[] = array(
+                                        'feedtype' => 'suggestion',
+                                        'suggestiondata' => $this->Suggestion_Model->getSuggestionDetail($val['Id']),
                                         );
                     } else {
                         $Data = array();

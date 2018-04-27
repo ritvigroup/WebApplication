@@ -26,9 +26,6 @@
                         <div class="portlet box portlet-green">
                             <div class="portlet-header">
                                 <h1>Report</h1>
-                                <div class="actions">
-                                    <?php echo $this->payment_links; ?>
-                                </div>
                             </div>
                             <div class="portlet-body">
                                 <h3 style="text-align:right;">Wallet Balance: &#8377; <?php echo $result->MyWalletBalance;?></h3>

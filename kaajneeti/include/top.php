@@ -110,26 +110,16 @@
                     <a data-close-others="true" data-hover="dropdown" data-toggle="dropdown" class="dropdown-toggle" href="javascript:;"> <img src="<?php echo $this->session->userdata('UserProfilePic'); ?>" class="img-circle" alt=""> <span class="username username-hide-on-mobile"> <?php  $this->session->userdata('UserName'); ?> </span>
                     <i class="fa fa-angle-down"></i> </a>
                     <ul class="dropdown-menu dropdown-menu-default">
-                        <li>
-                            <a href="<?=base_url();?>profile/profile"> <i class="icon-user"></i> My Profile </a>
-
-                        </li>
-                        <li>
-                            <a href="<?=base_url();?>profile/profile"> <i class="icon-calendar"></i> My Calendar </a>
-                        </li>
-                        <li>
-                            <a href="<?=base_url();?>profile/profile"> <i class="icon-envelope-open"></i> My Inbox <span class="badge badge-danger"> 3 </span> </a>
-                        </li>
-                        <li>
-                            <a href="<?=base_url();?>profile/profile"> <i class="icon-rocket"></i> My Tasks <span class="badge badge-success"> 7 </span> </a>
-                        </li>
+                        <li><a href="<?=base_url();?>profile/profile"> <i class="icon-user"></i> My Profile </a></li>
+                        <?php /*
+                        <li><a href="<?=base_url();?>profile/profile"> <i class="icon-calendar"></i> My Calendar </a></li>
+                        <li><a href="<?=base_url();?>profile/profile"> <i class="icon-envelope-open"></i> My Inbox <span class="badge badge-danger"> 3 </span> </a></li>
+                        <li><a href="<?=base_url();?>profile/profile"> <i class="icon-rocket"></i> My Tasks <span class="badge badge-success"> 7 </span> </a></li>
                         <li class="divider"> </li>
-                        <li>
-                            <a href="<?=base_url();?>profile/profile"> <i class="icon-lock"></i> Lock Screen </a>
-                        </li>
-                        <li>
-                            <a href="<?=base_url();?>leader/logout"> <i class="icon-key"></i> Log Out </a>
-                        </li>
+                        <li><a href="<?=base_url();?>profile/profile"> <i class="icon-lock"></i> Lock Screen </a></li>
+                        <li class="divider"> </li>
+                        */ ?>
+                        <li><a href="<?=base_url();?>leader/logout"> <i class="icon-key"></i> Log Out </a></li>
                     </ul>
                 </li>
                 <!-- END USER LOGIN DROPDOWN -->
