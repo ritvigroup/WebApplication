@@ -1,4 +1,4 @@
-<form name="plan_form" method="post" action="<?php echo base_url(); ?>influence/influence" onSubmit="return false;">
+<form name="plan_form" method="post" action="<?php echo base_url(); ?>" onSubmit="return false;">
     <div class="modal-header">
         <button type="button" data-dismiss="modal" aria-hidden="true" class="close">×</button>
         <h4 id="modal-stackable-label" class="modal-title">New Team</h4>

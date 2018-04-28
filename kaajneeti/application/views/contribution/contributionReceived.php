@@ -26,7 +26,9 @@
                             
                             <div class="portlet-header">
                                 <ol class="breadcrumb page-breadcrumb">
-                                    <?php echo $this->payment_links; ?>
+                                    <li><a href="<?php echo base_url(); ?>contribution/contribution">Contribution</a>&nbsp;&nbsp;</li>
+							        <li><a href="<?php echo base_url(); ?>contribution/contributionSent">Sent</a>&nbsp;&nbsp;</li>
+							        <li class="activelink"><a href="<?php echo base_url(); ?>contribution/contributionReceived">Received</a>&nbsp;&nbsp;</li>
                                 </ol>
                             </div>
                             

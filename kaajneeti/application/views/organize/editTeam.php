@@ -1,7 +1,5 @@
 <?php
-echo '<pre>';
-print_r($SubLeaderDetail);
-echo '</pre>';
+$user_profile = $SubLeaderDetail->result;
 ?>
 <form name="plan_form" method="post" action="" onSubmit="return false;">
     <div class="modal-header">
@@ -16,13 +14,13 @@ echo '</pre>';
                     <div class="col-md-6">
                         <div class="form-group">
                             <label>First Name: </label>
-                            <input type="text" class="form-control" id="first_name" name="first_name" placeholder="First Name" required>
+                            <input type="text" class="form-control" id="first_name" name="first_name" placeholder="First Name" value="<?php echo $user_profile->FirstName; ?>" required>
                         </div>
                     </div>
                     <div class="col-md-6">
                         <div class="form-group">
                             <label>Last Name: </label>
-                            <input type="text" class="form-control" id="last_name" name="last_name" placeholder="Last Name" required>
+                            <input type="text" class="form-control" id="last_name" name="last_name" placeholder="Last Name" value="<?php echo $user_profile->LastName; ?>" required>
                         </div>
                     </div>
                 </div>
@@ -30,7 +28,7 @@ echo '</pre>';
                     <div class="col-md-6">
                         <div class="form-group">
                             <label>Email: </label>
-                            <input type="text" class="form-control" id="email" name="email" placeholder="Email Address" required>
+                            <input type="text" class="form-control" id="email" name="email" placeholder="Email Address" value="<?php echo $user_profile->Email; ?>" required>
                         </div>
                     </div>
                     <div class="col-md-6">
@@ -40,7 +38,8 @@ echo '</pre>';
                                 <?php
                                 foreach($Department->result AS $department) {
                                     if($department->DepartmentStatus == 1) {
-                                        echo '<option value="'.$department->DepartmentId.'">'.$department->DepartmentName.'</option>';
+                                        $selected_d = ($user_profile->UserDepartment == $department->DepartmentId) ? ' selected="selected"' : '';
+                                        echo '<option value="'.$department->DepartmentId.'" '.$selected_d.'>'.$department->DepartmentName.'</option>';
                                     }
                                 }
                                 ?>
@@ -58,10 +57,21 @@ echo '</pre>';
                     <div class="col-md-6">
                         <div class="form-group">
                             <label>Status: </label>
-                            <select class="form-control" id="status" name="status">
-                                <option value="1">Active</option>
+                            <select class="form-control fileUploadForm" id="status">
                                 <option value="0">In-Active</option>
+                                <option value="1" <?php if($user_profile->ProfileStatus == 1) { echo ' selected="selected"';}?>>Active</option>
                             </select>
+                        </div>
+                    </div>
+                    <input type="hidden" id="friend_user_profile_id" value="<?php echo $user_profile->UserProfileId; ?>">
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                        <?php
+                        $profile_pic = ($user_profile->ProfilePhotoPath != '') ? $user_profile->ProfilePhotoPath : base_url().'assets/images/default-user.png';
+                        ?>
+                        <img src="<?php echo $profile_pic; ?>" style="border: 1px solid #fff; box-shadow: 0 2px 3px rgba(0,0,0,0.25);width: 50px; height: 50px;" class="img-circle"/>
                         </div>
                     </div>
                 </div>
@@ -81,6 +91,7 @@ echo '</pre>';
 
     document.querySelector('.update_user').onclick = function () {
         var $this = $(this);
+        var friend_user_profile_id      = $("#friend_user_profile_id").val();
         var first_name      = $("#first_name").val();
         var last_name       = $("#last_name").val();
         var email           = $("#email").val();
@@ -98,10 +109,12 @@ echo '</pre>';
                 form_data.append('file', file);
             });
 
+            form_data.append('friend_user_profile_id', friend_user_profile_id);
             form_data.append('first_name', first_name);
             form_data.append('last_name', last_name);
             form_data.append('email', email);
             form_data.append('department', department);
+            form_data.append('status', status);
             form_data.append('update_user', 'Y');
 
             jQuery.ajax({

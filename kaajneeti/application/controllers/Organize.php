@@ -174,8 +174,10 @@ class Organize extends CI_Controller {
         }
         $_POST['user_profile_id'] = $this->session->userdata('UserProfileId');
 
-        $_POST['unique_profile_id'] = $this->uri->segment(3);
-        $json_encode = post_curl(API_CALL_PATH.'userprofile/getUserAllProfileInformationByUniqueProfileId', $this->input->post(), $this->curl);
+        $_POST['unique_profile_id']         = $this->uri->segment(3);
+        $_POST['friend_user_profile_id']    = $this->uri->segment(4);
+
+        $json_encode = post_curl(API_CALL_PATH.'userprofile/getUserprofileFriendsprofileInformationUniqueIdCheck', $this->input->post(), $this->curl);
 
         $json_decode = json_decode($json_encode);
         if(count($json_decode->result) > 0) {
@@ -217,6 +219,39 @@ class Organize extends CI_Controller {
             }
 
             $json_decode = post_curl_with_files(API_CALL_PATH.'userregister/saveUserProfile', $post_data, $this->curl);
+
+            header('Content-type: application/json');
+
+            echo $json_decode;
+
+            return false;
+        } else if($this->input->method(TRUE) == "POST" && $this->input->post('update_user') == 'Y') {
+
+            $post_data = array(
+                                'user_profile_id'   => $this->input->post('user_profile_id'),
+                                'friend_user_profile_id'    => $this->input->post('friend_user_profile_id'),
+                                'first_name'        => $this->input->post('first_name'),
+                                'last_name'         => $this->input->post('last_name'),
+                                'email'             => $this->input->post('email'),
+                                'department'        => $this->input->post('department'),
+                                'status'            => $this->input->post('status'),
+                                );
+
+            if($_FILES['file']['name'] != '') {
+
+                //$post_data = array_merge($post_data, array('file['.$i.']' => '@'.($_FILES['file']['tmp_name'][$i]).''));
+                $post_data = array_merge($post_data, array('photo' => getCurlValue($_FILES['file']['tmp_name'], $_FILES['file']['type'], $_FILES['file']['name'])));
+            }
+
+
+
+            $json_decode = post_curl_with_files(API_CALL_PATH.'userregister/updateUserProfile', $post_data, $this->curl);
+
+            // echo '<pre>';
+            // print_r($_POST);
+            // print_r($json_decode);
+            // echo '</pre>';
+            // die;
 
             header('Content-type: application/json');
 

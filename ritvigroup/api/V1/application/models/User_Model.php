@@ -289,16 +289,36 @@ class User_Model extends CI_Model {
 
     // Get User Profile User Information by Unique Id and Profile Id
     public function getUserprofileFriendsprofileInformationUniqueIdCheck($UserUniqueId, $FriendUserProfileId, $UserProfileId) {
-        
-        $profile = $this->getUserProfileInformation($FriendUserProfileId, $UserProfileId);
-        $detail = $this->getUserDetail($profile['UserId'], $UserProfileId, 0);
+        $this->db->select('UserProfileId');
+        $this->db->from($this->userProfileTbl.' AS up');
+        $this->db->join($this->userTbl.' AS u', 'up.UserId = u.UserId', 'LEFT');
+        $this->db->where('up.UserProfileId', $FriendUserProfileId);
+        $this->db->where('u.UserUniqueId', $UserUniqueId);
+        $query = $this->db->get();
+        $res_u = $query->row_array();
 
-        $return['user_profile_detail'] = array(
-                                'user_info' => $detail,
-                                'profile' => $profile,
-                            );
+        $user_profile = array();
+        if($res_u['UserProfileId'] > 0) {
+            $user_profile = $this->getUserProfileInformation($res_u['UserProfileId'], $UserProfileId);
+        }
+        return $user_profile;
+    }
 
-        return $return;
+    // Get user profile information by unique id
+    public function getUserprofileByUniqueProfileId($UserUniqueId, $UserProfileId, $user_type = 1) {
+        $this->db->select('UserProfileId');
+        $this->db->from($this->userProfileTbl.' AS up');
+        $this->db->join($this->userTbl.' AS u', 'up.UserId = u.UserId', 'LEFT');
+        $this->db->where('u.UserUniqueId', $UserUniqueId);
+        $this->db->where('up.UserTypeId', $user_type);
+        $query = $this->db->get();
+        $res_u = $query->row_array();
+
+        $user_profile = array();
+        if($res_u['UserProfileId'] > 0) {
+            $user_profile = $this->getUserProfileInformation($res_u['UserProfileId'], $UserProfileId);
+        }
+        return $user_profile;
     }
 
 
@@ -334,6 +354,7 @@ class User_Model extends CI_Model {
                                 "Gender"                        => (($res_u['Gender'] != NULL) ? $res_u['Gender'] : ""),
                                 "MaritalStatus"                 => (($res_u['MaritalStatus'] != NULL) ? $res_u['MaritalStatus'] : ""),
                                 "Email"                         => (($res_u['Email'] != NULL) ? $res_u['Email'] : ""),
+                                "UserDepartment"                => (($res_u['UserDepartment'] != NULL) ? $res_u['UserDepartment'] : "0"),
                                 "DepartmentName"                => (($res_u['DepartmentName'] != NULL) ? $res_u['DepartmentName'] : ""),
                                 "UserProfileDeviceToken"        => (($res_u['UserProfileDeviceToken'] != NULL) ? $res_u['UserProfileDeviceToken'] : ""),
                                 "PoliticalPartyId"              => (($res_u['PoliticalPartyId'] > 0) ? $res_u['PoliticalPartyId'] : "0"),
@@ -508,7 +529,7 @@ class User_Model extends CI_Model {
 
         $user_profiles = array();
         foreach($res_u AS $key => $result) {
-            $user_profiles['UserProfileCitizen'][] = $this->getUserDetailCitizen($result['UserId'], $UserProfileId);
+            $user_profiles['UserProfileCitizen'][] = $this->getUserProfileInformation($result['UserProfileId'], $UserProfileId);
         }
         return $user_profiles;
     }
@@ -568,7 +589,7 @@ class User_Model extends CI_Model {
                 $MyFavouriteLeaderYesNo = 1;
             }
 
-            $leader_detail = $this->getUserDetailLeader($result['UserId'], $UserProfileId);
+            $leader_detail = $this->getUserProfileInformation($result['UserProfileId'], $UserProfileId);
 
             $leader_detail = array_merge($leader_detail, array('MyFavouriteLeader' => $MyFavouriteLeaderYesNo));
 
@@ -616,7 +637,7 @@ class User_Model extends CI_Model {
 
         $user_profiles = array();
         foreach($res_u AS $key => $result) {
-            $user_profiles['UserProfileSubLeader'][] = $this->getUserDetailSubLeader($result['UserId'], $UserProfileId);
+            $user_profiles['UserProfileSubLeader'][] = $this->getUserProfileInformation($result['UserProfileId'], $UserProfileId);
         }
         return $user_profiles;
     }
@@ -655,14 +676,18 @@ class User_Model extends CI_Model {
             $res_u = $query->result_array();
         }
 
-        $user_profiles = array();
+        $user_profiles['UserProfileCitizen'] = array();
+        $user_profiles['UserProfileLeader'] = array();
+        $user_profiles['UserProfileSubLeader'] = array();
         foreach($res_u AS $key => $result) {
             if($result['UserTypeId'] == 1) {
-                $user_profiles['UserProfileCitizen'][] = $this->getUserDetailCitizen($result['UserId'], $UserProfileId);
-            } else if($result['UserTypeId'] == 2) {
-                $user_profiles['UserProfileLeader'][] = $this->getUserDetailLeader($result['UserId'], $UserProfileId);
-            } else if($result['UserTypeId'] == 3) {
-                $user_profiles['UserProfileSubLeader'][] = $this->getUserDetailSubLeader($result['UserId'], $UserProfileId);
+                $user_profiles['UserProfileCitizen'][] = $this->getUserProfileInformation($result['UserProfileId'], $UserProfileId);
+            }
+            if($result['UserTypeId'] == 2) {
+                $user_profiles['UserProfileLeader'][] = $this->getUserProfileInformation($result['UserProfileId'], $UserProfileId);
+            }
+            if($result['UserTypeId'] == 3) {
+                //$user_profiles['UserProfileSubLeader'][] = $this->getUserProfileInformation($result['UserProfileId'], $UserProfileId);
             }
         }
         return $user_profiles;
@@ -1436,7 +1461,7 @@ class User_Model extends CI_Model {
         $res_u = $query->result_array();
 
         foreach($res_u AS $key => $result) {
-            $my_team[] = $this->getUserProfileWithUserInformation($result['UserProfileId'], $UserProfileId);
+            $my_team[] = $this->getUserProfileInformation($result['UserProfileId'], $UserProfileId);
         }
 
         return $my_team;
@@ -1855,7 +1880,7 @@ class User_Model extends CI_Model {
 
         foreach($res_u AS $key => $result) {
             if(!@in_array($result['UserProfileId'], $user_prifile_id_array)) {
-                $follow_user[] = $this->getUserProfileWithUserInformation($result['UserProfileId'], $UserProfileId);
+                $follow_user[] = $this->getUserProfileInformation($result['UserProfileId'], $UserProfileId);
                 $user_prifile_id_array[] = $result['UserProfileId'];
             }
         }
@@ -1880,7 +1905,7 @@ class User_Model extends CI_Model {
         $res_u = $query->result_array();
         foreach($res_u AS $key => $result) {
             if(!@in_array($result['FollowUserProfileId'], $user_prifile_id_array)) {
-                $follow_user[] = $this->getUserProfileWithUserInformation($result['FollowUserProfileId'], $UserProfileId);
+                $follow_user[] = $this->getUserProfileInformation($result['FollowUserProfileId'], $UserProfileId);
                 $user_prifile_id_array[] = $result['FollowUserProfileId'];
             }
         }
@@ -1909,7 +1934,7 @@ class User_Model extends CI_Model {
 
         foreach($res_u AS $key => $result) {
             if(!@in_array($result['FriendUserProfileId'], $user_prifile_id_array)) {
-                $follow_user[] = $this->getUserProfileWithUserInformation($result['FriendUserProfileId'], $UserProfileId);
+                $follow_user[] = $this->getUserProfileInformation($result['FriendUserProfileId'], $UserProfileId);
                 $user_prifile_id_array[] = $result['FriendUserProfileId'];
             }
         }

@@ -206,18 +206,19 @@ class Userprofile extends CI_Controller {
         if($UserProfileId == "") {
             $msg = "Please select user profile";
             $error_occured = true;
+        } else if($unique_profile_id == "") {
+            $msg = "Please select unique profile";
+            $error_occured = true;
         } else if($FriendUserProfileId == "") {
             $msg = "Please select friend user profile";
             $error_occured = true;
         } else {
 
-            $res_u = $this->User_Model->getUserprofileFriendsprofileInformationUniqueIdCheck($unique_profile_id, $FriendUserProfileId, $UserProfileId);
+            $profile = $this->User_Model->getUserprofileFriendsprofileInformationUniqueIdCheck($unique_profile_id, $FriendUserProfileId, $UserProfileId);
 
-            if($res_u['user_profile_detail']['user_info']['UserId'] > 0) {
+            if($profile['UserProfileId'] > 0) {
                 
-                $profile = $res_u;
-
-                $msg = "Friend profile information found successfully";
+                $msg = "Profile information found successfully";
 
             } else {
                 $msg = "No user profile Found";
@@ -227,14 +228,57 @@ class Userprofile extends CI_Controller {
 
         if($error_occured == true) {
             $array = array(
-                            "status"        => 'failed',
-                            "message"       => $msg,
+                            "status"    => 'failed',
+                            "message"   => $msg,
                         );
         } else {
 
             $array = array(
                            "status"     => 'success',
-                           "result"    => $profile,
+                           "result"     => $profile,
+                           "message"    => $msg,
+                           );
+        }
+        displayJsonEncode($array);
+    }
+
+    // Get Userprofile Information by Unique Profile id
+    public function getUserprofileByUniqueProfileId() {
+        $error_occured = false;
+        $UserProfileId          = $this->input->post('user_profile_id');
+        $unique_profile_id      = $this->input->post('unique_profile_id');
+        $user_type              = $this->input->post('user_type');
+        
+        if($UserProfileId == "") {
+            $msg = "Please select user profile";
+            $error_occured = true;
+        } else if($unique_profile_id == "") {
+            $msg = "Please select unique profile id";
+            $error_occured = true;
+        } else {
+
+            $profile = $this->User_Model->getUserprofileByUniqueProfileId($unique_profile_id, $UserProfileId, $user_type);
+
+            if($profile['UserProfileId'] > 0) {
+
+                $msg = "Profile information found successfully";
+
+            } else {
+                $msg = "No user profile Found";
+                $error_occured = true;
+            }
+        }
+
+        if($error_occured == true) {
+            $array = array(
+                            "status"    => 'failed',
+                            "message"   => $msg,
+                        );
+        } else {
+
+            $array = array(
+                           "status"     => 'success',
+                           "result"     => $profile,
                            "message"    => $msg,
                            );
         }

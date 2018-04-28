@@ -710,6 +710,7 @@ class Userregister extends CI_Controller {
     }
 
 
+    // Creating Team From User Profile
     public function saveUserProfile() {
         $error_occured = false;
         $user_profile_id = $this->input->post('user_profile_id'); // Added By User Profile Id
@@ -803,6 +804,93 @@ class Userregister extends CI_Controller {
             $array = array(
                            "status"         => 'success',
                            "result"     => $user_info,
+                           "message"        => $msg,
+                           );
+        }
+        displayJsonEncode($array);
+    }
+
+
+    // Update Team By User Profile
+    public function updateUserProfile() {
+        $error_occured = false;
+        $user_profile_id = $this->input->post('user_profile_id'); // Added By User Profile Id
+        
+        $friend_user_profile_id = $this->input->post('friend_user_profile_id'); // Friend User Profile Id
+        $first_name             = $this->input->post('first_name'); // Created First Name
+        $last_name              = $this->input->post('last_name'); // Created last Name
+        $email                  = $this->input->post('email'); // Created Email
+        $department             = $this->input->post('department'); // Department
+        $status                 = $this->input->post('status'); // Status
+        
+        if($user_profile_id == "") {
+            $msg = "Please select user profile";
+            $error_occured = true;
+        } else if($friend_user_profile_id == "") {
+            $msg = "Please select your team profile id";
+            $error_occured = true;
+        } else if($first_name == "") {
+            $msg = "Please enter first name";
+            $error_occured = true;
+        } else if($last_name == "") {
+            $msg = "Please enter last name";
+            $error_occured = true;
+        } else if($email == "") {
+            $msg = "Please enter email";
+            $error_occured = true;
+        } else if($department == "") {
+            $msg = "Please selected department";
+            $error_occured = true;
+        } else {
+
+            $user_profile = $this->User_Model->getUserProfileInformation($friend_user_profile_id, $user_profile_id);
+
+            $updateData = array(
+                                'FirstName'                 => $first_name,
+                                'LastName'                  => $last_name,
+                                'Email'                     => $email,
+                                'UserDepartment'            => $department,
+                                'ProfileStatus'             => $status,
+                                'UpdatedBy'                 => $user_profile_id,
+                                'UpdatedOn'                 => date('Y-m-d H:i:s'),
+                            );
+
+            $this->User_Model->updateUserProfileData($friend_user_profile_id, $updateData);
+
+            if($friend_user_profile_id > 0) {
+
+                $this->User_Model->saveUserProfilePhoto('photo', $user_profile['UserId'], $friend_user_profile_id, 1);
+
+                $to      = 'rajesh1may@gmail.com';
+                $subject = 'the subject';
+                $message = 'hello';
+                $headers = 'From: webmaster@example.com' . "\r\n" .
+                    'Reply-To: webmaster@example.com' . "\r\n" .
+                    'X-Mailer: PHP/' . phpversion();
+
+                @mail($to, $subject, $message, $headers);
+
+                $user_profile = $this->User_Model->getUserProfileInformation($friend_user_profile_id, $user_profile_id);
+
+                $this->db->query("COMMIT");
+                $msg = "User profile updated successfully";
+            } else {
+                $this->db->query("ROLLBACK");
+                $msg = "Error: Problem to update user successfully";
+                $error_occured = true;
+            }
+        }
+
+        if($error_occured == true) {
+            $array = array(
+                            "status"        => 'failed',
+                            "message"       => $msg,
+                        );
+        } else {
+
+            $array = array(
+                           "status"         => 'success',
+                           "result"         => $user_profile,
                            "message"        => $msg,
                            );
         }

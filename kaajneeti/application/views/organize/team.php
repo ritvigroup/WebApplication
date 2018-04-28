@@ -25,18 +25,7 @@
                 <div class="row  border-bottom white-bg dashboard-header">
                     <div class="col-md-12">
                         <div class="portlet box">
-                            <?php /*
-                            <div class="portlet-header">
-                                <h1>My Team</h1>
-                                <div class="actions">
-                                    <a data-target="#modal-stackable" data-toggle="modal" href="javascript:void(0);" class="btn btn-info btn-xs" onClick="return newTeam();"><i class="fa fa-plus"></i>&nbsp;New Team</a>&nbsp;
-                                    <a href="<?=base_url();?>organize/fleet" class="btn btn-info btn-xs"><i class="fa fa-plus"></i>&nbsp;Fleet</a>&nbsp;
-                                    <a href="<?=base_url();?>organize/documents" class="btn btn-info btn-xs"><i class="fa fa-plus"></i>&nbsp;Documents</a>&nbsp;
-                                </div>
-                            </div>
-                            */ ?>
-
-                            <div class="portlet-header">
+                           <div class="portlet-header">
                                 <ol class="breadcrumb page-breadcrumb">
                                     <li class="activelink"><a data-target="#modal-stackable" data-toggle="modal" href="javascript:void(0);" onClick="return newTeam();">New Team</a></li>
                                     <li><a href="<?=base_url();?>organize/documents">Document</a>&nbsp;&nbsp;</li>
@@ -68,30 +57,27 @@
                                                 <tbody>
                                                 <?php foreach($MyTeam->result AS $my_team) { ?>
                                                     <?php
-                                                    $Status = ($my_team->user_profile_detail->profile->ProfileStatus == 1) ? 'Active' : 'Not Accepted';
+                                                    $Status = ($my_team->ProfileStatus == 1) ? 'Active' : 'Not Accepted';
 
-                                                    $UserProfileHrefLink = base_url().'profile/subprofile/'.$my_team->user_profile_detail->user_info->UserUniqueId.'/'.$my_team->user_profile_detail->profile->UserProfileId;
+                                                    $UserProfileHrefLink = base_url().'profile/subprofile/'.$my_team->UserUniqueId.'/'.$my_team->UserProfileId;
 
-                                                    if($my_team->user_profile_detail->profile->ProfilePhotoPath != '') {
-                                                        $profile_pic = ($my_team->user_profile_detail->profile->ProfilePhotoPath != '') ? $my_team->user_profile_detail->profile->ProfilePhotoPath : base_url().'assets/images/default-user.png';
+                                                    if($my_team->ProfilePhotoPath != '') {
+                                                        $profile_pic = ($my_team->ProfilePhotoPath != '') ? $my_team->ProfilePhotoPath : base_url().'assets/images/default-user.png';
                                                     } else {
-                                                        $profile_pic = ($my_team->user_profile_detail->user_info->ProfilePhotoPath != '') ? $my_team->user_profile_detail->user_info->ProfilePhotoPath : base_url().'assets/images/default-user.png';
+                                                        $profile_pic = ($my_team->ProfilePhotoPath != '') ? $my_team->ProfilePhotoPath : base_url().'assets/images/default-user.png';
                                                     }
 
                                                     ?>
                                                     <tr>
                                                         <td><input type="checkbox"/></td>
-                                                        <td><img
-                                                    src="<?php echo $profile_pic; ?>"
-                                                    style="border: 1px solid #fff; box-shadow: 0 2px 3px rgba(0,0,0,0.25);width: 50px; height: 50px;"
-                                                    class="img-circle"/></td>
-                                                        <td><a href="<?php echo $UserProfileHrefLink; ?>" target="_blank"><?php echo $my_team->user_profile_detail->profile->FirstName.' '.$my_team->user_profile_detail->profile->LastName; ?></a></td>
-                                                        <td><?php echo $my_team->user_profile_detail->profile->Email; ?></td>
-                                                        <td><?php echo $my_team->user_profile_detail->profile->DepartmentName; ?></td>
+                                                        <td><img src="<?php echo $profile_pic; ?>" style="border: 1px solid #fff; box-shadow: 0 2px 3px rgba(0,0,0,0.25);width: 50px; height: 50px;" class="img-circle"/></td>
+                                                        <td><a href="<?php echo $UserProfileHrefLink; ?>" target="_blank"><?php echo $my_team->FirstName.' '.$my_team->LastName; ?></a></td>
+                                                        <td><?php echo $my_team->Email; ?></td>
+                                                        <td><?php echo $my_team->DepartmentName; ?></td>
                                                         <td><?php echo $Status; ?></td>
-                                                        <td><?php echo $my_team->user_profile_detail->profile->AddedOn; ?></td>
+                                                        <td><?php echo $my_team->AddedOn; ?></td>
                                                         <td>
-                                                            <button type="button" class="btn btn-default btn-xs" data-target="#modal-stackable" data-toggle="modal" href="javascript:void(0);" onClick="return editTeam('<?php echo $my_team->user_profile_detail->user_info->UserUniqueId; ?>');"><i
+                                                            <button type="button" class="btn btn-default btn-xs" data-target="#modal-stackable" data-toggle="modal" href="javascript:void(0);" onClick="return editTeam('<?php echo $my_team->UserUniqueId; ?>', '<?php echo $my_team->UserProfileId; ?>');"><i
                                                                     class="fa fa-edit"></i>&nbsp;
                                                                 Edit
                                                             </button>
@@ -161,9 +147,9 @@
     }
 
 
-    function editTeam(unique_profile_id) {
+    function editTeam(unique_profile_id, friend_user_profile_id) {
 
-        $.post("<?php echo base_url(); ?>organize/editTeam/"+unique_profile_id, {'display': 'Y'},
+        $.post("<?php echo base_url(); ?>organize/editTeam/"+unique_profile_id+'/'+friend_user_profile_id, {'display': 'Y'},
             function (data, status) {
                 if(data != '') {
                     $('.modal-content').html(data);
