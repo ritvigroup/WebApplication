@@ -1852,7 +1852,78 @@ class User_Model extends CI_Model {
     }
 
 
-    // Get My All Followers
+    // Get My All Friends, Follower, Followings Id
+    public function getMyFriendFollowerAndFollowingUserProfileId($UserProfileId) {
+
+        $follow_user = array();
+        $user_prifile_id_array = array();
+
+        $search_text = trim($search_text);
+        // Followers
+        $sql = "SELECT ufu.*, up.UserId 
+                                        FROM ".$this->UserFollowTbl." AS ufu 
+                                        LEFT JOIN ".$this->userProfileTbl." up ON ufu.UserProfileId = up.UserProfileId
+                                        WHERE 
+                                            ufu.`FollowUserProfileId` = '".$UserProfileId."'";
+
+
+        //echo $sql.'<br>';
+        $query = $this->db->query($sql);
+
+        $res_u = $query->result_array();
+
+        foreach($res_u AS $key => $result) {
+            if(!@in_array($result['UserProfileId'], $user_prifile_id_array)) {
+                $user_prifile_id_array[] = $result['UserProfileId'];
+            }
+        }
+
+        // Followings
+        $sql = "SELECT ufu.*, up.UserId 
+                                        FROM ".$this->UserFollowTbl." AS ufu 
+                                        LEFT JOIN ".$this->userProfileTbl." up ON ufu.FollowUserProfileId = up.UserProfileId
+                                        WHERE 
+                                            ufu.`UserProfileId` = '".$UserProfileId."'";
+
+        
+        //echo $sql.'<br>';
+        $query = $this->db->query($sql);
+
+        $res_u = $query->result_array();
+        foreach($res_u AS $key => $result) {
+            if(!@in_array($result['FollowUserProfileId'], $user_prifile_id_array)) {
+                $user_prifile_id_array[] = $result['FollowUserProfileId'];
+            }
+        }
+
+
+        // Friends
+        $sql = "SELECT uf.FriendUserProfileId 
+                                        FROM ".$this->UserFriendTbl." AS uf  
+                                        LEFT JOIN ".$this->userProfileTbl." up ON uf.FriendUserProfileId = up.UserProfileId 
+                                        WHERE 
+                                            uf.`UserProfileId` = '".$UserProfileId."'
+                                        AND uf.RequestAccepted = '1'"; 
+
+        $sql .= " ORDER BY uf.RequestAcceptedOn DESC";
+        //echo $sql.'<br>';
+
+        $query = $this->db->query($sql);
+
+        $res_u = $query->result_array();
+
+        foreach($res_u AS $key => $result) {
+            if(!@in_array($result['FriendUserProfileId'], $user_prifile_id_array)) {
+                $user_prifile_id_array[] = $result['FriendUserProfileId'];
+            }
+        }
+
+        return $user_prifile_id_array;
+    }
+
+
+
+    // Get My All Followers Search
     public function searchMyFriendFollowerAndFollowing($UserProfileId, $search_text) {
 
         $follow_user = array();

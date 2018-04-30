@@ -46,7 +46,7 @@ class Contribution extends CI_Controller {
         $data = array();
       
         $_POST['user_profile_id'] = $this->session->userdata('UserProfileId');
-        $json_encode = post_curl(API_CALL_PATH.'payment/getMyAllPaymentTransactionLog', $this->input->post(), $this->curl);
+        $json_encode = post_curl(API_CALL_PATH.'payment/getMyAllPaymentAndPointTransactionLog', $this->input->post(), $this->curl);
 
         $json_decode = json_decode($json_encode);
         if(count($json_decode->result) > 0) {

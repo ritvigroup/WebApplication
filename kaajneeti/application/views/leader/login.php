@@ -43,16 +43,18 @@
             <h3>Welcome to Kaajneeti</h3>
             <p>Ab Raajneeti nahi Kaajneeti chalegi</p>
             <p>Login in. To see it in action.</p>
-                <div class="form-group">
-                    <input type="text" required="" name="username" placeholder="Username" class="form-control signin-username">
-                </div>
-                <div class="form-group">
-                    <input type="password" required="" name="password" placeholder="Password" class="form-control signin-password">
-                </div>
-                <button class="btn aqua block full-width bottom15 signin_up_button" type="submit">Login</button>
-                <a href="<?=base_url();?>leader/forgot"><small>Forgot password?</small></a>
-                <p class="text-muted text-center"><small>Do not have an account?</small></p>
-                <a href="<?=base_url();?>leader/register" class="btn btn-sm btn-white btn-block">Create an account</a>
+            	<form method="post" onsubmit="return false;">
+	                <div class="form-group">
+	                    <input type="text" required="" name="username" placeholder="Username" class="form-control signin-username">
+	                </div>
+	                <div class="form-group">
+	                    <input type="password" required="" name="password" placeholder="Password" class="form-control signin-password">
+	                </div>
+	                <button class="btn aqua block full-width bottom15 signin_up_button" type="submit">Login</button>
+	                <a href="<?=base_url();?>leader/forgot"><small>Forgot password?</small></a>
+	                <p class="text-muted text-center"><small>Do not have an account?</small></p>
+	                <a href="<?=base_url();?>leader/register" class="btn btn-sm btn-white btn-block">Create an account</a>
+                </form>
             <p class="top15"> <small>Developed at: <a href="http://www.ritvigroup.com" target="_blank">Ritvi Innovation Pvt. Ltd.</a> &copy; 2016-2017</small> </p>
         </div>
     </div>

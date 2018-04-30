@@ -27,8 +27,9 @@
                         <div class="portlet box">
                            <div class="portlet-header">
                                 <ol class="breadcrumb page-breadcrumb">
-                                    <li class="activelink"><a data-target="#modal-stackable" data-toggle="modal" href="javascript:void(0);" onClick="return newTeam();">New Team</a></li>
-                                    <li><a href="<?=base_url();?>organize/documents">Document</a>&nbsp;&nbsp;</li>
+                                    <li class="activelink"><a href="javascript:void(0);">My Team</a></li>
+                                    <li><a data-target="#modal-stackable" data-toggle="modal" href="javascript:void(0);" onClick="return newTeam();">New Team</a></li>
+                                    <?php /*<li><a href="<?=base_url();?>organize/documents">Document</a>&nbsp;&nbsp;</li>*/ ?>
                                 </ol>
                             </div>
 

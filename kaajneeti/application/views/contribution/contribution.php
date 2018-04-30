@@ -56,20 +56,20 @@
                                                     
                                                     <?php foreach($result AS $payment) { ?>
                                                         <?php
-                                                        $debit_or_credit = ($payment->DebitOrCredit == 1) ? 'Credit' : 'Debit';
-                                                        $status = ($payment->TransactionStatus == 1) ? 'Success' : 'Failed';
-                                                        $plus_minus = ($payment->DebitOrCredit == 1) ? '' : '-';
+                                                        $debit_or_credit = ($payment->paymentdata->DebitOrCredit == 1) ? 'Credit' : 'Debit';
+                                                        $status = ($payment->paymentdata->TransactionStatus == 1) ? 'Success' : 'Failed';
+                                                        $plus_minus = ($payment->paymentdata->DebitOrCredit == 1) ? '' : '-';
                                                         ?>
                                                         <tr>
-                                                            <td><?php echo $payment->TransactionId; ?></td>
-                                                            <td><?php echo $payment->PaymentGatewayName; ?></td>
-                                                            <td><?php echo $payment->TransactionComment; ?></td>
-                                                            <td><a href="<?=base_url();?>profile/profile/<?php echo $payment->PaymentBy->user_profile_detail->user_info->UserUniqueId; ?>" target="_blank"><?php echo $payment->PaymentBy->user_profile_detail->profile->FirstName.' '.$payment->PaymentBy->user_profile_detail->profile->LastName; ?></a></td>
-                                                            <td><a href="<?=base_url();?>profile/profile/<?php echo $payment->PaymentTo->user_profile_detail->user_info->UserUniqueId; ?>" target="_blank"><?php echo $payment->PaymentTo->user_profile_detail->profile->FirstName.' '.$payment->PaymentTo->user_profile_detail->profile->LastName; ?></a></td>
+                                                            <td><?php echo $payment->paymentdata->TransactionId; ?></td>
+                                                            <td><?php echo $payment->paymentdata->PaymentGatewayName; ?></td>
+                                                            <td><?php echo $payment->paymentdata->TransactionComment; ?></td>
+                                                            <td><a href="<?=base_url();?>profile/profile/<?php echo $payment->paymentdata->PaymentBy->UserUniqueId; ?>" target="_blank"><?php echo $payment->paymentdata->PaymentBy->FirstName.' '.$payment->paymentdata->PaymentBy->LastName; ?></a></td>
+                                                            <td><a href="<?=base_url();?>profile/profile/<?php echo $payment->paymentdata->PaymentTo->UserUniqueId; ?>" target="_blank"><?php echo $payment->paymentdata->PaymentTo->FirstName.' '.$payment->paymentdata->PaymentTo->LastName; ?></a></td>
                                                             <td><?php echo $debit_or_credit; ?></td>
-                                                            <td><?php echo $plus_minus; ?> &#8377; <?php echo $payment->TransactionAmount; ?></td>
+                                                            <td><?php echo $plus_minus; ?> &#8377; <?php echo $payment->paymentdata->TransactionAmount; ?></td>
                                                             <td><?php echo $status; ?></td>
-                                                            <td><?php echo $payment->AddedOn; ?></td>
+                                                            <td><?php echo $payment->paymentdata->AddedOn; ?></td>
                                                         </tr>
                                                     <?php } ?>
                                                     

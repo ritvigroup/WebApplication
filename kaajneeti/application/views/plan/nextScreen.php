@@ -4,6 +4,7 @@
 
 <form name="create_plan_form" id="create_plan_form" method="post" action="" onSubmit="return false;">
 <?php if($next_screen == "" || $next_screen == 0) { ?>
+
 <div class="modal-header" style="background: #6989ec; color:#fff;">
     <button type="button" data-dismiss="modal" aria-hidden="true" class="close">×</button>
     <h4 id="modal-stackable-label" class="modal-title">What's your plan name</h4>
@@ -16,7 +17,9 @@
         </div>
     </div>
 </div>
+
 <?php } else if($next_screen == 1) { ?>
+
 <div class="modal-header" style="background: #6989ec; color:#fff;">
     <button type="button" data-dismiss="modal" aria-hidden="true" class="close">×</button>
     <h4 id="modal-stackable-label" class="modal-title">Tell us about your GOAL</h4>
@@ -26,32 +29,35 @@
         <div class="panel-heading"><i class="fa fa-bullseye fa-2x" aria-hidden="true" style="color:#6b736c;"></i>  Goal</div>
         <div class="panel-body">
             <h4 style="color:#000; font-weight: 550;">What do you want to be?</h4>
-            <input type="text" data-tabindex="1" class="form-control mbm" id="plan_title" name="plan_title" placeholder="Enter Description" style="margin-top: 20px;">
+            
+            <div class="col-md-12">
+                <div class="form-group">
+                    <input type="text" data-tabindex="1" class="form-control mbm" id="plan_title" name="plan_title" placeholder="Enter Description" style="margin-top: 20px;">
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label class="col-md-2 control-label">Start Date</label>
+                    <div class="input-group date form_datetime col-md-8" data-date-format="dd MM yyyy HH:ii p" data-link-field="dtp_input1">
+                        <input class="form-control" size="25" id="start_date" name="start_date" type="text" value="" readonly>
+                        <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span> <span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
+                    </div>
+                    <input type="hidden" id="dtp_input1" value="" />
+                    <br/>
+                </div>
+            </div>
 
-                     <div class="form-group" style="margin-top: 50px;"><label class="col-md-3 control-label">Start Date
-                                            </label>
-
-                                            <div class="col-md-3">
-                                                <div class="input-group"><input type="text"
-                                                                                class="datepicker form-control"/>
-
-                                                    <div class="input-group-addon"><i class="fa fa-calendar"></i></div>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                            <div class="form-group"><label class="col-md-3 control-label">End Date
-                                            </label>
-
-                                            <div class="col-md-3">
-                                                <div class="input-group"><input type="text"
-                                                                                class="datepicker form-control"/>
-
-                                                    <div class="input-group-addon"><i class="fa fa-calendar"></i></div>
-                                                </div>
-                                            </div>
-                                        </div>
-     
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label class="col-md-2 control-label">End Date</label>
+                    <div class="input-group date form_datetime col-md-8" data-date-format="dd MM yyyy HH:ii p" data-link-field="dtp_input1">
+                        <input class="form-control" size="25" id="end_date" name="end_date" type="text" value="" readonly>
+                        <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span> <span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
+                    </div>
+                    <input type="hidden" id="dtp_input1" value="" />
+                    <br/>
+                </div>
+            </div>     
 
         </div>
     </div>

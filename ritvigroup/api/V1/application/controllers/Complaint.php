@@ -402,7 +402,19 @@ class Complaint extends CI_Controller {
             //$associated_complaints = $this->Complaint_Model->getAllComplaintWhereMyselfAssociated($UserProfileId);
 
             //$complaints = array_merge($complaints, $associated_complaints);
+
+            
+
             if(count($complaints) > 0) {
+
+                $complaint = array();
+
+                foreach($complaints AS $complaint_arr) {
+                    $complaint[] = array(
+                                        'feedtype' => 'complaint',
+                                        'complaintdata' => $complaint_arr,
+                                        );
+                }
                 $msg = "Complaint fetched successfully";
             } else {
                 $msg = "No complaint added by you";
@@ -419,7 +431,7 @@ class Complaint extends CI_Controller {
 
             $array = array(
                            "status"     => 'success',
-                           "result"     => $complaints,
+                           "result"     => $complaint,
                            "message"    => $msg,
                            );
         }
@@ -439,6 +451,15 @@ class Complaint extends CI_Controller {
 
             $complaints = $this->Complaint_Model->getAllComplaintWhereMyselfAssociated($UserProfileId);
             if(count($complaints) > 0) {
+
+                $complaint = array();
+
+                foreach($complaints AS $complaint_arr) {
+                    $complaint[] = array(
+                                        'feedtype' => 'complaint',
+                                        'complaintdata' => $complaint_arr,
+                                        );
+                }
                 $msg = "Complaint fetched successfully";
             } else {
                 $msg = "No complaint added by you";
@@ -454,9 +475,9 @@ class Complaint extends CI_Controller {
         } else {
 
             $array = array(
-                           "status"       => 'success',
-                           "result"   => $complaints,
-                           "message"      => $msg,
+                           "status"     => 'success',
+                           "result"     => $complaint,
+                           "message"    => $msg,
                            );
         }
         displayJsonEncode($array);
