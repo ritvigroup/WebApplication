@@ -31,6 +31,81 @@ class Search extends CI_Controller {
     }
 
 
+    // Get All Educations of Users
+    public function getAllEducactionsAddedByAnyUser() {
+        $UserProfileId  = $this->input->post('user_profile_id');
+        $search_for     = $this->input->post('search_for'); 
+        $search         = $this->input->post('q'); 
+        
+        if($UserProfileId == "") {
+            $msg = "Please select user profile";
+            $error_occured = true;
+        } else {
+            $education_list = $this->User_Model->getAllEducactionsAddedByAnyUser($UserProfileId, $search_for, $search);
+
+            if(count($education_list) > 0) {
+                $msg = "Education list found";
+            } else {
+                $msg = "No any education found";
+                $error_occured = true;
+            }
+        }
+
+        if($error_occured == true) {
+            $array = array(
+                            "status"        => 'failed',
+                            "message"       => $msg,
+                        );
+        } else {
+
+            $array = array(
+                           "status"   => 'success',
+                           "result"   => $education_list,
+                           "message"  => $msg,
+                           );
+        }
+        displayJsonEncode($array);
+    }
+
+
+    // Get All Work of Users
+    public function getAllWorkAddedByAnyUser() {
+        $UserProfileId  = $this->input->post('user_profile_id');
+        $search_for     = $this->input->post('search_for'); 
+        $search         = $this->input->post('q'); 
+        
+        if($UserProfileId == "") {
+            $msg = "Please select user profile";
+            $error_occured = true;
+        } else {
+            $work_list = $this->User_Model->getAllWorkAddedByAnyUser($UserProfileId, $search_for, $search);
+
+            if(count($work_list) > 0) {
+                $msg = "Work list found";
+            } else {
+                $msg = "No any work found";
+                $error_occured = true;
+            }
+        }
+
+        if($error_occured == true) {
+            $array = array(
+                            "status"        => 'failed',
+                            "message"       => $msg,
+                        );
+        } else {
+
+            $array = array(
+                           "status"   => 'success',
+                           "result"   => $work_list,
+                           "message"  => $msg,
+                           );
+        }
+        displayJsonEncode($array);
+    }
+
+
+    // Get All Search For Whole Application
     public function getAllSearch() {
         $error_occured = false;
 
@@ -60,9 +135,9 @@ class Search extends CI_Controller {
             
             $result['Event'] = array();
             if($search_in == 'all' || $search_in == 'event') {
-                $sql = "SELECT EventId AS Id, 'Event' AS DataType, AddedOn AS DateAdded FROM `Event` WHERE `StartDate` <= '".date('Y-m-d H:i:s')."' AND `EndDate` >= '".date('Y-m-d H:i:s')."' AND `EventStatus` = '1' AND (`EventName` LIKE '%".$search."%' OR `EventDescription` LIKE '%".$search."%') AND `AddedBy` = '".$UserProfileId."' ";
+                $sql = "SELECT EventId AS Id, 'Event' AS DataType, AddedOn AS DateAdded FROM `Event` WHERE `EventStatus` = '1' AND (`EventName` LIKE '%".$search."%' OR `EventDescription` LIKE '%".$search."%') AND `AddedBy` = '".$UserProfileId."' ";
                 if(count($my_friend_user_profile_id) > 0) {
-                    $sql .= " UNION SELECT EventId AS Id, 'Event' AS DataType, AddedOn AS DateAdded FROM `Event` WHERE `StartDate` <= '".date('Y-m-d H:i:s')."' AND `EndDate` >= '".date('Y-m-d H:i:s')."' AND `EventStatus` = '1' AND (`EventName` LIKE '%".$search."%' OR `EventDescription` LIKE '%".$search."%') AND `AddedBy` IN (".implode(',', $my_friend_user_profile_id).") ";
+                    $sql .= " UNION SELECT EventId AS Id, 'Event' AS DataType, AddedOn AS DateAdded FROM `Event` WHERE `EventStatus` = '1' AND (`EventName` LIKE '%".$search."%' OR `EventDescription` LIKE '%".$search."%') AND `AddedBy` IN (".implode(',', $my_friend_user_profile_id).") ";
                 }
                 $sql .= " ORDER BY DateAdded DESC LIMIT $start,$end";
                 $query = $this->db->query($sql);
@@ -154,7 +229,7 @@ class Search extends CI_Controller {
 
             $result['Profile'] = array();
             if($search_in == 'all' || $search_in == 'profile') {
-                $sql = "SELECT UserProfileId AS Id, 'Profile' AS DataType, AddedOn AS DateAdded FROM `UserProfile` WHERE `ProfileStatus` = '1' AND (`FirstName` LIKE '%".$search."%' OR `LastName` LIKE '%".$search."%') AND `AddedBy` = '".$UserProfileId."'  ";
+                $sql = "SELECT UserProfileId AS Id, 'Profile' AS DataType, AddedOn AS DateAdded FROM `UserProfile` WHERE `ProfileStatus` = '1' AND (`FirstName` LIKE '%".$search."%' OR `LastName` LIKE '%".$search."%') ";
                 if(count($my_friend_user_profile_id) > 0) {
                     //$sql .= " UNION SELECT UserProfileId AS Id, 'Profile' AS DataType, AddedOn AS DateAdded FROM `UserProfile` WHERE `ProfileStatus` = '1' AND (`FirstName` LIKE '%".$search."%' OR `LastName` LIKE '%".$search."%') AND `AddedBy`  IN (".implode(',', $my_friend_user_profile_id).") ";
                 }
@@ -198,15 +273,15 @@ class Search extends CI_Controller {
     }
 
 
-    public function getAllFriendHomePageData() {
+    // Get All Search Filter for People Result
+    public function getAllSearchFilterForPeople() {
+
         $error_occured = false;
 
         $UserId                 = $this->input->post('user_id');
         $UserProfileId          = $this->input->post('user_profile_id');
-        $FriendUserProfileId    = $this->input->post('friend_user_profile_id');
-        $start                  = (($this->input->post('start') > 0) ? $this->input->post('start') : 0);
-        $end                    = (($this->input->post('end') > 0) ? $this->input->post('end') : 10);
 
+        $result = array();
        
         if($UserId == "") {
             $msg = "Please select user";
@@ -217,66 +292,43 @@ class Search extends CI_Controller {
         } else {
         
             $result = array();
-            $sql = "
-            
-            SELECT EventId AS Id, 'Event' AS DataType, AddedOn AS DateAdded FROM `Event` WHERE `StartDate` <= '".date('Y-m-d H:i:s')."' AND `EndDate` >= '".date('Y-m-d H:i:s')."' AND `EventPrivacy` = '1' AND `EventStatus` = '1' AND `AddedBy` = '".$FriendUserProfileId."'
+            $result['Location'] = array();
+            $result['Qualification'] = array();
+            $result['Work'] = array();
+            $sql = "SELECT Address, City, State, Landmark, Country FROM `UserProfileAddress` WHERE `UserProfileId` = '".$UserProfileId."' AND `Status` = '1' GROUP BY Address, City, State, Landmark, Country ORDER BY Address";
 
-            UNION 
-
-            SELECT PollId AS Id, 'Poll' AS DataType, AddedOn AS DateAdded FROM `Poll` WHERE `ValidFromDate` <= '".date('Y-m-d')."' AND `ValidEndDate` >= '".date('Y-m-d')."' AND `PollPrivacy` = '1' AND `PollStatus` = '1' AND `AddedBy` = '".$FriendUserProfileId."'
-            UNION 
-
-            SELECT PostId AS Id, 'Post' AS DataType, AddedOn AS DateAdded FROM `Post` WHERE `PostStatus` = '1' AND `PostPrivacy` = '1' AND `UserProfileId` = '".$FriendUserProfileId."'
-
-            UNION 
-
-            SELECT ComplaintId AS Id, 'Complaint' AS DataType, AddedOn AS DateAdded FROM `Complaint` WHERE `ComplaintStatus` = '1' AND `ComplaintPrivacy` = '1' AND `AddedBy` = '".$FriendUserProfileId."'
-
-            ORDER BY DateAdded DESC LIMIT $start,$end";
-
-
-            //echo $sql;die;
             $query = $this->db->query($sql);
             $res = $query->result_array();
 
             if(count($res) > 0) {
                 foreach($res AS $key => $val) {
-
-                    if($val['DataType'] == "Post") {
-                        $Data[] = array(
-                                        'feedtype' => 'post',
-                                        'postdata' => $this->Post_Model->getPostDetail($val['Id']),
-                                        );
-                    } else if($val['DataType'] == "Event") {
-                        $Data[] = array(
-                                        'feedtype' => 'event',
-                                        'eventdata' => $this->Event_Model->getEventDetail($val['Id']),
-                                        );
-                    } else if($val['DataType'] == "Poll") {
-                        $Data[] = array(
-                                        'feedtype' => 'poll',
-                                        'polldata' => $this->Poll_Model->getPollDetail($val['Id']),
-                                        );
-                    } else if($val['DataType'] == "Complaint") {
-                        $Data[] = array(
-                                        'feedtype' => 'complaint',
-                                        'complaintdata' => $this->Complaint_Model->getComplaintDetail($val['Id']),
-                                        );
-                    } else if($val['DataType'] == "Suggestion") {
-                        $Data[] = array(
-                                        'feedtype' => 'suggestion',
-                                        'suggestiondata' => $this->Suggestion_Model->getSuggestionDetail($val['Id']),
-                                        );
-                    } else {
-                        $Data = array();
-                    }
-                    $result = $Data;
+                    $result['Location'][$key] = $val;
                 }
-                $msg = "Friend profile data found";
-            } else {
-                $msg = "No post found";
-                $error_occured = true;
             }
+
+            $sql = "SELECT Qualification, QualificationLocation, QualificationUniversity FROM `UserProfileEducation` WHERE `UserProfileId` = '".$UserProfileId."' AND `Status` = '1' GROUP BY Qualification, QualificationLocation, QualificationUniversity ORDER BY Qualification";
+
+            $query = $this->db->query($sql);
+            $res = $query->result_array();
+
+            if(count($res) > 0) {
+                foreach($res AS $key => $val) {
+                    $result['Qualification'][$key] = $val;
+                }
+            }
+
+            $sql = "SELECT WorkPosition, WorkPlace, WorkLocation FROM `UserProfileWork` WHERE `UserProfileId` = '".$UserProfileId."' AND `Status` = '1' GROUP BY WorkPosition, WorkPlace, WorkLocation ORDER BY WorkPosition";
+
+            $query = $this->db->query($sql);
+            $res = $query->result_array();
+
+            if(count($res) > 0) {
+                foreach($res AS $key => $val) {
+                    $result['Work'][$key] = $val;
+                }
+            }
+
+            $msg = "Filters found";
         }
 
         if($error_occured == true) {
@@ -293,6 +345,7 @@ class Search extends CI_Controller {
                            );
         }
         displayJsonEncode($array);
+
     }
 
 }

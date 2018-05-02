@@ -13,7 +13,7 @@
     <div class="panel panel-white">
         <div class="panel-heading " style="border-bottom:0px solid #a0a0a2 !important;">What do you want to call it?</div>
         <div class="panel-body">
-            <input type="text" data-tabindex="1" class="form-control mbm" id="plan_title" name="plan_title" placeholder="Enter description">
+            <input type="text" data-tabindex="1" class="form-control mbm" id="plan_title" name="plan_title" placeholder="Enter your plan name">
         </div>
     </div>
 </div>
@@ -32,7 +32,7 @@
             
             <div class="col-md-12">
                 <div class="form-group">
-                    <input type="text" data-tabindex="1" class="form-control mbm" id="plan_title" name="plan_title" placeholder="Enter Description" style="margin-top: 20px;">
+                    <input type="text" data-tabindex="1" class="form-control mbm" id="plan_goal" name="plan_goal" placeholder="Enter your goal" style="margin-top: 20px;">
                 </div>
             </div>
             <div class="col-md-6">
@@ -63,41 +63,54 @@
     </div>
 </div>
 <?php } else if($next_screen == 2) { ?>
+
 <div class="modal-header" style="background: #6989ec; color:#fff;">
     <button type="button" data-dismiss="modal" aria-hidden="true" class="close">×</button>
     <h4 id="modal-stackable-label" class="modal-title">Let's define your Geography</h4>
 </div>
+
 <div class="modal-body">
     <div class="panel panel-white" style="border-color: transparent;">
         <div class="panel-heading" style="color:#000; font-weight: 550;"> <i class="fa fa-map-marker fa-2x" style="color:#6b736c;"></i>  Geography?</div>
         <div class="panel-body">
-            <div class="col-md-6">
-                <label for="inputUsername" class="control-label target-area">Target Area
-                                                            <span class="require">*</span></label>
-                        <div class="input-icon right"><i class="fa fa-location-arrow"></i><input type="text" placeholder="Please enter your area" class="form-control" style="margin-top: 10px;"></div>
-                                                            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <label for="inputUsername" class="control-label target-area">Target Area
+                        <span class="require">*</span></label>
+                    <div class="input-icon right"><i class="fa fa-location-arrow"></i><input type="text" id="target_area" name="target_area" placeholder="Please enter your area" class="form-control controls" style="margin-top: 10px;"></div>
+                </div>
 
-                                                            <div class="col-md-6">
-                <label for="inputUsername" class="control-label target-area" >Specific Area
-                                                            <span class="require">*</span></label>
-                        <div class="input-icon right"><i class="fa fa-location-arrow"></i><input type="text" placeholder="Please enter your area" class="form-control" style="margin-top: 10px;"></div>
-                                                            </div>
+                <div class="col-md-6">
+                    <label for="inputUsername" class="control-label target-area" >Specific Area
+                        <span class="require">*</span></label>
+                        <div class="input-icon right"><i class="fa fa-location-arrow"></i><input type="text" id="target_specific_area" name="target_specific_area" placeholder="Please specify your area" class="form-control controls" style="margin-top: 10px;"></div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-12">
+                    <div id="map"></div>
+                </div>
+            </div>
 
         </div>
     </div>
 </div>
+
 <?php } else if($next_screen == 3) { ?>
+
 <div class="modal-header">
     <button type="button" data-dismiss="modal" aria-hidden="true" class="close">×</button>
     <h4 id="modal-stackable-label" class="modal-title">Let's begin with your goal 3</h4>
 </div>
 <div class="modal-body">
     <div class="panel panel-white">
-             <div class="panel-body">
+        <div class="panel-body">
             <div style="width: 100%"><iframe width="100%" height="200" src="https://maps.google.com/maps?width=100%&height=600&hl=en&q=noida+(Ritvi%20group)&ie=UTF8&t=&z=14&iwloc=B&output=embed" frameborder="0" scrolling="no" marginheight="0" marginwidth="0"><a href="https://www.mapsdirections.info/en/custom-google-maps/">Create a custom Google Map</a> by <a href="https://www.mapsdirections.info/en/">Measure area on map</a></iframe></div><br />
         </div>
     </div>
 </div>
+
 <?php } else if($next_screen == 4) { ?>
 <div class="modal-header" style="background: #6989ec; color:#fff;">
     <button type="button" data-dismiss="modal" aria-hidden="true" class="close">×</button>
@@ -226,7 +239,7 @@
 
                                             <h4 class="target-area" style="margin-top: 14px;">What do you want to call them?</h4>
 
-            <input type="text" data-tabindex="1" class="form-control mbm" id="plan_title" name="plan_title" placeholder="Enter a name or description" style="margin-top: 20px;">
+            <input type="text" data-tabindex="1" class="form-control mbm" id="plan_title1" name="plan_title1" placeholder="Enter a name or description" style="margin-top: 20px;">
                                                    </div>
 
                                  
@@ -268,11 +281,11 @@
                                         </div>
                             <h4 class="target-area target-area3">How many emplyees in this group?</h4>
 
-            <input type="text" data-tabindex="1" class="form-control mbm target-area3" id="plan_title" name="plan_title" placeholder="Enter contstant number">
+            <input type="text" data-tabindex="1" class="form-control mbm target-area3" id="plan_title2" name="plan_title2" placeholder="Enter contstant number">
 
                             <h4 class="target-area target-area3">What do you want to call them?</h4>
 
-            <input type="text" data-tabindex="1" class="form-control mbm target-area3" id="plan_title" name="plan_title" placeholder="Enter a name or description">
+            <input type="text" data-tabindex="1" class="form-control mbm target-area3" id="plan_title3" name="plan_title3" placeholder="Enter a name or description">
                                                    </div>
 
                                  

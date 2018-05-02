@@ -2073,5 +2073,110 @@ class User_Model extends CI_Model {
         }
     }
 
+
+    // search all education added by any user
+    public function getAllEducactionsAddedByAnyUser($UserProfileId, $search_for, $search) {
+
+        $result = array();
+        if($search_for == 'qualification') {
+
+            $sql = "SELECT Qualification FROM `UserProfileEducation` WHERE `Status` = '1' AND `Qualification` LIKE '%".$search."%' GROUP BY Qualification ORDER BY Qualification LIMIT 0, 20";
+
+            $query = $this->db->query($sql);
+            $res = $query->result_array();
+
+            if(count($res) > 0) {
+                foreach($res AS $key => $val) {
+                    $result[] = $val['Qualification'];
+                }
+            }
+            return $result;
+        }
+
+
+        if($search_for == 'location') {
+
+            $sql = "SELECT QualificationLocation FROM `UserProfileEducation` WHERE `Status` = '1' AND `QualificationLocation` LIKE '%".$search."%' GROUP BY QualificationLocation ORDER BY QualificationLocation LIMIT 0, 20";
+
+            $query = $this->db->query($sql);
+            $res = $query->result_array();
+
+            if(count($res) > 0) {
+                foreach($res AS $key => $val) {
+                    $result[] = $val['QualificationLocation'];
+                }
+            }
+            return $result;
+        }
+
+
+        if($search_for == 'university') {
+
+            $sql = "SELECT QualificationUniversity FROM `UserProfileEducation` WHERE `Status` = '1' AND `QualificationUniversity` LIKE '%".$search."%' GROUP BY QualificationUniversity ORDER BY QualificationUniversity LIMIT 0, 20";
+
+            $query = $this->db->query($sql);
+            $res = $query->result_array();
+
+            if(count($res) > 0) {
+                foreach($res AS $key => $val) {
+                    $result[] = $val['QualificationUniversity'];
+                }
+            }
+            return $result;
+        }
+    }
+
+
+    // search all work added by any user
+    public function getAllWorkAddedByAnyUser($UserProfileId, $search_for, $search) {
+
+        $result = array();
+        if($search_for == 'work') {
+
+            $sql = "SELECT WorkPosition FROM `UserProfileWork` WHERE `Status` = '1' AND `WorkPosition` LIKE '%".$search."%' GROUP BY WorkPosition ORDER BY WorkPosition LIMIT 0, 20";
+
+            $query = $this->db->query($sql);
+            $res = $query->result_array();
+
+            if(count($res) > 0) {
+                foreach($res AS $key => $val) {
+                    $result[] = $val['WorkPosition'];
+                }
+            }
+            return $result;
+        }
+
+
+        if($search_for == 'place') {
+            $sql = "SELECT WorkPlace FROM `UserProfileWork` WHERE `Status` = '1' AND `WorkPlace` LIKE '%".$search."%' GROUP BY WorkPlace ORDER BY WorkPlace LIMIT 0, 20";
+
+            $query = $this->db->query($sql);
+            $res = $query->result_array();
+
+            if(count($res) > 0) {
+                foreach($res AS $key => $val) {
+                    $result[] = $val['WorkPlace'];
+                }
+            }
+            return $result;
+        }
+
+
+        if($search_for == 'location') {
+
+            $sql = "SELECT WorkLocation FROM `UserProfileWork` WHERE `Status` = '1' AND `WorkLocation` LIKE '%".$search."%' GROUP BY WorkLocation ORDER BY WorkLocation LIMIT 0, 20";
+
+            $query = $this->db->query($sql);
+            $res = $query->result_array();
+
+            if(count($res) > 0) {
+                foreach($res AS $key => $val) {
+                    $result[] = $val['WorkLocation'];
+                }
+            }
+            return $result;
+        }
+    }
+
     
 }

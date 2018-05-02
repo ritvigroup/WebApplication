@@ -63,13 +63,28 @@ class Friendgroup_Model extends CI_Model {
         
             if($group_member[$i] > 0) {
 
-                $insertData = array(
-                                    'FriendGroupId'     => $FriendGroupId,
-                                    'UserProfileId'     => $group_member[$i],
-                                    'AddedBy'           => $UserProfileId,
-                                    'AddedOn'           => date('Y-m-d H:i:s'),
-                                    );
-                $this->db->insert($this->FriendGroupMemberTbl, $insertData);
+                $sql = "SELECT * FROM ".$this->FriendGroupMemberTbl." WHERE FriendGroupId = '".$FriendGroupId."' AND `UserProfileId` = '".$group_member[$i]."'";
+                $query = $this->db->query($sql);
+
+                $num = $query->num_rows();
+                if($num > 0) {
+
+                } else {
+
+                    $IsAdmin = 0;
+                    if($UserProfileId == $group_member[$i]) {
+                        $IsAdmin = 1;
+                    }
+
+                    $insertData = array(
+                                        'FriendGroupId'     => $FriendGroupId,
+                                        'UserProfileId'     => $group_member[$i],
+                                        'IsAdmin'           => $IsAdmin,
+                                        'AddedBy'           => $UserProfileId,
+                                        'AddedOn'           => date('Y-m-d H:i:s'),
+                                        );
+                    $this->db->insert($this->FriendGroupMemberTbl, $insertData);
+                }
             }
         }
         return true;
@@ -180,6 +195,33 @@ class Friendgroup_Model extends CI_Model {
             $res = $query->row_array();
 
             if($res['FriendGroupMemberId'] > 0) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+
+    public  function updateMemberAsGroupAdmin($FriendGroupId, $UserProfileId, $member_id) {
+        $friend_group = array();
+        if(isset($FriendGroupId) && $FriendGroupId > 0) {
+
+            $this->db->select('FriendGroupMemberId');
+            $this->db->from($this->FriendGroupMemberTbl);
+            $this->db->where('FriendGroupId', $FriendGroupId);
+            $this->db->where('UserProfileId', $member_id);
+            $query = $this->db->get();
+
+            $res = $query->row_array();
+
+            if($res['FriendGroupMemberId'] > 0) {
+                $this->db->where('FriendGroupId', $FriendGroupId);
+                $this->db->where('UserProfileId', $member_id);
+
+                $updateData = array(
+                                    'IsAdmin' => 1
+                                    );
+                $this->db->update($this->FriendGroupMemberTbl);
                 return true;
             }
         }

@@ -193,6 +193,58 @@ class Friendgroup extends CI_Controller {
         displayJsonEncode($array);
     }
 
+    // Make Group Admin of Group
+    public function updateMemberAsGroupAdmin() {
+        $error_occured = false;
+
+        $UserProfileId      = $this->input->post('user_profile_id');
+        $FriendGroupId      = $this->input->post('group_id');
+        $member_id          = $this->input->post('member_id');
+        
+        if($UserProfileId == "") {
+            $msg = "Please select your profile";
+            $error_occured = true;
+        } else if($FriendGroupId == '') {
+            $msg = "Please select group";
+            $error_occured = true;
+        } else if($member_id == '') {
+            $msg = "Please select member";
+            $error_occured = true;
+        } else {
+
+            $this->db->query("BEGIN");
+
+            $update_member = $this->Friendgroup_Model->updateMemberAsGroupAdmin($FriendGroupId, $UserProfileId, $member_id);
+
+            if($update_member == true) { 
+                $this->db->query("COMMIT");
+                
+                $friend_group_detail = $this->Friendgroup_Model->getFriendgroupDetail($FriendGroupId, $UserProfileId);
+
+                $msg = "Group memeber admin applied successfully";
+            } else {
+                $this->db->query("ROLLBACK");
+                $msg = "Not able to update member as group admin";
+                $error_occured = true;
+            }
+        }
+
+        if($error_occured == true) {
+            $array = array(
+                            "status"    => 'failed',
+                            "message"   => $msg,
+                        );
+        } else {
+
+            $array = array(
+                           "status"     => 'success',
+                           "result"     => $friend_group_detail,
+                           "message"    => $msg,
+                           );
+        }
+        displayJsonEncode($array);
+    }
+
     // Update Friend Group
     public function updateFriendGroup() {
         $error_occured = false;
