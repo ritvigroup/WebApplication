@@ -385,7 +385,7 @@ class Userlogin extends CI_Controller {
 		} else {
 
 			// otp code
-			$otp_message = "Your one time verification code for Ritvi Group is ".$otp;
+			$otp_message = $otp." is the OTP verifying your mobile with Kaajneeti";
 			$otp_sent = sendMessageToPhone($mobile, $otp_message);
 
 			$array = array(

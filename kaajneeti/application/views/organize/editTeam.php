@@ -58,8 +58,9 @@ $user_profile = $SubLeaderDetail->result;
                         <div class="form-group">
                             <label>Status: </label>
                             <select class="form-control fileUploadForm" id="status">
-                                <option value="0">In-Active</option>
+                                <option value="2">In-Active</option>
                                 <option value="1" <?php if($user_profile->ProfileStatus == 1) { echo ' selected="selected"';}?>>Active</option>
+                                <option value="-1">Delete</option>
                             </select>
                         </div>
                     </div>

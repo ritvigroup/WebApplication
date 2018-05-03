@@ -101,7 +101,61 @@
                                         <?php if(count($result) > 0) {?>
                                             <?php foreach($result AS $user) { ?>
                                                 
-                                                <?php $this->CI->showUser($user); ?>
+                                                <?php
+
+                                                $ProfilePhotoPath = ($user->ProfilePhotoPath != '') ? $user->ProfilePhotoPath : base_url().'assets/images/default-user.png';
+        
+                                                $Gender = ($user->Gender == 1) ? 'Male' : (($user->Gender == 2) ? 'Female' : 'Other');
+
+                                                $UserProfileHrefLink = base_url().'profile/profile/'.$user->UserUniqueId;
+
+                                                ?>
+                                                <div class="note note-info" style="float: left;" id="request_id_<?php echo $user->UserProfileId; ?>">
+                                                    <div style="float: left;">
+                                                        <span class="img-shadow"><img src="<?php echo $ProfilePhotoPath; ?>" style="border: 1px solid #fff; box-shadow: 0 2px 3px rgba(0,0,0,0.25);width: 80px; height: 80px; margin-right: 15px;" class="img-circle"/></span>
+                                                    </div>
+                                                    <div style="float: left;">
+                                                        <h4 class="block"><a href="<?php echo $UserProfileHrefLink; ?>" target="_blank"><?php echo $user->FirstName.' '.$user->LastName?></a></h4>
+                                                        <p><?php echo $user->Email; ?></p>
+                                                        <p><?php echo $Gender; ?>, <span class="label label-warning"><?php echo $user->PoliticalPartyName; ?></span>, 
+
+                                                        <?php echo date('d-M-Y h:i A', strtotime($user->RequestSentOn)); ?></p>
+                                                    </div>
+                                                    <div style="float: right;">
+                                                        <button type="button" class="btn btn-danger" onClick="return cancelRequest(<?php echo $user->UserProfileId; ?>);"><i class="fa fa-trash-o"></i>&nbsp; Delete</button>
+
+                                                        <?php if($user->MyFriend == 0) { ?>
+                                                        <button type="button" class="btn btn-success btn-xs" onClick="return sendRequest(<?php echo $user->UserProfileId; ?>);"><i
+                                                                class="fa fa-plus-o"></i>&nbsp;
+                                                            Add Friend
+                                                        </button>
+                                                        <?php } else if($user->MyFriend == 1) { ?>
+                                                        <button type="button" class="btn btn-danger btn-xs" onClick="return cancelRequest(<?php echo $user->UserProfileId; ?>);"><i
+                                                                class="fa fa-trash-o"></i>&nbsp;
+                                                            Cancel Request
+                                                        </button>
+                                                        <?php } else if($user->MyFriend == 2) { ?>
+                                                        <button type="button" class="btn btn-success btn-xs" onClick="return acceptRequest(<?php echo $user->UserProfileId; ?>);"><i
+                                                                class="fa fa-plus-o"></i>&nbsp;
+                                                            Accept Request
+                                                        </button>
+                                                        <button type="button" class="btn btn-danger btn-xs" onClick="return deleteRequest(<?php echo $user->UserProfileId; ?>);"><i
+                                                                class="fa fa-trash-o"></i>&nbsp;
+                                                            Delete Request
+                                                        </button>
+                                                        <?php } else if($user->MyFriend == 3) { ?>
+                                                        <button type="button" class="btn btn-danger btn-xs" onClick="return unFriend(<?php echo $user->UserProfileId; ?>);"><i
+                                                                class="fa fa-trash-o"></i>&nbsp;
+                                                            Unfriend
+                                                        </button>
+                                                        <?php } else if($user->MyFriend == 4) { ?>
+
+                                                        <?php } else { ?>
+                                                        <?php } ?>
+
+                                                        
+                                                    </div>
+                                                </div>
                                                 
                                             <?php } ?>
                                         <?php } ?>

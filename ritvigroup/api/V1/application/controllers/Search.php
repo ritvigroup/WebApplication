@@ -228,7 +228,7 @@ class Search extends CI_Controller {
             }
 
             $result['Profile'] = array();
-            if($search_in == 'all' || $search_in == 'profile') {
+            if($search_in == 'all' || $search_in == 'people') {
                 $sql = "SELECT UserProfileId AS Id, 'Profile' AS DataType, AddedOn AS DateAdded FROM `UserProfile` WHERE `ProfileStatus` = '1' AND (`FirstName` LIKE '%".$search."%' OR `LastName` LIKE '%".$search."%') ";
                 if(count($my_friend_user_profile_id) > 0) {
                     //$sql .= " UNION SELECT UserProfileId AS Id, 'Profile' AS DataType, AddedOn AS DateAdded FROM `UserProfile` WHERE `ProfileStatus` = '1' AND (`FirstName` LIKE '%".$search."%' OR `LastName` LIKE '%".$search."%') AND `AddedBy`  IN (".implode(',', $my_friend_user_profile_id).") ";
@@ -295,7 +295,7 @@ class Search extends CI_Controller {
             $result['Location'] = array();
             $result['Qualification'] = array();
             $result['Work'] = array();
-            $sql = "SELECT Address, City, State, Landmark, Country FROM `UserProfileAddress` WHERE `UserProfileId` = '".$UserProfileId."' AND `Status` = '1' GROUP BY Address, City, State, Landmark, Country ORDER BY Address";
+            $sql = "SELECT City, Country FROM `UserProfileAddress` WHERE `UserProfileId` = '".$UserProfileId."' AND `Status` = '1' GROUP BY City,  Country ORDER BY Address";
 
             $query = $this->db->query($sql);
             $res = $query->result_array();
@@ -306,7 +306,7 @@ class Search extends CI_Controller {
                 }
             }
 
-            $sql = "SELECT Qualification, QualificationLocation, QualificationUniversity FROM `UserProfileEducation` WHERE `UserProfileId` = '".$UserProfileId."' AND `Status` = '1' GROUP BY Qualification, QualificationLocation, QualificationUniversity ORDER BY Qualification";
+            $sql = "SELECT Qualification, QualificationUniversity FROM `UserProfileEducation` WHERE `UserProfileId` = '".$UserProfileId."' AND `Status` = '1' GROUP BY Qualification, QualificationUniversity ORDER BY Qualification";
 
             $query = $this->db->query($sql);
             $res = $query->result_array();
@@ -317,7 +317,7 @@ class Search extends CI_Controller {
                 }
             }
 
-            $sql = "SELECT WorkPosition, WorkPlace, WorkLocation FROM `UserProfileWork` WHERE `UserProfileId` = '".$UserProfileId."' AND `Status` = '1' GROUP BY WorkPosition, WorkPlace, WorkLocation ORDER BY WorkPosition";
+            $sql = "SELECT WorkPosition, WorkLocation FROM `UserProfileWork` WHERE `UserProfileId` = '".$UserProfileId."' AND `Status` = '1' GROUP BY WorkPosition, WorkLocation ORDER BY WorkPosition";
 
             $query = $this->db->query($sql);
             $res = $query->result_array();

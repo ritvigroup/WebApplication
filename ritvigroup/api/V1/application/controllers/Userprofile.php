@@ -21,6 +21,89 @@ class Userprofile extends CI_Controller {
         $this->device_os 		= $this->input->post('device_os');
     }
 
+
+    // Get All System Users
+    public function getAllSystemUser() {
+        $error_occured = false;
+        $AdminId = $this->input->post('admin_id');
+        
+        if($AdminId == "") {
+            $msg = "You are not authorised";
+            $error_occured = true;
+        } else {
+
+            $users = $this->User_Model->getAllSystemUser($AdminId);
+            if(count($users) > 0) {
+
+            } else {
+                $msg = "No user registered with us.";
+                $error_occured = true;
+            }
+
+        }
+
+        if($error_occured == true) {
+            $array = array(
+                            "status"        => 'failed',
+                            "message"       => $msg,
+                        );
+        } else {
+
+            $array = array(
+                           "status"         => 'success',
+                           "result"         => $users,
+                           "message"        => $msg,
+                           );
+        }
+        displayJsonEncode($array);
+    }
+
+
+    // Get User Information By Unique Id
+    public function getUserFullInformationByUniqueId() {
+        $error_occured = false;
+        $UserUniqueId = $this->input->post('user_unique_id');
+        
+        if($UserUniqueId == "") {
+            $msg = "Please select user";
+            $error_occured = true;
+        } else {
+
+            $res_u = $this->User_Model->getUserFullInformationByUniqueId($UserUniqueId);
+
+            if($res_u['UserStatus'] == '1') {
+                
+                $user_info = $this->User_Model->getUserDetailAll($res_u['UserId']);
+
+                $msg = "User full information found successfully";
+
+            } else if($res_u['UserId'] > 0 && $res_u['UserStatus'] != '1') {
+                $msg = "User in no longer active.";
+                $error_occured = true;
+            } else {
+                $msg = "No User Found";
+                $error_occured = true;
+            }
+        }
+
+        if($error_occured == true) {
+            $array = array(
+                            "status"        => 'failed',
+                            "message"       => $msg,
+                        );
+        } else {
+
+            $array = array(
+                           "status"         => 'success',
+                           "result"         => $user_info,
+                           "message"        => $msg,
+                           );
+        }
+        displayJsonEncode($array);
+    }
+
+
+
     // Get User Information
     public function getUserInformation() {
         $error_occured = false;

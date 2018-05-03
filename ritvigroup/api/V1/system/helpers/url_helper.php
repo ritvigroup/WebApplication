@@ -601,6 +601,35 @@ if ( ! function_exists('autoGenerateOtp'))
 if ( ! function_exists('sendMessageToPhone'))
 {
 	function sendMessageToPhone($recerverNO, $message) {
+		
+		if(is_array($recerverNO)) {
+			$recerverNO = str_replace('+', '', implode(',', $recerverNO));
+		} else {
+			$recerverNO = str_replace('+', '', $recerverNO);
+		}
+
+
+		$message = str_replace(' ', '%20', $message);
+
+		$url =  "http://www.pertinaxsolution.com/api/mt/SendSMS?user=ritvigroup&password=del12345&senderid=KAJNTI&channel=Trans&DCS=0&flashsms=0&number=".$recerverNO."&text=".($message)."&route=5";
+
+
+		//$file_get_contents = file_get_contents($url);
+
+		$curlSession = curl_init();
+	    curl_setopt($curlSession, CURLOPT_URL, $url);
+	    curl_setopt($curlSession, CURLOPT_BINARYTRANSFER, true);
+	    curl_setopt($curlSession, CURLOPT_RETURNTRANSFER, true);
+
+	    $jsonData = json_decode(curl_exec($curlSession));
+	    curl_close($curlSession);
+
+		echo '<pre>';
+		print_r($url);
+		print_r($jsonData);
+		echo '</pre>';
+
+
 		/*if (!function_exists('curl_init')) {
 			echo "Error : Curl library not installed";
 			return FALSE;

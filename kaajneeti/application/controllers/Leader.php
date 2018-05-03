@@ -391,7 +391,7 @@ class Leader extends CI_Controller {
                 $options = '';
                 $UserProfileLeader = $json_decode->result->UserProfileLeader;
                 foreach($UserProfileLeader AS $LeaderProfile) {
-                    $options .= '<option value="'.$LeaderProfile->UserProfileLeader->UserProfileId.'">'.$LeaderProfile->UserProfileLeader->FirstName. ' '.$LeaderProfile->UserProfileLeader->LastName .'</option>';
+                    $options .= '<option value="'.$LeaderProfile->UserProfileId.'">'.$LeaderProfile->FirstName. ' '.$LeaderProfile->LastName .'</option>';
                 }
                 echo $options;
             } else {

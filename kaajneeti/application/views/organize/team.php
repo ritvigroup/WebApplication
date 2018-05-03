@@ -41,8 +41,6 @@
                                                    class="table table-hover table-striped table-bordered table-advanced tablesorter display">
                                                 <thead>
                                                 <tr>
-                                                    <th style="width: 3%; padding: 10px; background: #efefef"><input
-                                                            type="checkbox" class="checkall"/></th>
                                                     <th>Pic</th>
                                                     <th>Name</th>
                                                     <th>Email</th>
@@ -58,7 +56,8 @@
                                                 <tbody>
                                                 <?php foreach($MyTeam->result AS $my_team) { ?>
                                                     <?php
-                                                    $Status = ($my_team->ProfileStatus == 1) ? 'Active' : 'Not Accepted';
+                                                    $Status = ($my_team->ProfileStatus == 1) ? 'Active' : (($my_team->ProfileStatus == 2) ? 'In-Active' :'Not Accepted');
+                                                    $StatusColor = ($my_team->ProfileStatus == 1) ? 'green' : (($my_team->ProfileStatus == 2) ? 'red' :'blue');
 
                                                     $UserProfileHrefLink = base_url().'profile/subprofile/'.$my_team->UserUniqueId.'/'.$my_team->UserProfileId;
 
@@ -70,12 +69,11 @@
 
                                                     ?>
                                                     <tr>
-                                                        <td><input type="checkbox"/></td>
                                                         <td><img src="<?php echo $profile_pic; ?>" style="border: 1px solid #fff; box-shadow: 0 2px 3px rgba(0,0,0,0.25);width: 50px; height: 50px;" class="img-circle"/></td>
                                                         <td><a href="<?php echo $UserProfileHrefLink; ?>" target="_blank"><?php echo $my_team->FirstName.' '.$my_team->LastName; ?></a></td>
                                                         <td><?php echo $my_team->Email; ?></td>
                                                         <td><?php echo $my_team->DepartmentName; ?></td>
-                                                        <td><?php echo $Status; ?></td>
+                                                        <td><span class="btn <?php echo $StatusColor; ?> btn-xs"><?php echo $Status; ?></span></td>
                                                         <td><?php echo $my_team->AddedOn; ?></td>
                                                         <td>
                                                             <button type="button" class="btn btn-default btn-xs" data-target="#modal-stackable" data-toggle="modal" href="javascript:void(0);" onClick="return editTeam('<?php echo $my_team->UserUniqueId; ?>', '<?php echo $my_team->UserProfileId; ?>');"><i

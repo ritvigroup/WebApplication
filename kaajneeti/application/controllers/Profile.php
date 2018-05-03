@@ -15,13 +15,48 @@ class Profile extends CI_Controller {
         $this->device_name      = $this->input->post('device_name');
         $this->device_os        = $this->input->post('device_os');
        
-        if(($this->session->userdata('UserId')) > 0) {
+        if($this->session->userdata('UserId') > 0 || $this->session->userdata('AdminId') > 0) {
             
         } else {
             redirect('leader/login');
         }
 
     }
+
+
+    public function userdetail() {
+
+        if (!$this->input->is_ajax_request()) {
+           exit('Error');
+        }
+        
+        checkAdminLoggedInAndRedirectLogin();
+
+        $data = array();
+        
+        if($this->uri->segment(3) != '') {
+            
+            $_POST['user_unique_id'] = $this->uri->segment(3);
+            $json_encode = post_curl(API_CALL_PATH.'userprofile/getUserFullInformationByUniqueId', $this->input->post(), $this->curl);
+
+            $json_decode = json_decode($json_encode);
+            if(count($json_decode->result) > 0) {
+                $data = $json_decode;
+
+
+                $this->load->view('profile/userdetail',$data);
+
+
+            } else {
+                $this->load->view('profile/notfound',$data);
+            }
+
+            
+        } else {
+            $this->load->view('profile/notfound',$data);
+        }
+    }
+
     
     public function subprofile() {
         $data = array();

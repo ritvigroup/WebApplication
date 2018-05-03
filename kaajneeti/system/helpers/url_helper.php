@@ -512,6 +512,31 @@ if ( ! function_exists('url_title'))
 	}
 }
 
+
+if ( ! function_exists('checkLeaderLoggedInAndRedirectLogin'))
+{
+	function checkLeaderLoggedInAndRedirectLogin() {
+		if($_SESSION['UserId'] > 0) {
+            
+        } else {
+            redirect('leader/login');
+        }
+	}
+}
+
+
+if ( ! function_exists('checkAdminLoggedInAndRedirectLogin'))
+{
+	function checkAdminLoggedInAndRedirectLogin() {
+		if($_SESSION['AdminId'] > 0) {
+            
+        } else {
+            redirect('admin/login');
+        }
+	}
+}
+
+
 // ------------------------------------------------------------------------
 
 if ( ! function_exists('redirect'))

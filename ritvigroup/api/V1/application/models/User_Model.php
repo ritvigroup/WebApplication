@@ -19,7 +19,40 @@ class User_Model extends CI_Model {
         $this->genderTbl            = 'Gender';
         $this->politicalPartyTbl    = 'PoliticalParty';
         $this->DepartmentTbl        = 'Department';
+
+
+        $this->AdminTbl             = 'Admin';
     }
+
+
+    // Verify Admin Username and Password
+    public function verifyAdminUsernamePassword($username, $password) {
+        $query = $this->loginAdminUsernamePassword($username, $password);
+        $result = $query->row_array();
+        if ($query->num_rows() > 0)
+        {
+            return ($result);
+        }
+        else 
+        {
+            return false;
+        }
+    }
+
+
+    // Admin Login with username with password
+    public function loginAdminUsernamePassword($username, $password) {
+        $this->db->select('AdminId, UserStatus');
+        $this->db->from($this->AdminTbl);
+        $this->db->where('UserName', $username);
+        $this->db->where('UserPassword', md5($password));
+        $this->db->limit(1);
+        $query = $this->db->get();
+        return $query;
+    }
+
+
+
 
     // Login with username with password
     public function loginUsernamePassword($username, $password) {
@@ -130,6 +163,47 @@ class User_Model extends CI_Model {
         }
     }
 
+
+    // Get All System User
+    public function getAllSystemUser($AdminId) {
+        $users = array();
+        if($AdminId > 0) {
+
+            $this->db->select('UserId');
+            $this->db->from($this->userTbl);
+            $this->db->order_by('AddedOn', 'DESC');
+            $query = $this->db->get();
+            $res = $query->result_array();
+            if ($query->num_rows() > 0) {
+                foreach($res AS $key => $result) {
+                    $users[] = $this->getOnlyUserDetail($result['UserId']);
+                }
+                return $users;
+            } else {
+                return $users;
+            }
+
+        } else {
+            return $users;
+        }
+    }
+
+
+    public function getOnlyUserDetail($UserId) {
+        $query = $this->db->query("SELECT u.*, uph.PhotoPath AS UserProfilePhoto, uch.PhotoPath AS UserCoverPhoto 
+                                                    FROM ".$this->userTbl." AS u 
+                                                    LEFT JOIN ".$this->userPhotoTbl." uph ON u.ProfilePhotoId = uph.UserPhotoId
+                                                    LEFT JOIN ".$this->userPhotoTbl." uch ON u.CoverPhotoId = uch.UserPhotoId
+                                                    WHERE 
+                                                        u.`UserId` = '".$UserId."'");
+
+        $res_u = $query->row_array();
+
+        $user_detail = $this->returnUserDetail($res_u);
+
+        return $user_detail;
+    }
+
     // Get User Detail [$FriendUserId, $UserProfileId, $full information]
     public function getUserDetail($FriendUserId, $UserProfileId, $full_information = 0) {
         if(isset($FriendUserId) && $FriendUserId > 0) {
@@ -237,6 +311,20 @@ class User_Model extends CI_Model {
         } else {
             $user_detail = array();
         }
+        return $user_detail;
+    }
+
+
+    public function getUserFullInformationByUniqueId($UserUniqueId) {
+        $this->db->select('u.*, uph.PhotoPath AS UserProfilePhoto, uch.PhotoPath AS UserCoverPhoto');
+        $this->db->from($this->userTbl.' AS u');
+        $this->db->join($this->userPhotoTbl.' AS uph', 'u.ProfilePhotoId = uph.UserPhotoId', 'LEFT');
+        $this->db->join($this->userPhotoTbl.' AS uch', 'u.CoverPhotoId = uch.UserPhotoId', 'LEFT');
+        $this->db->where('u.UserUniqueId', $UserUniqueId);
+        $query = $this->db->get();
+        $res_u = $query->row_array();
+        $user_detail = $this->returnUserDetail($res_u);
+
         return $user_detail;
     }
 
@@ -813,6 +901,17 @@ class User_Model extends CI_Model {
         } else {
             return false;
         }
+    }
+
+    // Get Admin Information
+    public function getAdminInformation($AdminId) {
+        $this->db->select('*');
+        $this->db->from($this->AdminTbl);
+        $this->db->where('AdminId', $AdminId);
+        $this->db->limit(1);
+        $query = $this->db->get();
+        $result = $query->row_array();
+        return $result;
     }
 
     // get User Information
@@ -1455,6 +1554,7 @@ class User_Model extends CI_Model {
                                         WHERE 
                                             up.`ParentUserId` = '".$UserId."'
                                         AND up.UserTypeId = '3' 
+                                        AND up.ProfileStatus != -1
                                         ORDER BY up.AddedOn DESC";
         $query = $this->db->query($sql);
 
@@ -1823,6 +1923,15 @@ class User_Model extends CI_Model {
                         );
         return $detail;
     }
+
+
+    // Update Admin Login Status
+    public function updateAdminLoginStatus($UserId, $updateData) {
+        $this->db->where('AdminId', $UserId);
+        $this->db->update($this->AdminTbl, $updateData);
+    }
+
+
 
     // Update Login Status
     public function updateLoginStatus($UserId, $updateData) {

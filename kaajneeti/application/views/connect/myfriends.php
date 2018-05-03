@@ -34,7 +34,7 @@
 
                              <div class="portlet-body">
                                 <div class="row mbm">
-                                    <div class="col-lg-12">
+                                    
                                         <?php /*
                                         <div class="table-responsive">
                                             <table id="table_id" class="table table-hover table-striped table-bordered table-advanced tablesorter display">
@@ -91,37 +91,43 @@
                                         </div>
                                         */ ?>
 
-                                        <?php
-                                        echo '<pre>';
-                                        print_r($result);
-                                        echo '</pre>';
-                                        ?>
+                                    <?php
+                                    echo '<pre>';
+                                    print_r($result);
+                                    echo '</pre>';
+                                    ?>
 
-                                        <?php if(count($result) > 0) {?>
-                                            <?php foreach($result AS $user) { ?>
-                                                
-                                                <?php
+                                    <?php if(count($result) > 0) {?>
+                                        <?php foreach($result AS $user) { ?>
+                                            
+                                            <?php
 
-                                                $ProfilePhotoPath = ($user->ProfilePhotoPath != '') ? $user->ProfilePhotoPath : base_url().'assets/images/default-user.png';
-        
-                                                $Gender = ($user->Gender == 1) ? 'Male' : (($user->Gender == 2) ? 'Female' : 'Other');
+                                            $ProfilePhotoPath = ($user->ProfilePhotoPath != '') ? $user->ProfilePhotoPath : base_url().'assets/images/default-user.png';
+    
+                                            $Gender = ($user->Gender == 1) ? 'Male' : (($user->Gender == 2) ? 'Female' : (($user->Gender == 3) ? 'Other' : ''));
 
-                                                $UserProfileHrefLink = base_url().'profile/profile/'.$user->UserUniqueId;
+                                            $UserProfileHrefLink = base_url().'profile/profile/'.$user->UserUniqueId;
 
-                                                ?>
-                                                <div class="note note-info" style="float: left;" id="request_id_<?php echo $user->UserProfileId; ?>">
-                                                    <div style="float: left;">
+                                            ?>
+                                            <div class="col-lg-2">
+                                                <div class="note note-info" id="request_id_<?php echo $user->UserProfileId; ?>">
+                                                    <div style="text-align: center">
                                                         <span class="img-shadow"><img src="<?php echo $ProfilePhotoPath; ?>" style="border: 1px solid #fff; box-shadow: 0 2px 3px rgba(0,0,0,0.25);width: 80px; height: 80px; margin-right: 15px;" class="img-circle"/></span>
                                                     </div>
-                                                    <div style="float: left;">
+                                                    <div style="text-align: center">
                                                         <h4 class="block"><a href="<?php echo $UserProfileHrefLink; ?>" target="_blank"><?php echo $user->FirstName.' '.$user->LastName?></a></h4>
-                                                        <p><?php echo $user->Email; ?></p>
-                                                        <p><?php echo $Gender; ?>, <span class="label label-warning"><?php echo $user->PoliticalPartyName; ?></span>, 
-
-                                                        <?php echo date('d-M-Y h:i A', strtotime($user->RequestSentOn)); ?></p>
+                                                        <?php /*<p><?php echo $user->Email; ?></p>*/ ?>
+                                                        <?php if($Gender != '' || $user->PoliticalPartyName != '') { ?>
+                                                        <p>
+                                                            <?php if($Gender != '') { echo $Gender; } ?> 
+                                                            <?php if($user->PoliticalPartyName != '') { ?>
+                                                            <span class="label label-warning"><?php echo $user->PoliticalPartyName; ?></span>
+                                                            <?php } ?>
+                                                        </p>
+                                                        <?php } ?>
+                                                        <p>Follower: <?php echo $user->Follower; ?><br>Following: <?php echo $user->Following; ?></p>
                                                     </div>
-                                                    <div style="float: right;">
-                                                        <button type="button" class="btn btn-danger" onClick="return cancelRequest(<?php echo $user->UserProfileId; ?>);"><i class="fa fa-trash-o"></i>&nbsp; Delete</button>
+                                                    <div style="text-align: center">
 
                                                         <?php if($user->MyFriend == 0) { ?>
                                                         <button type="button" class="btn btn-success btn-xs" onClick="return sendRequest(<?php echo $user->UserProfileId; ?>);"><i
@@ -155,12 +161,12 @@
                                                         
                                                     </div>
                                                 </div>
-                                            
-                                                
-                                            <?php } ?>
-                                        <?php } ?>
+                                            </div>
                                         
-                                    </div>
+                                            
+                                        <?php } ?>
+                                    <?php } ?>
+                                    
                                 </div>
                             </div>
 
