@@ -583,8 +583,6 @@ class Complaint extends CI_Controller {
                 }
                 // Send Notification to Users End
 
-                $complaint_history_detail = array_merge($complaint_history_detail, $user_profile_id_array);
-
                 $msg = "Complaint history saved successfully";
 
             } else {
