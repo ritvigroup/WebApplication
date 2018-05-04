@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="cache-control" content="no-cache">
     <meta http-equiv="expires" content="Thu, 19 Nov 1900 08:52:00 GMT">
+
     
     <?php  require_once './include/css.php';?>
 
@@ -23,16 +24,28 @@
         <div class="page-content-wrapper animated fadeInRight">
             <div class="page-content">
                 <div class="row  border-bottom white-bg dashboard-header">
-                    <div class="col-md-12">
+                    <div class="col-md-6">
                         <div class="portlet box">
+                            <h3>Plan</h3>
 
-                            <div class="portlet-header">
-                                <ol class="breadcrumb page-breadcrumb">
-                                    <li class="activelink"><a href="#">My Plan</a>&nbsp;</li>
-                                    <li><a data-target="#modal-stackable" data-toggle="modal" href="javascript:void(0);" onClick="return nextScreen(0);" title="Let's begin with your Goal">New Plan</a>&nbsp;</li>
+                 <!--            <div class="portlet-header">
+                                <ol class="breadcrumb2 page-breadcrumb">
+                                    <li class="activelink"><a href="#"> Plan</a>&nbsp;</li>
+                          
                                 </ol>
-                            </div>
+                            </div> -->
                             
+                        </div>
+                    </div>
+
+                     <div class="col-md-6">
+                    
+
+                        <div class="portlet-header portlet box  breadcrumb page-breadcrumb pull-right" style=" margin-top: 10px;">
+                    
+                                
+                            <li><a data-target="#modal-stackable" data-toggle="modal" href="javascript:void(0);" onClick="return nextScreen(0);" title="Let's begin with your Goal">Create a Plan</a>&nbsp;</li>
+                      
                         </div>
                     </div>
 
@@ -43,7 +56,25 @@
                         <div id="map" style="width: 90%; height: 400px;"></div>
                     </div>
                     */ ?>
-                    
+                    <div class="col-md-12 header-table"> <table class="table" style="margin-bottom: 0px;">
+                            <thead>
+                          <tr>
+                            <th class="plan-icon"><i class="fa fa-bullseye fa-2x" aria-hidden="true"></i><br>Goal </th>
+                            <th class="plan-icon"><hr></th>
+                            <th class="plan-icon"><i class="fa fa-map-marker fa-2x" style="color:#6b736c;"></i><br>Geography</th>
+                                <th class="plan-icon"><hr></th>
+                            <th class="plan-icon"><i class="fa fa-users fa-2x" aria-hidden="true"></i><br>Audience</th>
+                            <th class="plan-icon"><hr></th>
+                            <th class="plan-icon"><i class="fa fa-bar-chart fa-2x" aria-hidden="true"></i><br>Forecast</th>
+                          
+                          </tr>
+
+
+                        </thead>
+                                        </table></div> 
+
+                   
+                
                     <!-- stat timeline and feed  -->
                     <div class="top20">
                         

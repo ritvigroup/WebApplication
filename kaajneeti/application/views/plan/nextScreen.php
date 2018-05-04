@@ -2,7 +2,7 @@
  $prev_screen =  ((int) $next_screen - 1);
     $next_screen_next =  ((int) $next_screen + 1);    //echo $next_screen;
 
-$back_link = '<i class="fa fa-arrow-left" aria-hidden="true" onClick="return prevScreen('.$prev_screen.');"></i> &nbsp;&nbsp;';
+$back_link = '<i class="fa fa-arrow-left" aria-hidden="true" onClick="return prevScreen('.$prev_screen.');" style="padding: 3px 5px; cursor: pointer;" title="Back &laquo;"></i> &nbsp;&nbsp;';
 ?>
 
 <form name="create_plan_form" id="create_plan_form" method="post" action="" onSubmit="return false;">
@@ -59,8 +59,6 @@ $back_link = '<i class="fa fa-arrow-left" aria-hidden="true" onClick="return pre
                         <input class="form-control" size="25" id="end_date" name="end_date" type="text" value="" readonly>
                        <span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
                     </div>
-                    <!-- <input type="hidden" id="dtp_input1" value="" /> -->
-                    <!-- <br/> -->
                 </div>
             </div>     
 
@@ -78,21 +76,22 @@ $back_link = '<i class="fa fa-arrow-left" aria-hidden="true" onClick="return pre
         <div class="panel-body">
             <div class="col-md-6">
                 <label for="inputUsername" class="control-label target-area" style="margin-top: 15px;">Target Area
-                                                            <span class="require">*</span></label>
-                        <div class="input-icon right"><i class="fa fa-location-arrow"></i><input type="text" placeholder="Please enter your area" class="form-control" style="margin-top: 6px;"></div>
-                                                            </div>
-
-                   <!--                                          <div class="col-md-6">
-                <label for="inputUsername" class="control-label target-area" >Specific Area
-                                                            <span class="require">*</span></label>
-                        <div class="input-icon right"><i class="fa fa-location-arrow"></i><input type="text" placeholder="Please enter your area" class="form-control" style="margin-top: 10px;"></div>
-                                                            </div>
- -->
+                    <span class="require">*</span>
+                </label>
+                <div class="input-icon right">
+                    <i class="fa fa-location-arrow"></i>
+                    <input type="text" placeholder="Please enter your area" class="form-control" style="margin-top: 6px;">
+                </div>
+            </div>
+            <!--<div class="col-md-6">
+                    <label for="inputUsername" class="control-label target-area" >Specific Area<span class="require">*</span></label>
+                    <div class="input-icon right"><i class="fa fa-location-arrow"></i><input type="text" placeholder="Please enter your area" class="form-control" style="margin-top: 10px;"></div>
+            </div>-->
         </div>
     </div>
 </div>
 <?php } else if($next_screen == 3) { ?>
-<div class="modal-header">
+<div class="modal-header" style="background: #49b6d6; color:#fff;">
     <button type="button" data-dismiss="modal" aria-hidden="true" class="close">×</button>
     <h4 id="modal-stackable-label" class="modal-title"><?php echo $back_link; ?>Let's begin with your goal 3</h4>
 </div>
@@ -110,7 +109,6 @@ $back_link = '<i class="fa fa-arrow-left" aria-hidden="true" onClick="return pre
 </div>
 <div class="modal-body">
     <div class="panel panel-white" style="border-color: transparent;">
-        <img src="">
          <div class="panel-heading" style="color:#000; font-weight: 550;"><i class="fa fa-user fa-2x" aria-hidden="true" style="color:#6b736c;"></i> Who will your preferred Audience?
          </div>
 
@@ -119,15 +117,6 @@ $back_link = '<i class="fa fa-arrow-left" aria-hidden="true" onClick="return pre
 
                         <form action="#" class="form-horizontal">
                                     <div class="form-body pal">
-
-                                        <!-- <div class="form-group"><label for="inputName" class="col-md-3 control-label target-area">Location</label>
-
-                                            <div class="col-md-9">
-                                                <div class="input-icon right"><input
-                                                        id="inputName" type="text" placeholder="" class="form-control"/>
-                                                </div>
-                                            </div>
-                                        </div> -->
 
                                         <div class="form-group"><label for="inputPassword"
                                                                        class="col-md-3 control-label target-area" style="margin-top: 20px;">Age</label>
