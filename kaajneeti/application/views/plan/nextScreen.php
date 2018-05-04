@@ -136,22 +136,25 @@ $back_link = '<i class="fa fa-arrow-left" aria-hidden="true" onClick="return pre
                                         </div>
                                         </div>
 
-                                                    <div class="form-group"><label for="inputPassword"
-                                                                       class="col-md-3 control-label target-area">Gender</label>
+                                        <div class="form-group">
+                                            <label for="inputPassword" class="col-md-3 control-label target-area">Gender</label>
 
-                                     <div class="row">
-                                            <div class="col-md-2">
-                                              <input type="radio" name="gender" value="male"> Male<br>
-                                            </div>
-                                           <div class="col-md-2" style="width: 20%;">
-                                       <input type="radio" name="gender" value="female"> Female<br>
-                                            </div>
+                                         <div class="row">
+                                                <div class="col-md-2">
+                                                    <input type="radio" name="gender" value="male">All<br>
+                                                </div>
+                                                <div class="col-md-2">
+                                                    <input type="radio" name="gender" value="male"> Male<br>
+                                                </div>
+                                                <div class="col-md-2">
+                                                    <input type="radio" name="gender" value="female"> Female<br>
+                                                </div>
 
-                                                 <div class="col-md-2">
-                                           <input type="radio" name="gender" value="other"> Other
+                                                <div class="col-md-4">
+                                                    <input type="radio" name="gender" value="other">Transgender
+                                                </div>
+                                       
                                             </div>
-                                   
-                                        </div>
                                         </div>
 
                                      
@@ -395,23 +398,229 @@ $back_link = '<i class="fa fa-arrow-left" aria-hidden="true" onClick="return pre
 <?php } else if($next_screen == 9) { ?>
 <div class="modal-header" style="background: #49b6d6; color:#fff;">
     <button type="button" data-dismiss="modal" aria-hidden="true" class="close">×</button>
-    <h4 id="modal-stackable-label" class="modal-title"><?php echo $back_link; ?>Plan your media</h4>
+    <h4 id="modal-stackable-label" class="modal-title"><?php echo $back_link; ?> Media Expenses </h4>
 </div>
 <div class="modal-body">
     <div class="panel panel-white" style="border-color: transparent;">
-        <div class="panel-heading"> <i class="fa fa-share-alt-square fa-2x" aria-hidden="true" style="color:#6b736c; margin-top: -5px; float: left;"></i> &nbsp; &nbsp;<span>How much you want to spend?</span></div>
+        <div class="panel-heading"> <i class="fa fa-share-alt-square fa-2x" aria-hidden="true" style="color:#6b736c; margin-top: -5px; float: left;"></i> &nbsp; &nbsp;<span>Let's plan your media</span></div>
         <div class="panel-body">
-        
-            <div class="row">
-            <div class="col-md-6">
-                <button class="btn btn-primary" style="background: #93cef6; border-radius: 5px !important; border:none;" > Tasks</button>
-            </div>
 
-             <div class="col-md-6">
-                   <button class="btn btn-primary" style="background: #93cef6; border-radius: 5px !important; border:none;" >Budget</button>
+            <ul class="nav nav-tabs">
+    <li class="active"><a data-toggle="tab" href="#Online">Online</a></li>
+    <li><a data-toggle="tab" href="#Offline">Offline</a></li>
+      <li><a data-toggle="tab" href="#expenses">Miscellaneous expenses</a></li>
+  
+  </ul>
 
-             </div>
-        </div>
+  <div class="tab-content">
+    <div id="Online" class="tab-pane fade in active">
+
+     <div class="row" style="height: 100px; overflow-y: auto; width: 100%;">
+       <div class="col-md-6">
+       
+                <div class="form-group mbn">
+                  <div class="checkbox"><label><input tabindex="5" type="checkbox"/>&nbsp;
+                  Pay per click </label></div>
+              </div>
+                     <div class="form-group mbn">
+                  <div class="checkbox"><label><input tabindex="5" type="checkbox"/>&nbsp;
+                  Blogging</label></div>
+              </div>
+
+                     <div class="form-group mbn">
+                  <div class="checkbox"><label><input tabindex="5" type="checkbox"/>&nbsp;
+                  SEO</label></div>
+              </div>
+                     <div class="form-group mbn">
+                  <div class="checkbox"><label><input tabindex="5" type="checkbox"/>&nbsp;
+                  SEM</label></div>
+              </div>
+                     <div class="form-group mbn">
+                  <div class="checkbox"><label><input tabindex="5" type="checkbox"/>&nbsp;
+                  Social Media</label></div>
+              </div>
+                     <div class="form-group mbn">
+                  <div class="checkbox"><label><input tabindex="5" type="checkbox"/>&nbsp;
+                  Email</label></div>
+              </div>
+    </div>
+
+           <div class="col-md-6">
+       
+                <div class="form-group mbn">
+                  <div class="checkbox"><label><input tabindex="5" type="checkbox"/>&nbsp;
+                  SMS</label></div>
+              </div>
+                     <div class="form-group mbn">
+                  <div class="checkbox"><label><input tabindex="5" type="checkbox"/>&nbsp;
+                  Website</label></div>
+              </div>
+
+                     <div class="form-group mbn">
+                  <div class="checkbox"><label><input tabindex="5" type="checkbox"/>&nbsp;
+                  Newsletter</label></div>
+              </div>
+                     <div class="form-group mbn">
+                  <div class="checkbox"><label><input tabindex="5" type="checkbox"/>&nbsp;
+                  Display ads</label></div>
+              </div>
+                     <div class="form-group mbn">
+                  <div class="checkbox"><label><input tabindex="5" type="checkbox"/>&nbsp;
+                  Youtube</label></div>
+              </div>
+                     <div class="form-group mbn">
+                  <div class="checkbox"><label><input tabindex="5" type="checkbox"/>&nbsp;
+                  Text</label></div>
+              </div>
+    </div>
+
+    </div>
+</div>
+
+
+
+    <div id="Offline" class="tab-pane fade">
+  
+     <div class="row" style="height: 100px; overflow-y: auto; width: 100%;">
+       <div class="col-md-6">
+       
+                <div class="form-group mbn">
+                  <div class="checkbox"><label><input tabindex="5" type="checkbox"/>&nbsp;
+                  Newspaper ads </label></div>
+              </div>
+                     <div class="form-group mbn">
+                  <div class="checkbox"><label><input tabindex="5" type="checkbox"/>&nbsp;
+                  TV ads</label></div>
+              </div>
+
+                     <div class="form-group mbn">
+                  <div class="checkbox"><label><input tabindex="5" type="checkbox"/>&nbsp;
+                  Radio</label></div>
+              </div>
+                     <div class="form-group mbn">
+                  <div class="checkbox"><label><input tabindex="5" type="checkbox"/>&nbsp;
+                  Magazine ads</label></div>
+              </div>
+                     <div class="form-group mbn">
+                  <div class="checkbox"><label><input tabindex="5" type="checkbox"/>&nbsp;
+                  Brochure print</label></div>
+              </div>
+                     <div class="form-group mbn">
+                  <div class="checkbox"><label><input tabindex="5" type="checkbox"/>&nbsp;
+                  Posters</label></div>
+              </div>
+    </div>
+
+           <div class="col-md-6">
+       
+                <div class="form-group mbn">
+                  <div class="checkbox"><label><input tabindex="5" type="checkbox"/>&nbsp;
+                  Text</label></div>
+              </div>
+                     <div class="form-group mbn">
+                  <div class="checkbox"><label><input tabindex="5" type="checkbox"/>&nbsp;
+                  Text</label></div>
+              </div>
+
+                     <div class="form-group mbn">
+                  <div class="checkbox"><label><input tabindex="5" type="checkbox"/>&nbsp;
+                  Text</label></div>
+              </div>
+                     <div class="form-group mbn">
+                  <div class="checkbox"><label><input tabindex="5" type="checkbox"/>&nbsp;
+                  Text</label></div>
+              </div>
+                     <div class="form-group mbn">
+                  <div class="checkbox"><label><input tabindex="5" type="checkbox"/>&nbsp;
+                  Text</label></div>
+              </div>
+                     <div class="form-group mbn">
+                  <div class="checkbox"><label><input tabindex="5" type="checkbox"/>&nbsp;
+                  Text</label></div>
+              </div>
+    </div>
+
+    </div>
+    </div>
+
+
+
+
+
+        <div id="expenses" class="tab-pane fade">
+  
+     <div class="row" style="height: 100px; overflow-y: auto; width: 100%;">
+       <div class="col-md-6">
+       
+                <div class="form-group mbn">
+                  <div class="checkbox"><label><input tabindex="5" type="checkbox"/>&nbsp;
+                  Text </label></div>
+              </div>
+                     <div class="form-group mbn">
+                  <div class="checkbox"><label><input tabindex="5" type="checkbox"/>&nbsp;
+                  Text</label></div>
+              </div>
+
+                     <div class="form-group mbn">
+                  <div class="checkbox"><label><input tabindex="5" type="checkbox"/>&nbsp;
+                  Text</label></div>
+              </div>
+                     <div class="form-group mbn">
+                  <div class="checkbox"><label><input tabindex="5" type="checkbox"/>&nbsp;
+                 Text</label></div>
+              </div>
+                     <div class="form-group mbn">
+                  <div class="checkbox"><label><input tabindex="5" type="checkbox"/>&nbsp;
+                  Text</label></div>
+              </div>
+                     <div class="form-group mbn">
+                  <div class="checkbox"><label><input tabindex="5" type="checkbox"/>&nbsp;
+                 Text</label></div>
+              </div>
+    </div>
+
+           <div class="col-md-6">
+                <div class="form-group mbn">
+                  <div class="checkbox"><label><input tabindex="5" type="checkbox"/>&nbsp;
+                  Text</label></div>
+              </div>
+                     <div class="form-group mbn">
+                  <div class="checkbox"><label><input tabindex="5" type="checkbox"/>&nbsp;
+                  Text</label></div>
+              </div>
+
+                     <div class="form-group mbn">
+                  <div class="checkbox"><label><input tabindex="5" type="checkbox"/>&nbsp;
+                  Text</label></div>
+              </div>
+                     <div class="form-group mbn">
+                  <div class="checkbox"><label><input tabindex="5" type="checkbox"/>&nbsp;
+                  Text</label></div>
+              </div>
+                     <div class="form-group mbn">
+                  <div class="checkbox"><label><input tabindex="5" type="checkbox"/>&nbsp;
+                  Text</label></div>
+              </div>
+                     <div class="form-group mbn">
+                  <div class="checkbox"><label><input tabindex="5" type="checkbox"/>&nbsp;
+                  Text</label></div>
+              </div>
+    </div>
+
+    </div>
+    </div>
+
+
+
+
+  </div>
+
+</div>
+ </div>
+   </div>
+</div> 
+
+
 
         </div>
     </div>
@@ -420,22 +629,51 @@ $back_link = '<i class="fa fa-arrow-left" aria-hidden="true" onClick="return pre
 <?php } else if($next_screen == 10) { ?>
 <div class="modal-header" style="background: #49b6d6; color:#fff;">
     <button type="button" data-dismiss="modal" aria-hidden="true" class="close">×</button>
-    <h4 id="modal-stackable-label" class="modal-title"><?php echo $back_link; ?>Let's make your strategiess</h4>
+    <h4 id="modal-stackable-label" class="modal-title"><?php echo $back_link; ?>Funding</h4>
 </div>
 <div class="modal-body">
     <div class="panel panel-white" style="border-color: transparent;">
-        <div class="panel-heading"> $  How much you want to spend?</div>
+        <div class="panel-heading"><i class="fa fa-money fa-2x" aria-hidden="true" style="color:#6b736c; margin-top: -5px; float: left;"></i> &nbsp; &nbsp;<span>Let's plan your funds</span></div>
         <div class="panel-body">
         
             <div class="row">
-            <div class="col-md-6">
-                <button class="btn btn-primary" style="background: #93cef6; border-radius: 5px !important; border:none;" > Tasks</button>
+            <div class="col-md-4">
+                        <div class="form-group mbn">
+                  <div class="checkbox"><label><input tabindex="5" type="checkbox"/>&nbsp;
+                  Crowd funding </label></div>
+              </div>
             </div>
 
-             <div class="col-md-6">
-                   <button class="btn btn-primary" style="background: #93cef6; border-radius: 5px !important; border:none;" >Budget</button>
+             <div class="col-md-4">
+                       <div class="form-group mbn">
+                  <div class="checkbox"><label><input tabindex="5" type="checkbox"/>&nbsp;
+                  Investor </label></div>
+              </div>
 
              </div>
+
+             <div class="col-md-4">
+                           <div class="form-group mbn">
+                  <div class="checkbox"><label><input tabindex="5" type="checkbox"/>&nbsp;
+                  Contribution </label></div>
+              </div>
+
+             </div>
+        </div>
+
+        <div class="row" style="margin-top: 40px;">
+             <div class="col-md-4"> <lebel style="margin-left: 24px; vertical-align: middle;"> Your Budget</lebel></div>
+            <div class="col-md-4">
+                
+                <div class="form-group">
+            
+                <input type="text" name="" placeholder="Rupees" class="form-control">
+
+                </div>
+            </div>
+           
+
+
         </div>
 
         </div>
@@ -445,11 +683,11 @@ $back_link = '<i class="fa fa-arrow-left" aria-hidden="true" onClick="return pre
 
 <div class="modal-footer">
     <!-- <inpu.panel-headingt type="reset" class="btn btn-default" value="Cancel"> -->
-    <!-- <i class="fa fa-trash-o fa-2x" aria-hidden="true" onCLick="return resetFormPage();"></i> -->
+     <i class="fa fa-trash-o fa-2x" aria-hidden="true" onCLick="return resetFormPage();"></i>
 
     <?php
    
-    if($next_screen >= 9) {
+    if($next_screen == 10) {
         ?>
         <!-- <button type="submit" class="btn btn-success" onClick="return prevScreen(<?php echo $prev_screen;?>);">Prev</button> -->
         <button type="submit" class="btn btn-success">Submit</button>
@@ -459,13 +697,12 @@ $back_link = '<i class="fa fa-arrow-left" aria-hidden="true" onClick="return pre
         <?php if($next_screen != '0') { ?>
        <!--  <button type="submit" class="btn btn-success" onClick="return prevScreen(<?php echo $prev_screen;?>);">Prev</button> -->
         <?php } ?>
-         <button type="button" data-dismiss="modal" class="btn btn-default" style="margin-top: 5px;"> Save & Close</button>
-       
-
+         <button type="button" data-dismiss="modal" class="btn btn-default save-button"> Save & Close</button>
+         <button type="submit" class="btn btn-success" onClick="return nextScreen(<?php echo $next_screen_next; ?>);">Next</button>
     <?php   
     }
     ?>
-     <button type="submit" class="btn btn-success" onClick="return nextScreen(<?php echo $next_screen_next; ?>);">Next</button>
+    
    
 </div>
 </form>

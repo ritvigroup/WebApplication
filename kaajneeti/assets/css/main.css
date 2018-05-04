@@ -1080,6 +1080,10 @@ color:#888
 .dropdown-menu.dropdown-checkboxes, .dropdown-menu.dropdown-radiobuttons {
     padding: 5px;
 }
+.checkbox{
+    margin-top: 30px;
+    margin-bottom: -16px;
+}
 
 /*------------------------------------------------
 
@@ -3905,12 +3909,25 @@ WIDGETS
 }
 .plan-icon{
     text-align: center;
+  
+
 }
 .plan-icon hr{
         width: 200px;
-        border-top: 3px solid green;
+        border-top: 2px solid green;
 }
-
+.fa-trash-o{
+    margin-top: 10px;
+    float: left;
+}
+.modal-footer{
+    background: #d8d8d8;
+}
+.save-button{
+        margin-top: 5px;
+    background: #929292;
+    color: #fff;
+}
 
 
 /*.profile-avetar-img {

@@ -28,7 +28,7 @@
 <!-- animate css -->
 <link href="<?=base_url();?>assets/css/animate.css" rel="stylesheet">
 <!-- adminbag main css -->
-<link href="<?=base_url();?>assets/css/main.css" rel="stylesheet">
+<link href="<?=base_url();?>assets/css/main.css?v=1.1" rel="stylesheet">
 <!-- fullcalendar -->
 <link href='<?=base_url();?>assets/css/fullcalendar.css' rel='stylesheet' />
 <link href='<?=base_url();?>assets/css/fullcalendar.print.css' rel='stylesheet' media='print' />

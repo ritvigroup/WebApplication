@@ -59,13 +59,13 @@
                     <div class="col-md-12 header-table"> <table class="table" style="margin-bottom: 0px;">
                             <thead>
                           <tr>
-                            <th class="plan-icon"><i class="fa fa-bullseye fa-2x" aria-hidden="true"></i><br>Goal </th>
+                            <th class="plan-icon"><a data-target="#modal-stackable" data-toggle="modal" href="javascript:void(0);" onClick="return nextScreen(0);"><i class="fa fa-bullseye fa-2x" aria-hidden="true"></i><br>Goal </a></th>
                             <th class="plan-icon"><hr></th>
-                            <th class="plan-icon"><i class="fa fa-map-marker fa-2x" style="color:#6b736c;"></i><br>Geography</th>
+                            <th class="plan-icon"><a data-target="#modal-stackable" data-toggle="modal" href="javascript:void(0);" onClick="return nextScreen(3);"><i class="fa fa-map-marker fa-2x"></i><br>Geography</a></th>
                                 <th class="plan-icon"><hr></th>
-                            <th class="plan-icon"><i class="fa fa-users fa-2x" aria-hidden="true"></i><br>Audience</th>
+                            <th class="plan-icon"><a data-target="#modal-stackable" data-toggle="modal" href="javascript:void(0);" onClick="return nextScreen(4);"><i class="fa fa-users fa-2x" aria-hidden="true"></i><br>Audience</a></th>
                             <th class="plan-icon"><hr></th>
-                            <th class="plan-icon"><i class="fa fa-bar-chart fa-2x" aria-hidden="true"></i><br>Forecast</th>
+                            <th class="plan-icon"><a data-target="#modal-stackable" data-toggle="modal" href="javascript:void(0);" onClick="return nextScreen(5);"><i class="fa fa-bar-chart fa-2x" aria-hidden="true"></i><br>Forecast</a></th>
                           
                           </tr>
 
