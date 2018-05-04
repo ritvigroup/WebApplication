@@ -311,9 +311,21 @@ class Userlogin extends CI_Controller {
                 $this->User_Model->updateLoginStatus($UserId, $updateData);
 
                 if($login_type == '' || $login_type == 1) {
+
                     $user_profile = $this->User_Model->getCitizenProfileInformation($UserId);
+
+                    $updateData = array(
+                        'UserProfileDeviceToken' => $this->device_token,
+                    );
+                    $this->User_Model->updateUserProfileData($user_profile['UserProfileId'], $updateData);
+
                 } else if($login_type == 2) {
                     $user_profile = $this->User_Model->getLeaderProfileInformation($UserId);
+
+                    $updateData = array(
+                        'UserProfileDeviceToken' => $this->device_token,
+                    );
+                    $this->User_Model->updateUserProfileData($user_profile['UserProfileId'], $updateData);
                 }
 
                 $msg = "User logged in successfully";

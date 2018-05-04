@@ -410,6 +410,33 @@ class User_Model extends CI_Model {
     }
 
 
+    public function getUserProfileDeviceTokenFromUserProfileIds($UserProfileId) {
+        $user_device_token = array();
+        if(is_array($UserProfileId)) {
+            foreach($UserProfileId AS $user_profile_id) {
+                $this->db->select('UserProfileDeviceToken');
+                $this->db->from($this->userProfileTbl);
+                $this->db->where('UserProfileId', $user_profile_id);
+                $query = $this->db->get();
+                $res_u = $query->row_array();
+                if($res_u['UserProfileDeviceToken'] != '') {
+                    $user_device_token[] = $res_u['UserProfileDeviceToken'];
+                }
+            }
+        } else {
+            $this->db->select('UserProfileDeviceToken');
+            $this->db->from($this->userProfileTbl);
+            $this->db->where('UserProfileId', $UserProfileId);
+            $query = $this->db->get();
+            $res_u = $query->row_array();
+            if($res_u['UserProfileDeviceToken'] != '') {
+                $user_device_token[] = $res_u['UserProfileDeviceToken'];
+            }
+        }
+        return $user_device_token;
+    }
+
+
     // Get User Profile Information
     public function getUserProfileInformation($FriendUserProfileId, $UserProfileId = 0) {
 
@@ -467,6 +494,8 @@ class User_Model extends CI_Model {
                                 "FacebookPageUrl"               => (($res_u['FacebookPageUrl'] != NULL) ? $res_u['FacebookPageUrl'] : ""),
                                 "TwitterPageUrl"                => (($res_u['TwitterPageUrl'] != NULL) ? $res_u['TwitterPageUrl'] : ""),
                                 "GooglePageUrl"                 => (($res_u['GooglePageUrl'] != NULL) ? $res_u['GooglePageUrl'] : ""),
+                                
+                                "UserProfileDeviceToken"        => (($res_u['UserProfileDeviceToken'] != NULL) ? $res_u['UserProfileDeviceToken'] : ""),
                                 
                                 "AddedOn"                       => return_time_ago($res_u['AddedOn']),
                                 "AddedOnTime"                   => ($res_u['AddedOn']),

@@ -127,7 +127,6 @@ class Profile extends CI_Controller {
                 echo $json;
 
                 return false;
-
             } else if($this->input->method(TRUE) == "POST" && $this->input->post('update_password') == 'Y') {
 
                 $post_data = $this->input->post();
@@ -159,12 +158,12 @@ class Profile extends CI_Controller {
                 $data = $json_decode;
             }
 
-            $json_encode = post_curl(API_CALL_PATH.'leader/getAllHomePageData', $this->input->post(), $this->curl);
+            /*$json_encode = post_curl(API_CALL_PATH.'leader/getAllHomePageData', $this->input->post(), $this->curl);
 
             $json_decode = json_decode($json_encode);
             if(count($json_decode->result) > 0) {
                 $data = $json_decode;
-            }
+            }*/
 
             $this->load->view('profile/profile',$data);
         }

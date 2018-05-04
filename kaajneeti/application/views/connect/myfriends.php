@@ -92,9 +92,9 @@
                                         */ ?>
 
                                     <?php
-                                    echo '<pre>';
-                                    print_r($result);
-                                    echo '</pre>';
+                                    // echo '<pre>';
+                                    // print_r($result);
+                                    // echo '</pre>';
                                     ?>
 
                                     <?php if(count($result) > 0) {?>

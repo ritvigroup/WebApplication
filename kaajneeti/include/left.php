@@ -25,7 +25,7 @@
 
             <li class="nav-item <?php if($request_uri['4'] == "organize") {?>active<?php } ?>"><a class="nav-link" href="<?=base_url();?>organize/team"><i class="fa fa-sitemap fa-fw"></i><span class="title">Organize</span></a></li>
 
-            <li class="nav-item <?php if($request_uri['4'] == "express") {?>active<?php } ?>"><a class="nav-link" href="<?=base_url();?>express/express"><i class="fa fa-sitemap fa-fw"></i><span class="title">Express</span></a></li>
+            <li class="nav-item <?php if($request_uri['4'] == "express") {?>active<?php } ?>"><a class="nav-link" href="<?=base_url();?>express/express"><i class="fa fa-bullhorn fa-fw"></i><span class="title">Express</span></a></li>
 
             <li class="nav-item <?php if($request_uri['4'] == "complaint") {?>active<?php } ?>"><a class="nav-link" href="<?=base_url();?>connect/myfriends"><i class="fa fa-share-alt-square fa-fw"></i><span class="title">Connect</span></a></li>
 

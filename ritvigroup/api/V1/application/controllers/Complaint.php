@@ -103,14 +103,14 @@ class Complaint extends CI_Controller {
         $ApplicantName          = $this->input->post('applicant_name');
         $ApplicantFatherName    = $this->input->post('applicant_father_name');
         $ApplicantMobile        = $this->input->post('applicant_mobile');
-        $department             = $this->input->post('department');
+        $department             = ($this->input->post('department') > 0) ? $this->input->post('department') : 0;
 
         $address                = $this->input->post('address');
         $place                  = $this->input->post('place');
         $latitude               = $this->input->post('latitude');
         $longitude              = $this->input->post('longitude');
         
-        $ComplaintPrivacy       = $this->input->post('privacy'); // 1 = Public, 0 = Private
+        $ComplaintPrivacy       = ($this->input->post('privacy') != '') ? $this->input->post('privacy') : 1; // 1 = Public, 0 = Private
         $schedule_date          = $this->input->post('schedule_date');
 
         $ComplaintStatus = 1;
@@ -532,7 +532,8 @@ class Complaint extends CI_Controller {
         $HistoryDescription         = $this->input->post('description');
         
         $current_status             = $this->input->post('current_status');
-        
+
+
         if($UserProfileId == "") {
             $msg = "Please select your profile";
             $error_occured = true;
@@ -571,6 +572,18 @@ class Complaint extends CI_Controller {
                 $complaint_history_detail = $this->Complaint_Model->getComplaintHistoryDetail($ComplaintHistoryId, $UserProfileId);
                 
                 $this->db->query("COMMIT");
+
+                // Sending Notification to Users Start
+                $user_profile_id_array = $this->Complaint_Model->getActiveUserProfileIdAssociatedWithComplaint($ComplaintId, $UserProfileId);
+
+                $device_tokens = $this->User_Model->getUserProfileDeviceTokenFromUserProfileIds($user_profile_id_array);
+
+                foreach($device_tokens AS $device_token) {
+                    sendAndroidNotification($device_token, 'ComplaintReply', $HistoryTitle, $HistoryDescription, $complaint_history_detail);
+                }
+                // Send Notification to Users End
+
+                $complaint_history_detail = array_merge($complaint_history_detail, $user_profile_id_array);
 
                 $msg = "Complaint history saved successfully";
 

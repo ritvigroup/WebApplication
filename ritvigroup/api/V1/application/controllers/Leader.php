@@ -51,7 +51,18 @@ class Leader extends CI_Controller {
             $result = array();
             $sql = "
             
-            SELECT EventId AS Id, 'Event' AS DataType, AddedOn AS DateAdded FROM `Event` WHERE `StartDate` <= '".date('Y-m-d H:i:s')."' AND `EndDate` >= '".date('Y-m-d H:i:s')."' AND `EventStatus` = '1' AND `AddedBy` = '".$UserProfileId."'
+            SELECT EventId AS Id, 'Event' AS DataType, AddedOn AS DateAdded FROM `Event` 
+                    WHERE 
+                        `EventStatus` = '1' 
+                    AND `AddedBy` = '".$UserProfileId."'
+
+            UNION 
+
+            SELECT e.EventId AS Id, 'Event' AS DataType, e.AddedOn AS DateAdded FROM `Event` AS e 
+                    LEFT JOIN `EventAttendee` AS ea ON e.EventId = ea.EventId 
+                    WHERE 
+                        e.`EventStatus` = '1' 
+                    AND ea.`UserProfileId` = '".$UserProfileId."'
 
             UNION 
 
@@ -62,7 +73,15 @@ class Leader extends CI_Controller {
 
             UNION 
 
-            SELECT ComplaintId AS Id, 'Complaint' AS DataType, AddedOn AS DateAdded FROM `Complaint` WHERE `ComplaintStatus` = '1' AND `AddedBy` = '".$UserProfileId."'
+            SELECT ComplaintId AS Id, 'Complaint' AS DataType, AddedOn AS DateAdded FROM `Complaint` WHERE `ComplaintStatus` = '1' AND `AddedBy` = '".$UserProfileId."' 
+
+            UNION 
+
+            SELECT c.ComplaintId AS Id, 'Complaint' AS DataType, c.AddedOn AS DateAdded FROM `Complaint` AS c 
+                    LEFT JOIN `ComplaintAssigned` AS ca ON ca.ComplaintId = c.ComplaintId 
+                    WHERE 
+                        c.`ComplaintStatus` = '1' 
+                    AND ca.`AssignedTo` = '".$UserProfileId."' 
 
             UNION 
 

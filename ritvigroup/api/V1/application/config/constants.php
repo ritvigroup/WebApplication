@@ -93,6 +93,7 @@ if(ENVIRONMENT == 'development') {
 	defined('WEBSITE_URL')        OR define('WEBSITE_URL', 'http://www.ritvigroup.com/ritvigroup.com/ritvigroup');
 }
 
+defined('FIREBASE_API_KEY')        OR define('FIREBASE_API_KEY', 'AAAAwGGjlNU:APA91bG0o5DrxKoCguYHXlDyqv2T9fZaH9XeoE2laBBcE8l2HsmBr36tbNgqspuPH3c7D_HMZbpQBSbSkOaxz4wOdbw9Z6_H4VDcf3TuKam5TCVkC0_ebJpW61Ai_pcWxgxLSFeweFvN');
 
 defined('APP_FOLDER')        OR define('APP_FOLDER', 'ritvigroup');
 defined('API_FOLDER')        OR define('API_FOLDER', 'api');

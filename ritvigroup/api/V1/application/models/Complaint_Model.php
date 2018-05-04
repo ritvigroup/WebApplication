@@ -398,6 +398,45 @@ class Complaint_Model extends CI_Model {
         return $complaint_detail;
     }
 
+
+    public function getActiveUserProfileIdAssociatedWithComplaint($ComplaintId, $except_UserProfileId = 0) {
+
+        $user_profile_id_array = array();
+
+        // Complaint Creator
+        $query = $this->db->query("SELECT AddedBy FROM ".$this->complaintTbl." WHERE ComplaintId = '".$ComplaintId."'");        
+        $res = $query->result_array();
+
+        foreach($res AS $key => $result) {
+            if(!@in_array($result['AddedBy'], $user_profile_id_array) && $result['AddedBy'] != $except_UserProfileId) {
+                $user_profile_id_array[] = $result['AddedBy'];
+            }
+        }
+
+        // Complaint Members
+        $query = $this->db->query("SELECT UserProfileId FROM ".$this->complaintMemberTbl." WHERE ComplaintId = '".$ComplaintId."' AND AcceptedYesNo = '1'");        
+        $res = $query->result_array();
+
+        foreach($res AS $key => $result) {
+            if(!@in_array($result['UserProfileId'], $user_profile_id_array) && $result['UserProfileId'] != $except_UserProfileId) {
+                $user_profile_id_array[] = $result['UserProfileId'];
+            }
+        }
+
+        // Complaint History Repiers
+        $query = $this->db->query("SELECT AddedBy FROM ".$this->complaintHistoryTbl." WHERE ComplaintId = '".$ComplaintId."'");        
+        $res = $query->result_array();
+
+        foreach($res AS $key => $result) {
+            if(!@in_array($result['AddedBy'], $user_profile_id_array) && $result['AddedBy'] != $except_UserProfileId) {
+                $user_profile_id_array[] = $result['AddedBy'];
+            }
+        }
+
+        return $user_profile_id_array;
+    }
+
+
     // Get Complaint Detail
     public function getComplaintDetail($ComplaintId, $UserProfileId) {
         $complaint_detail = array();
