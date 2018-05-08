@@ -81,7 +81,7 @@
                         <div class="clearfix"> </div>
                         <!-- End projects list -->
                         
-                        <?php  require_once './include/footer.php';?>
+                        
 
                     </div>
                 </div>
@@ -102,17 +102,11 @@
 
 <?php  require_once './include/scroll_top.php';?>
 
+<?php  require_once './include/footer.php';?>
+
 </body>
 
 <?php  require_once './include/js.php';?>
-
-<div id="modal-stackable" tabindex="-1" role="dialog" aria-labelledby="modal-stackable-label" aria-hidden="true" class="modal fade" style="display: none;">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            
-        </div>
-    </div>
-</div>
 
 
 <script>

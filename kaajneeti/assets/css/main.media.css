@@ -15,7 +15,7 @@ page sidebar  class for large
 .page-sidebar-closed .page-sidebar .page-sidebar-menu > li:hover {
     display: block;
     position: relative;
-    width: 256px;
+    width: 145px;
     z-index: 10000;
 }
 

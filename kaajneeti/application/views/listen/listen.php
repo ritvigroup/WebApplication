@@ -173,28 +173,13 @@
                         </div>                    
                     </div>
                 </div>
-                <div class="panel-footer listen-footer">
-                    
-                    <div class="row">
-                        <div class="col-md-6"><p><strong>Copyright</strong>" 2018 © Kaajneeti All Right Reserved "</p></div>
-                         <div class="col-md-6"><div class="pull-right">
-        <ul class="list-inline">
-            <li><a title="Dashboard" href="http://localhost/kaajneeti/leader/dashboard" class="footer-text">Dashboard</a></li>
-            <li><a title="Inbox" href="" class="footer-text"> Inbox </a></li>
-            <li><a title="Blog" href="" class="footer-text">Blog</a></li>
-            <li><a title="Contacts" href="" class="footer-text">Contacts</a></li>
-        </ul>
-    </div></div>
-                    </div>
-                </div>
-            </div>
             <!-- stat timeline and feed  -->
             <div class="top20">
                 
                 <div class="clearfix"> </div>
                 <!-- End projects list -->
                 
-                <!-- <?php  require_once './include/foote';?> -->
+                <?php require_once './include/footer.php';?>
 
             </div>
         </div>
@@ -205,7 +190,7 @@
 
 </body>
 
-<?php  //require_once './include/js.php';?>
+<?php  require_once './include/js.php';?>
 
 
 <div id="modal-stackable" tabindex="-1" role="dialog" aria-labelledby="modal-stackable-label" aria-hidden="true" class="modal fade" style="display: none;">
@@ -215,102 +200,6 @@
         </div>
     </div>
 </div>
-
-<script src="<?=base_url();?>assets/js/vendor/jquery.min.js"></script>
-    <!-- bootstrap js -->
-<script src="<?=base_url();?>assets/js/vendor/bootstrap.min.js"></script>
-<!-- flot chart -->
-    <script type="text/javascript" src="assets/js/vendor/flotCart/jquery.js"></script>
-    <script type="text/javascript" src="assets/js/vendor/flotCart/jquery.flot.js"></script>
-    <script type="text/javascript" src="assets/js/vendor/flotCart/jquery.flot.stack.js"></script>
-    <script type="text/javascript" src="assets/js/vendor/flotCart/jquery.flot.categories.js"></script>
-    <script type="text/javascript" src="assets/js/vendor/flotCart/jquery.flot.crosshair.js"></script>
-    <script type="text/javascript" src="assets/js/vendor/flotCart/jquery.flot.pie.js"></script>
-    <script type="text/javascript" src="assets/js/vendor/flotCart.js"></script>
-    <!-- slimscroll js -->
-<!-- slimscroll js -->
-<script type="text/javascript" src="<?=base_url();?>assets/js/vendor/jquery.slimscroll.js"></script>
-<!-- pace js -->
-<script src="<?=base_url();?>assets/js/vendor/pace/pace.min.js"></script>
-<!-- main js -->
-<script src="<?=base_url();?>assets/js/main.js"></script>
-
-<script>
-/*$('#pie-with-legend').highcharts({
-    chart: {
-        plotBackgroundColor: null,
-        plotBorderWidth: null,
-        plotShadow: false
-    },
-    title: {
-        text: 'Overall report'
-    },
-    tooltip: {
-        pointFormat: '{series.name}: <b>{point.percentage:.1f}</b>'
-    },
-    plotOptions: {
-        pie: {
-            allowPointSelect: true,
-            cursor: 'pointer',
-            dataLabels: {
-                enabled: false
-            },
-            showInLegend: true
-        }
-    },
-    series: [{
-        type: 'pie',
-        name: 'Percentage',
-        data: [
-            <?php foreach($overall_report AS $total_summary_key => $total_summary_val) { ?>
-                ['<?php echo $total_summary_key; ?>',   <?php echo $total_summary_val; ?>],
-            <?php } ?>
-        ]
-    }]
-});*/
-
-// Build the chart
-// $('#pie-with-gradient-fill').highcharts({
-//     chart: {
-//         plotBackgroundColor: null,
-//         plotBorderWidth: null,
-//         plotShadow: false
-//     },
-//     title: {
-//         text: 'Overall Report'
-//     },
-//     tooltip: {
-//         pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
-//     },
-//     plotOptions: {
-//         pie: {
-//             allowPointSelect: true,
-//             cursor: 'pointer',
-//             dataLabels: {
-//                 enabled: true,
-//                 color: '#000000',
-//                 connectorColor: '#000000',
-//                 formatter: function() {
-//                     return '<b>'+ this.point.name +'</b>: '+ this.percentage.toFixed(2) +' %';
-//                 }
-//             }
-//         }
-//     },
-//     series: [{
-//         type: 'pie',
-//         name: 'Browser share',
-//         data: [
-//             <?php foreach($overall_report AS $total_summary_key => $total_summary_val) { ?>
-//                 ['<?php echo $total_summary_key; ?>',   <?php echo $total_summary_val; ?>],
-//             <?php } ?>
-//         ]
-//     }]
-// });
-
-</script>
-
-
-    
 
 
 

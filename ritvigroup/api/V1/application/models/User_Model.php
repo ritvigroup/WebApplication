@@ -465,7 +465,7 @@ class User_Model extends CI_Model {
                                 "MiddleName"                    => (($res_u['MiddleName'] != NULL) ? $res_u['MiddleName'] : ""),
                                 "LastName"                      => (($res_u['LastName'] != NULL) ? $res_u['LastName'] : ""),
                                 "UserTypeId"                    => (($res_u['UserTypeId'] != NULL) ? $res_u['UserTypeId'] : ""),
-                                "DateOfBirth"                   => (($res_u['DateOfBirth'] != '0000-00-00') ? $res_u['DateOfBirth'] : ""),
+                                "DateOfBirth"                   => (($res_u['DateOfBirth'] != '0000-00-00' || $res_u['DateOfBirth'] != NULL) ? $res_u['DateOfBirth'] : ""),
                                 "Gender"                        => (($res_u['Gender'] != NULL) ? $res_u['Gender'] : ""),
                                 "MaritalStatus"                 => (($res_u['MaritalStatus'] != NULL) ? $res_u['MaritalStatus'] : ""),
                                 "Email"                         => (($res_u['Email'] != NULL) ? $res_u['Email'] : ""),
@@ -1503,7 +1503,7 @@ class User_Model extends CI_Model {
         $fav_leader = array();
 
         foreach($res_u AS $key => $result) {
-            $fav_leader[] = $this->getUserDetailLeader($result['UserId'], $UserProfileId);
+            $fav_leader[] = $this->getUserProfileInformation($result['FriendUserProfileId'], $UserProfileId);
         }
 
         return $fav_leader;
@@ -1555,7 +1555,7 @@ class User_Model extends CI_Model {
     }
 
     // Get My All Friends
-    public function getMyAllFriends($UserProfileId) {
+    public function getMyAllFriends($UserProfileId, $onlyUserProfileId = 0) {
         $query = $this->db->query("SELECT uf.FriendUserProfileId 
                                         FROM ".$this->UserFriendTbl." AS uf 
                                         WHERE 
@@ -1567,10 +1567,19 @@ class User_Model extends CI_Model {
 
         $friends = array();
 
+        $fiends_profile_id = array();
+
         foreach($res_u AS $key => $result) {
             $friends[] = $this->getUserProfileInformation($result['FriendUserProfileId'], $UserProfileId);
+
+            if($onlyUserProfileId == 1) {
+                $fiends_profile_id[] = $result['FriendUserProfileId'];
+            }
         }
 
+        if($onlyUserProfileId == 1) { 
+            return $fiends_profile_id;
+        }
         return $friends;
     }
 

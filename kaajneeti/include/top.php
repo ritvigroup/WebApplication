@@ -3,7 +3,9 @@
     <div class="page-header-inner ">
         <!-- BEGIN LOGO -->
         <div class="page-logo">
-            <a href="<?=base_url();?>leader/dashboard"> Kaajneeti </a>
+            <a href="<?=base_url();?>leader/dashboard"> 
+                <img class="logo-default" alt="logo" src="../assets/images/logo.png">
+            </a>
         </div>
         <!-- END LOGO -->
         <div class="library-menu"> <span class="one">-</span> <span class="two">-</span> <span class="three">-</span> </div>
@@ -11,12 +13,12 @@
         <div class="top-menu">
             <ul class="nav navbar-nav pull-right">
                 <li style="color: #fff; border-right:1px solid #fff; padding-right: 10px; float: left; padding-top: 10px;">Free Edition  <br><span style="color: skyblue; font-size: 12px;">Upgrade</span></li>
-                <li class="dropdown">
+                <!-- <li class="dropdown">
                     <a href="#" data-toggle="dropdown" class="dropdown-toggle count-info"> <i class="fa fa-envelope"></i> <span class="badge badge-info">6</span> </a>
                     <ul class="dropdown-menu dropdown-messages menuBig">
                         <li>
                             <div class="dropdown-messages-box">
-                                <a class="pull-left" href="profile.html"> <!-- <img src="assets/images/teem/a7.jpg" class="img-circle" alt="image"> --> </a>
+                                <a class="pull-left" href="profile.html"> <img src="assets/images/teem/a7.jpg" class="img-circle" alt="image"> </a>
                                 <div class="media-body"> <small class="pull-right">46h ago</small> <strong>Mike Loreipsum</strong> started following <strong>Olivia Wenscombe</strong>.
                                     <br>
                                     <small class="text-muted">3 days ago at 7:58 pm - 10.06.2014</small> </div>
@@ -25,7 +27,7 @@
                         <li class="divider"></li>
                         <li>
                             <div class="dropdown-messages-box">
-                                <a class="pull-left" href="profile.html"> <!-- <img src="assets/images/teem/a4.jpg" class="img-circle" alt="image"> --> </a>
+                                <a class="pull-left" href="profile.html"> <img src="assets/images/teem/a4.jpg" class="img-circle" alt="image"> </a>
                                 <div class="media-body "> <small class="pull-right text-navy">5h ago</small> <strong>Alex Smith </strong> started following <strong>Olivia Wenscombe</strong>.
                                     <br>
                                     <small class="text-muted">Yesterday 1:21 pm - 11.06.2014</small> </div>
@@ -34,7 +36,7 @@
                         <li class="divider"></li>
                         <li>
                             <div class="dropdown-messages-box">
-                                <a class="pull-left" href="profile.html"> <!-- <img src="assets/images/teem/a3.jpg" class="img-circle" alt="image"> --> </a>
+                                <a class="pull-left" href="profile.html"> <img src="assets/images/teem/a3.jpg" class="img-circle" alt="image"> </a>
                                 <div class="media-body "> <small class="pull-right">23h ago</small> <strong>Olivia Wenscombe</strong> love <strong>Sophie </strong>. <br>
                                     <small class="text-muted">2 days ago at 2:30 am - 11.06.2014</small> </div>
                             </div>
@@ -46,42 +48,56 @@
                             </div>
                         </li>
                     </ul>
-                </li>
-                <li class="dropdown">
-                    <a href="#" data-toggle="dropdown" class="dropdown-toggle count-info"> <i class="fa fa-comments"></i> <span class="badge badge-info"></span> </a>
-                    <ul class="dropdown-menu dropdown-messages menuBig">
-                        <li>
-                            <div class="dropdown-messages-box">
-                                <a class="pull-left" href="profile.html"> <!-- <img src="assets/images/teem/a7.jpg" class="img-circle" alt="image"> --> </a>
-                                <div class="media-body"> <small class="pull-right">46h ago</small> <strong>Mike Loreipsum</strong> started following <strong>Olivia Wenscombe</strong>.
-                                    <br>
-                                    <small class="text-muted">3 days ago at 7:58 pm - 10.06.2014</small> </div>
+                </li> -->
+                <li class="search"><input type="" name="" style="display: none;"><button class=""><i class="fa fa-search"></i></button></li>
+
+                <li class="dropdown add">
+                    <a href="#" data-toggle="dropdown" class="dropdown-toggle count-info"> <i class="fa fa-plus"></i> <span class="badge badge-info"></span> </a>
+                    <div class="dropdown-menu dropdown-messages menuBig">
+                        
+                        <div class="col-md-12 padding-20">
+                            <h3>Create</h3>
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <a href="#">Customers</a>
+                                    <a href="#">lorem</a>
+                                    <a href="#">lorem</a>
+                                    <a href="#">lorem</a>
+                                    <a href="#">lorem</a>
+                                    <a href="#">lorem</a>
+                                    <a href="#">lorem</a>
+                                </div>
+                                <div class="col-sm-3">
+                                    <a href="#">Suppliers</a>
+                                    <a href="#">lorem</a>
+                                    <a href="#">lorem</a>
+                                    <a href="#">lorem</a>
+                                    <a href="#">lorem</a>
+                                    <a href="#">lorem</a>
+                                    <a href="#">lorem</a>
+                                </div>
+                                <div class="col-sm-3">
+                                    <a href="#">Employees</a>
+                                    <a href="#">lorem</a>
+                                    <a href="#">lorem</a>
+                                    <a href="#">lorem</a>
+                                    <a href="#">lorem</a>
+                                    <a href="#">lorem</a>
+                                    <a href="#">lorem</a>
+                                </div>
+                                <div class="col-sm-3">
+                                    <a href="#">lorem</a>
+                                    <a href="#">lorem</a>
+                                    <a href="#">lorem</a>
+                                    <a href="#">lorem</a>
+                                    <a href="#">lorem</a>
+                                    <a href="#">lorem</a>
+                                    <a href="#">lorem</a>
+                                </div>
                             </div>
-                        </li>
-                        <li class="divider"></li>
-                        <li>
-                            <div class="dropdown-messages-box">
-                                <a class="pull-left" href="profile.html"> <!-- <img src="assets/images/teem/a4.jpg" class="img-circle" alt="image"> --> </a>
-                                <div class="media-body "> <small class="pull-right text-navy">5h ago</small> <strong>Alex Smith </strong> started following <strong>Olivia Wenscombe</strong>.
-                                    <br>
-                                    <small class="text-muted">Yesterday 1:21 pm - 11.06.2014</small> </div>
-                            </div>
-                        </li>
-                        <li class="divider"></li>
-                        <li>
-                            <div class="dropdown-messages-box">
-                                <a class="pull-left" href="profile.html"> <!-- <img src="assets/images/teem/a3.jpg" class="img-circle" alt="image"> --> </a>
-                                <div class="media-body "> <small class="pull-right">23h ago</small> <strong>Olivia Wenscombe</strong> love <strong>Sophie </strong>. <br>
-                                    <small class="text-muted">2 days ago at 2:30 am - 11.06.2014</small> </div>
-                            </div>
-                        </li>
-                        <li class="divider"></li>
-                        <li>
-                            <div class="text-center link-block">
-                                <a href="mailbox.html"> <i class="fa fa-envelope"></i> <strong>Read All Messages</strong> </a>
-                            </div>
-                        </li>
-                    </ul>
+                        </div>                       
+                    </div>
+
                 </li>
                 <li class="dropdown">
                     <a href="#" data-toggle="dropdown" class="dropdown-toggle count-info"> <i class="fa fa-bell"></i> <span class="badge badge-primary"></span> </a>
@@ -105,12 +121,113 @@
                         <li class="last"></li>
                     </ul>
                 </li>
+                <li class="dropdown">
+                    <a href="#" data-toggle="dropdown" class="dropdown-toggle count-info"> <i class="glyphicon glyphicon-cog"></i> <span class="badge badge-info"></span> </a>
+                    <div class="dropdown-menu dropdown-messages menuBig">
+                        
+                        <div class="col-md-9 padding-20">
+                            <h3>ritvi innovation pvt. ltd.</h3>
+                            <div class="row">
+                                <div class="col-sm-4">
+                                    <a href="#">lorem</a>
+                                    <a href="#">lorem</a>
+                                    <a href="#">lorem</a>
+                                    <a href="#">lorem</a>
+                                    <a href="#">lorem</a>
+                                    <a href="#">lorem</a>
+                                    <a href="#">lorem</a>
+                                </div>
+                                <div class="col-sm-4">
+                                    <a href="#">lorem</a>
+                                    <a href="#">lorem</a>
+                                    <a href="#">lorem</a>
+                                    <a href="#">lorem</a>
+                                    <a href="#">lorem</a>
+                                    <a href="#">lorem</a>
+                                    <a href="#">lorem</a>
+                                </div>
+                                <div class="col-sm-4">
+                                    <a href="#">lorem</a>
+                                    <a href="#">lorem</a>
+                                    <a href="#">lorem</a>
+                                    <a href="#">lorem</a>
+                                    <a href="#">lorem</a>
+                                    <a href="#">lorem</a>
+                                    <a href="#">lorem</a>
+                                </div>
+                                
+                            </div>
+                        </div>  
+                        <div class="col-md-3 bg-color-light padding-20">
+                            <div class="row">
+                                <div class="col-sm-12 padding-top-32">
+                                    <a href="#">lorem</a>
+                                    <a href="#">lorem</a>
+                                    <a href="#">lorem</a>
+                                    <a href="#">lorem</a>
+                                    <a href="#">lorem</a>
+                                    <a href="#">lorem</a>
+                                    <a href="#">lorem</a>
+                                </div>
+                            </div>
+                        </div>                      
+                    </div>
+
+                </li>
+                <!-- <li class="dropdown">
+                    <a href="#" data-toggle="dropdown" class="dropdown-toggle count-info"> <i class="fa fa-comments"></i> <span class="badge badge-info"></span> </a>
+                    <ul class="dropdown-menu dropdown-messages menuBig">
+                        <li>
+                            <div class="dropdown-messages-box">
+                                <a class="pull-left" href="profile.html"> <img src="assets/images/teem/a7.jpg" class="img-circle" alt="image"> </a>
+                                <div class="media-body"> <small class="pull-right">46h ago</small> <strong>Mike Loreipsum</strong> started following <strong>Olivia Wenscombe</strong>.
+                                    <br>
+                                    <small class="text-muted">3 days ago at 7:58 pm - 10.06.2014</small> </div>
+                            </div>
+                        </li>
+                        <li class="divider"></li>
+                        <li>
+                            <div class="dropdown-messages-box">
+                                <a class="pull-left" href="profile.html"> <img src="assets/images/teem/a4.jpg" class="img-circle" alt="image"> </a>
+                                <div class="media-body "> <small class="pull-right text-navy">5h ago</small> <strong>Alex Smith </strong> started following <strong>Olivia Wenscombe</strong>.
+                                    <br>
+                                    <small class="text-muted">Yesterday 1:21 pm - 11.06.2014</small> </div>
+                            </div>
+                        </li>
+                        <li class="divider"></li>
+                        <li>
+                            <div class="dropdown-messages-box">
+                                <a class="pull-left" href="profile.html"> <img src="assets/images/teem/a3.jpg" class="img-circle" alt="image"> </a>
+                                <div class="media-body "> <small class="pull-right">23h ago</small> <strong>Olivia Wenscombe</strong> love <strong>Sophie </strong>. <br>
+                                    <small class="text-muted">2 days ago at 2:30 am - 11.06.2014</small> </div>
+                            </div>
+                        </li>
+                        <li class="divider"></li>
+                        <li>
+                            <div class="text-center link-block">
+                                <a href="mailbox.html"> <i class="fa fa-envelope"></i> <strong>Read All Messages</strong> </a>
+                            </div>
+                        </li>
+                    </ul>
+                </li> -->
+                
                 <!-- START USER LOGIN DROPDOWN -->
                 <li class="dropdown dropdown-user">
                     <a data-close-others="true" data-hover="dropdown" data-toggle="dropdown" class="dropdown-toggle" href="javascript:;"> <img src="<?php echo $this->session->userdata('UserProfilePic'); ?>" class="img-circle" alt=""> <span class="username username-hide-on-mobile"> <?php  $this->session->userdata('UserName'); ?> </span>
-                    <i class="fa fa-angle-down"></i> </a>
+                     </a><!-- <i class="fa fa-angle-down"></i> -->
                     <ul class="dropdown-menu dropdown-menu-default">
                         <li><a href="<?=base_url();?>profile/profile"> <i class="icon-user"></i> My Profile </a></li>
+                        <li><a href="<?=base_url();?>profile/profile"> <i class="icon-user"></i> My Profile </a></li>
+                        <li class="divider"> </li>
+                        <li><a href="<?=base_url();?>profile/profile"> <i class="icon-user"></i> My Profile </a></li>
+                        <li><a href="<?=base_url();?>profile/profile"> <i class="icon-user"></i> My Profile </a></li>
+                        <li class="divider"> </li>
+                        <li><a href="<?=base_url();?>profile/profile"> <i class="icon-user"></i> My Profile </a></li>
+                        <li><a href="<?=base_url();?>profile/profile"> <i class="icon-user"></i> My Profile </a></li>
+                        <li class="divider"> </li>
+                        <li><a href="<?=base_url();?>profile/profile"> <i class="icon-user"></i> My Profile </a></li>
+                        <li><a href="<?=base_url();?>profile/profile"> <i class="icon-user"></i> My Profile </a></li>
+                        <li class="divider"> </li>
                         <?php /*
                         <li><a href="<?=base_url();?>profile/profile"> <i class="icon-calendar"></i> My Calendar </a></li>
                         <li><a href="<?=base_url();?>profile/profile"> <i class="icon-envelope-open"></i> My Inbox <span class="badge badge-danger"> 3 </span> </a></li>
@@ -120,6 +237,7 @@
                         <li class="divider"> </li>
                         */ ?>
                         <li><a href="<?=base_url();?>leader/logout"> <i class="icon-key"></i> Log Out </a></li>
+                        <li><a href="#" class="text-uppercase"> Available on <img src=""> <img src=""> </a></li>
                     </ul>
                 </li>
                 <!-- END USER LOGIN DROPDOWN -->

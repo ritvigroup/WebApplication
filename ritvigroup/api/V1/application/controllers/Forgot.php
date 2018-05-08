@@ -179,12 +179,17 @@ class Forgot extends CI_Controller {
                 
                 $UserId = $res_u['UserId'];
 
-                $ResetPasswordCode = $this->User_Model->autoGenerateResetPasswordCode();
+                //$ResetPasswordCode = $this->User_Model->autoGenerateResetPasswordCode();
 
-                $ResetPasswordCodeValidTill = date('Y-m-d H:i:s', time() + 120);
+                //$ResetPasswordCodeValidTill = date('Y-m-d H:i:s', time() + 120);
+
+                $otp = autoGenerateOtp();
+            
+                $ResetPasswordCodeValidTill = date('Y-m-d H:i:s', time() + 60);
+
 
                 $updateData = array(
-                    'ResetPasswordCode' => $ResetPasswordCode,
+                    'ResetPasswordCode' => $otp,
                     'ResetPasswordCodeValidTill' => $ResetPasswordCodeValidTill,
                     'UpdatedOn' => date('Y-m-d H:i:s'),
                 );
@@ -195,7 +200,7 @@ class Forgot extends CI_Controller {
 
                 $msg = "Reset Mpin sent to your mobile number";
             } else {
-                $msg = "Error: Either mobile number or mpin incorrect";
+                $msg = "Error: This mobile does not exist";
                 $error_occured = true;
             }
         }
@@ -208,7 +213,11 @@ class Forgot extends CI_Controller {
         } else {
 
             // code
-            $otp_message = "Reset forgot password code is sent to your mobile number. Reset password code is: ".$ResetPasswordCode;
+            //$otp_message = "Reset forgot password code is sent to your mobile number. Reset password code is: ".$ResetPasswordCode;
+            //$otp_sent = sendMessageToPhone($mobile, $otp_message);
+
+            // otp code
+            $otp_message = $otp." is the OTP verifying your mobile with Kaajneeti";
             $otp_sent = sendMessageToPhone($mobile, $otp_message);
 
             $array = array(
@@ -304,6 +313,7 @@ class Forgot extends CI_Controller {
 
                 $insertData = array(
                                     'UserId'        => $UserId,
+                                    'UserProfileId' => $UserId,
                                     'DeviceTokenId' => $this->device_token,
                                     'DeviceName'    => $this->device_name,
                                     'DeviceOs'      => $this->device_os,

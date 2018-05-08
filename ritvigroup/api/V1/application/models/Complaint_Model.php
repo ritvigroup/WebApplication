@@ -484,6 +484,7 @@ class Complaint_Model extends CI_Model {
         $UpdatedOn          = return_time_ago($res['UpdatedOn']);
 
         $ComplaintProfile       = $this->User_Model->getUserProfileInformation($AddedBy, $UserProfileId);
+        $ComplaintAssigned      = $this->getComplaintAssigned($ComplaintId, $UserProfileId);
         $ComplaintMember        = $this->getComplaintMember($ComplaintId, $UserProfileId);
         $ComplaintAttachment    = $this->getComplaintAttachment($ComplaintId, $UserProfileId);
         //$ComplaintHistory       = $this->getComplaintHistory($ComplaintId);
@@ -514,9 +515,31 @@ class Complaint_Model extends CI_Model {
                                 "ComplaintProfile"          => $ComplaintProfile,
                                 "ComplaintMember"           => $ComplaintMember,
                                 "ComplaintAttachment"       => $ComplaintAttachment,
+                                "ComplaintAssigned"         => $ComplaintAssigned,
                                 //"ComplaintHistory"          => $ComplaintHistory,
                                 );
         return $user_data_array;
+    }
+
+
+    public function getComplaintAssigned($ComplaintId, $UserProfileId) {
+        $ComplaintAssigned = array();
+
+        $query = $this->db->query("SELECT ca.* 
+                                            FROM ".$this->complaintAssignedTbl." AS ca 
+                                            LEFT JOIN ".$this->userProfileTbl." up ON ca.AssignedTo = up.UserProfileId
+                                            WHERE 
+                                                ca.`ComplaintId` = '".$ComplaintId."'");
+
+        
+        $res = $query->result_array();
+
+        foreach($res AS $key => $result) {
+            $user_detail = $this->User_Model->getUserProfileInformation($result['AssignedTo'], $UserProfileId);
+            $ComplaintAssigned[] = $user_detail;
+        }
+
+        return $ComplaintAssigned;
     }
 
 

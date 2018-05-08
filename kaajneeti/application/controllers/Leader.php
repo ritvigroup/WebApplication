@@ -9,17 +9,17 @@ class Leader extends CI_Controller {
 
         //$this->load->library('facebook');
 
-        $this->device_token     = gethostname();
-        $this->location_lant    = $this->input->post('location_lant');
-        $this->location_long    = $this->input->post('location_long');
-        $this->device_name      = $this->input->post('device_name');
-        $this->device_os        = $this->input->post('device_os');
+
+        $this->device_token 	= $_POST['device_token'] 	= gethostname();
+        $this->location_lant 	= $_POST['location_lant'] 	= getRealIpAddr();
+        $this->location_long 	= $_POST['location_long'] 	= getRealIpAddr();
+        $this->device_name 		= $_POST['device_name'] 	= getBrowser();
+        $this->device_os 		= $_POST['device_os'] 		= getOS();
        
 
     }
     
-    public function index()
-    {
+    public function index() {
         if(($this->session->userdata('UserId')) > 0)
         {
             redirect('leader/dashboard');
@@ -27,7 +27,6 @@ class Leader extends CI_Controller {
         $this->load->view('leader/login',$data);
     }
     
-
 
     public function fblogin() {
     	if($this->facebook->is_authenticated()){
@@ -68,6 +67,7 @@ class Leader extends CI_Controller {
         $data = array();
         $this->load->view('leader/login',$data);
     }
+
 
     public function login(){
         $data = array();
@@ -111,6 +111,7 @@ class Leader extends CI_Controller {
         $this->load->view('leader/login',$data);
     }
 
+
     public function register() {
     	if(($this->session->userdata('UserId')) > 0)
         {
@@ -143,6 +144,7 @@ class Leader extends CI_Controller {
         $data = array();
         $this->load->view('leader/register',$data);
     }
+
 
     public function forgot(){
         if(($this->session->userdata('UserId')) > 0)
@@ -198,8 +200,7 @@ class Leader extends CI_Controller {
     }
         
       
-    public function logout()
-	{
+    public function logout() {
 		$this->session->set_userdata(array(
 			'UserId'		=> '',
 		));
@@ -209,6 +210,7 @@ class Leader extends CI_Controller {
 		$this->session->sess_destroy();
 		redirect('leader/login');
 	}
+
 
 	public function fblogout() {
         // Remove local Facebook session
@@ -258,115 +260,13 @@ class Leader extends CI_Controller {
         $data = array();
         $this->load->view('leader/dashboard',$data);
     }
-    
-
-    public function profile() {
-        $data = array();
-
-        if(($this->session->userdata('UserId')) > 0) {
-        } else {
-        }
-        $this->load->view('leader/profile',$data);
-    }
-
-    public function team() {
-        $data = array();
-        $this->load->view('leader/team',$data);
-    }
-
-    public function newleader() {
-        $data = array();
-        $this->load->view('leader/newleader',$data);
-    }
-
-    public function citizen() {
-        $data = array();
-        $this->load->view('leader/citizen',$data);
-    }
-
-    public function chat() {
-        $data = array();
-        $this->load->view('leader/chat',$data);
-    }
-
-    public function call() {
-        $data = array();
-        $this->load->view('leader/call',$data);
-    }
-
-
-    public function complaint() {
-        $data = array();
-        $this->load->view('leader/complaint',$data);
-    }
-
-    public function email() {
-        $data = array();
-        $this->load->view('leader/email',$data);
-    }
-
-    public function sms() {
-        $data = array();
-        $this->load->view('leader/sms',$data);
-    }
-
-
-    public function notification() {
-        $data = array();
-        $this->load->view('leader/notification',$data);
-    }
-
-
-    public function livestreaming() {
-        $data = array();
-        $this->load->view('leader/livestreaming',$data);
-    }
-
-    public function event() {
-        $data = array();
-        $this->load->view('leader/event',$data);
-    }
-
-
-    public function issue() {
-        $data = array();
-        $this->load->view('leader/issue',$data);
-    }
-
-
-    public function poll() {
-        $data = array();
-        $this->load->view('leader/poll',$data);
-    }
-
-
-    public function social() {
-        $data = array();
-        $this->load->view('leader/social',$data);
-    }
-
-
-    public function voter_report() {
-        $data = array();
-        $this->load->view('leader/voter_report',$data);
-    }
-
-
-    public function team_report() {
-        $data = array();
-        $this->load->view('leader/team_report',$data);
-    }
-
-    public function geography_report() {
-        $data = array();
-        $this->load->view('leader/geography_report',$data);
-    }
 
 
     public function setting() {
         $data = array();
         $this->load->view('leader/setting',$data);
     }
+
 
     public function switch_profile() {
         $data = array();

@@ -48,6 +48,21 @@ class Citizen extends CI_Controller {
             $error_occured = true;
         } else {
         
+
+            $friend_user_profile_id = $this->User_Model->getMyAllFriends($UserProfileId, 1);
+
+
+
+            $friend_user_profile_id = array_merge($friend_user_profile_id, array($UserProfileId));
+
+            //print_r($friend_user_profile_id);die;
+
+            if(count($friend_user_profile_id) > 1) {
+                $post_condition = " AND p.`UserProfileId` IN (".implode(',', $friend_user_profile_id).")";
+            } else {
+                $post_condition = " AND p.`UserProfileId` = '".$UserProfileId."' ";
+            }
+
             $result = array();
             $sql = "
             
@@ -62,7 +77,25 @@ class Citizen extends CI_Controller {
 
             UNION 
 
+            SELECT p.PostId AS Id, 'Post' AS DataType, p.AddedOn AS DateAdded FROM 
+                                `Post` AS p 
+                            LEFT JOIN `PostTag` AS pt ON pt.PostId = p.PostId 
+                            WHERE 
+                                p.`PostStatus` = '1' 
+                            ".$post_condition."
+
+            UNION 
+
             SELECT ComplaintId AS Id, 'Complaint' AS DataType, AddedOn AS DateAdded FROM `Complaint` WHERE `ComplaintStatus` = '1' AND `AddedBy` = '".$UserProfileId."'
+
+            UNION 
+
+            SELECT c.ComplaintId AS Id, 'Complaint' AS DataType, c.AddedOn AS DateAdded FROM `Complaint` AS c 
+                    LEFT JOIN `ComplaintMember` AS cm ON cm.ComplaintId = c.ComplaintId 
+                    WHERE 
+                        c.`ComplaintStatus`     = '1' 
+                    AND cm.`UserProfileId`      = '".$UserProfileId."' 
+                    AND cm.AcceptedYesNo        != '2'
 
             UNION 
 

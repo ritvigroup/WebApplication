@@ -4,6 +4,7 @@
 <div class="page-sidebar-wrapper">
     <div class="page-sidebar">
         <ul class="page-sidebar-menu  page-header-fixed ">
+            <?php /* 
             <li class="sidebar-search-wrapper">
                 <!-- START RESPONSIVE SEARCH FORM -->
                 <form class="sidebar-search" action="" method="POST">
@@ -15,6 +16,7 @@
                 </form>
                 <!-- END RESPONSIVE SEARCH FORM -->
             </li>
+            */ ?>
             <li class="nav-item"> <a class="nav-link" href="<?=base_url();?>leader/dashboard"> <i class="fa fa-tachometer fa-fw"></i> <span class="title">Dashboard</span> </a></li>
             
             <li class="heading">

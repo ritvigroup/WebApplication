@@ -37,55 +37,53 @@
                                 <div class="row mbm">
                                     <div class="col-lg-12">
                                         <div class="table-responsive">
-                                            <table id="table_id"
-                                                   class="table table-hover table-striped table-bordered table-advanced tablesorter display">
+                                            <table id="table_id" class="table table-hover table-striped table-bordered table-advanced tablesorter display">
                                                 <thead>
-                                                <tr>
-                                                    <th>Pic</th>
-                                                    <th>Name</th>
-                                                    <th>Email</th>
-                                                    <th>Department</th>
-                                                    <th>Status</th>
-                                                    <th>Added On</th>
-                                                    <th>Action</th>
-
-                                                </tr>
-
-                                                <?php 
-                                                if(count($MyTeam->result) > 0) { ?>
-                                                <tbody>
-                                                <?php foreach($MyTeam->result AS $my_team) { ?>
-                                                    <?php
-                                                    $Status = ($my_team->ProfileStatus == 1) ? 'Active' : (($my_team->ProfileStatus == 2) ? 'In-Active' :'Not Accepted');
-                                                    $StatusColor = ($my_team->ProfileStatus == 1) ? 'green' : (($my_team->ProfileStatus == 2) ? 'red' :'blue');
-
-                                                    $UserProfileHrefLink = base_url().'profile/subprofile/'.$my_team->UserUniqueId.'/'.$my_team->UserProfileId;
-
-                                                    if($my_team->ProfilePhotoPath != '') {
-                                                        $profile_pic = ($my_team->ProfilePhotoPath != '') ? $my_team->ProfilePhotoPath : base_url().'assets/images/default-user.png';
-                                                    } else {
-                                                        $profile_pic = ($my_team->ProfilePhotoPath != '') ? $my_team->ProfilePhotoPath : base_url().'assets/images/default-user.png';
-                                                    }
-
-                                                    ?>
                                                     <tr>
-                                                        <td><img src="<?php echo $profile_pic; ?>" style="border: 1px solid #fff; box-shadow: 0 2px 3px rgba(0,0,0,0.25);width: 50px; height: 50px;" class="img-circle"/></td>
-                                                        <td><a href="<?php echo $UserProfileHrefLink; ?>" target="_blank"><?php echo $my_team->FirstName.' '.$my_team->LastName; ?></a></td>
-                                                        <td><?php echo $my_team->Email; ?></td>
-                                                        <td><?php echo $my_team->DepartmentName; ?></td>
-                                                        <td><span class="btn <?php echo $StatusColor; ?> btn-xs"><?php echo $Status; ?></span></td>
-                                                        <td><?php echo $my_team->AddedOn; ?></td>
-                                                        <td>
-                                                            <button type="button" class="btn btn-default btn-xs" data-target="#modal-stackable" data-toggle="modal" href="javascript:void(0);" onClick="return editTeam('<?php echo $my_team->UserUniqueId; ?>', '<?php echo $my_team->UserProfileId; ?>');"><i
-                                                                    class="fa fa-edit"></i>&nbsp;
-                                                                Edit
-                                                            </button>
-                                                        </td>
+                                                        <th>Pic</th>
+                                                        <th>Name</th>
+                                                        <th>Email</th>
+                                                        <th>Department</th>
+                                                        <th>Status</th>
+                                                        <th>Added On</th>
+                                                        <th>Action</th>
+
                                                     </tr>
-                                                <?php } ?>
-                                                
-                                                </tbody>
-                                                <?php }  ?> 
+
+                                                    <?php 
+                                                    if(count($MyTeam->result) > 0) { ?>
+                                                    <tbody>
+                                                        <?php foreach($MyTeam->result AS $my_team) { ?>
+                                                            <?php
+                                                            $Status = ($my_team->ProfileStatus == 1) ? 'Active' : (($my_team->ProfileStatus == 2) ? 'In-Active' :'Not Accepted');
+                                                            $StatusColor = ($my_team->ProfileStatus == 1) ? 'green' : (($my_team->ProfileStatus == 2) ? 'red' :'blue');
+
+                                                            $UserProfileHrefLink = base_url().'profile/subprofile/'.$my_team->UserUniqueId.'/'.$my_team->UserProfileId;
+
+                                                            if($my_team->ProfilePhotoPath != '') {
+                                                                $profile_pic = ($my_team->ProfilePhotoPath != '') ? $my_team->ProfilePhotoPath : base_url().'assets/images/default-user.png';
+                                                            } else {
+                                                                $profile_pic = ($my_team->ProfilePhotoPath != '') ? $my_team->ProfilePhotoPath : base_url().'assets/images/default-user.png';
+                                                            }
+
+                                                            ?>
+                                                            <tr>
+                                                                <td><img src="<?php echo $profile_pic; ?>" style="border: 1px solid #fff; box-shadow: 0 2px 3px rgba(0,0,0,0.25);width: 50px; height: 50px;" class="img-circle"/></td>
+                                                                <td><a href="<?php echo $UserProfileHrefLink; ?>" target="_blank"><?php echo $my_team->FirstName.' '.$my_team->LastName; ?></a></td>
+                                                                <td><?php echo $my_team->Email; ?></td>
+                                                                <td><?php echo $my_team->DepartmentName; ?></td>
+                                                                <td><span class="btn <?php echo $StatusColor; ?> btn-xs"><?php echo $Status; ?></span></td>
+                                                                <td><?php echo $my_team->AddedOn; ?></td>
+                                                                <td>
+                                                                    <button type="button" class="btn btn-default btn-xs" data-target="#modal-stackable" data-toggle="modal" href="javascript:void(0);" onClick="return editTeam('<?php echo $my_team->UserUniqueId; ?>', '<?php echo $my_team->UserProfileId; ?>');"><i
+                                                                            class="fa fa-edit"></i>&nbsp;
+                                                                        Edit
+                                                                    </button>
+                                                                </td>
+                                                            </tr>
+                                                        <?php } ?>
+                                                    </tbody>
+                                                    <?php }  ?> 
                                                 </thead>
                                             </table>
                                         </div>
@@ -103,18 +101,17 @@
                     <div class="clearfix"> </div>
                     <!-- End projects list -->
                     
-                    <?php  require_once './include/footer.php';?>
+                    
 
                 </div>
             </div>
         </div>
     </div>
-    
+
+</div>    
     <?php  require_once './include/scroll_top.php';?>
 
-</body>
-
-<?php  require_once './include/js.php';?>
+<?php  require_once './include/footer.php';?>
 
 
 <div id="modal-stackable" tabindex="-1" role="dialog" aria-labelledby="modal-stackable-label" aria-hidden="true" class="modal fade" style="display: none;">
@@ -124,6 +121,10 @@
         </div>
     </div>
 </div>
+
+</body>
+
+<?php  require_once './include/js.php';?>
 
 
 <script>

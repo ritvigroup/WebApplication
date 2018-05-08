@@ -98,18 +98,6 @@ class Userregister extends CI_Controller {
 
                 	$this->User_Model->saveUserPhoto('photo', $UserId, $profile_or_cover = 1);
 
-                	$insertData = array(
-					                    'UserId' 		=> $UserId,
-					                    'DeviceTokenId' => $this->device_token,
-					                    'DeviceName' 	=> $this->device_name,
-					                    'DeviceOs' 		=> $this->device_os,
-					                    'Longitude' 	=> $this->location_long,
-					                    'Lantitude' 	=> $this->location_lant,
-					                    'LoggedIn' 		=> date('Y-m-d H:i:s'),
-					                );
-
-		            $this->User_Model->insertUserLog($insertData);
-
                 	$msg = "User logged in successfully";
 
                 } else {
@@ -219,10 +207,25 @@ class Userregister extends CI_Controller {
                 }
             }
 
-            if($login_type == '' || $login_type == 1) {
-                $user_profile = $this->User_Model->getCitizenProfileInformation($UserId);
-            } else if($login_type == 2) {
-                $user_profile = $this->User_Model->getLeaderProfileInformation($UserId);
+            if($error_occured != true) {
+                if($login_type == '' || $login_type == 1) {
+                    $user_profile = $this->User_Model->getCitizenProfileInformation($UserId);
+                } else if($login_type == 2) {
+                    $user_profile = $this->User_Model->getLeaderProfileInformation($UserId);
+                }
+
+                $insertData = array(
+                            'UserId'        => $UserId,
+                            'UserProfileId' => $user_profile['UserProfileId'],
+                            'DeviceTokenId' => $this->device_token,
+                            'DeviceName'    => $this->device_name,
+                            'DeviceOs'      => $this->device_os,
+                            'Longitude'     => $this->location_long,
+                            'Lantitude'     => $this->location_lant,
+                            'LoggedIn'      => date('Y-m-d H:i:s'),
+                        );
+
+                $this->User_Model->insertUserLog($insertData);
             }
         }
 
@@ -391,10 +394,12 @@ class Userregister extends CI_Controller {
                 }
             }
 
-            if($login_type == '' || $login_type == 1) {
-                $user_profile = $this->User_Model->getCitizenProfileInformation($UserId);
-            } else if($login_type == 2) {
-                $user_profile = $this->User_Model->getLeaderProfileInformation($UserId);
+            if($error_occured != true) {
+                if($login_type == '' || $login_type == 1) {
+                    $user_profile = $this->User_Model->getCitizenProfileInformation($UserId);
+                } else if($login_type == 2) {
+                    $user_profile = $this->User_Model->getLeaderProfileInformation($UserId);
+                }
             }
         }
 
@@ -507,7 +512,7 @@ class Userregister extends CI_Controller {
                                         'FirstName'                 => $UserName,
                                         'UserProfileDeviceToken'    => $this->device_token,
                                         'Mobile'                    => $mobile,
-                                        'ProfileStatus'             => 1,
+                                        'ProfileStatus'             => 0,
                                         'AddedBy'                   => $UserId,
                                         'UpdatedBy'                 => $UserId,
                                         'AddedOn'                   => date('Y-m-d H:i:s'),
@@ -549,10 +554,24 @@ class Userregister extends CI_Controller {
                 }    
             }
 
-            if($login_type == '' || $login_type == 1) {
-                $user_profile = $this->User_Model->getCitizenProfileInformation($UserId);
-            } else if($login_type == 2) {
-                $user_profile = $this->User_Model->getLeaderProfileInformation($UserId);
+            if($error_occured != true) {
+                if($login_type == '' || $login_type == 1) {
+                    $user_profile = $this->User_Model->getCitizenProfileInformation($UserId);
+                } else if($login_type == 2) {
+                    $user_profile = $this->User_Model->getLeaderProfileInformation($UserId);
+                }
+
+                $insertData = array(
+                                    'UserId'        => $UserId,
+                                    'UserProfileId' => $user_profile['UserProfileId'],
+                                    'DeviceTokenId' => $this->device_token,
+                                    'DeviceName'    => $this->device_name,
+                                    'DeviceOs'      => $this->device_os,
+                                    'Longitude'     => $this->location_long,
+                                    'Lantitude'     => $this->location_lant,
+                                    'LoggedIn'      => date('Y-m-d H:i:s'),
+                                );
+                $this->User_Model->insertUserLog($insertData);
             }
 
 		}
@@ -670,8 +689,18 @@ class Userregister extends CI_Controller {
                 
                 $this->User_Model->updateUserData($UserId, $updateData);
 
+                
+                
+                if($login_type == '' || $login_type == 1) {
+                    $user_profile = $this->User_Model->getCitizenProfileInformation($UserId);
+                } else if($login_type == 2) {
+                    $user_profile = $this->User_Model->getLeaderProfileInformation($UserId);
+                }
+
+
                 $insertData = array(
                                     'UserId'        => $UserId,
+                                    'UserProfileId' => $user_profile['UserProfileId'],
                                     'DeviceTokenId' => $this->device_token,
                                     'DeviceName'    => $this->device_name,
                                     'DeviceOs'      => $this->device_os,
@@ -680,12 +709,6 @@ class Userregister extends CI_Controller {
                                     'LoggedIn'      => date('Y-m-d H:i:s'),
                                 );
                 $this->User_Model->insertUserLog($insertData);
-                
-                if($login_type == '' || $login_type == 1) {
-                    $user_profile = $this->User_Model->getCitizenProfileInformation($UserId);
-                } else if($login_type == 2) {
-                    $user_profile = $this->User_Model->getLeaderProfileInformation($UserId);
-                }
 
                 $msg = "Mpin set successfully";
             } else {

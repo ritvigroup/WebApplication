@@ -98,18 +98,6 @@ class Userlogin extends CI_Controller {
 
                 	$this->User_Model->saveUserPhoto('photo', $UserId, $profile_or_cover = 1);
 
-                	$insertData = array(
-					                    'UserId' 		=> $UserId,
-					                    'DeviceTokenId' => $this->device_token,
-					                    'DeviceName' 	=> $this->device_name,
-					                    'DeviceOs' 		=> $this->device_os,
-					                    'Longitude' 	=> $this->location_long,
-					                    'Lantitude' 	=> $this->location_lant,
-					                    'LoggedIn' 		=> date('Y-m-d H:i:s'),
-					                );
-
-		            $this->User_Model->insertUserLog($insertData);
-
                 	$msg = "User logged in successfully";
 
                 } else {
@@ -152,6 +140,14 @@ class Userlogin extends CI_Controller {
 
 		            $UserId = $this->User_Model->insertUser($insertData);
 
+                    $citizen_profile_status = 0;
+                    $leader_profile_status = 0;
+                    if($login_type == '' || $login_type == 1) {
+                        $citizen_profile_status = 1;
+                    } else if($login_type == 2) {
+                        $leader_profile_status = 1;
+                    }
+
                     if($UserId > 0) {
     		            $insertData = array(
     					                    'UserId' 					=> $UserId,
@@ -161,7 +157,7 @@ class Userlogin extends CI_Controller {
     					                    'Email' 					=> $email,
     					                    'UserProfileDeviceToken' 	=> $this->device_token,
     					                    'Mobile' 					=> $mobile,
-    					                    'ProfileStatus' 			=> 1,
+    					                    'ProfileStatus' 			=> $citizen_profile_status,
     					                    'AddedBy' 					=> $UserId,
     					                    'UpdatedBy' 				=> $UserId,
     					                    'AddedOn' 					=> date('Y-m-d H:i:s'),
@@ -178,7 +174,7 @@ class Userlogin extends CI_Controller {
                                             'Email'                     => $email,
                                             'UserProfileDeviceToken'    => $this->device_token,
                                             'Mobile'                    => $mobile,
-                                            'ProfileStatus'             => 1,
+                                            'ProfileStatus'             => $leader_profile_status,
                                             'AddedBy'                   => $UserId,
                                             'UpdatedBy'                 => $UserId,
                                             'AddedOn'                   => date('Y-m-d H:i:s'),
@@ -188,6 +184,7 @@ class Userlogin extends CI_Controller {
                         $UserLeaderProfileId = $this->User_Model->insertUserProfile($insertData);
 
                         if($UserCitizenProfileId > 0 && $UserLeaderProfileId > 0) {
+
                             $this->db->query("COMMIT");
                             $msg = "User registered and logged in successfully";
                         } else {
@@ -204,10 +201,26 @@ class Userlogin extends CI_Controller {
                 }
             }
 
-            if($login_type == '' || $login_type == 1) {
-                $user_profile = $this->User_Model->getCitizenProfileInformation($UserId);
-            } else if($login_type == 2) {
-                $user_profile = $this->User_Model->getLeaderProfileInformation($UserId);
+            if($error_occured != true) {
+
+                if($login_type == '' || $login_type == 1) {
+                    $user_profile = $this->User_Model->getCitizenProfileInformation($UserId);
+                } else if($login_type == 2) {
+                    $user_profile = $this->User_Model->getLeaderProfileInformation($UserId);
+                }
+
+                $insertData = array(
+                            'UserId'        => $UserId,
+                            'UserProfileId' => $user_profile['UserProfileId'],
+                            'DeviceTokenId' => $this->device_token,
+                            'DeviceName'    => $this->device_name,
+                            'DeviceOs'      => $this->device_os,
+                            'Longitude'     => $this->location_long,
+                            'Lantitude'     => $this->location_lant,
+                            'LoggedIn'      => date('Y-m-d H:i:s'),
+                        );
+
+                $this->User_Model->insertUserLog($insertData);
             }
         }
 
@@ -260,6 +273,19 @@ class Userlogin extends CI_Controller {
                     $user_profile = $this->User_Model->getLeaderProfileInformation($UserId);
                 }
 
+                $insertData = array(
+                            'UserId'        => $UserId,
+                            'UserProfileId' => $user_profile['UserProfileId'],
+                            'DeviceTokenId' => $this->device_token,
+                            'DeviceName'    => $this->device_name,
+                            'DeviceOs'      => $this->device_os,
+                            'Longitude'     => $this->location_long,
+                            'Lantitude'     => $this->location_lant,
+                            'LoggedIn'      => date('Y-m-d H:i:s'),
+                        );
+
+                $this->User_Model->insertUserLog($insertData);
+
                 $msg = "User logged in successfully";
             } else {
                 $msg = "Error: Either username or password incorrect";
@@ -300,7 +326,7 @@ class Userlogin extends CI_Controller {
 
             $res_u = $this->User_Model->verifyMobileMpin($mobile, $mpin);
 
-            if($res_u['UserStatus'] == '1') {
+            if($res_u['UserStatus'] != '2' && $res_u != false) {
                 
                 $UserId = $res_u['UserId'];
 
@@ -328,7 +354,24 @@ class Userlogin extends CI_Controller {
                     $this->User_Model->updateUserProfileData($user_profile['UserProfileId'], $updateData);
                 }
 
+                $insertData = array(
+                            'UserId'        => $UserId,
+                            'UserProfileId' => $user_profile['UserProfileId'],
+                            'DeviceTokenId' => $this->device_token,
+                            'DeviceName'    => $this->device_name,
+                            'DeviceOs'      => $this->device_os,
+                            'Longitude'     => $this->location_long,
+                            'Lantitude'     => $this->location_lant,
+                            'LoggedIn'      => date('Y-m-d H:i:s'),
+                        );
+
+                $this->User_Model->insertUserLog($insertData);
+
+
                 $msg = "User logged in successfully";
+            } else if($res_u['UserStatus'] == '2') {
+                $msg = "Error: Your account is disabled";
+                $error_occured = true;
             } else {
                 $msg = "Error: Either mobile number or mpin incorrect";
                 $error_occured = true;
@@ -442,7 +485,8 @@ class Userlogin extends CI_Controller {
                 }
                 
                 $insertData = array(
-				                    'UserId' 		=> $UserId,
+                                    'UserId'        => $UserId,
+				                    'UserProfileId' => $user_profile['UserProfileId'],
 				                    'DeviceTokenId' => $this->device_token,
 				                    'DeviceName' 	=> $this->device_name,
 				                    'DeviceOs' 		=> $this->device_os,

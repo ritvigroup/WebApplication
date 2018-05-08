@@ -58,7 +58,7 @@
             </select>
         </div>
         <div class="form-group">
-            <div class="i-checks">
+            <div class="1i-checks">
                 <input type="checkbox" id="terms" name="terms" class="iCheck" indeterminate="true">
                 Agree the terms and policy 
             </div>
