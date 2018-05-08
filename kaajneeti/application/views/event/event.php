@@ -80,7 +80,7 @@
                     <div class="clearfix"> </div>
                     <!-- End projects list -->
                     
-                    <?php  require_once './include/footer.php';?>
+                    
 
                 </div>
             </div>
@@ -88,7 +88,7 @@
     </div>
 
 <?php  require_once './include/scroll_top.php';?>
-
+<?php  require_once './include/footer.php';?>
 </body>
 
 <?php  require_once './include/js.php';?>

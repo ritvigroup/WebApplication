@@ -1,8 +1,8 @@
 <?php
-echo '<pre>';
-print_r($result);
-print_r($HomePageData);
-echo '</pre>';
+// echo '<pre>';
+// print_r($result);
+// print_r($HomePageData);
+// echo '</pre>';
 $UserDetail = $result;
 
 $UserName   = $UserDetail->UserName;
@@ -143,11 +143,11 @@ $profile_pic = ($UserDetail->ProfilePhotoPath != '') ? $UserDetail->ProfilePhoto
             </div>
         </div>
     </div>
-<?php // require_once './include/footer.php';?>
 
 
 
 <?php  require_once './include/scroll_top.php';?>
+<?php  require_once './include/footer.php';?>
 
 </body>
 

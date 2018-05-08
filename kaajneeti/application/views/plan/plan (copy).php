@@ -84,7 +84,7 @@
                         <div class="clearfix"> </div>
                         <!-- End projects list -->
                         
-                        <?php  require_once './include/footer.php';?>
+                        
 
                     </div>
                 </div>
@@ -100,11 +100,8 @@
     </div>
 </div>
 
-<script src="<?php echo base_url(); ?>assets/js/sweetalert-dev.js"></script> 
-<script src="<?php echo base_url(); ?>assets/js/sweetalert.min.js"></script> 
-
 <?php  require_once './include/scroll_top.php';?>
-
+<?php  require_once './include/footer.php';?>
 </body>
 
 <?php  require_once './include/js.php';?>

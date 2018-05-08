@@ -147,6 +147,7 @@ class Organize extends CI_Controller {
     }
 
 
+
     public function newTeam() {
         $data = array();
       
@@ -163,6 +164,46 @@ class Organize extends CI_Controller {
         }
         
         $this->load->view('organize/newTeam',$data);
+    }
+
+
+
+    public function newFleet() {
+        $data = array();
+      
+        if (!$this->input->is_ajax_request()) {
+           exit('Error');
+        }
+        $_POST['user_profile_id'] = $this->session->userdata('UserProfileId');
+
+        
+        $this->load->view('organize/newFleet',$data);
+    }
+
+
+    public function newDocument() {
+        $data = array();
+      
+        if (!$this->input->is_ajax_request()) {
+           exit('Error');
+        }
+        $_POST['user_profile_id'] = $this->session->userdata('UserProfileId');
+
+        
+        $this->load->view('organize/newDocument',$data);
+    }
+
+
+    public function newGroup() {
+        $data = array();
+      
+        if (!$this->input->is_ajax_request()) {
+           exit('Error');
+        }
+        $_POST['user_profile_id'] = $this->session->userdata('UserProfileId');
+
+        
+        $this->load->view('organize/newGroup',$data);
     }
 
 
