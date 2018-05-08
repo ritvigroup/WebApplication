@@ -31,9 +31,9 @@
                                     <li><a href="<?php //echo base_url(); ?>connect/requestsent">Outgoing</a>&nbsp;</li>
                                 </ol> -->
                                 <ol class="breadcrumb">
-                                    <li> <a class="text-capitalize" href="index.html">kaajneeti</a> </li>
-                                    <li> <a class="text-capitalize">connect</a> </li>
-                                    <li class="active text-capitalize"> <strong>myfriends</strong> </li>
+                                    <li> <a class="text-capitalize" href="<?php echo base_url(); ?>leader/dashboard">Home</a> </li>
+                                    <li> <a class="text-capitalize">Connect</a> </li>
+                                    <li class="active text-capitalize"> <strong>My Connections</strong> </li>
                                 </ol>
                             </div>
 
@@ -47,20 +47,20 @@
                                                     <div class="col-md-6">
                                                         <!-- <i class="fa fa-thumbs-up"></i>  -->
                                                         <span class="user-frnd text-uppercase">
-                                                            Connectios
+                                                            Connection
                                                         </span>
                                                     </div>
                                                     <div class="col-md-6 ">
                                                         <div class="pull-right"> 
                                                             <div class="btn-group" role="group" >
                                                                 <div class="btn-group" role="group">
-                                                                    <button type="button" class="btn aqua btn-outline btn-sm text-capitalize">follower
-                                                                    <span class="badge">4</span></button>
+                                                                    <a  href="#connect-follower" role="tab" id="connect-follower1" data-toggle="tab" aria-controls="connect-follower"><button type="button" class="btn aqua btn-outline btn-sm text-capitalize">follower
+                                                                    <span class="badge">4</span></button></a>
                                                                     <!-- <i class="fa fa-"></i> -->
                                                                   </div>
                                                                   <div class="btn-group" role="group">
-                                                                    <button type="button" class="btn aqua btn-outline btn-sm text-capitalize">
-                                                                     Following <span class="badge">4</span></button>
+                                                                    <a  href="#connect-following" role="tab" id="connect-following1" data-toggle="tab" aria-controls="connect-following"><button type="button" class="btn aqua btn-outline btn-sm text-capitalize">
+                                                                     Following <span class="badge">4</span></button></a>
                                                                   </div>
                                                                   
                                                                 </div >
@@ -79,10 +79,7 @@
                                                                         <a href="#edit-privecy" data-toggle="modal">
                                                                             Edit Privecy
                                                                         </a>
-                                                                        <!-- Button trigger modal -->
-<!-- <button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal">
-  Edit Privecy
-</button> -->
+                                                                        
                                                                     </li>
                                                                   </ul>
                                                             </div>
@@ -98,42 +95,38 @@
                                                     <div class="col-md-9">
                                                         <div>
 
-                                                          <!-- Nav tabs -->
-                                                          <ul class="nav nav-tabs" role="tablist">
-                                                            <li role="presentation" class="active"><a href="#all-connections" aria-controls="home" role="tab" data-toggle="tab">All Connections <span class="badge">4</span></a></li>
-                                                            <li role="presentation" class="dropdown"> <a href="#" class="dropdown-toggle" id="request-connections" data-toggle="dropdown" aria-controls="request-connections-contents" aria-expanded="false">Request <span class="caret"></span></a>
-                                                                <ul class="dropdown-menu" aria-labelledby="request-connections" id="myTabDrop1-contents">
-                                                                    <li><a href="#request-incoming-post" role="tab" id="request-connections-tab1" data-toggle="tab" aria-controls="request-incoming-post">Incoming Post <span class="badge">4</span></a></li>
-                                                                    <li><a href="#request-outgoing-post" role="tab" id="request-connections-tab2" data-toggle="tab" aria-controls="request-outgoing-post">Outgoing Post <span class="badge">4</span></a></li>
-                                                                </ul>
-                                                            </li>
-                                                            <li role="presentation" class="dropdown"> <a href="#" class="dropdown-toggle" id="connects" data-toggle="dropdown" aria-controls="connects-contents" aria-expanded="false">Connects <span class="caret"></span></a>
-                                                                <ul class="dropdown-menu" aria-labelledby="Connects" id="myTabDrop1-contents">
-                                                                    <li><a href="#connect-citizen" role="tab" id="connect-citizen-tab1" data-toggle="tab" aria-controls="request-incoming-post">Citizen <span class="badge">4</span></a></li>
-                                                                    <li><a href="#connect-leader" role="tab" id="connect-citizen-tab2" data-toggle="tab" aria-controls="request-outgoing-post">Leader <span class="badge">4</span></a></li>
-                                                                </ul>
-                                                            </li>
-                                                            <li role="presentation" class="dropdown"> <a href="#" class="dropdown-toggle" id="group-connection" data-toggle="dropdown" aria-controls="connects-contents" aria-expanded="false">Groups <span class="caret"></span></a>
-                                                                <ul class="dropdown-menu" aria-labelledby="group-connection" id="group-connection-contents">
-                                                                    <li><a href="#citizen-grout-connection" role="tab" id="group-connection-tab1" data-toggle="tab" aria-controls="request-incoming-post">Citizen Groups <span class="badge">4</span></a></li>
-                                                                    <li><a href="#leader-grout-connection" role="tab" id="group-connection-tab2" data-toggle="tab" aria-controls="request-outgoing-post">Leader Groups <span class="badge">4</span></a></li>
-                                                                </ul>
-                                                            </li>
-                                                           <!--  <li role="presentation"><a href="#incoming_post" aria-controls="profile" role="tab" data-toggle="tab">Incoming<span class="badge">4</span></a></li>
-                                                            <li role="presentation"><a href="#birthday" aria-controls="messages" role="tab" data-toggle="tab">Outgoing <span class="badge">4</span></a></li> -->
-                                                            <!-- <li role="presentation"><a href="#work" aria-controls="settings" role="tab" data-toggle="tab">Connection <span class="badge">4</span></a></li> -->
-                                                            <!-- <li role="presentation"><a href="#college" aria-controls="home" role="tab" data-toggle="tab">Mutual Friends <span class="badge">4</span></a></li> -->
-                                                             <li role="presentation"><a href="#txt-1" aria-controls="messages" role="tab" data-toggle="tab">txt-1 <span class="badge">4</span></a></li>
-                                                            <li role="presentation" class="dropdown"> <a href="#" class="dropdown-toggle" id="myTabDrop1" data-toggle="dropdown" aria-controls="myTabDrop1-contents" aria-expanded="false">more <span class="caret"></span></a>
-                                                                <ul class="dropdown-menu" aria-labelledby="myTabDrop1" id="myTabDrop1-contents">
-                                                                    <li><a href="#dropdown1" role="tab" id="dropdown1-tab" data-toggle="tab" aria-controls="dropdown1">txt-2 <span class="badge">4</span></a></li>
-                                                                    <li><a href="#dropdown2" role="tab" id="dropdown2-tab" data-toggle="tab" aria-controls="dropdown2">txt-3 <span class="badge">4</span></a></li>
-                                                                    <li><a href="#dropdown3" role="tab" id="dropdown2-tab" data-toggle="tab" aria-controls="dropdown3">txt-4 <span class="badge">4</span></a></li>
-                                                                    <li><a href="#dropdown4" role="tab" id="dropdown2-tab" data-toggle="tab" aria-controls="dropdown4">txt-5 <span class="badge">4</span></a></li>
-                                                                    <li><a href="#dropdown5" role="tab" id="dropdown2-tab" data-toggle="tab" aria-controls="dropdown5">txt-6 <span class="badge">4</span></a></li>
-                                                                </ul>
-                                                            </li>
-                                                          </ul>
+                                                            <!-- Nav tabs -->
+                                                            <ul class="nav nav-tabs" role="tablist">
+                                                                <li role="presentation" class="active"><a href="#all-connections" aria-controls="home" role="tab" data-toggle="tab">All Connections <span class="badge">4</span></a></li>
+                                                                <li role="presentation" class="dropdown"> <a href="#" class="dropdown-toggle" id="request-connections" data-toggle="dropdown" aria-controls="request-connections-contents" aria-expanded="false">Request <span class="caret"></span></a>
+                                                                    <ul class="dropdown-menu" aria-labelledby="request-connections" id="myTabDrop1-contents">
+                                                                        <li><a href="#request-incoming-post" role="tab" id="request-connections-tab1" data-toggle="tab" aria-controls="request-incoming-post">Incoming Request <span class="badge">4</span></a></li>
+                                                                        <li><a href="#request-outgoing-post" role="tab" id="request-connections-tab2" data-toggle="tab" aria-controls="request-outgoing-post">Outgoing Request <span class="badge">4</span></a></li>
+                                                                    </ul>
+                                                                </li>
+                                                                <li role="presentation" class="dropdown"> <a href="#" class="dropdown-toggle" id="connects" data-toggle="dropdown" aria-controls="connects-contents" aria-expanded="false">Connects <span class="caret"></span></a>
+                                                                    <ul class="dropdown-menu" aria-labelledby="Connects" id="myTabDrop1-contents">
+                                                                        <li><a href="#connect-citizen" role="tab" id="connect-citizen-tab1" data-toggle="tab" aria-controls="request-incoming-post">Citizen <span class="badge">4</span></a></li>
+                                                                        <li><a href="#connect-leader" role="tab" id="connect-citizen-tab2" data-toggle="tab" aria-controls="request-outgoing-post">Leader <span class="badge">4</span></a></li>
+                                                                    </ul>
+                                                                </li>
+                                                                <li role="presentation" class="dropdown"> <a href="#" class="dropdown-toggle" id="group-connection" data-toggle="dropdown" aria-controls="connects-contents" aria-expanded="false">Groups <span class="caret"></span></a>
+                                                                    <ul class="dropdown-menu" aria-labelledby="group-connection" id="group-connection-contents">
+                                                                        <li><a href="#citizen-grout-connection" role="tab" id="group-connection-tab1" data-toggle="tab" aria-controls="request-incoming-post">Citizen Groups <span class="badge">4</span></a></li>
+                                                                        <li><a href="#leader-grout-connection" role="tab" id="group-connection-tab2" data-toggle="tab" aria-controls="request-outgoing-post">Leader Groups <span class="badge">4</span></a></li>
+                                                                    </ul>
+                                                                </li>
+                                                                <li role="presentation"><a href="#txt-1" aria-controls="messages" role="tab" data-toggle="tab">txt-1 <span class="badge">4</span></a></li>
+                                                                <li role="presentation" class="dropdown"> <a href="#" class="dropdown-toggle" id="myTabDrop1" data-toggle="dropdown" aria-controls="myTabDrop1-contents" aria-expanded="false">more <span class="caret"></span></a>
+                                                                    <ul class="dropdown-menu" aria-labelledby="myTabDrop1" id="myTabDrop1-contents">
+                                                                        <li><a href="#dropdown1" role="tab" id="dropdown1-tab" data-toggle="tab" aria-controls="dropdown1">txt-2 <span class="badge">4</span></a></li>
+                                                                        <li><a href="#dropdown2" role="tab" id="dropdown2-tab" data-toggle="tab" aria-controls="dropdown2">txt-3 <span class="badge">4</span></a></li>
+                                                                        <li><a href="#dropdown3" role="tab" id="dropdown2-tab" data-toggle="tab" aria-controls="dropdown3">txt-4 <span class="badge">4</span></a></li>
+                                                                        <li><a href="#dropdown4" role="tab" id="dropdown2-tab" data-toggle="tab" aria-controls="dropdown4">txt-5 <span class="badge">4</span></a></li>
+                                                                        <li><a href="#dropdown5" role="tab" id="dropdown2-tab" data-toggle="tab" aria-controls="dropdown5">txt-6 <span class="badge">4</span></a></li>
+                                                                    </ul>
+                                                                </li>
+                                                            </ul>
 
                                                           
 
@@ -155,8 +148,7 @@
                                                 
 
                                                 <div class="row">
-                                                    <!-- Tab panes -->
-                                                      <div class="tab-content">
+                                                    <div class="tab-content">
                                                         
                                                         <!--               All Friends           -->
                                                         <div role="tabpanel" class="tab-pane active" id="all-connections">
@@ -194,13 +186,40 @@
                                                                         
                                                                     </div>
                                                                 </div>
+
+                                                                <div class="grid-list-view grid col-md-4 col-sm-6">
+                                                                    <div class="contact-box">
+                                                                        <div class="col-sm-12">
+                                                                            <img src="../assets/images/teem/a1.jpg" class="img-responsive" alt="image">
+                                                                            <h3><strong>Jordan Belfort</strong></h3>
+                                                                            <p><i class="fa fa-star"></i> 333 Friends</p>
+                                                                            <div class="connection-features">
+                                                                                <div class="dropdown">
+                                                                                    <button class="btn aqua btn-outline btn-sm dropdown-toggle" type="button" id="connection-featuresMenu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                                                    <i class="fa fa-plus"></i>
+                                                                                        
+                                                                                    </button>
+                                                                                     <ul class="dropdown-menu dropdown-menu-left" aria-labelledby="connection-featuresMenu">
+                                                                                        <li><a href="#">Get Notification</a></li>
+                                                                                        <li><a href="#">Close connetions</a></li>
+                                                                                        <li><a href="#">Acquaintances</a></li>
+                                                                                        <li><a href="#">Add to another list...</a></li>
+                                                                                        <li><a href="#">Suggest connections...</a></li>
+                                                                                        <li><a href="#">Unconfirmed</a></li>
+                                                                                    </ul>
+                                                                                </div>
+                                                                            </div>    
+                                                                        </div>
+                                                                        <div class="clearfix"></div>
+                                                                        
+                                                                    </div>
+                                                                </div>
                                                                
                                                             </div>
-                                                              
                                                         </div>
                                                         <!--               Incomming Post           -->
                                                         <div role="tabpanel" class="tab-pane" id="request-incoming-post">
-                                                            <div class="row "><!--Both keys Grid & List view -->
+                                                            <div class="row ">
                                                                 <div class="col-sm-12">
                                                                     <i class="fa fa-th-list fa-2x pull-right" id="list-view-id"></i>
                                                                     <i class="fa fa-th fa-2x pull-right" id="grid-view-id"></i>
@@ -223,15 +242,14 @@
                                                                     </div>
                                                                 </div>
                                                             </div>
-                                                                                                                                                                                   
                                                         </div>
                                                         <!--               Outcomming Post           -->
                                                         <div role="tabpanel" class="tab-pane" id="request-outgoing-post">
-                                                            <div class="row "><!--Both keys Grid & List view -->
-                                                            <div class="col-sm-12">
-                                                                <i class="fa fa-th-list fa-2x pull-right" id="list-view-id"></i>
-                                                                <i class="fa fa-th fa-2x pull-right" id="grid-view-id"></i>
-                                                            </div>
+                                                            <div class="row ">
+                                                                <div class="col-sm-12">
+                                                                    <i class="fa fa-th-list fa-2x pull-right" id="list-view-id"></i>
+                                                                    <i class="fa fa-th fa-2x pull-right" id="grid-view-id"></i>
+                                                                </div>
                                                             </div>
                                                             <div class="connect_list row">
                                                                 <div class="grid-list-view grid col-md-4 col-sm-6">
@@ -252,7 +270,7 @@
                                                         </div>
                                                         <!--               Connection           -->
                                                         <div role="tabpanel" class="tab-pane" id="connect-citizen">
-                                                            <div class="row "><!--Both keys Grid & List view -->
+                                                            <div class="row ">
                                                                 <div class="col-sm-12">
                                                                     <i class="fa fa-th-list fa-2x pull-right" id="list-view-id"></i>
                                                                     <i class="fa fa-th fa-2x pull-right" id="grid-view-id"></i>
@@ -291,7 +309,7 @@
                                                         </div>
                                                         <!--               Mutual Friends           -->
                                                         <div role="tabpanel" class="tab-pane" id="connect-leader">
-                                                            <div class="row "><!--Both keys Grid & List view -->
+                                                            <div class="row ">
                                                                 <div class="col-sm-12">
                                                                     <i class="fa fa-th-list fa-2x pull-right" id="list-view-id"></i>
                                                                     <i class="fa fa-th fa-2x pull-right" id="grid-view-id"></i>
@@ -330,7 +348,7 @@
                                                         </div>
                                                         <!--               High School           -->
                                                         <div role="tabpanel" class="tab-pane" id="citizen-grout-connection">
-                                                            <div class="row "><!--Both keys Grid & List view -->
+                                                            <div class="row ">
                                                                 <div class="col-sm-12">
                                                                     <i class="fa fa-th-list fa-2x pull-right" id="list-view-id"></i>
                                                                     <i class="fa fa-th fa-2x pull-right" id="grid-view-id"></i>
@@ -339,7 +357,7 @@
                                                             Citizen group
                                                         </div>
                                                         <div role="tabpanel" class="tab-pane" id="leader-grout-connection">
-                                                            <div class="row "><!--Both keys Grid & List view -->
+                                                            <div class="row ">
                                                                 <div class="col-sm-12">
                                                                     <i class="fa fa-th-list fa-2x pull-right" id="list-view-id"></i>
                                                                     <i class="fa fa-th fa-2x pull-right" id="grid-view-id"></i>
@@ -348,7 +366,7 @@
                                                             Citizen Leader
                                                         </div>
                                                         <div role="tabpanel" class="tab-pane" id="txt-1">
-                                                            <div class="row "><!--Both keys Grid & List view -->
+                                                            <div class="row ">
                                                                 <div class="col-sm-12">
                                                                     <i class="fa fa-th-list fa-2x pull-right" id="list-view-id"></i>
                                                                     <i class="fa fa-th fa-2x pull-right" id="grid-view-id"></i>
@@ -357,7 +375,7 @@
                                                             txt-1
                                                         </div>
                                                         <div class="tab-pane fade" role="tabpanel" id="dropdown1" aria-labelledby="dropdown1-tab">
-                                                            <div class="row "><!--Both keys Grid & List view -->
+                                                            <div class="row ">
                                                                 <div class="col-sm-12">
                                                                     <i class="fa fa-th-list fa-2x pull-right" id="list-view-id"></i>
                                                                     <i class="fa fa-th fa-2x pull-right" id="grid-view-id"></i>
@@ -366,7 +384,7 @@
                                                             dropdown1
                                                         </div>
                                                         <div class="tab-pane fade" role="tabpanel" id="dropdown2" aria-labelledby="dropdown1-tab">
-                                                            <div class="row "><!--Both keys Grid & List view -->
+                                                            <div class="row ">
                                                                 <div class="col-sm-12">
                                                                     <i class="fa fa-th-list fa-2x pull-right" id="list-view-id"></i>
                                                                     <i class="fa fa-th fa-2x pull-right" id="grid-view-id"></i>
@@ -375,7 +393,7 @@
                                                             dropdown2
                                                         </div>
                                                         <div class="tab-pane fade" role="tabpanel" id="dropdown3" aria-labelledby="dropdown1-tab">
-                                                            <div class="row "><!--Both keys Grid & List view -->
+                                                            <div class="row ">
                                                                 <div class="col-sm-12">
                                                                     <i class="fa fa-th-list fa-2x pull-right" id="list-view-id"></i>
                                                                     <i class="fa fa-th fa-2x pull-right" id="grid-view-id"></i>
@@ -384,7 +402,7 @@
                                                              dropdown3
                                                         </div>
                                                         <div class="tab-pane fade" role="tabpanel" id="dropdown4" aria-labelledby="dropdown1-tab">
-                                                            <div class="row "><!--Both keys Grid & List view -->
+                                                            <div class="row ">
                                                                 <div class="col-sm-12">
                                                                     <i class="fa fa-th-list fa-2x pull-right" id="list-view-id"></i>
                                                                     <i class="fa fa-th fa-2x pull-right" id="grid-view-id"></i>
@@ -393,13 +411,91 @@
                                                             dropdown4
                                                         </div>
                                                         <div class="tab-pane fade" role="tabpanel" id="dropdown5" aria-labelledby="dropdown1-tab">
-                                                            <div class="row "><!--Both keys Grid & List view -->
+                                                            <div class="row ">
                                                                 <div class="col-sm-12">
                                                                     <i class="fa fa-th-list fa-2x pull-right" id="list-view-id"></i>
                                                                     <i class="fa fa-th fa-2x pull-right" id="grid-view-id"></i>
                                                                 </div>
                                                             </div>
                                                             dropdown5
+                                                        </div>
+
+                                                        <div role="tabpanel" class="tab-pane" id="connect-follower">
+                                                            <div class="row ">
+                                                                <div class="col-sm-12">
+                                                                    <i class="fa fa-th-list fa-2x pull-right" id="list-view-id"></i>
+                                                                    <i class="fa fa-th fa-2x pull-right" id="grid-view-id"></i>
+                                                                </div>
+                                                            </div>
+                                                            <div class="connect_list row">
+                                                                <div class="grid-list-view grid col-md-4 col-sm-6">
+                                                                    <div class="contact-box">
+                                                                        <div class="col-sm-12">
+                                                                            <img src="../assets/images/teem/a1.jpg" class="img-responsive" alt="image">
+                                                                            <h3><strong>Jordan Belfort Follower</strong></h3>
+                                                                            <p><i class="fa fa-star"></i> 333 Friends</p>
+                                                                            <div class="connection-features">
+                                                                                <div class="dropdown">
+                                                                                    <button class="btn aqua btn-outline btn-sm dropdown-toggle" type="button" id="connection-featuresMenu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                                                    <i class="fa fa-plus"></i>
+                                                                                        
+                                                                                    </button>
+                                                                                     <ul class="dropdown-menu dropdown-menu-left" aria-labelledby="connection-featuresMenu">
+                                                                                        <li><a href="#">Lorem</a></li>
+                                                                                        <li><a href="#">Lorem</a></li>
+                                                                                        <li><a href="#">Lorem</a></li>
+                                                                                        <li><a href="#">Lorem</a></li>
+                                                                                        <li><a href="#">Lorem</a></li>
+                                                                                        <li><a href="#">Lorem</a></li>
+                                                                                    </ul>
+                                                                                </div>
+                                                                            </div>    
+                                                                        </div>
+                                                                        <div class="clearfix"></div>
+                                                                        
+                                                                    </div>
+                                                                </div>
+                                                               
+                                                            </div>
+                                                        </div>
+
+                                                        <div role="tabpanel" class="tab-pane" id="connect-following">
+                                                            <div class="row ">
+                                                                <div class="col-sm-12">
+                                                                    <i class="fa fa-th-list fa-2x pull-right" id="list-view-id"></i>
+                                                                    <i class="fa fa-th fa-2x pull-right" id="grid-view-id"></i>
+                                                                </div>
+                                                            </div>
+                                                            <div class="connect_list row">
+                                                                <div class="grid-list-view grid col-md-4 col-sm-6">
+                                                                    <div class="contact-box">
+                                                                        <div class="col-sm-12">
+                                                                            <img src="../assets/images/teem/a1.jpg" class="img-responsive" alt="image">
+                                                                            <h3><strong>Jordan Belfort Following</strong></h3>
+                                                                            <p><i class="fa fa-star"></i> 333 Friends</p>
+                                                                            <div class="connection-features">
+                                                                                <div class="dropdown">
+                                                                                    <button class="btn aqua btn-outline btn-sm dropdown-toggle" type="button" id="connection-featuresMenu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                                                    <i class="fa fa-plus"></i>
+                                                                                        
+                                                                                    </button>
+                                                                                     <ul class="dropdown-menu dropdown-menu-left" aria-labelledby="connection-featuresMenu">
+                                                                                        <li><a href="#">Lorem</a></li>
+                                                                                        <li><a href="#">Lorem</a></li>
+                                                                                        <li><a href="#">Lorem</a></li>
+                                                                                        <li><a href="#">Lorem</a></li>
+                                                                                        <li><a href="#">Lorem</a></li>
+                                                                                        <li><a href="#">Lorem</a></li>
+                                                                                    </ul>
+                                                                                </div>
+                                                                            </div>    
+                                                                        </div>
+                                                                        <div class="clearfix"></div>
+                                                                        
+                                                                    </div>
+                                                                </div>
+                                                               
+                                                            </div>
                                                         </div>
                                                       
                                                 </div>
@@ -452,16 +548,7 @@
                             <li><a href="#" data-toggle="modal" data-target="#edit-privecy-custom-button"> <i class="fa fa-cog"></i>Custom</a></li>
                           </ul>
                         </div>
-                        <!-- <div role="presentation" class="dropdown"> 
-                            <a href="#" class="dropdown-toggle" id="drop5" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-globe"></i> Public <span class="caret"></span> </a>
-                            <ul class="dropdown-menu" id="menu2" aria-labelledby="drop5">
-                                <li><a href="#" data-value="public"><i class="fa fa-globe"></i> Public</a></li>
-                                <li><a href="#" data-value="connections"><i class="fa fa-users"></i> Connections</a></li>
-                                <li><a href="#" data-value="only me"> <i class="fa fa-unlock"></i> Only me</a></li>
-                                <li role="separator" class="divider"></li>
-                                <li><a href="#" data-toggle="modal" data-target="#edit-privecy-custom-button"> <i class="fa fa-cog"></i>Custom</a></li>
-                            </ul>
-                        </div>  -->              
+                              
                     </div>
                 </div>
                     <hr />
@@ -472,15 +559,7 @@
                         <p>Remember, the people you follow can see that you're following them.</p>
                     </div>
                     <div class="col-sm-4 text-right">
-                        <!-- <div role="presentation" class="dropdown"> <a href="#" class="dropdown-toggle" id="drop5" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-globe"></i> Public <span class="caret"></span> </a>
-                            <ul class="dropdown-menu" id="menu2" aria-labelledby="drop5">
-                                <li><a href="#" data-value="public"><i class="fa fa-globe"></i> Public</a></li>
-                                <li><a href="#" data-value="connections"><i class="fa fa-users"></i> Connections</a></li>
-                                <li><a href="#" data-value="only me"> <i class="fa fa-unlock"></i> Only me</a></li>
-                                <li role="separator" class="divider"></li>
-                                <li><a href="#edit-privecy-custom-button"> <i class="fa fa-cog"></i>Custom</a></li>
-                            </ul>
-                        </div>  -->  
+                        
                         <div class="dropdown">
                           <a class="btn dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
                             <i class="fa fa-globe"></i> Public <span class="caret"></span>
@@ -532,17 +611,7 @@
                         </div>
                         
                     </div>
-                    <!-- <div class="col-sm-4 text-right">
-                        <div role="presentation" class="dropdown"> <a href="#" class="dropdown-toggle" id="drop5" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-globe"></i> Public <span class="caret"></span> </a>
-                            <ul class="dropdown-menu" id="menu2" aria-labelledby="drop5">
-                                <li><a href="#"><i class="fa fa-globe"></i> Public</a></li>
-                                <li><a href="#"><i class="fa fa-users"></i> Connections</a></li>
-                                <li><a href="#"> <i class="fa fa-unlock"></i> Only me</a></li>
-                                <li role="separator" class="divider"></li>
-                                <li><a href="#"> <i class="fa fa-cog"></i>Custom</a></li>
-                            </ul>
-                        </div>               
-                    </div> -->
+                    
                 </div>
                     <hr />
                 <div class="row">
