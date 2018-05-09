@@ -369,6 +369,7 @@ Button css
     background: #f1f4f7;
 }
 
+.aqua-bg-color { background-color: #49b6d6; }
 .aqua-bg {
         background-image: url(../images/parliament2.jpg);
         background-position: center;
@@ -2592,7 +2593,7 @@ Page Header
     background-image: none;
     border: 0 none;
     filter: none;
-    height: 46px;
+    height: 48px;
     margin: 0;
     min-height: 46px;
     padding: 0;
@@ -3363,9 +3364,8 @@ Breadcrumb Bar
  
 .breadcrumb {
     background-color: #ffffff;
-    /*margin-bottom:20;
-    padding: 5;
-    font-size: 25px;*/
+    padding: 8px;
+    margin-bottom: 5px;
 }
 
 /*.breadcrumb > li a {
@@ -4430,10 +4430,15 @@ textarea.form-control{
     padding: 20px 20px 0px;
     background-color: #f3f3f4;
 }
-.connect_myfriends .tab-content { padding: 20px; }
-.connect_myfriends .user-frnd { font-size: 24px; }
+.modal-open .modal {
+    background-color: #0000008a;
+}
 
-.connect_myfriends .nav-tabs > li > a {
+
+/*#connect_myfriends .tab-content { padding: 20px; }
+#connect_myfriends .user-frnd { font-size: 24px; }
+
+#connect_myfriends .nav-tabs > li > a {
     font-weight: 500;
     padding: 0;
     width: 120px;
@@ -4441,7 +4446,7 @@ textarea.form-control{
     line-height: 27px;
     font-size: 10px;
     text-align: center;
-}
+}*/
 .footer .help .dropdown-menu {
     right: 20px;
     left: -100px;
@@ -4537,30 +4542,31 @@ textarea.form-control{
     margin-left: 15px;
  }
 
- .connect_myfriends .nav-tabs>li.active>a, .connect_myfriends .nav-tabs>li.active>a:focus, .connect_myfriends .nav-tabs>li.active>a:hover {
+ #connect_myfriends .nav-tabs>li.active>a, #connect_myfriends .nav-tabs>li.active>a:focus, #connect_myfriends .nav-tabs>li.active>a:hover {
     color: #555;
     cursor: default;
-     background-color: inherit; 
+    background-color: inherit; 
+    border: 0;
     border-bottom: 2px solid #49b6d6;
      /*border-bottom-color: inherit; */
 }
-.connect_myfriends .badge, #user-profile .profile-nav .badge {
-    font-weight: 300;
-    color: #555;
+#connect_myfriends .badge, #user-profile .profile-nav .badge {
+    font-weight: 500;
+    color: #fff;
     width: 30px;
     height: 18px;
     padding: 0;
     line-height: 17px;
     margin-left: 2px;
-    border: 1px solid #49b6d6;
-    background-color: inherit;
+    /* border: 1px solid #49b6d6; */
+    background-color: #49b6d6;
 }
  #user-profile .profile-nav .badge { color: #49b6d6; }
 
 /******Tabs => grid-view or list view*******/
-.connect_myfriends .contact-box { padding: 0; }
-.connect_myfriends .list .contact-box { padding: 0; }
-.connect_myfriends .list .contact-box .col-sm-12 { padding: 0; }
+#connect_myfriends .contact-box { padding: 0; }
+#connect_myfriends .list .contact-box { padding: 0; }
+#connect_myfriends .list .contact-box .col-sm-12 { padding: 0; }
 #grid-view-id, #list-view-id {
     cursor: pointer;
     margin-bottom: 18px;
@@ -4571,6 +4577,7 @@ textarea.form-control{
     position: relative;
 }*/
 .grid img, .list img { width: 110px; float: left; margin-right: 15px; }
+.list img { margin-left: 15px; }
 /*.list img { width: 60px; float: left; margin-right: 15px; }*/
 
 .contact-box .col-sm-12 { margin-left: -15px; margin-right: -15px; }
@@ -4586,15 +4593,15 @@ textarea.form-control{
     bottom: 4px;
 }
 
-.btn-group>.dropdown-menu, .dropdown-toggle>.dropdown-menu, .dropdown>.dropdown-menu {
+.connect_list .contact-box .btn-group>.dropdown-menu, .connect_list .contact-box .dropdown-toggle>.dropdown-menu, .connect_list .contact-box .dropdown>.dropdown-menu {
     /*margin-top: -5px;*/
     margin-left: -150px;
 }
 
-.modal .btn-group>.dropdown-menu, .modal .dropdown-toggle>.dropdown-menu, .modal .dropdown>.dropdown-menu {
-    /*margin-top: -5px;*/
+/*.modal .btn-group>.dropdown-menu, .modal .dropdown-toggle>.dropdown-menu, .modal .dropdown>.dropdown-menu {
+    margin-top: -5px;
     margin-left: 0;
-}
+}*/
 
 /*.list-view {
     display: none;
@@ -4657,6 +4664,23 @@ textarea.form-control{
 .head .tag-name {
     position: absolute;
     top: 10px;
+}
+
+.head .user-frnd {
+    font-size: 24px;
+    position: absolute;
+    /*margin-top: -17px;*/
+}
+.top-menu .search-box {
+    position: absolute;
+    top: 9px;
+}
+.contact-box {
+    padding: 0;
+}
+.contact-box h3 {
+    margin-top: 10px;
+    font-size: 20px;
 }
 
 /********User Prfile page css********/

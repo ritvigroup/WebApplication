@@ -11,6 +11,14 @@
         <div class="library-menu"> <span class="one">-</span> <span class="two">-</span> <span class="three">-</span> </div>
         <!-- BEGIN TOP NAVIGATION MENU -->
         <div class="top-menu">
+
+            <div class="col-sm-5 col-sm-offset-2 search-box input-group">
+                <input id="search-projects" type="text" class="input-sm form-control" placeholder="Search">
+                <!-- <span class="input-group-btn"> -->
+                    <!-- <button class="btn btn-sm aqua" type="button"> Go!</button> -->
+                <!-- </<s></s>pan> -->
+            </div>
+
             <ul class="nav navbar-nav pull-right">
                 <li style="color: #fff; border-right:1px solid #fff; padding-right: 10px; float: left; padding-top: 10px;">Free Edition  <br><span style="color: skyblue; font-size: 12px;">Upgrade</span></li>
                 <!-- <li class="dropdown">
@@ -49,7 +57,11 @@
                         </li>
                     </ul>
                 </li> -->
-                <li class="search"><input type="" name="" style="display: none;"><button class=""><i class="fa fa-search"></i></button></li>
+                <!-- <li class="search"><input type="" name="" style="display: none;"><button class=""><i class="fa fa-search"></i></button></li> -->
+
+                <li style=" margin-left: 11px; margin-top: 7px; ">
+                    <button class="btn btn-success" type="button" data-toggle="modal" data-target="#express-post"><i class="fa fa-bullhorn"></i> Express </button>
+                </li>
 
                 <li class="dropdown add">
                     <a href="#" data-toggle="dropdown" class="dropdown-toggle count-info"> <i class="fa fa-plus"></i> <span class="badge badge-info"></span> </a>
@@ -217,7 +229,7 @@
                      </a><!-- <i class="fa fa-angle-down"></i> -->
                     <ul class="dropdown-menu dropdown-menu-default">
                         <li><a href="<?=base_url();?>profile/profile"> <i class="icon-user"></i> My Profile </a></li>
-                        <li><a href="<?=base_url();?>profile/profile"> <i class="icon-user"></i> My Profile </a></li>
+                        <li><a href="<?=base_url();?>profile/subprofile"> <i class="icon-user"></i> Other Profile </a></li>
                         <li class="divider"> </li>
                         <li><a href="<?=base_url();?>profile/profile"> <i class="icon-user"></i> My Profile </a></li>
                         <li><a href="<?=base_url();?>profile/profile"> <i class="icon-user"></i> My Profile </a></li>
