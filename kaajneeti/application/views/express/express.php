@@ -1,12 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
-<head><title>Express yourself</title>
+<head><title>My Team</title>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="cache-control" content="no-cache">
     <meta http-equiv="expires" content="Thu, 19 Nov 1900 08:52:00 GMT">
+
     <?php  require_once './include/css.php';?>
+
 </head>
 <body class="page-header-fixed ">
     
@@ -22,383 +24,273 @@
             <div class="page-content">
                 <div class="row  border-bottom white-bg dashboard-header">
                     <div class="col-md-12">
-                        
-                        <!-- <h2> Express</h2> -->
-                        <button type="button" class="btn purple  btn-sm pull-right" data-toggle="modal" data-target="#myModal">Express</button>
+                        <div class="portlet box">
+                            <div class="portlet-header">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                <h3>Express</h3>
+                                </div>
+
+                              
+                                <div class="actions action-right">
+                                  <!-- <a data-target="#modal-stackable" data-toggle="modal" href="javascript:void(0);" class="btn btn-info btn-xs" onClick="return newTeam();"><i class="fa fa-plus"></i>&nbsp;Team</a>&nbsp;
+                        <a href="<?=base_url();?>organize/fleet" class="btn btn-info btn-xs"><i class="fa fa-plus"></i>&nbsp;Fleet</a>&nbsp;
+                                    <a href="<?=base_url();?>organize/documents" class="btn btn-info btn-xs"><i class="fa fa-plus"></i>&nbsp;Documents</a>&nbsp;
+                                     -->
+                                     <div class="dropdown">
+                        <button onclick="myFunction()" class="dropbtn"><!-- <i class="fa fa-plus-circle"></i> -->&nbsp;Manage <span class="caret"></span>   </button>&nbsp;
+                        <div id="myDropdown" class="dropdown-content">
+                      <a href="#home"> Post</a>
+                      <a href="#about"> Poll</a>
+                       <a href="#home"> Event</a>
+                      <a href="#about">Task</a>
+                      <a href="#about">Calender</a>
+                      <a href="#about">Social Post</a>
+
+
+                      <a  data-target="#modal-stackable" data-toggle="modal" href="javascript:void(0);" onClick="return newTeam();"  href="#contact"> New Documents</a>
+                      <a href="#about"> New Group</a>
                     </div>
-                </div>
-                <div class="wrapper-content ">
-                    <div class="row blog">
-
-                        <?php
-                        // echo '<pre>';
-                        // print_r($result);
-                        // echo '</pre>';
-
-                        foreach($result AS $result_data) { ?>
-                        <div class="col-lg-4">
-                            
-                            <?php if($result_data->feedtype == 'post') { ?>
-                                <?php
-                                $PostTitle          = $result_data->postdata->PostTitle;
-                                $PostDescription    = $result_data->postdata->PostDescription;
-                                $PostBy             = $result_data->postdata->PostProfile->FirstName. ' '.$result_data->postdata->PostProfile->LastName;
-                                $PostOn             = $result_data->postdata->AddedOn;
-
-                                $PostTag = $result_data->postdata->PostTag;
-
-                                $PostTagDisplay = '';
-                                if(count($PostTag) > 0) {
-                                    $pt = 0;
-                                    foreach($PostTag AS $post_tag) {
-
-                                        $post_tag_name = $post_tag->FirstName. ' '.$post_tag->LastName;
-                                        $PostTagDisplay .= '<button type="button" class="btn green btn-outline sbold btn-xs">'.$post_tag_name.'</button>';
-                                        $pt++;
-                                        //if($PostTag == $pt)
-                                    }
-                                }
-                                ?>
-                                <div class="ibox"> 
-                                    <!-- <img alt="" class="full-width" src="assets/images/blogs/1.jpg"> -->
-                                    <div class="widgets-container padding-top10"> 
-                                        <a class="btn-link" href="#">Post
-                                            <h2 class="hed"> <?php echo $PostTitle; ?> </h2>
-                                        </a>
-                                        <div class="small bottom5"> <strong><?php echo $PostBy; ?></strong> <span class="text-muted right"><i class="fa fa-clock-o"></i> <?php echo $PostOn; ?></span> </div>
-                                        <?php if($PostDescription != '') { ?>
-                                        <p> <?php echo $PostDescription; ?> </p>
-                                        <?php } ?>
-                                        <div class="row">
-                                            <div class="col-md-4">
-                                                <?php if($PostTagDisplay != '') { ?>
-                                                <h5>Tags:</h5>
-                                                    <?php echo $PostTagDisplay; ?>
-                                                <?php } ?>
-                                            </div>
-                                            <div class="col-md-8">
-                                                <div class="small text-right">
-                                                    <h5>&nbsp;</h5>
-                                                    <div> 
-                                                        <i class="fa fa-comments-o"> </i> 80 &nbsp;
-                                                        <i class="fa fa-eye"> </i> 200 views 
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
+                  </div>
                                 </div>
-                            <?php } ?>
-
-                            <?php if($result_data->feedtype == 'suggestion') { ?>
-                                <?php
-                                $SuggestionSubject      = $result_data->suggestiondata->SuggestionSubject;
-                                $SuggestionDescription  = $result_data->suggestiondata->SuggestionDescription;
-                                $PostBy                 = $result_data->suggestiondata->SuggestionProfile->FirstName. ' '.$result_data->suggestiondata->SuggestionProfile->LastName;
-                                $PostOn                 = $result_data->suggestiondata->AddedOn;
-
-                                $PostTag = $result_data->suggestiondata->PostTag;
-
-                                $PostTagDisplay = '';
-                                if(count($PostTag) > 0) {
-                                    $pt = 0;
-                                    foreach($PostTag AS $post_tag) {
-
-                                        $post_tag_name = $post_tag->FirstName. ' '.$post_tag->LastName;
-                                        $PostTagDisplay .= '<button type="button" class="btn green btn-outline sbold btn-xs">'.$post_tag_name.'</button>';
-                                        $pt++;
-                                        //if($PostTag == $pt)
-                                    }
-                                }
-                                ?>
-                                <div class="ibox"> 
-                                    <!-- <img alt="" class="full-width" src="assets/images/blogs/1.jpg"> -->
-                                    <div class="widgets-container padding-top10"> 
-                                        <a class="btn-link" href="#">Suggestion
-                                            <h2 class="hed"> <?php echo $SuggestionSubject; ?> </h2>
-                                        </a>
-                                        <div class="small bottom5"> <strong><?php echo $PostBy; ?></strong> <span class="text-muted right"><i class="fa fa-clock-o"></i> <?php echo $PostOn; ?></span> </div>
-                                        <?php if($SuggestionDescription != '') { ?>
-                                        <p> <?php echo $SuggestionDescription; ?> </p>
-                                        <?php } ?>
-                                        <div class="row">
-                                            <div class="col-md-4">
-                                                <?php if($PostTagDisplay != '') { ?>
-                                                <h5>Tags:</h5>
-                                                    <?php echo $PostTagDisplay; ?>
-                                                <?php } ?>
-                                            </div>
-                                            <div class="col-md-8">
-                                                <div class="small text-right">
-                                                    <h5>&nbsp;</h5>
-                                                    <div> 
-                                                        <i class="fa fa-comments-o"> </i> 80 &nbsp;
-                                                        <i class="fa fa-eye"> </i> 200 views 
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            <?php } ?>
-
-                            <?php if($result_data->feedtype == 'complaint') { ?>
-                                <?php
-                                $ComplaintSubject      = $result_data->complaintdata->ComplaintSubject;
-                                $ComplaintDescription  = $result_data->complaintdata->ComplaintDescription;
-                                $PostBy                 = $result_data->complaintdata->ComplaintProfile->FirstName. ' '.$result_data->complaintdata->ComplaintProfile->LastName;
-                                $PostOn                 = $result_data->complaintdata->AddedOn;
-
-                                $ComplaintMember = $result_data->complaintdata->ComplaintMember;
-
-                                $ComplaintMemberDisplay = '';
-                                if(count($ComplaintMember) > 0) {
-                                    $pt = 0;
-                                    foreach($ComplaintMember AS $complaint_tag) {
-
-                                        $complaint_tag_name = $complaint_tag->FirstName. ' '.$complaint_tag->LastName;
-                                        $ComplaintMemberDisplay .= '<button type="button" class="btn green btn-outline sbold btn-xs">'.$complaint_tag_name.'</button>';
-                                        $pt++;
-                                        //if($PostTag == $pt)
-                                    }
-                                }
-                                ?>
-                                <div class="ibox"> 
-                                    <!-- <img alt="" class="full-width" src="assets/images/blogs/1.jpg"> -->
-                                    <div class="widgets-container padding-top10"> 
-                                        <a class="btn-link" href="#">Complaint
-                                            <h2 class="hed"> <?php echo $ComplaintSubject; ?> </h2>
-                                        </a>
-                                        <div class="small bottom5"> <strong><?php echo $PostBy; ?></strong> <span class="text-muted right"><i class="fa fa-clock-o"></i> <?php echo $PostOn; ?></span> </div>
-                                        <?php if($ComplaintDescription != '') { ?>
-                                        <p> <?php echo $ComplaintDescription; ?> </p>
-                                        <?php } ?>
-                                        <div class="row">
-                                            <div class="col-md-4">
-                                                <?php if($ComplaintMemberDisplay != '') { ?>
-                                                <h5>Tags:</h5>
-                                                    <?php echo $ComplaintMemberDisplay; ?>
-                                                <?php } ?>
-                                            </div>
-                                            <div class="col-md-8">
-                                                <div class="small text-right">
-                                                    <h5>&nbsp;</h5>
-                                                    <div> 
-                                                        <i class="fa fa-comments-o"> </i> 80 &nbsp;
-                                                        <i class="fa fa-eye"> </i> 200 views 
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            <?php } ?>
-
-                        </div>
-                        <?php } ?>
-                    </div>
-                </div>
-                <!-- stat timeline and feed  -->
-                <div class="top20">
-                    
-                    <div class="clearfix"> </div>
-                    <!-- End projects list -->
-                    
-                    
-
-                </div>
-            </div>
-        </div>
-    </div>
-
-
-<div class="modal fade" id="myModal" role="dialog">
-    <div class="modal-dialog">
-
-        <!-- Modal content-->
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title">Express</h4>
-            </div>
-            <div class="modal-body">
-                <div class="form-group">
-
-                    <textarea class="form-control" id="message" name="message" placeholder="Write your feelings..." rows="5"></textarea>
-
-                </div>
-
-                <div class="row">
-
-
-                    <div class="col-md-12"><!-- Button trigger modal -->
-
-                        <div class="col-md-4"> 
-                            <i class="fa fa-picture-o fa-2x"></i>
-                            <input type="file" name="file" style="display: hidden;">
-                        </div>
-
-                        <div class="col-md-8"> 
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>     
-                            <div class="dropdown pull-right">
-                                <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Public
-                                    <span class="caret"></span>
-                                </button>
-                                <ul class="dropdown-menu dropdown-menu2">
-                                    <li><a href="#">Public</a></li>
-                                    <li><a href="#">My followers</a></li>
-                                    <li><a href="#">My Connect</a></li>
-                                    <li><a href="#">Only Me</a></li>
-                                    <li><a href="#" data-toggle="modal" data-target="#exampleModalCenter">Specific form</a></li>
-                                </ul>
                             </div>
-                            <button type="button" class="btn btn-success express_post">Express</button> 
+                            </div>
+
+                            <div class="portlet-body">
+                             
+                              <div class="row">
+                                <div class="col-md-12">
+
+                                  <ul class="nav navbar-nav">
+                                    <li><a href="javascript:void(0);"> <i class="fa fa-pencil" aria-hidden="true"></i> Compose Post</a></li>
+                                    <li><a href="javascript:void(0);"> <i class="fa fa-picture-o" aria-hidden="true"></i> Photo/Video Album</a></li>
+                                    <li><a href="javascript:void(0);"  data-toggle="modal" data-target="#exampleModalCenter"> <i class="fa fa-video-camera" aria-hidden="true"></i> Live Video</a></li>
+
+
+
+                                  </ul>
+
+                                </div>
+                              </div>
+
+
+                            <!-- Modal -->
+                            <div class="modal fade custom-fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                              <div class="modal-dialog modal-dialog-centered model-top" role="document">
+                                <div class="modal-content">
+                                  <div class="modal-header express-header">
+                                    <h5 class="modal-title" id="exampleModalLongTitle"></h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                      <span aria-hidden="true">&times;</span>
+                                    </button>
+                                  </div>
+                                  <div class="modal-body">
+                                  <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="button-group ">
+                                      <button type="button" class="btn btn-primary camera-btn"><i class="fa fa-video-camera" aria-hidden="true"></i> Camera</button>
+                                      <button type="button" class="btn btn-default connect-btn"><i class="fa fa-plug" aria-hidden="true"></i> Connect</button>
+                                      </div>
+
+                                      <h1 class="text-center camerah1">Unable to find camera</h1>
+                                      <p class="text-center">Please connect a camera and verify that camera permissions are correct in your browser</p><br>
+                                       <div class="button-group ">
+                                       <button type="button" class="btn btn-primary  ">Done</button></div>
+
+
+                                    </div>
+                                  </div>
+                                  </div>
+                               <!--    <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                    <button type="button" class="btn btn-primary">Save changes</button>
+                                  </div> -->
+                                </div>
+                              </div>
+                            </div>                                                                                 
+                             
+                                <div class="row">
+                                <div class="col-xs-12">
+                                       <div class="textarea-img">
+                                       <img src="https://www.toptene.com/wp-content/uploads/2017/10/top-10-most-handsome-men-in-the-world.jpg"  width="50"  height="50" class="img-circle">
+                                       </div>
+                          <!--                  <div class="expires-button">
+
+                                    <button type="button" class="btn btn-info express-info">Submit</button>
+                                    </div> -->
+
+
+                                     <div class="form-group">
+
+                                      <textarea class="form-control placeholder"  placeholder="Write Somthing here  ......" rows="8"></textarea>
+                                 
+
+                                    </div>
+                                
+                                </div>
+                              </div>
+
+                              <div class="row" style="max-height: 100px; overflow-y: auto; overflow-x: none; max-width: 100%;">
+                                
+                                <div class="col-md-3">
+                                    <button type="button" class="btn btn-default default-border">
+                                        <i class=" fa fa-envelope"></i> Post
+                                      </button><br><br>
+                                     <button type="button" class="btn btn-default default-border">
+                                      <i class=" fa fa-list-ul"></i> Poll
+                                    </button><br><br>
+
+                                     <button type="button" class="btn btn-default default-border">
+                                      <i class=" fa fa-calendar"></i> Event
+                                    </button><br><br>
+                                    <button type="button" class="btn btn-default default-border">
+                                      <i class="fa fa-tasks"></i> Task
+                                    </button>
+                                </div>
+                                    
+                                    
+                    
+
+                                 <div class="col-md-3">
+                                     <button type="button" class="btn btn-default default-border"><i class="fa fa-envelope"></i> Social Post</button><br><br>
+                                       <button type="button" class="btn btn-default default-border"><i class="fa fa-calendar"></i> Calender</button><br><br>
+                                    
+                                   
+                                  
+                              
+                    
+                                </div>
+
+                                  <div class="col-md-3">
+                                  
+                                   <button type="button" class="btn btn-default default-border"> <i class="fa fa-tasks"></i> Task </button><br><br>
+                                     
+                                   
+                                      <button type="button" class="btn btn-default default-border"><i class="fa fa-users" aria-hidden="true"></i> New Group</button>
+                    
+                                  </div>
+
+                                  <div class="col-md-3">
+                                  
+                                      
+                                     <button type="button" class="btn btn-default default-border"> <i class=" fa fa-calendar"></i> Event   </button><br><br>
+                                   
+                               
+                                      <button type="button" class="btn btn-default default-border"><i class="fa fa-file" aria-hidden="true"></i> New Document</button>
+                    
+                                  </div>
+
+                              </div>
+
+                              <div class="row">
+                                <div class="col-md-12">
+                                  
+                                  <div class="dropup express-dropdown pull-right" id="my-id">
+                                      <button class="btn btn-default dropdown-toggle" type="button"  id="my-id2" data-toggle="dropdown">Public
+                                          <span class="caret"></span>
+                                      </button>
+                                      <ul class="dropdown-menu dropdown-menu2">
+                                          <li><a href="#">Public</a></li>
+                                          <li><a href="#">My followers</a></li>
+                                          <li><a href="#">My Connect</a></li>
+                                          <li><a href="#">Only Me</a></li>
+                                          <li><a href="#">Specific form</a></li>
+                                      </ul>
+
+                                      <button class="btn btn-primary " type="button">Post  </button>
+                                  </div>
+          
+                                </div>
+                              </div>
+                            </div>
                         </div>
                     </div>
                 </div>
+
             </div>
         </div>
     </div>
-</div>
-                                <!-- Modal -->
-<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLongTitle">Specific Friend</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true" style="margin-right: 16px; margin-top: -18px; float: left;">&times;</span>
+    
+    <?php  require_once './include/scroll_top.php';?>
 
-                </button>
-            </div>
-            <div class="modal-body">
-                <div class="form-group">
-                    <i class="fa fa-search pull-right" aria-hidden="true"></i>
-                    <input type="text" name="" placeholder="Search..." class="form-control" style="position: relative;">
-                </div>
-
-                <h4 style="color: #333; text-align: left;">Friends</h4>
-                <div  class="row" style="height: 100px; overflow-y: auto; overflow-x: none;width: 100%;">
-                        <div class="col-md-6">
-                            <div class="image">
-                                <img src="https://demo.opencart.com/image/cache/catalog/demo/apple_cinema_30-228x228.jpg"  class="img-responsive">
-                            </div>
-                            <div class="caption">
-                                <h4>Rajesh</h4>
-                            </div>
-                            <div class="form-group gender">
-                                <input type="radio" name="gender">
-                            </div>
-                        </div>                   
-                        <div class="col-md-6">
-                            <div class="image">
-                                <img src="https://demo.opencart.com/image/cache/catalog/demo/apple_cinema_30-228x228.jpg"  class="img-responsive">
-                            </div>
-                            <div class="caption">
-                                <h4>Rajesh</h4>
-                            </div>
-                            <div class="form-group gender">
-                                <input type="radio" name="gender">
-                            </div>
-                        </div>                   
-                        <div class="col-md-6">
-                            <div class="image">
-                                <img src="https://demo.opencart.com/image/cache/catalog/demo/apple_cinema_30-228x228.jpg"  class="img-responsive">
-                            </div>
-                            <div class="caption">
-                                <h4>Rajesh</h4>
-                            </div>
-                            <div class="form-group gender">
-                                <input type="radio" name="gender">
-                            </div>
-                        </div>                   
-                        <div class="col-md-6">
-                            <div class="image">
-                                <img src="https://demo.opencart.com/image/cache/catalog/demo/apple_cinema_30-228x228.jpg"  class="img-responsive">
-                            </div>
-                            <div class="caption">
-                                <h4>Rajesh</h4>
-                            </div>
-                            <div class="form-group gender">
-                                <input type="radio" name="gender">
-                            </div>
-                        </div>                   
-                        <div class="col-md-6">
-                            <div class="image">
-                                <img src="https://demo.opencart.com/image/cache/catalog/demo/apple_cinema_30-228x228.jpg"  class="img-responsive">
-                            </div>
-                            <div class="caption">
-                                <h4>Rajesh</h4>
-                            </div>
-                            <div class="form-group gender">
-                                <input type="radio" name="gender">
-                            </div>
-                        </div>                   
-                    </div>
-                </div>
-
-                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary">Save changes</button>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-<?php  require_once './include/scroll_top.php';?>
 <?php  require_once './include/footer.php';?>
 </body>
 
 <?php  require_once './include/js.php';?>
 
+
+<div id="modal-stackable" tabindex="-1" role="dialog" aria-labelledby="modal-stackable-label" aria-hidden="true" class="modal fade" style="display: none;">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            
+        </div>
+    </div>
+</div>
+
+
 <script>
-document.querySelector('.express_post').onclick = function () {
-    var $this = $(this);
-    var title  = $("#message").val();
+    $(document).ready(function() {
+        // Flexible table
 
-    
+        $('#table_id').DataTable();
 
-    if (title.length > 0) {
-        $('.express_post').html('Validating...');
-                    
-        var form_data = new FormData($('input[name^="file"]'));
+    });
+    function newTeam() {
 
-        jQuery.each($('input[name^="file"]')[0].files, function(i, file) {
-            form_data.append('file', file);
-        });
-
-        form_data.append('title', title);
-        form_data.append('save_post', 'Y');
-
-        jQuery.ajax({
-            type: 'POST',
-            cache: false,
-            processData: false,
-            contentType: false,
-            data: form_data,
-            url: "<?php echo base_url(); ?>express/express",
-
-            success: function(data) {
- 
-                if (data.status === "failed") {
-                    sweetAlert("Oops...", data.message, "error");
-                    $('.express_post').html('Express');
-                    return false;
-                } else { 
-                    if (data.status === "success") {
-                        $('.express_post').html('Saved');
-                        window.location.href="express";
-                    }
+        $.post("<?php echo base_url(); ?>organize/newTeam", {'display': 'Y'},
+            function (data, status) {
+                if(data != '') {
+                    $('.modal-content').html(data);
+                } else {
+                    $('.modal-content').html(data);
                 }
-            }
-        });
-
-    } else {
-        sweetAlert("Oops...", "Please enter some text to express your feelings", "error");
-        return false;
+            });
     }
-};
+</script>
+
+<script>
+/* When the user clicks on the button, 
+toggle between hiding and showing the dropdown content */
+function myFunction() {
+    document.getElementById("myDropdown").classList.toggle("show");
+}
+
+// Close the dropdown if the user clicks outside of it
+window.onclick = function(e) {
+  if (!e.target.matches('.dropbtn')) {
+    var myDropdown = document.getElementById("myDropdown");
+      if (myDropdown.classList.contains('show')) {
+        myDropdown.classList.remove('show');
+      }
+  }
+}
+</script>
+
+<script>
+$(document).ready(function(){
+
+$("#activate_user").click(function(){
+    $("#activate").show();
+});
+$(".nav-tabs li a").click(function(){
+    $('#activate').css("display","none");
+});
+
+   $("#user").click(function(){
+    $("#user2").show();
+});
+
+       $(".nav-tabs li a").click(function(){
+    $('#user2').css("display","none");
+});
+
+
+
+  
+
+
+
+});
 </script>
 
 </body>

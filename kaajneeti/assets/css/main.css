@@ -3072,7 +3072,7 @@ a:hover{
 
 .page-sidebar .page-sidebar-menu > li.active > a, .page-sidebar-closed.page-sidebar-fixed .page-sidebar:hover .page-sidebar-menu > li.active > a {
     border: medium none;
-    font-size: 14px;
+    font-size: 12px;
     text-shadow: none;
 }
 
@@ -3972,9 +3972,75 @@ WIDGETS
     background-color: #337ab7 !important;
     border-color: #2e6da4 !important;
 }
+textarea.form-control{
+    border-radius: 10px !important;
+    padding-left: 70px;
+    padding-top: 25px;
+    font-size: 24px;
+    font-weight: 550;
+    /*position: absolute;*/
+}
+.textarea-img{
+    position: absolute;
+        top: 10px;
+    padding-left: 10px;
+}
+.placeholder::placeholder {
+    font-size: 12px !important;
+}
+.express-info{
+    position: absolute;
+    margin-top: 50px;
+}
+.expires-button{
+    float: right;
+    margin-right: 95px;
+}
+.button-group {
+    text-align: center;
+}
+.camera-btn{
+    padding: 6px 45px;
+}
+.connect-btn{
+     padding: 6px 45px;
+}
+.express-header{
+    border-bottom: 0;
+}
+.camerah1{
+    margin-top: 50px;
+}
+.fade{
+    opacity: 0.9 !important;
+    background: #000;
+}
+.model-top{
+    margin-top: 100px;
 
-
-
+}
+.default-border{
+    border: none;
+}
+.fa-envelope{
+    color: #d9534f;
+}
+.fa-file{
+    color: #5bc0de;
+}
+.fa-list-ul{
+    color: #f0ad4e;
+}
+.fa-calendar{
+    color: #5cb85c;
+}
+.fa-tasks{
+    color: #4283f4;
+}
+.express-dropdown{
+    margin-top: 20px;
+    margin-right: 10px;
+}
 
 /*.profile-avetar-img {
     background-color: #fff;

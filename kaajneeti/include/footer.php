@@ -1,4 +1,4 @@
-
+<?php /*
 <!--BEGIN FOOTER-->
 <div class="footer">
 	<div class="row">
@@ -48,3 +48,4 @@
 		$('.footer-tab-content').removeClass('hide').addClass('');
 	}
 </script>
+*/ ?>
