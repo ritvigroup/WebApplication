@@ -296,4 +296,25 @@ class Express extends CI_Controller {
         $this->load->view('organize/team', $data);
     }
 
+
+
+
+    public function expressPopup() {
+        $data = array();
+      
+        if (!$this->input->is_ajax_request()) {
+           exit('Error');
+        }
+        $_POST['user_profile_id'] = $this->session->userdata('UserProfileId');
+
+        $json_encode = post_curl(API_CALL_PATH.'complaint/getAllDepartment', $this->input->post(), $this->curl);
+
+        $json_decode = json_decode($json_encode);
+        if(count($json_decode->result) > 0) {
+            $data['Department'] = $json_decode;
+        }
+        
+        $this->load->view('express/expressPopup',$data);
+    }
+
 }

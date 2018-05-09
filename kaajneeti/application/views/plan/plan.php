@@ -44,7 +44,7 @@
                         <div class="portlet-header portlet box  breadcrumb page-breadcrumb pull-right" style=" margin-top: 10px;">
                     
                                 
-                            <li><a data-target="#modal-stackable" data-toggle="modal" href="javascript:void(0);" onClick="return nextScreen(0);" title="Let's begin with your Goal">Create a Plan</a>&nbsp;</li>
+                            <li><a data-target="#modal-stackable" data-toggle="modal" href="javascript:void(0);" onClick="return nextScreen(0);" title="Let's begin with your Goal" class="btn btn-success">Create a Plan</a>&nbsp;</li>
                       
                         </div>
                     </div>
@@ -117,8 +117,6 @@
 
         var all_data = Get_All_Page_Data();
 
-        console.log(all_data);
-
         $.post("<?php echo base_url(); ?>plan/nextScreen", {'next_screen': next_screen_id},
             function (data, status) {
                 if(data != '') {
@@ -126,7 +124,11 @@
                 } else {
                     $('.modal-content').html(data);
                 }
-                $('.form_datetime').datetimepicker();
+                $('.form_datetime').datetimepicker({
+                    dateFormat: 'yyyy-mm-dd',
+                    autoclose: true,
+                    todayBtn: true,
+                });
             });
     }
 
@@ -143,7 +145,11 @@
                 } else {
                     $('.modal-content').html(data);
                 }
-                //$('.datepicker').datepicker();
+                $('.form_datetime').datetimepicker({
+                    dateFormat: 'yyyy-mm-dd',
+                    autoclose: true,
+                    todayBtn: true,
+                });
             });
     }
 

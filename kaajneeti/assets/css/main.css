@@ -3073,14 +3073,14 @@ a:hover{
 
 .page-sidebar .page-sidebar-menu > li.active > a, .page-sidebar-closed.page-sidebar-fixed .page-sidebar:hover .page-sidebar-menu > li.active > a {
     border: medium none;
-    font-size: 12px;
+    font-size: 13px;
     text-shadow: none;
 }
 
 .page-sidebar .page-sidebar-menu > li > a, .page-sidebar-closed.page-sidebar-fixed .page-sidebar:hover .page-sidebar-menu > li > a {
     border: 0 none;
     display: block;
-    font-size: 12px;
+    font-size: 13px;
     font-weight: 300;
     margin: 0;
     padding: 10px 15px;
@@ -3807,7 +3807,7 @@ WIDGETS
 .dropbtn {
     background-color: #49b6d6;
     color: white;
-    padding: 10px;
+    padding: 2px 10px;
     font-size: 16px;
     border: none;
     cursor: pointer;
@@ -3976,7 +3976,8 @@ textarea.form-control{
     border-radius: 10px !important;
     padding-left: 70px;
     padding-top: 25px;
-    font-size: 24px;
+    font-size: 13px;
+    height: 125px;
     font-weight: 550;
     /*position: absolute;*/
 }
@@ -4013,7 +4014,6 @@ textarea.form-control{
 }
 .fade{
     opacity: 0.9 !important;
-    background: #000;
 }
 .model-top{
     margin-top: 100px;

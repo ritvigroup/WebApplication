@@ -16,21 +16,6 @@
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 <!--  chartJs js  -->
 <script src="<?=base_url();?>assets/js/vendor/chartJs/Chart.bundle.js"></script>
 <!--timeline_horizontal-->
@@ -131,4 +116,59 @@
 	    });
 
     });
+
+
+
+    function openExpressPopup() {
+
+        $.post("<?php echo base_url(); ?>express/expressPopup", {'display': 'Y'},
+            function (data, status) {
+                if(data != '') {
+                    $('.modal-content').html(data);
+                } else {
+                    $('.modal-content').html(data);
+                }
+            });
+    }
+</script>
+
+
+<script>
+/* When the user clicks on the button, 
+toggle between hiding and showing the dropdown content */
+function myFunction() {
+    document.getElementById("myDropdown").classList.toggle("show");
+}
+
+// Close the dropdown if the user clicks outside of it
+window.onclick = function(e) {
+  if (!e.target.matches('.dropbtn')) {
+    var myDropdown = document.getElementById("myDropdown");
+      if (myDropdown.classList.contains('show')) {
+        myDropdown.classList.remove('show');
+      }
+  }
+}
+</script>
+
+<script>
+$(document).ready(function(){
+
+	$("#activate_user").click(function(){
+	    $("#activate").show();
+	});
+
+	$(".nav-tabs li a").click(function(){
+	    $('#activate').css("display","none");
+	});
+
+	$("#user").click(function(){
+	    $("#user2").show();
+	});
+
+	$(".nav-tabs li a").click(function(){
+	    $('#user2').css("display","none");
+	});
+
+});
 </script>

@@ -41,7 +41,7 @@ $back_link = '<i class="fa fa-arrow-left" aria-hidden="true" onClick="return pre
             <div class="col-md-6" style="margin-top: 15px;">
                 <div class="form-group">
                     <label class="col-md-4 control-label">Start Date</label>
-                    <div class="input-group date form_datetime col-md-8" data-date-format="dd MM yyyy HH:ii p" data-link-field="dtp_input1">
+                    <div class="input-group date form_datetime col-md-8" data-date-format="yyyy-mm-dd" data-link-field="dtp_input1">
                         <input class="form-control" size="25" id="start_date" name="start_date" type="text" value="" readonly>
                         <span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
                     </div>
@@ -55,7 +55,7 @@ $back_link = '<i class="fa fa-arrow-left" aria-hidden="true" onClick="return pre
             <div class="col-md-6" style="margin-top: 15px;">
                 <div class="form-group">
                     <label class="col-md-4 control-label">End Date</label>
-                    <div class="input-group date form_datetime col-md-8" data-date-format="dd MM yyyy HH:ii p" data-link-field="dtp_input1">
+                    <div class="input-group date form_datetime col-md-8" data-date-format="yyyy-mm-dd" data-link-field="dtp_input1">
                         <input class="form-control" size="25" id="end_date" name="end_date" type="text" value="" readonly>
                        <span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
                     </div>

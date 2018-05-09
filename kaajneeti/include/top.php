@@ -21,46 +21,9 @@
 
             <ul class="nav navbar-nav pull-right">
                 <li style="color: #fff; border-right:1px solid #fff; padding-right: 10px; float: left; padding-top: 10px;">Free Edition  <br><span style="color: skyblue; font-size: 12px;">Upgrade</span></li>
-                <!-- <li class="dropdown">
-                    <a href="#" data-toggle="dropdown" class="dropdown-toggle count-info"> <i class="fa fa-envelope"></i> <span class="badge badge-info">6</span> </a>
-                    <ul class="dropdown-menu dropdown-messages menuBig">
-                        <li>
-                            <div class="dropdown-messages-box">
-                                <a class="pull-left" href="profile.html"> <img src="assets/images/teem/a7.jpg" class="img-circle" alt="image"> </a>
-                                <div class="media-body"> <small class="pull-right">46h ago</small> <strong>Mike Loreipsum</strong> started following <strong>Olivia Wenscombe</strong>.
-                                    <br>
-                                    <small class="text-muted">3 days ago at 7:58 pm - 10.06.2014</small> </div>
-                            </div>
-                        </li>
-                        <li class="divider"></li>
-                        <li>
-                            <div class="dropdown-messages-box">
-                                <a class="pull-left" href="profile.html"> <img src="assets/images/teem/a4.jpg" class="img-circle" alt="image"> </a>
-                                <div class="media-body "> <small class="pull-right text-navy">5h ago</small> <strong>Alex Smith </strong> started following <strong>Olivia Wenscombe</strong>.
-                                    <br>
-                                    <small class="text-muted">Yesterday 1:21 pm - 11.06.2014</small> </div>
-                            </div>
-                        </li>
-                        <li class="divider"></li>
-                        <li>
-                            <div class="dropdown-messages-box">
-                                <a class="pull-left" href="profile.html"> <img src="assets/images/teem/a3.jpg" class="img-circle" alt="image"> </a>
-                                <div class="media-body "> <small class="pull-right">23h ago</small> <strong>Olivia Wenscombe</strong> love <strong>Sophie </strong>. <br>
-                                    <small class="text-muted">2 days ago at 2:30 am - 11.06.2014</small> </div>
-                            </div>
-                        </li>
-                        <li class="divider"></li>
-                        <li>
-                            <div class="text-center link-block">
-                                <a href="mailbox.html"> <i class="fa fa-envelope"></i> <strong>Read All Messages</strong> </a>
-                            </div>
-                        </li>
-                    </ul>
-                </li> -->
-                <!-- <li class="search"><input type="" name="" style="display: none;"><button class=""><i class="fa fa-search"></i></button></li> -->
 
                 <li style=" margin-left: 11px; margin-top: 7px; ">
-                    <button class="btn btn-success" type="button" data-toggle="modal" data-target="#express-post"><i class="fa fa-bullhorn"></i> Express </button>
+                    <button class="btn btn-success" type="button" data-toggle="modal" data-target="#express-popup" onClick="return openExpressPopup();"><i class="fa fa-bullhorn"></i> Express </button>
                 </li>
 
                 <li class="dropdown add">
@@ -259,3 +222,15 @@
     </div>
     <!-- END HEADER INNER -->
 </div>
+
+
+
+<?php // Express Start ?>
+<div id="express-popup" tabindex="-1" role="dialog" aria-labelledby="modal-stackable-label" aria-hidden="true" class="modal fade" style="display: none;">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            
+        </div>
+    </div>
+</div>
+<?php // Express End ?>
