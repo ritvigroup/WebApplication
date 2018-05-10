@@ -69,9 +69,9 @@ class Post extends CI_Controller {
         if($UserProfileId == "") {
 			$msg = "Please select your profile";
 			$error_occured = true;
-		} else if($PostTitle == "") {
+		/*} else if($PostTitle == "") {
 			$msg = "Please enter some text to post";
-			$error_occured = true;
+			$error_occured = true;*/
 		} else {
 
             $this->db->query("BEGIN");

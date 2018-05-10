@@ -92,63 +92,33 @@
             <button type="button" class="btn btn-default default-border"><i class="fa fa-file" aria-hidden="true"></i> New Document</button>
         </div>
     </div>
-
-
-    <div class="row">
-        <div class="col-md-12">
-            <div class="dropup express-dropdown pull-right" id="my-id">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-
-                <div class="dropup express-dropdown " id="my-id">
-                    <button class="btn btn-default dropdown-toggle" type="button"  id="my-id2" data-toggle="dropdown">Public
-                        <span class="caret"></span>
-                    </button>
-                    <ul class="dropdown-menu dropdown-menu2">
-                        <li><a href="#">Public</a></li>
-                        <li><a href="#">My followers</a></li>
-                        <li><a href="#">My Connect</a></li>
-                        <li><a href="#">Only Me</a></li>
-                        <li><a href="#">Specific form</a></li>
-                    </ul>
-
-                </div>
-
-                <button type="button" class="btn btn-primary">Post</button>
-            </div>
+   
+</div>
+<div class="modal-footer">
+    <div class="col-md-2">
+        <div class="dropup express-dropdown pull-right" id="my-id">
+            <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
         </div>
+    </div>
+    <div class="col-md-4 pull-right" >
+        <div class="dropup express-dropdown " id="my-id">
+            <button class="btn btn-default dropdown-toggle" type="button"  id="my-id2" data-toggle="dropdown">Public
+                <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu dropdown-menu2">
+                <li><a href="#">Public</a></li>
+                <li><a href="#">My followers</a></li>
+                <li><a href="#">My Connect</a></li>
+                <li><a href="#">Only Me</a></li>
+                <li><a href="#">Specific form</a></li>
+            </ul>
+
+             <button type="button" class="btn btn-success">Post</button>
+
+        </div>
+
+       
     </div>
 </div>
 
 
-
-<div class="modal fade custom-fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered model-top" role="document">
-        <div class="modal-content">
-            <div class="modal-header express-header">
-                <h5 class="modal-title" id="exampleModalLongTitle"></h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="button-group ">
-                            <button type="button" class="btn btn-primary camera-btn"><i class="fa fa-video-camera" aria-hidden="true"></i> Camera</button>
-                            <button type="button" class="btn btn-default connect-btn"><i class="fa fa-plug" aria-hidden="true"></i> Connect</button>
-                        </div>
-
-                        <h1 class="text-center camerah1">Unable to find camera</h1>
-                        <p class="text-center">Please connect a camera and verify that camera permissions are correct in your browser</p><br>
-                        <div class="button-group ">
-                            <button type="button" data-dismiss="modal" class="btn btn-primary  ">Done</button></div>
-
-
-                        </div>
-                    </div>
-                </div>
-
-            </div>
-        </div>
-    </div>
-</div>

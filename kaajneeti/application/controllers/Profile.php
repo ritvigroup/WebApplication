@@ -77,6 +77,7 @@ class Profile extends CI_Controller {
 
             $this->load->view('profile/subprofile',$data);
         }
+        $this->load->view('profile/subprofile',$data);
     }
 
     public function profile() {

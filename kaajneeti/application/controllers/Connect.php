@@ -115,6 +115,22 @@ class Connect extends CI_Controller {
     }
 
 
+    public function groups() {
+        $data = array();
+      
+        $_POST['user_id'] = $this->session->userdata('UserId');
+        $_POST['user_profile_id'] = $this->session->userdata('UserProfileId');
+        $json_encode = post_curl(API_CALL_PATH.'userconnect/getMyAllFriends', $this->input->post(), $this->curl);
+
+        $json_decode = json_decode($json_encode);
+        if(count($json_decode->result) > 0) {
+            $data = $json_decode;
+        }
+        
+        $this->load->view('connect/groups',$data);
+    }
+
+
     public function search() {
         $data = array();
       

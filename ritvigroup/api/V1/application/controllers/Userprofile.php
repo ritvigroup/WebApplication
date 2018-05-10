@@ -985,11 +985,11 @@ class Userprofile extends CI_Controller {
                         $error_occured = true;
                     } else {
 
-                        $res_u = $this->User_Model->isExistUserAndUserProfileAltMobile($alt_mobile, $UserId);
-                        if($res_u['UserId'] > 0) {
-                            $msg = "This alternate mobile is already in use. Please choose mobile number";
-                            $error_occured = true;
-                        }
+                        // $res_u = $this->User_Model->isExistUserAndUserProfileAltMobile($alt_mobile, $UserId);
+                        // if($res_u['UserId'] > 0) {
+                        //     $msg = "This alternate mobile is already in use. Please choose mobile number";
+                        //     $error_occured = true;
+                        // }
                     }
                 }
             }

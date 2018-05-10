@@ -124,12 +124,20 @@ $back_link = '<i class="fa fa-arrow-left" aria-hidden="true" onClick="return pre
                                      <div class="row">
                                             <div class="col-md-4" style="margin-top: 20px; width: 16%;">
                                                 <div class="form-group"><select class="form-control">
-                                                    <option>65</option>
+                                                    <?php
+                                                    for($i = 18; $i < 80; $i++) {
+                                                        echo '<option value="'.$i.'">'.$i.'</option>';
+                                                    }
+                                                    ?>
                                                 </select></div>
                                             </div>
                                            <div class="col-md-4"  style="margin-top: 20px; width: 16%;">
                                                 <div class="form-group"><select class="form-control">
-                                                    <option>65</option>
+                                                    <?php
+                                                    for($i = 80; $i > 18; $i--) {
+                                                        echo '<option value="'.$i.'">'.$i.'</option>';
+                                                    }
+                                                    ?>
                                                 </select></div>
                                             </div>
                                    
@@ -151,7 +159,7 @@ $back_link = '<i class="fa fa-arrow-left" aria-hidden="true" onClick="return pre
                                                 </div>
 
                                                 <div class="col-md-2">
-                                                    <input type="radio" name="gender" value="other"><span class="Transgender">Transgender</span>
+                                                    <span><input type="radio" name="gender" value="other"><span class="Transgender">Transgender</span></span>
                                                 </div>
                                        
                                             </div>
@@ -177,7 +185,7 @@ $back_link = '<i class="fa fa-arrow-left" aria-hidden="true" onClick="return pre
                                         </div>
                                         <div class="row">
  
-                                    <div class="col-md-3 read-more religion-input">
+                                    <div class="col-md-3 read-more religion-input" style="display: none;">
                                        
                                          <label for="inputName" class="col-md-3 control-label target-area">Religion</label>
                                     </div>
@@ -969,7 +977,9 @@ $back_link = '<i class="fa fa-arrow-left" aria-hidden="true" onClick="return pre
 
 <div class="modal-footer">
     <!-- <inpu.panel-headingt type="reset" class="btn btn-default" value="Cancel"> -->
-     <i class="fa fa-trash-o fa-2x" aria-hidden="true" onCLick="return resetFormPage();"></i>
+     <i class="fa fa-trash-o fa-2x delete" aria-hidden="true" onCLick="return resetFormPage();"></i>
+     <button type="reset" class="btn pull-left btn-sm btn-primary confirm">Confirm</button>
+     <button type="reset" class="btn pull-left btn-sm btn-primary cancel">Cancel</button>
 
 
 
@@ -1000,6 +1010,12 @@ $back_link = '<i class="fa fa-arrow-left" aria-hidden="true" onClick="return pre
   
     $("#read-click").click(function(){
         $(".religion-input").toggle();
+    });
+
+    $(document).ready(function(){
+        $('.delete').click(function(){
+            $('.confirm, .cancel').toggle();
+        });
     });
 });
 </script>

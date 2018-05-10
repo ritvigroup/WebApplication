@@ -27,7 +27,7 @@
                                 <ol class="breadcrumb">
                                     <li> <a class="text-capitalize" href="<?=base_url();?>leader/dashboard">Kaajneeti</a> </li>
                                     <li> <a class="text-capitalize" href="<?=base_url(); ?>connect/myfriends">Connect</a> </li>
-                                    <li class="active"><strong><a class="text-capitalize" href="<?=base_url(); ?>connect/myfriends">My Connections</a> </strong> </li>
+                                    <li class="active"><strong><a class="text-capitalize" href="<?=base_url(); ?>connect/groups">Groups</a> </strong> </li>
                                 </ol>
                             </div>
 
@@ -41,7 +41,7 @@
                                                         <div class="col-md-6">
                                                             <!-- <i class="fa fa-thumbs-up"></i>  -->
                                                             <span class="user-frnd text-uppercase">
-                                                                All Connections
+                                                                Groups
                                                             </span>
                                                         </div>
                                                         <div class="col-md-6 ">
@@ -92,9 +92,9 @@
                                                         <div class="col-md-12">
                                                             <div class="connections-tabs">
                                                                 <ul class="connect-tab-menu">
-                                                                    <li class="active"><a href="<?=base_url();?>connect/myfriends">all connections</a></li>
+                                                                    <li><a href="<?=base_url();?>connect/myfriends">all connections</a></li>
                                                                     <li><a href="<?=base_url();?>connect/requestsent">requests</a></li>
-                                                                    <li><a href="<?=base_url();?>connect/groups">groups</a></li>
+                                                                    <li class="active"><a href="<?=base_url();?>connect/groups">groups</a></li>
                                                                 </ul>
                                                             </div><!--Tabs-->
                                                         </div>
@@ -118,11 +118,13 @@
 
                                                     <!-- Nav tabs -->
                                                     <ul class="margin-left-right-0 nav nav-tabs" role="tablist">
-                                                        <li role="presentation" class="active"><a href="#all-connections" aria-controls="home" role="tab" data-toggle="tab">All <span class="badge">4</span></a></li>
+                                                        <li role="presentation" class="active"><a href="#my-groups" aria-controls="home" role="tab" data-toggle="tab">My groups <span class="badge">4</span></a></li>
 
-                                                        <li role="presentation"><a href="#leader-connections" aria-controls="home" role="tab" data-toggle="tab">Leader <span class="badge">4</span></a></li>
+                                                        <li role="presentation"><a href="#Suggested-groups" aria-controls="home" role="tab" data-toggle="tab">Suggested groups <span class="badge">4</span></a></li>
 
-                                                        <li role="presentation"><a href="#citizen-connections" aria-controls="home" role="tab" data-toggle="tab">Citizen <span class="badge">4</span></a></li>
+                                                        <li><button class="btn btn-success" type="button" data-target="#create-group" data-toggle="modal"><i class="fa fa-plus"></i> Create Gruop</button></li>
+
+                                                        <!-- <li role="presentation"><a href="#all-connections" aria-controls="home" role="tab" data-toggle="tab">Citizen <span class="badge">4</span></a></li> -->
 
                                                         <li class="connetions-search col-sm-3 pull-right">
                                                             <div class="row input-group">
@@ -138,8 +140,8 @@
                                                     <!-- Tab panes -->
                                                     <div class="margin-left-right-0 tab-content">
                                                         
-                                                        <!--               All connections           -->
-                                                        <div role="tabpanel" class="tab-pane active" id="all-connections">
+                                                        <!--               All Friends           -->
+                                                        <div role="tabpanel" class="tab-pane active" id="my-groups">
                                                             <!-- <div class="row ">Both keys Grid & List view  -->
                                                                 <div class="col-sm-12" style=" margin-top: 5px; ">
                                                                     <i class="fa fa-th-list fa-2x pull-right" id="list-view-id"></i>
@@ -153,8 +155,9 @@
                                                                             <a href="<?=base_url();?>profile/profile"">
                                                                                 <img src="../assets/images/teem/a1.jpg" class="img-responsive" alt="image">
                                                                             </a>
-                                                                            <h3><strong>Jordan citizen</strong></h3>
-                                                                            <p><i class="fa fa-star"></i> 333 connections</p>
+                                                                            
+                                                                            <h3><strong>My group</strong></h3>
+                                                                            <p><a href="#"><i class="fa fa-star"></i> 10Unread post</a></p>
                                                                             <div class="connection-features">
                                                                                 <div class="dropdown">
                                                                                     <button class="btn aqua btn-outline btn-sm dropdown-toggle" type="button" id="connection-featuresMenu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -162,12 +165,9 @@
                                                                                         
                                                                                     </button>
                                                                                      <ul class="dropdown-menu dropdown-menu-left" aria-labelledby="connection-featuresMenu">
-                                                                                        <li><a href="#">Get Notification</a></li>
-                                                                                        <li><a href="#">Close connetions</a></li>
-                                                                                        <li><a href="#">Acquaintances</a></li>
-                                                                                        <li><a href="#">Add to another list...</a></li>
-                                                                                        <li><a href="#">Suggest connections...</a></li>
-                                                                                        <li><a href="#">Unconfirmed</a></li>
+                                                                                        <li><a href="#">Edit Notification Settings</a></li>
+                                                                                        <li><a href="#">Leave Group</a></li>
+                                                                                        <li><a href="#">Pin to Shortcuts</a></li>
                                                                                     </ul>
                                                                                 </div>
                                                                             </div>    
@@ -179,11 +179,11 @@
                                                                 <div class="grid-list-view grid col-md-4 col-sm-6">
                                                                     <div class="contact-box">
                                                                         <div class="col-sm-12">
-                                                                            <a href="#">
-                                                              <img src="../assets/images/teem/a1.jpg" class="img-responsive" alt="image">
-                                                            </a>
-                                                                            <h3><strong>Jordan leader</strong></h3>
-                                                                            <p><i class="fa fa-star"></i> 333 connections</p>
+                                                                            <a href="<?=base_url();?>profile/profile"">
+                                                                                <img src="../assets/images/teem/a1.jpg" class="img-responsive" alt="image">
+                                                                            </a>
+                                                                            <h3><strong>My group</strong></h3>
+                                                                            <p><a href="#"><i class="fa fa-star"></i> 10Unread post</a></p>
                                                                             <div class="connection-features">
                                                                                 <div class="dropdown">
                                                                                     <button class="btn aqua btn-outline btn-sm dropdown-toggle" type="button" id="connection-featuresMenu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -191,12 +191,9 @@
                                                                                         
                                                                                     </button>
                                                                                      <ul class="dropdown-menu dropdown-menu-left" aria-labelledby="connection-featuresMenu">
-                                                                                        <li><a href="#">Get Notification</a></li>
-                                                                                        <li><a href="#">Close connetions</a></li>
-                                                                                        <li><a href="#">Acquaintances</a></li>
-                                                                                        <li><a href="#">Add to another list...</a></li>
-                                                                                        <li><a href="#">Suggest connections...</a></li>
-                                                                                        <li><a href="#">Unconfirmed</a></li>
+                                                                                        <li><a href="#">Edit Notification Settings</a></li>
+                                                                                        <li><a href="#">Leave Group</a></li>
+                                                                                        <li><a href="#">Pin to Shortcuts</a></li>
                                                                                     </ul>
                                                                                 </div>
                                                                             </div>    
@@ -208,11 +205,11 @@
                                                                 <div class="grid-list-view grid col-md-4 col-sm-6">
                                                                     <div class="contact-box">
                                                                         <div class="col-sm-12">
-                                                                            <a href="#">
-  <img src="../assets/images/teem/a1.jpg" class="img-responsive" alt="image">
-</a>
-                                                                            <h3><strong>Jordan citizen</strong></h3>
-                                                                            <p><i class="fa fa-star"></i> 333 connections</p>
+                                                                            <a href="<?=base_url();?>profile/profile"">
+                                                                                <img src="../assets/images/teem/a1.jpg" class="img-responsive" alt="image">
+                                                                            </a>
+                                                                            <h3><strong>My group</strong></h3>
+                                                                            <p><a href="#"><i class="fa fa-star"></i> 10Unread post</a></p>
                                                                             <div class="connection-features">
                                                                                 <div class="dropdown">
                                                                                     <button class="btn aqua btn-outline btn-sm dropdown-toggle" type="button" id="connection-featuresMenu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -220,12 +217,9 @@
                                                                                         
                                                                                     </button>
                                                                                      <ul class="dropdown-menu dropdown-menu-left" aria-labelledby="connection-featuresMenu">
-                                                                                        <li><a href="#">Get Notification</a></li>
-                                                                                        <li><a href="#">Close connetions</a></li>
-                                                                                        <li><a href="#">Acquaintances</a></li>
-                                                                                        <li><a href="#">Add to another list...</a></li>
-                                                                                        <li><a href="#">Suggest connections...</a></li>
-                                                                                        <li><a href="#">Unconfirmed</a></li>
+                                                                                        <li><a href="#">Edit Notification Settings</a></li>
+                                                                                        <li><a href="#">Leave Group</a></li>
+                                                                                        <li><a href="#">Pin to Shortcuts</a></li>
                                                                                     </ul>
                                                                                 </div>
                                                                             </div>    
@@ -237,11 +231,11 @@
                                                                 <div class="grid-list-view grid col-md-4 col-sm-6">
                                                                     <div class="contact-box">
                                                                         <div class="col-sm-12">
-                                                                            <a href="#">
-  <img src="../assets/images/teem/a1.jpg" class="img-responsive" alt="image">
-</a>
-                                                                            <h3><strong>Jordan leader</strong></h3>
-                                                                            <p><i class="fa fa-star"></i> 333 connections</p>
+                                                                            <a href="<?=base_url();?>profile/profile"">
+                                                                                <img src="../assets/images/teem/a1.jpg" class="img-responsive" alt="image">
+                                                                            </a>
+                                                                            <h3><strong>My group</strong></h3>
+                                                                            <p><a href="#"><i class="fa fa-star"></i> 10Unread post</a></p>
                                                                             <div class="connection-features">
                                                                                 <div class="dropdown">
                                                                                     <button class="btn aqua btn-outline btn-sm dropdown-toggle" type="button" id="connection-featuresMenu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -249,12 +243,9 @@
                                                                                         
                                                                                     </button>
                                                                                      <ul class="dropdown-menu dropdown-menu-left" aria-labelledby="connection-featuresMenu">
-                                                                                        <li><a href="#">Get Notification</a></li>
-                                                                                        <li><a href="#">Close connetions</a></li>
-                                                                                        <li><a href="#">Acquaintances</a></li>
-                                                                                        <li><a href="#">Add to another list...</a></li>
-                                                                                        <li><a href="#">Suggest connections...</a></li>
-                                                                                        <li><a href="#">Unconfirmed</a></li>
+                                                                                        <li><a href="#">Edit Notification Settings</a></li>
+                                                                                        <li><a href="#">Leave Group</a></li>
+                                                                                        <li><a href="#">Pin to Shortcuts</a></li>
                                                                                     </ul>
                                                                                 </div>
                                                                             </div>    
@@ -266,11 +257,11 @@
                                                                 <div class="grid-list-view grid col-md-4 col-sm-6">
                                                                     <div class="contact-box">
                                                                         <div class="col-sm-12">
-                                                                            <a href="#">
-  <img src="../assets/images/teem/a1.jpg" class="img-responsive" alt="image">
-</a>
-                                                                            <h3><strong>Jordan citizen</strong></h3>
-                                                                            <p><i class="fa fa-star"></i> 333 connections</p>
+                                                                            <a href="<?=base_url();?>profile/profile"">
+                                                                                <img src="../assets/images/teem/a1.jpg" class="img-responsive" alt="image">
+                                                                            </a>
+                                                                            <h3><strong>My group</strong></h3>
+                                                                            <p><a href="#"><i class="fa fa-star"></i> 10Unread post</a></p>
                                                                             <div class="connection-features">
                                                                                 <div class="dropdown">
                                                                                     <button class="btn aqua btn-outline btn-sm dropdown-toggle" type="button" id="connection-featuresMenu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -278,12 +269,9 @@
                                                                                         
                                                                                     </button>
                                                                                      <ul class="dropdown-menu dropdown-menu-left" aria-labelledby="connection-featuresMenu">
-                                                                                        <li><a href="#">Get Notification</a></li>
-                                                                                        <li><a href="#">Close connetions</a></li>
-                                                                                        <li><a href="#">Acquaintances</a></li>
-                                                                                        <li><a href="#">Add to another list...</a></li>
-                                                                                        <li><a href="#">Suggest connections...</a></li>
-                                                                                        <li><a href="#">Unconfirmed</a></li>
+                                                                                        <li><a href="#">Edit Notification Settings</a></li>
+                                                                                        <li><a href="#">Leave Group</a></li>
+                                                                                        <li><a href="#">Pin to Shortcuts</a></li>
                                                                                     </ul>
                                                                                 </div>
                                                                             </div>    
@@ -295,11 +283,11 @@
                                                                 <div class="grid-list-view grid col-md-4 col-sm-6">
                                                                     <div class="contact-box">
                                                                         <div class="col-sm-12">
-                                                                            <a href="#">
-  <img src="../assets/images/teem/a1.jpg" class="img-responsive" alt="image">
-</a>
-                                                                            <h3><strong>Jordan leader</strong></h3>
-                                                                            <p><i class="fa fa-star"></i> 333 connections</p>
+                                                                            <a href="<?=base_url();?>profile/profile"">
+                                                                                <img src="../assets/images/teem/a1.jpg" class="img-responsive" alt="image">
+                                                                            </a>
+                                                                            <h3><strong>My group</strong></h3>
+                                                                            <p><a href="#"><i class="fa fa-star"></i> 10Unread post</a></p>
                                                                             <div class="connection-features">
                                                                                 <div class="dropdown">
                                                                                     <button class="btn aqua btn-outline btn-sm dropdown-toggle" type="button" id="connection-featuresMenu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -307,12 +295,9 @@
                                                                                         
                                                                                     </button>
                                                                                      <ul class="dropdown-menu dropdown-menu-left" aria-labelledby="connection-featuresMenu">
-                                                                                        <li><a href="#">Get Notification</a></li>
-                                                                                        <li><a href="#">Close connetions</a></li>
-                                                                                        <li><a href="#">Acquaintances</a></li>
-                                                                                        <li><a href="#">Add to another list...</a></li>
-                                                                                        <li><a href="#">Suggest connections...</a></li>
-                                                                                        <li><a href="#">Unconfirmed</a></li>
+                                                                                        <li><a href="#">Edit Notification Settings</a></li>
+                                                                                        <li><a href="#">Leave Group</a></li>
+                                                                                        <li><a href="#">Pin to Shortcuts</a></li>
                                                                                     </ul>
                                                                                 </div>
                                                                             </div>    
@@ -325,8 +310,8 @@
                                                               
                                                         </div>
 
-                                                        <!--               leader connections           -->
-                                                        <div role="tabpanel" class="tab-pane" id="leader-connections">
+                                                        <!--              Group Leader           -->
+                                                        <div role="tabpanel" class="tab-pane" id="Suggested-groups">
                                                             <!-- <div class="row ">Both keys Grid & List view  -->
                                                                 <div class="col-sm-12" style=" margin-top: 5px; ">
                                                                     <i class="fa fa-th-list fa-2x pull-right" id="list-view-id"></i>
@@ -337,27 +322,29 @@
                                                                 <div class="grid-list-view grid col-md-4 col-sm-6">
                                                                     <div class="contact-box">
                                                                         <div class="col-sm-12">
-                                                                            <a href="#">
-  <img src="../assets/images/teem/a1.jpg" class="img-responsive" alt="image">
-</a>
-                                                                            <h3><strong>Jordan leader</strong></h3>
-                                                                            <p><i class="fa fa-star"></i> 333 connections</p>
-                                                                            <div class="connection-features">
+                                                                            <a href="<?=base_url();?>profile/profile"">
+                                                                                <img src="../assets/images/teem/a1.jpg" class="img-responsive" alt="image">
+                                                                            </a>
+                                                                            
+                                                                            <h3><strong>Suggested group</strong></h3>
+                                                                            <p><a href="#"><i class="fa fa-star"></i> 10Unread post</a></p>
+                                                                             <div>
+                                                                                <button class="btn blue" type="button">Join</button>
+                                                                                <button class="btn btn-warning" type="button">Delete</button>
+                                                                            </div>
+                                                                            <!-- <div class="connection-features">
                                                                                 <div class="dropdown">
                                                                                     <button class="btn aqua btn-outline btn-sm dropdown-toggle" type="button" id="connection-featuresMenu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                                                                     <i class="fa fa-plus"></i>
                                                                                         
                                                                                     </button>
                                                                                      <ul class="dropdown-menu dropdown-menu-left" aria-labelledby="connection-featuresMenu">
-                                                                                        <li><a href="#">Get Notification</a></li>
-                                                                                        <li><a href="#">Close connetions</a></li>
-                                                                                        <li><a href="#">Acquaintances</a></li>
-                                                                                        <li><a href="#">Add to another list...</a></li>
-                                                                                        <li><a href="#">Suggest connections...</a></li>
-                                                                                        <li><a href="#">Unconfirmed</a></li>
+                                                                                        <li><a href="#">Edit Notification Settings</a></li>
+                                                                                        <li><a href="#">Leave Group</a></li>
+                                                                                        <li><a href="#">Pin to Shortcuts</a></li>
                                                                                     </ul>
                                                                                 </div>
-                                                                            </div>    
+                                                                            </div> -->    
                                                                         </div>
                                                                         <div class="clearfix"></div>
                                                                         
@@ -366,27 +353,28 @@
                                                                 <div class="grid-list-view grid col-md-4 col-sm-6">
                                                                     <div class="contact-box">
                                                                         <div class="col-sm-12">
-                                                                            <a href="#">
-  <img src="../assets/images/teem/a1.jpg" class="img-responsive" alt="image">
-</a>
-                                                                            <h3><strong>Jordan leader</strong></h3>
-                                                                            <p><i class="fa fa-star"></i> 333 connections</p>
-                                                                            <div class="connection-features">
+                                                                            <a href="<?=base_url();?>profile/profile"">
+                                                                                <img src="../assets/images/teem/a1.jpg" class="img-responsive" alt="image">
+                                                                            </a>
+                                                                            <h3><strong>Suggested group</strong></h3>
+                                                                            <p><a href="#"><i class="fa fa-star"></i> 10Unread post</a></p>
+                                                                             <div>
+                                                                                <button class="btn blue" type="button">Join</button>
+                                                                                <button class="btn btn-warning" type="button">Delete</button>
+                                                                            </div>
+                                                                            <!-- <div class="connection-features">
                                                                                 <div class="dropdown">
                                                                                     <button class="btn aqua btn-outline btn-sm dropdown-toggle" type="button" id="connection-featuresMenu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                                                                     <i class="fa fa-plus"></i>
                                                                                         
                                                                                     </button>
                                                                                      <ul class="dropdown-menu dropdown-menu-left" aria-labelledby="connection-featuresMenu">
-                                                                                        <li><a href="#">Get Notification</a></li>
-                                                                                        <li><a href="#">Close connetions</a></li>
-                                                                                        <li><a href="#">Acquaintances</a></li>
-                                                                                        <li><a href="#">Add to another list...</a></li>
-                                                                                        <li><a href="#">Suggest connections...</a></li>
-                                                                                        <li><a href="#">Unconfirmed</a></li>
+                                                                                        <li><a href="#">Edit Notification Settings</a></li>
+                                                                                        <li><a href="#">Leave Group</a></li>
+                                                                                        <li><a href="#">Pin to Shortcuts</a></li>
                                                                                     </ul>
                                                                                 </div>
-                                                                            </div>    
+                                                                            </div>  -->   
                                                                         </div>
                                                                         <div class="clearfix"></div>
                                                                         
@@ -395,156 +383,29 @@
                                                                 <div class="grid-list-view grid col-md-4 col-sm-6">
                                                                     <div class="contact-box">
                                                                         <div class="col-sm-12">
-                                                                            <a href="#">
-  <img src="../assets/images/teem/a1.jpg" class="img-responsive" alt="image">
-</a>
-                                                                            <h3><strong>Jordan leader</strong></h3>
-                                                                            <p><i class="fa fa-star"></i> 333 connections</p>
-                                                                            <div class="connection-features">
-                                                                                <div class="dropdown">
-                                                                                    <button class="btn aqua btn-outline btn-sm dropdown-toggle" type="button" id="connection-featuresMenu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                                                    <i class="fa fa-plus"></i>
-                                                                                        
-                                                                                    </button>
-                                                                                     <ul class="dropdown-menu dropdown-menu-left" aria-labelledby="connection-featuresMenu">
-                                                                                        <li><a href="#">Get Notification</a></li>
-                                                                                        <li><a href="#">Close connetions</a></li>
-                                                                                        <li><a href="#">Acquaintances</a></li>
-                                                                                        <li><a href="#">Add to another list...</a></li>
-                                                                                        <li><a href="#">Suggest connections...</a></li>
-                                                                                        <li><a href="#">Unconfirmed</a></li>
-                                                                                    </ul>
-                                                                                </div>
-                                                                            </div>    
-                                                                        </div>
-                                                                        <div class="clearfix"></div>
-                                                                        
-                                                                    </div>
-                                                                </div>
-                                                                <div class="grid-list-view grid col-md-4 col-sm-6">
-                                                                    <div class="contact-box">
-                                                                        <div class="col-sm-12">
-                                                                            <a href="#">
-  <img src="../assets/images/teem/a1.jpg" class="img-responsive" alt="image">
-</a>
-                                                                            <h3><strong>Jordan leader</strong></h3>
-                                                                            <p><i class="fa fa-star"></i> 333 connections</p>
-                                                                            <div class="connection-features">
-                                                                                <div class="dropdown">
-                                                                                    <button class="btn aqua btn-outline btn-sm dropdown-toggle" type="button" id="connection-featuresMenu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                                                    <i class="fa fa-plus"></i>
-                                                                                        
-                                                                                    </button>
-                                                                                     <ul class="dropdown-menu dropdown-menu-left" aria-labelledby="connection-featuresMenu">
-                                                                                        <li><a href="#">Get Notification</a></li>
-                                                                                        <li><a href="#">Close connetions</a></li>
-                                                                                        <li><a href="#">Acquaintances</a></li>
-                                                                                        <li><a href="#">Add to another list...</a></li>
-                                                                                        <li><a href="#">Suggest connections...</a></li>
-                                                                                        <li><a href="#">Unconfirmed</a></li>
-                                                                                    </ul>
-                                                                                </div>
-                                                                            </div>    
-                                                                        </div>
-                                                                        <div class="clearfix"></div>
-                                                                        
-                                                                    </div>
-                                                                </div>
-                                                                <div class="grid-list-view grid col-md-4 col-sm-6">
-                                                                    <div class="contact-box">
-                                                                        <div class="col-sm-12">
-                                                                            <a href="#">
-  <img src="../assets/images/teem/a1.jpg" class="img-responsive" alt="image">
-</a>
-                                                                            <h3><strong>Jordan leader</strong></h3>
-                                                                            <p><i class="fa fa-star"></i> 333 connections</p>
-                                                                            <div class="connection-features">
-                                                                                <div class="dropdown">
-                                                                                    <button class="btn aqua btn-outline btn-sm dropdown-toggle" type="button" id="connection-featuresMenu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                                                    <i class="fa fa-plus"></i>
-                                                                                        
-                                                                                    </button>
-                                                                                     <ul class="dropdown-menu dropdown-menu-left" aria-labelledby="connection-featuresMenu">
-                                                                                        <li><a href="#">Get Notification</a></li>
-                                                                                        <li><a href="#">Close connetions</a></li>
-                                                                                        <li><a href="#">Acquaintances</a></li>
-                                                                                        <li><a href="#">Add to another list...</a></li>
-                                                                                        <li><a href="#">Suggest connections...</a></li>
-                                                                                        <li><a href="#">Unconfirmed</a></li>
-                                                                                    </ul>
-                                                                                </div>
-                                                                            </div>    
-                                                                        </div>
-                                                                        <div class="clearfix"></div>
-                                                                        
-                                                                    </div>
-                                                                </div>
-                                                                <div class="grid-list-view grid col-md-4 col-sm-6">
-                                                                    <div class="contact-box">
-                                                                        <div class="col-sm-12">
-                                                                            <a href="#">
-  <img src="../assets/images/teem/a1.jpg" class="img-responsive" alt="image">
-</a>
-                                                                            <h3><strong>Jordan leader</strong></h3>
-                                                                            <p><i class="fa fa-star"></i> 333 connections</p>
-                                                                            <div class="connection-features">
-                                                                                <div class="dropdown">
-                                                                                    <button class="btn aqua btn-outline btn-sm dropdown-toggle" type="button" id="connection-featuresMenu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                                                    <i class="fa fa-plus"></i>
-                                                                                        
-                                                                                    </button>
-                                                                                     <ul class="dropdown-menu dropdown-menu-left" aria-labelledby="connection-featuresMenu">
-                                                                                        <li><a href="#">Get Notification</a></li>
-                                                                                        <li><a href="#">Close connetions</a></li>
-                                                                                        <li><a href="#">Acquaintances</a></li>
-                                                                                        <li><a href="#">Add to another list...</a></li>
-                                                                                        <li><a href="#">Suggest connections...</a></li>
-                                                                                        <li><a href="#">Unconfirmed</a></li>
-                                                                                    </ul>
-                                                                                </div>
-                                                                            </div>    
-                                                                        </div>
-                                                                        <div class="clearfix"></div>
-                                                                        
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                              
-                                                        </div>
+                                                                            <a href="<?=base_url();?>profile/profile"">
+                                                                                <img src="../assets/images/teem/a1.jpg" class="img-responsive" alt="image">
+                                                                            </a>
+                                                                            <h3><strong>Suggested group</strong></h3>
+                                                                            <p><a href="#"><i class="fa fa-star"></i> 10Unread post</a></p>
+                                                                            <div>
+                                                                                <button class="btn blue" type="button">Join</button>
+                                                                                <button class="btn btn-warning" type="button">Delete</button>
+                                                                            </div>
 
-                                                        <!--               citizen connections           -->
-                                                        <div role="tabpanel" class="tab-pane" id="citizen-connections">
-                                                            <!-- <div class="row ">Both keys Grid & List view  -->
-                                                                <div class="col-sm-12" style=" margin-top: 5px; ">
-                                                                    <i class="fa fa-th-list fa-2x pull-right" id="list-view-id"></i>
-                                                                    <i class="fa fa-th fa-2x pull-right" id="grid-view-id"></i>
-                                                                </div>
-                                                            <!-- </div> -->
-                                                            <div class="connect_list">
-                                                                <div class="grid-list-view grid col-md-4 col-sm-6">
-                                                                    <div class="contact-box">
-                                                                        <div class="col-sm-12">
-                                                                            <a href="#">
-  <img src="../assets/images/teem/a1.jpg" class="img-responsive" alt="image">
-</a>
-                                                                            <h3><strong>Jordan citizen</strong></h3>
-                                                                            <p><i class="fa fa-star"></i> 333 connections</p>
-                                                                            <div class="connection-features">
+                                                                            <!-- <div class="connection-features">
                                                                                 <div class="dropdown">
                                                                                     <button class="btn aqua btn-outline btn-sm dropdown-toggle" type="button" id="connection-featuresMenu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                                                                     <i class="fa fa-plus"></i>
                                                                                         
                                                                                     </button>
                                                                                      <ul class="dropdown-menu dropdown-menu-left" aria-labelledby="connection-featuresMenu">
-                                                                                        <li><a href="#">Get Notification</a></li>
-                                                                                        <li><a href="#">Close connetions</a></li>
-                                                                                        <li><a href="#">Acquaintances</a></li>
-                                                                                        <li><a href="#">Add to another list...</a></li>
-                                                                                        <li><a href="#">Suggest connections...</a></li>
-                                                                                        <li><a href="#">Unconfirmed</a></li>
+                                                                                        <li><a href="#">Edit Notification Settings</a></li>
+                                                                                        <li><a href="#">Leave Group</a></li>
+                                                                                        <li><a href="#">Pin to Shortcuts</a></li>
                                                                                     </ul>
                                                                                 </div>
-                                                                            </div>    
+                                                                            </div> -->    
                                                                         </div>
                                                                         <div class="clearfix"></div>
                                                                         
@@ -553,27 +414,28 @@
                                                                 <div class="grid-list-view grid col-md-4 col-sm-6">
                                                                     <div class="contact-box">
                                                                         <div class="col-sm-12">
-                                                                            <a href="#">
-  <img src="../assets/images/teem/a1.jpg" class="img-responsive" alt="image">
-</a>
-                                                                            <h3><strong>Jordan citizen</strong></h3>
-                                                                            <p><i class="fa fa-star"></i> 333 connections</p>
-                                                                            <div class="connection-features">
+                                                                            <a href="<?=base_url();?>profile/profile"">
+                                                                                <img src="../assets/images/teem/a1.jpg" class="img-responsive" alt="image">
+                                                                            </a>
+                                                                            <h3><strong>Suggested group</strong></h3>
+                                                                            <p><a href="#"><i class="fa fa-star"></i> 10Unread post</a></p>
+                                                                             <div>
+                                                                                <button class="btn blue" type="button">Join</button>
+                                                                                <button class="btn btn-warning" type="button">Delete</button>
+                                                                            </div>
+                                                                            <!-- <div class="connection-features">
                                                                                 <div class="dropdown">
                                                                                     <button class="btn aqua btn-outline btn-sm dropdown-toggle" type="button" id="connection-featuresMenu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                                                                     <i class="fa fa-plus"></i>
                                                                                         
                                                                                     </button>
                                                                                      <ul class="dropdown-menu dropdown-menu-left" aria-labelledby="connection-featuresMenu">
-                                                                                        <li><a href="#">Get Notification</a></li>
-                                                                                        <li><a href="#">Close connetions</a></li>
-                                                                                        <li><a href="#">Acquaintances</a></li>
-                                                                                        <li><a href="#">Add to another list...</a></li>
-                                                                                        <li><a href="#">Suggest connections...</a></li>
-                                                                                        <li><a href="#">Unconfirmed</a></li>
+                                                                                        <li><a href="#">Edit Notification Settings</a></li>
+                                                                                        <li><a href="#">Leave Group</a></li>
+                                                                                        <li><a href="#">Pin to Shortcuts</a></li>
                                                                                     </ul>
                                                                                 </div>
-                                                                            </div>    
+                                                                            </div>  -->   
                                                                         </div>
                                                                         <div class="clearfix"></div>
                                                                         
@@ -582,27 +444,28 @@
                                                                 <div class="grid-list-view grid col-md-4 col-sm-6">
                                                                     <div class="contact-box">
                                                                         <div class="col-sm-12">
-                                                                            <a href="#">
-  <img src="../assets/images/teem/a1.jpg" class="img-responsive" alt="image">
-</a>
-                                                                            <h3><strong>Jordan citizen</strong></h3>
-                                                                            <p><i class="fa fa-star"></i> 333 connections</p>
-                                                                            <div class="connection-features">
+                                                                            <a href="<?=base_url();?>profile/profile"">
+                                                                                <img src="../assets/images/teem/a1.jpg" class="img-responsive" alt="image">
+                                                                            </a>
+                                                                            <h3><strong>Suggested group</strong></h3>
+                                                                            <p><a href="#"><i class="fa fa-star"></i> 10Unread post</a></p>
+                                                                             <div>
+                                                                                <button class="btn blue" type="button">Join</button>
+                                                                                <button class="btn btn-warning" type="button">Delete</button>
+                                                                            </div>
+                                                                            <!-- <div class="connection-features">
                                                                                 <div class="dropdown">
                                                                                     <button class="btn aqua btn-outline btn-sm dropdown-toggle" type="button" id="connection-featuresMenu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                                                                     <i class="fa fa-plus"></i>
                                                                                         
                                                                                     </button>
                                                                                      <ul class="dropdown-menu dropdown-menu-left" aria-labelledby="connection-featuresMenu">
-                                                                                        <li><a href="#">Get Notification</a></li>
-                                                                                        <li><a href="#">Close connetions</a></li>
-                                                                                        <li><a href="#">Acquaintances</a></li>
-                                                                                        <li><a href="#">Add to another list...</a></li>
-                                                                                        <li><a href="#">Suggest connections...</a></li>
-                                                                                        <li><a href="#">Unconfirmed</a></li>
+                                                                                        <li><a href="#">Edit Notification Settings</a></li>
+                                                                                        <li><a href="#">Leave Group</a></li>
+                                                                                        <li><a href="#">Pin to Shortcuts</a></li>
                                                                                     </ul>
                                                                                 </div>
-                                                                            </div>    
+                                                                            </div>   -->  
                                                                         </div>
                                                                         <div class="clearfix"></div>
                                                                         
@@ -611,85 +474,28 @@
                                                                 <div class="grid-list-view grid col-md-4 col-sm-6">
                                                                     <div class="contact-box">
                                                                         <div class="col-sm-12">
-                                                                            <a href="#">
-  <img src="../assets/images/teem/a1.jpg" class="img-responsive" alt="image">
-</a>
-                                                                            <h3><strong>Jordan citizen</strong></h3>
-                                                                            <p><i class="fa fa-star"></i> 333 connections</p>
-                                                                            <div class="connection-features">
+                                                                            <a href="<?=base_url();?>profile/profile"">
+                                                                                <img src="../assets/images/teem/a1.jpg" class="img-responsive" alt="image">
+                                                                            </a>
+                                                                            <h3><strong>Suggested group</strong></h3>
+                                                                            <p><a href="#"><i class="fa fa-star"></i> 10Unread post</a></p>
+                                                                             <div>
+                                                                                <button class="btn blue" type="button">Join</button>
+                                                                                <button class="btn btn-warning" type="button">Delete</button>
+                                                                            </div>
+                                                                            <!-- <div class="connection-features">
                                                                                 <div class="dropdown">
                                                                                     <button class="btn aqua btn-outline btn-sm dropdown-toggle" type="button" id="connection-featuresMenu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                                                                     <i class="fa fa-plus"></i>
                                                                                         
                                                                                     </button>
                                                                                      <ul class="dropdown-menu dropdown-menu-left" aria-labelledby="connection-featuresMenu">
-                                                                                        <li><a href="#">Get Notification</a></li>
-                                                                                        <li><a href="#">Close connetions</a></li>
-                                                                                        <li><a href="#">Acquaintances</a></li>
-                                                                                        <li><a href="#">Add to another list...</a></li>
-                                                                                        <li><a href="#">Suggest connections...</a></li>
-                                                                                        <li><a href="#">Unconfirmed</a></li>
+                                                                                        <li><a href="#">Edit Notification Settings</a></li>
+                                                                                        <li><a href="#">Leave Group</a></li>
+                                                                                        <li><a href="#">Pin to Shortcuts</a></li>
                                                                                     </ul>
                                                                                 </div>
-                                                                            </div>    
-                                                                        </div>
-                                                                        <div class="clearfix"></div>
-                                                                        
-                                                                    </div>
-                                                                </div>
-                                                                <div class="grid-list-view grid col-md-4 col-sm-6">
-                                                                    <div class="contact-box">
-                                                                        <div class="col-sm-12">
-                                                                            <a href="#">
-  <img src="../assets/images/teem/a1.jpg" class="img-responsive" alt="image">
-</a>
-                                                                            <h3><strong>Jordan citizen</strong></h3>
-                                                                            <p><i class="fa fa-star"></i> 333 connections</p>
-                                                                            <div class="connection-features">
-                                                                                <div class="dropdown">
-                                                                                    <button class="btn aqua btn-outline btn-sm dropdown-toggle" type="button" id="connection-featuresMenu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                                                    <i class="fa fa-plus"></i>
-                                                                                        
-                                                                                    </button>
-                                                                                     <ul class="dropdown-menu dropdown-menu-left" aria-labelledby="connection-featuresMenu">
-                                                                                        <li><a href="#">Get Notification</a></li>
-                                                                                        <li><a href="#">Close connetions</a></li>
-                                                                                        <li><a href="#">Acquaintances</a></li>
-                                                                                        <li><a href="#">Add to another list...</a></li>
-                                                                                        <li><a href="#">Suggest connections...</a></li>
-                                                                                        <li><a href="#">Unconfirmed</a></li>
-                                                                                    </ul>
-                                                                                </div>
-                                                                            </div>    
-                                                                        </div>
-                                                                        <div class="clearfix"></div>
-                                                                        
-                                                                    </div>
-                                                                </div>
-                                                                <div class="grid-list-view grid col-md-4 col-sm-6">
-                                                                    <div class="contact-box">
-                                                                        <div class="col-sm-12">
-                                                                            <a href="#">
-  <img src="../assets/images/teem/a1.jpg" class="img-responsive" alt="image">
-</a>
-                                                                            <h3><strong>Jordan citizen</strong></h3>
-                                                                            <p><i class="fa fa-star"></i> 333 connections</p>
-                                                                            <div class="connection-features">
-                                                                                <div class="dropdown">
-                                                                                    <button class="btn aqua btn-outline btn-sm dropdown-toggle" type="button" id="connection-featuresMenu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                                                    <i class="fa fa-plus"></i>
-                                                                                        
-                                                                                    </button>
-                                                                                     <ul class="dropdown-menu dropdown-menu-left" aria-labelledby="connection-featuresMenu">
-                                                                                        <li><a href="#">Get Notification</a></li>
-                                                                                        <li><a href="#">Close connetions</a></li>
-                                                                                        <li><a href="#">Acquaintances</a></li>
-                                                                                        <li><a href="#">Add to another list...</a></li>
-                                                                                        <li><a href="#">Suggest connections...</a></li>
-                                                                                        <li><a href="#">Unconfirmed</a></li>
-                                                                                    </ul>
-                                                                                </div>
-                                                                            </div>    
+                                                                            </div>  -->   
                                                                         </div>
                                                                         <div class="clearfix"></div>
                                                                         
@@ -869,6 +675,49 @@
             </div>
         </div>
 
+        <!-- Modal -->
+        <div class="modal fade" id="create-group" tabindex="-1" role="dialog" aria-labelledby="create-group-ex">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">create group</h4>
+                  </div>
+                  <div class="modal-body">
+                    
+                    <div class="tabs-container">
+                        <ul class="nav nav-tabs">
+                            <li class="active"><a href="#tab-1" data-toggle="tab">Leader</a></li>
+                            <li><a href="#tab-2" data-toggle="tab">Citizen</a></li>
+                            
+                        </ul>
+                        <div class="tab-content">
+                            <div class="tab-pane active" id="tab-1">
+                              <div class="panel-body"> <strong>Lorem ipsum dolor sit amet</strong>
+                                <p> Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap. </p>
+                                <p> Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, </p>
+                              </div>
+                            </div>
+                            <div class="tab-pane" id="tab-2">
+                              <div class="panel-body"> <strong>Lorem ipsum dolor sit amet</strong>
+                                <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. </p>
+                                <p>I am alone, and feel the charm of existence in this spot, which was created for the bliss of souls like mine. I am so happy, my dear friend, so absorbed in the exquisite
+                                  sense of mere tranquil existence, that I neglect my talents. I should be incapable of drawing a single stroke at the present moment; and yet.</p>
+                              </div>
+                            </div>
+                            
+                        </div>
+                    </div>
+
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary pull-right">Create Group</button>
+                  </div>
+                </div>
+            </div>
+        </div>
+
 </body>
 
 <?php  require_once './include/js.php';?>
@@ -901,12 +750,12 @@
         }
     }
 
-    $('#all-connections #list-view-id, #leader-connections #list-view-id, #citizen-connections #list-view-id').on('click', function(){
+    $('#my-groups #list-view-id, #Suggested-groups #list-view-id').on('click', function(){
         $(' .grid-list-view').removeClass('grid col-md-4 col-sm-6');
         $('.grid-list-view').addClass('list col-md-12 col-sm-12');
     });
 
-    $('#all-connections #grid-view-id, #leader-connections #grid-view-id, #citizen-connections #grid-view-id').on('click', function(){
+    $('#my-groups #grid-view-id, #Suggested-groups #grid-view-id').on('click', function(){
         $('.grid-list-view').removeClass('list col-md-12 col-sm-12');
         $('.grid-list-view').addClass('grid col-md-4 col-sm-6');
     });

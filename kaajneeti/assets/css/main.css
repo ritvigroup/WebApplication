@@ -70,12 +70,12 @@ a, button, code, div, input, label, li, p, pre, select, span, svg, table, td, te
     border-radius: 0 !important;
 }
 
-.active a:focus {
+/*.active a:focus {
     outline: none;
     outline-offset: -2px;
     border-bottom: 2px solid red;
     text-decoration: none;
-}
+}*/
 
 .activelink {
     outline: none;
@@ -3364,8 +3364,8 @@ Breadcrumb Bar
  
 .breadcrumb {
     background-color: #ffffff;
-    padding: 8px;
-    margin-bottom: 5px;
+    padding: 8px 8px 8px 0;
+    margin-bottom: 10px;
 }
 
 /*.breadcrumb > li a {
@@ -3853,9 +3853,9 @@ WIDGETS
 .portlet{
     padding: 11px 24px; 
 }
-.breadcrumb{
+/*.breadcrumb{
     margin-bottom: 0px !important;
-}
+}*/
 .panel-heading{
     border-bottom: 2px solid gray;
 }
@@ -4012,9 +4012,10 @@ textarea.form-control{
 .camerah1{
     margin-top: 50px;
 }
-.fade{
+/*.fade{
     opacity: 0.9 !important;
-}
+    background: #000;
+}*/
 .model-top{
     margin-top: 100px;
 
@@ -4426,9 +4427,24 @@ textarea.form-control{
 
 /**********************Pushpendra_dwivedi**************************/
 
-.connect_myfriends .head {
-    padding: 20px 20px 0px;
-    background-color: #f3f3f4;
+.modal-footer .btn+.btn {
+    margin-bottom: 5px;
+}
+
+.express-btn:active:focus, .express-btn:focus {
+    border-color: transparent;
+}
+
+.margin-left-right-0 {
+    margin-left: 0;
+    margin-right: 0;
+}
+
+#connect_myfriends .head {
+        /* padding-top: 12px; */
+    padding-bottom: 3px;
+    margin-bottom: 0;
+    /* background-color: #f3f3f4; */
 }
 .modal-open .modal {
     background-color: #0000008a;
@@ -4576,7 +4592,7 @@ textarea.form-control{
 /*.grid .contact-box, .list .contact-box {
     position: relative;
 }*/
-.grid img, .list img { width: 110px; float: left; margin-right: 15px; }
+.grid img, .list img { width: 110px; float: left; margin-right: 15px; margin-left: 6px; }
 .list img { margin-left: 15px; }
 /*.list img { width: 60px; float: left; margin-right: 15px; }*/
 
@@ -4635,55 +4651,192 @@ textarea.form-control{
 
 /*********Connection Page css*********/
 
-#connect_myfriends .modal-footer {
-    text-align: inherit;
-}
+    #connect_myfriends .modal-footer {
+        text-align: inherit;
+    }
 
-#connect_myfriends .head .nav { margin-top: 4px; }
+    #connect_myfriends .head .nav { margin-top: 4px; }
 
-.search .search-on {
-    display: block !important;
-    position: absolute;
-    left: -280px;
-    top: 3px;
-    width: 300px;
-    height: 40px;
-    transition: width 2s ease-in-out;
-}
-.head .input-group .form-control {
-    float: right;
-    width: 46%;
-    -webkit-transition: width .35s ease-in-out;
-    transition: width .35s ease-in-out;
-}
-.head .input-group .form-control:focus {
-    width: 100%;
-    position: absolute;
-    right: 48px;
-}
-.head .tag-name {
-    position: absolute;
-    top: 10px;
-}
+    .search .search-on {
+        display: block !important;
+        position: absolute;
+        left: -280px;
+        top: 3px;
+        width: 300px;
+        height: 40px;
+        transition: width 2s ease-in-out;
+    }
+    .connetions-search .input-group .form-control {
+        float: right;
+        width: 46%;
+        -webkit-transition: width .35s ease-in-out;
+        transition: width .35s ease-in-out;
+    }
+    .connetions-search .input-group .form-control:focus {
+        width: 100%;
+        position: absolute;
+        right: 48px;
+    }
+    .head .tag-name {
+        position: absolute;
+        top: 10px;
+    }
 
-.head .user-frnd {
-    font-size: 24px;
-    position: absolute;
-    /*margin-top: -17px;*/
-}
-.top-menu .search-box {
-    position: absolute;
-    top: 9px;
-}
-.contact-box {
-    padding: 0;
-}
-.contact-box h3 {
-    margin-top: 10px;
-    font-size: 20px;
-}
+    .head .user-frnd {
+        font-size: 24px;
+        position: absolute;
+        margin-top: -7px;
+    }
+    .top-menu .search-box {
+        position: absolute;
+        top: 9px;
+    }
+    .contact-box {
+        padding: 0;
+    }
+    .contact-box h3 {
+        margin-top: 10px;
+        font-size: 20px;
+    }
+
+    .connect-tab-menu {
+        list-style: none;
+        padding-left: 0;
+        margin-top: 10px;
+        margin-bottom: 3px;
+        font-size: 16px;
+        text-transform: uppercase;
+        border-bottom: 1px solid #e6e9eb;
+        padding-bottom: 0;
+    }
+
+    .connect-tab-menu li {
+        display: inline-block;
+        margin-right: 20px;
+    }
+
+    .connect-tab-menu li a,.connect-tab-menu li.active {
+        padding: 10px;
+    }
+
+    a:hover, a:focus {
+        color: #74d5f2;
+    }
+    .connect-tab-menu li a:hover, .connect-tab-menu li a:focus {
+        outline: none;
+        outline-offset: 0;
+        border-bottom: 0 solid #49b6d6;
+        text-decoration: none;
+        background-color: inherit;
+    }
+    .connect-tab-menu li:hover, .connect-tab-menu li:focus, .connect-tab-menu li.active {
+        outline: none;
+        outline-offset: -2px;
+        border-bottom: 2px solid #49b6d6;
+        text-decoration: none;
+        background-color: #ececec;
+    }
 
 /********User Prfile page css********/
 #user-profile .profile-nav > li > a {
     padding: 7px 10px 15px;
 }
+
+.profile-edit-about-tabs {
+    margin-bottom: 20px;
+}
+
+.profile-edit-about-tabs .nav-tabs > li > a {
+    color: #a7b1c2;
+    font-weight: 600;
+    padding: 5px 10px;
+    font-size: 12px;
+}
+
+.profile-edit-about-tabs .nav>li>a:focus {
+    outline: none;
+    background-color: transparent;
+}
+.profile-edit-about-tabs .nav>li>a:hover {
+    background-color: #ececec;
+}
+
+.post-element {
+    background-color: #fff;
+    margin-top: 0px !important;
+    padding: 15px 15px 0 15px !important;
+}
+.post-container {
+    background-color: #f4f4f4;
+}
+
+.post-box { cursor: pointer;  }
+
+.feed-list {
+    padding: 15px 15px 7px;
+    background-color: #fff;
+    /*margin-top: 15px;*/
+    border: 1px solid #e7eaec;
+}
+
+.feed-list ul { 
+    list-style: none;
+    margin-left: -40px;
+}
+.feed-list ul li { 
+    display: inline-block; margin-right: 30px; }
+
+.feed-element .media-body p {
+    margin-top: 10px;
+}
+
+.post-box .activity-btn {
+    margin-top: 15px;
+    padding-top: 15px;
+    padding-bottom: 10px;
+    border-top: 1px solid #f3f3f3;
+    border-bottom: 1px solid #f3f3f3;
+}
+
+.post-box .media-footer-btn {
+
+}
+
+.post-model-box {
+    background-color: transparent;
+    width: 97%;
+    left: 9px;
+    top: 50px;
+    /* right: 3px; */
+    position: absolute;
+    height: 74%;
+}
+
+.post-container .nav-tabs > li > a {
+    font-size: 12px;
+    padding: 10px 15px;
+}
+#about-profile ul li a {
+    padding: 8px 0;
+    font-weight: 300;
+    display: table;
+}
+#about-profile .active a:focus {
+    /*outline: none;*/
+    outline-offset: 0;
+    border-bottom: 0;
+    /*text-decoration: none;*/
+}
+/*#about-profile ul:hover {
+    background-color: #f4f4f4;
+    padding-left: 15px; 
+}*/
+/*#about-profile a:hover, #about-profile a:focus {
+    color: #74d5f2;
+    background-color: #f4f4f4;
+}*/
+
+.delete {cursor: pointer;}
+.delete:hover {color: red;}
+.confirm { background-color: red !important; }
+.confirm, .cancel { display: none; margin: 10px 0 0 10px; }

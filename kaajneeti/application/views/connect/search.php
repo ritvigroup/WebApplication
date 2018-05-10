@@ -25,10 +25,8 @@
                         <div class="portlet box ">
                             <div class="portlet-header">
                                 <ol class="breadcrumb page-breadcrumb">
-                                    <li><a href="<?php echo base_url(); ?>connect/myfriends">My Connection</a>&nbsp;</li>
-                                    <li class="activelink"><a href="<?php echo base_url(); ?>connect/search">Search</a>&nbsp;</li>
-                                    <li><a href="<?php echo base_url(); ?>connect/invitation">Incomming</a>&nbsp;</li>
-                                    <li><a href="<?php echo base_url(); ?>connect/requestsent">Outgoing</a>&nbsp;</li>
+                                    <li> <a class="text-capitalize" href="<?=base_url();?>leader/dashboard">Kaajneeti</a> </li>
+                                    <li class="active"> <a class="text-capitalize" href="<?=base_url(); ?>connect/myfriends">Connect</a> </li>
                                 </ol>
                             </div>
                             <div class="row">
@@ -55,23 +53,165 @@
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="col-md-4 submit-button"><input type="button" value="Submit" onClick="return searchLeader();"></div>
+                                <div class="col-md-4 submit-button"><input type="button" value="Submit" onClick="return searchLeader();" class="btn btn-success"></div>
                                 <div class="col-md-4"></div>
                                 <div class="col-md-4"></div>
                             </div>
 
 
 
-                            <div class="table-responsive" id="search_result_show">
+                            <div class="table-responsive1" id="search_result_show">
                                 <div class="portlet-body">
                                     <div class="row mbm">
-                                        <div class="col-lg-12 search-result">
+                                        <div class="col-lg-12">
                                             <h1>Search Result</h1>
-                                            <div class="table-responsive">
-                                                <table id="table_id"
-                                                       class="table table-hover table-striped table-bordered table-advanced tablesorter display">
+                                            <div class="connect_list">
+                                                <div class="grid-list-view grid col-md-4 col-sm-6">
+                                                    <div class="contact-box">
+                                                        <div class="col-sm-12">
+                                                            <a href="#">
+                                                              <img src="../assets/images/teem/a1.jpg" class="img-responsive" alt="image">
+                                                            </a>
+                                                            <h3><strong>Jordan Belfort</strong></h3>
+                                                            <p><a href="#">Send Request</a></p>
+                                                            <div>
+                                                                <button class="btn btn-default" type="button">Undo</button>
+                                                            </div>  
+                                                        </div>
+                                                        <div class="clearfix"></div>
+                                                        
+                                                    </div>
+                                                </div>
+                                                <div class="grid-list-view grid col-md-4 col-sm-6">
+                                                    <div class="contact-box">
+                                                        <div class="col-sm-12">
+                                                            <a href="#">
+                                                              <img src="../assets/images/teem/a1.jpg" class="img-responsive" alt="image">
+                                                            </a>
+                                                            <h3><strong>Jordan Belfort</strong></h3>
+                                                            <p><a href="#">Send Request</a></p>
+                                                            <div>
+                                                                <button class="btn btn-default" type="button">Undo</button>
+                                                            </div> 
+                                                        </div>
+                                                        <div class="clearfix"></div>
+                                                        
+                                                    </div>
+                                                </div>
+                                                <div class="grid-list-view grid col-md-4 col-sm-6">
+                                                    <div class="contact-box">
+                                                        <div class="col-sm-12">
+                                                            <a href="#">
+                                                              <img src="../assets/images/teem/a1.jpg" class="img-responsive" alt="image">
+                                                            </a>
+                                                            <h3><strong>Jordan Belfort</strong></h3>
+                                                            <p><a href="#">Send Request</a></p>
+                                                            <div>
+                                                                <button class="btn btn-default" type="button">Undo</button>
+                                                            </div>  
+                                                        </div>
+                                                        <div class="clearfix"></div>
+                                                        
+                                                    </div>
+                                                </div>
 
-                                                </table>
+                                                <div class="grid-list-view grid col-md-4 col-sm-6">
+                                                    <div class="contact-box">
+                                                        <div class="col-sm-12">
+                                                            <a href="#">
+                                                              <img src="../assets/images/teem/a1.jpg" class="img-responsive" alt="image">
+                                                            </a>
+                                                            <h3><strong>Jordan Belfort</strong></h3>
+                                                            <p><a href="#">Send Request</a></p>
+                                                            <div>
+                                                                <button class="btn btn-default" type="button">Undo</button>
+                                                            </div>  
+                                                        </div>
+                                                        <div class="clearfix"></div>
+                                                        
+                                                    </div>
+                                                </div>
+                                                <div class="grid-list-view grid col-md-4 col-sm-6">
+                                                    <div class="contact-box">
+                                                        <div class="col-sm-12">
+                                                            <a href="#">
+                                                              <img src="../assets/images/teem/a1.jpg" class="img-responsive" alt="image">
+                                                            </a>
+                                                            <h3><strong>Jordan Belfort</strong></h3>
+                                                            <p><a href="#">Send Request</a></p>
+                                                            <div>
+                                                                <button class="btn btn-default" type="button">Undo</button>
+                                                            </div> 
+                                                        </div>
+                                                        <div class="clearfix"></div>
+                                                        
+                                                    </div>
+                                                </div>
+                                                <div class="grid-list-view grid col-md-4 col-sm-6">
+                                                    <div class="contact-box">
+                                                        <div class="col-sm-12">
+                                                            <a href="#">
+                                                              <img src="../assets/images/teem/a1.jpg" class="img-responsive" alt="image">
+                                                            </a>
+                                                            <h3><strong>Jordan Belfort</strong></h3>
+                                                            <p><a href="#">Send Request</a></p>
+                                                            <div>
+                                                                <button class="btn btn-default" type="button">Undo</button>
+                                                            </div>  
+                                                        </div>
+                                                        <div class="clearfix"></div>
+                                                        
+                                                    </div>
+                                                </div>
+
+                                                <div class="grid-list-view grid col-md-4 col-sm-6">
+                                                    <div class="contact-box">
+                                                        <div class="col-sm-12">
+                                                            <a href="#">
+                                                              <img src="../assets/images/teem/a1.jpg" class="img-responsive" alt="image">
+                                                            </a>
+                                                            <h3><strong>Jordan Belfort</strong></h3>
+                                                            <p><a href="#">Send Request</a></p>
+                                                            <div>
+                                                                <button class="btn btn-default" type="button">Undo</button>
+                                                            </div>  
+                                                        </div>
+                                                        <div class="clearfix"></div>
+                                                        
+                                                    </div>
+                                                </div>
+                                                <div class="grid-list-view grid col-md-4 col-sm-6">
+                                                    <div class="contact-box">
+                                                        <div class="col-sm-12">
+                                                            <a href="#">
+                                                              <img src="../assets/images/teem/a1.jpg" class="img-responsive" alt="image">
+                                                            </a>
+                                                            <h3><strong>Jordan Belfort</strong></h3>
+                                                            <p><a href="#">Send Request</a></p>
+                                                            <div>
+                                                                <button class="btn btn-default" type="button">Undo</button>
+                                                            </div> 
+                                                        </div>
+                                                        <div class="clearfix"></div>
+                                                        
+                                                    </div>
+                                                </div>
+                                                <div class="grid-list-view grid col-md-4 col-sm-6">
+                                                    <div class="contact-box">
+                                                        <div class="col-sm-12">
+                                                            <a href="#">
+                                                              <img src="../assets/images/teem/a1.jpg" class="img-responsive" alt="image">
+                                                            </a>
+                                                            <h3><strong>Jordan Belfort</strong></h3>
+                                                            <p><a href="#">Send Request</a></p>
+                                                            <div>
+                                                                <button class="btn btn-default" type="button">Undo</button>
+                                                            </div>  
+                                                        </div>
+                                                        <div class="clearfix"></div>
+                                                        
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>

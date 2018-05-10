@@ -26,14 +26,12 @@
                 <div class="row  border-bottom white-bg dashboard-header">
                     <div class="col-md-6">
                         <div class="portlet box">
-                            <h3>Plan</h3>
-
-                 <!--            <div class="portlet-header">
-                                <ol class="breadcrumb2 page-breadcrumb">
-                                    <li class="activelink"><a href="#"> Plan</a>&nbsp;</li>
-                          
+                            <div class="portlet-header">
+                                <ol class="breadcrumb">
+                                    <li> <a class="text-capitalize" href="<?=base_url();?>leader/dashboard">Kaajneeti</a> </li>
+                                    <li class="active"><strong><a class="text-capitalize" href="<?=base_url(); ?>plan/plan">Plan</a> </strong> </li>
                                 </ol>
-                            </div> -->
+                            </div>
                             
                         </div>
                     </div>
@@ -56,35 +54,23 @@
                         <div id="map" style="width: 90%; height: 400px;"></div>
                     </div>
                     */ ?>
-                    <div class="col-md-12 header-table"> <table class="table" style="margin-bottom: 0px;">
+                    <div class="col-md-12 header-table">
+                        <table class="table" style="margin-bottom: 0px;">
                             <thead>
-                          <tr>
-                            <th class="plan-icon"><a data-target="#modal-stackable" data-toggle="modal" href="javascript:void(0);" onClick="return nextScreen(0);"><i class="fa fa-bullseye fa-2x" aria-hidden="true"></i><br>Goal </a></th>
-                            <th class="plan-icon"><hr></th>
-                            <th class="plan-icon"><a data-target="#modal-stackable" data-toggle="modal" href="javascript:void(0);" onClick="return nextScreen(3);"><i class="fa fa-map-marker fa-2x"></i><br>Geography</a></th>
-                                <th class="plan-icon"><hr></th>
-                            <th class="plan-icon"><a data-target="#modal-stackable" data-toggle="modal" href="javascript:void(0);" onClick="return nextScreen(4);"><i class="fa fa-users fa-2x" aria-hidden="true"></i><br>Audience</a></th>
-                            <th class="plan-icon"><hr></th>
-                            <th class="plan-icon"><a data-target="#modal-stackable" data-toggle="modal" href="javascript:void(0);" onClick="return nextScreen(5);"><i class="fa fa-bar-chart fa-2x" aria-hidden="true"></i><br>Forecast</a></th>
-                          
-                          </tr>
-
-
-                        </thead>
-                                        </table></div> 
-
-                   
-                
-                    <!-- stat timeline and feed  -->
-                    <div class="top20">
-                        
-                        <div class="clearfix"> </div>
-                        <!-- End projects list -->
-                        
-                        
-
-                    </div>
+                                <tr>
+                                    <th class="plan-icon"><a data-target="#modal-stackable" data-toggle="modal" href="javascript:void(0);" onClick="return nextScreen(0);"><i class="fa fa-bullseye fa-2x" aria-hidden="true"></i><br>Goal </a></th>
+                                    <th class="plan-icon"><hr></th>
+                                    <th class="plan-icon"><a data-target="#modal-stackable" data-toggle="modal" href="javascript:void(0);" onClick="return nextScreen(3);"><i class="fa fa-map-marker fa-2x"></i><br>Geography</a></th>
+                                        <th class="plan-icon"><hr></th>
+                                    <th class="plan-icon"><a data-target="#modal-stackable" data-toggle="modal" href="javascript:void(0);" onClick="return nextScreen(4);"><i class="fa fa-users fa-2x" aria-hidden="true"></i><br>Audience</a></th>
+                                    <th class="plan-icon"><hr></th>
+                                    <th class="plan-icon"><a data-target="#modal-stackable" data-toggle="modal" href="javascript:void(0);" onClick="return nextScreen(5);"><i class="fa fa-bar-chart fa-2x" aria-hidden="true"></i><br>Forecast</a></th>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div> 
                 </div>
+
             </div>
         </div>
     </div>

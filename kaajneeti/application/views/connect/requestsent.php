@@ -13,7 +13,7 @@
     <?php  require_once './include/top.php';?>
 
     <div class="clearfix"> </div>
-    <div class="page-container">
+    <div id="connect_myfriends" class="page-container">
         
         <?php  require_once './include/left.php';?>
 
@@ -24,88 +24,245 @@
                     <div class="col-md-12">
                         <div class="portlet box">
                             <div class="portlet-header">
-                                <ol class="breadcrumb page-breadcrumb">
-                                    <li><a href="<?php echo base_url(); ?>connect/myfriends">My Connection</a>&nbsp;</li>
-                                    <li><a href="<?php echo base_url(); ?>connect/search">Search</a>&nbsp;</li>
-                                    <li><a href="<?php echo base_url(); ?>connect/invitation">Incomming</a>&nbsp;</li>
-                                    <li class="activelink"><a href="<?php echo base_url(); ?>connect/requestsent">Outgoing</a>&nbsp;</li>
+                                <ol class="breadcrumb">
+                                    <li> <a class="text-capitalize" href="<?=base_url();?>leader/dashboard">Kaajneeti</a> </li>
+                                    <li> <a class="text-capitalize" href="<?=base_url(); ?>connect/myfriends">Connect</a> </li>
+                                    <li class="active"><strong><a class="text-capitalize" href="<?=base_url(); ?>connect/requestsent">Requests</a> </strong> </li>
                                 </ol>
                             </div>
 
                             <div class="portlet-body">
-                                <div class="row mbm">
-                                    <div class="col-lg-12">
-                                        <?php /*
-                                        <div class="table-responsive">
-                                            <table id="table_id"
-                                                   class="table table-hover table-striped table-bordered table-advanced tablesorter display">
-                                                <thead>
-                                                    <tr>
-                                                        <th style="width: 3%; padding: 10px; background: #efefef"><input
-                                                                type="checkbox" class="checkall"/></th>
-                                                        <th>Pic</th>
-                                                        <th>Name</th>
-                                                        <th>Email</th>
-                                                        <th>Gender</th>
-                                                        <th>Party</th>
-                                                        <th>Request On</th>
-                                                        <th>Action</th>
-                                                    </tr>
+                                <div class="mbm">
+                                    <!-- <div class="col-md-12"> -->
+                                        <!-- <div class="row"> -->
+                                            <!-- <div class="col-md-12"> -->
+                                                <div class="row head">
+                                                    <div class="user-heading">
+                                                        <div class="col-md-6">
+                                                            <!-- <i class="fa fa-thumbs-up"></i>  -->
+                                                            <span class="user-frnd text-uppercase">
+                                                                Request
+                                                            </span>
+                                                        </div>
+                                                        <div class="col-md-6 ">
+                                                            <div class="pull-right"> 
+                                                                <!-- <div class="btn-group" role="group" > -->
+                                                                    <!-- <div class="btn-group" role="group"> -->
+                                                                         <a href="<?=base_url(); ?>connect/search"><button type="button" class="btn aqua btn-outline btn-sm text-capitalize"><i class="fa fa-plus"></i> Find Connections</button></a>
 
-                                                    <?php if(count($result) > 0) {?>
-                                                        <?php foreach($result AS $user) { ?>
-                                                            <?php
-                                                            $ProfilePhotoPath = ($user->user_profile_detail->user_info->ProfilePhotoPath != '') ? $user->user_profile_detail->user_info->ProfilePhotoPath : base_url().'assets/images/default-user.png';
+                                                                        <button type="button" class="btn aqua btn-outline btn-sm text-capitalize">follower
+                                                                        <span class="badge">4</span></button>
+                                                                        <!-- <i class="fa fa-"></i> -->
+                                                                    <!-- </div> -->
+                                                                    <!-- <div class="btn-group" role="group"> -->
+                                                                        <button type="button" class="btn aqua btn-outline btn-sm text-capitalize">
+                                                                         Following <span class="badge">4</span></button>
+                                                                    <!-- </div> -->
+                                                                      
+                                                                <!-- </div > -->
 
-
-                                                            
-                                                            $Gender = ($user->user_profile_detail->user_info->Gender == 1) ? 'Male' : (($user->user_profile_detail->user_info->Gender == 2) ? 'Female' : 'Other');
-
-                                                            $UserProfileHrefLink = base_url().'profile/profile/'.$user->user_profile_detail->user_info->UserUniqueId;
-
-                                                            ?>
-                                                        <tbody class="media-thumb" id="request_id_<?php echo $user->user_profile_detail->profile->UserProfileId; ?>">
-                                                            <tr>
-                                                                <td><input type="checkbox"></td>
-                                                                <td><span class="img-shadow"><img
-                                                                src="<?php echo $ProfilePhotoPath; ?>"
-                                                                style="border: 1px solid #fff; box-shadow: 0 2px 3px rgba(0,0,0,0.25);width: 40px; height: 40px;"
-                                                                class="img-circle"/></span></td>
-                                                                <td><a href="<?php echo $UserProfileHrefLink; ?>" target="_blank"><h6 class="media-heading"><?php echo $user->user_profile_detail->profile->FirstName.' '.$user->user_profile_detail->profile->LastName?></h6></a>
+                                                                <div class="dropdown pull-right"style=" margin-left: 4px; ">
+                                                                    <button class="btn aqua btn-outline btn-sm dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                                                    <i class="fa fa-ellipsis-h"></i>
                                                                     
-                                                                </td>
-                                                                <td>
-                                                                    <div><?php echo $user->user_profile_detail->profile->Email; ?></div>
-                                                                </td>
-                                                                <td><span class="label label-success"><?php echo $Gender; ?></span></td>
-                                                                <td><span class="label label-warning"><?php echo $leader_profile->UserProfileLeader->PoliticalPartyName; ?></span></td>
-                                                                <td><?php echo date('d-M-Y h:i A', strtotime($user->RequestSentOn)); ?></td>
-                                                                <td>
-                                                                    <button type="button" class="btn btn-danger btn-xs" onClick="return cancelRequest(<?php echo $user->user_profile_detail->profile->UserProfileId; ?>);"><i
-                                                                            class="fa fa-trash-o"></i>&nbsp;
-                                                                        Delete
                                                                     </button>
-                                                                </td>
-                                                            </tr>
-                                                        </tbody>
-                                                        <?php } ?>
-                                                    <?php } else { ?>
-                                                    
-                                                    <?php } ?>
-                                                    
-                                                </thead>
-                                            </table>
-                                        </div>
-                                        */ ?>
+                                                                    <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+                                                                        <li><a href="#">txt</a></li>
+                                                                        <li><a href="#">txt</a></li>
+                                                                        <li><a href="#">txt</a></li>
+                                                                        <li><a href="#">txt</a></li>
+                                                                        <li>
+                                                                            <a href="#edit-privecy" data-toggle="modal">
+                                                                            Edit Privecy
+                                                                            </a>
+                                                                        </li>
+                                                                    </ul>
+                                                                </div>
+                                                            </div>
+                                                            
+                                                        </div>
+                                                   
+                                                    </div><!--user headig-->
 
-                                        <?php if(count($result) > 0) {?>
-                                            <?php foreach($result AS $user) { ?>
+                                                    <div class="connect-menu">
+                                                        <div class="col-md-12">
+                                                            <div class="connections-tabs">
+                                                                <ul class="connect-tab-menu">
+                                                                    <li><a href="<?=base_url();?>connect/myfriends">all connections</a></li>
+                                                                    <li class="active"><a href="<?=base_url();?>connect/requestsent">requests</a></li>
+                                                                    <li><a href="<?=base_url();?>connect/groups">groups</a></li>
+                                                                </ul>
+                                                            </div><!--Tabs-->
+                                                        </div>
+
+                                                        <!-- <div class="col-md-3" style=" margin-top: 6px; ">
+                                                            
+                                                            <div class="input-group">
+                                                              <input type="text" class="form-control" placeholder="Search for...">
+                                                              <span class="input-group-btn">
+                                                                <button class="btn btn-default" type="button">Go!</button>
+                                                              </span>
+                                                            </div>
+                                                        </div> -->
+
+                                                    </div>
+                                                </div>
                                                 
-                                                <?php $this->CI->showUser($user); ?>
+                                                <div class="clearfix"></div>
                                                 
-                                            <?php } ?>
-                                        <?php } ?>
-                                    </div>
+                                                <div class="row margin-left-right-0 connect-menu-contents">
+
+                                                    <!-- Nav tabs -->
+                                                    <ul class="margin-left-right-0 nav nav-tabs" role="tablist">
+                                                        <li role="presentation" class="active"><a href="#request-incoming-post" aria-controls="home" role="tab" data-toggle="tab">Incomming Request <span class="badge">4</span></a></li>
+
+                                                        <li role="presentation"><a href="#request-outgoing-post" aria-controls="home" role="tab" data-toggle="tab">outgoing Request <span class="badge">4</span></a></li>
+
+                                                        <li class="connetions-search col-sm-3 pull-right">
+                                                            <div class="row input-group">
+                                                              <input type="text" class="form-control" placeholder="Search for...">
+                                                              <span class="input-group-btn">
+                                                                <button class="btn btn-default" type="button">Go!</button>
+                                                              </span>
+                                                            </div>
+                                                        </li>
+
+                                                    </ul>
+
+                                                    <!-- Tab panes -->
+                                                    <div class="margin-left-right-0 tab-content">
+                                                        
+                                                        <!--              Incomming Post           -->
+                                                        <div role="tabpanel" class="tab-pane active" id="request-incoming-post">
+                                                            <!-- <div class="row ">Both keys Grid & List view  -->
+                                                                <div class="col-sm-12" style=" margin-top: 5px; ">
+                                                                    <i class="fa fa-th-list fa-2x pull-right" id="list-view-id"></i>
+                                                                    <i class="fa fa-th fa-2x pull-right" id="grid-view-id"></i>
+                                                                </div>
+                                                            <!-- </div> -->
+                                                            <div class="connect_list">
+                                                                <div class="grid-list-view grid col-md-4 col-sm-6">
+                                                                    <div class="contact-box">
+                                                                        <div class="col-sm-12">
+                                                                            <a href="<?=base_url();?>profile/profile"">
+                                                                                <img src="../assets/images/teem/a1.jpg" class="img-responsive" alt="image">
+                                                                            </a>
+                                                                            <h3><strong>Jordan Belfort</strong></h3>
+                                                                            <p><i class="fa fa-star"></i> 14 Post</p>
+                                                                            <p>
+                                                                                <button class="btn blue  btn-circle" type="button"><i class="fa fa-check"></i> </button>
+                                                                                <button class="btn btn-warning btn-circle" type="button"><i class="fa fa-times"></i> </button>
+                                                                            </p> 
+                                                                        </div>
+                                                                        <div class="clearfix"></div>
+                                                                        
+                                                                    </div>
+                                                                </div>
+                                                                <div class="grid-list-view grid col-md-4 col-sm-6">
+                                                                    <div class="contact-box">
+                                                                        <div class="col-sm-12">
+                                                                            <a href="#">
+                                                                              <img src="../assets/images/teem/a1.jpg" class="img-responsive" alt="image">
+                                                                            </a>
+                                                                            <h3><strong>Jordan Belfort</strong></h3>
+                                                                            <p><i class="fa fa-star"></i> 14 Post</p>
+                                                                            <p>
+                                                                                <button class="btn blue  btn-circle" type="button"><i class="fa fa-check"></i> </button>
+                                                                                <button class="btn btn-warning btn-circle" type="button"><i class="fa fa-times"></i> </button>
+                                                                            </p> 
+                                                                        </div>
+                                                                        <div class="clearfix"></div>
+                                                                        
+                                                                    </div>
+                                                                </div>
+                                                                <div class="grid-list-view grid col-md-4 col-sm-6">
+                                                                    <div class="contact-box">
+                                                                        <div class="col-sm-12">
+                                                                            <a href="#">
+                                                                              <img src="../assets/images/teem/a1.jpg" class="img-responsive" alt="image">
+                                                                            </a>
+                                                                            <h3><strong>Jordan Belfort</strong></h3>
+                                                                            <p><i class="fa fa-star"></i> 14 Post</p>
+                                                                            <p>
+                                                                                <button class="btn blue  btn-circle" type="button"><i class="fa fa-check"></i> </button>
+                                                                                <button class="btn btn-warning btn-circle" type="button"><i class="fa fa-times"></i> </button>
+                                                                            </p> 
+                                                                        </div>
+                                                                        <div class="clearfix"></div>
+                                                                        
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                              
+                                                        </div>
+
+                                                        <!--              Incomming Post           -->
+                                                        <div role="tabpanel" class="tab-pane" id="request-outgoing-post">
+                                                            <!-- <div class="row ">Both keys Grid & List view  -->
+                                                                <div class="col-sm-12" style=" margin-top: 5px; ">
+                                                                    <i class="fa fa-th-list fa-2x pull-right" id="list-view-id"></i>
+                                                                    <i class="fa fa-th fa-2x pull-right" id="grid-view-id"></i>
+                                                                </div>
+                                                            <!-- </div> -->
+                                                            <div class="connect_list">
+                                                                <div class="grid-list-view grid col-md-4 col-sm-6">
+                                                                    <div class="contact-box">
+                                                                        <div class="col-sm-12">
+                                                                            <a href="#">
+                                                                              <img src="../assets/images/teem/a1.jpg" class="img-responsive" alt="image">
+                                                                            </a>
+                                                                            <h3><strong>Jordan Belfort</strong></h3>
+                                                                            <p><a href="#">Send Request</a></p>
+                                                                            <div>
+                                                                                <button class="btn btn-default" type="button">Undo</button>
+                                                                            </div>  
+                                                                        </div>
+                                                                        <div class="clearfix"></div>
+                                                                        
+                                                                    </div>
+                                                                </div>
+                                                                <div class="grid-list-view grid col-md-4 col-sm-6">
+                                                                    <div class="contact-box">
+                                                                        <div class="col-sm-12">
+                                                                            <a href="#">
+                                                                              <img src="../assets/images/teem/a1.jpg" class="img-responsive" alt="image">
+                                                                            </a>
+                                                                            <h3><strong>Jordan Belfort</strong></h3>
+                                                                            <p><a href="#">Send Request</a></p>
+                                                                            <div>
+                                                                                <button class="btn btn-default" type="button">Undo</button>
+                                                                            </div> 
+                                                                        </div>
+                                                                        <div class="clearfix"></div>
+                                                                        
+                                                                    </div>
+                                                                </div>
+                                                                <div class="grid-list-view grid col-md-4 col-sm-6">
+                                                                    <div class="contact-box">
+                                                                        <div class="col-sm-12">
+                                                                            <a href="#">
+                                                                              <img src="../assets/images/teem/a1.jpg" class="img-responsive" alt="image">
+                                                                            </a>
+                                                                            <h3><strong>Jordan Belfort</strong></h3>
+                                                                            <p><a href="#">Send Request</a></p>
+                                                                            <div>
+                                                                                <button class="btn btn-default" type="button">Undo</button>
+                                                                            </div>  
+                                                                        </div>
+                                                                        <div class="clearfix"></div>
+                                                                        
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                              
+                                                        </div>
+                                                        
+                                                      
+                                                    </div>
+                                                </div>
+                                            <!-- </div> -->
+                                        <!-- </div> -->
+                                    <!-- </div>        -->
                                 </div>
                             </div>
                         </div>
@@ -157,6 +314,17 @@ function cancelRequest(id) {
         return false;
     }
 }
+
+$('#request-incoming-post #list-view-id, #request-outgoing-post #list-view-id').on('click', function(){
+        $(' .grid-list-view').removeClass('grid col-md-4 col-sm-6');
+        $('.grid-list-view').addClass('list col-md-12 col-sm-12');
+});
+
+$('#request-incoming-post #grid-view-id, #request-outgoing-post #grid-view-id').on('click', function(){
+    $('.grid-list-view').removeClass('list col-md-12 col-sm-12');
+    $('.grid-list-view').addClass('grid col-md-4 col-sm-6');
+});
+
 </script>
 
 </body>

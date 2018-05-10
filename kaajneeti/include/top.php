@@ -228,9 +228,42 @@
 <?php // Express Start ?>
 <div id="express-popup" tabindex="-1" role="dialog" aria-labelledby="modal-stackable-label" aria-hidden="true" class="modal fade" style="display: none;">
     <div class="modal-dialog">
-        <div class="modal-content">
+        <div class="modal-content modal-content-express">
             
         </div>
     </div>
 </div>
 <?php // Express End ?>
+
+
+<div class="modal fade custom-fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered model-top" role="document">
+        <div class="modal-content">
+            <div class="modal-header express-header">
+                <h5 class="modal-title" id="exampleModalLongTitle"></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="button-group ">
+                            <button type="button" class="btn btn-primary camera-btn"><i class="fa fa-video-camera" aria-hidden="true"></i> Camera</button>
+                            <button type="button" class="btn btn-default connect-btn"><i class="fa fa-plug" aria-hidden="true"></i> Connect</button>
+                        </div>
+
+                        <h1 class="text-center camerah1">Unable to find camera</h1>
+                        <p class="text-center">Please connect a camera and verify that camera permissions are correct in your browser</p><br>
+                        <div class="button-group ">
+                            <button type="button" data-dismiss="modal" class="btn btn-primary  ">Done</button></div>
+
+
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>

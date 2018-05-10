@@ -124,9 +124,9 @@
         $.post("<?php echo base_url(); ?>express/expressPopup", {'display': 'Y'},
             function (data, status) {
                 if(data != '') {
-                    $('.modal-content').html(data);
+                    $('.modal-content-express').html(data);
                 } else {
-                    $('.modal-content').html(data);
+                    $('.modal-content-express').html(data);
                 }
             });
     }

@@ -26,9 +26,13 @@
                     <div class="col-md-12">
                         <div class="portlet box">
                             <div class="portlet-header">
+                                <ol class="breadcrumb">
+                                    <li> <a class="text-capitalize" href="<?=base_url();?>leader/dashboard">Kaajneeti</a> </li>
+                                    <li class="active"><strong><a class="text-capitalize" href="<?=base_url(); ?>express/express">Express</a> </strong> </li>
+                                </ol>
+
                                 <div class="row">
                                     <div class="col-md-6">
-                                <h3>Express</h3>
                                 </div>
 
                               
