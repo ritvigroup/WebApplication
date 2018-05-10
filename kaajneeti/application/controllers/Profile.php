@@ -187,6 +187,12 @@ class Profile extends CI_Controller {
         }
     }
 
+
+    public function setting() {
+        $data = array();
+        $this->load->view('profile/setting',$data);
+    }
+
     
     public function searchCityByCityId() {
         if (!$this->input->is_ajax_request()) {

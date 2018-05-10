@@ -133,9 +133,9 @@
                               <div class="row" style="max-height: 100px; overflow-y: auto; overflow-x: none; max-width: 100%;">
                                 
                                 <div class="col-md-3">
-                                    <button type="button" class="btn btn-default default-border">
+                                <!--     <button type="button" class="btn btn-default default-border">
                                         <i class=" fa fa-envelope"></i> Post
-                                      </button><br><br>
+                                      </button><br><br> -->
                                      <button type="button" class="btn btn-default default-border">
                                       <i class=" fa fa-list-ul"></i> Poll
                                     </button><br><br>

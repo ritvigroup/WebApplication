@@ -309,7 +309,7 @@ class Organize extends CI_Controller {
             $data['MyTeam'] = $json_decode;
         }
 
-        $this->load->view('organize/team_h', $data);
+        $this->load->view('organize/team', $data);
     }
 
 }

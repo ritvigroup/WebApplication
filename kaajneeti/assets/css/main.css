@@ -371,8 +371,8 @@ Button css
 
 .aqua-bg-color { background-color: #49b6d6; }
 .aqua-bg {
-        background-image: url(../images/parliament2.jpg);
-        background-position: center;
+        background-image: url(../images/parliament3.jpg);
+        *background-position: center;
         background-repeat: no-repeat;
         background-size: cover;
 }
@@ -2245,7 +2245,7 @@ Error, Login & Lockscreen
 }
 
 .login-layout-full::before {
-    background-image: url(../images/parliament2.jpg);
+    background-image: url(../images/parliament3.jpg);
  background-position: center top;
  background-size: cover;
  content: "";
