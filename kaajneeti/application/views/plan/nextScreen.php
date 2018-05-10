@@ -979,7 +979,7 @@ $back_link = '<i class="fa fa-arrow-left" aria-hidden="true" onClick="return pre
     <!-- <inpu.panel-headingt type="reset" class="btn btn-default" value="Cancel"> -->
      <i class="fa fa-trash-o fa-2x delete" aria-hidden="true" onCLick="return resetFormPage();"></i>
      <button type="reset" class="btn pull-left btn-sm btn-primary confirm">Confirm</button>
-     <button type="reset" class="btn pull-left btn-sm btn-primary cancel">Cancel</button>
+     <button type="button" class="btn pull-left btn-sm btn-primary cancel">Cancel</button>
 
 
 
@@ -1018,6 +1018,9 @@ $back_link = '<i class="fa fa-arrow-left" aria-hidden="true" onClick="return pre
         });
 
         $('.cancel').click(function(){
+            $('.confirm, .cancel').toggle();
+        });
+        $('.confirm').click(function(){
             $('.confirm, .cancel').toggle();
         });
     });

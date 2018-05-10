@@ -43,7 +43,7 @@
             <div>
                 <h1 class="logo-name" id="simple_arc">KaajNeeti</h1>
             </div>
-            <h3>Welcome to Kaajneeti</h3>
+            
             <p id="tag_line">Ab Raajneeti nahi Kaajneeti chalegi</p>
             <p>Login in. To see it in action.</p>
             	<form method="post" onsubmit="return false;">
@@ -60,6 +60,8 @@
                 </form>
             <p class="top15"> <small>Developed at: <a href="http://www.ritvigroup.com" target="_blank">Ritvi Innovation Pvt. Ltd.</a> &copy; 2016-2017</small> </p>
         </div>
+        <br>
+        <!-- <h3 style="color: black;">Welcome to Kaajneeti</h3> -->
     </div>
 </body>
 

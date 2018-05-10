@@ -3,8 +3,8 @@
     <div class="page-header-inner ">
         <!-- BEGIN LOGO -->
         <div class="page-logo">
-            <a href="<?=base_url();?>leader/dashboard"> 
-                <img class="logo-default" alt="logo" src="../assets/images/logo.png">
+            <a href="<?=base_url();?>leader/dashboard" style="color: white; font-size: 24px; text-align: center;margin-top: 7px;"> 
+                Kaajneeti
             </a>
         </div>
         <!-- END LOGO -->
@@ -12,7 +12,7 @@
         <!-- BEGIN TOP NAVIGATION MENU -->
         <div class="top-menu">
 
-            <div class="col-sm-5 col-sm-offset-2 search-box input-group">
+            <div class="col-sm-4 col-sm-offset-2 search-box input-group">
                 <input id="search-projects" type="text" class="input-sm form-control" placeholder="Search">
                 <!-- <span class="input-group-btn"> -->
                     <!-- <button class="btn btn-sm aqua" type="button"> Go!</button> -->

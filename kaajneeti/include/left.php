@@ -19,6 +19,9 @@
             */ ?>
             <li class="nav-item"> <a class="nav-link" href="<?=base_url();?>leader/dashboard"> <i class="fa fa-tachometer fa-fw"></i> <span class="title">Dashboard</span> </a></li>
             
+
+            <li class="nav-item <?php if($request_uri['4'] == "explore") {?>active<?php } ?>"><a class="nav-link" href="<?=base_url();?>explore/explore"><i class="fa fa-binoculars fa-fw"></i><span class="title">Explore</span></a></li>
+
             <li class="heading">
                 <h3 class="uppercase">Features</h3>
             </li>
@@ -26,8 +29,6 @@
             <li class="nav-item <?php if($request_uri['4'] == "plan") {?>active<?php } ?>"><a class="nav-link" href="<?=base_url();?>plan/plan"><i class="fa fa-pencil-square-o fa-fw"></i><span class="title">Plan</span></a></li>
 
             <li class="nav-item <?php if($request_uri['4'] == "organize") {?>active<?php } ?>"><a class="nav-link" href="<?=base_url();?>organize/team"><i class="fa fa-sitemap fa-fw"></i><span class="title">Organize</span></a></li>
-
-            <li class="nav-item <?php if($request_uri['4'] == "express") {?>active<?php } ?>"><a class="nav-link" href="<?=base_url();?>express/express"><i class="fa fa-bullhorn fa-fw"></i><span class="title">Express</span></a></li>
 
             <li class="nav-item <?php if($request_uri['4'] == "complaint") {?>active<?php } ?>"><a class="nav-link" href="<?=base_url();?>connect/myfriends"><i class="fa fa-share-alt-square fa-fw"></i><span class="title">Connect</span></a></li>
 

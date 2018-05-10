@@ -140,6 +140,8 @@ function myFunction() {
     document.getElementById("myDropdown").classList.toggle("show");
 }
 
+
+
 // Close the dropdown if the user clicks outside of it
 window.onclick = function(e) {
   if (!e.target.matches('.dropbtn')) {
@@ -169,6 +171,35 @@ $(document).ready(function(){
 	$(".nav-tabs li a").click(function(){
 	    $('#user2').css("display","none");
 	});
+
+	/*function ConfirmDialog(){
+	    $('<div></div>').appendTo('body')
+	        .html('<div><h6>Are you sure to close?</h6></div>')
+	        .dialog({
+	            modal: true, title: 'Delete message', zIndex: 10000, autoOpen: true,
+	            width: 'auto', resizable: false,
+	            buttons: {
+	                Yes: function () {
+	                    // $(obj).removeAttr('onclick');                                
+	                    // $(obj).parents('.Parent').remove();
+														
+	                    $('body').append('<h1>Confirm Dialog Result: <i>Yes</i></h1>');
+	                    
+	                    $(this).dialog("close");
+	                },
+	                No: function () {                           		                              
+
+	                	$('body').append('<h1>Confirm Dialog Result: <i>No</i></h1>');
+	                
+	                    $(this).dialog("close");
+	                }
+	            },
+	            close: function (event, ui) {
+	                $(this).remove();
+	            }
+	        });
+	}*/
+
 
 });
 </script>
