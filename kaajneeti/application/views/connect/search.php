@@ -26,7 +26,8 @@
                             <div class="portlet-header">
                                 <ol class="breadcrumb page-breadcrumb">
                                     <li> <a class="text-capitalize" href="<?=base_url();?>leader/dashboard">Kaajneeti</a> </li>
-                                    <li class="active"> <a class="text-capitalize" href="<?=base_url(); ?>connect/myfriends">Connect</a> </li>
+                                    <li> <a class="text-capitalize" href="<?=base_url(); ?>connect/myfriends">Connect</a> </li>
+                                    <li class="active"> <a class="text-capitalize" href="<?=base_url(); ?>connect/search">Search</a> </li>
                                 </ol>
                             </div>
                             <div class="row">

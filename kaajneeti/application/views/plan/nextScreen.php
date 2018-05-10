@@ -1016,6 +1016,10 @@ $back_link = '<i class="fa fa-arrow-left" aria-hidden="true" onClick="return pre
         $('.delete').click(function(){
             $('.confirm, .cancel').toggle();
         });
+
+        $('.cancel').click(function(){
+            $('.confirm, .cancel').toggle();
+        });
     });
 });
 </script>

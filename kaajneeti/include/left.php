@@ -34,7 +34,7 @@
 
             <li class="nav-item <?php if($request_uri['4'] == "event") {?>active<?php } ?>"><a class="nav-link" href="<?=base_url();?>listen/listen"><i class="fa fa-headphones fa-fw"></i><span class="title">Listen</span></a></li>
 
-            <li class="nav-item <?php if($request_uri['4'] == "influence") {?>active<?php } ?>"><a class="nav-link" href="<?=base_url();?>influence/email"><i class="fa fa-arrows-alt fa-fw"></i><span class="title">Camplaign</span></a></li>
+            <li class="nav-item <?php if($request_uri['4'] == "influence") {?>active<?php } ?>"><a class="nav-link" href="<?=base_url();?>influence/email"><i class="fa fa-arrows-alt fa-fw"></i><span class="title">Campaign</span></a></li>
 
             <li class="nav-item <?php if($request_uri['4'] == "contribution") {?>active<?php } ?>"><a class="nav-link" href="<?=base_url();?>contribution/contribution"><i class="fa fa-refresh fa-fw"></i><span class="title">Funding</span></a></li>
 

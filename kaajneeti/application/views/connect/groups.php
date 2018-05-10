@@ -122,7 +122,7 @@
 
                                                         <li role="presentation"><a href="#Suggested-groups" aria-controls="home" role="tab" data-toggle="tab">Suggested groups <span class="badge">4</span></a></li>
 
-                                                        <li><button class="btn btn-success" type="button" data-target="#create-group" data-toggle="modal"><i class="fa fa-plus"></i> Create Gruop</button></li>
+                                                        <li><button class="btn btn-success" type="button" data-target="#create-group" data-toggle="modal"onClick="return newGroup();"><i class="fa fa-plus"></i> Create Gruop</button></li>
 
                                                         <!-- <li role="presentation"><a href="#all-connections" aria-controls="home" role="tab" data-toggle="tab">Citizen <span class="badge">4</span></a></li> -->
 
@@ -532,6 +532,15 @@
 
         <?php  require_once './include/scroll_top.php';?>
 
+
+        <div id="create-group" tabindex="-1" role="dialog" aria-labelledby="modal-stackable-label" aria-hidden="true" class="modal fade" style="display: none;">
+            <div class="modal-dialog">
+                <div class="modal-content modal-content-ajax">
+                    
+                </div>
+            </div>
+        </div>
+
         <!--            Model for Edit Privecy          -->
         <div class="modal fade bs-example-modal-sm" id="express-post" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
             <div class="modal-dialog" role="document">
@@ -676,14 +685,14 @@
         </div>
 
         <!-- Modal -->
-        <div class="modal fade" id="create-group" tabindex="-1" role="dialog" aria-labelledby="create-group-ex">
+        <div class="modal fade" id="create-groupold" tabindex="-1" role="dialog" aria-labelledby="create-group-ex">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                   <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                     <h4 class="modal-title" id="myModalLabel">create group</h4>
                   </div>
-                  <div class="modal-body">
+                  <div class="modal-body modal-content-ajax">
                     
                     <div class="tabs-container">
                         <ul class="nav nav-tabs">
@@ -765,6 +774,19 @@
         $(this).parents(".dropdown").find('.btn').val($(this).data('value'));
         $(this).parents(".dropdown").find('.btn').html($(this).html() + '<span class="caret"></span>');
     });
+
+
+    function newGroup() {
+
+        $.post("<?php echo base_url(); ?>organize/newGroup", {'display': 'Y'},
+            function (data, status) {
+                if(data != '') {
+                    $('.modal-content-ajax').html(data);
+                } else {
+                    $('.modal-content-ajax').html(data);
+                }
+            });
+    }
 
 </script>
 

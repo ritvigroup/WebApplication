@@ -29,8 +29,11 @@
     <!--[if lt IE 9]> <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script> <![endif]-->
     <!--[if lt IE 9]> <script src="dist/html5shiv.js"></script> <![endif]-->
 
+    <script src="https://use.typekit.net/fbl0lhq.js"></script>
+
     <link type="text/css" rel="stylesheet" href="<?php echo base_url(); ?>assets/css/sweetalert.css?ver=1.04">
 
+    
 </head>
 
 
@@ -38,10 +41,10 @@
     <div class="middle-box text-center loginscreen ">
         <div class="widgets-container">
             <div>
-                <h1 class="logo-name">KaajNeeti</h1>
+                <h1 class="logo-name" id="simple_arc">KaajNeeti</h1>
             </div>
             <h3>Welcome to Kaajneeti</h3>
-            <p>Ab Raajneeti nahi Kaajneeti chalegi</p>
+            <p id="tag_line">Ab Raajneeti nahi Kaajneeti chalegi</p>
             <p>Login in. To see it in action.</p>
             	<form method="post" onsubmit="return false;">
 	                <div class="form-group">
@@ -99,5 +102,29 @@
         }
     };
 </script> 
+
+<?php /* */?>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/FitText.js/1.2.0/jquery.fittext.min.js"></script>
+<script src="<?php echo base_url(); ?>assets/js/circletype.min.js"></script>
+
+<script>
+try {
+    Typekit.load({
+      active: renderDemo
+    })
+  } catch (e) {
+    // Error loading fonts
+  }
+
+  renderDemo();
+
+  function renderDemo() {
+   
+    //new CircleType(document.getElementById('simple_arc')).radius(900);
+    new CircleType(document.getElementById('tag_line')).radius(90);
+    
+  }
+    </script>
+<?php /**/ ?>
 </body>
 </html>
