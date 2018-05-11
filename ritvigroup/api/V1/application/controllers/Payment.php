@@ -173,6 +173,7 @@ class Payment extends CI_Controller {
     }
 
     
+    // Save Payment Transaction and Contribution Transaction
     public function savePaymentTransactionLog() {
         $error_occured = false;
 

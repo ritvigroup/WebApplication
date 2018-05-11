@@ -12,6 +12,9 @@ class User_Model extends CI_Model {
         $this->UserFriendTbl        = 'UserFriend';
         $this->UserFollowTbl        = 'UserFollow';
 
+        $this->UserRoleTbl              = 'UserRole';
+        $this->UserRolePermissionTbl    = 'UserRolePermission';
+
         $this->UserProfileAddressTbl    = 'UserProfileAddress';
         $this->UserProfileEducationTbl  = 'UserProfileEducation';
         $this->UserProfileWorkTbl       = 'UserProfileWork';
@@ -440,7 +443,7 @@ class User_Model extends CI_Model {
     // Get User Profile Information
     public function getUserProfileInformation($FriendUserProfileId, $UserProfileId = 0) {
 
-        $query = $this->db->query("SELECT up.*, d.DepartmentName, pp.PoliticalPartyName, 
+        $query = $this->db->query("SELECT up.*, ur.RoleName, d.DepartmentName, pp.PoliticalPartyName, 
                                             uph.PhotoPath AS UserProfilePhoto, 
                                             uch.PhotoPath AS UserCoverPhoto,
                                             u.UserUniqueId  
@@ -449,6 +452,7 @@ class User_Model extends CI_Model {
                                         LEFT JOIN ".$this->DepartmentTbl." AS d ON up.UserDepartment = d.DepartmentId
                                         LEFT JOIN ".$this->userPhotoTbl." uph ON up.ProfilePhotoId = uph.UserPhotoId
                                         LEFT JOIN ".$this->userPhotoTbl." uch ON up.CoverPhotoId = uch.UserPhotoId
+                                        LEFT JOIN ".$this->UserRoleTbl." ur ON up.UserRoleId = ur.UserRoleId
                                         LEFT JOIN ".$this->userTbl." u ON up.UserId = u.UserId
                                         WHERE 
                                             up.`UserProfileId` = '".$FriendUserProfileId."'");
@@ -471,6 +475,11 @@ class User_Model extends CI_Model {
                                 "Email"                         => (($res_u['Email'] != NULL) ? $res_u['Email'] : ""),
                                 "UserDepartment"                => (($res_u['UserDepartment'] != NULL) ? $res_u['UserDepartment'] : "0"),
                                 "DepartmentName"                => (($res_u['DepartmentName'] != NULL) ? $res_u['DepartmentName'] : ""),
+                                
+                                "UserRoleId"                    => (($res_u['UserRoleId'] != NULL) ? $res_u['UserRoleId'] : ""),
+                                "RoleName"                      => (($res_u['RoleName'] != NULL) ? $res_u['RoleName'] : ""),
+                                "ProfileUserName"               => (($res_u['ProfileUserName'] != NULL) ? $res_u['ProfileUserName'] : ""),
+                                
                                 "UserProfileDeviceToken"        => (($res_u['UserProfileDeviceToken'] != NULL) ? $res_u['UserProfileDeviceToken'] : ""),
                                 "PoliticalPartyId"              => (($res_u['PoliticalPartyId'] > 0) ? $res_u['PoliticalPartyId'] : "0"),
                                 "PoliticalPartyName"            => (($res_u['PoliticalPartyName'] != NULL) ? $res_u['PoliticalPartyName'] : ""),

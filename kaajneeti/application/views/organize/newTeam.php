@@ -42,18 +42,44 @@
                 <div class="row">
                     <div class="col-md-6">
                         <div class="form-group">
-                            <label>Email: </label>
-                            <input type="text" class="form-control" id="email" name="email" placeholder="Email Address" required>
+                            <label>Username: </label>
+                            <input type="text" class="form-control" id="user_name" name="user_name" placeholder="Username" required>
                         </div>
                     </div>
                     <div class="col-md-6">
                         <div class="form-group">
+                            <label>Password: </label>
+                            <input type="password" class="form-control" id="password" name="password" placeholder="Password" required>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Email: </label>
+                            <input type="text" class="form-control" id="email" name="email" placeholder="Email Address">
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <div style="float: right;"><a data-target="#modal-stackable-role" data-toggle="modal" href="javascript:void(0);" onClick="return addNewUserRole();">Add New</a></div>
+                            <label>Role: </label>
+                            <select class="form-control" id="role" name="role">
+                                <option value="">-Select Role-</option>
+                                <?php
+                                foreach($UserRole->result AS $user_role) {
+                                    if($user_role->RoleStatus == 1) {
+                                        echo '<option value="'.$user_role->UserRoleId.'">'.$user_role->RoleName.'</option>';
+                                    }
+                                }
+                                ?>
+                            </select>
+                        </div>
+                    </div>
+                    <?php /*
+                    <div class="col-md-6">
+                        <div class="form-group">
                             <label>Department: </label>
-                            <?php
-                            // echo '<pre>';
-                            // print_r($Department);
-                            // echo '</pre>';
-                            ?>
                             <select class="form-control" id="department" name="department">
                                 <?php
                                 foreach($Department->result AS $department) {
@@ -65,6 +91,7 @@
                             </select>
                         </div>
                     </div>
+                    */ ?>
                 </div>
                 <div class="row">
                     <div class="col-md-6">
@@ -117,46 +144,57 @@
         var last_name       = $("#last_name").val();
         var email           = $("#email").val();
         var department      = $("#department").val();
+        var user_name       = $("#user_name").val();
+        var password        = $("#password").val();
+        var role            = $("#role").val();
 
-        
+        $('.save_user').html('Validating...');
 
         if (friend_profile > 0 && first_name.length > 3) {
-            $('.save_user').html('Validating...');
-                        
-            var form_data = new FormData($('input[name^="file"]'));
+            if(role == '' || role == 0) {
+                sweetAlert("Oops...", 'Please select role', "error");
+                $('.save_user').html('Save');
+                return false;
+            } else {
+                
+                var form_data = new FormData($('input[name^="file"]'));
 
-            jQuery.each($('input[name^="file"]')[0].files, function(i, file) {
-                form_data.append('file', file);
-            });
+                jQuery.each($('input[name^="file"]')[0].files, function(i, file) {
+                    form_data.append('file', file);
+                });
 
-            form_data.append('friend_profile', friend_profile);
-            form_data.append('first_name', first_name);
-            form_data.append('last_name', last_name);
-            form_data.append('email', email);
-            form_data.append('department', department);
-            form_data.append('save_user', 'Y');
+                form_data.append('friend_profile', friend_profile);
+                form_data.append('first_name', first_name);
+                form_data.append('last_name', last_name);
+                form_data.append('email', email);
+                form_data.append('department', department);
+                form_data.append('user_name', user_name);
+                form_data.append('password', password);
+                form_data.append('role', role);
+                form_data.append('save_user', 'Y');
 
-            jQuery.ajax({
-                type: 'POST',
-                cache: false,
-                processData: false,
-                contentType: false,
-                data: form_data,
-                url: "<?php echo base_url(); ?>organize/team",
+                jQuery.ajax({
+                    type: 'POST',
+                    cache: false,
+                    processData: false,
+                    contentType: false,
+                    data: form_data,
+                    url: "<?php echo base_url(); ?>organize/team",
 
-                success: function(data) {
-                    if (data.status === "failed") {
-                        sweetAlert("Oops...", data.message, "error");
-                        $('.save_user').html('Save');
-                        return false;
-                    } else { 
-                        if (data.status === "success") {
-                            $('.save_user').html('Saved');
-                            window.location.href="team";
+                    success: function(data) {
+                        if (data.status === "failed") {
+                            sweetAlert("Oops...", data.message, "error");
+                            $('.save_user').html('Save');
+                            return false;
+                        } else { 
+                            if (data.status === "success") {
+                                $('.save_user').html('Saved');
+                                window.location.href="team";
+                            }
                         }
                     }
-                }
-            });
+                });
+            }
 
         } else {
             sweetAlert("Oops...", "Please select user and enter first name", "error");

@@ -743,6 +743,9 @@ class Userregister extends CI_Controller {
         $last_name = $this->input->post('last_name'); // Created last Name
         $email = $this->input->post('email'); // Created Email
         $department = $this->input->post('department'); // Department
+        $user_name = $this->input->post('user_name'); // Department
+        $password = $this->input->post('password'); // Department
+        $role = $this->input->post('role'); // Department
         
         if($user_profile_id == "") {
             $msg = "Please select user profile";
@@ -756,12 +759,12 @@ class Userregister extends CI_Controller {
         } else if($last_name == "") {
             $msg = "Please enter last name";
             $error_occured = true;
-        } else if($email == "") {
+        /*} else if($email == "") {
             $msg = "Please enter email";
             $error_occured = true;
         } else if($department == "") {
             $msg = "Please selected department";
-            $error_occured = true;
+            $error_occured = true;*/
         } else {
 
             $user_detail = $this->User_Model->getUserProfileInformation($user_profile_id);
@@ -778,6 +781,9 @@ class Userregister extends CI_Controller {
                                     'LastName'                  => $last_name,
                                     'Email'                     => $email,
                                     'UserDepartment'            => $department,
+                                    'ProfileUserName'           => $user_name,
+                                    'ProfileUserPassword'       => $password,
+                                    'UserRoleId'                => $role,
                                     'UserProfileDeviceToken'    => '',
                                     'Mobile'                    => '',
                                     'ProfileStatus'             => 1,

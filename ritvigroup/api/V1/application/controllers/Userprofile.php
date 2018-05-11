@@ -385,7 +385,7 @@ class Userprofile extends CI_Controller {
 
             $res_u = $this->User_Model->searchCitizenProfiles($UserProfileId, $search);
 
-            if(count($res_u) > 0) {
+            if(count($res_u['UserProfileCitizen']) > 0) {
 
                 $msg = "Profile information found successfully";
 
@@ -428,7 +428,7 @@ class Userprofile extends CI_Controller {
 
             $res_u = $this->User_Model->searchLeaderProfiles($UserProfileId, $search);
 
-            if(count($res_u) > 0) {
+            if(count($res_u['UserProfileLeader']) > 0) {
 
                 $msg = "Profile information found successfully";
 
@@ -442,6 +442,7 @@ class Userprofile extends CI_Controller {
             $array = array(
                             "status"        => 'failed',
                             "message"       => $msg,
+                            "result"    => $res_u,
                         );
         } else {
 
@@ -471,7 +472,7 @@ class Userprofile extends CI_Controller {
 
             $res_u = $this->User_Model->searchSubLeaderProfiles($UserProfileId, $search);
 
-            if(count($res_u) > 0) {
+            if(count($res_u['UserProfileSubLeader']) > 0) {
 
                 $msg = "Profile information found successfully";
 

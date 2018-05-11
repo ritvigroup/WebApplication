@@ -39,27 +39,23 @@
                                                 <div class="row head">
                                                     <div class="user-heading">
                                                         <div class="col-md-6">
-                                                            <!-- <i class="fa fa-thumbs-up"></i>  -->
-                                                            <span class="user-frnd text-uppercase">
-                                                                All Connections
-                                                            </span>
+                                                            <div class="connections-tabs">
+                                                                <ul class="connect-tab-menu">
+                                                                    <li class="active"><a href="<?=base_url();?>connect/myfriends">all connections</a></li>
+                                                                    <li><a href="<?=base_url();?>connect/requestsent">requests</a></li>
+                                                                    <li><a href="<?=base_url();?>connect/groups">groups</a></li>
+                                                                </ul>
+                                                            </div>
                                                         </div>
-                                                        <div class="col-md-6 ">
+                                                        <div class="col-md-6">
                                                             <div class="pull-right"> 
-                                                                <!-- <div class="btn-group" role="group" > -->
-                                                                    <!-- <div class="btn-group" role="group"> -->
-                                                                         <button type="button" class="btn aqua btn-outline btn-sm text-capitalize"><i class="fa fa-plus"></i> Find Connections</button>
+                                                                <button type="button" class="btn aqua btn-outline btn-sm text-capitalize"><i class="fa fa-plus"></i> Find Connections</button>
 
-                                                                        <button type="button" class="btn aqua btn-outline btn-sm text-capitalize">follower
-                                                                        <span class="badge">4</span></button>
-                                                                        <!-- <i class="fa fa-"></i> -->
-                                                                    <!-- </div> -->
-                                                                    <!-- <div class="btn-group" role="group"> -->
-                                                                        <button type="button" class="btn aqua btn-outline btn-sm text-capitalize">
+                                                                <button type="button" class="btn aqua btn-outline btn-sm text-capitalize">follower
+                                                                <span class="badge">4</span></button>
+                                                                        
+                                                                <button type="button" class="btn aqua btn-outline btn-sm text-capitalize">
                                                                          Following <span class="badge">4</span></button>
-                                                                    <!-- </div> -->
-                                                                      
-                                                                <!-- </div > -->
 
                                                                 <div class="dropdown pull-right"style=" margin-left: 4px; ">
                                                                     <button class="btn aqua btn-outline btn-sm dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
@@ -90,13 +86,7 @@
 
                                                     <div class="connect-menu">
                                                         <div class="col-md-12">
-                                                            <div class="connections-tabs">
-                                                                <ul class="connect-tab-menu">
-                                                                    <li class="active"><a href="<?=base_url();?>connect/myfriends">all connections</a></li>
-                                                                    <li><a href="<?=base_url();?>connect/requestsent">requests</a></li>
-                                                                    <li><a href="<?=base_url();?>connect/groups">groups</a></li>
-                                                                </ul>
-                                                            </div><!--Tabs-->
+                                                            <!--Tabs-->
                                                         </div>
 
                                                         <!-- <div class="col-md-3" style=" margin-top: 6px; ">

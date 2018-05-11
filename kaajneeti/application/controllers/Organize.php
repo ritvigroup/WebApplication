@@ -162,8 +162,38 @@ class Organize extends CI_Controller {
         if(count($json_decode->result) > 0) {
             $data['Department'] = $json_decode;
         }
+
+        $json_encode = post_curl(API_CALL_PATH.'role/getMyAllUserRoleWithDefault', $this->input->post(), $this->curl);
+
+        $json_decode = json_decode($json_encode);
+        if(count($json_decode->result) > 0) {
+            $data['UserRole'] = $json_decode;
+        }
         
         $this->load->view('organize/newTeam',$data);
+    }
+
+
+    public function newRole() {
+        $data = array();
+      
+        if (!$this->input->is_ajax_request()) {
+           exit('Error');
+        }
+        $_POST['user_profile_id'] = $this->session->userdata('UserProfileId');
+
+        if($this->input->post('role_name') != '') {
+            $json_encode = post_curl(API_CALL_PATH.'role/saveMyUserRole', $this->input->post(), $this->curl);
+
+            header('Content-type: application/json');
+
+            echo $json_encode;
+
+            return false;
+        }
+
+        
+        $this->load->view('organize/newRole',$data);
     }
 
 
@@ -251,6 +281,9 @@ class Organize extends CI_Controller {
                                 'last_name'         => $this->input->post('last_name'),
                                 'email'             => $this->input->post('email'),
                                 'department'        => $this->input->post('department'),
+                                'user_name'         => $this->input->post('user_name'),
+                                'password'          => $this->input->post('password'),
+                                'role'              => $this->input->post('role'),
                                 );
 
             if($_FILES['file']['name'] != '') {
@@ -269,13 +302,16 @@ class Organize extends CI_Controller {
         } else if($this->input->method(TRUE) == "POST" && $this->input->post('update_user') == 'Y') {
 
             $post_data = array(
-                                'user_profile_id'   => $this->input->post('user_profile_id'),
+                                'user_profile_id'           => $this->input->post('user_profile_id'),
                                 'friend_user_profile_id'    => $this->input->post('friend_user_profile_id'),
-                                'first_name'        => $this->input->post('first_name'),
-                                'last_name'         => $this->input->post('last_name'),
-                                'email'             => $this->input->post('email'),
-                                'department'        => $this->input->post('department'),
-                                'status'            => $this->input->post('status'),
+                                'first_name'                => $this->input->post('first_name'),
+                                'last_name'                 => $this->input->post('last_name'),
+                                'email'                     => $this->input->post('email'),
+                                'department'                => $this->input->post('department'),
+                                'status'                    => $this->input->post('status'),
+                                'user_name'                 => $this->input->post('user_name'),
+                                'password'                  => $this->input->post('password'),
+                                'role'                      => $this->input->post('role'),
                                 );
 
             if($_FILES['file']['name'] != '') {

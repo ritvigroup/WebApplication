@@ -40,7 +40,19 @@
             <li class="nav-item <?php if($request_uri['4'] == "contribution") {?>active<?php } ?>"><a class="nav-link" href="<?=base_url();?>contribution/contribution"><i class="fa fa-refresh fa-fw"></i><span class="title">Funding</span></a></li>
 
             <li class="nav-item <?php if($request_uri['4'] == "report") {?>active<?php } ?>"><a class="nav-link" href="<?=base_url();?>report/report"><i class="fa fa-file-text-o fa-fw"></i><span class="title">Reports</span></a></li>
+
+            
+
         </ul>
     </div>
+
+    <div class="left-icon">
+        <ul class="list-inline center-block">   
+            <li><a href="#" target="_blank"><i class="fa fa-google" aria-hidden="true"></i></a></li>
+            <li><a href="https://www.facebook.com/kaajneeti/" target="_blank"><i class="fa fa-facebook-square" aria-hidden="true"></i></a></li>
+            <li><a href="https://twitter.com/kaajneeti" target="_blank"><i class=" fa fa-twitter-square" aria-hidden="true"></i></a></li></div>
+        </ul>
+    </div>
+
 </div>
 <!-- End page sidebar wrapper -->
