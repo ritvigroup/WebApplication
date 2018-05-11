@@ -82,11 +82,10 @@
                                             </div>
 
                                             <div class="dropdown" id="organize-active">
-                                                <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" id="active-id">Active Users
-                                                <span class="caret"></span></button>
+                                                <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" id="active-id"><i class="fa fa-user"></i> Active Users <span class="caret"></span></button>
                                                 <ul class="dropdown-menu">
-                                                    <li><a href="#" id="activate_user_div">Active</a></li>
-                                                    <li><a href="#" id="inactivate_user_div">Inactive Users</a></li>
+                                                    <li><a href="#" id="activate_user_div"><i class="fa fa-user"></i> Active Users</a></li>
+                                                    <li><a href="#" id="inactivate_user_div"><i class="fa fa-user-slash"></i> Inactive Users</a></li>
                                                     <li><a href="#">Unconfirmed Users</a></li>
                                                     <li><a href="#">Deleted Users</a></li>
                                                     <li><a href="#">Activate Users</a></li>
@@ -171,7 +170,7 @@
                                                             <td><?php echo $my_team->AddedOn; ?></td>
                                                             <td><?php echo $Status; ?></td>
                                                             <td>
-                                                                <button type="button" class="btn btn-info btn-xs"><i class="fa fa-edit"></i>&nbsp;Edit</button>
+                                                                <button type="button" class="btn btn-info btn-xs" data-target="#modal-stackable" data-toggle="modal" href="javascript:void(0);" onClick="return editTeam('<?php echo $my_team->UserUniqueId; ?>', '<?php echo $my_team->UserProfileId; ?>');"><i class="fa fa-edit"></i>&nbsp;Edit</button>
                                                                 <button type="button" class="btn btn-danger btn-xs"><i class="fa fa-trash"></i>&nbsp;Delete</button>
                                                             </td>
                                                         </tr>
@@ -218,301 +217,6 @@
     </div>
 </div>
 
-
-<!-- Modal -->
-<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLongTitle"></h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                ...
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary">Save changes</button>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- Modal -->
-<div class="modal fade" id="new-fleet" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLongTitle"></h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                ...
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary">Save changes</button>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- Modal -->
-<div class="modal fade" id="upload-documents" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLongTitle"></h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                ...
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary">Save changes</button>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- Modal -->
-<div class="modal fade" id="create-group" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLongTitle"></h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                ...
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary">Save changes</button>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- Modal -->
-<div class="modal fade" id="create-event" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content">
-            <div class="modal-header"> 
-                <h5 class="modal-title" id="exampleModalLongTitle">Create Event</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <div class="row">
-
-                    <div class="col-md-12">
-
-                        <form action="#" class="form-horizontal">
-
-                            <div class="form-body pal">
-                                <div class="form-group"><label for="inputUsername"
-                                    class="col-md-3 control-label">Event Photo or Video
-                                    <span class='require'>*</span></label>
-
-                                    <div class="col-md-9">
-                                        <div class="input-icon"><input
-                                            id="inputUsername" type="text"
-                                            placeholder="Upload Photo or Video" class="form-control event-photoupload"/>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="form-group"><label for="inputUsername"
-                                    class="col-md-3 control-label">Event Name
-                                    <span class='require'>*</span></label>
-
-                                    <div class="col-md-9">
-                                        <div class="input-icon"><input
-                                            id="inputUsername" type="text"
-                                            placeholder="Add a short, clear name" class="form-control"/>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="form-group"><label for="inputUsername"
-                                    class="col-md-3 control-label">Location
-                                    <span class='require'>*</span></label>
-
-                                    <div class="col-md-9">
-                                        <div class="input-icon"><input
-                                            id="inputUsername" type="text"
-                                            placeholder="Include a place or address" class="form-control"/>
-                                        </div>
-                                    </div>
-                                </div>
-
-
-                                <div class="form-group">
-                                    <label class="col-md-3 control-label">Start Date</label>
-                                    <div class="input-group date form_datetime col-md-9 start-date" data-date-format="dd MM yyyy HH:ii p" data-link-field="dtp_input1">
-                                        <input class="form-control datepicker" size="25" id="start_date" name="start_date" type="text" value="" readonly>
-                                        <span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
-                                    </div>
-                                    <input type="hidden" id="dtp_input1" value="" />
-                                    <br/>
-                                </div>
-
-                                <div class="form-group">
-                                    <label class="col-md-3 control-label">End Date</label>
-                                    <div class="input-group date form_datetime col-md-9 end-date" data-date-format="dd MM yyyy HH:ii p"      data-link-field="dtp_input1">
-                                        <input class="form-control datepicker" size="25" id="end_date" name="end_date" type="text" value="" readonly>
-                                        <span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
-                                    </div>
-                                </div>
-
-
-
-
-                                <div class="form-group mbn"><label for="inputContent"
-                                    class="col-md-3 control-label">Description</label>
-
-                                    <div class="col-md-9">
-
-                                        <textarea id="inputContent"  placeholder="tell people more about"  rows="2"
-                                        class="form-control event-textarea"></textarea>
-                                    </div>
-                                </div>
-                            </div>
-                        </form>
-
-                    </div>
-                </div> 
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary">Save changes</button>
-            </div>
-        </div>
-    </div>
-</div>
-
-
-<!-- Modal -->
-<div class="modal fade" id="create-poll" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLongTitle"> Create Poll</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <div class="row">
-                    <div class="col-md-12">
-
-                        <ul class="nav navbar-nav">
-                            <li><a href="javascript:void(0);"> <i class="fa fa-pencil" aria-hidden="true"></i> Compose Post</a></li>
-                            <li><a href="javascript:void(0);"> <i class="fa fa-picture-o" aria-hidden="true"></i> Photo/Video Album</a></li>
-                            <li><a href="javascript:void(0);" data-toggle="modal" data-target="#exampleModalCenter"> <i class="fa fa-video-camera" aria-hidden="true"></i> Live Video</a></li>
-                        </ul>
-
-
-                    </div>
-                </div>
-
-
-
-
-                <div class="row">
-                    <div class="col-xs-12">
-                        <div class="textarea-img">
-                            <img src="https://www.toptene.com/wp-content/uploads/2017/10/top-10-most-handsome-men-in-the-world.jpg"  width="50"  height="50" class="img-circle">
-                        </div>
-                        <div class="form-group">
-                            <textarea class="form-control placeholder"  placeholder="Ask Somthing  ......" rows="8"></textarea>
-                        </div>
-
-
-
-                        <div class="form-group">
-
-                            <div class="col-md-12">
-                                <div class="input-icon"><i class="fa fa-user"></i><input id="inputUsername" type="text"  placeholder="option1" class="form-control"/><br>
-
-
-                                </div>
-                            </div>
-                        </div>   
-
-                        <div class="form-group">
-
-                            <div class="col-md-12">
-                                <div class="input-icon"><i class="fa fa-user"></i><input id="inputUsername" type="text"  placeholder="option2" class="form-control"/>
-
-
-                                </div>
-                            </div>
-                        </div>  
-
-
-                        <div class="col-md-6 poll-dropdown"><div class="dropup ">
-                            <button class="btn btn-primary dropdown-toggle" type="button" id="my-id2" data-toggle="dropdown" aria-expanded="false"><i class="fa fa-clock-o" aria-hidden="true"></i>  1 Week
-                                <span class="caret"></span>
-                            </button>
-                            <ul class="dropdown-menu dropdown-menu2">
-                                <li><a href="#">Public</a></li>
-                                <li><a href="#">My followers</a></li>
-                                <li><a href="#">My Connect</a></li>
-                                <li><a href="#">Only Me</a></li>
-                                <li><a href="#">Specific form</a></li>
-                            </ul>
-                        </div></div>
-                        <div class="col-md-6 poll-remove"><h4 class="text-right"><a href="#">Remove Poll</a></h4></div>        
-                    </div>
-                </div>
-
-
-
-
-            </div>
-            <div class="modal-footer">
-                <div class="col-md-2">
-                    <div class="dropup express-dropdown pull-right" id="my-id">
-                        <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
-                    </div>
-                </div>
-                <div class="col-md-4 pull-right" >
-                    <div class="dropup express-dropdown " id="my-id">
-                        <button class="btn btn-default dropdown-toggle" type="button"  id="my-id2" data-toggle="dropdown">Public
-                            <span class="caret"></span>
-                        </button>
-                        <ul class="dropdown-menu dropdown-menu2">
-                            <li><a href="#">Public</a></li>
-                            <li><a href="#">My followers</a></li>
-                            <li><a href="#">My Connect</a></li>
-                            <li><a href="#">Only Me</a></li>
-                            <li><a href="#">Specific form</a></li>
-                        </ul>
-
-                        <button type="button" class="btn btn-success">Post</button>
-
-                    </div>
-
-
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-
-
-
 <script>
     $(document).ready(function() {
 // Flexible table
@@ -528,6 +232,18 @@ $('#table_id').DataTable();
     function newTeam() {
 
         $.post("<?php echo base_url(); ?>organize/newTeam", {'display': 'Y'},
+            function (data, status) {
+                if(data != '') {
+                    $('.modal-content-ajax').html(data);
+                } else {
+                    $('.modal-content-ajax').html(data);
+                }
+            });
+    }
+
+    function editTeam(unique_profile_id, friend_user_profile_id) {
+
+        $.post("<?php echo base_url(); ?>organize/editTeam/"+unique_profile_id+'/'+friend_user_profile_id, {'display': 'Y'},
             function (data, status) {
                 if(data != '') {
                     $('.modal-content-ajax').html(data);

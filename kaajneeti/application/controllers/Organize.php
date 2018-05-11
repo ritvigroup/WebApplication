@@ -261,6 +261,13 @@ class Organize extends CI_Controller {
         if(count($json_decode->result) > 0) {
             $data['Department'] = $json_decode;
         }
+
+        $json_encode = post_curl(API_CALL_PATH.'role/getMyAllUserRoleWithDefault', $this->input->post(), $this->curl);
+
+        $json_decode = json_decode($json_encode);
+        if(count($json_decode->result) > 0) {
+            $data['UserRole'] = $json_decode;
+        }
         
         $this->load->view('organize/editTeam',$data);
     }
@@ -324,11 +331,6 @@ class Organize extends CI_Controller {
 
             $json_decode = post_curl_with_files(API_CALL_PATH.'userregister/updateUserProfile', $post_data, $this->curl);
 
-            // echo '<pre>';
-            // print_r($_POST);
-            // print_r($json_decode);
-            // echo '</pre>';
-            // die;
 
             header('Content-type: application/json');
 

@@ -738,14 +738,14 @@ class Userregister extends CI_Controller {
         $error_occured = false;
         $user_profile_id = $this->input->post('user_profile_id'); // Added By User Profile Id
         
-        $friend_profile = $this->input->post('friend_profile'); // Selected User Profile Id
-        $first_name = $this->input->post('first_name'); // Created First Name
-        $last_name = $this->input->post('last_name'); // Created last Name
-        $email = $this->input->post('email'); // Created Email
-        $department = $this->input->post('department'); // Department
-        $user_name = $this->input->post('user_name'); // Department
-        $password = $this->input->post('password'); // Department
-        $role = $this->input->post('role'); // Department
+        $friend_profile     = $this->input->post('friend_profile'); // Selected User Profile Id
+        $first_name         = $this->input->post('first_name'); // Created First Name
+        $last_name          = $this->input->post('last_name'); // Created last Name
+        $email              = $this->input->post('email'); // Created Email
+        $department         = $this->input->post('department'); // Department
+        $user_name          = $this->input->post('user_name'); // Username
+        $password           = $this->input->post('password'); // Passwrord
+        $role               = $this->input->post('role'); // User Role
         
         if($user_profile_id == "") {
             $msg = "Please select user profile";
@@ -850,6 +850,9 @@ class Userregister extends CI_Controller {
         $last_name              = $this->input->post('last_name'); // Created last Name
         $email                  = $this->input->post('email'); // Created Email
         $department             = $this->input->post('department'); // Department
+        $user_name              = $this->input->post('user_name'); // Username
+        $password               = $this->input->post('password'); // Passwrord
+        $role                   = $this->input->post('role'); // User Role
         $status                 = $this->input->post('status'); // Status
         
         if($user_profile_id == "") {
@@ -864,12 +867,12 @@ class Userregister extends CI_Controller {
         } else if($last_name == "") {
             $msg = "Please enter last name";
             $error_occured = true;
-        } else if($email == "") {
+        /*} else if($email == "") {
             $msg = "Please enter email";
             $error_occured = true;
         } else if($department == "") {
             $msg = "Please selected department";
-            $error_occured = true;
+            $error_occured = true;*/
         } else {
 
             $user_profile = $this->User_Model->getUserProfileInformation($friend_user_profile_id, $user_profile_id);
@@ -879,6 +882,9 @@ class Userregister extends CI_Controller {
                                 'LastName'                  => $last_name,
                                 'Email'                     => $email,
                                 'UserDepartment'            => $department,
+                                'ProfileUserName'           => $user_name,
+                                'ProfileUserPassword'       => $password,
+                                'UserRoleId'                => $role,
                                 'ProfileStatus'             => $status,
                                 'UpdatedBy'                 => $user_profile_id,
                                 'UpdatedOn'                 => date('Y-m-d H:i:s'),

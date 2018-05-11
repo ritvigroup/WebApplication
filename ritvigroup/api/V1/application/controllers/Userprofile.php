@@ -190,6 +190,52 @@ class Userprofile extends CI_Controller {
         displayJsonEncode($array);
     }
 
+
+    // Validate User Profile Exist for My Team
+    public function validateUserProfileExistForTeam() {
+        $error_occured = false;
+        $UserProfileId          = $this->input->post('user_profile_id');
+        $TeamUserProfileId      = $this->input->post('team_user_profile_id');
+        $TeamProfileUserName    = $this->input->post('team_user_name');
+        
+        if($UserProfileId == "") {
+            $msg = "Please select user";
+            $error_occured = true;
+        } else if($TeamUserProfileId == "") {
+            $msg = "Please select your team profile";
+            $error_occured = true;
+        } else if($TeamProfileUserName == "") {
+            $msg = "Please select username";
+            $error_occured = true;
+        } else {
+
+            $res_u = $this->User_Model->validateUserProfileExistForTeam($UserProfileId, $TeamUserProfileId, $TeamProfileUserName);
+
+            if($res_u['UserProfileId'] > 0) {
+                $msg = "This username is already taken by someone. Please choose another username";
+                $error_occured = true;
+            }  else {
+                $msg = "You can use this username.";
+            }
+        }
+
+        if($error_occured == true) {
+            $array = array(
+                            "status"        => 'failed',
+                            "message"       => $msg,
+                        );
+        } else {
+
+            $array = array(
+                           "status"         => 'success',
+                           "message"        => $msg,
+                           );
+        }
+        displayJsonEncode($array);
+    }
+
+
+
     // Get User All Profile Information By Unique Profile Id
     public function getUserAllProfileInformationByUniqueProfileId() {
         $error_occured = false;

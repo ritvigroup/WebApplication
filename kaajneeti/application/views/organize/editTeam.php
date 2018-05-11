@@ -1,5 +1,9 @@
 <?php
 $user_profile = $SubLeaderDetail->result;
+
+echo '<pre>';
+print_r($SubLeaderDetail);
+echo '</pre>';
 ?>
 <form name="plan_form" method="post" action="" onSubmit="return false;">
     <div class="modal-header">
@@ -27,10 +31,42 @@ $user_profile = $SubLeaderDetail->result;
                 <div class="row">
                     <div class="col-md-6">
                         <div class="form-group">
+                            <label>Username: </label>
+                            <input type="text" class="form-control" id="user_name" name="user_name" placeholder="Username" value="<?php echo $user_profile->ProfileUserName; ?>" required>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Password: </label>
+                            <input type="password" class="form-control" id="password" name="password" placeholder="Password" >
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
                             <label>Email: </label>
                             <input type="text" class="form-control" id="email" name="email" placeholder="Email Address" value="<?php echo $user_profile->Email; ?>" required>
                         </div>
                     </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <div style="float: right;"><a data-target="#modal-stackable-role" data-toggle="modal" href="javascript:void(0);" onClick="return addNewUserRole();">Add New</a></div>
+                            <label>Role: </label>
+                            <select class="form-control" id="role" name="role">
+                                <option value="">-Select Role-</option>
+                                <?php
+                                foreach($UserRole->result AS $user_role) {
+                                    if($user_role->RoleStatus == 1) {
+                                        $selected_r = ($user_profile->UserRoleId == $user_role->UserRoleId) ? ' selected="selected"' : '';
+                                        echo '<option value="'.$user_role->UserRoleId.'" '.$selected_r.'>'.$user_role->RoleName.'</option>';
+                                    }
+                                }
+                                ?>
+                            </select>
+                        </div>
+                    </div>
+                    <?php /*
                     <div class="col-md-6">
                         <div class="form-group">
                             <label>Department: </label>
@@ -46,6 +82,7 @@ $user_profile = $SubLeaderDetail->result;
                             </select>
                         </div>
                     </div>
+                    */ ?>
                 </div>
                 <div class="row">
                     <div class="col-md-6">
@@ -97,6 +134,9 @@ $user_profile = $SubLeaderDetail->result;
         var last_name       = $("#last_name").val();
         var email           = $("#email").val();
         var department      = $("#department").val();
+        var user_name       = $("#user_name").val();
+        var password        = $("#password").val();
+        var role            = $("#role").val();
         var status          = $("#status").val();
 
         
@@ -115,6 +155,9 @@ $user_profile = $SubLeaderDetail->result;
             form_data.append('last_name', last_name);
             form_data.append('email', email);
             form_data.append('department', department);
+            form_data.append('user_name', user_name);
+            form_data.append('password', password);
+            form_data.append('role', role);
             form_data.append('status', status);
             form_data.append('update_user', 'Y');
 
