@@ -4988,12 +4988,12 @@ label {
     font-size: 12px;
     padding: 10px 15px;
 }
-#about-profile ul li a {
+#about-profile ul li a, #social-profile ul li a {
     padding: 8px 0;
     font-weight: 300;
     display: table;
 }
-#about-profile .active a:focus {
+#about-profile .active a:focus, #social-profile ul li a:focus {
     /*outline: none;*/
     outline-offset: 0;
     border-bottom: 0;
@@ -5049,4 +5049,93 @@ label {
 }
 #sum_box .complaint-box-hover:hover {
     display: block;
+}
+.well { position: relative; }
+a.cancle-accordian span { 
+font-size: 28px;
+    position: absolute;
+    top: -10px;
+    right: 3px; }
+
+.modal-body .modal-body-list {
+    padding: 15px;
+    border-bottom: 1px solid #d8d8d8;
+}
+#work-and-education-about-profile .feed-element, #Places-You-Lived-about-profile .feed-element, #Places-You-Lived-about-profile .feed-element, #Family-and-Relationships-about-profile .feed-element {
+    padding-bottom: 0;
+}
+#work-and-education-about-profile hr {
+    margin-top: 20px;
+    margin-bottom: -1px; }
+
+.media-body .stick {
+    margin-right: 5px;
+    padding-right: 8px;
+    border-right: 1px solid #d8d8d8;
+}
+.media-body .add-public {
+    opacity: 0;
+}
+.media-body .add-public .fa, .media-body .add-public span {
+    cursor: pointer;
+}
+.modal-body-list:hover .add-public {
+    opacity: 1
+}
+
+.dropdown-menu>li>h3, .dropdown-menu>li>h6, .page-header.navbar .top-menu .navbar-nav > li.dropdown-user .dropdown-menu > li > a {
+    margin: 0;
+    padding: 10px 18px;
+    font-size: 13px;
+    font-weight: 300;
+    /*color: #6f6f6f;
+    display: block;
+    clear: both;
+    font-weight: 300;
+    white-space: nowrap;*/
+}
+.dropdown-menu>li>h3:first-child{
+    font-size: 18px;
+    font-weight: 600;
+    padding-top: 12px;
+}
+.page-header.navbar .top-menu .navbar-nav > li.dropdown-user > .dropdown-menu.dropdown-menu-default {
+    width: 274px;
+}
+.dropdown.dropdown-user .dropdown-menu.dropdown-menu-default li.divider {
+    margin: 0;
+}
+
+.dropdown-menu>li>h6 a {
+    display: inline-block !important;
+}
+
+.dropdown-menu>li>h6 a img {
+    width: 30px;
+    height: 30px;
+    float: left;
+}
+
+/**    Setting Page    **/
+
+.profile-setting dd {
+    line-height: 2.5;
+}
+.profile-setting dt {
+    line-height: 2.2;
+}
+.page-header.navbar .top-menu .navbar-nav > li.user-notification .dropdown-menu.menuBig { width: 195px; }
+
+.express-btn {
+    background-color: inherit;
+    border: 0;
+    color: #fff;
+    font-size: 17px;
+    margin-top: 3px;
+}
+
+.top-menu .feed-element img.img-circle, .dropdown-messages-box img.img-circle {
+    width: 30px !important;
+    height: 30px !important;
+    margin: 9px 20px 0 !important;
 }
