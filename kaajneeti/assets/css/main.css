@@ -3003,6 +3003,7 @@ element.style {
 #sum_box .db:hover {
     background: #33485c;
     color: #fff;
+    cursor: pointer;
 }
 #sum_box .db:hover .icon{
     color: #fff;
@@ -3011,6 +3012,16 @@ element.style {
 color: #777777;
 
 }
+.#sum_box .db:hover a {
+    color: #fff;
+}
+#sum_box .db:hover .icon a{
+    color: #fff;
+}
+.area-hide-button{
+    margin-top: 20px;
+}
+
 
 a:hover{
     text-decoration: none;
@@ -5039,14 +5050,98 @@ label {
 }
 
 #sum_box .complaint-box-hover {
-    margin: -15px;
-    padding: 15px;
+    margin: -16px;
+    padding: 8px;
     position: absolute;
-    width: 100%;
+    width: 300px;
     background-color: #b7b7b7;
-    margin-top: -50px;
+    top: 115px;
+    max-height: 150px;
+    z-index: 1;
     display: none;
+    overflow:auto;
+
 }
+.feed-element-div{
+    padding-bottom: 5px !important;
+}
+.suggestion-box-hover{
+    margin: -16px;
+    padding: 8px;
+    position: absolute;
+    width: 300px;
+    background-color: #b7b7b7;
+    top: 115px;
+    max-height: 150px;
+    z-index: 1;
+    display: none;
+    overflow:auto;
+}
+.information-box-hover{
+    margin: -16px;
+    padding: 8px;
+    position: absolute;
+    width: 300px;
+    background-color: #b7b7b7;
+    top: 115px;
+    max-height: 150px;
+    z-index: 1;
+    display: none;
+    overflow:auto;
+}
+.event-box-hover{
+    margin: -16px;
+    padding: 8px;
+    position: absolute;
+    width: 300px;
+    background-color: #b7b7b7;
+    top: 115px;
+    max-height: 150px;
+    z-index: 1;
+    display: none;
+    overflow:auto;
+}
+.poll-box-hover{
+    margin: -16px;
+    padding: 8px;
+    position: absolute;
+    width: 300px;
+    background-color: #b7b7b7;
+    top: 115px;
+    max-height: 150px;
+    z-index: 1;
+    display: none;
+    overflow:auto;
+}
+
+.post-box-hover{
+    margin: -137px;
+    padding: 8px;
+    position: absolute;
+    width: 300px;
+    background-color: #b7b7b7;
+    top: 235px;
+    max-height: 150px;
+    z-index: 1;
+    display: none;
+    text-align: left;
+    overflow:auto;
+}
+.profile-subject{
+    font-weight: 300;
+    font-size: 10px;
+}
+.text-navy2{
+    color: #fff;
+}
+.profile-danger-btn{
+        margin: 21px -49px 0px 0px;
+    font-size: 10px;
+}
+.feed-element{
+
+}
+
 #sum_box .complaint-box-hover:hover {
     display: block;
 }

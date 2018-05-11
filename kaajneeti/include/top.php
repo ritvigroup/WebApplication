@@ -26,7 +26,7 @@
                             <div class="feed-element"> <a href="<?=base_url();?>profile/subprofile"> <img alt="image" class="img-circle" src="../assets/images/teem/a9.jpg" style=" margin: 5px 20px 0; "> </a></div>
                         </li>
                         <li class="dropdown">
-                            <a href="#" data-toggle="dropdown" class="dropdown-toggle count-info"> <img src="../assets/images/switch_icon.png"> <span class="badge badge-info"></span> </a>
+                            <a href="#" data-toggle="dropdown1" class="dropdown-toggle1 count-info"> <img src="../assets/images/switch_icon.png"> <span class="badge badge-info"></span> </a>
                             <div class="dropdown-menu dropdown-messages menuBig">
                                 
                                 <div class="col-md-12 padding-20">
