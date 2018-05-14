@@ -4889,17 +4889,17 @@ label {
         margin-bottom: 3px;
         font-size: 16px;
         text-transform: uppercase;
-        border-bottom: 1px solid #e6e9eb;
-        padding-bottom: 0;
+        *border-bottom: 1px solid #e6e9eb;
+        padding-bottom: 5px;
     }
 
     .connect-tab-menu li {
         display: inline-block;
-        margin-right: 20px;
+        margin-right: 5px;
     }
 
-    .connect-tab-menu li a,.connect-tab-menu li.active {
-        padding: 10px;
+    .connect-tab-menu li a {
+        padding: 10px 20px;
     }
 
     a:hover, a:focus {
@@ -4912,13 +4912,16 @@ label {
         text-decoration: none;
         background-color: inherit;
     }
-    .connect-tab-menu li:hover, .connect-tab-menu li:focus, .connect-tab-menu li.active {
+    .connect-tab-menu li a:hover, .connect-tab-menu li a:focus, .connect-tab-menu li.active a{
         outline: none;
         outline-offset: -2px;
         border-bottom: 2px solid #49b6d6;
         text-decoration: none;
         background-color: #ececec;
     }
+
+.border_bottom{border-bottom: 1px solid #e6e9eb;}
+.margin_bottom { margin-bottom: 5px; }
 
 /********User Prfile page css********/
 #user-profile .profile-nav > li > a {
