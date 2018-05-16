@@ -28,6 +28,7 @@ class Search extends CI_Controller {
         $this->location_long 	= $this->input->post('location_long');
         $this->device_name 		= $this->input->post('device_name');
         $this->device_os 		= $this->input->post('device_os');
+        $this->search           = $this->input->post('q'); 
     }
 
 
@@ -35,13 +36,12 @@ class Search extends CI_Controller {
     public function getAllEducactionsAddedByAnyUser() {
         $UserProfileId  = $this->input->post('user_profile_id');
         $search_for     = $this->input->post('search_for'); 
-        $search         = $this->input->post('q'); 
         
         if($UserProfileId == "") {
             $msg = "Please select user profile";
             $error_occured = true;
         } else {
-            $education_list = $this->User_Model->getAllEducactionsAddedByAnyUser($UserProfileId, $search_for, $search);
+            $education_list = $this->User_Model->getAllEducactionsAddedByAnyUser($UserProfileId, $search_for, $this->search);
 
             if(count($education_list) > 0) {
                 $msg = "Education list found";
@@ -72,13 +72,12 @@ class Search extends CI_Controller {
     public function getAllWorkAddedByAnyUser() {
         $UserProfileId  = $this->input->post('user_profile_id');
         $search_for     = $this->input->post('search_for'); 
-        $search         = $this->input->post('q'); 
         
         if($UserProfileId == "") {
             $msg = "Please select user profile";
             $error_occured = true;
         } else {
-            $work_list = $this->User_Model->getAllWorkAddedByAnyUser($UserProfileId, $search_for, $search);
+            $work_list = $this->User_Model->getAllWorkAddedByAnyUser($UserProfileId, $search_for, $this->search);
 
             if(count($work_list) > 0) {
                 $msg = "Work list found";
@@ -112,7 +111,6 @@ class Search extends CI_Controller {
         $UserId             = $this->input->post('user_id');
         $UserProfileId      = $this->input->post('user_profile_id');
         $search_in          = $this->input->post('search_in');
-        $search             = $this->input->post('q');
         $start              = (($this->input->post('start') > 0) ? $this->input->post('start') : 0);
         $end                = (($this->input->post('end') > 0) ? $this->input->post('end') : 10);
 
@@ -135,9 +133,9 @@ class Search extends CI_Controller {
             
             $result['Event'] = array();
             if($search_in == 'all' || $search_in == 'event') {
-                $sql = "SELECT EventId AS Id, 'Event' AS DataType, AddedOn AS DateAdded FROM `Event` WHERE `EventStatus` = '1' AND (`EventName` LIKE '%".$search."%' OR `EventDescription` LIKE '%".$search."%') AND `AddedBy` = '".$UserProfileId."' ";
+                $sql = "SELECT EventId AS Id, 'Event' AS DataType, AddedOn AS DateAdded FROM `Event` WHERE `EventStatus` = '1' AND (`EventName` LIKE '%".$this->search."%' OR `EventDescription` LIKE '%".$this->search."%') AND `AddedBy` = '".$UserProfileId."' ";
                 if(count($my_friend_user_profile_id) > 0) {
-                    $sql .= " UNION SELECT EventId AS Id, 'Event' AS DataType, AddedOn AS DateAdded FROM `Event` WHERE `EventStatus` = '1' AND (`EventName` LIKE '%".$search."%' OR `EventDescription` LIKE '%".$search."%') AND `AddedBy` IN (".implode(',', $my_friend_user_profile_id).") ";
+                    $sql .= " UNION SELECT EventId AS Id, 'Event' AS DataType, AddedOn AS DateAdded FROM `Event` WHERE `EventStatus` = '1' AND (`EventName` LIKE '%".$this->search."%' OR `EventDescription` LIKE '%".$this->search."%') AND `AddedBy` IN (".implode(',', $my_friend_user_profile_id).") ";
                 }
                 $sql .= " ORDER BY DateAdded DESC LIMIT $start,$end";
                 $query = $this->db->query($sql);
@@ -154,9 +152,9 @@ class Search extends CI_Controller {
             
             $result['Poll'] = array();
             if($search_in == 'all' || $search_in == 'poll') {
-                $sql = "SELECT PollId AS Id, 'Poll' AS DataType, AddedOn AS DateAdded FROM `Poll` WHERE `ValidFromDate` <= '".date('Y-m-d')."' AND `ValidEndDate` >= '".date('Y-m-d')."' AND `PollStatus` = '1' AND `PollQuestion` LIKE '%".$search."%' AND `AddedBy` = '".$UserProfileId."' "; 
+                $sql = "SELECT PollId AS Id, 'Poll' AS DataType, AddedOn AS DateAdded FROM `Poll` WHERE `ValidFromDate` <= '".date('Y-m-d')."' AND `ValidEndDate` >= '".date('Y-m-d')."' AND `PollStatus` = '1' AND `PollQuestion` LIKE '%".$this->search."%' AND `AddedBy` = '".$UserProfileId."' "; 
                 if(count($my_friend_user_profile_id) > 0) {
-                    $sql .= " UNION SELECT PollId AS Id, 'Poll' AS DataType, AddedOn AS DateAdded FROM `Poll` WHERE `ValidFromDate` <= '".date('Y-m-d')."' AND `ValidEndDate` >= '".date('Y-m-d')."' AND `PollStatus` = '1' AND `PollQuestion` LIKE '%".$search."%' AND `AddedBy` IN (".implode(',', $my_friend_user_profile_id).") ";
+                    $sql .= " UNION SELECT PollId AS Id, 'Poll' AS DataType, AddedOn AS DateAdded FROM `Poll` WHERE `ValidFromDate` <= '".date('Y-m-d')."' AND `ValidEndDate` >= '".date('Y-m-d')."' AND `PollStatus` = '1' AND `PollQuestion` LIKE '%".$this->search."%' AND `AddedBy` IN (".implode(',', $my_friend_user_profile_id).") ";
                 }
                 $sql .= " ORDER BY DateAdded DESC LIMIT $start,$end";
                 $query = $this->db->query($sql);
@@ -173,9 +171,9 @@ class Search extends CI_Controller {
             
             $result['Post'] = array();
             if($search_in == 'all' || $search_in == 'post') {
-                $sql = "SELECT PostId AS Id, 'Post' AS DataType, AddedOn AS DateAdded FROM `Post` WHERE `PostStatus` = '1' AND `PostTitle` LIKE '%".$search."%' AND `UserProfileId` = '".$UserProfileId."'  "; 
+                $sql = "SELECT PostId AS Id, 'Post' AS DataType, AddedOn AS DateAdded FROM `Post` WHERE `PostStatus` = '1' AND `PostTitle` LIKE '%".$this->search."%' AND `UserProfileId` = '".$UserProfileId."'  "; 
                 if(count($my_friend_user_profile_id) > 0) {
-                    $sql .= " UNION SELECT PostId AS Id, 'Post' AS DataType, AddedOn AS DateAdded FROM `Post` WHERE `PostStatus` = '1' AND `PostTitle` LIKE '%".$search."%' AND `UserProfileId`  IN (".implode(',', $my_friend_user_profile_id).") ";
+                    $sql .= " UNION SELECT PostId AS Id, 'Post' AS DataType, AddedOn AS DateAdded FROM `Post` WHERE `PostStatus` = '1' AND `PostTitle` LIKE '%".$this->search."%' AND `UserProfileId`  IN (".implode(',', $my_friend_user_profile_id).") ";
                 }
                 $sql .= " ORDER BY DateAdded DESC LIMIT $start,$end";
                 $query = $this->db->query($sql);
@@ -192,9 +190,9 @@ class Search extends CI_Controller {
 
             $result['Complaint'] = array();
             if($search_in == 'all' || $search_in == 'complaint') {
-                $sql = "SELECT ComplaintId AS Id, 'Complaint' AS DataType, AddedOn AS DateAdded FROM `Complaint` WHERE `ComplaintStatus` = '1' AND (`ComplaintSubject` LIKE '%".$search."%' OR `ComplaintDescription` LIKE '%".$search."%') AND `AddedBy` = '".$UserProfileId."'  ";
+                $sql = "SELECT ComplaintId AS Id, 'Complaint' AS DataType, AddedOn AS DateAdded FROM `Complaint` WHERE `ComplaintStatus` = '1' AND (`ComplaintSubject` LIKE '%".$this->search."%' OR `ComplaintDescription` LIKE '%".$this->search."%') AND `AddedBy` = '".$UserProfileId."'  ";
                 if(count($my_friend_user_profile_id) > 0) {
-                    $sql .= " UNION SELECT ComplaintId AS Id, 'Complaint' AS DataType, AddedOn AS DateAdded FROM `Complaint` WHERE `ComplaintStatus` = '1' AND (`ComplaintSubject` LIKE '%".$search."%' OR `ComplaintDescription` LIKE '%".$search."%') AND `AddedBy` IN (".implode(',', $my_friend_user_profile_id).")  ";
+                    $sql .= " UNION SELECT ComplaintId AS Id, 'Complaint' AS DataType, AddedOn AS DateAdded FROM `Complaint` WHERE `ComplaintStatus` = '1' AND (`ComplaintSubject` LIKE '%".$this->search."%' OR `ComplaintDescription` LIKE '%".$this->search."%') AND `AddedBy` IN (".implode(',', $my_friend_user_profile_id).")  ";
                 }
                 $sql .= " ORDER BY DateAdded DESC LIMIT $start,$end";
                 $query = $this->db->query($sql);
@@ -211,9 +209,9 @@ class Search extends CI_Controller {
 
             $result['Suggestion'] = array();
             if($search_in == 'all' || $search_in == 'suggestion') {
-                $sql = "SELECT SuggestionId AS Id, 'Suggestion' AS DataType, AddedOn AS DateAdded FROM `Suggestion` WHERE `SuggestionStatus` = '1' AND (`SuggestionSubject` LIKE '%".$search."%' OR `SuggestionDescription` LIKE '%".$search."%') AND `AddedBy` = '".$UserProfileId."'  ";
+                $sql = "SELECT SuggestionId AS Id, 'Suggestion' AS DataType, AddedOn AS DateAdded FROM `Suggestion` WHERE `SuggestionStatus` = '1' AND (`SuggestionSubject` LIKE '%".$search."%' OR `SuggestionDescription` LIKE '%".$this->search."%') AND `AddedBy` = '".$UserProfileId."'  ";
                 if(count($my_friend_user_profile_id) > 0) {
-                    $sql .= " UNION SELECT SuggestionId AS Id, 'Suggestion' AS DataType, AddedOn AS DateAdded FROM `Suggestion` WHERE `SuggestionStatus` = '1' AND (`SuggestionSubject` LIKE '%".$search."%' OR `SuggestionDescription` LIKE '%".$search."%') AND `AddedBy`  IN (".implode(',', $my_friend_user_profile_id).") ";
+                    $sql .= " UNION SELECT SuggestionId AS Id, 'Suggestion' AS DataType, AddedOn AS DateAdded FROM `Suggestion` WHERE `SuggestionStatus` = '1' AND (`SuggestionSubject` LIKE '%".$this->search."%' OR `SuggestionDescription` LIKE '%".$this->search."%') AND `AddedBy`  IN (".implode(',', $my_friend_user_profile_id).") ";
                 }
                 $sql .= " ORDER BY DateAdded DESC LIMIT $start,$end";
                 $query = $this->db->query($sql);
@@ -229,9 +227,45 @@ class Search extends CI_Controller {
 
             $result['Profile'] = array();
             if($search_in == 'all' || $search_in == 'people') {
-                $sql = "SELECT UserProfileId AS Id, 'Profile' AS DataType, AddedOn AS DateAdded FROM `UserProfile` WHERE `ProfileStatus` = '1' AND (`FirstName` LIKE '%".$search."%' OR `LastName` LIKE '%".$search."%') ";
+
+                if($search_in == 'people') {
+                    $friend_of_friend   = $this->input->post('friend_of_friend');
+                    $city               = $this->input->post('city');
+                    $education          = $this->input->post('education');
+                    $work               = $this->input->post('work');
+
+                    $people_search_condition = '';
+                    if($city != '') {
+                        $people_search_condition .= " AND upa.City = '".$city."'";
+                    }
+                    if($education != '') {
+                        $people_search_condition .= " AND upe.Qualification = '".$education."'";
+                    }
+                    if($work != '') {
+                        $people_search_condition .= " AND upw.WorkPosition = '".$work."'";
+                    }
+                }
+                $sql = "SELECT up.UserProfileId AS Id, 'Profile' AS DataType, up.AddedOn AS DateAdded 
+                                    FROM `UserProfile` AS up 
+                                    LEFT JOIN `UserProfileAddress` AS upa ON up.UserProfileId = upa.UserProfileId 
+                                    LEFT JOIN `UserProfileEducation` AS upe ON up.UserProfileId = upe.UserProfileId 
+                                    LEFT JOIN `UserProfileWork` AS upw ON up.UserProfileId = upw.UserProfileId 
+                                    WHERE 
+                                        up.`ProfileStatus` = '1' 
+                                    AND (up.`FirstName` LIKE '%".$this->search."%' OR up.`LastName` LIKE '%".$this->search."%') ";
+                $sql .= $people_search_condition;
+
                 if(count($my_friend_user_profile_id) > 0) {
-                    //$sql .= " UNION SELECT UserProfileId AS Id, 'Profile' AS DataType, AddedOn AS DateAdded FROM `UserProfile` WHERE `ProfileStatus` = '1' AND (`FirstName` LIKE '%".$search."%' OR `LastName` LIKE '%".$search."%') AND `AddedBy`  IN (".implode(',', $my_friend_user_profile_id).") ";
+                    $sql .= " UNION 
+                                SELECT up.UserProfileId AS Id, 'Profile' AS DataType, up.AddedOn AS DateAdded 
+                                        FROM `UserProfile` AS up 
+                                        LEFT JOIN `UserProfileAddress` AS upa ON up.UserProfileId = upa.UserProfileId 
+                                        LEFT JOIN `UserProfileEducation` AS upe ON up.UserProfileId = upe.UserProfileId 
+                                        LEFT JOIN `UserProfileWork` AS upw ON up.UserProfileId = upw.UserProfileId 
+                                        WHERE 
+                                            up.`ProfileStatus` = '1' 
+                                        AND (up.`FirstName` LIKE '%".$this->search."%' OR up.`LastName` LIKE '%".$this->search."%') 
+                                        AND up.`UserProfileId`  IN (".implode(',', $my_friend_user_profile_id).") ";
                 }
                 $sql .= " ORDER BY DateAdded DESC LIMIT $start,$end";
                 $query = $this->db->query($sql);

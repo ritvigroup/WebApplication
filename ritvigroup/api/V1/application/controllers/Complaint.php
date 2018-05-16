@@ -128,7 +128,6 @@ class Complaint extends CI_Controller {
         $complaint_member = $this->input->post('complaint_member'); // Should be multiple in array
 
 
-        $ComplaintUniqueId = $this->Complaint_Model->generateComplaintUniqueId();
         
         if($UserProfileId == "") {
 			$msg = "Please select your profile";
@@ -139,6 +138,8 @@ class Complaint extends CI_Controller {
 		} else {
 
             $this->db->query("BEGIN");
+
+            $ComplaintUniqueId = $this->Complaint_Model->generateComplaintUniqueId();
 
             $insertData = array(
                                 'ComplaintUniqueId'         => $ComplaintUniqueId,
@@ -521,6 +522,98 @@ class Complaint extends CI_Controller {
     }
 
 
+    // Accept / Reject Complaint From Leader
+    public function saveAcceptRejectComplaintFromLeader() {
+        $error_occured = false;
+
+        $UserProfileId     = $this->input->post('user_profile_id');
+        $ComplaintId       = $this->input->post('complaint_id');   
+        $current_status    = $this->input->post('current_status'); // -1 = Declined, 2 = Accepted
+
+
+        if($UserProfileId == "") {
+            $msg = "Please select your profile";
+            $error_occured = true;
+        } else if($ComplaintId == "") {
+            $msg = "Please enter complaint id";
+            $error_occured = true;
+        } else if($current_status == "") {
+            $msg = "Please select accept or reject complaint";
+            $error_occured = true;
+        } else {
+
+            $this->db->query("BEGIN");
+
+            if($current_status == 2) {
+                $complaint_status = $this->Complaint_Model->getComplaintStatusDetail($current_status);
+
+                if($complaint_status['StatusName'] != '') {
+                    $HistoryTitle = $complaint_status['StatusName'];
+                    $HistoryDescription = $complaint_status['StatusName']. ' your complaint';
+                } else {
+                    $HistoryTitle = 'Declined';
+                    $HistoryDescription = $HistoryTitle. ' your complaint';
+                }
+            } else {
+                $HistoryTitle = 'Declined';
+                $HistoryDescription = $HistoryTitle. ' your complaint';
+            }
+
+            $insertData = array(
+                                'ComplaintId'               => $ComplaintId,
+                                'ParentComplaintHistoryId'  => 0,
+                                'HistoryTitle'              => $HistoryTitle,
+                                'HistoryDescription'        => $HistoryDescription,
+                                'HistoryStatus'             => 1,
+                                'AddedBy'                   => $UserProfileId,
+                                'AddedOn'                   => date('Y-m-d H:i:s'),
+                            );
+            $ComplaintHistoryId = $this->Complaint_Model->saveMyComplaintHistory($insertData);
+
+            if($ComplaintHistoryId > 0) {
+
+                $this->Complaint_Model->updateComplaint($UserProfileId, $ComplaintId, $current_status);
+
+                $complaint_history_detail = $this->Complaint_Model->getComplaintHistoryDetail($ComplaintHistoryId, $UserProfileId);
+                
+                $this->db->query("COMMIT");
+
+                // Sending Notification to Users Start
+                $user_profile_id_array = $this->Complaint_Model->getActiveUserProfileIdAssociatedWithComplaint($ComplaintId, $UserProfileId);
+
+                $device_tokens = $this->User_Model->getUserProfileDeviceTokenFromUserProfileIds($user_profile_id_array);
+
+                foreach($device_tokens AS $device_token) {
+                    //sendAndroidNotification($device_token, 'ComplaintReply', $HistoryTitle, $HistoryDescription, $complaint_history_detail);
+                }
+                // Send Notification to Users End
+
+                $msg = "Complaint history saved successfully";
+
+            } else {
+                $this->db->query("ROLLBACK");
+                $msg = "Complaint history not saved. Error occured";
+                $error_occured = true;
+            }
+        }
+
+        if($error_occured == true) {
+            $array = array(
+                            "status"        => 'failed',
+                            "message"       => $msg,
+                        );
+        } else {
+
+            $array = array(
+                           "status"     => 'success',
+                           "result"     => $complaint_history_detail,
+                           "message"    => $msg,
+                           );
+        }
+        displayJsonEncode($array);
+    }
+
+
     // Save COmplaint History
     public function saveComplaintHistory() {
         $error_occured = false;
@@ -540,9 +633,9 @@ class Complaint extends CI_Controller {
         } else if($ComplaintId == "") {
             $msg = "Please enter complaint id";
             $error_occured = true;
-        } else if($HistoryTitle == "") {
+        /*} else if($HistoryTitle == "") {
             $msg = "Please enter title";
-            $error_occured = true;
+            $error_occured = true;*/
         } else if($HistoryDescription == "") {
             $msg = "Please enter description";
             $error_occured = true;
@@ -579,7 +672,7 @@ class Complaint extends CI_Controller {
                 $device_tokens = $this->User_Model->getUserProfileDeviceTokenFromUserProfileIds($user_profile_id_array);
 
                 foreach($device_tokens AS $device_token) {
-                    sendAndroidNotification($device_token, 'ComplaintReply', $HistoryTitle, $HistoryDescription, $complaint_history_detail);
+                    //sendAndroidNotification($device_token, 'ComplaintReply', $HistoryTitle, $HistoryDescription, $complaint_history_detail);
                 }
                 // Send Notification to Users End
 
@@ -644,6 +737,95 @@ class Complaint extends CI_Controller {
                            "status"     => 'success',
                            "result"     => $complaint_history_detail,
                            "message"    => $msg,
+                           );
+        }
+        displayJsonEncode($array);
+    }
+
+
+    // Copy Complaint To Some Other Leader
+    public function copyMyComplaint() {
+        $error_occured = false;
+
+        $UserProfileId      = $this->input->post('user_profile_id');
+        $OldComplaintId     = $this->input->post('complaint_id');
+        $AssignedTo         = $this->input->post('assign_to_profile_id'); // Assign to Favourite Leader/Sub-Leader
+        
+        if($UserProfileId == "") {
+            $msg = "Please select your profile";
+            $error_occured = true;
+        } else if($OldComplaintId == "") {
+            $msg = "Please select complaint";
+            $error_occured = true;
+        } else if($AssignedTo == "") {
+            $msg = "Please select a leader to assign this complaint";
+            $error_occured = true;
+        } else {
+
+            $this->db->query("BEGIN");
+
+            $ComplaintUniqueId = $this->Complaint_Model->generateComplaintUniqueId();
+
+            $complaint_detail = $this->Complaint_Model->getComplaintDetail($OldComplaintId, $UserProfileId);
+
+            $insertData = array(
+                                'ComplaintUniqueId'         => $ComplaintUniqueId,
+                                'ComplaintTypeId'           => $complaint_detail['ComplaintTypeId'],
+                                'ComplaintSubject'          => $complaint_detail['ComplaintSubject'],
+                                'ComplaintDescription'      => $complaint_detail['ComplaintDescription'],
+                                'ApplicantName'             => $complaint_detail['ApplicantName'],
+                                'ApplicantFatherName'       => $complaint_detail['ApplicantFatherName'],
+                                'ApplicantMobile'           => $complaint_detail['ApplicantMobile'],
+                                'ComplaintStatus'           => $complaint_detail['ComplaintStatus'],
+                                'ComplaintDepartment'       => $complaint_detail['department'],
+                                
+                                'ComplaintPrivacy'          => $complaint_detail['ComplaintPrivacy'],
+
+                                'ComplaintPlace'            => $complaint_detail['place'],
+                                'ComplaintAddress'          => $complaint_detail['address'],
+                                'ComplaintLatitude'         => $complaint_detail['latitude'],
+                                'ComplaintLongitude'        => $complaint_detail['longitude'],
+                                
+                                'ScheduleOn'                => date('Y-m-d H:i:s'),
+                                'AddedBy'                   => $UserProfileId,
+                                'UpdatedBy'                 => $UserProfileId,
+                                'AddedOn'                   => date('Y-m-d H:i:s'),
+                                'UpdatedOn'                 => date('Y-m-d H:i:s'),
+                            );
+            $ComplaintId = $this->Complaint_Model->saveMyComplaint($insertData);
+
+            if($ComplaintId > 0) {
+                
+                $this->Complaint_Model->assignComplaintToLeaderSubLeader($ComplaintId, $UserProfileId, $AssignedTo);
+                
+                $this->Complaint_Model->copyMyComplaintMembers($OldComplaintId, $ComplaintId, $UserProfileId);
+                
+                $this->Complaint_Model->copyMyComplaintAttachment($OldComplaintId, $ComplaintId, $UserProfileId);
+
+                $complaint_detail = $this->Complaint_Model->getComplaintDetail($ComplaintId, $UserProfileId);
+
+                $this->db->query("COMMIT");
+
+                $msg = "Complaint copied successfully";
+
+            } else {
+                $this->db->query("ROLLBACK");
+                $msg = "Complaint not saved. Error occured";
+                $error_occured = true;
+            }
+        }
+
+        if($error_occured == true) {
+            $array = array(
+                            "status"        => 'failed',
+                            "message"       => $msg,
+                        );
+        } else {
+
+            $array = array(
+                           "status"         => 'success',
+                           "result"         => $complaint_detail,
+                           "message"        => $msg,
                            );
         }
         displayJsonEncode($array);

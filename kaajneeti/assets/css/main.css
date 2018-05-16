@@ -3862,7 +3862,7 @@ WIDGETS
 }
 
 .portlet{
-    padding: 11px 24px; 
+    padding: 5px; 
 }
 /*.breadcrumb{
     margin-bottom: 0px !important;
@@ -5236,4 +5236,8 @@ font-size: 28px;
     width: 30px !important;
     height: 30px !important;
     margin: 9px 20px 0 !important;
+}
+.page-sidebar-closed .list-inline > li {
+    display: block;
+    padding: 5px;
 }

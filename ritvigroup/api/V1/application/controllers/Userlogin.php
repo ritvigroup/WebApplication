@@ -76,13 +76,13 @@ class Userlogin extends CI_Controller {
 	                );
 
 	                if($social_type == "facebook") {
-	                	array_merge($updateData, array('FacebookProfileId' => $id));
+	                	$updateData = array_merge($updateData, array('FacebookProfileId' => $id));
 					} else if($social_type == "google") {
-						array_merge($updateData, array('GoogleProfileId' => $id));
+						$updateData = array_merge($updateData, array('GoogleProfileId' => $id));
 					} else if($social_type == "twitter") {
-						array_merge($updateData, array('TwitterProfileId' => $id));
+						$updateData = array_merge($updateData, array('TwitterProfileId' => $id));
 					} else if($social_type == "linkedin") {
-						array_merge($updateData, array('LinkedinProfileId' => $id));
+						$updateData = array_merge($updateData, array('LinkedinProfileId' => $id));
 					}
 
                 	if($MobileUserId == $EmailUserId) {
@@ -122,20 +122,20 @@ class Userlogin extends CI_Controller {
 					                );
 
                 	if($social_type == "facebook") {
-	                	array_merge($insertData, array('FacebookProfileId' => $id));
+	                	$insertData = array_merge($insertData, array('FacebookProfileId' => $id));
 					} else if($social_type == "google") {
-						array_merge($insertData, array('GoogleProfileId' => $id));
+						$insertData = array_merge($insertData, array('GoogleProfileId' => $id));
 					} else if($social_type == "twitter") {
-						array_merge($insertData, array('TwitterProfileId' => $id));
+						$insertData = array_merge($insertData, array('TwitterProfileId' => $id));
 					} else if($social_type == "linkedin") {
-						array_merge($insertData, array('LinkedinProfileId' => $id));
+						$insertData = array_merge($insertData, array('LinkedinProfileId' => $id));
 					}
 
 					if($mobile != '') {
-						array_merge($insertData, array('UserMobile' => $mobile));
+						$insertData = array_merge($insertData, array('UserMobile' => $mobile));
 					}
 					if($email != '') {
-						array_merge($insertData, array('UserEmail' => $email));
+						$insertData = array_merge($insertData, array('UserEmail' => $email));
 					}
 
 		            $UserId = $this->User_Model->insertUser($insertData);
@@ -202,6 +202,17 @@ class Userlogin extends CI_Controller {
             }
 
             if($error_occured != true) {
+
+                if($login_type == '' || $login_type == 1) {
+                    $user_profile = $this->User_Model->getCitizenProfileInformation($UserId);
+
+                    $this->User_Model->saveUserProfilePhoto('photo', $UserId, $user_profile['UserProfileId'], 1);
+
+                } else if($login_type == 2) {
+                    $user_profile = $this->User_Model->getLeaderProfileInformation($UserId);
+
+                    $this->User_Model->saveUserProfilePhoto('photo', $UserId, $user_profile['UserProfileId'], 1);
+                }
 
                 if($login_type == '' || $login_type == 1) {
                     $user_profile = $this->User_Model->getCitizenProfileInformation($UserId);

@@ -469,7 +469,7 @@ class User_Model extends CI_Model {
                                 "MiddleName"                    => (($res_u['MiddleName'] != NULL) ? $res_u['MiddleName'] : ""),
                                 "LastName"                      => (($res_u['LastName'] != NULL) ? $res_u['LastName'] : ""),
                                 "UserTypeId"                    => (($res_u['UserTypeId'] != NULL) ? $res_u['UserTypeId'] : ""),
-                                "DateOfBirth"                   => (($res_u['DateOfBirth'] != '0000-00-00' || $res_u['DateOfBirth'] != NULL) ? $res_u['DateOfBirth'] : ""),
+                                "DateOfBirth"                   => (($res_u['DateOfBirth'] != '0000-00-00' && $res_u['DateOfBirth'] != NULL && $res_u['DateOfBirth'] != '') ? $res_u['DateOfBirth'] : ""),
                                 "Gender"                        => (($res_u['Gender'] != NULL) ? $res_u['Gender'] : ""),
                                 "MaritalStatus"                 => (($res_u['MaritalStatus'] != NULL) ? $res_u['MaritalStatus'] : ""),
                                 "Email"                         => (($res_u['Email'] != NULL) ? $res_u['Email'] : ""),
@@ -1498,14 +1498,21 @@ class User_Model extends CI_Model {
     }
 
     // Get My All Favourite Leader
-    public function getMyAllFavouriteLeader($UserId, $UserProfileId) {
+    public function getMyAllFavouriteLeader($UserId, $UserProfileId, $search_text = '') {
 
-        $query = $this->db->query("SELECT ufu.*, up.UserId 
+        $sql = "SELECT ufu.*, up.UserId 
                                         FROM ".$this->userFavUserTbl." AS ufu 
                                         LEFT JOIN ".$this->userProfileTbl." up ON ufu.FriendUserProfileId = up.UserProfileId
                                         WHERE 
                                             ufu.`UserProfileId` = '".$UserProfileId."'
-                                        AND (up.UserTypeId = '2' OR up.UserTypeId = '3')");
+                                        AND (up.UserTypeId = '2' OR up.UserTypeId = '3')";
+
+        if($search_text != '') {
+            $sql .= " AND (up.FirstName LIKE '%".$search_text."%' OR up.LastName LIKE '%".$search_text."%' OR up.Email LIKE '%".$search_text."%')";
+            $sql .= " LIMIT 0, 20";
+
+        }
+        $query = $this->db->query($sql);
 
         $res_u = $query->result_array();
 
@@ -2331,6 +2338,23 @@ class User_Model extends CI_Model {
                 }
             }
             return $result;
+        }
+    }
+
+
+    // Validate User Profile Username Exist for my team
+    public function validateUsernameForUserprofileExist($UserName, $UserProfileId) {
+        $this->db->select('UserProfileId');
+        $this->db->from($this->userProfileTbl);
+        $this->db->where('ProfileUserName', $UserName);
+        $this->db->where('UserProfileId !=', $UserProfileId);
+        $this->db->limit(1);
+        $query = $this->db->get();
+        $result = $query->row_array();
+        if ($query->num_rows() > 0) {
+            return true;
+        } else {
+            return false;
         }
     }
 

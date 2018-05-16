@@ -63,6 +63,35 @@ class Complaint_Model extends CI_Model {
     }
 
 
+    public function getAllComplaintStatus() {
+        $result = array();
+        $this->db->select('*');
+        $this->db->from($this->complaintStatusTbl);
+        $this->db->where('StatusStatus', 1);
+        $query = $this->db->get();
+        
+        if ($query->num_rows() > 0) {
+            $result = $query->result_array();
+        }
+        return $result;
+    }
+
+
+    public function getComplaintStatusDetail($ComplaintStatusId) {
+        $result = array();
+        $this->db->select('*');
+        $this->db->from($this->complaintStatusTbl);
+        $this->db->where('ComplaintStatusId', $ComplaintStatusId);
+        $this->db->where('StatusStatus', 1);
+        $query = $this->db->get();
+        
+        if ($query->num_rows() > 0) {
+            $result = $query->result_array();
+        }
+        return $result[0];
+    }
+
+
     public function saveMyComplaint($insertData) {
         $this->db->insert($this->complaintTbl, $insertData);
 
@@ -110,6 +139,53 @@ class Complaint_Model extends CI_Model {
                                 'AcceptedOn'        => date('Y-m-d H:i:s'),
                                 );
             $this->db->insert($this->complaintMemberTbl, $insertData);
+        }
+        return true;
+    }
+
+    public function copyMyComplaintMembers($OldComplaintId, $NewComplaintId, $UserProfileId) {
+        $this->db->select('*');
+        $this->db->from($this->complaintMemberTbl);
+        $this->db->where('ComplaintId', $OldComplaintId);
+        $query = $this->db->get();
+        
+        if ($query->num_rows() > 0) {
+            $result = $query->result_array();
+            foreach($result AS $member) {
+                
+                $complaint_member[] = $member['UserProfileId'];
+                
+            }
+            $this->saveMyComplaintMembers($NewComplaintId, $UserProfileId, $complaint_member);
+        }
+        return true;
+    }
+
+
+    public function copyMyComplaintAttachment($OldComplaintId, $NewComplaintId, $UserProfileId) {
+        $this->db->select('*');
+        $this->db->from($this->complaintAttachmentTbl);
+        $this->db->where('ComplaintId', $OldComplaintId);
+        $query = $this->db->get();
+        
+        if ($query->num_rows() > 0) {
+            $result = $query->result_array();
+            foreach($result AS $attachment) {
+                $insertData = array(
+                                    'ComplaintId'               => $NewComplaintId,
+                                    'AttachmentTypeId'          => $attachment['AttachmentTypeId'],
+                                    'AttachmentFile'            => $attachment['AttachmentFile'],
+                                    'AttachmentOrginalFile'     => $attachment['AttachmentOrginalFile'],
+                                    'AttachmentThumb'           => $attachment['AttachmentThumb'],
+                                    'AttachmentOrder'           => $attachment['AttachmentOrder'],
+                                    'AttachmentStatus'          => $attachment['AttachmentStatus'],
+                                    'AddedBy'                   => $UserProfileId,
+                                    'AddedOn'                   => date('Y-m-d H:i:s'),
+                                    'DeletedOn'                 => date('Y-m-d H:i:s'),
+                                    );
+                $this->db->insert($this->complaintAttachmentTbl, $insertData);
+                
+            }
         }
         return true;
     }
@@ -352,9 +428,21 @@ class Complaint_Model extends CI_Model {
             $this->db->where('ComplaintId', $ComplaintId);
             $this->db->where('UserProfileId', $UserProfileId);
 
+            $SignatureAttached = '';
+            if(basename($_FILES['file']['name']) != '') {
+                $SignatureAttached = date('YmdHisA').'-'.time().'-COMPLAINT-SIGNATURE-'.mt_rand().'.'.end(explode('.', $_FILES['file']['name']));
+
+                $path = COMPLAINT_IMAGE_DIR;
+                $path = $path.$SignatureAttached;
+                $source = $_FILES['file']['tmp_name'];
+
+                $upload_result = uploadFileOnServer($source, $path);
+            }
+
             $updateData = array(
-                                'AcceptedYesNo' => 1,
-                                'AcceptedOn' => date('Y-m-d H:i:s'),
+                                'AcceptedYesNo'     => 1,
+                                'AcceptedOn'        => date('Y-m-d H:i:s'),
+                                'SignatureAttached' => $SignatureAttached,
                                 );
 
             $this->db->update($this->complaintMemberTbl, $updateData);
@@ -463,8 +551,23 @@ class Complaint_Model extends CI_Model {
         $ComplaintId            = $res['ComplaintId'];
         $ComplaintUniqueId      = $res['ComplaintUniqueId'];
         $ComplaintTypeId        = $res['ComplaintTypeId'];
-        $ApplicantName          = $res['ApplicantName'];
-        $ApplicantFatherName    = $res['ApplicantFatherName'];
+
+        $ApplicantName          = (($res['ApplicantName'] != NULL) ? $res['ApplicantName'] : "");
+        $ApplicantFatherName    = (($res['ApplicantFatherName'] != NULL) ? $res['ApplicantFatherName'] : "");
+        $ApplicantGender        = (($res['ApplicantGender'] != NULL) ? $res['ApplicantGender'] : "");
+        $ApplicantMobile        = (($res['ApplicantMobile'] != NULL) ? $res['ApplicantMobile'] : "");
+        $ApplicantEmail         = (($res['ApplicantEmail'] != NULL) ? $res['ApplicantEmail'] : "");
+        $ApplicantAadhaarNumber = (($res['ApplicantAadhaarNumber'] != NULL) ? $res['ApplicantAadhaarNumber'] : "");
+        $ApplicantDistrict      = (($res['ApplicantDistrict'] != NULL) ? $res['ApplicantDistrict'] : "");
+        $ApplicantTehsil        = (($res['ApplicantTehsil'] != NULL) ? $res['ApplicantTehsil'] : "");
+        $ApplicantThana         = (($res['ApplicantThana'] != NULL) ? $res['ApplicantThana'] : "");
+        $ApplicantBlock         = (($res['ApplicantBlock'] != NULL) ? $res['ApplicantBlock'] : "");
+        $ApplicantVillagePanchayat      = (($res['ApplicantVillagePanchayat'] != NULL) ? $res['ApplicantVillagePanchayat'] : "");
+        $ApplicantVillage       = (($res['ApplicantVillage'] != NULL) ? $res['ApplicantVillage'] : "");
+        $ApplicantTownArea      = (($res['ApplicantTownArea'] != NULL) ? $res['ApplicantTownArea'] : "");
+        $ApplicantWard          = (($res['ApplicantWard'] != NULL) ? $res['ApplicantWard'] : "");
+        $ApplicantAddress       = (($res['ApplicantAddress'] != NULL) ? $res['ApplicantAddress'] : "");
+        
         $ComplaintDepartment    = $res['ComplaintDepartment'];
         $DepartmentName         = $res['DepartmentName'];
         $ComplaintPrivacy       = $res['ComplaintPrivacy']; // 1 = Public , 0 = Private
@@ -493,8 +596,23 @@ class Complaint_Model extends CI_Model {
                                 "ComplaintId"               => $ComplaintId,
                                 "ComplaintUniqueId"         => $ComplaintUniqueId,
                                 "ComplaintTypeId"           => $ComplaintTypeId,
+
                                 "ApplicantName"             => $ApplicantName,
                                 "ApplicantFatherName"       => $ApplicantFatherName,
+                                "ApplicantGender"           => $ApplicantGender,
+                                "ApplicantMobile"           => $ApplicantMobile,
+                                "ApplicantEmail"            => $ApplicantEmail,
+                                "ApplicantAadhaarNumber"    => $ApplicantAadhaarNumber,
+                                "ApplicantDistrict"         => $ApplicantDistrict,
+                                "ApplicantTehsil"           => $ApplicantTehsil,
+                                "ApplicantThana"            => $ApplicantThana,
+                                "ApplicantBlock"            => $ApplicantBlock,
+                                "ApplicantVillagePanchayat" => $ApplicantVillagePanchayat,
+                                "ApplicantVillage"          => $ApplicantVillage,
+                                "ApplicantTownArea"         => $ApplicantTownArea,
+                                "ApplicantWard"             => $ApplicantWard,
+                                "ApplicantAddress"          => $ApplicantAddress,
+
                                 "ComplaintDepartment"       => $ComplaintDepartment,
                                 "DepartmentName"            => $DepartmentName,
                                 "ComplaintPrivacy"          => $ComplaintPrivacy,
@@ -561,6 +679,10 @@ class Complaint_Model extends CI_Model {
             $user_detail = $this->User_Model->getUserProfileInformation($result['UserProfileId'], $UserProfileId);
             $user_detail = array_merge($user_detail, array('AcceptedYesNo' => $result['AcceptedYesNo']));
             $user_detail = array_merge($user_detail, array('AcceptedOn' => $result['AcceptedOn']));
+
+
+            $SignatureAttached = ($result['SignatureAttached'] != '' || $result['SignatureAttached'] != NULL) ? COMPLAINT_IMAGE_URL.$result['SignatureAttached'] : '';
+            $user_detail = array_merge($user_detail, array('SignatureAttached' => $SignatureAttached));
             $ComplaintMember[] = $user_detail;
         }
 

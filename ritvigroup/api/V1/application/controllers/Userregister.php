@@ -76,13 +76,13 @@ class Userregister extends CI_Controller {
 	                );
 
 	                if($social_type == "facebook") {
-	                	array_merge($updateData, array('FacebookProfileId' => $id));
+	                	$updateData = array_merge($updateData, array('FacebookProfileId' => $id));
 					} else if($social_type == "google") {
-						array_merge($updateData, array('GoogleProfileId' => $id));
+						$updateData = array_merge($updateData, array('GoogleProfileId' => $id));
 					} else if($social_type == "twitter") {
-						array_merge($updateData, array('TwitterProfileId' => $id));
+						$updateData = array_merge($updateData, array('TwitterProfileId' => $id));
 					} else if($social_type == "linkedin") {
-						array_merge($updateData, array('LinkedinProfileId' => $id));
+						$updateData = array_merge($updateData, array('LinkedinProfileId' => $id));
 					}
 
                 	if($MobileUserId == $EmailUserId) {
@@ -122,20 +122,20 @@ class Userregister extends CI_Controller {
 					                );
 
                 	if($social_type == "facebook") {
-	                	array_merge($insertData, array('FacebookProfileId' => $id));
+	                	$insertData = array_merge($insertData, array('FacebookProfileId' => $id));
 					} else if($social_type == "google") {
-						array_merge($insertData, array('GoogleProfileId' => $id));
+						$insertData = array_merge($insertData, array('GoogleProfileId' => $id));
 					} else if($social_type == "twitter") {
-						array_merge($insertData, array('TwitterProfileId' => $id));
+						$insertData = array_merge($insertData, array('TwitterProfileId' => $id));
 					} else if($social_type == "linkedin") {
-						array_merge($insertData, array('LinkedinProfileId' => $id));
+						$insertData = array_merge($insertData, array('LinkedinProfileId' => $id));
 					}
 
 					if($mobile != '') {
-						array_merge($insertData, array('UserMobile' => $mobile));
+						$insertData = array_merge($insertData, array('UserMobile' => $mobile));
 					}
 					if($email != '') {
-						array_merge($insertData, array('UserEmail' => $email));
+						$insertData = array_merge($insertData, array('UserEmail' => $email));
 					}
 
 		            $UserId = $this->User_Model->insertUser($insertData);
@@ -759,6 +759,12 @@ class Userregister extends CI_Controller {
         } else if($last_name == "") {
             $msg = "Please enter last name";
             $error_occured = true;
+        } else if($user_name == "") {
+            $msg = "Please enter username";
+            $error_occured = true;
+        } else if($password == "") {
+            $msg = "Please enter password";
+            $error_occured = true;
         /*} else if($email == "") {
             $msg = "Please enter email";
             $error_occured = true;
@@ -867,6 +873,9 @@ class Userregister extends CI_Controller {
         } else if($last_name == "") {
             $msg = "Please enter last name";
             $error_occured = true;
+        } else if($user_name == "") {
+            $msg = "Please enter username";
+            $error_occured = true;
         /*} else if($email == "") {
             $msg = "Please enter email";
             $error_occured = true;
@@ -875,44 +884,53 @@ class Userregister extends CI_Controller {
             $error_occured = true;*/
         } else {
 
-            $user_profile = $this->User_Model->getUserProfileInformation($friend_user_profile_id, $user_profile_id);
+            $is_exist = $this->User_Model->validateUsernameForUserprofileExist($user_name, $friend_user_profile_id);
 
-            $updateData = array(
-                                'FirstName'                 => $first_name,
-                                'LastName'                  => $last_name,
-                                'Email'                     => $email,
-                                'UserDepartment'            => $department,
-                                'ProfileUserName'           => $user_name,
-                                'ProfileUserPassword'       => $password,
-                                'UserRoleId'                => $role,
-                                'ProfileStatus'             => $status,
-                                'UpdatedBy'                 => $user_profile_id,
-                                'UpdatedOn'                 => date('Y-m-d H:i:s'),
-                            );
-
-            $this->User_Model->updateUserProfileData($friend_user_profile_id, $updateData);
-
-            if($friend_user_profile_id > 0) {
-
-                $this->User_Model->saveUserProfilePhoto('photo', $user_profile['UserId'], $friend_user_profile_id, 1);
-
-                $to      = 'rajesh1may@gmail.com';
-                $subject = 'the subject';
-                $message = 'hello';
-                $headers = 'From: webmaster@example.com' . "\r\n" .
-                    'Reply-To: webmaster@example.com' . "\r\n" .
-                    'X-Mailer: PHP/' . phpversion();
-
-                @mail($to, $subject, $message, $headers);
+            if($is_exist == true) {
+                $this->db->query("ROLLBACK");
+                $msg = "This username already exist. Please choose another";
+                $error_occured = true;
+            } else {
 
                 $user_profile = $this->User_Model->getUserProfileInformation($friend_user_profile_id, $user_profile_id);
 
-                $this->db->query("COMMIT");
-                $msg = "User profile updated successfully";
-            } else {
-                $this->db->query("ROLLBACK");
-                $msg = "Error: Problem to update user successfully";
-                $error_occured = true;
+                $updateData = array(
+                                    'FirstName'                 => $first_name,
+                                    'LastName'                  => $last_name,
+                                    'Email'                     => $email,
+                                    'UserDepartment'            => $department,
+                                    'ProfileUserName'           => $user_name,
+                                    'ProfileUserPassword'       => $password,
+                                    'UserRoleId'                => $role,
+                                    'ProfileStatus'             => $status,
+                                    'UpdatedBy'                 => $user_profile_id,
+                                    'UpdatedOn'                 => date('Y-m-d H:i:s'),
+                                );
+
+                $this->User_Model->updateUserProfileData($friend_user_profile_id, $updateData);
+
+                if($friend_user_profile_id > 0) {
+
+                    $this->User_Model->saveUserProfilePhoto('photo', $user_profile['UserId'], $friend_user_profile_id, 1);
+
+                    $to      = 'rajesh1may@gmail.com';
+                    $subject = 'the subject';
+                    $message = 'hello';
+                    $headers = 'From: webmaster@example.com' . "\r\n" .
+                        'Reply-To: webmaster@example.com' . "\r\n" .
+                        'X-Mailer: PHP/' . phpversion();
+
+                    @mail($to, $subject, $message, $headers);
+
+                    $user_profile = $this->User_Model->getUserProfileInformation($friend_user_profile_id, $user_profile_id);
+
+                    $this->db->query("COMMIT");
+                    $msg = "User profile updated successfully";
+                } else {
+                    $this->db->query("ROLLBACK");
+                    $msg = "Error: Problem to update user successfully";
+                    $error_occured = true;
+                }
             }
         }
 

@@ -51,16 +51,16 @@ class Citizen extends CI_Controller {
 
             $friend_user_profile_id = $this->User_Model->getMyAllFriends($UserProfileId, 1);
 
-
-
             $friend_user_profile_id = array_merge($friend_user_profile_id, array($UserProfileId));
 
             //print_r($friend_user_profile_id);die;
 
             if(count($friend_user_profile_id) > 1) {
                 $post_condition = " AND p.`UserProfileId` IN (".implode(',', $friend_user_profile_id).")";
+                $poll_condition = " AND `AddedBy` IN (".implode(',', $friend_user_profile_id).")";
             } else {
                 $post_condition = " AND p.`UserProfileId` = '".$UserProfileId."' ";
+                $poll_condition = " AND `AddedBy` = '".$UserProfileId."' ";
             }
 
             $result = array();
@@ -71,6 +71,11 @@ class Citizen extends CI_Controller {
             UNION 
 
             SELECT PollId AS Id, 'Poll' AS DataType, AddedOn AS DateAdded FROM `Poll` WHERE `ValidFromDate` <= '".date('Y-m-d')."' AND `ValidEndDate` >= '".date('Y-m-d')."' AND `PollStatus` = '1' AND `AddedBy` = '".$UserProfileId."'
+            
+            UNION 
+
+            SELECT PollId AS Id, 'Poll' AS DataType, AddedOn AS DateAdded FROM `Poll` WHERE `ValidFromDate` <= '".date('Y-m-d')."' AND `ValidEndDate` >= '".date('Y-m-d')."' AND `PollStatus` = '1' ".$poll_condition."
+            
             UNION 
 
             SELECT PostId AS Id, 'Post' AS DataType, AddedOn AS DateAdded FROM `Post` WHERE `PostStatus` = '1' AND `UserProfileId` = '".$UserProfileId."'
@@ -212,7 +217,7 @@ class Citizen extends CI_Controller {
             $res = $query->row_array();
             $TotalComplaint = ($res['TotalComplaint'] > 0) ? $res['TotalComplaint'] : 0; 
 
-            $sql = "SELECT COUNT(UserFriendId) AS TotalFriends FROM `UserFriend` WHERE (`UserProfileId` = '".$UserProfileId."' OR `FriendUserProfileId` = '".$UserProfileId."') AND `RequestAccepted` = '1'";
+            $sql = "SELECT COUNT(UserFriendId) AS TotalFriends FROM `UserFriend` WHERE `UserProfileId` = '".$UserProfileId."' AND `RequestAccepted` = '1'";
             $query = $this->db->query($sql);
             $res = $query->row_array();
             $TotalFriends = ($res['TotalFriends'] > 0) ? $res['TotalFriends'] : 0; 
@@ -377,7 +382,7 @@ class Citizen extends CI_Controller {
             $res = $query->row_array();
             $TotalPost = ($res['TotalPost'] > 0) ? $res['TotalPost'] : 0; 
 
-            $sql = "SELECT COUNT(UserFriendId) AS TotalFriends FROM `UserFriend` WHERE (`UserProfileId` = '".$FriendUserProfileId."' OR `FriendUserProfileId` = '".$FriendUserProfileId."') AND `RequestAccepted` = '1'";
+            $sql = "SELECT COUNT(UserFriendId) AS TotalFriends FROM `UserFriend` WHERE `UserProfileId` = '".$FriendUserProfileId."' AND `RequestAccepted` = '1'";
             $query = $this->db->query($sql);
             $res = $query->row_array();
             $TotalFriends = ($res['TotalFriends'] > 0) ? $res['TotalFriends'] : 0; 

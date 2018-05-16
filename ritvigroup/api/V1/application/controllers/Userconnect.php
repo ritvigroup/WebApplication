@@ -124,6 +124,8 @@ class Userconnect extends CI_Controller {
         $error_occured = false;
         $UserId         = $this->input->post('user_id');
         $UserProfileId  = $this->input->post('user_profile_id');
+        $search_text    = $this->input->post('q');
+        $search_text    = ($search_text != '') ? $search_text : '';
         
                 
         if($UserId == "") {
@@ -134,12 +136,10 @@ class Userconnect extends CI_Controller {
             $error_occured = true;
         } else {
 
-            $fav_leader = $this->User_Model->getMyAllFavouriteLeader($UserId, $UserProfileId);
+            $fav_leader = $this->User_Model->getMyAllFavouriteLeader($UserId, $UserProfileId, $search_text);
 
             if(count($fav_leader) > 0) {
-
                 $msg = "Favourite leader found successfully";
-
             } else {
                 $msg = "No leader in your favourite list.";
                 $error_occured = true;
@@ -155,7 +155,7 @@ class Userconnect extends CI_Controller {
 
             $array = array(
                            "status"     => 'success',
-                           "result"    => $fav_leader,
+                           "result"     => $fav_leader,
                            "message"    => $msg,
                            );
         }

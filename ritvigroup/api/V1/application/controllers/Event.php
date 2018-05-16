@@ -106,7 +106,6 @@ class Event extends CI_Controller {
     }
 
 
-
     public function saveLikeUnlikeEvent() {
         $error_occured = false;
 
@@ -403,10 +402,30 @@ class Event extends CI_Controller {
 
             $validate_event_already = $this->Event_Model->validateUserProfileAlreadyInterested($EventId, $UserProfileId);
 
-            if($validate_poll_already > 0) { 
-                $this->db->query("ROLLBACK");
-                $msg = "You had already shows your interest";
-                $error_occured = true;
+            if($validate_event_already['EventInterestId'] > 0) { 
+                // $this->db->query("ROLLBACK");
+                // $msg = "You had already shows your interest";
+                // $error_occured = true;
+
+                $EventInterestId = $validate_event_already['EventInterestId'];
+
+                $updateData = array(
+                                    'InterestType'      => $interest_type,
+                                    'AddedOn'           => date('Y-m-d H:i:s'),
+                                );
+
+                $whereData = array(
+                                    'EventInterestId'   => $EventInterestId,
+                                );
+
+                $this->Event_Model->updateMyEventInterest($updateData, $whereData);
+
+                $this->db->query("COMMIT");
+                    
+                $event_detail = $this->Event_Model->getEventDetail($EventId, $UserProfileId);
+
+                $msg = "Event Interest updated successfully";
+
             } else {
 
                 $insertData = array(
@@ -422,7 +441,6 @@ class Event extends CI_Controller {
                     $this->db->query("COMMIT");
                     
                     $event_detail = $this->Event_Model->getEventDetail($EventId, $UserProfileId);
-
 
                     $msg = "Event Interest submitted successfully";
 

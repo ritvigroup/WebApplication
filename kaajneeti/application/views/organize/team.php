@@ -36,7 +36,7 @@
                                 <div class="mbm">
                                     <div class="row head">
                                         <div class="user-heading">
-                                            <div class="col-md-9">
+                                            <div class="col-md-9 border_bottom">
                                                 <div class="connections-tabs">
                                                     <ul class="connect-tab-menu">
                                                         <li class="active"><a href="<?=base_url();?>organize/team">Team</a></li>
@@ -48,8 +48,8 @@
                                                     </ul>
                                                 </div>
                                             </div>
-                                            <div class="col-md-3">
-                                                <div class="actions action-right">
+                                            <div class="col-md-3 border_bottom ">
+                                                <div class="actions action-right margin_bottom">
                                                     <div class="dropdown">
                                                         <button onclick="myFunction()" class="dropbtn organize-button">&nbsp;Manage <span class="caret"></span>   </button>&nbsp;
                                                         <div id="myDropdown" class="dropdown-content">

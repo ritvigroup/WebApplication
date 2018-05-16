@@ -30,6 +30,28 @@ class Payment_Model extends CI_Model {
     }
 
 
+    // Get Payment API Detail By Name
+    public function getPaymentGatewayDetailByName($PaymentGatewayName) {
+        $payment_gateway_detail = array();
+        if(isset($PaymentGatewayName) && $PaymentGatewayName != '') {
+
+            $this->db->select('*');
+            $this->db->from($this->PaymentGatewayTbl);
+            $this->db->where('PaymentGatewayName', $PaymentGatewayName);
+            $query = $this->db->get();
+            
+            if ($query->num_rows() > 0) {
+                $res = $query->row_array();
+                $payment_gateway_detail = $res;
+            }
+            
+        } else {
+            $payment_gateway_detail = array();
+        }
+        return $payment_gateway_detail;
+    }
+
+
     // Get Payment API Detail
     public function getPaymentGatewayApiDetail($PaymentGatewayId) {
         $api_detail = array();
@@ -201,12 +223,15 @@ class Payment_Model extends CI_Model {
     public function returnPaymentTransactionLogDetail($res) {
         $PaymentTransactionLogId    = $res['PaymentTransactionLogId'];
         $PaymentGatewayId           = $res['PaymentGatewayId'];
+        $IsWalletUse                = ($res['IsWalletUse'] > 0) ? $res['IsWalletUse'] : 0;
         
        
         $PaymentGatewayName         = (($res['PaymentGatewayName'] != NULL) ? $res['PaymentGatewayName'] : "");
         $TransactionId              = (($res['TransactionId'] != NULL) ? $res['TransactionId'] : "");
         $TransactionDate            = (($res['TransactionDate'] != NULL) ? $res['TransactionDate'] : "");
         $TransactionAmount          = (($res['TransactionAmount'] != NULL) ? $res['TransactionAmount'] : "");
+        $GatewayTransaction         = (($res['GatewayTransaction'] != NULL) ? $res['GatewayTransaction'] : "");
+        $WalletTransaction          = (($res['WalletTransaction'] != NULL) ? $res['WalletTransaction'] : "");
         $TransactionShippingAmount  = (($res['TransactionShippingAmount'] != NULL) ? $res['TransactionShippingAmount'] : "");
         $DebitOrCredit              = (($res['DebitOrCredit'] != NULL) ? $res['DebitOrCredit'] : "");
         $TransactionComment         = (($res['TransactionComment'] != NULL) ? $res['TransactionComment'] : "");
@@ -220,10 +245,13 @@ class Payment_Model extends CI_Model {
         $data_array = array(
                             "PaymentTransactionLogId"       => $PaymentTransactionLogId,
                             "PaymentGatewayId"              => $PaymentGatewayId,
+                            "IsWalletUse"                   => $IsWalletUse,
                             "PaymentGatewayName"            => $PaymentGatewayName,
                             "TransactionId"                 => $TransactionId,
                             "TransactionDate"               => $TransactionDate,
                             "TransactionAmount"             => $TransactionAmount,
+                            "GatewayTransaction"            => $GatewayTransaction,
+                            "WalletTransaction"             => $WalletTransaction,
                             "TransactionShippingAmount"     => $TransactionShippingAmount,
                             "DebitOrCredit"                 => $DebitOrCredit,
                             "TransactionComment"            => $TransactionComment,
@@ -268,9 +296,12 @@ class Payment_Model extends CI_Model {
         $log_detail = array();
         if(isset($PointTransactionLogId) && $PointTransactionLogId > 0) {
 
-            $this->db->select('*');
-            $this->db->from($this->PointTransactionLogTbl);
-            $this->db->where('PointTransactionLogId', $PointTransactionLogId);
+            $this->db->select('ptl.*, pg.PaymentGatewayName');
+            $this->db->from($this->PointTransactionLogTbl.' AS ptl');
+            $this->db->join($this->PaymentGatewayTbl.' AS pg', 'ptl.PaymentGatewayId = pg.PaymentGatewayId' , 'LEFT');
+
+
+            $this->db->where('ptl.PointTransactionLogId', $PointTransactionLogId);
             $query = $this->db->get();
             
             if ($query->num_rows() > 0) {
@@ -288,6 +319,12 @@ class Payment_Model extends CI_Model {
     // Return Point Transaction Log Detail
     public function returnPointTransactionLogDetail($res) {
         $PointTransactionLogId      = $res['PointTransactionLogId'];
+        $PaymentGatewayId           = $res['PaymentGatewayId'];
+        $IsWalletUse                = ($res['IsWalletUse'] > 0) ? $res['IsWalletUse'] : 0;
+        
+       
+        $PaymentGatewayName         = (($res['PaymentGatewayName'] != NULL) ? $res['PaymentGatewayName'] : "");
+        
         $PointByName                = $res['PointByName'];
         $PointById                  = $res['PointById'];
         
@@ -307,6 +344,9 @@ class Payment_Model extends CI_Model {
 
         $data_array = array(
                             "PointTransactionLogId"         => $PointTransactionLogId,
+                            "PaymentGatewayId"              => $PaymentGatewayId,
+                            "IsWalletUse"                   => $IsWalletUse,
+                            "PaymentGatewayName"            => $PaymentGatewayName,
                             "PointByName"                   => $PointByName,
                             "PointById"                     => $PointById,
                             "TransactionId"                 => $TransactionId,

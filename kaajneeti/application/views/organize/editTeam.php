@@ -1,9 +1,9 @@
 <?php
 $user_profile = $SubLeaderDetail->result;
 
-echo '<pre>';
-print_r($SubLeaderDetail);
-echo '</pre>';
+// echo '<pre>';
+// print_r($SubLeaderDetail);
+// echo '</pre>';
 ?>
 <form name="plan_form" method="post" action="" onSubmit="return false;">
     <div class="modal-header">
@@ -95,6 +95,7 @@ echo '</pre>';
                         <div class="form-group">
                             <label>Status: </label>
                             <select class="form-control fileUploadForm" id="status">
+                                <option value="0">Not Accepted</option>
                                 <option value="2">In-Active</option>
                                 <option value="1" <?php if($user_profile->ProfileStatus == 1) { echo ' selected="selected"';}?>>Active</option>
                                 <option value="-1">Delete</option>

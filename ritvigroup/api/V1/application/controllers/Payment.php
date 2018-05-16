@@ -179,10 +179,13 @@ class Payment extends CI_Controller {
 
         $UserProfileId              = $this->input->post('user_profile_id');
         $PaymentGatewayId           = $this->input->post('payment_gateway_id');
+        $IsWalletUse                = ($this->input->post('is_wallet_use') > 0) ? $this->input->post('is_wallet_use') : 0;
         $TransactionId              = $this->input->post('transaction_id');
         $PaymentTo                  = $this->input->post('payment_to_user_profile_id');
         $TransactionDate            = date('Y-m-d H:i:s', strtotime($this->input->post('transaction_date')));
         $TransactionAmount          = $this->input->post('transaction_amount');
+        $GatewayTransaction         = $this->input->post('gateway_amount');
+        $WalletTransaction          = $this->input->post('wallet_amount');
         $TransactionShippingAmount  = $this->input->post('transaction_shipping_amount');
         $TransactionStatus          = $this->input->post('transaction_status'); // 0 = Unsuccessful, 1 = Successful
         $DebitOrCredit              = $this->input->post('debit_or_credit'); // 0 = Debit, 1 = Credit
@@ -200,11 +203,14 @@ class Payment extends CI_Controller {
 
             $insertData = array(
                                 'PaymentGatewayId'          => $PaymentGatewayId,
+                                'IsWalletUse'               => $IsWalletUse,
                                 'TransactionId'             => $TransactionId,
                                 'PaymentBy'                 => $UserProfileId,
                                 'PaymentTo'                 => $PaymentTo,
                                 'TransactionDate'           => $TransactionDate,
                                 'TransactionAmount'         => $TransactionAmount,
+                                'GatewayTransaction'        => $GatewayTransaction,
+                                'WalletTransaction'         => $WalletTransaction,
                                 'TransactionShippingAmount' => $TransactionShippingAmount,
                                 'DebitOrCredit'             => $DebitOrCredit,
                                 'TransactionStatus'         => $TransactionStatus,
@@ -504,13 +510,18 @@ class Payment extends CI_Controller {
 
                 $TransactionId = time().$UserProfileId.mt_rand().rand();
 
+                $PaymentGatewayDetail = $this->Payment_Model->getPaymentGatewayDetailByName('Wallet');
+
                 $insertData = array(
-                                    'PaymentGatewayId'          => 0,
+                                    'PaymentGatewayId'          => $PaymentGatewayDetail['PaymentGatewayId'],
+                                    'IsWalletUse'               => 1,
                                     'TransactionId'             => $TransactionId,
                                     'PaymentBy'                 => $UserProfileId,
                                     'PaymentTo'                 => $UserProfileId,
                                     'TransactionDate'           => date('Y-m-d H:i:s'),
                                     'TransactionAmount'         => $transaction_amount,
+                                    'GatewayTransaction'        => 0.00,
+                                    'WalletTransaction'         => $transaction_amount,
                                     'TransactionShippingAmount' => 0.00,
                                     'DebitOrCredit'             => 1,
                                     'TransactionStatus'         => 1,
@@ -521,6 +532,8 @@ class Payment extends CI_Controller {
 
                 $insertPointData = array(
                                         'PointByName'           => 'PointToRupee',
+                                        'PaymentGatewayId'      => $PaymentGatewayDetail['PaymentGatewayId'],
+                                        'IsWalletUse'           => 1,
                                         'PointById'             => 0,
                                         'TransactionId'         => $TransactionId,
                                         'PaymentBy'             => $UserProfileId,
@@ -597,13 +610,18 @@ class Payment extends CI_Controller {
 
                 $TransactionId = time().$UserProfileId.mt_rand().rand();
 
+                $PaymentGatewayDetail = $this->Payment_Model->getPaymentGatewayDetailByName('Wallet');
+
                 $insertData = array(
-                                    'PaymentGatewayId'          => 0,
+                                    'PaymentGatewayId'          => $PaymentGatewayDetail['PaymentGatewayId'],
+                                    'IsWalletUse'               => 1,
                                     'TransactionId'             => $TransactionId,
                                     'PaymentBy'                 => $UserProfileId,
                                     'PaymentTo'                 => $UserProfileId,
                                     'TransactionDate'           => date('Y-m-d H:i:s'),
                                     'TransactionAmount'         => $rupee,
+                                    'GatewayTransaction'        => 0.00,
+                                    'WalletTransaction'         => $rupee,
                                     'TransactionShippingAmount' => 0.00,
                                     'DebitOrCredit'             => 0,
                                     'TransactionStatus'         => 1,
@@ -613,6 +631,8 @@ class Payment extends CI_Controller {
                 $PaymentTransactionLogId = $this->Payment_Model->savePaymentTransactionLog($insertData);
 
                 $insertPointData = array(
+                                        'PaymentGatewayId'      => $PaymentGatewayDetail['PaymentGatewayId'],
+                                        'IsWalletUse'           => 1,
                                         'PointByName'           => 'RupeeToPoint',
                                         'PointById'             => 0,
                                         'TransactionId'         => $TransactionId,

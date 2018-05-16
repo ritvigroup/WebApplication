@@ -243,7 +243,7 @@ class Poll_Model extends CI_Model {
         //$PollAnswer         = $this->getPollAnswer($PollId);
         
         $PollTotalParticipation = $this->getPollTotalParticipation($PollId);
-        $PollAnswerWithTotalParticipation = $this->getPollAnswerWithTotalParticipation($PollId);
+        $PollAnswerWithTotalParticipation = $this->getPollAnswerWithTotalParticipation($PollId, $UserProfileId);
 
         $validate_poll_already = $this->validateUserProfileAlreadyPolled($PollId, $UserProfileId);
 
@@ -293,7 +293,7 @@ class Poll_Model extends CI_Model {
     }
 
 
-    public function getPollAnswerWithTotalParticipation($PollId) {
+    public function getPollAnswerWithTotalParticipation($PollId, $UserProfileId) {
         
         $PollAnswer = array();
 
@@ -310,10 +310,26 @@ class Poll_Model extends CI_Model {
                                     'PollAnswerImage'   => (($result['PollAnswerImage'] != '') ? POLL_IMAGE_URL.$result['PollAnswerImage'] : ''),
                                     'PollAnswerStatus'  => $result['PollAnswerStatus'],
                                     'TotalAnswerdMe'    => $this->getPollAnswerTotalParticipation($result['PollAnswerId']),
+                                    'MeAnsweredYesNo'   => $this->meAnsweredOnPollAnswer($result['PollAnswerId'], $UserProfileId),
                                 );
         }
 
         return $PollAnswer;
+    }
+
+
+    public function meAnsweredOnPollAnswer($PollAnswerId, $UserProfileId) {
+        $this->db->select('PollParticipationId');
+        $this->db->from($this->pollParticipationTbl);
+        $this->db->where('PollAnswerId', $PollAnswerId);
+        $this->db->where('AddedBy', $UserProfileId);
+        $query = $this->db->get();
+        //$result = $query->row_array();
+        if ($query->num_rows() > 0) {
+            return 1;
+        } else {
+            return 0;
+        }
     }
 
 
