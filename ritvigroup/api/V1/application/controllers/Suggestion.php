@@ -32,6 +32,11 @@ class Suggestion extends CI_Controller {
         $ApplicantMobile        = $this->input->post('applicant_mobile');
         $ApplicantEmail         = $this->input->post('applicant_email');
 
+        $ApplicantAddress       = $this->input->post('address');
+        $ApplicantPlace         = $this->input->post('place');
+        $SuggestionLatitude     = $this->input->post('latitude');
+        $SuggestionLongitude    = $this->input->post('longitude');
+
         $AssignedTo             = $this->input->post('assign_to_profile_id'); // Assign to Favourite Leader/Sub-Leader
 
         $SuggestionUniqueId = $this->Suggestion_Model->generateSuggestionUniqueId();
@@ -47,14 +52,18 @@ class Suggestion extends CI_Controller {
             $this->db->query("BEGIN");
 
             $insertData = array(
-                                'SuggestionUniqueId'         => $SuggestionUniqueId,
-                                'SuggestionSubject'          => $SuggestionSubject,
-                                'SuggestionDescription'      => $SuggestionDescription,
+                                'SuggestionUniqueId'        => $SuggestionUniqueId,
+                                'SuggestionSubject'         => $SuggestionSubject,
+                                'SuggestionDescription'     => $SuggestionDescription,
                                 'ApplicantName'             => $ApplicantName,
                                 'ApplicantFatherName'       => $ApplicantFatherName,
                                 'ApplicantMobile'           => $ApplicantMobile,
-                                'ApplicantEmail'           => $ApplicantEmail,
-                                'SuggestionStatus'           => 1,
+                                'ApplicantEmail'            => $ApplicantEmail,
+                                'ApplicantAddress'          => $ApplicantAddress,
+                                'ApplicantPlace'            => $ApplicantPlace,
+                                'SuggestionLatitude'        => $SuggestionLatitude,
+                                'SuggestionLongitude'       => $SuggestionLongitude,
+                                'SuggestionStatus'          => 1,
                                 'AddedBy'                   => $UserProfileId,
                                 'AddedOn'                   => date('Y-m-d H:i:s'),
                                 'UpdatedOn'                 => date('Y-m-d H:i:s'),

@@ -283,6 +283,12 @@ class Suggestion_Model extends CI_Model {
         $ApplicantGender        = (($res['ApplicantGender'] != NULL) ? $res['ApplicantGender'] : "");
         $ApplicantMobile        = (($res['ApplicantMobile'] != NULL) ? $res['ApplicantMobile'] : "");
         $ApplicantEmail         = (($res['ApplicantEmail'] != NULL) ? $res['ApplicantEmail'] : "");
+
+        $ApplicantAddress       = (($res['ApplicantAddress'] != NULL) ? $res['ApplicantAddress'] : "");
+        $ApplicantPlace         = (($res['ApplicantPlace'] != NULL) ? $res['ApplicantPlace'] : "");
+        $SuggestionLatitude     = (($res['SuggestionLatitude'] != NULL) ? $res['SuggestionLatitude'] : "");
+        $SuggestionLongitude    = (($res['SuggestionLongitude'] != NULL) ? $res['SuggestionLongitude'] : "");
+        
         $ApplicantAadhaarNumber = (($res['ApplicantAadhaarNumber'] != NULL) ? $res['ApplicantAadhaarNumber'] : "");
         $SuggestionSubject      = (($res['SuggestionSubject'] != NULL) ? $res['SuggestionSubject'] : "");
         $SuggestionDescription  = (($res['SuggestionDescription'] != NULL) ? $res['SuggestionDescription'] : "");
@@ -304,6 +310,10 @@ class Suggestion_Model extends CI_Model {
                                 "ApplicantMobile"           => $ApplicantMobile,
                                 "ApplicantEmail"            => $ApplicantEmail,
                                 "ApplicantAadhaarNumber"    => $ApplicantAadhaarNumber,
+                                'ApplicantAddress'          => $ApplicantAddress,
+                                'ApplicantPlace'            => $ApplicantPlace,
+                                'SuggestionLatitude'        => $SuggestionLatitude,
+                                'SuggestionLongitude'       => $SuggestionLongitude,
                                 "SuggestionSubject"         => $SuggestionSubject,
                                 "SuggestionDescription"     => $SuggestionDescription,
                                 "SuggestionStatus"          => $SuggestionStatus,
