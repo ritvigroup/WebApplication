@@ -504,13 +504,13 @@ $(document).ready(function(){
 
         $('#complaint').click(function(){
 
-        	window.location.href ="http://localhost/kaajneeti/complaint/complaintReceived";
+        	window.location.href ="<?=base_url();?>complaint/complaintReceived";
 
         });
 
           $('#suggestion-box').click(function(){
 
-        	window.location.href ="http://localhost/kaajneeti/suggestion/suggestionReceived";
+        	window.location.href ="<?=base_url();?>suggestion/suggestionReceived";
 
         });
 
@@ -518,25 +518,25 @@ $(document).ready(function(){
 
           $('#information-box').click(function(){
 
-        	window.location.href ="http://localhost/kaajneeti/information/information";
+        	window.location.href ="<?=base_url();?>information/information";
 
         });
 
                $('#event-box').click(function(){
 
-        	window.location.href ="http://localhost/kaajneeti/event/event";
+        	window.location.href ="<?=base_url();?>event/event";
 
         });
 
              $('#poll-box').click(function(){
 
-        	window.location.href ="http://localhost/kaajneeti/poll/poll";
+        	window.location.href ="<?=base_url();?>poll/poll";
 
         });
 
            $('#post-box').click(function(){
 
-        	window.location.href ="http://localhost/kaajneeti/post/post";
+        	window.location.href ="<?=base_url();?>post/post";
 
         });
 

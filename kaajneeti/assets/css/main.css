@@ -5029,6 +5029,9 @@ label {
 .plan-table-div{
     margin-top: 20px;
 }
+.goal-hide-btn{
+    padding:6px 40px;
+}
 /*#about-profile ul:hover {
     background-color: #f4f4f4;
     padding-left: 15px; 
@@ -5065,6 +5068,18 @@ label {
     overflow:auto;
 
 }
+
+.complaint-box-hover::-webkit-scrollbar{
+    width: 5px !important;
+    background-color: #fff;
+}
+.complaint-box-hover::-webkit-scrollbar-thumb{
+     background:#f00; 
+}
+
+.complaint-box-hover::-webkit-scrollbar-thumb:hover{
+    background: #555; 
+}
 .feed-element-div{
     padding-bottom: 5px !important;
 }
@@ -5080,6 +5095,18 @@ label {
     display: none;
     overflow:auto;
 }
+
+.suggestion-box-hover::-webkit-scrollbar{
+    width: 5px !important;
+    background-color: #fff;
+}
+.suggestion-box-hover::-webkit-scrollbar-thumb{
+     background:red; 
+}
+
+.suggestion-box-hover::-webkit-scrollbar-thumb:hover{
+    background: #555; 
+}
 .information-box-hover{
     margin: -16px;
     padding: 8px;
@@ -5091,6 +5118,18 @@ label {
     z-index: 1;
     display: none;
     overflow:auto;
+}
+
+.information-box-hover::-webkit-scrollbar{
+    width: 5px !important;
+    background-color: #fff;
+}
+.information-box-hover::-webkit-scrollbar-thumb{
+     background:red; 
+}
+
+.information-box-hover::-webkit-scrollbar-thumb:hover{
+    background: #555; 
 }
 .event-box-hover{
     margin: -16px;
@@ -5104,6 +5143,18 @@ label {
     display: none;
     overflow:auto;
 }
+
+.event-box-hover::-webkit-scrollbar{
+    width: 5px !important;
+    background-color: #fff;
+}
+.event-box-hover::-webkit-scrollbar-thumb{
+     background:red; 
+}
+
+.event-box-hover::-webkit-scrollbar-thumb:hover{
+    background: #555; 
+}
 .poll-box-hover{
     margin: -16px;
     padding: 8px;
@@ -5115,6 +5166,18 @@ label {
     z-index: 1;
     display: none;
     overflow:auto;
+}
+
+.poll-box-hover::-webkit-scrollbar{
+    width: 5px !important;
+    background-color: #fff;
+}
+.poll-box-hover::-webkit-scrollbar-thumb{
+     background:red; 
+}
+
+.poll-box-hover::-webkit-scrollbar-thumb:hover{
+    background: #555; 
 }
 
 .post-box-hover{
@@ -5130,6 +5193,21 @@ label {
     text-align: left;
     overflow:auto;
 }
+
+.post-box-hover::-webkit-scrollbar{
+    width: 5px !important;
+    background-color: #fff;
+}
+.post-box-hover::-webkit-scrollbar-thumb{
+     background:red; 
+}
+
+.post-box-hover::-webkit-scrollbar-thumb:hover{
+    background: #555; 
+}
+
+
+
 .profile-subject{
     font-weight: 300;
     font-size: 10px;
@@ -5286,4 +5364,105 @@ font-size: 28px;
 .page-sidebar-closed .list-inline > li {
     display: block;
     padding: 5px;
+}
+.page-sidebar-closed .list-inline>li {
+    display: block;
+    padding:5px;
+
+}
+.plan-create{
+    color: #fff;
+}
+
+.plan-heading p{
+    font-size: 36px;
+    color: #000;
+    margin-top: 50px;
+}
+.heading-Opportunity {
+      border-top: 1px dotted #000000;
+      margin-top: 50px;
+}
+
+.Opportunity-para{
+
+    font-size: 24px;
+ position: absolute;
+    margin-top: -18px;
+    padding: 0 10px;
+    margin-left: 50%;
+    left: -84px;
+    background: white;
+}
+.plan-order-list{
+    font-size: 18px;
+
+}
+.order-list-area{
+    border: 1px solid gray;
+    height: 200px;
+    text-align: center;
+    padding-top: 60px;
+}
+.feeding-box{
+    height: 80px;
+    margin-top: 50px;
+    background-color: #fff;
+    box-shadow: 0px 2px 6px 1px gray;
+    border-left: 15px solid #49b6d6;
+}
+.feeding-box h3{
+    padding: 30px 10px;
+    float: left;
+}
+.plan-heading-center{
+    position: absolute;
+    margin-top: -18px;
+    padding: 0 10px;
+    margin-left: 50%;
+    left: -84px;
+    background: white;
+}
+.plan-heading{
+     border-top: 1px dotted #000000;
+    text-align: center;
+    margin-top: 40px;
+
+}
+.ol-order-list{
+    margin-top: 50px;
+}
+.span-rs{
+ 
+    font-size: 24px;
+    padding: 20px 100px;
+    float: left;
+    border-right: 1px dotted;
+}
+.span-1m{
+    font-size: 30px;
+        
+}
+.span-seed{
+    float:left;
+    padding: 30px 20px;
+}
+.sales-heading{
+    border-top: 1px dotted #000000;
+    margin-top: 50px;
+}
+.sales-para{
+     font-size: 24px;
+    position: absolute;
+    margin-top: -18px;
+    padding: 0 10px;
+    margin-left: 50%;
+    left: -84px;
+    background: white;
+}
+.plan-table{
+    margin-top: 50px;
+}
+.bottom-plan-area{
+    margin-top: 50px;
 }

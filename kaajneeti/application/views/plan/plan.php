@@ -43,9 +43,22 @@
                     
 
                         <div class="portlet-header portlet box  breadcrumb page-breadcrumb pull-right" style=" margin-top: 10px;">
-                    
-                                
-                            <li><a data-target="#modal-stackable" data-toggle="modal" href="javascript:void(0);" onClick="return nextScreen(0);" title="Let's begin with your Goal">Create a Plan</a>&nbsp;</li>
+              <div class="dropdown">
+  <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Plans
+  <span class="caret"></span></button>
+  <ul class="dropdown-menu pull-right">
+    <li><a href="#">HTML</a></li>
+    <li><a href="#">CSS</a></li>
+    <li><a href="#">JavaScript</a></li>
+    <li><a href="#">JavaScript</a>
+    <li class="divider"></li>    </li>
+
+    <button class="btn btn-success"> <li><a data-target="#modal-stackable" data-toggle="modal" href="javascript:void(0);" onClick="return nextScreen(0);" title="Let's begin with your Goal" class="plan-create">Create a Plan</a>&nbsp;</li> </button>
+
+
+  </ul>
+</div>
+                          
                       
                         </div>
                     </div>
@@ -79,282 +92,276 @@
                  </div> 
 
                         <div class="tab-content">
-                               <div id="goal" class="tab-pane fade in active">
-                                 <div class="col-md-12 plan-div">
-                                
-                                  <h2>Where do you get your revenue?</h2>
-                                    <p>
+                           <div id="goal" class="tab-pane fade in active">
 
-                                Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-                            tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-                            quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-                            consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
-                            cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
-                            proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-                             Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-                            tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-                            quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-                            consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
-                            cillum dolore eu fugiat nulla pariatur.</p>
-                               
+                             <div class="row">
+                             <div class="col-md-12">
+
+                                <div class="plan-heading">
+                           
+                                      <h1 class="plan-heading-center">KAAJNEETI</h1><br>
+                                      <p class="text-center">Communication is the Key</p>
+                                    
+
+                                </div>
+                                 
+ 
+                            </div>
                          </div>
-              
+
+                             <div class="heading-Opportunity">
+                                <p class="Opportunity-para">Our Opportunity</p>
+                            </div>
+
 
                          <div class="row">
-                             <div class="col-md-12 plan-table-div">
-                                 
-                                 <table class="table table-bordered">
+                             <div class="col-md-6 ol-order-list">
+                              <h3>Problems worth solving</h3>
+
+                              <ol class="plan-order-list">
+                              <li>Communication Gap</li>
+                              <li>Unauthentic Data</li>
+                              <li>Unorganized Team</li>
+                              <li>Poor MIS</li>
+                              <li>Unorganized Election Management</li>
+                              </ol>
+                         </div>
+
+
+                             <div class="col-md-6 ol-order-list">
+                              <h3>Our solutions</h3>
+                              <ol class="plan-order-list">
+                              <li>One to one Communication</li>
+                              <li>Accurate MIS</li>
+                              <li>Team Management</li>
+                              <li>Election Management</li>
+                              <li>Authentic data</li>
+                              </ol>
+                         </div>
+
+                         <div class="col-md-6">
+                             
+                             <div class="order-list-area">
+                                 <h2>Target area</h2>
+                                 <h4> Not started yet</h4>
+                             </div>
+                         </div>
+
+                         <div class="col-md-6">
+                             
+                           <table class="table table-bordered">
                                 <thead>
                                   <tr>
-                                    <th>Firstname</th>
-                                    <th>Lastname</th>
-                                    <th>Email</th>
+                                    <th>Competitor</th>
+                                    <th>How our solution is better</th>
+                                  
                                   </tr>
                                 </thead>
                                 <tbody>
                                   <tr>
-                                    <td>John</td>
-                                    <td>Doe</td>
-                                    <td>john@example.com</td>
+                                    <td>Jan Sunwayi</td>
+                                    <td>It is a Govt Approved Application</td>
+                                 
                                   </tr>
                                   <tr>
-                                    <td>Mary</td>
-                                    <td>Moe</td>
-                                    <td>mary@example.com</td>
+                                    <td>I-citizen</td>
+                                    <td>It is working in USA</td>
+                          
                                   </tr>
                                   <tr>
-                                    <td>July</td>
-                                    <td>Dooley</td>
-                                    <td>july@example.com</td>
+                                    <td>Umang</td>
+                                    <td>Govt Approved Appy</td>
+                                
+                                  </tr>
+                                    <tr>
+                                    <td>Govt. Portals</td>
+                                    <td>Govt. Approved</td>
+                                
                                   </tr>
                                 </tbody>
-                              </table>
-                            </div>
+                              </table> 
                          </div>
 
-                      <div class="row">
-                           <div class="col-md-6">
-                            <button type="button" class="btn btn-success">Add New Goal</button>
-                              </div>  
 
-                                <div class="col-md-6">
-                                <div class="button-group pull-right">
-                              
-                             <button type="button" class=" btn btn-default"><a data-toggle="tab" href="#geography">Next Direct Coats »</a></button>
-
-                           </div>  
-                        </div>
-                  </div>
-                 
-
-                 </div>
-
-                 <div id="geography" class="tab-pane fade">
-                     
-                                           <div class="col-md-12 plan-div">
-                                
-                                  <h2>Where do you get your revenue?</h2>
-                                    <p>
-
-                                Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-                            tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-                            quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-                            consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
-                            cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
-                            proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-                             Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-                            tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-                            quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-                            consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
-                            cillum dolore eu fugiat nulla pariatur.</p>
-                               
-                         </div>
-              
-
-                         <div class="row">
-                             <div class="col-md-12 plan-table-div">
+                         <div class="col-md-12"> 
+                             <div class="feeding-box">
                                  
-                                 <table class="table table-bordered">
+                                 <h3>Funding needed</h3>
+                                 <span class="span-rs"> Rs <span  class="span-1m">1M</span></span>
+                                 <span class="span-seed">seed Funding</span>
+                           
+                               </div>
+
+                          </div>
+
+                     </div>
+
+
+                          <div class="sales-heading">
+                              <p class="sales-para">Sales and Marketing</p>
+
+                          </div>
+
+                          <div class="row">
+                              
+                                <div class="col-md-6 ol-order-list">
+                              <h3>Sales channels</h3>
+
+                              <ol class="plan-order-list">
+                              <li>Digital Marketing</li>
+                              <li>Direct-Sales & Marketing</li>
+                              <li>Through Channel Partners</li>
+                              </ol>
+                         </div>
+
+
+                             <div class="col-md-6 ol-order-list">
+                              <h3>Marketing activities</h3>
+                              <ol class="plan-order-list">
+                              <li>Leaders</li>
+                              <li>Marketing Team</li>
+                              <li>Digital Media</li>
+                              <li>PR activities</li>
+                              <li>Govt. Approval</li>
+                            
+                              </ol>
+                         </div>
+                          </div>
+
+                               <div class="sales-heading">
+                              <p class="sales-para">Financial Projections</p>
+
+                             </div>
+
+
+                          <div class="row">
+                              <div class="col-md-12 plan-table">
+                                  
+                                         <table class="table table-bordered">
                                 <thead>
                                   <tr>
-                                    <th>Firstname</th>
-                                    <th>Lastname</th>
-                                    <th>Email</th>
+                                    <th>Competitor</th>
+                                    <th>How our solution is better</th>
+                                  
                                   </tr>
                                 </thead>
                                 <tbody>
                                   <tr>
-                                    <td>John</td>
-                                    <td>Doe</td>
-                                    <td>john@example.com</td>
-                                  </tr>
-                                  <tr>
-                                    <td>Mary</td>
-                                    <td>Moe</td>
-                                    <td>mary@example.com</td>
-                                  </tr>
-                                  <tr>
-                                    <td>July</td>
-                                    <td>Dooley</td>
-                                    <td>july@example.com</td>
-                                  </tr>
-                                </tbody>
-                              </table>
-                            </div>
-                         </div>
-
-                      <div class="row">
-                           <div class="col-md-6">
-                            <button type="button" class="btn btn-success">Add New</button>
-                              </div>  
-
-                                <div class="col-md-6">
-                                <div class="button-group pull-right">
-                              
-                             <button type="button" class=" btn btn-default"><a data-toggle="tab" href="#audience">Next Direct Coats »</a></button>
-
-                           </div>  
-                        </div>
-                  </div>
-                 </div>
-
-
-                     <div id="audience" class="tab-pane fade">
-                     
-                                    <div class="col-md-12 plan-div">
-                                
-                                  <h2>Where do you get your revenue?</h2>
-                                    <p>
-
-                                Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-                            tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-                            quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-                            consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
-                            cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
-                            proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-                             Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-                            tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-                            quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-                            consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
-                            cillum dolore eu fugiat nulla pariatur.</p>
-                               
-                         </div>
-              
-
-                         <div class="row">
-                             <div class="col-md-12 plan-table-div">
+                                    <td>Jan Sunwayi</td>
+                                    <td>It is a Govt Approved Application</td>
                                  
-                                 <table class="table table-bordered">
-                                <thead>
-                                  <tr>
-                                    <th>Firstname</th>
-                                    <th>Lastname</th>
-                                    <th>Email</th>
-                                  </tr>
-                                </thead>
-                                <tbody>
-                                  <tr>
-                                    <td>John</td>
-                                    <td>Doe</td>
-                                    <td>john@example.com</td>
                                   </tr>
                                   <tr>
-                                    <td>Mary</td>
-                                    <td>Moe</td>
-                                    <td>mary@example.com</td>
+                                    <td>I-citizen</td>
+                                    <td>It is working in USA</td>
+                          
                                   </tr>
                                   <tr>
-                                    <td>July</td>
-                                    <td>Dooley</td>
-                                    <td>july@example.com</td>
-                                  </tr>
-                                </tbody>
-                              </table>
-                            </div>
-                         </div>
-
-                      <div class="row">
-                           <div class="col-md-6">
-                            <button type="button" class="btn btn-success">Add New</button>
-                              </div>  
-
-                                <div class="col-md-6">
-                                <div class="button-group pull-right">
-                              
-                             <button type="button" class=" btn btn-default"><a data-toggle="tab" href="#forecast">Next Direct Coats »</a></button>
-
-                           </div>  
-                        </div>
-                  </div>
-                 </div>
-
-                         <div id="forecast" class="tab-pane fade">
-                            <div class="col-md-12 plan-div">
+                                    <td>Umang</td>
+                                    <td>Govt Approved Appy</td>
                                 
-                                  <h2>Where do you get your revenue?</h2>
-                                    <p>
-
-                                Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-                            tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-                            quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-                            consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
-                            cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
-                            proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-                             Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-                            tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-                            quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-                            consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
-                            cillum dolore eu fugiat nulla pariatur.</p>
-                               
-                         </div>
-              
-
-                         <div class="row">
-                             <div class="col-md-12 plan-table-div">
-                                 
-                                 <table class="table table-bordered">
-                                <thead>
-                                  <tr>
-                                    <th>Firstname</th>
-                                    <th>Lastname</th>
-                                    <th>Email</th>
                                   </tr>
-                                </thead>
-                                <tbody>
-                                  <tr>
-                                    <td>John</td>
-                                    <td>Doe</td>
-                                    <td>john@example.com</td>
-                                  </tr>
-                                  <tr>
-                                    <td>Mary</td>
-                                    <td>Moe</td>
-                                    <td>mary@example.com</td>
-                                  </tr>
-                                  <tr>
-                                    <td>July</td>
-                                    <td>Dooley</td>
-                                    <td>july@example.com</td>
+                                    <tr>
+                                    <td>Govt. Portals</td>
+                                    <td>Govt. Approved</td>
+                                
                                   </tr>
                                 </tbody>
-                              </table>
-                            </div>
-                         </div>
+                              </table> 
+                              </div>
+                          </div>
 
-                      <div class="row">
-                           <div class="col-md-6">
-                            <button type="button" class="btn btn-success">Add New</button>
-                              </div>  
+                             <div class="sales-heading">
+                              <p class="sales-para">Milestones</p>
 
-                                <div class="col-md-6">
-                                <div class="button-group pull-right">
-                              
-                             <button type="button" class=" btn btn-default"><a data-toggle="tab" href="#geography">Next Direct Coats »</a></button>
+                             </div>
 
-                           </div>  
-                        </div>
-                  </div>
-                 </div>
+                              <div class="row">
+                                <div class="col-md-12 bottom-plan-area">
+                                  <div class="order-list-area">
+                               
+                                   <h4> Not started yet</h4>
+                                 </div>
+                               </div>
+                              </div>
+
+                             <div class="sales-heading">
+                               <p class="sales-para">Team and Key Roles</p>
+                             </div>
+
+                             <div class="row" style="margin-top: 50px; overflow-x: auto; width: 100%">
+                                 <div class="col-md-2">
+                                    <div class="plan-img">
+                                        <img src="../assets/images/teem/a9.jpg">
+
+                                           </div>
+
+                                          <h3>Deepak Sharma</h3>
+                                          <h4>Project Manager</h4>
+
+                                   </div>
+
+                                    <div class="col-md-2">
+                                       <div class="plan-img">
+                                        <img src="../assets/images/teem/a9.jpg">
+
+                                        </div>
+
+                                     <h3>Deepak Sharma</h3>
+                                     <h4>Project Manager</h4>
+
+                                     </div>
+
+                                <div class="col-md-2">
+                                     <div class="plan-img">
+                                     <img src="../assets/images/teem/a9.jpg">
+
+                                     </div>
+
+                                     <h3>Deepak Sharma</h3>
+                                     <h4>Project Manager</h4>
+
+                                 </div>
+
+                                <div class="col-md-2">
+                                     <div class="plan-img">
+                                     <img src="../assets/images/teem/a9.jpg">
+
+                                     </div>
+
+                                     <h3>Deepak Sharma</h3>
+                                     <h4>Project Manager</h4>
+
+                                 </div>
+
+                                <div class="col-md-2">
+                                     <div class="plan-img">
+                                     <img src="../assets/images/teem/a9.jpg">
+
+                                     </div>
+
+                                     <h3>Deepak Sharma</h3>
+                                     <h4>Project Manager</h4>
+
+                                 </div>
+
+                                 <div class="col-md-2">
+                                     <div class="plan-img">
+                                     <img src="../assets/images/teem/a9.jpg">
+
+                                     </div>
+
+                                     <h3>Deepak Sharma</h3>
+                                     <h4>Project Manager</h4>
+
+                                 </div>
+                                 
+      
+                             </div>
+
+
+
+              </div>
 
 
               </div>
@@ -378,7 +385,7 @@
         </div>
     </div>
 
-<div id="modal-stackable" tabindex="-1" role="dialog" aria-labelledby="modal-stackable-label" aria-hidden="true" class="modal fade" style="display: none;">
+<div id="modal-stackable" tabindex="-1" role="dialog" aria-labelledby="modal-stackable-label" aria-hidden="true" data-keyboard="false" data-backdrop="static" class="modal fade" style="display: none;">
     <div class="modal-dialog">
         <div class="modal-content">
             
@@ -514,6 +521,32 @@
         document.create_plan_form.reset();
     }
 </script>
+
+<!-- <script type="text/javascript">
+    
+    $(document).ready(function(){
+
+        $(".goal-hide-btn").click(function(){
+
+            var innerdata = $(this).text();
+
+            if(innerdata == "Hide") {
+                $(".goal-hide-btn").text("Show");
+                $(".plan-div").hide();
+            }
+
+              else {
+             $(".goal-hide-btn").text("Hide");
+             $(".plan-div").show();
+           }
+             
+        });
+
+
+    });
+
+</script> -->
+
 
 <?php /*
 <script>
