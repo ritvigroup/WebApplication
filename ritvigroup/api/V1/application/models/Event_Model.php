@@ -199,7 +199,7 @@ class Event_Model extends CI_Model {
             $this->db->select('EventId');
             $this->db->from($this->eventTbl);
             $this->db->where('AddedBy', $UserProfileId);
-            $this->db->order_by('StartDate','DESC');
+            $this->db->order_by('AddedOn','DESC');
             $query = $this->db->get();
 
             $res = $query->result_array();

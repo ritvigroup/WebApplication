@@ -62,7 +62,7 @@ class Information extends CI_Controller {
                 
                 $this->Information_Model->saveMyInformationAttachment($InformationId, $UserProfileId, $_FILES['file']);
 
-                $information_detail = $this->Information_Model->getInformationDetail($InformationId);
+                $information_detail = $this->Information_Model->getInformationDetail($InformationId, $UserProfileId);
 
                 $this->db->query("COMMIT");
 
@@ -83,9 +83,9 @@ class Information extends CI_Controller {
         } else {
 
             $array = array(
-                           "status"                 => 'success',
-                           "result"     => $information_detail,
-                           "message"                => $msg,
+                           "status"         => 'success',
+                           "result"         => $information_detail,
+                           "message"        => $msg,
                            );
         }
         displayJsonEncode($array);
@@ -96,7 +96,7 @@ class Information extends CI_Controller {
         $error_occured = false;
 
         $UserProfileId   = $this->input->post('user_profile_id');
-        $InformationId          = $this->input->post('information_id');
+        $InformationId   = $this->input->post('information_id');
         
         if($UserProfileId == "") {
             $msg = "Please select your profile";
@@ -124,9 +124,9 @@ class Information extends CI_Controller {
         } else {
 
             $array = array(
-                           "status"             => 'success',
-                           "result"   => $information_detail,
-                           "message"            => $msg,
+                           "status"         => 'success',
+                           "result"         => $information_detail,
+                           "message"        => $msg,
                            );
         }
         displayJsonEncode($array);
@@ -160,9 +160,9 @@ class Information extends CI_Controller {
         } else {
 
             $array = array(
-                           "status"       => 'success',
-                           "result"   => $informations,
-                           "message"      => $msg,
+                           "status"         => 'success',
+                           "result"         => $informations,
+                           "message"        => $msg,
                            );
         }
         displayJsonEncode($array);

@@ -5193,8 +5193,8 @@ font-size: 28px;
     white-space: nowrap;*/
 }
 .dropdown-menu>li>h3:first-child{
-    font-size: 18px;
-    font-weight: 600;
+    font-size: 13px;
+    font-weight: 700;
     padding-top: 12px;
 }
 .page-header.navbar .top-menu .navbar-nav > li.dropdown-user > .dropdown-menu.dropdown-menu-default {
@@ -5230,13 +5230,59 @@ font-size: 28px;
     color: #fff;
     font-size: 17px;
     margin-top: 3px;
+    margin-right: 10px;
+}
+
+.page-header.navbar .top-menu .navbar-nav > li.switch-account > .dropdown-menu.menuBig {
+    width: 400px;
+    height: 150px;
+    padding: 5px;
+}
+.page-header.navbar .top-menu .navbar-nav > li.switch-account > .dropdown-menu.menuBig h3{
+    padding-bottom: 5px;
+    border-bottom: 1px solid #f2f2f3;
+}
+.switch-account { border-right: 1px solid #fff; padding-right: 10px !important; }
+.switch-account>a img {
+    width: 21px;
+    margin-bottom: 5px;
+}
+.switch-account .contact-box {
+    padding: 5px;
+    text-align: center;
+}
+.switch-account .contact-box img { width: 50px; }
+.switch-account .contact-box p { margin-bottom: 0; }
+.setting-usr {
+    margin-top: 3px;  
 }
 
 .top-menu .feed-element img.img-circle, .dropdown-messages-box img.img-circle {
-    width: 30px !important;
-    height: 30px !important;
-    margin: 9px 20px 0 !important;
+    width: 20px !important;
+    height: 20px !important;
+    margin: 14px 16px 0 32px !important;
 }
+.add .dropdown-menu dt {
+    line-height: 2.4;
+}
+.add.small .dropdown-menu dl {
+    margin-bottom: 30px;
+}
+.add .dropdown-menu dd {
+    line-height: 2.1;
+}
+.add.small .dropdown-menu dd {
+    line-height: 2;
+}
+.page-header.navbar .top-menu .navbar-nav > li.add.small  > .dropdown-menu.menuBig {
+    width: 160px;
+    height: 236px;
+    overflow: hidden;
+}
+.page-header.navbar .top-menu .navbar-nav > li > .dropdown-menu.menuBig.calendar-menu {
+    width: 350px;
+}
+
 .page-sidebar-closed .list-inline > li {
     display: block;
     padding: 5px;

@@ -30,6 +30,8 @@ class Poll extends CI_Controller {
         $ValidFromDate      = $this->input->post('valid_from_date');
         $ValidEndDate       = $this->input->post('valid_end_date');
 
+        $PollLocation       = $this->input->post('location');
+
         $poll_answer = $this->input->post('poll_answer'); // Should be multiple answers in array
 
 
@@ -49,6 +51,7 @@ class Poll extends CI_Controller {
                                 'PollUniqueId'      => $PollUniqueId,
                                 'PollQuestion'      => $PollQuestion,
                                 'PollPrivacy'       => $PollPrivacy,
+                                'PollLocation'      => $PollLocation,
                                 'ValidFromDate'     => date('Y-m-d', strtotime($ValidFromDate)),
                                 'ValidEndDate'      => date('Y-m-d', strtotime($ValidEndDate)),
                                 'PollStatus'        => 1,

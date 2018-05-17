@@ -171,7 +171,7 @@ class Poll_Model extends CI_Model {
         $polls = array();
         if(isset($UserProfileId) && $UserProfileId > 0) {
 
-            $query = $this->db->query("SELECT PollId FROM $this->pollTbl WHERE `AddedBy` = '".$UserProfileId."'");
+            $query = $this->db->query("SELECT PollId FROM $this->pollTbl WHERE `AddedBy` = '".$UserProfileId."' ORDER BY AddedOn DESC");
 
             $res = $query->result_array();
 
@@ -233,6 +233,7 @@ class Poll_Model extends CI_Model {
         $PollQuestion       = $res['PollQuestion'];
         $ValidFromDate      = (($res['ValidFromDate'] != NULL) ? $res['ValidFromDate'] : "");
         $ValidEndDate       = (($res['ValidEndDate'] != NULL) ? $res['ValidEndDate'] : "");
+        $PollLocation       = (($res['PollLocation'] != NULL) ? $res['PollLocation'] : "");
         $PollPrivacy        = $res['PollPrivacy'];
         $PollStatus         = $res['PollStatus'];
 
@@ -253,6 +254,7 @@ class Poll_Model extends CI_Model {
                                 "PollQuestion"              => $PollQuestion,
                                 "ValidFromDate"             => $ValidFromDate,
                                 "ValidEndDate"              => $ValidEndDate,
+                                "PollLocation"              => $PollLocation,
                                 "PollPrivacy"               => $PollPrivacy,
                                 "PollStatus"                => $PollStatus,
                                 "AddedOn"                   => $AddedOn,

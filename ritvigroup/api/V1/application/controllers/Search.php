@@ -152,11 +152,49 @@ class Search extends CI_Controller {
             
             $result['Poll'] = array();
             if($search_in == 'all' || $search_in == 'poll') {
-                $sql = "SELECT PollId AS Id, 'Poll' AS DataType, AddedOn AS DateAdded FROM `Poll` WHERE `ValidFromDate` <= '".date('Y-m-d')."' AND `ValidEndDate` >= '".date('Y-m-d')."' AND `PollStatus` = '1' AND `PollQuestion` LIKE '%".$this->search."%' AND `AddedBy` = '".$UserProfileId."' "; 
+
+                $poll_search_condition = '';
+
+                $participated   = $this->input->post('participated'); // 1 / 0
+                $posted_by      = $this->input->post('posted_by'); // You / YourFriend / Group
+                $post_type      = $this->input->post('post_type');
+                $date_from      = $this->input->post('date_from');
+                $date_to        = $this->input->post('date_to');
+                $location       = $this->input->post('location');
+
+                if($search_in == "poll") {
+
+                    if($posted_by != '') {
+                        if($posted_by == "You") {
+                            $poll_search_condition .= " AND `UserProfileId` = '".$UserProfileId."'";
+                        }
+                        if($posted_by == "YourFriend") {
+                            $poll_search_condition .= " AND `UserProfileId` IN (".implode(',', $my_friend_user_profile_id).")";
+                        }
+                        if($posted_by == "Group") {
+                            //$poll_search_condition .= " AND `UserProfileId` = '".$UserProfileId."'";
+                        }
+                    } 
+                    if($location != '') {
+                        $poll_search_condition .= " AND `PollLocation` LIKE '%".$location."%'";
+                    }
+                    if($date_from != '' && $date_to != '') {
+                        $poll_search_condition .= " AND `AddedOn` BETWEEN '".$date_from." 00:00:00' AND '".$date_to." 23:59:59'";
+                    }
+                } else {
+                    $poll_search_condition .= " AND `AddedBy` = '".$UserProfileId."'";
+                }
+
+                if($this->search != '') {
+                    $poll_search_condition .= " AND `PollQuestion` LIKE '%".$this->search."%' ";
+                }
+
+                $sql = "SELECT PollId AS Id, 'Poll' AS DataType, AddedOn AS DateAdded FROM `Poll` WHERE `ValidFromDate` <= '".date('Y-m-d')."' AND `ValidEndDate` >= '".date('Y-m-d')."' AND `PollStatus` = '1' ".$poll_search_condition; 
                 if(count($my_friend_user_profile_id) > 0) {
                     $sql .= " UNION SELECT PollId AS Id, 'Poll' AS DataType, AddedOn AS DateAdded FROM `Poll` WHERE `ValidFromDate` <= '".date('Y-m-d')."' AND `ValidEndDate` >= '".date('Y-m-d')."' AND `PollStatus` = '1' AND `PollQuestion` LIKE '%".$this->search."%' AND `AddedBy` IN (".implode(',', $my_friend_user_profile_id).") ";
                 }
                 $sql .= " ORDER BY DateAdded DESC LIMIT $start,$end";
+
                 $query = $this->db->query($sql);
                 $res = $query->result_array();
                 foreach($res AS $key => $val) {
@@ -171,19 +209,57 @@ class Search extends CI_Controller {
             
             $result['Post'] = array();
             if($search_in == 'all' || $search_in == 'post') {
-                $sql = "SELECT PostId AS Id, 'Post' AS DataType, AddedOn AS DateAdded FROM `Post` WHERE `PostStatus` = '1' AND `PostTitle` LIKE '%".$this->search."%' AND `UserProfileId` = '".$UserProfileId."'  "; 
+                $post_search_condition = '';
+                if($search_in == "post") {
+                    $posted_by   = $this->input->post('posted_by'); // You / YourFriend / Group
+                    $post_type   = $this->input->post('post_type'); // Trending / Most Viewed
+                    $date_from   = $this->input->post('date_from');
+                    $date_to     = $this->input->post('date_to');
+                    $location    = $this->input->post('location');
+
+                    
+                    if($posted_by != '') {
+                        if($posted_by == "You") {
+                            $post_search_condition .= " AND `UserProfileId` = '".$UserProfileId."'";
+                        }
+                        if($posted_by == "YourFriend") {
+                            $post_search_condition .= " AND `UserProfileId` IN (".implode(',', $my_friend_user_profile_id).")";
+                        }
+                        if($posted_by == "Group") {
+                            //$post_search_condition .= " AND `UserProfileId` = '".$UserProfileId."'";
+                        }
+                    }
+                    if($location != '') {
+                        $post_search_condition .= " AND ApplicantAddress LIKE '%".$location."%'";
+                    }
+                    if($date_from != '' && $date_to != '') {
+                        $post_search_condition .= " AND AddedOn BETWEEN '".$date_from." 00:00:00' AND '".$date_to." 23:59:59'";
+                    }
+                } else {
+                    $post_search_condition .= " AND `UserProfileId` = '".$UserProfileId."'";
+                }
+
+
+                $sql = "SELECT PostId AS Id, 'Post' AS DataType, AddedOn AS DateAdded FROM `Post` WHERE `PostStatus` = '1' AND `PostTitle` LIKE '%".$this->search."%' ".$post_search_condition; 
                 if(count($my_friend_user_profile_id) > 0) {
                     $sql .= " UNION SELECT PostId AS Id, 'Post' AS DataType, AddedOn AS DateAdded FROM `Post` WHERE `PostStatus` = '1' AND `PostTitle` LIKE '%".$this->search."%' AND `UserProfileId`  IN (".implode(',', $my_friend_user_profile_id).") ";
                 }
-                $sql .= " ORDER BY DateAdded DESC LIMIT $start,$end";
+
+
+                $sql .= " ORDER BY DateAdded DESC LIMIT $start, $end";
                 $query = $this->db->query($sql);
                 $res = $query->result_array();
+
+                $post_array = array();
                 foreach($res AS $key => $val) {
-                    $result['Post'][] = array(
-                                            'feedtype' => 'post',
-                                            'postdata' => $this->Post_Model->getPostDetail($val['Id'], $UserProfileId),
-                                            );
-                    $i++;
+                    if(!in_array($val['Id'], $post_array)) {
+                        $result['Post'][] = array(
+                                                'feedtype' => 'post',
+                                                'postdata' => $this->Post_Model->getPostDetail($val['Id'], $UserProfileId),
+                                                );
+                        $post_array[] = $val['Id'];
+                        $i++;
+                    }
                 }
             }
             
@@ -270,12 +346,19 @@ class Search extends CI_Controller {
                 $sql .= " ORDER BY DateAdded DESC LIMIT $start,$end";
                 $query = $this->db->query($sql);
                 $res = $query->result_array();
+
+                $people_array = array();
                 foreach($res AS $key => $val) {
-                    $result['Profile'][] = array(
-                                                'feedtype' => 'profile',
-                                                'profiledata' => $this->User_Model->getUserProfileInformation($val['Id'], $UserProfileId),
-                                                );
-                    $i++;
+
+                    if(!in_array($val['Id'], $people_array) && $val['Id'] != $UserProfileId) {
+                        $result['Profile'][] = array(
+                                                    'feedtype' => 'profile',
+                                                    'profiledata' => $this->User_Model->getUserProfileInformation($val['Id'], $UserProfileId),
+                                                    );
+
+                        $people_array[] = $val['Id'];
+                        $i++;
+                    }
                 }
             }
 
@@ -329,7 +412,7 @@ class Search extends CI_Controller {
             $result['Location'] = array();
             $result['Qualification'] = array();
             $result['Work'] = array();
-            $sql = "SELECT City, Country FROM `UserProfileAddress` WHERE `UserProfileId` = '".$UserProfileId."' AND `Status` = '1' GROUP BY City,  Country ORDER BY Address";
+            $sql = "SELECT City, Country FROM `UserProfileAddress` WHERE `UserProfileId` = '".$UserProfileId."' AND `Status` = '1' GROUP BY City,  Country ORDER BY UserProfileAddressId DESC";
 
             $query = $this->db->query($sql);
             $res = $query->result_array();
@@ -340,7 +423,7 @@ class Search extends CI_Controller {
                 }
             }
 
-            $sql = "SELECT Qualification, QualificationUniversity FROM `UserProfileEducation` WHERE `UserProfileId` = '".$UserProfileId."' AND `Status` = '1' GROUP BY Qualification, QualificationUniversity ORDER BY Qualification";
+            $sql = "SELECT Qualification, QualificationUniversity FROM `UserProfileEducation` WHERE `UserProfileId` = '".$UserProfileId."' AND `Status` = '1' GROUP BY Qualification, QualificationUniversity ORDER BY UserProfileEducationId DESC";
 
             $query = $this->db->query($sql);
             $res = $query->result_array();
@@ -351,7 +434,7 @@ class Search extends CI_Controller {
                 }
             }
 
-            $sql = "SELECT WorkPosition, WorkLocation FROM `UserProfileWork` WHERE `UserProfileId` = '".$UserProfileId."' AND `Status` = '1' GROUP BY WorkPosition, WorkLocation ORDER BY WorkPosition";
+            $sql = "SELECT WorkPosition, WorkLocation FROM `UserProfileWork` WHERE `UserProfileId` = '".$UserProfileId."' AND `Status` = '1' GROUP BY WorkPosition, WorkLocation ORDER BY UserProfileWorkId DESC";
 
             $query = $this->db->query($sql);
             $res = $query->result_array();

@@ -297,6 +297,7 @@ class Suggestion_Model extends CI_Model {
         $AddedOn            = return_time_ago($res['AddedOn']);
         $UpdatedOn          = return_time_ago($res['UpdatedOn']);
 
+        $SuggestionAssigned      = $this->getSuggestionAssigned($SuggestionId, $UserProfileId);
         $SuggestionProfile       = $this->User_Model->getUserProfileInformation($AddedBy, $UserProfileId);
         $SuggestionAttachment    = $this->getSuggestionAttachment($SuggestionId, $UserProfileId);
         $CountSuggestionHistory  = $this->getCountSuggestionHistory($SuggestionId, $UserProfileId);
@@ -322,11 +323,35 @@ class Suggestion_Model extends CI_Model {
                                 "UpdatedOn"                 => $UpdatedOn,
                                 "UpdatedOnTime"             => $res['UpdatedOn'],
                                 "SuggestionProfile"         => $SuggestionProfile,
+                                "SuggestionAssigned"        => $SuggestionAssigned,
                                 "SuggestionAttachment"      => $SuggestionAttachment,
                                 "CountSuggestionHistory"    => $CountSuggestionHistory,
                                 );
         return $user_data_array;
     }
+
+
+    public function getSuggestionAssigned($SuggestionId, $UserProfileId) {
+        $SuggestionAssigned = array();
+
+        $query = $this->db->query("SELECT sa.* 
+                                            FROM ".$this->suggestionAssignedTbl." AS sa 
+                                            LEFT JOIN ".$this->userProfileTbl." up ON sa.AssignedTo = up.UserProfileId
+                                            WHERE 
+                                                sa.`SuggestionId` = '".$SuggestionId."'");
+
+        
+        $res = $query->result_array();
+
+        foreach($res AS $key => $result) {
+            $user_detail = $this->User_Model->getUserProfileInformation($result['AssignedTo'], $UserProfileId);
+            $SuggestionAssigned[] = $user_detail;
+        }
+
+        return $SuggestionAssigned;
+    }
+
+
 
     // Get Suggestion Attachment
     public function getSuggestionAttachment($SuggestionId, $UserProfileId) {

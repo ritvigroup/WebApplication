@@ -15,7 +15,6 @@
 <script src="<?=base_url();?>assets/js/vendor/daterangepicker.js"></script>
 
 
-
 <!--  chartJs js  -->
 <script src="<?=base_url();?>assets/js/vendor/chartJs/Chart.bundle.js"></script>
 <!--timeline_horizontal-->
@@ -154,52 +153,76 @@ window.onclick = function(e) {
 </script>
 
 <script>
-$(document).ready(function(){
+	$(document).ready(function() {
 
-	$("#activate_user").click(function(){
-	    $("#activate").show();
+		$("#activate_user").click(function(){
+	    	$("#activate").show();
+		});
+	
+		$(".nav-tabs li a").click(function(){
+		    $('#activate').css("display","none");
+		});
+	
+		$("#user").click(function(){
+		    $("#user2").show();
+		});
+	
+		$(".nav-tabs li a").click(function(){
+		    $('#user2').css("display","none");
+		});
+
+	      var calendar = $('#calendar').fullCalendar({
+	      defaultView: 'agendaWeek',
+	      editable: true,
+	        selectable: true,
+	      //header and other values
+	      select: function(start, end, allDay) {
+	          endtime = $.fullCalendar.formatDate(end,'h:mm tt');
+	          starttime = $.fullCalendar.formatDate(start,'ddd, MMM d, h:mm tt');
+	          var mywhen = starttime + ' - ' + endtime;
+	          $('#createEventModal #apptStartTime').val(start);
+	          $('#createEventModal #apptEndTime').val(end);
+	          $('#createEventModal #apptAllDay').val(allDay);
+	          $('#createEventModal #when').text(mywhen);
+	          $('#createEventModal').modal('show');
+	       }
+	    });
+
+	  $('#submitButton').on('click', function(e){
+	    // We don't want this to act as a link so cancel the link action
+	    e.preventDefault();
+
+	    doSubmit();
+	  });
+
+	  function doSubmit(){
+	    $("#createEventModal").modal('hide');
+	    console.log($('#apptStartTime').val());
+	    console.log($('#apptEndTime').val());
+	    console.log($('#apptAllDay').val());
+	    alert("form submitted");
+	        
+	    $("#calendar").fullCalendar('renderEvent',
+	        {
+	            title: $('#patientName').val(),
+	            start: new Date($('#apptStartTime').val()),
+	            end: new Date($('#apptEndTime').val()),
+	            allDay: ($('#apptAllDay').val() == "true"),
+	        },
+	        true);
+	   }
+	});
+</script>
+<script type="text/javascript">
+	$('.page-header.navbar .top-menu .navbar-nav > li > .dropdown-menu.menuBig').on('click', function(event){
+	    // The event won't be propagated up to the document NODE and 
+	    // therefore delegated events won't be fired
+	    event.stopPropagation();
 	});
 
-	$(".nav-tabs li a").click(function(){
-	    $('#activate').css("display","none");
+	$(".less").click(function(){
+	    $(".add").toggleClass("small");
+	    $(".add .menuBig .row .add-item").toggleClass("col-sm-3");
+	    $("#expand").toggleClass("hide");
 	});
-
-	$("#user").click(function(){
-	    $("#user2").show();
-	});
-
-	$(".nav-tabs li a").click(function(){
-	    $('#user2').css("display","none");
-	});
-
-	/*function ConfirmDialog(){
-	    $('<div></div>').appendTo('body')
-	        .html('<div><h6>Are you sure to close?</h6></div>')
-	        .dialog({
-	            modal: true, title: 'Delete message', zIndex: 10000, autoOpen: true,
-	            width: 'auto', resizable: false,
-	            buttons: {
-	                Yes: function () {
-	                    // $(obj).removeAttr('onclick');                                
-	                    // $(obj).parents('.Parent').remove();
-														
-	                    $('body').append('<h1>Confirm Dialog Result: <i>Yes</i></h1>');
-	                    
-	                    $(this).dialog("close");
-	                },
-	                No: function () {                           		                              
-
-	                	$('body').append('<h1>Confirm Dialog Result: <i>No</i></h1>');
-	                
-	                    $(this).dialog("close");
-	                }
-	            },
-	            close: function (event, ui) {
-	                $(this).remove();
-	            }
-	        });
-	}*/
-
-
-});
 </script>

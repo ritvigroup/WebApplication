@@ -123,12 +123,12 @@ class Information_Model extends CI_Model {
         $information = array();
         if(isset($UserProfileId) && $UserProfileId > 0) {
 
-            $query = $this->db->query("SELECT InformationId FROM $this->informationTbl WHERE `AddedBy` = '".$UserProfileId."'");
+            $query = $this->db->query("SELECT InformationId FROM $this->informationTbl WHERE `AddedBy` = '".$UserProfileId."' ORDER BY AddedOn DESC");
 
             $res = $query->result_array();
 
             foreach($res AS $key => $result) {
-                $information[] = $this->getInformationDetail($result['InformationId']);
+                $information[] = $this->getInformationDetail($result['InformationId'], $UserProfileId);
             }
         } else {
             $information = array();
@@ -138,7 +138,7 @@ class Information_Model extends CI_Model {
 
 
     
-    public function getInformationDetail($InformationId) {
+    public function getInformationDetail($InformationId, $UserProfileId) {
         $information_detail = array();
         if(isset($InformationId) && $InformationId > 0) {
 
@@ -146,7 +146,7 @@ class Information_Model extends CI_Model {
 
             $res = $query->row_array();
 
-            $information_detail = $this->returnInformationDetail($res);
+            $information_detail = $this->returnInformationDetail($res, $UserProfileId);
         } else {
             $information_detail = array();
         }
@@ -154,7 +154,7 @@ class Information_Model extends CI_Model {
     }
 
     
-    public function returnInformationDetail($res) {
+    public function returnInformationDetail($res, $UserProfileId) {
         $InformationId              = $res['InformationId'];
         $InformationUniqueId        = $res['InformationUniqueId'];
         $InformationPrivacy         = $res['InformationPrivacy'];
@@ -173,7 +173,7 @@ class Information_Model extends CI_Model {
         $AddedOn            = return_time_ago($res['AddedOn']);
         $UpdatedOn          = return_time_ago($res['UpdatedOn']);
 
-        $InformationProfile       = $this->User_Model->getUserProfileWithUserInformation($AddedBy);
+        $InformationProfile       = $this->User_Model->getUserProfileInformation($AddedBy, $UserProfileId);
         $InformationAttachment    = $this->getInformationAttachment($InformationId);
 
         $user_data_array = array(
