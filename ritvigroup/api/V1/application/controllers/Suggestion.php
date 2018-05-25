@@ -97,13 +97,74 @@ class Suggestion extends CI_Controller {
         } else {
 
             $array = array(
-                           "status"             => 'success',
-                           "result"   => $suggestion_detail,
-                           "message"            => $msg,
+                           "status"         => 'success',
+                           "result"         => $suggestion_detail,
+                           "message"        => $msg,
                            );
         }
         displayJsonEncode($array);
     }
+
+
+    // Delete My Suggestion
+    public function deleteMySuggestion() {
+        $error_occured = false;
+
+        $UserProfileId   = $this->input->post('user_profile_id');
+        $SuggestionId    = $this->input->post('suggestion_id');
+        
+        if($UserProfileId == "") {
+            $msg = "Please select your profile";
+            $error_occured = true;
+        } else if($SuggestionId == "") {
+            $msg = "Please select suggestion";
+            $error_occured = true;
+        } else {
+
+            $this->db->query("BEGIN");
+
+            $updateData = array(
+                                'SuggestionStatus'  => -1,
+                                'UpdatedOn'         => date('Y-m-d H:i:s'),
+                            );
+            $whereData = array(
+                                'AddedBy'           => $UserProfileId,
+                                'SuggestionId'      => $SuggestionId,
+                                );
+
+            $suggestion_delete = $this->Suggestion_Model->updateMySuggestion($whereData, $updateData);
+
+            if($suggestion_delete == true) {
+                
+                $suggestion_detail = $this->Suggestion_Model->getSuggestionDetail($SuggestionId, $UserProfileId);
+
+                $this->db->query("COMMIT");
+
+                $msg = "Suggestion deleted successfully";
+
+            } else {
+                $this->db->query("ROLLBACK");
+                $msg = "Suggestion not deleted. Not authorised to delete this suggestion.";
+                $error_occured = true;
+            }
+        }
+
+        if($error_occured == true) {
+            $array = array(
+                            "status"        => 'failed',
+                            "message"       => $msg,
+                        );
+        } else {
+
+            $array = array(
+                           "status"         => 'success',
+                           "result"         => $suggestion_detail,
+                           "message"        => $msg,
+                           );
+        }
+        displayJsonEncode($array);
+    }
+
     
     // Get Suggestion Detail
     public function getSuggestionDetail() {

@@ -76,7 +76,7 @@ class Forgot extends CI_Controller {
 
     public function sendResetPasswordLink($UserEmail, $ResetPasswordCode) {
 
-        $link = 'http://localhost:81/ritvigroup.com/html/leader/resetpassword/'.$ResetPasswordCode;
+        $link = 'http://localhost/ritvigroup.com/html/leader/resetpassword/'.$ResetPasswordCode;
         $this->load->library('email');
         $message = '';
         $message .= '<table width="100%">

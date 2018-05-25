@@ -255,15 +255,12 @@ class Leader extends CI_Controller {
         if($UserId == "") {
             $msg = "Please select user";
             $error_occured = true;
-        } else if($UserId == "") {
-            $msg = "Please select user";
-            $error_occured = true;
         } else if($UserProfileId == "") {
             $msg = "Please select user profile";
             $error_occured = true;
         } else {
         
-            $my_team = $this->User_Model->getMyAllCreatedTeam($UserId);
+            $my_team = $this->User_Model->getMyAllCreatedTeam($UserProfileId);
             if(count($my_team) > 0) {
                 $msg = "My team found";
             } else {

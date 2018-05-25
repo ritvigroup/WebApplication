@@ -584,7 +584,7 @@ if ( ! function_exists('displayJsonEncode'))
 
 if ( ! function_exists('autoGenerateOtp'))
 {
-	function autoGenerateOtp($length = 6) {
+	function autoGenerateOtp($length = 4) {
 		$digit_chars 	= "0123456789";
 
 		/*if($DEVELOPMENT_MODE == 0) { 
@@ -593,7 +593,7 @@ if ( ! function_exists('autoGenerateOtp'))
 		} else {
 	    	$code = "123456";
 	    }*/
-	    $code = "123456";
+	    $code = "1234";
 	    return $code;
 	}
 }

@@ -5,6 +5,8 @@
 <script src="<?=base_url();?>assets/js/vendor/jquery.min.js"></script>
 <!-- bootstrap js -->
 <script src="<?=base_url();?>assets/js/vendor/bootstrap.min.js"></script>
+<script src="<?=base_url();?>assets/js/vendor/bootstrap-table.min.js"></script>
+<script src="<?=base_url();?>assets/js/vendor/datatable.min.js"></script>
 
 
 
@@ -40,6 +42,8 @@
 <!-- icheck -->
 <script src="<?=base_url();?>assets/js/vendor/icheck.js"></script>
 <!-- dataTables-->
+
+<?php /*
 <script type="text/javascript" src="<?=base_url();?>assets/js/vendor/jquery.dataTables.js"></script>
 <script type="text/javascript" src="<?=base_url();?>assets/js/vendor/dataTables.bootstrap.min.js"></script>
 <!-- js for print and download -->
@@ -52,10 +56,12 @@
 <script type="text/javascript" src="<?=base_url();?>assets/js/vendor/buttons.print.min.js"></script>
 <script type="text/javascript" src="<?=base_url();?>assets/js/vendor/dataTables.responsive.min.js"></script>
 <script type="text/javascript" src="<?=base_url();?>assets/js/vendor/dataTables.fixedHeader.min.js"></script>
+
+*/ ?>
 <!-- slimscroll js -->
 <script type="text/javascript" src="<?=base_url();?>assets/js/vendor/jquery.slimscroll.js"></script>
 <!-- dashboard1 js -->
-<script src="<?=base_url();?>assets/js/dashboard1.js"></script>
+<!-- <script src="<?=base_url();?>assets/js/dashboard1.js"></script> -->
 <!-- pace js -->
 <script src="<?=base_url();?>assets/js/vendor/pace/pace.min.js"></script>
 <!-- main js -->
@@ -133,8 +139,7 @@
 
 
 <script>
-/* When the user clicks on the button, 
-toggle between hiding and showing the dropdown content */
+// When the user clicks on the button, goggle between hiding and showing the dropdown content
 function myFunction() {
     document.getElementById("myDropdown").classList.toggle("show");
 }
@@ -149,7 +154,7 @@ window.onclick = function(e) {
         myDropdown.classList.remove('show');
       }
   }
-}
+} 
 </script>
 
 <script>

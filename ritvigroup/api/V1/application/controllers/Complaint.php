@@ -204,6 +204,64 @@ class Complaint extends CI_Controller {
         displayJsonEncode($array);
     }
 
+    // Delete Complaint
+    public function deleteMyComplaint() {
+		$error_occured = false;
+
+        $UserProfileId      = $this->input->post('user_profile_id');
+        $ComplaintId        = $this->input->post('complaint_id');
+                
+        if($UserProfileId == "") {
+			$msg = "Please select your profile";
+			$error_occured = true;
+		} else if($ComplaintId == "") {
+			$msg = "Please select complaint";
+			$error_occured = true;
+		} else {
+
+            $this->db->query("BEGIN");
+
+            $updateData = array(
+                                'ComplaintStatus'   => -1,
+                                'UpdatedOn'         => date('Y-m-d H:i:s'),
+                            );
+            $whereData = array(
+                                'AddedBy'   		=> $UserProfileId,
+                                'ComplaintId'    	=> $ComplaintId,
+                                );
+			$complaint_delete = $this->Complaint_Model->updateMyComplaint($whereData, $updateData);
+
+            if($complaint_delete == true) {
+
+                $complaint_detail = $this->Complaint_Model->getComplaintDetail($ComplaintId, $UserProfileId);
+
+                $this->db->query("COMMIT");
+
+                $msg = "Complaint deleted successfully";
+
+            } else {
+                $this->db->query("ROLLBACK");
+                $msg = "Complaint not delete. Not authorised to delete this complaint";
+                $error_occured = true;
+            }
+        }
+
+        if($error_occured == true) {
+            $array = array(
+                            "status"        => 'failed',
+                            "message"       => $msg,
+                        );
+        } else {
+
+            $array = array(
+                           "status"         => 'success',
+                           "result"   		=> $complaint_detail,
+                           "message"        => $msg,
+                           );
+        }
+        displayJsonEncode($array);
+    }
+
     // Update Complaint Invitation
     public function updateComplaintInvitations() {
         $error_occured = false;
@@ -393,13 +451,17 @@ class Complaint extends CI_Controller {
         $error_occured = false;
 
         $UserProfileId   = $this->input->post('user_profile_id');
+        $FriendProfileId    = $this->input->post('friend_profile_id');
         
         if($UserProfileId == "") {
             $msg = "Please select your profile";
             $error_occured = true;
+        } else if($FriendProfileId == "") {
+            $msg = "Please select friend profile";
+            $error_occured = true;
         } else {
 
-            $complaints = $this->Complaint_Model->getMyAllComplaint($UserProfileId);
+            $complaints = $this->Complaint_Model->getMyAllComplaint($UserProfileId, $FriendProfileId);
             //$associated_complaints = $this->Complaint_Model->getAllComplaintWhereMyselfAssociated($UserProfileId);
 
             //$complaints = array_merge($complaints, $associated_complaints);
@@ -444,13 +506,17 @@ class Complaint extends CI_Controller {
         $error_occured = false;
 
         $UserProfileId   = $this->input->post('user_profile_id');
+        $FriendProfileId    = $this->input->post('friend_profile_id');
         
         if($UserProfileId == "") {
             $msg = "Please select your profile";
             $error_occured = true;
+        } else if($FriendProfileId == "") {
+            $msg = "Please select friend profile";
+            $error_occured = true;
         } else {
 
-            $complaints = $this->Complaint_Model->getAllComplaintWhereMyselfAssociated($UserProfileId);
+            $complaints = $this->Complaint_Model->getAllComplaintWhereMyselfAssociated($UserProfileId, $FriendProfileId);
             if(count($complaints) > 0) {
 
                 $complaint = array();

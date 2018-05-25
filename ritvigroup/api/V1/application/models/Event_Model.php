@@ -40,6 +40,14 @@ class Event_Model extends CI_Model {
     }
 
 
+    public function updateMyEvent($whereData, $updateData) {
+        $this->db->where($whereData);
+        $this->db->update($this->eventTbl, $updateData);
+
+        return $this->db->affected_rows();
+    }
+
+
     public function saveMyEventInterest($insertData) {
         $this->db->insert($this->EventInterestTbl, $insertData);
 
@@ -192,14 +200,23 @@ class Event_Model extends CI_Model {
     }
 
 
-    public function getMyAllEvent($UserProfileId) {
+    public function getMyAllEvent($UserProfileId, $FriendProfileId) {
         $events = array();
-        if(isset($UserProfileId) && $UserProfileId > 0) {
+        if($FriendProfileId > 0) {
 
-            $this->db->select('EventId');
-            $this->db->from($this->eventTbl);
-            $this->db->where('AddedBy', $UserProfileId);
-            $this->db->order_by('AddedOn','DESC');
+            if($UserProfileId != $FriendProfileId) {
+                $this->db->select('EventId');
+                $this->db->from($this->eventTbl);
+                $this->db->where('AddedBy', $FriendProfileId);
+                $this->db->where('EventPrivacy', '1');
+                $this->db->order_by('AddedOn','DESC');
+            } else {
+                $this->db->select('EventId');
+                $this->db->from($this->eventTbl);
+                $this->db->where('AddedBy', $FriendProfileId);
+                $this->db->order_by('AddedOn','DESC');
+            }
+
             $query = $this->db->get();
 
             $res = $query->result_array();
@@ -210,8 +227,6 @@ class Event_Model extends CI_Model {
                                 'eventdata' => $this->getEventDetail($result['EventId'], $UserProfileId),
                                 );
             }
-        } else {
-            $events = array();
         }
         return $events;
     }

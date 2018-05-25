@@ -24,6 +24,19 @@ class Explore extends CI_Controller {
 
     public function explore() {
         $data = array();
+
+        $_POST['user_id'] = $this->session->userdata('UserId');
+        $_POST['user_profile_id'] = $this->session->userdata('UserProfileId');
+        $json_encode = post_curl(API_CALL_PATH.'leader/getAllHomePageData', $this->input->post(), $this->curl);
+
+        // echo '<pre>';
+        // print_r($json_encode);
+        // echo '</pre>';
+
+        $json_decode = json_decode($json_encode);
+        if(count($json_decode->result) > 0) {
+            $data = $json_decode;
+        }
         
         $this->load->view('explore/explore',$data);
     }

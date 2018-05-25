@@ -59,6 +59,7 @@
                                             <li><a href="#tab-5"  data-toggle="tab" >Plan Report</a></li>
                                             <li><a href="#tab-6"  data-toggle="tab" >Custom Report 1</a></li>
                                             <li><a href="#tab-7"  data-toggle="tab" >Custom Report 2</a></li>
+                                            <li><a href="<?=base_url();?>report/activeprofile" >Active Profile</a></li>
                                         </ul>
                                     </li>
                                     <li ><a href="#tab-8" data-toggle="tab" >All Reports </a></li>

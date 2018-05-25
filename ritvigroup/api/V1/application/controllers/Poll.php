@@ -26,7 +26,7 @@ class Poll extends CI_Controller {
 
         $UserProfileId      = $this->input->post('user_profile_id');
         $PollQuestion       = $this->input->post('poll_question');
-        $PollPrivacy        = $this->input->post('poll_privacy'); // 1 = Public, 0 = Private
+        $PollPrivacy        = $this->input->post('privacy'); // 1 = Public, 0 = Private
         $ValidFromDate      = $this->input->post('valid_from_date');
         $ValidEndDate       = $this->input->post('valid_end_date');
 
@@ -93,6 +93,64 @@ class Poll extends CI_Controller {
                            "status"             => 'success',
                            "result"       => $poll_detail,
                            "message"            => $msg,
+                           );
+        }
+        displayJsonEncode($array);
+    }
+
+
+    public function deleteMyPoll() {
+        $error_occured = false;
+
+        $UserProfileId      = $this->input->post('user_profile_id');
+        $PollId             = $this->input->post('poll_id');
+        
+        if($UserProfileId == "") {
+            $msg = "Please select your profile";
+            $error_occured = true;
+        } else if($PollId == "") {
+            $msg = "Please select poll to delete";
+            $error_occured = true;
+        } else {
+
+            $this->db->query("BEGIN");
+
+            $updateData = array(
+                                'PollStatus'        => -1,
+                                'UpdatedOn'         => date('Y-m-d H:i:s'),
+                            );
+            $whereData = array(
+                                'AddedBy'   => $UserProfileId,
+                                'PollId'    => $PollId,
+                                );
+            $poll_delete = $this->Poll_Model->updateMyPoll($whereData, $updateData);
+
+            if($poll_delete == true) {
+                
+                $poll_detail = $this->Poll_Model->getPollDetail($PollId, $UserProfileId);
+
+                $this->db->query("COMMIT");
+
+                $msg = "Poll deleted successfully";
+
+            } else {
+                $this->db->query("ROLLBACK");
+                $msg = "Poll not deleted. Not authorised to delete this poll.";
+                $error_occured = true;
+            }
+        }
+
+        if($error_occured == true) {
+            $array = array(
+                            "status"        => 'failed',
+                            "message"       => $msg,
+                        );
+        } else {
+
+            $array = array(
+                           "status"         => 'success',
+                           "result"         => $poll_detail,
+                           "message"        => $msg,
                            );
         }
         displayJsonEncode($array);
@@ -184,18 +242,22 @@ class Poll extends CI_Controller {
     public function getMyAllPoll() {
         $error_occured = false;
 
-        $UserProfileId   = $this->input->post('user_profile_id');
+        $UserProfileId      = $this->input->post('user_profile_id');
+        $FriendProfileId    = $this->input->post('friend_profile_id');
         
         if($UserProfileId == "") {
             $msg = "Please select your profile";
             $error_occured = true;
+        } else if($FriendProfileId == "") {
+            $msg = "Please select friend profile";
+            $error_occured = true;
         } else {
 
-            $polls = $this->Poll_Model->getMyAllPoll($UserProfileId);
+            $polls = $this->Poll_Model->getMyAllPoll($UserProfileId, $FriendProfileId);
             if(count($polls) > 0) {
                 $msg = "Poll fetched successfully";
             } else {
-                $msg = "No poll added by you";
+                $msg = "No poll found for you";
                 $error_occured = true;
             }
         }

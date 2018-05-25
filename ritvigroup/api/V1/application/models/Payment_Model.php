@@ -236,6 +236,7 @@ class Payment_Model extends CI_Model {
         $DebitOrCredit              = (($res['DebitOrCredit'] != NULL) ? $res['DebitOrCredit'] : "");
         $TransactionComment         = (($res['TransactionComment'] != NULL) ? $res['TransactionComment'] : "");
         $TransactionStatus          = $res['TransactionStatus'];
+        $IsContribute               = ($res['IsContribute'] > 0) ? $res['IsContribute'] : 0;
 
         $AddedOn         = return_time_ago($res['AddedOn']);
 
@@ -256,6 +257,7 @@ class Payment_Model extends CI_Model {
                             "DebitOrCredit"                 => $DebitOrCredit,
                             "TransactionComment"            => $TransactionComment,
                             "TransactionStatus"             => $TransactionStatus,
+                            "IsContribute"                  => $IsContribute,
                             "AddedOn"                       => $AddedOn,
                             "AddedOnTime"                   => $res['AddedOn'],
                             "PaymentBy"                     => $PaymentBy,
@@ -563,20 +565,55 @@ class Payment_Model extends CI_Model {
 
 
     // Get My Payment And Point Transaction Log
-    public function getMyAllPaymentAndPointTransactionLog($UserProfileId) {
+    public function getMyAllPaymentAndPointTransactionLog($UserProfileId, $Payment_Point = 'All', $debit_credit = 'All', $ContributeYesNo = 0) {
         $log_detail = array();
         if(isset($UserProfileId) && $UserProfileId > 0) {
 
-            $sql = "SELECT 'Payment' AS PaymentPointType, `PaymentTransactionLogId` AS LogId, `AddedOn` AS DateAdded 
+            // Payment
+            $sql_payment = "SELECT 'Payment' AS PaymentPointType, `PaymentTransactionLogId` AS LogId, `AddedOn` AS DateAdded 
                                                 FROM ".$this->PaymentTransactionLogTbl." 
                                             WHERE 
                                                 (`PaymentBy`= '".$UserProfileId."' OR `PaymentTo` = '".$UserProfileId."')";
-            $sql .= " UNION ";
+            if($debit_credit == '0') {
+                $sql_payment .= " AND `DebitOrCredit` = '0'";
+            } else if($debit_credit == '1') {
+                $sql_payment .= " AND `DebitOrCredit` = '1'";
+            }
 
-            $sql .= "SELECT 'Point' AS PaymentPointType, `PointTransactionLogId` AS LogId, `AddedOn` AS DateAdded 
+            if($ContributeYesNo > 0) {
+                $sql_payment .= " AND `IsContribute` > 0";
+            }
+
+            // Union
+            $sql_union = " UNION ";
+
+            // Poll
+            $sql_poll = "SELECT 'Point' AS PaymentPointType, `PointTransactionLogId` AS LogId, `AddedOn` AS DateAdded 
                                                 FROM ".$this->PointTransactionLogTbl." 
                                             WHERE 
                                                 (`PaymentBy`= '".$UserProfileId."' OR `PaymentTo` = '".$UserProfileId."')";
+
+            
+            if($debit_credit == '0') {
+                $sql_poll .= " AND `DebitOrCredit` = '0'";
+            } else if($debit_credit == '1') {
+                $sql_poll .= " AND `DebitOrCredit` = '1'";
+            }
+            
+            if($ContributeYesNo > 0) {
+                $sql_poll .= " AND `IsContribute` > 0";
+            }
+
+
+
+            if($Payment_Point == 'All') {
+                $sql = $sql_payment.$sql_union.$sql_poll;
+            } else if($Payment_Point == 'Payment') {
+                $sql = $sql_payment;
+            } else if($Payment_Point == 'Poll'){
+                $sql = $sql_poll;
+            }
+
             $sql .= " ORDER BY `DateAdded` DESC LIMIT 0, 200";
 
             $query = $this->db->query($sql);
@@ -585,22 +622,28 @@ class Payment_Model extends CI_Model {
                 $res = $query->result_array();
                 foreach($res AS $key => $result) {
 
-                    if($result['PaymentPointType'] == 'Payment') {
-                        $log_detail[] = array(
-                                            'feedtype'      => 'payment',
-                                            'paymentdata'   => $this->getPaymentTransactionLogDetail($result['LogId']),
-                                            );
-                    } else if($result['PaymentPointType'] == 'Point') {
-                        $log_detail[] = array(
-                                            'feedtype'      => 'point',
-                                            'pointdata'     => $this->getPointTransactionLogDetail($result['LogId']),
-                                            );
-                    }
+                    $log_detail[] = $this->getLogDetail($result);
                 }
             }
             
         } else {
             $log_detail = array();
+        }
+        return $log_detail;
+    }
+
+
+    public function getLogDetail($result) {
+        if($result['PaymentPointType'] == 'Payment') {
+            $log_detail = array(
+                                'feedtype'      => 'payment',
+                                'paymentdata'   => $this->getPaymentTransactionLogDetail($result['LogId']),
+                                );
+        } else if($result['PaymentPointType'] == 'Point') {
+            $log_detail = array(
+                                'feedtype'      => 'point',
+                                'pointdata'     => $this->getPointTransactionLogDetail($result['LogId']),
+                                );
         }
         return $log_detail;
     }

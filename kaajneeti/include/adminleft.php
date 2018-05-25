@@ -23,6 +23,8 @@
 
             <li class="nav-item <?php if($request_uri['4'] == "user") {?>active<?php } ?>"><a class="nav-link" href="<?=base_url();?>admin/systemuser"><i class="fa fa-pencil-square-o fa-fw"></i><span class="title">User</span></a></li>
 
+            <li class="nav-item <?php if($request_uri['4'] == "report") {?>active<?php } ?>"><a class="nav-link" href="<?=base_url();?>report/report"><i class="fa fa-pencil-square-o fa-fw"></i><span class="title">Report</span></a></li>
+
             
         </ul>
     </div>

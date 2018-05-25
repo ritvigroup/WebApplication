@@ -35,6 +35,13 @@ class Poll_Model extends CI_Model {
         return $poll_id;
     }
 
+    public function updateMyPoll($whereData, $updateData) {
+        $this->db->where($whereData);
+        $this->db->update($this->pollTbl, $updateData);
+
+        return $this->db->affected_rows();
+    }
+
 
     public function saveMyPollImage($PollId, $poll_image) {
 
@@ -167,11 +174,16 @@ class Poll_Model extends CI_Model {
     }
 
 
-    public function getMyAllPoll($UserProfileId) {
+    public function getMyAllPoll($UserProfileId, $FriendProfileId) {
         $polls = array();
-        if(isset($UserProfileId) && $UserProfileId > 0) {
 
-            $query = $this->db->query("SELECT PollId FROM $this->pollTbl WHERE `AddedBy` = '".$UserProfileId."' ORDER BY AddedOn DESC");
+        if($FriendProfileId > 0) {
+
+            if($UserProfileId != $FriendProfileId) {
+                $query = $this->db->query("SELECT PollId FROM $this->pollTbl WHERE `AddedBy` = '".$FriendProfileId."' AND `PollPrivacy` = '1' ORDER BY AddedOn DESC");
+            } else {
+                $query = $this->db->query("SELECT PollId FROM $this->pollTbl WHERE `AddedBy` = '".$FriendProfileId."' ORDER BY AddedOn DESC");
+            }
 
             $res = $query->result_array();
 
@@ -181,8 +193,6 @@ class Poll_Model extends CI_Model {
                                 'polldata' => $this->getPollDetail($result['PollId'], $UserProfileId),
                                 );
             }
-        } else {
-            $polls = array();
         }
         return $polls;
     }

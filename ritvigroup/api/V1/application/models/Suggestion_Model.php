@@ -37,6 +37,16 @@ class Suggestion_Model extends CI_Model {
         return $suggestion_id;
     }
 
+
+    // Update My Suggestion
+    public function updateMySuggestion($whereData, $updateData) {
+        $this->db->where($whereData);
+        $this->db->update($this->suggestionTbl, $updateData);
+
+        return $this->db->affected_rows();
+    }
+
+
     // Save my Suggestion History
     public function saveMySuggestionHistory($insertData) {
         $this->db->insert($this->suggestionHistoryTbl, $insertData);

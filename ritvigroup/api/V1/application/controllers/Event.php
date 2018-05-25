@@ -97,9 +97,68 @@ class Event extends CI_Controller {
         } else {
 
             $array = array(
-                           "status"             => 'success',
-                           "result"       => $event_detail,
-                           "message"            => $msg,
+                           "status"         => 'success',
+                           "result"         => $event_detail,
+                           "message"        => $msg,
+                           );
+        }
+        displayJsonEncode($array);
+    }
+
+
+    public function deleteMyEvent() {
+        $error_occured = false;
+
+        $UserProfileId  = $this->input->post('user_profile_id');
+        $EventId        = $this->input->post('event_id');
+        
+        if($UserProfileId == "") {
+            $msg = "Please select your profile";
+            $error_occured = true;
+        } else if($EventId == "") {
+            $msg = "Please select event";
+            $error_occured = true;
+        } else {
+
+            $this->db->query("BEGIN");
+
+            $updateData = array(
+                                'EventStatus'   => -1,
+                                'UpdatedOn'     => date('Y-m-d H:i:s'),
+                            );
+            $whereData = array(
+                                'AddedBy'       => $UserProfileId,
+                                'EventId'       => $EventId,
+                                );
+
+            $event_delete = $this->Event_Model->updateMyEvent($whereData, $updateData);
+
+            if($event_delete == true) {
+
+                $this->db->query("COMMIT");
+
+                $event_detail = $this->Event_Model->getEventDetail($EventId, $UserProfileId);
+
+                $msg = "Event deleted successfully";
+
+            } else {
+                $this->db->query("ROLLBACK");
+                $msg = "Event not deleted. Not authorised to delete this event";
+                $error_occured = true;
+            }
+        }
+
+        if($error_occured == true) {
+            $array = array(
+                            "status"        => 'failed',
+                            "message"       => $msg,
+                        );
+        } else {
+
+            $array = array(
+                           "status"         => 'success',
+                           "result"         => $event_detail,
+                           "message"        => $msg,
                            );
         }
         displayJsonEncode($array);
@@ -116,7 +175,7 @@ class Event extends CI_Controller {
             $msg = "Please select your profile";
             $error_occured = true;
         } else if($EventId == "") {
-            $msg = "Please select";
+            $msg = "Please select event";
             $error_occured = true;
         } else {
 
@@ -243,13 +302,17 @@ class Event extends CI_Controller {
         $error_occured = false;
 
         $UserProfileId   = $this->input->post('user_profile_id');
+        $FriendProfileId    = $this->input->post('friend_profile_id');
         
         if($UserProfileId == "") {
             $msg = "Please select your profile";
             $error_occured = true;
+        } else if($FriendProfileId == "") {
+            $msg = "Please select friend profile";
+            $error_occured = true;
         } else {
 
-            $events = $this->Event_Model->getMyAllEvent($UserProfileId);
+            $events = $this->Event_Model->getMyAllEvent($UserProfileId, $FriendProfileId);
             if(count($events) > 0) {
                 $msg = "Event fetched successfully";
             } else {

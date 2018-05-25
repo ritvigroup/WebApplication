@@ -1,6 +1,8 @@
 <link rel="shortcut icon" href="<?=base_url();?>assets/images/favicon.ico">
 <!-- Bootstrap -->
 <link href="<?=base_url();?>assets/css/bootstrap.min.css" rel="stylesheet">
+<link href="<?=base_url();?>assets/css/bootstrap-table.min.css" rel="stylesheet">
+<link href="<?=base_url();?>assets/css/datatable.min.css" rel="stylesheet">
 
 <!-- morris -->
 <link href="<?=base_url();?>assets/css/morris.css" rel="stylesheet">
@@ -28,7 +30,7 @@
 <!-- animate css -->
 <link href="<?=base_url();?>assets/css/animate.css" rel="stylesheet">
 <!-- adminbag main css -->
-<link href="<?=base_url();?>assets/css/main.css?v=1.2" rel="stylesheet">
+<link href="<?=base_url();?>assets/css/main.css?v=1.3" rel="stylesheet">
 <!-- fullcalendar -->
 <link href='<?=base_url();?>assets/css/fullcalendar.css' rel='stylesheet' />
 <link href='<?=base_url();?>assets/css/fullcalendar.print.css' rel='stylesheet' media='print' />
@@ -37,7 +39,11 @@
 <!-- adminbag demo css-->
 <link href="<?=base_url();?>assets/css/adminbagdemo.css" rel="stylesheet">
 <!-- aqua black theme css -->
-<link href="<?=base_url();?>assets/css/aqua-black.css" rel="stylesheet">
+<?php if($_SESSION['AdminId'] > 0) { ?>
+	<link href="<?=base_url();?>assets/css/aqua-green.css" rel="stylesheet">
+<?php } else { ?>
+	<link href="<?=base_url();?>assets/css/aqua-black.css" rel="stylesheet">
+<?php } ?>
 <!-- media css for responsive  -->
 <link href="<?=base_url();?>assets/css/main.media.css" rel="stylesheet">
 <link href="<?=base_url();?>assets/css/profile2.css" rel="stylesheet">

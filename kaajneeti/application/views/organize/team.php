@@ -84,11 +84,12 @@
                                             <div class="dropdown" id="organize-active">
                                                 <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" id="active-id"><i class="fa fa-user"></i> Active Users <span class="caret"></span></button>
                                                 <ul class="dropdown-menu">
+                                                    <li><a href="#" id="all_user_div"><i class="fa fa-user"></i> All Users</a></li>
                                                     <li><a href="#" id="activate_user_div"><i class="fa fa-user"></i> Active Users</a></li>
                                                     <li><a href="#" id="inactivate_user_div"><i class="fa fa-user-slash"></i> Inactive Users</a></li>
-                                                    <li><a href="#">Unconfirmed Users</a></li>
-                                                    <li><a href="#">Deleted Users</a></li>
-                                                    <li><a href="#">Activate Users</a></li>
+                                                    <li><a href="#" id="not_accepted_user_div">Unconfirmed Users</a></li>
+                                                    <!-- <li><a href="#">Deleted Users</a></li>
+                                                    <li><a href="#">Activate Users</a></li> -->
                                                 </ul>
                                             </div>
 
@@ -126,31 +127,46 @@
                                     // echo '</pre>';
                                     ?>
                                     <div class="row">
-                                        <div class="col-md-12  activate_user_div" id="team-table" >
+                                        <div class="col-md-12" id="team-table" >
                                             <div class="table-responsive">
-                                                <table id="table_id" class="table table-hover table-striped table-bordered table-advanced tablesorter display">
+                                                <?php /*<table id="table_id" class="table table-hover table-striped table-bordered table-advanced tablesorter display">*/ ?>
+
+                                                <table class="table datatable dragable"
+                                                                                       data-sort-name="attribute"
+                                                                                       data-sort-order="asc"
+                                                                                       data-show-toggle="true"
+                                                                                       data-show-columns="true"
+                                                                                       data-pagination="true"
+                                                                                       data-show-pagination-switch="true">
                                                     <thead>
                                                         <tr>
                                                             <th><input type="checkbox" name="checkall" /></th>
-                                                            <th>IMG</th>
-                                                            <th>NAME</th>
-                                                            <th>EMAIL</th>
-                                                            <th>USERNAME</th>
-                                                            <th>ROLE</th>
-                                                            <th>PROFILE</th>
-                                                            <th>CREATED</th>
-                                                            <th>STATUS</th>
-                                                            <td>ACTION</td>
+                                                            <th data-field="img" data-sortable="true" data-visible="true">IMG</th>
+                                                            <th data-field="name" data-sortable="true" data-visible="true">NAME</th>
+                                                            <th data-field="email" data-sortable="true" data-visible="true">EMAIL</th>
+                                                            <th data-field="username" data-sortable="true" data-visible="true">USERNAME</th>
+                                                            <th data-field="role" data-sortable="true" data-visible="true">ROLE</th>
+                                                            <th data-field="profile" data-sortable="true" data-visible="true">PARENT</th>
+                                                            <th data-field="created" data-sortable="true" data-visible="true">CREATED</th>
+                                                            <th data-field="status" data-sortable="true" data-visible="true">STATUS</th>
+                                                            <th data-field="action" data-sortable="true" data-visible="true">ACTION</th>
                                                         </tr>
+
                                                     </thead>
                                                     <?php 
+                                                    // echo '<pre>';
+                                                    // print_r($MyTeam->result);
+                                                    // echo '</pre>';
+                                                    // die;
                                                     if(count($MyTeam->result) > 0) { ?>
                                                     <tbody>
                                                     <?php foreach($MyTeam->result AS $my_team) { ?>
                                                         <?php
-                                                        $Status = ($my_team->ProfileStatus == 1) ? 'Active' : 'Not Accepted';
+                                                        $Status = ($my_team->ProfileStatus == 1) ? 'Active' : (($my_team->ProfileStatus == 2) ? 'In-Active' : 'Not Accepted');
+                                                        $TrRowStatus = ($my_team->ProfileStatus == 1) ? 'activate_user_div' : (($my_team->ProfileStatus == 2) ? 'inactivate_user_div' : 'not_accepted_user_div');
 
                                                         $UserProfileHrefLink = base_url().'profile/subprofile/'.$my_team->UserUniqueId.'/'.$my_team->UserProfileId;
+                                                        $UserProfileHrefLink = 'javascript:void(0);';
 
                                                         if($my_team->ProfilePhotoPath != '') {
                                                             $profile_pic = ($my_team->ProfilePhotoPath != '') ? $my_team->ProfilePhotoPath : base_url().'assets/images/default-user.png';
@@ -159,10 +175,10 @@
                                                         }
 
                                                         ?>
-                                                        <tr>
+                                                        <tr class="<?php echo $TrRowStatus; ?>">
                                                             <td><input type="checkbox" name="check_list[]" value="<?php echo $my_team->UserProfileId; ?>" /></td>
                                                             <td><img src="<?php echo $profile_pic; ?>" style="border: 1px solid #fff; box-shadow: 0 2px 3px rgba(0,0,0,0.25);width: 50px; height: 50px;" class="img-circle"/></td>
-                                                            <td><a href="<?php echo $UserProfileHrefLink; ?>" target="_blank"><?php echo $my_team->FirstName.' '.$my_team->LastName; ?></a></td>
+                                                            <td><a href="<?php echo $UserProfileHrefLink; ?>" onClick="return showUserDetail();"><?php echo $my_team->FirstName.' '.$my_team->LastName; ?></a></td>
                                                             <td><?php echo $my_team->Email; ?></td>
                                                             <td><?php echo $my_team->ProfileUserName; ?></td>
                                                             <td><?php echo $my_team->RoleName; ?></td>
@@ -173,13 +189,31 @@
                                                                 <button type="button" class="btn btn-info btn-xs" data-target="#modal-stackable" data-toggle="modal" href="javascript:void(0);" onClick="return editTeam('<?php echo $my_team->UserUniqueId; ?>', '<?php echo $my_team->UserProfileId; ?>');"><i class="fa fa-edit"></i>&nbsp;Edit</button>
                                                                 <button type="button" class="btn btn-danger btn-xs"><i class="fa fa-trash"></i>&nbsp;Delete</button>
                                                             </td>
+
+                                                            
                                                         </tr>
                                                     <?php } ?>
                                                     
                                                     </tbody>
                                                     <?php }  ?> 
                                                 </thead>
-                                            </table>
+                                                </table>
+                                            </div>
+                                            <!-- User Information -->
+                                            <div class="col-md-7 col-md-offset-3" id="user_detail" style="background-color: #fff; position: absolute;  top: 76px; right: 14px; height: 450px; overflow-y: scroll; display: none;">
+                                                <div class="user-info">
+                                                    <div class="row">
+                                                        <div style="float: right;cursor: pointer;padding: 5px;" title="Close Me" onClick="return hideUserDetail();">X</div>
+
+                                                        <div class="col-sm-12" id="display_user_detail">
+                                                            
+                                                            <!-- Show User Detail -->
+                                                            
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
                                         </div>
                                     </div>
                                 </div>
@@ -201,156 +235,37 @@
 <?php  require_once './include/js.php';?>
 
 
-<div id="modal-stackable" tabindex="-1" role="dialog" aria-labelledby="modal-stackable-label" aria-hidden="true" class="modal fade" style="display: none;">
-    <div class="modal-dialog">
-        <div class="modal-content modal-content-ajax">
-
-        </div>
-    </div>
-</div>
-
-<div id="modal-stackable-role" tabindex="-1" role="dialog" aria-labelledby="modal-stackable-label" aria-hidden="true" class="modal fade" style="display: none;">
-    <div class="modal-dialog">
-        <div class="modal-content modal-content-ajax-role">
-
-        </div>
-    </div>
-</div>
-
-<script>
-    $(document).ready(function() {
-// Flexible table
-
-$('#table_id').DataTable();
-
-});
-
-    $('.form_datetime').datetimepicker({
-
-    });
-
-    function newTeam() {
-
-        $.post("<?php echo base_url(); ?>organize/newTeam", {'display': 'Y'},
-            function (data, status) {
-                if(data != '') {
-                    $('.modal-content-ajax').html(data);
-                } else {
-                    $('.modal-content-ajax').html(data);
-                }
-            });
-    }
-
-    function editTeam(unique_profile_id, friend_user_profile_id) {
-
-        $.post("<?php echo base_url(); ?>organize/editTeam/"+unique_profile_id+'/'+friend_user_profile_id, {'display': 'Y'},
-            function (data, status) {
-                if(data != '') {
-                    $('.modal-content-ajax').html(data);
-                } else {
-                    $('.modal-content-ajax').html(data);
-                }
-            });
-    }
-
-
-    function addNewUserRole() {
-        $.post("<?php echo base_url(); ?>organize/newRole", {'display': 'Y'},
-            function (data, status) {
-                if(data != '') {
-                    $('.modal-content-ajax-role').html(data);
-                } else {
-                    $('.modal-content-ajax-role').html(data);
-                }
-            });
-    }
-
-    function newFleet() {
-
-        $.post("<?php echo base_url(); ?>organize/newFleet", {'display': 'Y'},
-            function (data, status) {
-                if(data != '') {
-                    $('.modal-content-ajax').html(data);
-                } else {
-                    $('.modal-content-ajax').html(data);
-                }
-            });
-    }
-
-    function newDocument() {
-
-        $.post("<?php echo base_url(); ?>organize/newDocument", {'display': 'Y'},
-            function (data, status) {
-                if(data != '') {
-                    $('.modal-content-ajax').html(data);
-                } else {
-                    $('.modal-content-ajax').html(data);
-                }
-            });
-    }
-
-    function newGroup() {
-
-        $.post("<?php echo base_url(); ?>organize/newGroup", {'display': 'Y'},
-            function (data, status) {
-                if(data != '') {
-                    $('.modal-content-ajax').html(data);
-                } else {
-                    $('.modal-content-ajax').html(data);
-                }
-            });
-    }
-</script>
-
-<script>
-/* When the user clicks on the button, 
-toggle between hiding and showing the dropdown content */
-function myFunction() {
-    document.getElementById("myDropdown").classList.toggle("show");
-}
-
-// Close the dropdown if the user clicks outside of it
-window.onclick = function(e) {
-    if (!e.target.matches('.dropbtn')) {
-        var myDropdown = document.getElementById("myDropdown");
-        if (myDropdown.classList.contains('show')) {
-            myDropdown.classList.remove('show');
-        }
-    }
-}
-</script>
+<?php  require_once './include/organize/organize.php'; // For all javascript belongs to Organize ?>
 
 <script>
     $(document).ready(function(){
 
+        $("#all_user_div").click(function(){
+            $(".activate_user_div").show();
+            $(".inactivate_user_div").show();
+            $(".not_accepted_user_div").show();
+        });
         $("#activate_user_div").click(function(){
             $(".activate_user_div").show();
             $(".inactivate_user_div").hide();
+            $(".not_accepted_user_div").hide();
         });
         $("#inactivate_user_div").click(function(){
             $(".activate_user_div").hide();
             $(".inactivate_user_div").show();
+            $(".not_accepted_user_div").hide();
         });
-        $(".nav-tabs li a").click(function(){
-
-            $('#activate').css("display","none");
-        });
-
-        $("#user").click(function(){
-            $("#user2").show();
+        $("#not_accepted_user_div").click(function(){
+            $(".activate_user_div").hide();
+            $(".inactivate_user_div").hide();
+            $(".not_accepted_user_div").show();
         });
 
-        $(".nav-tabs li a").click(function(){
-            $('#user2').css("display","none");
-        });
+        $(".bootstrap-table .dropdown-menu li").addClass('ui-state-default');
 
-
+        $( ".bootstrap-table .dropdown-menu" ).sortable();
 
     });
-</script>
-
-<script>
-
 </script>
 
 <script type="text/javascript">

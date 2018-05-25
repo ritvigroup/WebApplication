@@ -26,33 +26,43 @@ class Fleet extends CI_Controller {
 
         $UserProfileId          = $this->input->post('user_profile_id');
 
-        $vehicle_id         = $this->input->post('vehicle_id');
-        $vehicle_quantity   = $this->input->post('vehicle_quantity');
+        $FleetName              = $this->input->post('fleet_name');
+        $RegistrationNumber     = $this->input->post('registration_number');
+        $DriverName             = $this->input->post('driver_name');
+        $FleetType              = $this->input->post('vehicle_type');
+        $VehicleQuantity        = $this->input->post('vehicle_quantity');
 
         
         if($UserProfileId == "") {
             $msg = "Please select your profile";
             $error_occured = true;
-        } else if(count($vehicle_id) == 0 || count($vehicle_quantity) == 0) {
-            $msg = "Please select vehicle and its quantity";
+        } else if($FleetName == "") {
+            $msg = "Please enter vehicle name";
             $error_occured = true;
         } else {
 
             $this->db->query("BEGIN");
 
             $fleet_data = array();
-            $fleet_data['vehicle_id']       = $vehicle_id;
-            $fleet_data['vehicle_quantity'] = $vehicle_quantity;
+            $fleet_data['UserProfileId']        = $UserProfileId;
+            $fleet_data['FleetName']            = $FleetName;
+            $fleet_data['RegistrationNumber']   = $RegistrationNumber;
+            $fleet_data['DriverName']           = $DriverName;
+            $fleet_data['FleetType']            = $FleetType;
+            $fleet_data['VehicleQuantity']      = $VehicleQuantity;
+            $fleet_data['FleetStatus']          = 1;
+            $fleet_data['AddedOn']              = date('Y-m-d H:i:s');
+            $fleet_data['UpdatedOn']            = date('Y-m-d H:i:s');
 
 
-            // echo '<pre>';
-            // print_r($fleet_data);
-            // echo '</pre>';
-            // die;
+            $FleetId = $this->Fleet_Model->saveMyFleet($fleet_data);
 
-            $save_status = $this->Fleet_Model->saveFleet($UserProfileId, $fleet_data);
+            if($FleetId > 0) {
 
-            if($save_status == true) {
+                $this->Fleet_Model->saveFleetImage($FleetId, $UserProfileId, $_FILES['file']);
+
+                $fleet_detail = $this->Fleet_Model->getFleetDetail($FleetId, $UserProfileId);
+
                 $this->db->query("COMMIT");
                 $msg = "Fleet saved successfully";
             } else {
@@ -70,9 +80,9 @@ class Fleet extends CI_Controller {
         } else {
 
             $array = array(
-                           "status"             => 'success',
-                           "result"       => $folder_detail,
-                           "message"            => $msg,
+                           "status"         => 'success',
+                           "result"         => $fleet_detail,
+                           "message"        => $msg,
                            );
         }
         displayJsonEncode($array);

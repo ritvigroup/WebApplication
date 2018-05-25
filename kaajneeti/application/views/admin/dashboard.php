@@ -7,18 +7,18 @@
     <meta http-equiv="cache-control" content="no-cache">
     <meta http-equiv="expires" content="Thu, 19 Nov 1900 08:52:00 GMT">
 
-    <?php  require_once './include/admincss.php';?>
+    <?php  require_once './include/css.php';?>
     
 </head>
 
 <body class="page-header-fixed ">
     
-    <?php  require_once './include/admintop.php';?>
+    <?php  require_once './include/top.php';?>
 
     <div class="clearfix"> </div>
     <div class="page-container">
         
-        <?php  require_once './include/adminleft.php';?>
+        <?php  require_once './include/left.php';?>
 
         <!-- Start page content wrapper -->
         <div class="page-content-wrapper animated fadeInRight">
@@ -28,7 +28,7 @@
                         <div class="contact-box center-version">
                             <a href="#"> <img src="<?php echo $this->session->userdata('UserProfilePic'); ?>" class="img-circle" alt="image">
                                 <h3 class="m-b-xs"><strong>Rajesh Vishwakarma</strong></h3>
-                                <div class="font-bold">Admin</div>
+                                <div class="font-bold"></div>
                                 <address>
                                     <strong>Ritvi Group</strong><br>
                                 </address>
@@ -46,18 +46,18 @@
                     <div class="clearfix"> </div>
                     <!-- End projects list -->
                     
-                    <?php  require_once './include/adminfooter.php';?>
+                    <?php  require_once './include/footer.php';?>
 
                 </div>
             </div>
         </div>
     </div>
     
-    <?php  require_once './include/adminscroll_top.php';?>
+    <?php  require_once './include/scroll_top.php';?>
 
 </body>
 
-<?php  require_once './include/adminjs.php';?>
+<?php  require_once './include/js.php';?>
 
 
 

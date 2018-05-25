@@ -5,8 +5,7 @@ class Connect extends CI_Controller {
 
     public $CI = NULL;
 
-    public function __construct()
-    {
+    public function __construct() {
         parent::__construct();
         $this->CI = & get_instance();
         
@@ -30,6 +29,20 @@ class Connect extends CI_Controller {
         $_POST['friend_user_profile_id'] = $this->input->post('id');
 
         $json_encode = post_curl(API_CALL_PATH.'userconnect/sendUserProfileFriendRequest', $this->input->post(), $this->curl);
+
+        header('Content-type: application/json');
+
+        echo $json_encode;
+        die;
+    }
+
+
+    public function getNotificationFromUserProfileOnOff() {
+        $_POST['user_id'] = $this->session->userdata('UserId');
+        $_POST['user_profile_id'] = $this->session->userdata('UserProfileId');
+        $_POST['friend_user_profile_id'] = $this->input->post('id');
+
+        $json_encode = post_curl(API_CALL_PATH.'userconnect/getNotificationFromUserProfileOnOff', $this->input->post(), $this->curl);
 
         header('Content-type: application/json');
 
@@ -64,70 +77,316 @@ class Connect extends CI_Controller {
         echo $json_encode;
         die;
     }
+
+
+    public function followUnfollowUserProfile() {
+        $_POST['user_id'] = $this->session->userdata('UserId');
+        $_POST['user_profile_id'] = $this->session->userdata('UserProfileId');
+        $_POST['friend_user_profile_id'] = $this->input->post('id');
+
+        $json_encode = post_curl(API_CALL_PATH.'userconnect/followUnfollowUserProfile', $this->input->post(), $this->curl);
+
+        header('Content-type: application/json');
+
+        echo $json_encode;
+        die;
+    }
     
 
-    public function myfriends() {
+    public function connect() {
         $data = array();
       
         $_POST['user_id'] = $this->session->userdata('UserId');
         $_POST['user_profile_id'] = $this->session->userdata('UserProfileId');
-        $json_encode = post_curl(API_CALL_PATH.'userconnect/getMyAllFriends', $this->input->post(), $this->curl);
+        
 
+        $data = array();
+        $json_encode = post_curl(API_CALL_PATH.'userconnect/getMyAllConnections', $this->input->post(), $this->curl);
+        $json_decode = json_decode($json_encode);
+
+        $data['Connections'] = $json_decode;
+           
+
+
+        $_POST['friend_user_profile_id'] = $this->session->userdata('UserProfileId');
+        $json_encode = post_curl(API_CALL_PATH.'userprofile/getUserprofileFriendsprofileInformation', $this->input->post(), $this->curl);
         $json_decode = json_decode($json_encode);
         if(count($json_decode->result) > 0) {
-            $data = $json_decode;
+            $data['Profile'] = $json_decode;
         }
         
-        $this->load->view('connect/myfriends',$data);
+        $this->load->view('connect/connect',$data);
     }
 
 
-    public function invitation() {
+    public function leader() {
         $data = array();
-        
+      
         $_POST['user_id'] = $this->session->userdata('UserId');
         $_POST['user_profile_id'] = $this->session->userdata('UserProfileId');
+        
+
+        $data = array();
+        $json_encode = post_curl(API_CALL_PATH.'userconnect/getMyAllLeaderConnections', $this->input->post(), $this->curl);
+        $json_decode = json_decode($json_encode);
+
+        $data['Connections'] = $json_decode;
+           
+
+
+        $_POST['friend_user_profile_id'] = $this->session->userdata('UserProfileId');
+        $json_encode = post_curl(API_CALL_PATH.'userprofile/getUserprofileFriendsprofileInformation', $this->input->post(), $this->curl);
+        $json_decode = json_decode($json_encode);
+        if(count($json_decode->result) > 0) {
+            $data['Profile'] = $json_decode;
+        }
+        
+        $this->load->view('connect/leader',$data);
+    }
+
+
+    public function citizen() {
+        $data = array();
+      
+        $_POST['user_id'] = $this->session->userdata('UserId');
+        $_POST['user_profile_id'] = $this->session->userdata('UserProfileId');
+        
+
+        $data = array();
+        $json_encode = post_curl(API_CALL_PATH.'userconnect/getMyAllCitizenConnections', $this->input->post(), $this->curl);
+        $json_decode = json_decode($json_encode);
+
+        $data['Connections'] = $json_decode;
+           
+
+
+        $_POST['friend_user_profile_id'] = $this->session->userdata('UserProfileId');
+        $json_encode = post_curl(API_CALL_PATH.'userprofile/getUserprofileFriendsprofileInformation', $this->input->post(), $this->curl);
+        $json_decode = json_decode($json_encode);
+        if(count($json_decode->result) > 0) {
+            $data['Profile'] = $json_decode;
+        }
+        
+        $this->load->view('connect/citizen',$data);
+    }
+
+
+    public function other() {
+        $data = array();
+      
+        $_POST['user_id'] = $this->session->userdata('UserId');
+        $_POST['user_profile_id'] = $this->session->userdata('UserProfileId');
+        
+
+        $data = array();
+        $json_encode = post_curl(API_CALL_PATH.'userconnect/getMyAllOtherConnections', $this->input->post(), $this->curl);
+        $json_decode = json_decode($json_encode);
+
+        $data['Connections'] = $json_decode;
+           
+
+
+        $_POST['friend_user_profile_id'] = $this->session->userdata('UserProfileId');
+        $json_encode = post_curl(API_CALL_PATH.'userprofile/getUserprofileFriendsprofileInformation', $this->input->post(), $this->curl);
+        $json_decode = json_decode($json_encode);
+        if(count($json_decode->result) > 0) {
+            $data['Profile'] = $json_decode;
+        }
+        
+        $this->load->view('connect/other',$data);
+    }
+
+
+    public function incoming() {
+        $data = array();
+      
+        $_POST['user_id'] = $this->session->userdata('UserId');
+        $_POST['user_profile_id'] = $this->session->userdata('UserProfileId');
+        
+
+        $data = array();
         $json_encode = post_curl(API_CALL_PATH.'userconnect/getMyAllFriendRequest', $this->input->post(), $this->curl);
+        $json_decode = json_decode($json_encode);
 
+        $data['Connections'] = $json_decode;
+           
+
+
+        $_POST['friend_user_profile_id'] = $this->session->userdata('UserProfileId');
+        $json_encode = post_curl(API_CALL_PATH.'userprofile/getUserprofileFriendsprofileInformation', $this->input->post(), $this->curl);
         $json_decode = json_decode($json_encode);
         if(count($json_decode->result) > 0) {
-            $data = $json_decode;
+            $data['Profile'] = $json_decode;
         }
         
-        $this->load->view('connect/invitation',$data);
+        $this->load->view('connect/incoming',$data);
     }
 
 
-    public function requestsent() {
+    public function outgoing() {
         $data = array();
       
         $_POST['user_id'] = $this->session->userdata('UserId');
         $_POST['user_profile_id'] = $this->session->userdata('UserProfileId');
+        
 
+        $data = array();
         $json_encode = post_curl(API_CALL_PATH.'userconnect/getMyAllRequestToFriends', $this->input->post(), $this->curl);
+        $json_decode = json_decode($json_encode);
 
+        $data['Connections'] = $json_decode;
+           
+
+
+        $_POST['friend_user_profile_id'] = $this->session->userdata('UserProfileId');
+        $json_encode = post_curl(API_CALL_PATH.'userprofile/getUserprofileFriendsprofileInformation', $this->input->post(), $this->curl);
         $json_decode = json_decode($json_encode);
         if(count($json_decode->result) > 0) {
-            $data = $json_decode;
+            $data['Profile'] = $json_decode;
         }
         
-        $this->load->view('connect/requestsent',$data);
+        $this->load->view('connect/outgoing',$data);
     }
 
 
-    public function groups() {
+    public function follower() {
         $data = array();
       
         $_POST['user_id'] = $this->session->userdata('UserId');
         $_POST['user_profile_id'] = $this->session->userdata('UserProfileId');
-        $json_encode = post_curl(API_CALL_PATH.'userconnect/getMyAllFriends', $this->input->post(), $this->curl);
+        
 
+        $data = array();
+        $json_encode = post_curl(API_CALL_PATH.'userconnect/getMyAllFollowers', $this->input->post(), $this->curl);
+        $json_decode = json_decode($json_encode);
+        $data['Connections'] = $json_decode;
+           
+
+
+        $_POST['friend_user_profile_id'] = $this->session->userdata('UserProfileId');
+        $json_encode = post_curl(API_CALL_PATH.'userprofile/getUserprofileFriendsprofileInformation', $this->input->post(), $this->curl);
         $json_decode = json_decode($json_encode);
         if(count($json_decode->result) > 0) {
-            $data = $json_decode;
+            $data['Profile'] = $json_decode;
         }
         
-        $this->load->view('connect/groups',$data);
+        $this->load->view('connect/follower',$data);
+    }
+
+
+    public function following() {
+        $data = array();
+      
+        $_POST['user_id'] = $this->session->userdata('UserId');
+        $_POST['user_profile_id'] = $this->session->userdata('UserProfileId');
+        
+
+        $data = array();
+        $json_encode = post_curl(API_CALL_PATH.'userconnect/getMyAllFollowings', $this->input->post(), $this->curl);
+        $json_decode = json_decode($json_encode);
+        $data['Connections'] = $json_decode;
+           
+
+
+        $_POST['friend_user_profile_id'] = $this->session->userdata('UserProfileId');
+        $json_encode = post_curl(API_CALL_PATH.'userprofile/getUserprofileFriendsprofileInformation', $this->input->post(), $this->curl);
+        $json_decode = json_decode($json_encode);
+        if(count($json_decode->result) > 0) {
+            $data['Profile'] = $json_decode;
+        }
+        
+        $this->load->view('connect/following',$data);
+    }
+
+
+    public function getNotificationFromGroupOnOff() {
+        $_POST['user_id']           = $this->session->userdata('UserId');
+        $_POST['user_profile_id']   = $this->session->userdata('UserProfileId');
+        $_POST['group_id']          = $this->input->post('id');
+
+        $json_encode = post_curl(API_CALL_PATH.'friendgroup/getNotificationFromGroupOnOff', $this->input->post(), $this->curl);
+
+        header('Content-type: application/json');
+
+        echo $json_encode;
+        die;
+    }
+
+    public function exitMeFromFriendgroup() {
+        $_POST['user_id']           = $this->session->userdata('UserId');
+        $_POST['user_profile_id']   = $this->session->userdata('UserProfileId');
+        $_POST['group_id']          = $this->input->post('id');
+
+        $json_encode = post_curl(API_CALL_PATH.'friendgroup/exitMeFromFriendgroup', $this->input->post(), $this->curl);
+
+        header('Content-type: application/json');
+
+        echo $json_encode;
+        die;
+    }
+
+
+    public function group() {
+        $data = array();
+      
+        $_POST['user_id'] = $this->session->userdata('UserId');
+        $_POST['user_profile_id'] = $this->session->userdata('UserProfileId');
+
+        if($this->input->method(TRUE) == "POST" && $this->input->post('save_group') == 'Y') {
+
+            $member = $this->input->post('member_id');
+            //$member .= ','.$_POST['user_profile_id'];
+            //$member_exp = explode(',', $member);
+            $post_data = array(
+                                'user_profile_id'           => $this->input->post('user_profile_id'),
+                                'group_name'                => $this->input->post('group_name'),
+                                'group_description'         => $this->input->post('group_description'),
+                                'group_member'              => $member,
+                                );
+
+            if($_FILES['file']['name'] != '') {
+
+                //$post_data = array_merge($post_data, array('file' => '@'.($_FILES['file']['tmp_name']).''));
+                $post_data = array_merge($post_data, array('file' => getCurlValue($_FILES['file']['tmp_name'], $_FILES['file']['type'], $_FILES['file']['name'])));
+            }
+
+
+            // echo '<pre>';
+            // print_r($member_id);
+            // print_r($post_data);
+            // print_r($_FILES);
+            // die;
+
+
+            $json_decode = post_curl_with_files(API_CALL_PATH.'friendgroup/saveFriendgroup', $post_data, $this->curl);
+
+            echo '<pre>';
+            print_r($json_decode);
+            die;
+
+            header('Content-type: application/json');
+
+            echo $json_decode;
+
+            return false;
+        }
+        
+
+        $data = array();
+        $json_encode = post_curl(API_CALL_PATH.'friendgroup/getMyAllFriendgroup', $this->input->post(), $this->curl);
+        $json_decode = json_decode($json_encode);
+        $data['Connections'] = $json_decode;
+           
+
+
+        $_POST['friend_user_profile_id'] = $this->session->userdata('UserProfileId');
+        $json_encode = post_curl(API_CALL_PATH.'userprofile/getUserprofileFriendsprofileInformation', $this->input->post(), $this->curl);
+        $json_decode = json_decode($json_encode);
+        if(count($json_decode->result) > 0) {
+            $data['Profile'] = $json_decode;
+        }
+        
+        $this->load->view('connect/group',$data);
     }
 
 
@@ -151,11 +410,22 @@ class Connect extends CI_Controller {
             $data['Gender'] = $json_decode->result;
         }
 
+        $json_encode = post_curl(API_CALL_PATH.'userprofile/searchUserProfilesForConnect', $this->input->post(), $this->curl);
+
+        $json_decode = json_decode($json_encode);
+        if(count($json_decode->result) > 0) {
+            $data['Connections'] = $json_decode;
+        }
+
+        // echo '<pre>';
+        // print_r($json_decode);
+        // echo '</pre>';
+
         $this->load->view('connect/search',$data);
     }
 
 
-    public function search_result() {
+    public function searchUserProfiles() {
         $data = array();
       
         $error = false;
@@ -203,78 +473,17 @@ class Connect extends CI_Controller {
         }
 
         if($error == false) {
-            $json_encode = post_curl(API_CALL_PATH.'userprofile/searchLeaderProfiles', $this->input->post(), $this->curl);
-
-            // echo '<pre>';
-            // print_r($json_encode);
-            // echo '</pre>';
+            $json_encode = post_curl(API_CALL_PATH.'userprofile/searchUserProfilesForConnect', $this->input->post(), $this->curl);
 
             $json_decode = json_decode($json_encode);
             if(count($json_decode->result) > 0) {
-                $data = $json_decode->result;
+                $data['Connections'] = $json_decode;
             }
+
             $this->load->view('connect/search_result',$data);
         } else {
             echo '';
         }
-    }
-
-
-    public function showUser($user) {
-        $ProfilePhotoPath = ($user->ProfilePhotoPath != '') ? $user->ProfilePhotoPath : base_url().'assets/images/default-user.png';
-        
-        $Gender = ($user->Gender == 1) ? 'Male' : (($user->Gender == 2) ? 'Female' : 'Other');
-
-        $UserProfileHrefLink = base_url().'profile/profile/'.$user->UserUniqueId;
-
-        ?>
-        <div class="note note-info" style="float: left;" id="request_id_<?php echo $user->UserProfileId; ?>">
-            <div style="float: left;">
-                <span class="img-shadow"><img src="<?php echo $ProfilePhotoPath; ?>" style="border: 1px solid #fff; box-shadow: 0 2px 3px rgba(0,0,0,0.25);width: 80px; height: 80px; margin-right: 15px;" class="img-circle"/></span>
-            </div>
-            <div style="float: left;">
-                <h4 class="block"><a href="<?php echo $UserProfileHrefLink; ?>" target="_blank"><?php echo $user->FirstName.' '.$user->LastName?></a></h4>
-                <p><?php echo $user->Email; ?></p>
-                <p><?php echo $Gender; ?>, <span class="label label-warning"><?php echo $user->PoliticalPartyName; ?></span>, 
-
-                <?php echo date('d-M-Y h:i A', strtotime($user->RequestSentOn)); ?></p>
-            </div>
-            <div style="float: right;">
-                <button type="button" class="btn btn-danger" onClick="return cancelRequest(<?php echo $user->UserProfileId; ?>);"><i class="fa fa-trash-o"></i>&nbsp; Delete</button>
-
-                <?php if($user->MyFriend == 0) { ?>
-                <button type="button" class="btn btn-success btn-xs" onClick="return sendRequest(<?php echo $user->UserProfileId; ?>);"><i
-                        class="fa fa-plus-o"></i>&nbsp;
-                    Add Friend
-                </button>
-                <?php } else if($user->MyFriend == 1) { ?>
-                <button type="button" class="btn btn-danger btn-xs" onClick="return cancelRequest(<?php echo $user->UserProfileId; ?>);"><i
-                        class="fa fa-trash-o"></i>&nbsp;
-                    Cancel Request
-                </button>
-                <?php } else if($user->MyFriend == 2) { ?>
-                <button type="button" class="btn btn-success btn-xs" onClick="return acceptRequest(<?php echo $user->UserProfileId; ?>);"><i
-                        class="fa fa-plus-o"></i>&nbsp;
-                    Accept Request
-                </button>
-                <button type="button" class="btn btn-danger btn-xs" onClick="return deleteRequest(<?php echo $user->UserProfileId; ?>);"><i
-                        class="fa fa-trash-o"></i>&nbsp;
-                    Delete Request
-                </button>
-                <?php } else if($user->MyFriend == 3) { ?>
-                <button type="button" class="btn btn-danger btn-xs" onClick="return unFriend(<?php echo $user->UserProfileId; ?>);"><i
-                        class="fa fa-trash-o"></i>&nbsp;
-                    Unfriend
-                </button>
-                <?php } else if($user->MyFriend == 4) { ?>
-
-                <?php } else { ?>
-                <?php } ?>
-
-                
-            </div>
-        </div>
-        <?php
     }
 
 }

@@ -101,6 +101,14 @@ class Complaint_Model extends CI_Model {
     }
 
 
+    public function updateMyComplaint($whereData, $updateData) {
+        $this->db->where($whereData);
+        $this->db->update($this->complaintTbl, $updateData);
+
+        return $this->db->affected_rows();
+    }
+
+
     public function updateComplaint($UserProfileId, $ComplaintId, $current_status = 0) {
         if($current_status > 0) {
             $this->db->where('ComplaintId', $ComplaintId);
@@ -342,16 +350,24 @@ class Complaint_Model extends CI_Model {
     }
 
 
-    public function getMyAllComplaint($UserProfileId) {
+    public function getMyAllComplaint($UserProfileId, $FriendProfileId) {
         $complaints = array();
-        if(isset($UserProfileId) && $UserProfileId > 0) {
+        
+        if($FriendProfileId > 0) {
 
-            $sql = "(SELECT ComplaintId FROM ".$this->complaintTbl." WHERE `AddedBy` = '".$UserProfileId."' ORDER BY AddedOn DESC) 
+            /*$sql = "(SELECT ComplaintId FROM ".$this->complaintTbl." WHERE `AddedBy` = '".$UserProfileId."' ORDER BY AddedOn DESC) 
                     UNION 
                     (SELECT cm.ComplaintId FROM ".$this->complaintMemberTbl." cm 
                      LEFT JOIN ".$this->complaintTbl." AS c ON cm.ComplaintId = c.ComplaintId WHERE cm.`UserProfileId` = '".$UserProfileId."' ORDER BY c.AddedOn DESC) 
-                    ";
-            $sql = "SELECT ComplaintId FROM ".$this->complaintTbl." WHERE `AddedBy` = '".$UserProfileId."' ORDER BY AddedOn DESC";
+                    ";*/
+
+
+            if($UserProfileId != $FriendProfileId) {
+                $sql = $this->db->query("SELECT ComplaintId FROM $this->complaintTbl WHERE `AddedBy` = '".$FriendProfileId."' AND `ComplaintPrivacy` = '1' ORDER BY AddedOn DESC");
+            } else {
+                $sql = $this->db->query("SELECT ComplaintId FROM $this->complaintTbl WHERE `AddedBy` = '".$FriendProfileId."' ORDER BY AddedOn DESC");
+            }
+
             $query = $this->db->query($sql);
 
             $res = $query->result_array();
@@ -363,24 +379,35 @@ class Complaint_Model extends CI_Model {
                     $complaint_array[] = $result['ComplaintId'];
                 }
             }
-        } else {
-            $complaints = array();
         }
         return $complaints;
     }
 
 
     // Get All Complaint Where Myself Associated
-    public function getAllComplaintWhereMyselfAssociated($UserProfileId) {
+    public function getAllComplaintWhereMyselfAssociated($UserProfileId, $FriendProfileId) {
         $complaints = array();
-        if(isset($UserProfileId) && $UserProfileId > 0) {
+        if($FriendProfileId > 0) {
 
-            $this->db->select('cm.ComplaintId');
-            $this->db->from($this->complaintMemberTbl.' AS cm');
-            $this->db->join($this->complaintTbl.' AS c', 'cm.ComplaintId = c.ComplaintId', 'LEFT');
-            $this->db->where('cm.UserProfileId', $UserProfileId);
-            $this->db->where('cm.AcceptedYesNo !=', -1); // Declined
-            $this->db->order_by('c.AddedOn', 'DESC');
+            if($UserProfileId != $FriendProfileId) {
+                $this->db->select('cm.ComplaintId');
+                $this->db->from($this->complaintMemberTbl.' AS cm');
+                $this->db->join($this->complaintTbl.' AS c', 'cm.ComplaintId = c.ComplaintId', 'LEFT');
+                $this->db->where('cm.UserProfileId', $FriendProfileId);
+                $this->db->where('c.ComplaintPrivacy', 1);
+                $this->db->where('cm.AcceptedYesNo !=', -1); // Declined
+                $this->db->order_by('c.AddedOn', 'DESC');
+
+            } else {
+                $this->db->select('cm.ComplaintId');
+                $this->db->from($this->complaintMemberTbl.' AS cm');
+                $this->db->join($this->complaintTbl.' AS c', 'cm.ComplaintId = c.ComplaintId', 'LEFT');
+                $this->db->where('cm.UserProfileId', $FriendProfileId);
+                $this->db->where('cm.AcceptedYesNo !=', -1); // Declined
+                $this->db->order_by('c.AddedOn', 'DESC');
+            }
+
+            
             $query = $this->db->get();
 
             //echo $this->db->last_query();
@@ -390,8 +417,6 @@ class Complaint_Model extends CI_Model {
             foreach($res AS $key => $result) {
                 $complaints[] = $this->getComplaintDetail($result['ComplaintId'], $UserProfileId);
             }
-        } else {
-            $complaints = array();
         }
         return $complaints;
     }
@@ -568,8 +593,9 @@ class Complaint_Model extends CI_Model {
         $ApplicantWard          = (($res['ApplicantWard'] != NULL) ? $res['ApplicantWard'] : "");
         $ApplicantAddress       = (($res['ApplicantAddress'] != NULL) ? $res['ApplicantAddress'] : "");
         
-        $ComplaintDepartment    = $res['ComplaintDepartment'];
-        $DepartmentName         = $res['DepartmentName'];
+        $ComplaintDepartment    = (($res['ComplaintDepartment'] != NULL) ? $res['ComplaintDepartment'] : "");
+        $DepartmentName         = (($res['DepartmentName'] != NULL) ? $res['DepartmentName'] : "");
+        
         $ComplaintPrivacy       = $res['ComplaintPrivacy']; // 1 = Public , 0 = Private
         $AddedBy                = $res['AddedBy'];
         
@@ -581,7 +607,7 @@ class Complaint_Model extends CI_Model {
         $ComplaintSubject       = (($res['ComplaintSubject'] != NULL) ? $res['ComplaintSubject'] : "");
         $ComplaintDescription   = (($res['ComplaintDescription'] != NULL) ? $res['ComplaintDescription'] : "");
         $ComplaintStatus        = $res['ComplaintStatus'];
-        $ComplaintStatusName    = $res['ComplaintStatusName'];
+        $ComplaintStatusName    = (($res['ComplaintStatusName'] != NULL) ? $res['ComplaintStatusName'] : "Deleted");
 
         $AddedOn            = return_time_ago($res['AddedOn']);
         $UpdatedOn          = return_time_ago($res['UpdatedOn']);

@@ -6,237 +6,188 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="cache-control" content="no-cache">
     <meta http-equiv="expires" content="Thu, 19 Nov 1900 08:52:00 GMT">
-    <link rel="shortcut icon" href="<?=base_url();?>assets/images/icons/favicon.ico">
-    <link rel="apple-touch-icon" href="<?=base_url();?>assets/images/icons/favicon.png">
-    <link rel="apple-touch-icon" sizes="72x72" href="<?=base_url();?>assets/images/icons/favicon-72x72.png">
-    <link rel="apple-touch-icon" sizes="114x114" href="<?=base_url();?>assets/images/icons/favicon-114x114.png">
-
-
-    <!--Loading bootstrap css-->
-    <link type="text/css" rel="stylesheet"
-          href="http://fonts.googleapis.com/css?family=Open+Sans:400italic,400,300,700">
-    <link type="text/css" rel="stylesheet" href="http://fonts.googleapis.com/css?family=Oswald:400,700,300">
-    <link type="text/css" rel="stylesheet"
-          href="<?=base_url();?>assets/vendors/jquery-ui-1.10.4.custom/css/ui-lightness/jquery-ui-1.10.4.custom.min.css">
-    <link type="text/css" rel="stylesheet" href="<?=base_url();?>assets/vendors/font-awesome/css/font-awesome.min.css">
-    <link type="text/css" rel="stylesheet" href="<?=base_url();?>assets/vendors/bootstrap/css/bootstrap.min.css">
-
-    <link type="text/css" rel="stylesheet" href="<?php echo base_url(); ?>assets/css/sweetalert.css?ver=1.04">
-
-    <!--LOADING STYLESHEET FOR PAGE-->
-    <link type="text/css" rel="stylesheet" href="<?=base_url();?>assets/vendors/bootstrap-colorpicker/css/colorpicker.css">
-    <link type="text/css" rel="stylesheet" href="<?=base_url();?>assets/vendors/bootstrap-datepicker/css/datepicker.css">
-    <link type="text/css" rel="stylesheet" href="<?=base_url();?>assets/vendors/bootstrap-daterangepicker/daterangepicker-bs3.css">
-    <link type="text/css" rel="stylesheet"
-          href="<?=base_url();?>assets/vendors/bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css">
-    <link type="text/css" rel="stylesheet" href="<?=base_url();?>assets/vendors/bootstrap-timepicker/css/bootstrap-timepicker.min.css">
-    <link type="text/css" rel="stylesheet" href="<?=base_url();?>assets/vendors/bootstrap-clockface/css/clockface.css">
-    <link type="text/css" rel="stylesheet" href="<?=base_url();?>assets/vendors/bootstrap-switch/css/bootstrap-switch.css">
-    <!--Loading style vendors-->
-    <link type="text/css" rel="stylesheet" href="<?=base_url();?>assets/vendors/animate.css/animate.css">
-    <link type="text/css" rel="stylesheet" href="<?=base_url();?>assets/vendors/jquery-pace/pace.css">
-    <link type="text/css" rel="stylesheet" href="<?=base_url();?>assets/vendors/iCheck/skins/all.css">
-    <link type="text/css" rel="stylesheet" href="<?=base_url();?>assets/vendors/jquery-notific8/jquery.notific8.min.css">
-    <link type="text/css" rel="stylesheet" href="<?=base_url();?>assets/vendors/bootstrap-daterangepicker/daterangepicker-bs3.css">
-    <!--Loading style-->
-    <link type="text/css" rel="stylesheet" href="<?=base_url();?>assets/css/themes/style1/orange-blue.css" class="default-style">
-    <link type="text/css" rel="stylesheet" href="<?=base_url();?>assets/css/themes/style1/orange-blue.css" id="theme-change"
-          class="style-change color-change">
-    <link type="text/css" rel="stylesheet" href="<?=base_url();?>assets/css/style-responsive.css">
+    <?php  require_once './include/css.php';?>
 
 </head>
-<body class=" ">
-<div>
-    <!--BEGIN BACK TO TOP--><a id="totop" href="#"><i class="fa fa-angle-up"></i></a><!--END BACK TO TOP-->
-    <!--BEGIN TOPBAR-->
+<body class="page-header-fixed ">
+
     <?php  require_once './include/top.php';?>
-    <!--END TOPBAR-->
-    <div id="wrapper"><!--BEGIN SIDEBAR MENU-->
-        
+
+    <div class="clearfix"> </div>
+    <div class="page-container">
+
         <?php  require_once './include/left.php';?>
 
-        <!--BEGIN PAGE WRAPPER-->
-        <div id="page-wrapper"><!--BEGIN TITLE & BREADCRUMB PAGE-->
-            <div id="title-breadcrumb-option-demo" class="page-title-breadcrumb">
-                <div class="page-header pull-left">
-                    <div class="page-title">Fleet</div>
-                </div>
-                <ol class="breadcrumb page-breadcrumb">
-                    <li><i class="fa fa-home"></i>&nbsp;<a href="<?=base_url();?>leader/home">Home</a>&nbsp;&nbsp;<i
-                            class="fa fa-angle-right"></i>&nbsp;&nbsp;</li>
-                    <li><a href="#">Fleet</a>&nbsp;&nbsp;<i class="fa fa-angle-right"></i>&nbsp;&nbsp;</li>
-                    <li class="active">New</li>
-                </ol>
-                <div class="btn btn-blue reportrange hide"><i class="fa fa-calendar"></i>&nbsp;<span></span>&nbsp;report&nbsp;<i
-                        class="fa fa-angle-down"></i><input type="hidden" name="datestart"/><input type="hidden"
-                                                                                                   name="endstart"/>
-                </div>
-                <div class="clearfix"></div>
-            </div>
-            <!--END TITLE & BREADCRUMB PAGE--><!--BEGIN CONTENT-->
+        <div class="page-content-wrapper animated fadeInRight">
             <div class="page-content">
-                <div class="row">
-                    <div class="col-lg-12">
-                        <div class="portlet box portlet-green">
+                <div class="row  border-bottom white-bg dashboard-header">
+                    <div class="col-md-12">
+                        <div class="portlet box ">
                             <div class="portlet-header">
-                                <div class="caption">Fleet</div>
-                            </div>
-                            <div class="portlet-body">
-                                
-                                <h3 class="mbxl">Add / Update Fleet</h3>
-
-                                <div class="row">
-                                    <?php foreach($Vehicle->result AS $key => $val) { ?>
-                                    <div class="col-md-2">
-                                        
-                                        <div class="form-group">
-                                            
-                                            <label for="folder_name" class="control-label"><?php echo $val->VehicleName; ?><span
-                                                class='require'>*</span></label>
-                                            <input id="vehicle_id" name="vehicle_id[]" type="hidden" value="<?php echo $val->VehicleId; ?>" class="vehicle_id" />
-                                            <input id="vehicle_quantity" name="vehicle_quantity[]" type="text" placeholder="Vehicle Quantity" class="form-control vehicle_quantity"/>
-                                            
-                                        </div>
-                                        
-                                    </div>
-                                    <?php } ?>
-                                </div>
-                                <div class="form-group">
-                                    <button type="submit" class="btn btn-success fleet_button">Submit&nbsp;<i class="fa fa-chevron-circle-right"></i></button>
-                                </div>
+                                <ol class="breadcrumb">
+                                    <li> <a class="text-capitalize" href="<?=base_url();?>leader/dashboard">Kaajneeti</a> </li>
+                                    <li> <a class="text-capitalize" href="<?=base_url(); ?>organize/team">Organize</a> </li>
+                                    <li class="active"><strong><a class="text-capitalize" href="<?=base_url(); ?>organize/team">Team</a> </strong> </li>
+                                </ol>
                             </div>
 
                             <div class="portlet-body">
-                                <h3 class="mbxl">Fleet</h3>
-                                <div class="table-responsive">
-                                    <table id="user-last-logged-table"
-                                           class="table table-striped table-hover thumb-small">
-                                        <thead>
-                                        <tr class="condensed">
-                                            <th scope="col"><span class="column-sorter"></span></th>
-                                            <th scope="col">Vehicle<span class="column-sorter"></span></th>
-                                            <th scope="col">Quantity<span class="column-sorter"></span></th>
-                                            <th scope="col">Added On<span class="column-sorter"></span></th>
-                                        </tr>
-                                        </thead>
-                                        <tbody class="media-thumb">
-                                            <?php foreach($Fleet->result AS $key => $val) { ?>
-                                            <tr>
-                                                <td></td>
-                                                <td><?php echo $val->VehicleName; ?></td>
-                                                <td><?php echo $val->VehicleQuantity; ?></td>
-                                                <td>
-                                                    <ul class="data">
-                                                        <li><strong class="user-list-ip"><?php echo $val->AddedOn; ?></strong></li>
+                                <div class="mbm">
+                                    <div class="row head">
+                                        <div class="user-heading">
+                                            <div class="col-md-9 border_bottom">
+                                                <div class="connections-tabs">
+                                                    <ul class="connect-tab-menu">
+                                                        <li><a href="<?=base_url();?>organize/team">Team</a></li>
+                                                        <li class="active"><a href="<?=base_url();?>organize/fleet">Fleet</a></li>
+                                                        <li><a href="<?=base_url();?>organize/document">Document</a></li>
+                                                        <li><a href="<?=base_url();?>organize/document">Group</a></li>
+                                                        <li><a href="<?=base_url();?>organize/document">Event</a></li>
+                                                        <li><a href="<?=base_url();?>organize/document">Poll</a></li>
                                                     </ul>
-                                                </td>
-                                            </tr>
-                                            <?php } ?>
-                                        </tbody>
-                                    </table>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-3 border_bottom ">
+                                                <div class="actions action-right margin_bottom">
+                                                    <div class="dropdown">
+                                                        <button onclick="myFunction()" class="dropbtn organize-button">&nbsp;Manage <span class="caret"></span>   </button>&nbsp;
+                                                        <div id="myDropdown" class="dropdown-content">
+                                                            <a data-target="#modal-stackable" data-toggle="modal" href="javascript:void(0);" onClick="return newTeam();"> New Team</a>
+                                                            <a data-target="#modal-stackable" data-toggle="modal" href="javascript:void(0);" onClick="return newFleet();"> New Fleet</a>
+                                                            <a data-target="#modal-stackable" data-toggle="modal" href="javascript:void(0);" onClick="return newDocument();"> New Documents</a>
+                                                            <a data-target="#modal-stackable" data-toggle="modal" href="javascript:void(0);" onClick="return newGroup();"> New Group</a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
 
+                            <div class="portlet-body">
+                                <div id="team" class="active">
+                                    <div class="row">
+                                        <div class="col-md-8 ">
+                                        </div>
+
+                                        <div class="col-md-4 active-user">
+                                            
+                                            <div class="dropdown  ractive-user">
+                                                <div class="dropdown  organize-user ">
+                                                    <button class="btn btn-primary" type="button"  data-target="#modal-stackable" data-toggle="modal" href="javascript:void(0);" onClick="return newFleet();"><i class="fa fa-plus" aria-hidden="true"></i>  New Fleet
+                                                    </button>
+                                                </div>
+                                            </div>
+
+                                            <div class="dropdown" id="organize-active">
+                                                <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" id="active-id"><i class="fa fa-user"></i> Active Users <span class="caret"></span></button>
+                                                <ul class="dropdown-menu">
+                                                    <li><a href="#" id="activate_user_div"><i class="fa fa-user"></i> Active Users</a></li>
+                                                    <li><a href="#" id="inactivate_user_div"><i class="fa fa-user-slash"></i> Inactive Users</a></li>
+                                                    <li><a href="#" id="not_accepted_user_div">Unconfirmed Users</a></li>
+                                                    <!-- <li><a href="#">Deleted Users</a></li>
+                                                    <li><a href="#">Activate Users</a></li> -->
+                                                </ul>
+                                            </div>
+
+                                            <div class="dropdown  ractive-user">
+                                                <div class="dropdown  organize-user ">
+                                                    <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown"> <i class="fa fa-plus" aria-hidden="true"></i>
+                                                    </button>
+                                                    <ul class="dropdown-menu organize-user2 " >
+
+                                                        <li><a href="#">Task</a></li>
+                                                        <li><a href="#">Call</a></li>
+                                                        <li><a href="#">Event</a></li>
+                                                        <li><a href="#" id="">Text</a></li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+
+                                            <div class="dropdown  organize-user active-user">
+                                                <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown"> <i class="fa fa-ellipsis-h" aria-hidden="true"></i>
+                                                </button>
+                                                <ul class="dropdown-menu organize-user">
+
+                                                    <li><a href="#">Text</a></li>
+                                                    <li><a href="#" id="">Print</a></li>
+                                                    <li><a href="#" id=""> export to PDF</a></li>
+                                                    <li><a href="#" id="">export to excel</a></li>
+                                                </ul>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                    <?php
+                                    // echo '<pre>';
+                                    // print_r($Fleet->result);
+                                    // echo '</pre>';
+                                    ?>
+                                    <div class="row">
+                                        <div class="col-md-12" id="team-table" >
+                                            <div class="table-responsive">
+                                                <table class="table datatable dragable"
+                                                                                       data-sort-name="attribute"
+                                                                                       data-sort-order="asc"
+                                                                                       data-show-toggle="true"
+                                                                                       data-show-columns="true"
+                                                                                       data-pagination="true"
+                                                                                       data-show-pagination-switch="true">
+                                                    <thead>
+                                                        <tr>
+                                                            <th><input type="checkbox" name="checkall" /></th>
+                                                            <th data-field="name" data-sortable="true" data-visible="true">NAME</th>
+                                                            <th data-field="registration" data-sortable="true" data-visible="true">REGISTRATION</th>
+                                                            <th data-field="driver" data-sortable="true" data-visible="true">DRIVER</th>
+                                                            <th data-field="type" data-sortable="true" data-visible="true">TYPE</th>
+                                                            <th data-field="qty" data-sortable="true" data-visible="true">QTY</th>
+                                                            <th data-field="status" data-sortable="true" data-visible="true">STATUS</th>
+                                                            <th data-field="added_on" data-sortable="true" data-visible="true">ADDED ON</th>
+                                                            <th data-field="action" data-sortable="true" data-visible="true">ACTION</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody class="media-thumb">
+                                                        <?php foreach($Fleet->result AS $fleet) { ?>
+                                                        <tr>
+                                                            <td></td>
+                                                            <td><?php echo $fleet->FleetName; ?></td>
+                                                            <td><?php echo $fleet->RegistrationNumber; ?></td>
+                                                            <td><?php echo $fleet->DriverName; ?></td>
+                                                            <td><?php echo $fleet->FleetType; ?></td>
+                                                            <td><?php echo $fleet->VehicleQuantity; ?></td>
+                                                            <td><?php echo $fleet->FleetStatus; ?></td>
+                                                            <td><?php echo $fleet->AddedOn; ?></td>
+                                                            <td><?php echo $fleet->AddedOn; ?></td>
+                                                        </tr>
+                                                        <?php } ?>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
-                
             </div>
-            <!--END CONTENT--></div>
-        <!--BEGIN FOOTER-->
-        
-        <?php  require_once './include/footer.php';?>
+        </div>
+    </div>
 
-        <!--END FOOTER--><!--END PAGE WRAPPER--></div>
-</div>
-<script src="<?php echo base_url(); ?>assets/js/sweetalert-dev.js"></script> 
-<script src="<?php echo base_url(); ?>assets/js/sweetalert.min.js"></script> 
+</body>
 
-<script src="<?=base_url();?>assets/js/jquery-1.10.2.min.js"></script>
-<script src="<?=base_url();?>assets/js/jquery-migrate-1.2.1.min.js"></script>
-<script src="<?=base_url();?>assets/js/jquery-ui.js"></script>
-<!--loading bootstrap js-->
-<script src="<?=base_url();?>assets/vendors/bootstrap/js/bootstrap.min.js"></script>
-<script src="<?=base_url();?>assets/vendors/bootstrap-hover-dropdown/bootstrap-hover-dropdown.js"></script>
-<script src="<?=base_url();?>assets/js/html5shiv.js"></script>
-<script src="<?=base_url();?>assets/js/respond.min.js"></script>
-<script src="<?=base_url();?>assets/vendors/metisMenu/jquery.metisMenu.js"></script>
-<script src="<?=base_url();?>assets/vendors/slimScroll/jquery.slimscroll.js"></script>
-<script src="<?=base_url();?>assets/vendors/jquery-cookie/jquery.cookie.js"></script>
-<script src="<?=base_url();?>assets/vendors/iCheck/icheck.min.js"></script>
-<script src="<?=base_url();?>assets/vendors/iCheck/custom.min.js"></script>
-<script src="<?=base_url();?>assets/vendors/jquery-notific8/jquery.notific8.min.js"></script>
-<script src="<?=base_url();?>assets/vendors/jquery-highcharts/highcharts.js"></script>
-<script src="<?=base_url();?>assets/js/jquery.menu.js"></script>
-<script src="<?=base_url();?>assets/vendors/jquery-pace/pace.min.js"></script>
-<script src="<?=base_url();?>assets/vendors/holder/holder.js"></script>
-<script src="<?=base_url();?>assets/vendors/responsive-tabs/responsive-tabs.js"></script>
-<script src="<?=base_url();?>assets/vendors/jquery-news-ticker/jquery.newsTicker.min.js"></script>
-<script src="<?=base_url();?>assets/vendors/moment/moment.js"></script>
-<script src="<?=base_url();?>assets/vendors/bootstrap-datepicker/js/bootstrap-datepicker.js"></script>
-<script src="<?=base_url();?>assets/vendors/bootstrap-daterangepicker/daterangepicker.js"></script>
-<!--CORE JAVASCRIPT-->
-<script src="<?=base_url();?>assets/js/main.js"></script>
-<!--LOADING SCRIPTS FOR PAGE-->
-<script src="<?=base_url();?>assets/vendors/bootstrap-datepicker/js/bootstrap-datepicker.js"></script>
-<script src="<?=base_url();?>assets/vendors/bootstrap-daterangepicker/daterangepicker.js"></script>
-<script src="<?=base_url();?>assets/vendors/moment/moment.js"></script>
-<script src="<?=base_url();?>assets/vendors/bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js"></script>
-<script src="<?=base_url();?>assets/vendors/bootstrap-timepicker/js/bootstrap-timepicker.js"></script>
-<script src="<?=base_url();?>assets/vendors/bootstrap-clockface/js/clockface.js"></script>
-<script src="<?=base_url();?>assets/vendors/bootstrap-colorpicker/js/bootstrap-colorpicker.js"></script>
-<script src="<?=base_url();?>assets/vendors/bootstrap-switch/js/bootstrap-switch.min.js"></script>
-<script src="<?=base_url();?>assets/vendors/jquery-maskedinput/jquery-maskedinput.js"></script>
-<script src="<?=base_url();?>assets/vendors/charCount.js"></script>
-<script src="<?=base_url();?>assets/js/form-components.js"></script>
+<?php  require_once './include/footer.php';?>
+
+
+<?php  require_once './include/scroll_top.php';?>
 
 
 
-<script src="<?=base_url();?>assets/vendors/jquery-validate/jquery.validate.min.js"></script>
-<script src="<?=base_url();?>assets/vendors/jquery-steps/js/jquery.steps.min.js"></script>
-<script src="<?=base_url();?>assets/vendors/jquery-bootstrap-wizard/jquery.bootstrap.wizard.min.js"></script>
-<script src="<?=base_url();?>assets/js/form-wizard.js"></script>
+<?php  require_once './include/js.php';?>
 
-<script>
-    
-    document.querySelector('.fleet_button').onclick = function () {
-        var $this = $(this);
-        var vehicle_id = '';
-        $('.vehicle_id').each(function(){
-            vehicle_id += $(this).val()+',';
-        });
 
-        var vehicle_quantity = '';
-        $('.vehicle_quantity').each(function(){
-            vehicle_quantity += $(this).val()+',';
-        });
+<?php  require_once './include/organize/organize.php'; // For all javascript belongs to Organize ?>
 
-        if (vehicle_quantity.length > 0) {
-            $this.button('Uploading...');
-
-            $.post("<?php echo base_url(); ?>organize/fleet", {
-                                                            vehicle_id: vehicle_id, 
-                                                            vehicle_quantity: vehicle_quantity, 
-                                                            },
-                function (data, status) {
-                   
-                    if (data.status === "failed") {
-                        sweetAlert("Oops...", data.message, "error");
-                        return false;
-                    } else { 
-                        $this.button('Submit');
-                        if (data.status === "success") {
-                            window.location.href="fleet";
-                        }
-                    }
-                });
-
-        } else {
-            sweetAlert("Oops...", "Please enter folder name", "error");
-            return false;
-        }
-    };
-</script> 
 
 </body>
 </html>

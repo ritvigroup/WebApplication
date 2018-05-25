@@ -6,8 +6,9 @@ class Fleet_Model extends CI_Model {
         $this->userTbl              = 'User';
         $this->userProfileTbl       = 'UserProfile';
 
-        $this->VehicleTbl    = 'Vehicle';
-        $this->FleetTbl      = 'Fleet';
+        $this->VehicleTbl           = 'Vehicle';
+        $this->FleetTbl             = 'Fleet';
+        $this->FleetAttachmentTbl   = 'FleetAttachment';
     }
 
 
@@ -18,6 +19,39 @@ class Fleet_Model extends CI_Model {
         $fleet_id = $this->db->insert_id();
 
         return $fleet_id;
+    }
+
+
+    public function saveFleetImage($FleetId, $UserProfileId, $fleet_image) {
+        for($i = 0; $i < count($fleet_image['name']); $i++) {
+            
+            $FleetImage = basename($fleet_image['name'][$i]);
+
+            if($FleetImage != '') {
+                $AttachmentFile = date('YmdHisA').'-'.time().'-FLEET-'.mt_rand().'.'.end(explode('.', $FleetImage));
+
+                $path = DOC_DIR;
+                $AttachmentTypeId = 1;
+
+                $path = $path.$AttachmentFile;
+                $source = $fleet_image['tmp_name'][$i];
+
+                $upload_result = uploadFileOnServer($source, $path);
+
+                $insertData = array(
+                                    'FleetId'               => $FleetId,
+                                    'AttachmentTypeId'      => $AttachmentTypeId,
+                                    'AttachmentFile'        => $AttachmentFile,
+                                    'AttachmentOrginalFile' => $FleetImage,
+                                    'AttachmentThumb'       => '',
+                                    'AttachmentOrder'       => '0',
+                                    'AttachmentStatus'      => 1,
+                                    'AddedBy'               => $UserProfileId,
+                                    'AddedOn'               => date('Y-m-d H:i:s'),
+                                    );
+                $this->db->insert($this->FleetAttachmentTbl, $insertData);
+            }
+        }
     }
 
 
@@ -117,12 +151,7 @@ class Fleet_Model extends CI_Model {
         $fleet_detail = array();
         if(isset($FleetId) && $FleetId > 0) {
 
-            $sql = "SELECT f.*, v.VehicleName FROM 
-                                                ".$this->FleetTbl." AS f 
-                                            LEFT JOIN ".$this->VehicleTbl." AS v ON f.VehicleId = v.VehicleId
-                                            WHERE 
-                                                f.FleetId = '".$FleetId."'
-                                            ORDER BY f.AddedOn DESC";
+            $sql = "SELECT * FROM ".$this->FleetTbl." WHERE FleetId = '".$FleetId."'";
             $query = $this->db->query($sql);
 
             $res = $query->row_array();
@@ -130,8 +159,6 @@ class Fleet_Model extends CI_Model {
             if($res['FleetId'] > 0) {
                 $fleet_detail = $this->returnFleetDetail($res, $UserProfileId);
             }
-        } else {
-            $fleet_detail = array();
         }
         return $fleet_detail;
     }
@@ -139,31 +166,35 @@ class Fleet_Model extends CI_Model {
     
     public function returnFleetDetail($res, $UserProfileId = 0) {
         $FleetId            = $res['FleetId'];
-        $UserProfileId      = $res['UserProfileId'];
-        $VehicleId          = $res['VehicleId'];
-        $VehicleName        = (($res['VehicleName'] != NULL) ? $res['VehicleName'] : "");
+        $AddedBy            = $res['UserProfileId'];
+        $FleetName          = (($res['FleetName'] != NULL) ? $res['FleetName'] : "");
+        $RegistrationNumber = (($res['RegistrationNumber'] != NULL) ? $res['RegistrationNumber'] : "");
+        $DriverName         = (($res['DriverName'] != NULL) ? $res['DriverName'] : "");
+        $FleetType         = (($res['FleetType'] != NULL) ? $res['FleetType'] : "");
         $VehicleQuantity    = (($res['VehicleQuantity'] != NULL) ? $res['VehicleQuantity'] : "");
         $FleetStatus        = (($res['FleetStatus'] != NULL) ? $res['FleetStatus'] : "");
 
         $AddedOn            = return_time_ago($res['AddedOn']);
         $UpdatedOn          = return_time_ago($res['UpdatedOn']);
 
-        $FleetProfile       = $this->User_Model->getUserProfileWithUserInformation($UserProfileId);
+        $FleetProfile       = $this->User_Model->getUserProfileInformation($AddedBy, $UserProfileId);
 
-        $doc_folder_data_array = array(
-                                    "FleetId"           => $FleetId,
-                                    "UserProfileId"     => $UserProfileId,
-                                    "VehicleId"         => $VehicleId,
-                                    "VehicleName"       => $VehicleName,
-                                    "VehicleQuantity"   => $VehicleQuantity,
-                                    "FleetStatus"       => $FleetStatus,
-                                    "AddedOn"           => $AddedOn,
-                                    "AddedOnTime"       => $res['AddedOn'],
-                                    "UpdatedOn"         => $UpdatedOn,
-                                    "UpdatedOnTime"     => $res['UpdatedOn'],
-                                    "FleetProfile"      => $FleetProfile,
-                                    );
-        return $doc_folder_data_array;
+        $data_array = array(
+                            "FleetId"               => $FleetId,
+                            "UserProfileId"         => $AddedBy,
+                            "FleetName"             => $FleetName,
+                            "RegistrationNumber"    => $RegistrationNumber,
+                            "DriverName"            => $DriverName,
+                            "FleetType"             => $FleetType,
+                            "VehicleQuantity"       => $VehicleQuantity,
+                            "FleetStatus"           => $FleetStatus,
+                            "AddedOn"               => $AddedOn,
+                            "AddedOnTime"           => $res['AddedOn'],
+                            "UpdatedOn"             => $UpdatedOn,
+                            "UpdatedOnTime"         => $res['UpdatedOn'],
+                            "FleetProfile"          => $FleetProfile,
+                            );
+        return $data_array;
     }
 
 

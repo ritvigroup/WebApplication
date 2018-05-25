@@ -54,6 +54,8 @@ class Admin extends CI_Controller {
                 
                 if($AdminId > 0) {
                     $this->session->set_userdata('AdminId', $AdminId);
+                    $this->session->set_userdata('UserId', $AdminId);
+                    $this->session->set_userdata('UserProfileId', 0);
                     $this->session->set_userdata('Name', $UserName);
                     $this->session->set_userdata('UserProfilePic', $UserProfilePic);
                 }

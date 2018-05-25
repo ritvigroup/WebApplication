@@ -28,16 +28,19 @@ class Userlogin extends CI_Controller {
         $mobile         = $this->input->post('mobile');
         $social_type    = $this->input->post('social_type');
         $login_type     = $this->input->post('login_type');
-        
+
         if($id == "") {
 			$msg = "Please select your id";
 			$error_occured = true;
 		} else if($name == "") {
-			$msg = "Please select your name";
-			$error_occured = true;
-		} else {
+            $msg = "Please select your name";
+            $error_occured = true;
+        } else if($login_type == "") {
+            $msg = "Please select user type";
+            $error_occured = true;
+        } else {
 
-			$res_u = $this->User_Model->validateUserSocialProfileLogin($id, $social_type);
+			$res_u = $this->User_Model->validateUserSocialProfileLogin($id, $social_type, $login_type);
 
             if($res_u['UserStatus'] == '1') {
                 
@@ -49,29 +52,41 @@ class Userlogin extends CI_Controller {
                 
                 $this->User_Model->updateLoginStatus($UserId, $updateData);
 
+                $updateData = array(
+                    'ProfileLoginStatus' => 1,
+                    'UpdatedOn' => date('Y-m-d H:i:s'),
+                );
+
+                $this->User_Model->updateUserProfileData($res_u['UserProfileId'], $updateData);
+
                 $msg = "User logged in successfully";
 
             } else {
-            	$MobileUserId = 0;
+            	$MobileUserProfileId = 0;
             	if($mobile != '') {
-                	$res_mobile_u = $this->User_Model->isUserMobileExist($mobile);
+                	$res_mobile_u = $this->User_Model->isUserProfileMobileExist($mobile, $login_type);
 
-                	$MobileUserId = $res_mobile_u['UserId'];
+                    $UserId = $res_mobile_u['UserId'];
+
+                	$MobileUserProfileId = $res_mobile_u['UserProfileId'];
                 }
 
-                $EmailUserId = 0;
+                $EmailUserProfileId = 0;
             	if($email != '') {
-                	$res_email_u = $this->User_Model->isUserEmailExist($email);
+                	$res_email_u = $this->User_Model->isUserProfileEmailExist($email, $login_type);
 
-                	$EmailUserId = $res_email_u['UserId'];
+                    $UserId = $res_email_u['UserId'];
+
+                	$EmailUserProfileId = $res_email_u['UserProfileId'];
                 }
 
 
-                if($MobileUserId > 0 || $EmailUserId > 0) {
+
+                if($MobileUserProfileId > 0 || $EmailUserProfileId > 0) {
 
                 	// If User Mobile or Email exist in our system
                 	$updateData = array(
-	                    'LoginStatus' => 1,
+	                    'ProfileLoginStatus' => 1,
 	                    'UpdatedOn' => date('Y-m-d H:i:s'),
 	                );
 
@@ -85,22 +100,24 @@ class Userlogin extends CI_Controller {
 						$updateData = array_merge($updateData, array('LinkedinProfileId' => $id));
 					}
 
-                	if($MobileUserId == $EmailUserId) {
-		                $UserId = $MobileUserId;
-		                $this->User_Model->updateUserData($UserId, $updateData);
-                	} else if($MobileUserId > 0) {
-                		$UserId = $MobileUserId;
-                		$this->User_Model->updateUserData($UserId, $updateData);
-                	} else if($EmailUserId > 0) {
-                		$UserId = $EmailUserId;
-                		$this->User_Model->updateUserData($UserId, $updateData);
+                	if($MobileUserProfileId == $EmailUserProfileId) {
+		                $UserProfileId = $MobileUserProfileId;
+		                $this->User_Model->updateUserProfileData($UserProfileId, $updateData);
+                	} else if($MobileUserProfileId > 0) {
+                		$UserProfileId = $MobileUserProfileId;
+                		$this->User_Model->updateUserProfileData($UserProfileId, $updateData);
+                	} else if($EmailUserProfileId > 0) {
+                		$UserProfileId = $EmailUserProfileId;
+                		$this->User_Model->updateUserProfileData($UserProfileId, $updateData);
                 	}
 
-                	$this->User_Model->saveUserPhoto('photo', $UserId, $profile_or_cover = 1);
+                    $this->User_Model->saveUserProfilePhoto('photo', $UserId, $UserProfileId, $profile_or_cover = 1);
 
                 	$msg = "User logged in successfully";
 
                 } else {
+
+
 
                 	// If User Not exist in our system we register him/her first and generate UserId for him/her
 
@@ -120,16 +137,7 @@ class Userlogin extends CI_Controller {
 					                    'AddedOn' 			=> date('Y-m-d H:i:s'),
 					                    'UpdatedOn' 		=> date('Y-m-d H:i:s'),
 					                );
-
-                	if($social_type == "facebook") {
-	                	$insertData = array_merge($insertData, array('FacebookProfileId' => $id));
-					} else if($social_type == "google") {
-						$insertData = array_merge($insertData, array('GoogleProfileId' => $id));
-					} else if($social_type == "twitter") {
-						$insertData = array_merge($insertData, array('TwitterProfileId' => $id));
-					} else if($social_type == "linkedin") {
-						$insertData = array_merge($insertData, array('LinkedinProfileId' => $id));
-					}
+             	
 
 					if($mobile != '') {
 						$insertData = array_merge($insertData, array('UserMobile' => $mobile));
@@ -149,10 +157,11 @@ class Userlogin extends CI_Controller {
                     }
 
                     if($UserId > 0) {
+
     		            $insertData = array(
     					                    'UserId' 					=> $UserId,
     					                    'UserTypeId' 				=> 1,
-    					                    'ParentUserId' 				=> 0,
+    					                    'ParentUserProfileId' 	    => 0,
     					                    'FirstName' 				=> $name,
     					                    'Email' 					=> $email,
     					                    'UserProfileDeviceToken' 	=> $this->device_token,
@@ -164,12 +173,23 @@ class Userlogin extends CI_Controller {
     					                    'UpdatedOn' 				=> date('Y-m-d H:i:s'),
     					                );
 
+                        if($social_type == "facebook") {
+                            $insertData = array_merge($insertData, array('FacebookProfileId' => $id));
+                        } else if($social_type == "google") {
+                            $insertData = array_merge($insertData, array('GoogleProfileId' => $id));
+                        } else if($social_type == "twitter") {
+                            $insertData = array_merge($insertData, array('TwitterProfileId' => $id));
+                        } else if($social_type == "linkedin") {
+                            $insertData = array_merge($insertData, array('LinkedinProfileId' => $id));
+                        }
+
+
                         $UserCitizenProfileId = $this->User_Model->insertUserProfile($insertData);
 
                         $insertData = array(
                                             'UserId'                    => $UserId,
                                             'UserTypeId'                => 2,
-                                            'ParentUserId'              => 0,
+                                            'ParentUserProfileId'       => 0,
                                             'FirstName'                 => $name,
                                             'Email'                     => $email,
                                             'UserProfileDeviceToken'    => $this->device_token,
@@ -180,6 +200,16 @@ class Userlogin extends CI_Controller {
                                             'AddedOn'                   => date('Y-m-d H:i:s'),
                                             'UpdatedOn'                 => date('Y-m-d H:i:s'),
                                         );
+
+                        if($social_type == "facebook") {
+                            $insertData = array_merge($insertData, array('FacebookProfileId' => $id));
+                        } else if($social_type == "google") {
+                            $insertData = array_merge($insertData, array('GoogleProfileId' => $id));
+                        } else if($social_type == "twitter") {
+                            $insertData = array_merge($insertData, array('TwitterProfileId' => $id));
+                        } else if($social_type == "linkedin") {
+                            $insertData = array_merge($insertData, array('LinkedinProfileId' => $id));
+                        }
 
                         $UserLeaderProfileId = $this->User_Model->insertUserProfile($insertData);
 
@@ -202,6 +232,8 @@ class Userlogin extends CI_Controller {
             }
 
             if($error_occured != true) {
+
+
 
                 if($login_type == '' || $login_type == 1) {
                     $user_profile = $this->User_Model->getCitizenProfileInformation($UserId);
@@ -320,6 +352,82 @@ class Userlogin extends CI_Controller {
         displayJsonEncode($array);
     }
 
+    public function loginTeamUsernamePassword() {
+        $error_occured = false;
+        $username       = $this->input->post('username');
+        $password       = $this->input->post('password');
+        $login_type     = $this->input->post('login_type');
+        
+        if($username == "") {
+            $msg = "Please enter your username";
+            $error_occured = true;
+        } else if($password == "") {
+            $msg = "Please enter your password";
+            $error_occured = true;
+        } else {
+
+            $res_u = $this->User_Model->verifyTeamUsernamePassword($username, $password, $login_type);
+
+            if($res_u['UserId'] > 0) {
+                
+                if($res_u['ProfileStatus'] == 1) {
+                    $UserId = $res_u['UserId'];
+
+                    $updateData = array(
+                        'LoginStatus' => 1,
+                    );
+                    
+                    $this->User_Model->updateLoginStatus($UserId, $updateData);
+
+                    $updateData = array(
+                        'ProfileLoginStatus' => 1,
+                        'UpdatedOn' => date('Y-m-d H:i:s'),
+                    );
+                    
+                    $this->User_Model->updateUserProfileData($res_u['UserProfileId'], $updateData);
+
+                    $user_profile = $this->User_Model->getUserProfileInformation($res_u['UserProfileId'], $res_u['UserProfileId']);
+
+                    $insertData = array(
+                                'UserId'        => $UserId,
+                                'UserProfileId' => $user_profile['UserProfileId'],
+                                'DeviceTokenId' => $this->device_token,
+                                'DeviceName'    => $this->device_name,
+                                'DeviceOs'      => $this->device_os,
+                                'Longitude'     => $this->location_long,
+                                'Lantitude'     => $this->location_lant,
+                                'LoggedIn'      => date('Y-m-d H:i:s'),
+                            );
+
+                    $this->User_Model->insertUserLog($insertData);
+
+                    $msg = "User logged in successfully";
+                } else {
+                    $msg = "Error: Your account is disabled. Please contact your administrator";
+                    $error_occured = true;
+                }
+            } else {
+                $msg = "Error: Either username or password incorrect";
+                $error_occured = true;
+            }
+        }
+
+        if($error_occured == true) {
+            $array = array(
+                            "status"        => 'failed',
+                            "message"       => $msg,
+                        );
+        } else {
+
+            $array = array(
+                           "status"         => 'success',
+                           "result"         => $user_profile,
+                           "message"        => $msg,
+                           );
+        }
+        displayJsonEncode($array);
+    }
+
 
     public function loginMobileMpin() {
 		$error_occured = false;
@@ -332,6 +440,9 @@ class Userlogin extends CI_Controller {
             $error_occured = true;
         } else if($mpin == "") {
             $msg = "Please enter your mpin";
+            $error_occured = true;
+        } else if($login_type == "") {
+            $msg = "Please select login type";
             $error_occured = true;
         } else {
 

@@ -7,17 +7,17 @@
     <meta http-equiv="cache-control" content="no-cache">
     <meta http-equiv="expires" content="Thu, 19 Nov 1900 08:52:00 GMT">
 
-    <?php  require_once './include/admincss.php';?>
+    <?php  require_once './include/css.php';?>
 
 </head>
 <body class="page-header-fixed ">
     
-    <?php  require_once './include/admintop.php';?>
+    <?php  require_once './include/top.php';?>
 
     <div class="clearfix"> </div>
     <div class="page-container">
         
-        <?php  require_once './include/adminleft.php';?>
+        <?php  require_once './include/left.php';?>
 
         <!-- Start page content wrapper -->
         <div class="page-content-wrapper animated fadeInRight">
@@ -125,18 +125,18 @@
                     <div class="clearfix"> </div>
                     <!-- End projects list -->
                     
-                    <?php  require_once './include/adminfooter.php';?>
+                    <?php  require_once './include/footer.php';?>
 
                 </div>
             </div>
         </div>
     </div>
     
-    <?php  require_once './include/adminscroll_top.php';?>
+    <?php  require_once './include/scroll_top.php';?>
 
 </body>
 
-<?php  require_once './include/adminjs.php';?>
+<?php  require_once './include/js.php';?>
 
 
 <div id="modal-stackable" tabindex="-1" role="dialog" aria-labelledby="modal-stackable-label" aria-hidden="true" class="modal fade" style="display: none;">

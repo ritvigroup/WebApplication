@@ -54,7 +54,7 @@ if(DEVELOPMENT_MODE == 1) {
     $server_pass    = "";
     $server_db      = "kaajneeti";
 
-    define('WEBSITE_URL', 'http://localhost:81/ritvigroup.com');
+    define('WEBSITE_URL', 'http://localhost/ritvigroup.com');
     
 }
 define('SITE_URL', WEBSITE_URL.DIRECTORY_SEPARATOR.APP_FOLDER.DIRECTORY_SEPARATOR.API_FOLDER.DIRECTORY_SEPARATOR.VERSON_FOLDER);

@@ -286,7 +286,6 @@ class Leader extends CI_Controller {
             $json = post_curl(API_CALL_PATH.'userprofile/searchLeaderProfiles', $this->input->post(), $this->curl);
 
             $json_decode = json_decode($json);
-
             
             if($option == true) {
                 $options = '';

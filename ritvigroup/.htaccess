@@ -1,10 +1,10 @@
 <IfModule mod_rewrite.c>
 	Options +FollowSymLinks
 	RewriteEngine On 
-	RewriteBase /homytapp/
+	RewriteBase /ritvigroup.com/
 
-	#RewriteCond %{HTTP_HOST} ^localhost:81
-	#RewriteRule ^(.*)$ http://localhost:81/$1 [R=301]
+	#RewriteCond %{HTTP_HOST} ^localhost
+	#RewriteRule ^(.*)$ http://localhost/$1 [R=301]
 
 	RewriteEngine on
 	#

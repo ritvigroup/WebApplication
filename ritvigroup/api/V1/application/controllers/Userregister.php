@@ -20,7 +20,7 @@ class Userregister extends CI_Controller {
     }
 
 
-    public function registerWithSocial() {
+    public function registerWithSocialOld() {
 		$error_occured = false;
         $id             = $this->input->post('id');
         $name           = $this->input->post('name');
@@ -144,7 +144,7 @@ class Userregister extends CI_Controller {
     		            $insertData = array(
     					                    'UserId' 					=> $UserId,
     					                    'UserTypeId' 				=> 1,
-    					                    'ParentUserId' 				=> 0,
+    					                    'ParentUserProfileId' 				=> 0,
     					                    'FirstName' 				=> $name,
     					                    'Email' 					=> $email,
     					                    'UserProfileDeviceToken' 	=> $this->device_token,
@@ -168,7 +168,7 @@ class Userregister extends CI_Controller {
                         $insertData = array(
                                             'UserId'                    => $UserId,
                                             'UserTypeId'                => 2,
-                                            'ParentUserId'              => 0,
+                                            'ParentUserProfileId'              => 0,
                                             'FirstName'                 => $name,
                                             'Email'                     => $email,
                                             'UserProfileDeviceToken'    => $this->device_token,
@@ -329,7 +329,7 @@ class Userregister extends CI_Controller {
                     $insertData = array(
                                         'UserId'                    => $UserId,
                                         'UserTypeId'                => 1,
-                                        'ParentUserId'              => 0,
+                                        'ParentUserProfileId'              => 0,
                                         'FirstName'                 => $firstname,
                                         'LastName'                  => $lastname,
                                         'Email'                     => $email,
@@ -355,7 +355,7 @@ class Userregister extends CI_Controller {
                     $insertData = array(
                                         'UserId'                    => $UserId,
                                         'UserTypeId'                => 2,
-                                        'ParentUserId'              => 0,
+                                        'ParentUserProfileId'              => 0,
                                         'FirstName'                 => $firstname,
                                         'LastName'                  => $lastname,
                                         'Email'                     => $email,
@@ -485,8 +485,8 @@ class Userregister extends CI_Controller {
                     $insertData = array(
                                         'UserId'                    => $UserId,
                                         'UserTypeId'                => 1,
-                                        'ParentUserId'              => 0,
-                                        'FirstName'                 => $UserName,
+                                        'ParentUserProfileId'              => 0,
+                                        'FirstName'                 => '',
                                         'UserProfileDeviceToken'    => $this->device_token,
                                         'Mobile'                    => $mobile,
                                         'ProfileStatus'             => 1,
@@ -508,8 +508,8 @@ class Userregister extends CI_Controller {
                     $insertData = array(
                                         'UserId'                    => $UserId,
                                         'UserTypeId'                => 2,
-                                        'ParentUserId'              => 0,
-                                        'FirstName'                 => $UserName,
+                                        'ParentUserProfileId'              => 0,
+                                        'FirstName'                 => '',
                                         'UserProfileDeviceToken'    => $this->device_token,
                                         'Mobile'                    => $mobile,
                                         'ProfileStatus'             => 0,
@@ -782,13 +782,13 @@ class Userregister extends CI_Controller {
                 $insertData = array(
                                     'UserId'                    => $UserId,
                                     'UserTypeId'                => 3,
-                                    'ParentUserId'              => $user_detail['UserId'],
+                                    'ParentUserProfileId'       => $friend_profile,
                                     'FirstName'                 => $first_name,
                                     'LastName'                  => $last_name,
                                     'Email'                     => $email,
                                     'UserDepartment'            => $department,
                                     'ProfileUserName'           => $user_name,
-                                    'ProfileUserPassword'       => $password,
+                                    'ProfileUserPassword'       => md5($password),
                                     'UserRoleId'                => $role,
                                     'UserProfileDeviceToken'    => '',
                                     'Mobile'                    => '',
@@ -894,18 +894,22 @@ class Userregister extends CI_Controller {
 
                 $user_profile = $this->User_Model->getUserProfileInformation($friend_user_profile_id, $user_profile_id);
 
+                
                 $updateData = array(
                                     'FirstName'                 => $first_name,
                                     'LastName'                  => $last_name,
                                     'Email'                     => $email,
                                     'UserDepartment'            => $department,
-                                    'ProfileUserName'           => $user_name,
-                                    'ProfileUserPassword'       => $password,
+                                    'ProfileUserName'           => $user_name,                                    
                                     'UserRoleId'                => $role,
                                     'ProfileStatus'             => $status,
                                     'UpdatedBy'                 => $user_profile_id,
                                     'UpdatedOn'                 => date('Y-m-d H:i:s'),
                                 );
+
+                if($password != '') {
+                    $updateData = array_merge($updateData, array('ProfileUserPassword' => md5($password)));
+                }
 
                 $this->User_Model->updateUserProfileData($friend_user_profile_id, $updateData);
 

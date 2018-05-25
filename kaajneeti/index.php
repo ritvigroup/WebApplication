@@ -75,7 +75,7 @@ switch (ENVIRONMENT)
 			ini_set('display_errors', 0);
 		}
 
-		define('API_CALL_PATH', 'http://localhost:81/ritvigroup.com/ritvigroup/api/V1/');
+		define('API_CALL_PATH', 'http://localhost/ritvigroup.com/ritvigroup/api/V1/');
 
 	break;
 

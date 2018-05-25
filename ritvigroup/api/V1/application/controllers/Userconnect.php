@@ -349,6 +349,138 @@ class Userconnect extends CI_Controller {
         displayJsonEncode($array);
     }
 
+
+    // Set / Unset Get Notification
+    public function getNotificationFromUserProfileOnOff() {
+        $UserId                 = $this->input->post('user_id');
+        $UserProfileId          = $this->input->post('user_profile_id');
+        $FriendUserProfileId    = $this->input->post('friend_user_profile_id');
+        
+        if($UserId == "") {
+            $msg = "Please select user";
+            $error_occured = true;
+        } else if($UserProfileId == "") {
+            $msg = "Please select user profile";
+            $error_occured = true;
+        } else if($FriendUserProfileId == "") {
+            $msg = "Please select friend user profile";
+            $error_occured = true;
+        } else {
+
+            $notification_on_off = 0;
+
+            $UserProfileDetail = $this->User_Model->checkUserFriendRequest($UserProfileId, $FriendUserProfileId);
+
+
+            if($UserProfileDetail['UserProfileId'] > 0) {
+                $this->db->query("BEGIN");
+                if($UserProfileDetail['GetNotification'] == 1) {
+                    $this->User_Model->updateGetNotification($UserProfileId, $FriendUserProfileId, 0);
+                    $msg = "Now you will not get notification from this user";
+                } else if($UserProfileDetail['GetNotification'] == 0) {
+                    $this->User_Model->updateGetNotification($UserProfileId, $FriendUserProfileId, 1);
+                    $msg = "Now you will get notifications from this user";
+                    $notification_on_off = 1;
+                }
+                $this->db->query("COMMIT");
+            } else {
+                $this->User_Model->sendUserFriendRequest($UserProfileId, $FriendUserProfileId);
+
+                $UserProfileDetail = $this->User_Model->checkUserFriendRequest($UserProfileId, $FriendUserProfileId);
+
+                if($UserProfileDetail['UserProfileId'] > 0) {
+                    $this->db->query("BEGIN");
+                    if($UserProfileDetail['GetNotification'] == 1) {
+                        $this->User_Model->updateGetNotification($UserProfileId, $FriendUserProfileId, 0);
+                        $msg = "Now you will not get notification from this user";
+                    } else if($UserProfileDetail['GetNotification'] == 0) {
+                        $this->User_Model->updateGetNotification($UserProfileId, $FriendUserProfileId, 1);
+                        $msg = "Now you will get notifications from this user";
+                        $notification_on_off = 1;
+                    }
+                    $this->db->query("COMMIT");
+                } else {
+                    $msg = "Connect request failed for notifications";
+                    $error_occured = true;
+                }
+            }
+        }
+
+        if($error_occured == true) {
+            $array = array(
+                            "status"        => 'failed',
+                            "message"       => $msg,
+                        );
+        } else {
+
+            $array = array(
+                           "status"      => 'success',
+                           "message"     => $msg,
+                           "result"      => $notification_on_off,
+                           );
+        }
+        displayJsonEncode($array);
+    }
+
+
+    // Follow / Unfollow User Profile
+    public function followUnfollowUserProfile() {
+        $UserId                 = $this->input->post('user_id');
+        $UserProfileId          = $this->input->post('user_profile_id');
+        $FollowUserProfileId    = $this->input->post('friend_user_profile_id');
+        
+        if($UserId == "") {
+            $msg = "Please select user";
+            $error_occured = true;
+        } else if($UserProfileId == "") {
+            $msg = "Please select user profile";
+            $error_occured = true;
+        } else if($FollowUserProfileId == "") {
+            $msg = "Please select friend user profile";
+            $error_occured = true;
+        } else {
+
+            $follow = 0;
+
+            $UserProfileDetail = $this->User_Model->checkUserFollow($UserProfileId, $FollowUserProfileId);
+
+            if($UserProfileDetail['UserProfileId'] > 0) {
+                $this->db->query("BEGIN");
+                $this->User_Model->deleteUserFollowUser($UserProfileId, $FollowUserProfileId);
+                $this->db->query("COMMIT");
+                $msg = "User profile unfollow successfully";
+                $follow = 0;
+            } else {
+                $this->db->query("BEGIN");
+                $insertData = array(
+                                    'UserProfileId'         => $UserProfileId,
+                                    'FollowUserProfileId'   => $FollowUserProfileId,
+                                    'FollowOn'              => date('Y-m-d H:i:s'),
+                                );
+                $this->User_Model->insertUserFollowUser($insertData);
+                $this->db->query("COMMIT");
+                $msg = "Follow successfull";
+                $follow = 1;
+            }
+        }
+
+        if($error_occured == true) {
+            $array = array(
+                            "status"        => 'failed',
+                            "message"       => $msg,
+                        );
+        } else {
+
+            $array = array(
+                           "status"      => 'success',
+                           "message"     => $msg,
+                           "result"      => $follow,
+                           );
+        }
+        displayJsonEncode($array);
+    }
+
+
     // Friend Request Sent
     public function sendUserProfileFriendRequest() {
         $UserId                 = $this->input->post('user_id');
@@ -375,7 +507,7 @@ class Userconnect extends CI_Controller {
                 if($UserProfileDetail['RequestAccepted'] == 0) {
                     $this->User_Model->acceptUserFriendRequest($UserProfileId, $FriendUserProfileId);
                     $this->db->query("COMMIT");
-                    $msg = "You are now friend with this user";
+                    $msg = "You are now connect with this user";
                     $friend = 1;
                 } else if($UserProfileDetail['RequestAccepted'] == 2) {
                     $msg = "You cannot send friend request any more";
@@ -383,7 +515,7 @@ class Userconnect extends CI_Controller {
                 } else if($UserProfileDetail['RequestAccepted'] == 1) {
                     $this->User_Model->deleteUserFriendRequest($UserProfileId, $FriendUserProfileId);
                     $this->db->query("COMMIT");
-                    $msg = "You are now unfriend from this user";
+                    $msg = "We are sorry that you now no longer connect with this user.";
                     $friend = -1;
                 }
             } else {
@@ -395,15 +527,15 @@ class Userconnect extends CI_Controller {
                     if($UserProfileDetail['RequestAccepted'] == 1) {
                         $this->User_Model->deleteUserFriendRequest($UserProfileId, $FriendUserProfileId);
                         $this->db->query("COMMIT");
-                        $msg = "You are now unfriend from this user";
+                        $msg = "You are now unconnect from this user";
                     } else if($UserProfileDetail['RequestAccepted'] == 0) {
-                        $msg = "You already sent request to user";
+                        $msg = "You connect request already sent to user";
                         $error_occured = true;
                     }
                 } else {
                     $this->User_Model->sendUserFriendRequest($UserProfileId, $FriendUserProfileId);
                     $this->db->query("COMMIT");
-                    $msg = "Sent request to user";
+                    $msg = "Sent connection request to user";
                 }
             }
         }
@@ -418,7 +550,7 @@ class Userconnect extends CI_Controller {
             $array = array(
                            "status"      => 'success',
                            "message"     => $msg,
-                           "friend"     => $friend,
+                           "friend"      => $friend,
                            );
         }
         displayJsonEncode($array);
@@ -631,6 +763,271 @@ class Userconnect extends CI_Controller {
                            "status"      => 'success',
                            "message"     => $msg,
                            "result"     => $friends,
+                           );
+        }
+        displayJsonEncode($array);
+    }
+
+
+    // Get My All Connections
+    public function getMyAllConnections($UserProfileId) {
+        $UserId                 = $this->input->post('user_id');
+        $UserProfileId          = $this->input->post('user_profile_id');
+        
+        if($UserId == "") {
+            $msg = "Please select user";
+            $error_occured = true;
+        } else if($UserProfileId == "") {
+            $msg = "Please select user profile";
+            $error_occured = true;
+        } else {
+            $connections = $this->User_Model->getMyTotalConnections($UserProfileId, 0, 1);
+
+            if(count($connections) > 0) {
+                $msg = count($connections)." connect found";
+            } else {
+                $msg = "No connect found";
+                $error_occured = false;
+            }
+        }
+
+        if($error_occured == true) {
+            $array = array(
+                            "status"        => 'failed',
+                            "message"       => $msg,
+                        );
+        } else {
+
+            $array = array(
+                           "status"         => 'success',
+                           "message"        => $msg,
+                           "result"         => $connections,
+                           );
+        }
+        displayJsonEncode($array);
+    }
+
+    // Get My All Citizen Connections
+    public function getMyAllCitizenConnections($UserProfileId) {
+        $UserId                 = $this->input->post('user_id');
+        $UserProfileId          = $this->input->post('user_profile_id');
+        
+        if($UserId == "") {
+            $msg = "Please select user";
+            $error_occured = true;
+        } else if($UserProfileId == "") {
+            $msg = "Please select user profile";
+            $error_occured = true;
+        } else {
+            $connections = $this->User_Model->getMyTotalConnections($UserProfileId, 1, 1);
+            if(count($connections) > 0) {
+                $msg = count($connections)." citizen connect found";
+            } else {
+                $msg = "No connect found";
+                $error_occured = false;
+            }
+        }
+
+        if($error_occured == true) {
+            $array = array(
+                            "status"        => 'failed',
+                            "message"       => $msg,
+                        );
+        } else {
+
+            $array = array(
+                           "status"         => 'success',
+                           "message"        => $msg,
+                           "result"         => $connections,
+                           );
+        }
+        displayJsonEncode($array);
+    }
+
+    // Get My All Leader Connections
+    public function getMyAllLeaderConnections($UserProfileId) {
+        $UserId                 = $this->input->post('user_id');
+        $UserProfileId          = $this->input->post('user_profile_id');
+        
+        if($UserId == "") {
+            $msg = "Please select user";
+            $error_occured = true;
+        } else if($UserProfileId == "") {
+            $msg = "Please select user profile";
+            $error_occured = true;
+        } else {
+            $connections = $this->User_Model->getMyTotalConnections($UserProfileId, 2, 1);
+            if(count($connections) > 0) {
+                $msg = count($connections)." leader connect found";
+            } else {
+                $msg = "No connect found";
+                $error_occured = false;
+            }
+        }
+
+        if($error_occured == true) {
+            $array = array(
+                            "status"        => 'failed',
+                            "message"       => $msg,
+                        );
+        } else {
+
+            $array = array(
+                           "status"         => 'success',
+                           "message"        => $msg,
+                           "result"         => $connections,
+                           );
+        }
+        displayJsonEncode($array);
+    }
+
+    // Get My All Other Connections
+    public function getMyAllOtherConnections($UserProfileId) {
+        $UserId                 = $this->input->post('user_id');
+        $UserProfileId          = $this->input->post('user_profile_id');
+        
+        if($UserId == "") {
+            $msg = "Please select user";
+            $error_occured = true;
+        } else if($UserProfileId == "") {
+            $msg = "Please select user profile";
+            $error_occured = true;
+        } else {
+            $connections = $this->User_Model->getMyTotalConnections($UserProfileId, 3, 1);
+            if(count($connections) > 0) {
+                $msg = count($connections)." other connect found";
+            } else {
+                $msg = "No connect found";
+                $error_occured = false;
+            }
+        }
+
+        if($error_occured == true) {
+            $array = array(
+                            "status"        => 'failed',
+                            "message"       => $msg,
+                        );
+        } else {
+
+            $array = array(
+                           "status"         => 'success',
+                           "message"        => $msg,
+                           "result"         => $connections,
+                           );
+        }
+        displayJsonEncode($array);
+    }
+
+    // Get My All Followers
+    public function getMyAllConnectFollowers($UserProfileId) {
+        $UserId                 = $this->input->post('user_id');
+        $UserProfileId          = $this->input->post('user_profile_id');
+        
+        if($UserId == "") {
+            $msg = "Please select user";
+            $error_occured = true;
+        } else if($UserProfileId == "") {
+            $msg = "Please select user profile";
+            $error_occured = true;
+        } else {
+            $connections = $this->User_Model->getMyTotalFollowers($UserProfileId, 1);
+            if(count($connections) > 0) {
+                $msg = count($connections)." follower found";
+            } else {
+                $msg = "No follower found";
+                $error_occured = false;
+            }
+        }
+
+        if($error_occured == true) {
+            $array = array(
+                            "status"        => 'failed',
+                            "message"       => $msg,
+                        );
+        } else {
+
+            $array = array(
+                           "status"         => 'success',
+                           "message"        => $msg,
+                           "result"         => $connections,
+                           );
+        }
+        displayJsonEncode($array);
+    }
+
+    // Get My All Followings
+    public function getMyAllConnectFollowings($UserProfileId) {
+        $UserId                 = $this->input->post('user_id');
+        $UserProfileId          = $this->input->post('user_profile_id');
+        
+        if($UserId == "") {
+            $msg = "Please select user";
+            $error_occured = true;
+        } else if($UserProfileId == "") {
+            $msg = "Please select user profile";
+            $error_occured = true;
+        } else {
+            $connections = $this->User_Model->getMyTotalFollowings($UserProfileId, 1);
+            if(count($connections) > 0) {
+                $msg = count($connections)." following found";
+            } else {
+                $msg = "No following found";
+                $error_occured = false;
+            }
+        }
+
+        if($error_occured == true) {
+            $array = array(
+                            "status"        => 'failed',
+                            "message"       => $msg,
+                        );
+        } else {
+
+            $array = array(
+                           "status"         => 'success',
+                           "message"        => $msg,
+                           "result"         => $connections,
+                           );
+        }
+        displayJsonEncode($array);
+    }
+
+
+    // Get My All Connections with Followers and Followings
+    public function getMyAllConnectionsWithFollowersAndFollowings($UserProfileId) {
+        $UserId                 = $this->input->post('user_id');
+        $UserProfileId          = $this->input->post('user_profile_id');
+        
+        if($UserId == "") {
+            $msg = "Please select user";
+            $error_occured = true;
+        } else if($UserProfileId == "") {
+            $msg = "Please select user profile";
+            $error_occured = true;
+        } else {
+
+            $data = array();
+            $data['Connections']    = $this->User_Model->getMyTotalConnections($UserProfileId, 0, 1);
+            $data['Citizen']        = $this->User_Model->getMyTotalConnections($UserProfileId, 1, 1);
+            $data['Leader']         = $this->User_Model->getMyTotalConnections($UserProfileId, 2, 1);
+            $data['Other']          = $this->User_Model->getMyTotalConnections($UserProfileId, 3, 1);
+            $data['Followers']      = $this->User_Model->getMyTotalFollowers($UserProfileId, 1);
+            $data['Followings']      = $this->User_Model->getMyTotalFollowings($UserProfileId, 1);
+
+            $msg = "User connections with following and followers";
+        }
+
+        if($error_occured == true) {
+            $array = array(
+                            "status"        => 'failed',
+                            "message"       => $msg,
+                        );
+        } else {
+
+            $array = array(
+                           "status"         => 'success',
+                           "message"        => $msg,
+                           "result"         => $data,
                            );
         }
         displayJsonEncode($array);

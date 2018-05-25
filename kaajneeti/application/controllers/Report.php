@@ -42,6 +42,68 @@ class Report extends CI_Controller {
     }
 
 
+    public function activeProfile() {
+    	$_POST['user_id'] = $this->session->userdata('UserId');
+    	$_POST['user_profile_id'] = $this->session->userdata('UserProfileId');
+    	$_POST['user_type_id'] = 1;
+        $json_encode = post_curl(API_CALL_PATH.'userprofile/getAllActiveUserProfiles', $this->input->post(), $this->curl);
+
+        $json_decode = json_decode($json_encode);
+
+        if(count($json_decode->result) > 0) {
+            $data['UserProfiles'] = $json_decode;
+        }
+
+        $this->load->view('report/activeprofile',$data);
+    }
+
+    public function nonActiveProfile() {
+    	$_POST['user_id'] = $this->session->userdata('UserId');
+    	$_POST['user_profile_id'] = $this->session->userdata('UserProfileId');
+    	$_POST['user_type_id'] = 1;
+        $json_encode = post_curl(API_CALL_PATH.'userprofile/getAllInactiveUserProfiles', $this->input->post(), $this->curl);
+
+        $json_decode = json_decode($json_encode);
+
+        if(count($json_decode->result) > 0) {
+            $data['UserProfiles'] = $json_decode;
+        }
+
+        $this->load->view('report/nonactiveprofile',$data);
+    }
+
+
+    public function activeLeaderProfile() {
+    	$_POST['user_id'] = $this->session->userdata('UserId');
+    	$_POST['user_profile_id'] = $this->session->userdata('UserProfileId');
+    	$_POST['user_type_id'] = 2;
+        $json_encode = post_curl(API_CALL_PATH.'userprofile/getAllActiveUserProfiles', $this->input->post(), $this->curl);
+
+        $json_decode = json_decode($json_encode);
+
+        if(count($json_decode->result) > 0) {
+            $data['UserProfiles'] = $json_decode;
+        }
+
+        $this->load->view('report/activeleaderprofile',$data);
+    }
+
+    public function nonActiveLeaderProfile() {
+    	$_POST['user_id'] = $this->session->userdata('UserId');
+    	$_POST['user_profile_id'] = $this->session->userdata('UserProfileId');
+    	$_POST['user_type_id'] = 2;
+        $json_encode = post_curl(API_CALL_PATH.'userprofile/getAllInactiveUserProfiles', $this->input->post(), $this->curl);
+
+        $json_decode = json_decode($json_encode);
+
+        if(count($json_decode->result) > 0) {
+            $data['UserProfiles'] = $json_decode;
+        }
+
+        $this->load->view('report/nonactiveleaderprofile',$data);
+    }
+
+
     public function paymentTransaction() {
         $data = array();
       

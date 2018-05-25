@@ -70,7 +70,7 @@
             });
 
         } else {
-            sweetAlert("Oops...", "Please select user and enter first name", "error");
+            sweetAlert("Oops...", "Please select role name", "error");
             return false;
         }
     };

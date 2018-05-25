@@ -21,6 +21,14 @@ class Post_Model extends CI_Model {
     }
 
 
+    public function updateMyPost($whereData, $updateData) {
+        $this->db->where($whereData);
+        $this->db->update($this->postTbl, $updateData);
+
+        return $this->db->affected_rows();
+    }
+
+
     public function saveMyPostTags($PostId, $UserProfileId, $post_tag) {
         foreach($post_tag AS $tag_user_profile_id) {
             $insertData = array(
@@ -128,11 +136,16 @@ class Post_Model extends CI_Model {
     }
 
 
-    public function getMyAllPost($UserProfileId) {
+    public function getMyAllPost($UserProfileId, $FriendProfileId) {
         $posts = array();
-        if(isset($UserProfileId) && $UserProfileId > 0) {
+        
+        if($FriendProfileId > 0) {
 
-            $query = $this->db->query("SELECT PostId FROM $this->postTbl WHERE `UserProfileId` = '".$UserProfileId."'");
+            if($UserProfileId != $FriendProfileId) {
+                $query = $this->db->query("SELECT PostId FROM $this->postTbl WHERE `UserProfileId` = '".$FriendProfileId."' AND `PostStatus` = '1' AND `PostPrivacy` = '1' ORDER BY AddedOn DESC");
+            } else {
+                $query = $this->db->query("SELECT PostId FROM $this->postTbl WHERE `UserProfileId` = '".$FriendProfileId."' AND `PostStatus` != -1 ORDER BY AddedOn DESC");
+            }
 
             $res = $query->result_array();
 
@@ -142,8 +155,6 @@ class Post_Model extends CI_Model {
                                 'postdata' => $this->getPostDetail($result['PostId']),
                                 );
             }
-        } else {
-            $posts = array();
         }
         return $posts;
     }

@@ -24,9 +24,16 @@ class Friendgroup extends CI_Controller {
     public function saveFriendgroup() {
         $error_occured = false;
 
-        $UserProfileId      = $this->input->post('user_profile_id');
-        $FriendGroupName    = $this->input->post('group_name');
-        $group_member       = $this->input->post('group_member');
+        $UserProfileId              = $this->input->post('user_profile_id');
+        $FriendGroupName            = $this->input->post('group_name');
+        $FriendGroupDescription     = $this->input->post('group_description');
+        $group_member               = $this->input->post('group_member');
+
+        echo '<pre>';
+        print_r($_POST);
+        print_r($_FILES);
+        print_r($group_member);
+        die;
         
         if($UserProfileId == "") {
             $msg = "Please select your profile";
@@ -42,12 +49,13 @@ class Friendgroup extends CI_Controller {
             $this->db->query("BEGIN");
 
             $insertData = array(
-                                'FriendGroupName'       => $FriendGroupName,
-                                'FriendGroupStatus'     => 1,
-                                'AddedBy'               => $UserProfileId,
-                                'UpdatedBy'             => $UserProfileId,
-                                'AddedOn'               => date('Y-m-d H:i:s'),
-                                'UpdatedOn'             => date('Y-m-d H:i:s'),
+                                'FriendGroupName'           => $FriendGroupName,
+                                'FriendGroupDescription'    => $FriendGroupDescription,
+                                'FriendGroupStatus'         => 1,
+                                'AddedBy'                   => $UserProfileId,
+                                'UpdatedBy'                 => $UserProfileId,
+                                'AddedOn'                   => date('Y-m-d H:i:s'),
+                                'UpdatedOn'                 => date('Y-m-d H:i:s'),
                                 );
 
             $FriendGroupId = $this->Friendgroup_Model->saveFriendgroup($insertData);
@@ -56,10 +64,16 @@ class Friendgroup extends CI_Controller {
                 $FriendGroupMember = $this->Friendgroup_Model->saveFriendgroupMember($FriendGroupId, $UserProfileId, $group_member);
                 $FriendGroupImage = $this->Friendgroup_Model->saveFriendgroupImage($FriendGroupId, $UserProfileId, $_FILES['file']);
 
-                $this->db->query("COMMIT");
-                
-                $friend_group_detail = $this->Friendgroup_Model->getFriendgroupDetail($FriendGroupId, $UserProfileId);
-                $msg = "Group created successfully";
+                if($FriendGroupMember == false || $FriendGroupImage == false) {
+                    $this->db->query("ROLLBACK");
+                    $msg = "Group not saved. Error occured during member or photo update";
+                    $error_occured = true;
+                } else {
+                    $this->db->query("COMMIT");
+                    
+                    $friend_group_detail = $this->Friendgroup_Model->getFriendgroupDetail($FriendGroupId, $UserProfileId);
+                    $msg = "Group created successfully";
+                }
             } else {
                 $this->db->query("ROLLBACK");
                 $msg = "Group not saved. Error occured";
@@ -78,6 +92,8 @@ class Friendgroup extends CI_Controller {
                            "status"     => 'success',
                            "result"     => $friend_group_detail,
                            "message"    => $msg,
+                           "FriendGroupMember"    => $FriendGroupMember,
+                           "FriendGroupImage"    => $FriendGroupImage,
                            );
         }
         displayJsonEncode($array);
@@ -104,7 +120,7 @@ class Friendgroup extends CI_Controller {
 
             if($exist_member == true) { 
 
-                $delete_member = $this->Friendgroup_Model->deleteMemberFromFriendgroup($FriendGroupId, $UserProfileId, $UserProfileId);
+                $delete_member = $this->Friendgroup_Model->deleteMemberFromFriendgroup($FriendGroupId, $UserProfileId);
 
                 if($delete_member == true) {
                     $this->db->query("COMMIT");
@@ -114,7 +130,7 @@ class Friendgroup extends CI_Controller {
                     $msg = "Exist group successfully";
                 } else {
                     $this->db->query("ROLLBACK");
-                    $msg = "Group memeber does not exist. Error occured";
+                    $msg = "Group memeber does not exist. Error occured".$exist_member;
                     $error_occured = true;
                 }
             }
@@ -358,7 +374,7 @@ class Friendgroup extends CI_Controller {
             $error_occured = true;
         } else {
 
-            $groups = $this->Friendgroup_Model->getMyAllFriendgroup($UserProfileId);
+            $groups = $this->Friendgroup_Model->getMyAllFriendgroup($UserProfileId, $UserProfileId);
             if(count($groups) > 0) {
                 $msg = "Groups fetched successfully";
             } else {
@@ -378,6 +394,78 @@ class Friendgroup extends CI_Controller {
                            "status"     => 'success',
                            "result"     => $groups,
                            "message"    => $msg,
+                           );
+        }
+        displayJsonEncode($array);
+    }
+
+
+    // Set / Unset Get Notification
+    public function getNotificationFromGroupOnOff() {
+        $UserId           = $this->input->post('user_id');
+        $UserProfileId    = $this->input->post('user_profile_id');
+        $FriendGroupId    = $this->input->post('group_id');
+        
+        if($UserId == "") {
+            $msg = "Please select user";
+            $error_occured = true;
+        } else if($UserProfileId == "") {
+            $msg = "Please select user profile";
+            $error_occured = true;
+        } else if($FriendGroupId == "") {
+            $msg = "Please select group id";
+            $error_occured = true;
+        } else {
+
+            $notification_on_off = 0;
+
+            $GroupMemeberDetail = $this->Friendgroup_Model->checkGroupMemberGroupDetail($UserProfileId, $FriendGroupId);
+
+
+            if($GroupMemeberDetail['UserProfileId'] > 0) {
+                $this->db->query("BEGIN");
+                if($GroupMemeberDetail['GetNotification'] == 1) {
+                    $this->Friendgroup_Model->updateGetNotification($UserProfileId, $FriendGroupId, 0);
+                    $msg = "Now you will not get notification from this group";
+                } else if($GroupMemeberDetail['GetNotification'] == 0) {
+                    $this->Friendgroup_Model->updateGetNotification($UserProfileId, $FriendGroupId, 1);
+                    $msg = "Now you will get notifications from this group";
+                    $notification_on_off = 1;
+                }
+                $this->db->query("COMMIT");
+            } else {
+
+                $GroupMemeberDetail = $this->Friendgroup_Model->checkGroupMemberGroupDetail($UserProfileId, $FriendGroupId);
+
+                if($GroupMemeberDetail['UserProfileId'] > 0) {
+                    $this->db->query("BEGIN");
+                    if($GroupMemeberDetail['GetNotification'] == 1) {
+                        $this->Friendgroup_Model->updateGetNotification($UserProfileId, $FriendGroupId, 0);
+                        $msg = "Now you will not get notification from this group";
+                    } else if($GroupMemeberDetail['GetNotification'] == 0) {
+                        $this->Friendgroup_Model->updateGetNotification($UserProfileId, $FriendGroupId, 1);
+                        $msg = "Now you will get notifications from this group";
+                        $notification_on_off = 1;
+                    }
+                    $this->db->query("COMMIT");
+                } else {
+                    $msg = "Group request failed for notifications";
+                    $error_occured = true;
+                }
+            }
+        }
+
+        if($error_occured == true) {
+            $array = array(
+                            "status"        => 'failed',
+                            "message"       => $msg,
+                        );
+        } else {
+
+            $array = array(
+                           "status"      => 'success',
+                           "message"     => $msg,
+                           "result"      => $notification_on_off,
                            );
         }
         displayJsonEncode($array);

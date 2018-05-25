@@ -373,18 +373,154 @@
                         ?>
 
                         <div class="portlet box">
-                            <div class="portlet-header">
-                                <div class="caption">Overall listen report</div>
+                            <!-- <div class="portlet-header"> -->
+                                <!-- <div class="caption">Overall listen report</div> -->
                                 <!-- <div class="tools">
                                     <i class="fa fa-chevron-up"></i>
                                     <i data-toggle="modal" data-target="#modal-config" class="fa fa-cog"></i>
                                     <i class="fa fa-refresh"></i>
                                     <i class="fa fa-times"></i>
                                 </div> -->
-                            </div>
+                            <!-- </div> -->
                             <div class="row">
                                 <div class="col-lg-12">
-                                    <div class="ibox float-e-margins">
+                                    <div class="col-md-12  activate_user_div" id="team-table">
+                                      <table class="table table-bordered">
+                                        <thead>
+                                          <tr>
+                                            <th>
+                                              <div class="form-group activate-checkbox">
+                                                <div class="checkbox active-checkbox">
+                                                  <label>
+                                                    <input tabindex="5" type="checkbox">&nbsp;</label>
+                                                </div>
+                                              </div>
+                                            </th>
+                                            <th>Complaint</th>
+                                            <th>Complaint</th>
+                                            <th>Complaint</th>
+                                            <th>Complaint</th>
+                                            <th>Poll</th>
+                                            <th>Post</th>
+                                          </tr>
+                                        </thead>
+                                        <tbody>
+                                          <tr>
+                                            <td>
+                                              <div class="form-group activate-checkbox">
+                                                <div class="checkbox active-checkbox">
+                                                  <label>
+                                                    <input tabindex="5" type="checkbox">&nbsp;</label>
+                                                </div>
+                                              </div>
+                                            </td>
+                                            <td>Text</td>
+                                            <td>Text</td>
+                                            <td>Text</td>
+                                            <td>Text</td>
+                                            <td>Text</td>
+                                            <td>Text</td>
+                                          </tr>
+                                          <tr>
+                                            <td>
+                                              <div class="form-group activate-checkbox">
+                                                <div class="checkbox active-checkbox">
+                                                  <label>
+                                                    <input tabindex="5" type="checkbox">&nbsp;</label>
+                                                </div>
+                                              </div>
+                                            </td>
+                                            <td>Text</td>
+                                            <td>Text</td>
+                                            <td>Text</td>
+                                            <td>Text</td>
+                                            <td>Text</td>
+                                            <td>Text</td>
+                                          </tr>
+                                          <tr>
+                                            <td>
+                                              <div class="form-group activate-checkbox">
+                                                <div class="checkbox active-checkbox">
+                                                  <label>
+                                                    <input tabindex="5" type="checkbox">&nbsp;</label>
+                                                </div>
+                                              </div>
+                                            </td>
+                                            <td>Text</td>
+                                            <td>Text</td>
+                                            <td>Text</td>
+                                            <td>Text</td>
+                                            <td>Text</td>
+                                            <td>Text</td>
+                                          </tr>
+                                          <tr>
+                                            <td>
+                                              <div class="form-group activate-checkbox">
+                                                <div class="checkbox active-checkbox">
+                                                  <label>
+                                                    <input tabindex="5" type="checkbox">&nbsp;</label>
+                                                </div>
+                                              </div>
+                                            </td>
+                                            <td>Text</td>
+                                            <td>Text</td>
+                                            <td>Text</td>
+                                            <td>Text</td>
+                                            <td>Text</td>
+                                            <td>Text</td>
+                                          </tr>
+                                          <tr>
+                                            <td>
+                                              <div class="form-group activate-checkbox">
+                                                <div class="checkbox active-checkbox">
+                                                  <label>
+                                                    <input tabindex="5" type="checkbox">&nbsp;</label>
+                                                </div>
+                                              </div>
+                                            </td>
+                                            <td>Text</td>
+                                            <td>Text</td>
+                                            <td>Text</td>
+                                            <td>Text</td>
+                                            <td>Text</td>
+                                            <td>Text</td>
+                                          </tr>
+                                          <tr>
+                                            <td>
+                                              <div class="form-group activate-checkbox">
+                                                <div class="checkbox active-checkbox">
+                                                  <label>
+                                                    <input tabindex="5" type="checkbox">&nbsp;</label>
+                                                </div>
+                                              </div>
+                                            </td>
+                                            <td>Text</td>
+                                            <td>Text</td>
+                                            <td>Text</td>
+                                            <td>Text</td>
+                                            <td>Text</td>
+                                            <td>Text</td>
+                                          </tr>
+                                          <tr>
+                                            <td>
+                                              <div class="form-group activate-checkbox">
+                                                <div class="checkbox active-checkbox">
+                                                  <label>
+                                                    <input tabindex="5" type="checkbox">&nbsp;</label>
+                                                </div>
+                                              </div>
+                                            </td>
+                                            <td>Text</td>
+                                            <td>Text</td>
+                                            <td>Text</td>
+                                            <td>Text</td>
+                                            <td>Text</td>
+                                            <td>Text</td>
+                                          </tr>
+                                        </tbody>
+                                      </table>
+                                    </div>
+                                    <!-- <div class="ibox float-e-margins">
                                         <div class="ibox-title">
                                             <h5>Pie Chart 3 </h5>
                                             <div class="ibox-tools">
@@ -403,7 +539,7 @@
                                                 <div id="pieChart3" class="demo-placeholder"></div>
                                             </div>
                                         </div>
-                                    </div>
+                                    </div> -->
                                 </div>
                             </div>
                             
@@ -504,13 +640,13 @@ $(document).ready(function(){
 
         $('#complaint').click(function(){
 
-        	window.location.href ="<?=base_url();?>complaint/complaintReceived";
+        	window.location.href ="http://localhost/kaajneeti/complaint/complaintReceived";
 
         });
 
           $('#suggestion-box').click(function(){
 
-        	window.location.href ="<?=base_url();?>suggestion/suggestionReceived";
+        	window.location.href ="http://localhost/kaajneeti/suggestion/suggestionReceived";
 
         });
 
@@ -518,25 +654,25 @@ $(document).ready(function(){
 
           $('#information-box').click(function(){
 
-        	window.location.href ="<?=base_url();?>information/information";
+        	window.location.href ="http://localhost/kaajneeti/information/information";
 
         });
 
                $('#event-box').click(function(){
 
-        	window.location.href ="<?=base_url();?>event/event";
+        	window.location.href ="http://localhost/kaajneeti/event/event";
 
         });
 
              $('#poll-box').click(function(){
 
-        	window.location.href ="<?=base_url();?>poll/poll";
+        	window.location.href ="http://localhost/kaajneeti/poll/poll";
 
         });
 
            $('#post-box').click(function(){
 
-        	window.location.href ="<?=base_url();?>post/post";
+        	window.location.href ="http://localhost/kaajneeti/post/post";
 
         });
 

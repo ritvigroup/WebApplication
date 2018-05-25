@@ -38,6 +38,8 @@ class Citizen extends CI_Controller {
         $UserProfileId      = $this->input->post('user_profile_id');
         $start              = (($this->input->post('start') > 0) ? $this->input->post('start') : 0);
         $end                = (($this->input->post('end') > 0) ? $this->input->post('end') : 10);
+        $DataType           = $this->input->post('feed_type');
+        $DataType           = ($DataType != '') ? $DataType : 'ALL';
 
        
         if($UserId == "") {
@@ -56,57 +58,106 @@ class Citizen extends CI_Controller {
             //print_r($friend_user_profile_id);die;
 
             if(count($friend_user_profile_id) > 1) {
+                $event_condition = " AND `AddedBy` IN (".implode(',', $friend_user_profile_id).")";
                 $post_condition = " AND p.`UserProfileId` IN (".implode(',', $friend_user_profile_id).")";
                 $poll_condition = " AND `AddedBy` IN (".implode(',', $friend_user_profile_id).")";
+                $complaint_condition = " AND `AddedBy` IN (".implode(',', $friend_user_profile_id).")";
             } else {
-                $post_condition = " AND p.`UserProfileId` = '".$UserProfileId."' ";
-                $poll_condition = " AND `AddedBy` = '".$UserProfileId."' ";
+                $event_condition = " AND `AddedBy` = '0' ";
+                $post_condition = " AND p.`UserProfileId` = '0' ";
+                $poll_condition = " AND `AddedBy` = '0' ";
+                $complaint_condition = " AND `AddedBy` = '0' ";
             }
 
             $result = array();
-            $sql = "
+
+            if($DataType == "ALL" || $DataType == "event") {
+                $sql = "SELECT EventId AS Id, 'Event' AS DataType, AddedOn AS DateAdded FROM `Event` WHERE `StartDate` <= '".date('Y-m-d H:i:s')."' AND `EndDate` >= '".date('Y-m-d H:i:s')."' AND `EventStatus` != -1 AND `AddedBy` = '".$UserProfileId."' ";
+            }
+            if($DataType == "ALL" || $DataType == "event") {
+                $sql .= " UNION "; 
+            }
+
+            if($DataType == "ALL" || $DataType == "event") {
+                $sql .= " SELECT EventId AS Id, 'Event' AS DataType, AddedOn AS DateAdded FROM `Event` WHERE `StartDate` <= '".date('Y-m-d H:i:s')."' AND `EndDate` >= '".date('Y-m-d H:i:s')."' AND `EventStatus` = '1' AND `EventPrivacy` = '1' ".$event_condition." ";
+            }
+
+            if($DataType == "ALL") {
+                $sql .= " UNION ";  
+            }
+
+            if($DataType == "ALL" || $DataType == "poll") {
+                $sql .= " SELECT PollId AS Id, 'Poll' AS DataType, AddedOn AS DateAdded FROM `Poll` WHERE `ValidFromDate` <= '".date('Y-m-d')."' AND `ValidEndDate` >= '".date('Y-m-d')."' AND `PollStatus` != -1 AND `AddedBy` = '".$UserProfileId."' ";
+            }
             
-            SELECT EventId AS Id, 'Event' AS DataType, AddedOn AS DateAdded FROM `Event` WHERE `StartDate` <= '".date('Y-m-d H:i:s')."' AND `EndDate` >= '".date('Y-m-d H:i:s')."' AND `EventStatus` = '1' AND `AddedBy` = '".$UserProfileId."'
+            if($DataType == "ALL" || $DataType == "poll") {
+                $sql .= " UNION ";  
+            }
 
-            UNION 
-
-            SELECT PollId AS Id, 'Poll' AS DataType, AddedOn AS DateAdded FROM `Poll` WHERE `ValidFromDate` <= '".date('Y-m-d')."' AND `ValidEndDate` >= '".date('Y-m-d')."' AND `PollStatus` = '1' AND `AddedBy` = '".$UserProfileId."'
+            if($DataType == "ALL" || $DataType == "poll") {
+                $sql .= " SELECT PollId AS Id, 'Poll' AS DataType, AddedOn AS DateAdded FROM `Poll` WHERE `ValidFromDate` <= '".date('Y-m-d')."' AND `ValidEndDate` >= '".date('Y-m-d')."' AND `PollStatus` = '1' AND `PollPrivacy` = '1' ".$poll_condition." ";
+            }
             
-            UNION 
+            if($DataType == "ALL") {
+                $sql .= " UNION ";
+            }  
 
-            SELECT PollId AS Id, 'Poll' AS DataType, AddedOn AS DateAdded FROM `Poll` WHERE `ValidFromDate` <= '".date('Y-m-d')."' AND `ValidEndDate` >= '".date('Y-m-d')."' AND `PollStatus` = '1' ".$poll_condition."
-            
-            UNION 
+            if($DataType == "ALL" || $DataType == "post") {
+                $sql .= " SELECT PostId AS Id, 'Post' AS DataType, AddedOn AS DateAdded FROM `Post` WHERE `PostStatus` != -1 AND `UserProfileId` = '".$UserProfileId."' ";
+            }
 
-            SELECT PostId AS Id, 'Post' AS DataType, AddedOn AS DateAdded FROM `Post` WHERE `PostStatus` = '1' AND `UserProfileId` = '".$UserProfileId."'
+            if($DataType == "ALL" || $DataType == "post") {
+                $sql .= " UNION "; 
+            } 
 
-            UNION 
-
-            SELECT p.PostId AS Id, 'Post' AS DataType, p.AddedOn AS DateAdded FROM 
+            if($DataType == "ALL" || $DataType == "post") {
+                $sql .= " SELECT p.PostId AS Id, 'Post' AS DataType, p.AddedOn AS DateAdded FROM 
                                 `Post` AS p 
                             LEFT JOIN `PostTag` AS pt ON pt.PostId = p.PostId 
                             WHERE 
                                 p.`PostStatus` = '1' 
-                            ".$post_condition."
+                            AND p.PostPrivacy = '1' 
+                            ".$post_condition." ";
+            }
+            
+            if($DataType == "ALL") {
+                $sql .= " UNION "; 
+            } 
 
-            UNION 
+            if($DataType == "ALL" || $DataType == "complaint") {
+                $sql .= " SELECT ComplaintId AS Id, 'Complaint' AS DataType, AddedOn AS DateAdded FROM `Complaint` WHERE `ComplaintStatus` != -1 AND `AddedBy` = '".$UserProfileId."' ";
+            }
 
-            SELECT ComplaintId AS Id, 'Complaint' AS DataType, AddedOn AS DateAdded FROM `Complaint` WHERE `ComplaintStatus` = '1' AND `AddedBy` = '".$UserProfileId."'
+            if($DataType == "ALL" || $DataType == "complaint") {
+                $sql .= " UNION ";  
+            }
 
-            UNION 
+            if($DataType == "ALL" || $DataType == "complaint") {
+                $sql .= " SELECT ComplaintId AS Id, 'Complaint' AS DataType, AddedOn AS DateAdded FROM `Complaint` WHERE `ComplaintStatus` = '1' AND `ComplaintPrivacy` = '1' ".$complaint_condition." ";
+            }
 
-            SELECT c.ComplaintId AS Id, 'Complaint' AS DataType, c.AddedOn AS DateAdded FROM `Complaint` AS c 
-                    LEFT JOIN `ComplaintMember` AS cm ON cm.ComplaintId = c.ComplaintId 
-                    WHERE 
-                        c.`ComplaintStatus`     = '1' 
-                    AND cm.`UserProfileId`      = '".$UserProfileId."' 
-                    AND cm.AcceptedYesNo        != '2'
+            if($DataType == "ALL" || $DataType == "complaint") {
+                $sql .= " UNION ";  
+            }
 
-            UNION 
+            if($DataType == "ALL" || $DataType == "complaint") {
+                $sql .= " SELECT c.ComplaintId AS Id, 'Complaint' AS DataType, c.AddedOn AS DateAdded FROM `Complaint` AS c 
+                        LEFT JOIN `ComplaintMember` AS cm ON cm.ComplaintId = c.ComplaintId 
+                        WHERE 
+                            c.`ComplaintStatus`     = '1' 
+                        AND cm.`UserProfileId`      = '".$UserProfileId."' 
+                        AND cm.AcceptedYesNo        != '2' ";
+            }
 
-            SELECT SuggestionId AS Id, 'Suggestion' AS DataType, AddedOn AS DateAdded FROM `Suggestion` WHERE `SuggestionStatus` = '1' AND `AddedBy` = '".$UserProfileId."'
+            if($DataType == "ALL") {
+                $sql .= " UNION "; 
+            }
 
-            ORDER BY DateAdded DESC LIMIT $start,$end";
+            if($DataType == "ALL" || $DataType == "suggestion") {
+                $sql .= " SELECT SuggestionId AS Id, 'Suggestion' AS DataType, AddedOn AS DateAdded FROM `Suggestion` WHERE `SuggestionStatus` != -1 AND `AddedBy` = '".$UserProfileId."' ";
+            }
+
+            $sql .= " ORDER BY DateAdded DESC LIMIT $start,$end";
 
 
             //echo $sql;die;
@@ -146,9 +197,9 @@ class Citizen extends CI_Controller {
                     }
                     $result = $Data;
                 }
-                $msg = "Home data found";
+                $msg = "Your home data found";
             } else {
-                $msg = "No post found";
+                $msg = "No more post found";
                 $error_occured = true;
             }
         }
@@ -268,23 +319,35 @@ class Citizen extends CI_Controller {
         } else if($UserProfileId == "") {
             $msg = "Please select user profile";
             $error_occured = true;
+        } else if($FriendUserProfileId == "") {
+            $msg = "Please select friend user profile";
+            $error_occured = true;
         } else {
         
             $result = array();
+
+            if($UserProfileId == $FriendUserProfileId) {
+                $status_condition = " != -1 ";
+                $privacy_condition = " != -1 ";
+            } else {
+                $status_condition = " = '1' ";
+                $privacy_condition = " = '1' ";
+            }
+
             $sql = "
             
-            SELECT EventId AS Id, 'Event' AS DataType, AddedOn AS DateAdded FROM `Event` WHERE `StartDate` <= '".date('Y-m-d H:i:s')."' AND `EndDate` >= '".date('Y-m-d H:i:s')."' AND `EventPrivacy` = '1' AND `EventStatus` = '1' AND `AddedBy` = '".$FriendUserProfileId."'
+            SELECT EventId AS Id, 'Event' AS DataType, AddedOn AS DateAdded FROM `Event` WHERE `StartDate` <= '".date('Y-m-d H:i:s')."' AND `EndDate` >= '".date('Y-m-d H:i:s')."' AND `EventPrivacy` ".$privacy_condition." AND `EventStatus` ".$status_condition." AND `AddedBy` = '".$FriendUserProfileId."'
 
             UNION 
 
-            SELECT PollId AS Id, 'Poll' AS DataType, AddedOn AS DateAdded FROM `Poll` WHERE `ValidFromDate` <= '".date('Y-m-d')."' AND `ValidEndDate` >= '".date('Y-m-d')."' AND `PollPrivacy` = '1' AND `PollStatus` = '1' AND `AddedBy` = '".$FriendUserProfileId."'
+            SELECT PollId AS Id, 'Poll' AS DataType, AddedOn AS DateAdded FROM `Poll` WHERE `ValidFromDate` <= '".date('Y-m-d')."' AND `ValidEndDate` >= '".date('Y-m-d')."' AND `PollPrivacy` ".$privacy_condition." AND `PollStatus` ".$status_condition." AND `AddedBy` = '".$FriendUserProfileId."'
             UNION 
 
-            SELECT PostId AS Id, 'Post' AS DataType, AddedOn AS DateAdded FROM `Post` WHERE `PostStatus` = '1' AND `PostPrivacy` = '1' AND `UserProfileId` = '".$FriendUserProfileId."'
+            SELECT PostId AS Id, 'Post' AS DataType, AddedOn AS DateAdded FROM `Post` WHERE `PostStatus` ".$status_condition." AND `PostPrivacy` ".$privacy_condition." AND `UserProfileId` = '".$FriendUserProfileId."'
 
             UNION 
 
-            SELECT ComplaintId AS Id, 'Complaint' AS DataType, AddedOn AS DateAdded FROM `Complaint` WHERE `ComplaintStatus` = '1' AND `ComplaintPrivacy` = '1' AND `AddedBy` = '".$FriendUserProfileId."'
+            SELECT ComplaintId AS Id, 'Complaint' AS DataType, AddedOn AS DateAdded FROM `Complaint` WHERE `ComplaintStatus` ".$status_condition." AND `ComplaintPrivacy` ".$privacy_condition." AND `AddedBy` = '".$FriendUserProfileId."'
 
             ORDER BY DateAdded DESC LIMIT $start,$end";
 
@@ -367,27 +430,47 @@ class Citizen extends CI_Controller {
         
             $result = array();
             
-            $sql = "SELECT COUNT(EventId) AS TotalEvent FROM `Event` WHERE `AddedBy` = '".$FriendUserProfileId."' AND `EventStatus` = '1' AND `EventPrivacy` = '1'";
+            if($UserProfileId != $FriendUserProfileId) {
+                $sql = "SELECT COUNT(EventId) AS TotalEvent FROM `Event` WHERE `AddedBy` = '".$FriendUserProfileId."' AND `EventStatus` = '1' AND `EventPrivacy` = '1'";
+            } else {
+                $sql = "SELECT COUNT(EventId) AS TotalEvent FROM `Event` WHERE `AddedBy` = '".$FriendUserProfileId."' AND `EventStatus` != -1";
+            }
             $query = $this->db->query($sql);
             $res = $query->row_array();
             $TotalEvent = ($res['TotalEvent'] > 0) ? $res['TotalEvent'] : 0; 
 
-            $sql = "SELECT COUNT(PollId) AS TotalPoll FROM `Poll` WHERE `AddedBy` = '".$FriendUserProfileId."' AND `PollStatus` = '1' AND `PollPrivacy` = '1'";
+            if($UserProfileId != $FriendUserProfileId) {
+                $sql = "SELECT COUNT(PollId) AS TotalPoll FROM `Poll` WHERE `AddedBy` = '".$FriendUserProfileId."' AND `PollStatus` = '1' AND `PollPrivacy` = '1'";
+            } else {
+                $sql = "SELECT COUNT(PollId) AS TotalPoll FROM `Poll` WHERE `AddedBy` = '".$FriendUserProfileId."' AND `PollStatus` != -1";
+            }
             $query = $this->db->query($sql);
             $res = $query->row_array();
             $TotalPoll = ($res['TotalPoll'] > 0) ? $res['TotalPoll'] : 0; 
 
-            $sql = "SELECT COUNT(PostId) AS TotalPost FROM `Post` WHERE `UserProfileId` = '".$FriendUserProfileId."' AND `PostStatus` = '1' AND `PostPrivacy` = '1'";
+            if($UserProfileId != $FriendUserProfileId) {
+                $sql = "SELECT COUNT(PostId) AS TotalPost FROM `Post` WHERE `UserProfileId` = '".$FriendUserProfileId."' AND `PostStatus` = '1' AND `PostPrivacy` = '1'";
+            } else {
+                $sql = "SELECT COUNT(PostId) AS TotalPost FROM `Post` WHERE `UserProfileId` = '".$FriendUserProfileId."' AND `PostStatus` != -1";
+            }
             $query = $this->db->query($sql);
             $res = $query->row_array();
             $TotalPost = ($res['TotalPost'] > 0) ? $res['TotalPost'] : 0; 
 
-            $sql = "SELECT COUNT(UserFriendId) AS TotalFriends FROM `UserFriend` WHERE `UserProfileId` = '".$FriendUserProfileId."' AND `RequestAccepted` = '1'";
+            if($UserProfileId != $FriendUserProfileId) {
+                $sql = "SELECT COUNT(UserFriendId) AS TotalFriends FROM `UserFriend` WHERE `UserProfileId` = '".$FriendUserProfileId."' AND `RequestAccepted` = '1'";
+            } else {
+                $sql = "SELECT COUNT(UserFriendId) AS TotalFriends FROM `UserFriend` WHERE `UserProfileId` = '".$FriendUserProfileId."' AND `RequestAccepted` = '1'";
+            }
             $query = $this->db->query($sql);
             $res = $query->row_array();
             $TotalFriends = ($res['TotalFriends'] > 0) ? $res['TotalFriends'] : 0; 
 
-            $sql = "SELECT COUNT(ComplaintId) AS TotalComplaint FROM `Complaint` WHERE `AddedBy` = '".$FriendUserProfileId."' AND `ComplaintPrivacy` = '1' AND `ComplaintStatus` = '1'";
+            if($UserProfileId != $FriendUserProfileId) {
+                $sql = "SELECT COUNT(ComplaintId) AS TotalComplaint FROM `Complaint` WHERE `AddedBy` = '".$FriendUserProfileId."' AND `ComplaintStatus` = '1' AND `ComplaintPrivacy` = '1'";
+            } else {
+                $sql = "SELECT COUNT(ComplaintId) AS TotalComplaint FROM `Complaint` WHERE `AddedBy` = '".$FriendUserProfileId."' AND `ComplaintStatus` != -1";
+            }
             $query = $this->db->query($sql);
             $res = $query->row_array();
             $TotalComplaint = ($res['TotalComplaint'] > 0) ? $res['TotalComplaint'] : 0; 

@@ -57,6 +57,39 @@ class Profile extends CI_Controller {
         }
     }
 
+
+    public function userprofiledetail() {
+
+        if (!$this->input->is_ajax_request()) {
+           exit('Error');
+        }
+        
+        $data = array();
+        
+        if($this->uri->segment(4) != '') {
+            
+            $_POST['user_profile_id'] = $this->uri->segment(3);
+            $_POST['friend_user_profile_id'] = $this->uri->segment(4);
+            $json_encode = post_curl(API_CALL_PATH.'userprofile/getFriendsProfileFullInformation', $this->input->post(), $this->curl);
+
+            $json_decode = json_decode($json_encode);
+            if(count($json_decode->result) > 0) {
+                $data = $json_decode;
+
+
+                $this->load->view('profile/showUserProfileInformation',$data);
+
+
+            } else {
+                $this->load->view('profile/notfound',$data);
+            }
+
+            
+        } else {
+            $this->load->view('profile/notfound',$data);
+        }
+    }
+
     
     public function subprofile() {
         $data = array();

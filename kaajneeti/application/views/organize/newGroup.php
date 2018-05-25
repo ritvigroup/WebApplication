@@ -10,13 +10,13 @@
                     <div class="col-md-6">
                         <div class="form-group">
                             <label>Group Name: </label>
-                            <input type="text" class="form-control" id="first_name" name="first_name" placeholder="Group Name" required>
+                            <input type="text" class="form-control" id="group_name" name="group_name" placeholder="Group Name" required>
                         </div>
                     </div>
                     <div class="col-md-6">
                         <div class="form-group">
                             <label>Group Description: </label>
-                            <input type="text" class="form-control" id="last_name" name="last_name" placeholder="Group Description" required>
+                            <input type="text" class="form-control" id="group_description" name="group_description" placeholder="Group Description" required>
                         </div>
                     </div>
                 </div>
@@ -24,16 +24,19 @@
                     <div class="col-md-6">
                         <div class="form-group">
                             <label>Group Members: </label>
-                            <select class="form-control" id="department" name="department" multiple="">
-                                <option value="">Member 1</option>
-                                <option value="">Member 2</option>
-                                <option value="">Member 3</option>
-                                <option value="">Member 4</option>
-                                <option value="">Member 5</option>
-                                <option value="">Member 6</option>
-                                <option value="">Member 7</option>
-                                <option value="">Member 8</option>
-                                <option value="">Member 9</option>
+                            <select class="form-control" id="member_id" name="member_id[]" multiple="">
+                                <?php
+                                foreach($Connections->result AS $users) {
+                                    $Name = $users->FirstName.' '.$users->LastName;
+
+                                    if($users->ProfilePhotoPath != '') {
+                                        $profile_pic = ($users->ProfilePhotoPath != '') ? $users->ProfilePhotoPath : base_url().'assets/images/default-user.png';
+                                    } else {
+                                        $profile_pic = ($users->ProfilePhotoPath != '') ? $users->ProfilePhotoPath : base_url().'assets/images/default-user.png';
+                                    } 
+                                    echo '<option value="'.$users->UserProfileId.'">'.$Name.'</option>';
+                                }
+                                ?>
                             </select>
                         </div>
                     </div>
@@ -50,7 +53,7 @@
         </div>
     </div>
     <div class="modal-footer">
-        <button type="submit" class="btn btn-success save_user">Save</button>
+        <button type="submit" class="btn btn-success save_group">Save</button>
         <button type="reset" data-dismiss="modal" class="btn btn-default">Cancel</button>
     </div>
 </form>
@@ -58,42 +61,15 @@
 
 
 <script>
-<?php /*
-    document.querySelector('.search_button').onclick = function () {
-        var search_user = $("#search_user").val();
 
-        if (search_user.length > 0) {
-
-            $('.search_button').val('Searching...');
-
-            $.post("<?php echo base_url(); ?>leader/searchLeaderProfiles", {search: search_user},
-                function (data, status) {
-
-                    if(data != '') {
-                        $('#friend_profile').html(data);
-                    } else {
-                        $('#friend_profile').html('<option value="">No User Found</option>');
-                    }
-                    $('.search_button').val('Search');
-                });
-        } else {
-            sweetAlert("Oops...", "Please enter something to search leaders", "error");
-            return false;
-        }
-    };
-
-    document.querySelector('.save_user').onclick = function () {
+    document.querySelector('.save_group').onclick = function () {
         var $this = $(this);
-        var friend_profile  = $("#friend_profile").val();
-        var first_name      = $("#first_name").val();
-        var last_name       = $("#last_name").val();
-        var email           = $("#email").val();
-        var department      = $("#department").val();
+        var group_name          = $("#group_name").val();
+        var group_description   = $("#group_description").val();
+        var member_id           = $("#member_id").val();      
 
-        
-
-        if (friend_profile > 0 && first_name.length > 3) {
-            $('.save_user').html('Validating...');
+        if (group_name.length > 2) {
+            $('.save_group').html('Saving...');
                         
             var form_data = new FormData($('input[name^="file"]'));
 
@@ -101,12 +77,10 @@
                 form_data.append('file', file);
             });
 
-            form_data.append('friend_profile', friend_profile);
-            form_data.append('first_name', first_name);
-            form_data.append('last_name', last_name);
-            form_data.append('email', email);
-            form_data.append('department', department);
-            form_data.append('save_user', 'Y');
+            form_data.append('group_name', group_name);
+            form_data.append('group_description', group_description);
+            form_data.append('member_id', member_id);
+            form_data.append('save_group', 'Y');
 
             jQuery.ajax({
                 type: 'POST',
@@ -114,7 +88,7 @@
                 processData: false,
                 contentType: false,
                 data: form_data,
-                url: "<?php echo base_url(); ?>organize/team",
+                url: "<?php echo base_url(); ?>connect/group",
 
                 success: function(data) {
                     if (data.status === "failed") {
@@ -131,11 +105,10 @@
             });
 
         } else {
-            sweetAlert("Oops...", "Please select user and enter first name", "error");
+            sweetAlert("Oops...", "Please enter group name to proceed", "error");
             return false;
         }
     };
-    */ ?>
 </script>
 
 

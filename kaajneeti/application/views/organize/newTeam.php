@@ -11,7 +11,7 @@
                     <div class="col-md-6">
                         <div class="form-group">
                             <label>Search: </label>
-                            <input type="text" class="form-control" id="search_user" name="search_user" autocomplete="off" placeholder="Search Users" required>
+                            <input type="text" class="form-control" id="search_user" name="search_user" autocomplete="off" placeholder="Search Users" >
                             <input type="button" value="Search" class="btn btn-default search_button">
                         </div>
                     </div>
@@ -148,14 +148,14 @@
         var password        = $("#password").val();
         var role            = $("#role").val();
 
-        $('.save_user').html('Validating...');
 
-        if (friend_profile > 0 && first_name.length > 3) {
-            if(role == '' || role == 0) {
+        if (first_name.length >= 2) {
+            $('.save_user').html('Authorising...');
+            /*if(role == '' || role == 0) {
                 sweetAlert("Oops...", 'Please select role', "error");
                 $('.save_user').html('Save');
                 return false;
-            } else {
+            } else {*/
                 
                 var form_data = new FormData($('input[name^="file"]'));
 
@@ -194,10 +194,10 @@
                         }
                     }
                 });
-            }
+            //}
 
         } else {
-            sweetAlert("Oops...", "Please select user and enter first name", "error");
+            sweetAlert("Oops...", "Please enter first name", "error");
             return false;
         }
     };

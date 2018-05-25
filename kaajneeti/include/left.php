@@ -17,20 +17,25 @@
                 <!-- END RESPONSIVE SEARCH FORM -->
             </li>
             */ ?>
-            <li class="nav-item"> <a class="nav-link" href="<?=base_url();?>leader/dashboard"> <i class="fa fa-tachometer fa-fw"></i> <span class="title">Dashboard</span> </a></li>
+            <li class="nav-item"> <a class="nav-link" href="<?=base_url();?><?php echo $replace_controller; ?>/dashboard"> <i class="fa fa-tachometer fa-fw"></i> <span class="title">Dashboard</span> </a></li>
             
-
+            <?php if($_SESSION['AdminId'] > 0) { } else { ?>
             <li class="nav-item <?php if($request_uri['4'] == "explore") {?>active<?php } ?>"><a class="nav-link" href="<?=base_url();?>explore/explore"><i class="fa fa-binoculars fa-fw"></i><span class="title">Explore</span></a></li>
-
+            <?php } ?>
             <li class="heading">
                 <h3 class="uppercase">Features</h3>
             </li>
 
+            <?php if($_SESSION['AdminId'] > 0) { ?>
+            
+            <li class="nav-item <?php if($request_uri['4'] == "user") {?>active<?php } ?>"><a class="nav-link" href="<?=base_url();?>admin/systemuser"><i class="fa fa-pencil-square-o fa-fw"></i><span class="title">User</span></a></li>
+
+            <?php } else { ?>
             <li class="nav-item <?php if($request_uri['4'] == "plan") {?>active<?php } ?>"><a class="nav-link" href="<?=base_url();?>plan/plan"><i class="fa fa-pencil-square-o fa-fw"></i><span class="title">Plan</span></a></li>
 
             <li class="nav-item <?php if($request_uri['4'] == "organize") {?>active<?php } ?>"><a class="nav-link" href="<?=base_url();?>organize/team"><i class="fa fa-sitemap fa-fw"></i><span class="title">Organize</span></a></li>
 
-            <li class="nav-item <?php if($request_uri['4'] == "complaint") {?>active<?php } ?>"><a class="nav-link" href="<?=base_url();?>connect/myfriends"><i class="fa fa-share-alt-square fa-fw"></i><span class="title">Connect</span></a></li>
+            <li class="nav-item <?php if($request_uri['4'] == "complaint") {?>active<?php } ?>"><a class="nav-link" href="<?=base_url();?>connect/connect"><i class="fa fa-share-alt-square fa-fw"></i><span class="title">Connect</span></a></li>
 
 
             <li class="nav-item <?php if($request_uri['4'] == "event") {?>active<?php } ?>"><a class="nav-link" href="<?=base_url();?>listen/listen"><i class="fa fa-headphones fa-fw"></i><span class="title">Listen</span></a></li>
@@ -38,8 +43,9 @@
             <li class="nav-item <?php if($request_uri['4'] == "influence") {?>active<?php } ?>"><a class="nav-link" href="<?=base_url();?>influence/email"><i class="fa fa-arrows-alt fa-fw"></i><span class="title">Campaign</span></a></li>
 
             <li class="nav-item <?php if($request_uri['4'] == "contribution") {?>active<?php } ?>"><a class="nav-link" href="<?=base_url();?>contribution/contribution"><i class="fa fa-refresh fa-fw"></i><span class="title">Funding</span></a></li>
+            <?php } ?>
 
-            <li class="nav-item <?php if($request_uri['4'] == "report") {?>active<?php } ?>"><a class="nav-link" href="<?=base_url();?>report/report"><i class="fa fa-file-text-o fa-fw"></i><span class="title">Reports</span></a></li>
+            <li class="nav-item <?php if($request_uri['4'] == "report") {?>active1<?php } ?>"><a class="nav-link" href="<?=base_url();?>report/report"><i class="fa fa-file-text-o fa-fw"></i><span class="title">Reports</span></a></li>
 
             
 

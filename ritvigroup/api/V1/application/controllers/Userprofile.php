@@ -59,6 +59,90 @@ class Userprofile extends CI_Controller {
     }
 
 
+    // Get All Active User Profiles
+    public function getAllActiveUserProfiles() {
+        $error_occured = false;
+        $user_id            = $this->input->post('user_id');
+        $UserProfileId    = $this->input->post('user_profile_id');
+        $user_type_id       = $this->input->post('user_type_id');
+
+        
+        
+        if($UserProfileId == "") {
+            $msg = "You are not authorised";
+            $error_occured = true;
+        } else {
+
+            $users = $this->User_Model->getAllActiveUserProfiles($UserProfileId, $user_type_id);
+
+            if(count($users) > 0) {
+
+            } else {
+                $msg = "No user registered with us.";
+                $error_occured = true;
+            }
+
+        }
+
+        if($error_occured == true) {
+            $array = array(
+                            "status"        => 'failed',
+                            "message"       => $msg,
+                        );
+        } else {
+
+            $array = array(
+                           "status"         => 'success',
+                           "result"         => $users,
+                           "message"        => $msg,
+                           );
+        }
+        displayJsonEncode($array);
+    }
+
+
+    // Get All In Active User Profiles
+    public function getAllInactiveUserProfiles() {
+        $error_occured = false;
+        $user_id            = $this->input->post('user_id');
+        $UserProfileId      = $this->input->post('user_profile_id');
+        $user_type_id       = $this->input->post('user_type_id');
+
+        
+        
+        if($UserProfileId == "") {
+            $msg = "You are not authorised";
+            $error_occured = true;
+        } else {
+
+            $users = $this->User_Model->getAllInactiveUserProfiles($UserProfileId, $user_type_id);
+
+            if(count($users) > 0) {
+
+            } else {
+                $msg = "No user registered with us.";
+                $error_occured = true;
+            }
+
+        }
+
+        if($error_occured == true) {
+            $array = array(
+                            "status"        => 'failed',
+                            "message"       => $msg,
+                        );
+        } else {
+
+            $array = array(
+                           "status"         => 'success',
+                           "result"         => $users,
+                           "message"        => $msg,
+                           );
+        }
+        displayJsonEncode($array);
+    }
+
+
     // Get User Information By Unique Id
     public function getUserFullInformationByUniqueId() {
         $error_occured = false;
@@ -544,6 +628,47 @@ class Userprofile extends CI_Controller {
         displayJsonEncode($array);
     }
 
+
+    // Search All User Profile for Connect
+    public function searchUserProfilesForConnect() {
+        $error_occured = false;
+        $UserProfileId = $this->input->post('user_profile_id');
+        
+        $search = $this->input->post('search');
+                
+        if($UserProfileId == "") {
+            $msg = "Please select user profile";
+            $error_occured = true;
+        } else {
+
+            $res_u = $this->User_Model->searchUserProfilesForConnect($UserProfileId, $search);
+
+            if(count($res_u) > 0) {
+
+                $msg = "Profile information found successfully";
+
+            } else {
+                $msg = "No user profile Found";
+                $error_occured = true;
+            }
+        }
+
+        if($error_occured == true) {
+            $array = array(
+                            "status"        => 'failed',
+                            "message"       => $msg,
+                        );
+        } else {
+
+            $array = array(
+                           "status"     => 'success',
+                           "result"    => $res_u,
+                           "message"    => $msg,
+                           );
+        }
+        displayJsonEncode($array);
+    }
+
     // Search All User Profiles
     public function searchAllUserProfiles() {
         $error_occured = false;
@@ -777,34 +902,75 @@ class Userprofile extends CI_Controller {
         displayJsonEncode($array);
     }
 
-    // Remove Cover Profile Picture
-    public function removeCoverProfilePicture() {
+
+    // Update User Profile Photo
+    public function updateUserProfileCoverPhoto() {
         $error_occured = false;
         $UserId = $this->input->post('user_id');
+        $UserProfileId = $this->input->post('user_profile_id');
         
         if($UserId == "") {
             $msg = "Please select user";
             $error_occured = true;
+        } else if($UserProfileId == "") {
+            $msg = "Please select user profile";
+            $error_occured = true;
         } else {
 
-            $res_u = $this->User_Model->getUserInformation($UserId);
+            $this->User_Model->saveUserProfilePhoto('cover', $UserId, $UserProfileId, 2);
 
-            if($res_u['UserStatus'] == '1') {
+            $user_profile = $this->User_Model->getUserProfileInformation($UserProfileId, $UserProfileId);
 
-                $UserId = $res_u['UserId'];
+            $msg = "User profile cover updated successfully";
+
+        }
+
+        if($error_occured == true) {
+            $array = array(
+                            "status"        => 'failed',
+                            "message"       => $msg,
+                        );
+        } else {
+
+            $array = array(
+                           "status"   => 'success',
+                           "result"   => $user_profile,
+                           "message"  => $msg,
+                           );
+        }
+        displayJsonEncode($array);
+    }
+
+    // Remove Cover Profile Picture
+    public function removeUserProfileCoverPhoto() {
+        $error_occured = false;
+        $UserId = $this->input->post('user_id');
+        $UserProfileId = $this->input->post('user_profile_id');
+        
+        if($UserId == "") {
+            $msg = "Please select user";
+            $error_occured = true;
+        } else if($UserProfileId == "") {
+            $msg = "Please select user profile";
+            $error_occured = true;
+        } else {
+
+            $user_profile = $this->User_Model->getUserProfileInformation($UserProfileId, $UserProfileId);
+
+            if($user_profile['ProfileStatus'] == '1') {
 
                 $updateData = array(
-                    'CoverPhotoId' => 0,
-                    'UpdatedOn' => date('Y-m-d H:i:s'),
-                );
+                                    'CoverPhotoId' => 0,
+                                    'UpdatedOn' => date('Y-m-d H:i:s'),
+                                    );
                 
-                $this->User_Model->updateUserData($UserId, $updateData);
+                $this->User_Model->updateUserProfileData($UserProfileId, $updateData);
                 
-                $user_info = $this->User_Model->getUserDetail($UserId, 0, 0);
+                $user_profile = $this->User_Model->getUserProfileInformation($UserProfileId, $UserProfileId);
 
-                $msg = "User cover profile photo removed successfully";
+                $msg = "User cover photo removed successfully";
 
-            } else if($res_u['UserId'] > 0 && $res_u['UserStatus'] != '1') {
+            } else if($user_profile['ProfileStatus'] != '1') {
                 $msg = "User in no longer active.";
                 $error_occured = true;
             } else {
@@ -822,7 +988,7 @@ class Userprofile extends CI_Controller {
 
             $array = array(
                            "status"         => 'success',
-                           "result"   => $user_info,
+                           "result"         => $user_profile,
                            "message"        => $msg,
                            );
         }
@@ -1974,6 +2140,49 @@ class Userprofile extends CI_Controller {
                            "status"   => 'success',
                            "result"   => $user_friend_list,
                            "message"  => $msg,
+                           );
+        }
+        displayJsonEncode($array);
+    }
+
+
+    // Get Friend Profile Full Information
+    public function getFriendsProfileFullInformation() {
+        $error_occured = false;
+        $UserProfileId = $this->input->post('user_profile_id');
+        $FriendUserProfileId = $this->input->post('friend_user_profile_id');
+        
+        if($UserProfileId == "") {
+            $msg = "Please select user profile";
+            $error_occured = true;
+        } else if($FriendUserProfileId == "") {
+            $msg = "Please select friend user profile";
+            $error_occured = true;
+        } else {
+
+            $data = array();
+            $res_u = $this->User_Model->getUserProfileInformation($FriendUserProfileId, $UserProfileId);
+
+            $data['Profile'] = $res_u;
+
+            $data['ProfileAddress']     = $this->User_Model->getUserProfileAddress($FriendUserProfileId);
+            $data['ProfileEducation']   = $this->User_Model->getUserProfileEducation($FriendUserProfileId);
+            $data['ProfileWork']        = $this->User_Model->getUserProfileWork($FriendUserProfileId);
+
+            $msg = "Friend profile information found successfully";
+        }
+
+        if($error_occured == true) {
+            $array = array(
+                            "status"        => 'failed',
+                            "message"       => $msg,
+                        );
+        } else {
+
+            $array = array(
+                           "status"     => 'success',
+                           "result"     => $data,
+                           "message"    => $msg,
                            );
         }
         displayJsonEncode($array);

@@ -124,8 +124,64 @@ class Post extends CI_Controller {
         }
         displayJsonEncode($array);
     }
-    
-    
+
+    public function deleteMyPostStatus() {
+        $error_occured = false;
+
+        $UserProfileId      = $this->input->post('user_profile_id');
+        $PostId             = $this->input->post('post_id');
+        
+        if($UserProfileId == "") {
+            $msg = "Please select your profile";
+            $error_occured = true;
+        } else if($PostId == "") {
+            $msg = "Please select post to delete";
+            $error_occured = true;
+        } else {
+
+            $this->db->query("BEGIN");
+
+            $updateData = array(
+                                'PostStatus'        => -1,
+                                'UpdatedOn'         => date('Y-m-d H:i:s'),
+                            );
+            $whereData = array(
+                                'UserProfileId' => $UserProfileId,
+                                'PostId'        => $PostId,
+                                );
+            $post_delete = $this->Post_Model->updateMyPost($whereData, $updateData);
+
+            if($post_delete == true) {
+                
+                $post_detail = $this->Post_Model->getPostDetail($PostId, $UserProfileId);
+
+                $this->db->query("COMMIT");
+
+                $msg = "Post deleted successfully";
+
+            } else {
+                $this->db->query("ROLLBACK");
+                $msg = "Post not deleted. Not authorised to delete this post.";
+                $error_occured = true;
+            }
+        }
+
+        if($error_occured == true) {
+            $array = array(
+                            "status"        => 'failed',
+                            "message"       => $msg,
+                        );
+        } else {
+
+            $array = array(
+                           "status"         => 'success',
+                           "result"    => $post_detail,
+                           "message"        => $msg,
+                           );
+        }
+        displayJsonEncode($array);
+    }
+       
     public function getPostDetail() {
         $error_occured = false;
 
@@ -160,18 +216,21 @@ class Post extends CI_Controller {
         displayJsonEncode($array);
     }
 
-
     public function getMyAllPost() {
         $error_occured = false;
 
         $UserProfileId   = $this->input->post('user_profile_id');
+        $FriendProfileId    = $this->input->post('friend_profile_id');
         
         if($UserProfileId == "") {
             $msg = "Please select your profile";
             $error_occured = true;
+        } else if($FriendProfileId == "") {
+            $msg = "Please select friend profile";
+            $error_occured = true;
         } else {
 
-            $posts = $this->Post_Model->getMyAllPost($UserProfileId);
+            $posts = $this->Post_Model->getMyAllPost($UserProfileId, $FriendProfileId);
             if(count($posts) > 0) {
                 $msg = "Post fetched successfully";
             } else {

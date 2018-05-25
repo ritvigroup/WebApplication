@@ -31,7 +31,7 @@ class Friendgroup_Model extends CI_Model {
 
     public function saveFriendgroupImage($FriendGroupId, $UserProfileId, $group_image) {
 
-
+        $error = true;
         $GroupName = $group_image['name'];
 
         if($GroupName != '') {
@@ -52,13 +52,19 @@ class Friendgroup_Model extends CI_Model {
                                 );
             $this->db->where('FriendGroupId', $FriendGroupId);
             $this->db->update($this->FriendGroupTbl, $updateData);
+
+            if($this->db->affected_rows() > 0) {
+            } else {
+                $error = false;
+            }
         }
-        return true;
+        return $error;
     }
 
 
     public function saveFriendgroupMember($FriendGroupId, $UserProfileId, $group_member) {
 
+        $error = true;
         for($i = 0; $i < count($group_member); $i++) {
         
             if($group_member[$i] > 0) {
@@ -80,14 +86,39 @@ class Friendgroup_Model extends CI_Model {
                                         'FriendGroupId'     => $FriendGroupId,
                                         'UserProfileId'     => $group_member[$i],
                                         'IsAdmin'           => $IsAdmin,
+                                        'GetNotification'   => 1,
                                         'AddedBy'           => $UserProfileId,
                                         'AddedOn'           => date('Y-m-d H:i:s'),
                                         );
                     $this->db->insert($this->FriendGroupMemberTbl, $insertData);
+
+                    $mm = $this->db->insert_id();
+                    if($mm > 0) {
+
+                    } else { 
+                        $error = false;
+                    }
                 }
             }
         }
-        return true;
+        return $error;
+    }
+
+
+    // Check Member in Group Detail
+    public function checkGroupMemberGroupDetail($UserProfileId, $FriendGroupId) {
+
+        $this->db->select('*');
+        $this->db->from($this->FriendGroupMemberTbl);
+        $this->db->where('UserProfileId', $UserProfileId);
+        $this->db->where('FriendGroupId', $FriendGroupId);
+        $query = $this->db->get();
+
+        if ($query->num_rows() > 0) {
+            return $result = $query->row_array();
+        } else {
+            return 0;
+        }
     }
 
     
@@ -123,6 +154,7 @@ class Friendgroup_Model extends CI_Model {
 
         $GroupProfile       = $this->User_Model->getUserProfileInformation($AddedBy);
         $GroupMembers       = $this->getFriendgroupMember($FriendGroupId, $UserProfileId);
+        $GroupMemeberDetail = $this->checkGroupMemberGroupDetail($UserProfileId, $FriendGroupId);
 
         $doc_folder_data_array = array(
                                     "FriendGroupId"         => $FriendGroupId,
@@ -134,6 +166,7 @@ class Friendgroup_Model extends CI_Model {
                                     "UpdatedOn"             => $UpdatedOn,
                                     "UpdatedOnTime"         => $res['UpdatedOn'],
                                     "GroupProfile"          => $GroupProfile,
+                                    "GroupMemeberDetail"    => $GroupMemeberDetail,
                                     "GroupMembers"          => $GroupMembers,
                                     );
         return $doc_folder_data_array;
@@ -160,14 +193,16 @@ class Friendgroup_Model extends CI_Model {
 
     
 
-    public function getMyAllFriendgroup($UserProfileId) {
+    public function getMyAllFriendgroup($FriendUserProfileId, $UserProfileId) {
         $friend_group = array();
-        if(isset($UserProfileId) && $UserProfileId > 0) {
+        if(isset($FriendUserProfileId) && $FriendUserProfileId > 0) {
 
-            $this->db->select('FriendGroupId');
-            $this->db->from($this->FriendGroupTbl);
-            $this->db->where('AddedBy', $UserProfileId);
-            $this->db->order_by('AddedOn','ASC');
+            $this->db->select('fg.FriendGroupId');
+            $this->db->from($this->FriendGroupTbl.' AS fg');
+            $this->db->join($this->FriendGroupMemberTbl.' AS fgm', 'fgm.FriendGroupId = fg.FriendGroupId', 'LEFT');
+            $this->db->where('fgm.UserProfileId', $FriendUserProfileId);
+            $this->db->where('fg.FriendGroupStatus', 1);
+            $this->db->order_by('fgm.AddedOn','ASC');
             $query = $this->db->get();
 
             $res = $query->result_array();
@@ -179,6 +214,34 @@ class Friendgroup_Model extends CI_Model {
             $friend_group = array();
         }
         return $friend_group;
+    }
+
+
+    // Check Group Member Exist for notifications
+    public function checkUserFriendRequest($UserProfileId, $FriendUserProfileId) {
+
+        $this->db->select('*');
+        $this->db->from($this->UserFriendTbl);
+        $this->db->where('UserProfileId', $UserProfileId);
+        $this->db->where('FriendUserProfileId', $FriendUserProfileId);
+        $query = $this->db->get();
+
+        if ($query->num_rows() > 0) {
+            return $result = $query->row_array();
+        } else {
+            return 0;
+        }
+    }
+
+
+    // Update Get Notification From Friend
+    public function updateGetNotification($UserProfileId, $FriendGroupId, $GetNotification) {
+        $updateData = array(
+                            'GetNotification'       => $GetNotification,
+                            );
+        $this->db->where('UserProfileId', $UserProfileId);
+        $this->db->where('FriendGroupId', $FriendGroupId);
+        $this->db->update($this->FriendGroupMemberTbl, $updateData);
     }
 
 
@@ -229,9 +292,12 @@ class Friendgroup_Model extends CI_Model {
     }
 
 
-    public function deleteMemberFromFriendgroup($FriendGroupId, $UserProfileId, $member_id) {
+    public function deleteMemberFromFriendgroup($FriendGroupId, $member_id) {
+        $this->db->where('FriendGroupId', $FriendGroupId);
         $this->db->where('UserProfileId', $member_id);
         $this->db->delete($this->FriendGroupMemberTbl);
+
+        return true;
     }
 
 }

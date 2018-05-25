@@ -16,6 +16,7 @@ if ( ! function_exists('post_curl'))
                 $this_curl->option('connecttimeout', 60000);
 
                 $this_curl->option('postfields', http_build_query($params));
+
                 $data = $this_curl->execute();
                 return $data;
         }

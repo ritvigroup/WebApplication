@@ -71,6 +71,17 @@ PROFILE 2
     width: 100%;
 }
 
+
+.profile-card-2 {
+    margin-left: auto;
+    margin-right: auto;
+    padding-bottom: 0px;
+    padding-top: 0px;
+    display: table;
+    width: 100%;
+}
+
+
 .profile-avetar {
     display: table-cell;
     padding-right: 30px;

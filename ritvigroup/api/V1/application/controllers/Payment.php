@@ -141,13 +141,16 @@ class Payment extends CI_Controller {
         $error_occured = false;
 
         $UserProfileId   = $this->input->post('user_profile_id');
+        $Payment_Point   = $this->input->post('payment_point'); // All / Payment / Point
+        $debit_credit    = $this->input->post('debit_credit'); // All / 0 / 1
+        $ContributeYesNo = $this->input->post('contribute'); // 0 / 1
         
         if($UserProfileId == "") {
             $msg = "Please select your profile";
             $error_occured = true;
         } else {
 
-            $payment_log = $this->Payment_Model->getMyAllPaymentAndPointTransactionLog($UserProfileId);
+            $payment_log = $this->Payment_Model->getMyAllPaymentAndPointTransactionLog($UserProfileId, $Payment_Point, $debit_credit, $ContributeYesNo);
             if(count($payment_log) > 0) {
                 $msg = "Payment and Point Log fetched successfully";
             } else {
@@ -184,12 +187,19 @@ class Payment extends CI_Controller {
         $PaymentTo                  = $this->input->post('payment_to_user_profile_id');
         $TransactionDate            = date('Y-m-d H:i:s', strtotime($this->input->post('transaction_date')));
         $TransactionAmount          = $this->input->post('transaction_amount');
-        $GatewayTransaction         = $this->input->post('gateway_amount');
-        $WalletTransaction          = $this->input->post('wallet_amount');
+        if($IsWalletUse == 0) {
+            $GatewayTransaction         = $TransactionAmount;
+            $WalletTransaction          = 0.00;
+        } else {
+            $GatewayTransaction         = 0.00;
+            $WalletTransaction          = $TransactionAmount;
+        }
         $TransactionShippingAmount  = $this->input->post('transaction_shipping_amount');
         $TransactionStatus          = $this->input->post('transaction_status'); // 0 = Unsuccessful, 1 = Successful
         $DebitOrCredit              = $this->input->post('debit_or_credit'); // 0 = Debit, 1 = Credit
         $TransactionComment         = $this->input->post('comments');
+        $IsContribute               = $this->input->post('contribute');
+        $IsContribute               = ($IsContribute > 0) ? $IsContribute : 0;
         
         if($UserProfileId == "") {
             $msg = "Please select your profile";
@@ -213,6 +223,7 @@ class Payment extends CI_Controller {
                                 'WalletTransaction'         => $WalletTransaction,
                                 'TransactionShippingAmount' => $TransactionShippingAmount,
                                 'DebitOrCredit'             => $DebitOrCredit,
+                                'IsContribute'              => $IsContribute,
                                 'TransactionStatus'         => $TransactionStatus,
                                 'TransactionComment'        => $TransactionComment,
                                 'AddedOn'                   => date('Y-m-d H:i:s'),

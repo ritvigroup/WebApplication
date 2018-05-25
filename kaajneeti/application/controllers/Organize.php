@@ -114,12 +114,23 @@ class Organize extends CI_Controller {
             $_POST['user_profile_id'] = $this->session->userdata('UserProfileId');
 
             $post_data = array(
-                                'user_profile_id' => $this->input->post('user_profile_id'),
-                                'vehicle_id' => explode(',', $this->input->post('vehicle_id')),
-                                'vehicle_quantity' => explode(',', $this->input->post('vehicle_quantity')),
+                                'user_profile_id'       => $this->input->post('user_profile_id'),
+                                'fleet_name'            => $this->input->post('fleet_name'),
+                                'registration_number'   => $this->input->post('registration_number'),
+                                'driver_name'           => $this->input->post('driver_name'),
+                                'vehicle_type'          => $this->input->post('vehicle_type'),
+                                'vehicle_quantity'      => $this->input->post('vehicle_quantity'),
                                 );
 
-            $json_decode = post_curl(API_CALL_PATH.'fleet/saveFleet', $post_data, $this->curl);
+
+            for($i = 0; $i < count($_FILES['file']['name']); $i++) {
+                if($_FILES['file']['name'][$i] != '') {
+
+                    $post_data = array_merge($post_data, array('file['.$i.']' => getCurlValue($_FILES['file']['tmp_name'][$i], $_FILES['file']['type'][$i], $_FILES['file']['name'][$i])));
+                }
+            }
+
+            $json_decode = post_curl_with_files(API_CALL_PATH.'fleet/saveFleet', $post_data, $this->curl);
 
             header('Content-type: application/json');
 
@@ -129,12 +140,6 @@ class Organize extends CI_Controller {
         }
         
         $_POST['user_profile_id'] = $this->session->userdata('UserProfileId');
-        $json_encode = post_curl(API_CALL_PATH.'fleet/getAllVehicle', $this->input->post(), $this->curl);
-
-        $json_decode = json_decode($json_encode);
-        if(count($json_decode->result) > 0) {
-            $data['Vehicle'] = $json_decode;
-        }
 
         $json_encode = post_curl(API_CALL_PATH.'fleet/getMyAllFleet', $this->input->post(), $this->curl);
 
@@ -230,10 +235,30 @@ class Organize extends CI_Controller {
         if (!$this->input->is_ajax_request()) {
            exit('Error');
         }
+
+        $_POST['user_id'] = $this->session->userdata('UserId');
         $_POST['user_profile_id'] = $this->session->userdata('UserProfileId');
+
+        $json_encode = post_curl(API_CALL_PATH.'userconnect/getMyAllConnections', $this->input->post(), $this->curl);
+        $json_decode = json_decode($json_encode);
+
+        $data['Connections'] = $json_decode;
 
         
         $this->load->view('organize/newGroup',$data);
+    }
+
+
+    public function showUserDetail() {
+        $data = array();
+      
+        if (!$this->input->is_ajax_request()) {
+           exit('Error');
+        }
+        $_POST['user_profile_id'] = $this->session->userdata('UserProfileId');
+
+        
+        $this->load->view('organize/showUserDetail',$data);
     }
 
 
@@ -281,9 +306,16 @@ class Organize extends CI_Controller {
            
         if($this->input->method(TRUE) == "POST" && $this->input->post('save_user') == 'Y') {
 
+            $friend_profile = $this->input->post('friend_profile');
+            if($friend_profile > 0) {
+
+            } else {
+                $friend_profile = $this->input->post('user_profile_id');
+            }
+
             $post_data = array(
                                 'user_profile_id'   => $this->input->post('user_profile_id'),
-                                'friend_profile'    => $this->input->post('friend_profile'),
+                                'friend_profile'    => $friend_profile,
                                 'first_name'        => $this->input->post('first_name'),
                                 'last_name'         => $this->input->post('last_name'),
                                 'email'             => $this->input->post('email'),
