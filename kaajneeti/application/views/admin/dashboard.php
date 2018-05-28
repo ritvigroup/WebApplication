@@ -27,10 +27,10 @@
                     <div class="col-sm-3">
                         <div class="contact-box center-version">
                             <a href="#"> <img src="<?php echo $this->session->userdata('UserProfilePic'); ?>" class="img-circle" alt="image">
-                                <h3 class="m-b-xs"><strong>Rajesh Vishwakarma</strong></h3>
+                                <h3 class="m-b-xs"><strong>Administrator</strong></h3>
                                 <div class="font-bold"></div>
                                 <address>
-                                    <strong>Ritvi Group</strong><br>
+                                    <strong>Kaajneeti</strong><br>
                                 </address>
                             </a>
                             <div class="contact-box-footer">

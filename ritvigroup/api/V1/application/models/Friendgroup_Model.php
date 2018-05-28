@@ -29,6 +29,14 @@ class Friendgroup_Model extends CI_Model {
     }
 
 
+    public function updateMyFriendGroup($whereData, $updateData) {
+        $this->db->where($whereData);
+        $this->db->update($this->FriendGroupTbl, $updateData);
+
+        return $this->db->affected_rows();
+    }
+
+
     public function saveFriendgroupImage($FriendGroupId, $UserProfileId, $group_image) {
 
         $error = true;
@@ -144,6 +152,7 @@ class Friendgroup_Model extends CI_Model {
     public function returnFriendgroupDetail($res, $UserProfileId = 0) {
         $FriendGroupId         = $res['FriendGroupId'];
         $FriendGroupName       = $res['FriendGroupName'];
+        $FriendGroupDescription       = $res['FriendGroupDescription'];
         $FriendGroupPhoto      = (($res['FriendGroupPhoto'] != NULL) ? DOC_URL.$res['FriendGroupPhoto'] : "");
         $FriendGroupStatus     = (($res['FriendGroupStatus'] != NULL) ? $res['FriendGroupStatus'] : "");
 
@@ -159,6 +168,7 @@ class Friendgroup_Model extends CI_Model {
         $doc_folder_data_array = array(
                                     "FriendGroupId"         => $FriendGroupId,
                                     "FriendGroupName"       => $FriendGroupName,
+                                    "FriendGroupDescription"       => $FriendGroupDescription,
                                     "FriendGroupPhoto"      => $FriendGroupPhoto,
                                     "FriendGroupStatus"     => $FriendGroupStatus,
                                     "AddedOn"               => $AddedOn,
@@ -210,8 +220,6 @@ class Friendgroup_Model extends CI_Model {
             foreach($res AS $key => $result) {
                 $friend_group[] = $this->getFriendgroupDetail($result['FriendGroupId'], $UserProfileId);
             }
-        } else {
-            $friend_group = array();
         }
         return $friend_group;
     }

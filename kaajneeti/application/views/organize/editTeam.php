@@ -5,7 +5,7 @@ $user_profile = $SubLeaderDetail->result;
 // print_r($SubLeaderDetail);
 // echo '</pre>';
 ?>
-<form name="plan_form" method="post" action="" onSubmit="return false;">
+<form name="plan_form" method="post" action="" onSubmit="return false;" autocomplete="nope">
     <div class="modal-header">
         <button type="button" data-dismiss="modal" aria-hidden="true" class="close">×</button>
         <h4 id="modal-stackable-label" class="modal-title">Edit Team</h4>
@@ -32,13 +32,13 @@ $user_profile = $SubLeaderDetail->result;
                     <div class="col-md-6">
                         <div class="form-group">
                             <label>Username: </label>
-                            <input type="text" class="form-control" id="user_name" name="user_name" placeholder="Username" value="<?php echo $user_profile->ProfileUserName; ?>" required>
+                            <input type="text" class="form-control" id="user_name" name="edit_user_name" placeholder="Username" autocomplete="nope" value="<?php echo $user_profile->ProfileUserName; ?>" required>
                         </div>
                     </div>
                     <div class="col-md-6">
                         <div class="form-group">
                             <label>Password: </label>
-                            <input type="password" class="form-control" id="password" name="password" placeholder="Password" >
+                            <input type="password" class="form-control" id="password" name="edit_password" placeholder="Password" autocomplete="nope" >
                         </div>
                     </div>
                 </div>
@@ -46,7 +46,7 @@ $user_profile = $SubLeaderDetail->result;
                     <div class="col-md-6">
                         <div class="form-group">
                             <label>Email: </label>
-                            <input type="text" class="form-control" id="email" name="email" placeholder="Email Address" value="<?php echo $user_profile->Email; ?>" required>
+                            <input type="text" class="form-control" id="email" name="email" placeholder="Email Address" value="<?php echo $user_profile->Email; ?>">
                         </div>
                     </div>
                     <div class="col-md-6">

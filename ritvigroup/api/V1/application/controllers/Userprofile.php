@@ -58,7 +58,6 @@ class Userprofile extends CI_Controller {
         displayJsonEncode($array);
     }
 
-
     // Get All Active User Profiles
     public function getAllActiveUserProfiles() {
         $error_occured = false;
@@ -100,7 +99,6 @@ class Userprofile extends CI_Controller {
         displayJsonEncode($array);
     }
 
-
     // Get All In Active User Profiles
     public function getAllInactiveUserProfiles() {
         $error_occured = false;
@@ -141,7 +139,6 @@ class Userprofile extends CI_Controller {
         }
         displayJsonEncode($array);
     }
-
 
     // Get User Information By Unique Id
     public function getUserFullInformationByUniqueId() {
@@ -185,8 +182,6 @@ class Userprofile extends CI_Controller {
         }
         displayJsonEncode($array);
     }
-
-
 
     // Get User Information
     public function getUserInformation() {
@@ -274,7 +269,6 @@ class Userprofile extends CI_Controller {
         displayJsonEncode($array);
     }
 
-
     // Validate User Profile Exist for My Team
     public function validateUserProfileExistForTeam() {
         $error_occured = false;
@@ -317,8 +311,6 @@ class Userprofile extends CI_Controller {
         }
         displayJsonEncode($array);
     }
-
-
 
     // Get User All Profile Information By Unique Profile Id
     public function getUserAllProfileInformationByUniqueProfileId() {
@@ -628,7 +620,6 @@ class Userprofile extends CI_Controller {
         displayJsonEncode($array);
     }
 
-
     // Search All User Profile for Connect
     public function searchUserProfilesForConnect() {
         $error_occured = false;
@@ -847,7 +838,6 @@ class Userprofile extends CI_Controller {
         displayJsonEncode($array);
     }
 
-
     // Remove User Profile Picutre
     public function removeUserProfilePicture() {
         $error_occured = false;
@@ -901,7 +891,6 @@ class Userprofile extends CI_Controller {
         }
         displayJsonEncode($array);
     }
-
 
     // Update User Profile Photo
     public function updateUserProfileCoverPhoto() {
@@ -1296,6 +1285,65 @@ class Userprofile extends CI_Controller {
         displayJsonEncode($array);
     }
 
+    public function deleteProfile() {
+        $error_occured = false;
+
+        $UserProfileId          = $this->input->post('user_profile_id');
+        $FriendUserProfileId    = $this->input->post('friend_user_profile_id');
+
+        if($UserProfileId == "") {
+            $msg = "Please select your profile";
+            $error_occured = true;
+        } else if($FriendUserProfileId == "") {
+            $msg = "Please select your team";
+            $error_occured = true;
+        } else {
+
+            $this->db->query("BEGIN");
+
+            $updateData = array(
+                                'ProfileStatus'     => -1,
+                                'UpdatedOn'         => date('Y-m-d H:i:s'),
+                            );
+            $whereData = array(
+                                'UserProfileId'     => $FriendUserProfileId,
+                                'AddedBy'           => $UserProfileId,
+                                );
+            $profile_delete = $this->User_Model->updateMyProfileTeam($whereData, $updateData);
+
+            if($profile_delete == true) {
+                
+                $profile_detail = $this->User_Model->getUserProfileInformation($FriendUserProfileId, $UserProfileId);
+
+                $this->db->query("COMMIT");
+
+                $msg = "Team deleted successfully";
+
+            } else {
+                $this->db->query("ROLLBACK");
+                $msg = "Team not deleted. Not authorised to delete this team.";
+                $error_occured = true;
+            }
+        }
+
+        if($error_occured == true) {
+            $array = array(
+                            "status"        => 'failed',
+                            "message"       => $msg,
+                            "profile_delete"       => $profile_delete,
+                        );
+        } else {
+
+            $array = array(
+                           "status"         => 'success',
+                           "result"         => $profile_detail,
+                           "message"        => $msg,
+                           "profile_delete"        => $profile_delete,
+                           );
+        }
+        displayJsonEncode($array);
+    }
+
     // Update leader profile Setting
     public function updateLeaderProfileSetting() {
         $UserId         = $this->input->post('user_id');
@@ -1636,7 +1684,6 @@ class Userprofile extends CI_Controller {
         displayJsonEncode($array);
     }
 
-
     // Delete Profile Address
     public function deleteProfileAddress() {
         $UserId         = $this->input->post('user_id');
@@ -1777,7 +1824,6 @@ class Userprofile extends CI_Controller {
         }
         displayJsonEncode($array);
     }
-
 
     // Delete Profile Education
     public function deleteProfileEducation() {
@@ -1921,7 +1967,6 @@ class Userprofile extends CI_Controller {
         displayJsonEncode($array);
     }
 
-
     // Delete Profile Work
     public function deleteProfileWork() {
         $UserId         = $this->input->post('user_id');
@@ -2057,7 +2102,6 @@ class Userprofile extends CI_Controller {
         displayJsonEncode($array);
     }
 
-
     // Get More Detail About Friend User Profile
     public function getMoreDetailAboutFriendUserProfile() {
         $UserProfileId          = $this->input->post('user_profile_id');
@@ -2106,7 +2150,6 @@ class Userprofile extends CI_Controller {
         displayJsonEncode($array);
     }
 
-
     // Get User Profile Friend List
     public function getUserProfileFriendList() {
         $UserProfileId          = $this->input->post('user_profile_id');
@@ -2144,7 +2187,6 @@ class Userprofile extends CI_Controller {
         }
         displayJsonEncode($array);
     }
-
 
     // Get Friend Profile Full Information
     public function getFriendsProfileFullInformation() {

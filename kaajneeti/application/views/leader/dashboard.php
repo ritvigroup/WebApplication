@@ -27,10 +27,11 @@
                     <div class="col-sm-3">
                         <div class="contact-box center-version">
                             <a href="profile.html"> <img src="<?php echo $this->session->userdata('UserProfilePic'); ?>" class="img-circle" alt="image">
-                                <h3 class="m-b-xs"><strong>Rajesh Vishwakarma</strong></h3>
-                                <div class="font-bold">Project Manager</div>
+                                <h3 class="m-b-xs"><strong><?php echo $this->session->userdata('Name'); ?></strong></h3>
+                                <div class="font-bold">Leader</div>
+                                <div class="font-bold"><?php echo $this->session->userdata('UserUniqueId'); ?></div>
                                 <address>
-                                    <strong>Ritvi Group</strong><br>
+                                    <strong>Kaajneeti</strong><br>
                                 </address>
                             </a>
                             <div class="contact-box-footer">

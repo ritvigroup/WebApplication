@@ -29,11 +29,11 @@ class Friendgroup extends CI_Controller {
         $FriendGroupDescription     = $this->input->post('group_description');
         $group_member               = $this->input->post('group_member');
 
-        echo '<pre>';
-        print_r($_POST);
-        print_r($_FILES);
-        print_r($group_member);
-        die;
+        if(@is_array($group_member)) {
+
+        } else {
+            $group_member = explode(',', $group_member);
+        }
         
         if($UserProfileId == "") {
             $msg = "Please select your profile";
@@ -94,6 +94,65 @@ class Friendgroup extends CI_Controller {
                            "message"    => $msg,
                            "FriendGroupMember"    => $FriendGroupMember,
                            "FriendGroupImage"    => $FriendGroupImage,
+                           );
+        }
+        displayJsonEncode($array);
+    }
+
+    // Delete Friend Group
+    public function deleteMyGroup() {
+        $error_occured = false;
+
+        $UserProfileId  = $this->input->post('user_profile_id');
+        $FriendGroupId  = $this->input->post('group_id');
+
+        
+        if($UserProfileId == "") {
+            $msg = "Please select your profile";
+            $error_occured = true;
+        } else if($FriendGroupId == "") {
+            $msg = "Please select group ";
+            $error_occured = true;
+        } else {
+
+            $this->db->query("BEGIN");
+
+            $updateData = array(
+                                'FriendGroupStatus'     => -1,
+                                'UpdatedOn'             => date('Y-m-d H:i:s'),
+                            );
+            $whereData = array(
+                                'AddedBy'               => $UserProfileId,
+                                'FriendGroupId'         => $FriendGroupId,
+                                );
+            $group_delete = $this->Friendgroup_Model->updateMyFriendGroup($whereData, $updateData);
+
+            if($group_delete == true) {
+                
+                $friend_group_detail = $this->Friendgroup_Model->getFriendgroupDetail($FriendGroupId, $UserProfileId);
+
+                $this->db->query("COMMIT");
+
+                $msg = "Group deleted successfully";
+
+            } else {
+                $this->db->query("ROLLBACK");
+                $msg = "Group not deleted. Not authorised to delete this group.";
+                $error_occured = true;
+            }
+        }
+
+        if($error_occured == true) {
+            $array = array(
+                            "status"        => 'failed',
+                            "message"       => $msg,
+                        );
+        } else {
+
+            $array = array(
+                           "status"         => 'success',
+                           "result"         => $friend_group_detail,
+                           "message"        => $msg,
                            );
         }
         displayJsonEncode($array);
@@ -398,7 +457,6 @@ class Friendgroup extends CI_Controller {
         }
         displayJsonEncode($array);
     }
-
 
     // Set / Unset Get Notification
     public function getNotificationFromGroupOnOff() {

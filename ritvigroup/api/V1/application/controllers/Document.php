@@ -35,6 +35,7 @@ class Document extends CI_Controller {
 
         $UserProfileId          = $this->input->post('user_profile_id');
         $DocumentFolderName     = $this->input->post('folder_name');
+        $DocumentFolderDescription     = $this->input->post('folder_description');
         
         if($UserProfileId == "") {
             $msg = "Please select your profile";
@@ -85,9 +86,9 @@ class Document extends CI_Controller {
         } else {
 
             $array = array(
-                           "status"             => 'success',
-                           "result"       => $folder_detail,
-                           "message"            => $msg,
+                           "status"         => 'success',
+                           "result"         => $folder_detail,
+                           "message"        => $msg,
                            );
         }
         displayJsonEncode($array);
@@ -176,7 +177,9 @@ class Document extends CI_Controller {
 
         $UserProfileId      = $this->input->post('user_profile_id');
         $DocumentFolderId   = $this->input->post('folder_id');
-        
+        $DocumentName       = $this->input->post('document_name');
+
+      
         if($UserProfileId == "") {
             $msg = "Please select your profile";
             $error_occured = true;
@@ -186,8 +189,13 @@ class Document extends CI_Controller {
         } else {
 
             $DocumentFolderId = ($DocumentFolderId > 0) ? $DocumentFolderId : 0;
-            $doc_detail = $this->Document_Model->saveDocument($DocumentFolderId, $UserProfileId, $_FILES['file']);
-            $msg = "Files saved successfully";
+            if(is_array($DocumentName)) {
+                $msg = "Foler not saved";
+                $error_occured = true;
+            } else {
+                $this->Document_Model->saveDocument($DocumentFolderId, $UserProfileId, $DocumentName, $_FILES['file']);
+                $msg = "Files saved successfully";
+            }
         }
 
         if($error_occured == true) {
@@ -198,9 +206,67 @@ class Document extends CI_Controller {
         } else {
 
             $array = array(
-                           "status"             => 'success',
-                           "result"       => $folder_detail,
-                           "message"            => $msg,
+                           "status"         => 'success',
+                           "message"        => $msg,
+                           );
+        }
+        displayJsonEncode($array);
+    }
+
+
+    public function deleteDocument() {
+        $error_occured = false;
+
+        $UserProfileId          = $this->input->post('user_profile_id');
+        $DocumentId             = $this->input->post('document_id');
+        $FriendUserProfileId    = $this->input->post('friend_user_profile_id');
+
+        if($UserProfileId == "") {
+            $msg = "Please select your profile";
+            $error_occured = true;
+        } else if($DocumentId == "") {
+            $msg = "Please select your document";
+            $error_occured = true;
+        } else if($FriendUserProfileId == "") {
+            $msg = "Please select your team";
+            $error_occured = true;
+        } else {
+
+            $this->db->query("BEGIN");
+
+            $updateData = array(
+                                'DocumentStatus'    => -1,
+                                'UpdatedOn'         => date('Y-m-d H:i:s'),
+                            );
+            $whereData = array(
+                                'DocumentId'        => $DocumentId,
+                                'AddedBy'           => $FriendUserProfileId,
+                                );
+            $doc_delete = $this->Document_Model->updateMyDocument($whereData, $updateData);
+
+            if($doc_delete == true) {
+                
+                $this->db->query("COMMIT");
+
+                $msg = "Document deleted successfully";
+
+            } else {
+                $this->db->query("ROLLBACK");
+                $msg = "Document not deleted. Not authorised to delete this document.";
+                $error_occured = true;
+            }
+        }
+
+        if($error_occured == true) {
+            $array = array(
+                            "status"        => 'failed',
+                            "message"       => $msg,
+                        );
+        } else {
+
+            $array = array(
+                           "status"         => 'success',
+                           "message"        => $msg,
                            );
         }
         displayJsonEncode($array);

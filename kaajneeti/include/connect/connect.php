@@ -20,7 +20,6 @@
         }
     }
 
-
     function unFriend(id) {
 
         if (id > 0) {
@@ -70,7 +69,6 @@
         }
     }
 
-
     function followUnfollowUserProfile(id) {
         if (id > 0) {
             $('#connection_loader_id_'+id).show();
@@ -119,7 +117,6 @@
             return false;
         }
     }
-
 
     function acceptRequest(id) {
 
@@ -230,7 +227,6 @@
             }
 
         });
-        
     }
 
 
@@ -260,17 +256,12 @@
         }
     }
 
-    function exitMeFromFriendgroupConfirm(id) {
+
+    function exitMeFromFriendgroup(id) {
         var ans = confirm("Are you sure to leave this group?");
         if(!ans) {
             return false;
-        } else {
-            exitMeFromFriendgroup(id);
-        }
-    }
-
-    function exitMeFromFriendgroup(id) {
-
+        } 
         if (id > 0) {
             $('#connection_loader_id_'+id).show();
             $.post("<?php echo base_url(); ?>connect/exitMeFromFriendgroup", {id: id},

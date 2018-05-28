@@ -1,4 +1,4 @@
-<form name="plan_form" method="post" action="<?php echo base_url(); ?>" onSubmit="return false;">
+<form name="plan_form" method="post" action="<?php echo base_url(); ?>" onSubmit="return false;" autocomplete="off">
     <div class="modal-header">
         <button type="button" data-dismiss="modal" aria-hidden="true" class="close">×</button>
         <h4 id="modal-stackable-label" class="modal-title">New Team</h4>
@@ -11,7 +11,7 @@
                     <div class="col-md-6">
                         <div class="form-group">
                             <label>Search: </label>
-                            <input type="text" class="form-control" id="search_user" name="search_user" autocomplete="off" placeholder="Search Users" >
+                            <input type="text" class="form-control" id="search_user" name="search_user" autocomplete="nope" placeholder="Search Users" >
                             <input type="button" value="Search" class="btn btn-default search_button">
                         </div>
                     </div>
@@ -43,13 +43,13 @@
                     <div class="col-md-6">
                         <div class="form-group">
                             <label>Username: </label>
-                            <input type="text" class="form-control" id="user_name" name="user_name" placeholder="Username" required>
+                            <input type="text" class="form-control" id="user_name" name="team_user_name" placeholder="Username" autocomplete="nope" required>
                         </div>
                     </div>
                     <div class="col-md-6">
                         <div class="form-group">
                             <label>Password: </label>
-                            <input type="password" class="form-control" id="password" name="password" placeholder="Password" required>
+                            <input type="password" class="form-control" id="password" name="team_password" placeholder="Password" autocomplete="nope" required>
                         </div>
                     </div>
                 </div>

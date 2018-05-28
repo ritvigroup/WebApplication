@@ -36,6 +36,8 @@ class Poll extends CI_Controller {
 
 
         $PollUniqueId = $this->Poll_Model->generatePollUniqueId();
+
+
         
         if($UserProfileId == "") {
 			$msg = "Please select your profile";
@@ -60,6 +62,7 @@ class Poll extends CI_Controller {
                                 'AddedOn'           => date('Y-m-d H:i:s'),
                                 'UpdatedOn'         => date('Y-m-d H:i:s'),
                             );
+
 			$PollId = $this->Poll_Model->saveMyPoll($insertData);
 
             if($PollId > 0) {

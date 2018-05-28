@@ -7,26 +7,35 @@
         <div class="panel panel-white">
             <div class="panel-body">
                 <div class="row">
-                    <div class="col-md-6">
+                    <div class="col-md-12">
                         <div class="form-group">
+                            <?php
+                            // echo '<pre>';
+                            // print_r($DocumentFolder);
+                            // echo '</pre>';
+                            ?>
+                            <div style="float: right;"><a data-target="#modal-stackable-folder" data-toggle="modal" href="javascript:void(0);" onClick="return newFolder();">Add New</a></div>
                             <label>Choose Folder: </label>
-                            <select class="form-control" id="department" name="department" multiple="">
-                                <option value="">Folder 1</option>
-                                <option value="">Folder 2</option>
-                                <option value="">Folder 3</option>
-                                <option value="">Folder 4</option>
+                            <select class="form-control" id="folder_id" name="folder_id">
+                                <?php
+                                foreach($DocumentFolder->result AS $folder_value) {
+                                    echo '<option value="'.$folder_value->DocumentFolderId.'">'.$folder_value->DocumentFolderName.'</option>';
+                                }
+                                ?>
                             </select>
                         </div>
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-md-6">
+                    <div class="col-md-12">
                         <div class="form-group">
                             <label>Document Name: </label>
-                            <input type="text" class="form-control" id="first_name" name="first_name" placeholder="Document Name" required>
+                            <input type="text" class="form-control document_name" id="document_name" name="document_name" placeholder="Document Name" required>
                         </div>
                     </div>
-                    <div class="col-md-6">
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
                         <div class="form-group">
                             <label>Image: </label>
                             <input type="file" name="file" class="form-control fileUploadForm" />
@@ -41,7 +50,7 @@
         </div>
     </div>
     <div class="modal-footer">
-        <button type="submit" class="btn btn-success save_user">Save</button>
+        <button type="submit" class="btn btn-success save_document">Save</button>
         <button type="reset" data-dismiss="modal" class="btn btn-default">Cancel</button>
     </div>
 </form>
@@ -49,84 +58,64 @@
 
 
 <script>
-<?php /*
-    document.querySelector('.search_button').onclick = function () {
-        var search_user = $("#search_user").val();
 
-        if (search_user.length > 0) {
+    document.querySelector('.save_document').onclick = function () {
 
-            $('.search_button').val('Searching...');
-
-            $.post("<?php echo base_url(); ?>leader/searchLeaderProfiles", {search: search_user},
-                function (data, status) {
-
-                    if(data != '') {
-                        $('#friend_profile').html(data);
-                    } else {
-                        $('#friend_profile').html('<option value="">No User Found</option>');
-                    }
-                    $('.search_button').val('Search');
-                });
-        } else {
-            sweetAlert("Oops...", "Please enter something to search leaders", "error");
-            return false;
-        }
-    };
-
-    document.querySelector('.save_user').onclick = function () {
-        var $this = $(this);
-        var friend_profile  = $("#friend_profile").val();
-        var first_name      = $("#first_name").val();
-        var last_name       = $("#last_name").val();
-        var email           = $("#email").val();
-        var department      = $("#department").val();
-
+        $('.save_document').prop('disabled', true);
         
+        var folder_id  = $("#folder_id").val();
+        var document_name  = $("#document_name").val();
 
-        if (friend_profile > 0 && first_name.length > 3) {
-            $('.save_user').html('Validating...');
-                        
+        if (folder_id > 0) {
+            
             var form_data = new FormData($('input[name^="file"]'));
 
+            var files_selected = 0;
             jQuery.each($('input[name^="file"]')[0].files, function(i, file) {
                 form_data.append('file', file);
+                files_selected++;
             });
 
-            form_data.append('friend_profile', friend_profile);
-            form_data.append('first_name', first_name);
-            form_data.append('last_name', last_name);
-            form_data.append('email', email);
-            form_data.append('department', department);
-            form_data.append('save_user', 'Y');
 
-            jQuery.ajax({
-                type: 'POST',
-                cache: false,
-                processData: false,
-                contentType: false,
-                data: form_data,
-                url: "<?php echo base_url(); ?>organize/team",
+            if(files_selected > 0) {
 
-                success: function(data) {
-                    if (data.status === "failed") {
-                        sweetAlert("Oops...", data.message, "error");
-                        $('.save_user').html('Save');
-                        return false;
-                    } else { 
-                        if (data.status === "success") {
-                            $('.save_user').html('Saved');
-                            window.location.href="team";
+                $('.save_document').html('Saving your document...');
+
+                form_data.append('folder_id', folder_id);
+                form_data.append('document_name', document_name);
+                form_data.append('save_document', 'Y');
+
+                jQuery.ajax({
+                    type: 'POST',
+                    cache: false,
+                    processData: false,
+                    contentType: false,
+                    data: form_data,
+                    url: "<?php echo base_url(); ?>organize/document",
+
+                    success: function(data) {
+                        if (data.status === "failed") {
+                            sweetAlert("Oops...", data.message, "error");
+                            $('.save_document').prop('disabled', false);
+                            $('.save_document').html('Save');
+                            return false;
+                        } else { 
+                            if (data.status === "success") {
+                                window.location.href="document";
+                            }
                         }
                     }
-                }
-            });
+                });
+            } else {
+                sweetAlert("Oops...", "Please select atleast one file", "error");
+                $('.save_document').prop('disabled', false);
+                return false;
+            }
 
         } else {
-            sweetAlert("Oops...", "Please select user and enter first name", "error");
+            sweetAlert("Oops...", "Please select any folder", "error");
+            $('.save_document').prop('disabled', false);
             return false;
         }
     };
-    */ ?>
-</script>
-
-
+</script> 

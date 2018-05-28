@@ -105,6 +105,12 @@ class Fleet_Model extends CI_Model {
         return false;
     }
 
+    public function updateMyFleet($whereData, $updateData) {
+        $this->db->where($whereData);
+        $this->db->update($this->FleetTbl, $updateData);
+
+        return $this->db->affected_rows();
+    }
 
     public function getAllVehicle($UserProfileId) {
         $vehicle = array();
@@ -132,6 +138,7 @@ class Fleet_Model extends CI_Model {
             $this->db->select('FleetId');
             $this->db->from($this->FleetTbl);
             $this->db->where('UserProfileId', $UserProfileId);
+            $this->db->where('FleetStatus !=', -1);
             $this->db->order_by('AddedOn','DESC');
             $query = $this->db->get();
 

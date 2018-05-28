@@ -651,6 +651,13 @@ class User_Model extends CI_Model {
         }
     }
 
+    public function updateMyProfileTeam($whereData, $updateData) {
+        $this->db->where($whereData);
+        $this->db->update($this->userProfileTbl, $updateData);
+
+        return $this->db->affected_rows();
+    }
+
 
     // Get User Profile Information
     public function getUserProfileInformation($FriendUserProfileId, $UserProfileId = 0) {
@@ -1430,6 +1437,9 @@ class User_Model extends CI_Model {
     // Auto Generate User Unique Id
     public function autoGenerateUserUniqueId() {
         $UserUniqueId = mt_rand().time().rand();
+
+        $UserUniqueId = substr( str_shuffle( $UserUniqueId ), 0, 14);
+
         $this->db->select('UserId');
         $this->db->from($this->userTbl);
         $this->db->where('UserUniqueId', $UserUniqueId);
@@ -2504,7 +2514,8 @@ class User_Model extends CI_Model {
                                         FROM ".$this->UserFollowTbl." AS ufu 
                                         LEFT JOIN ".$this->userProfileTbl." up ON ufu.UserProfileId = up.UserProfileId
                                         WHERE 
-                                            ufu.`FollowUserProfileId` = '".$UserProfileId."'";
+                                            ufu.`FollowUserProfileId` = '".$UserProfileId."' 
+                                        AND up.`ProfileStatus` != -1 ";
 
         if($search_text != '') {
             $sql .= " AND ( ";
@@ -2530,7 +2541,8 @@ class User_Model extends CI_Model {
                                         FROM ".$this->UserFollowTbl." AS ufu 
                                         LEFT JOIN ".$this->userProfileTbl." up ON ufu.FollowUserProfileId = up.UserProfileId
                                         WHERE 
-                                            ufu.`UserProfileId` = '".$UserProfileId."'";
+                                            ufu.`UserProfileId` = '".$UserProfileId."' 
+                                        AND up.`ProfileStatus` != -1 ";
 
         if($search_text != '') {
             $sql .= " AND ( ";
@@ -2556,7 +2568,8 @@ class User_Model extends CI_Model {
                                         FROM ".$this->UserFriendTbl." AS uf  
                                         LEFT JOIN ".$this->userProfileTbl." up ON uf.FriendUserProfileId = up.UserProfileId 
                                         WHERE 
-                                            uf.`UserProfileId` = '".$UserProfileId."'
+                                            uf.`UserProfileId` = '".$UserProfileId."' 
+                                        AND up.`ProfileStatus` != -1 
                                         AND uf.RequestAccepted = '1'"; 
 
         if($search_text != '') {
@@ -2749,11 +2762,29 @@ class User_Model extends CI_Model {
 
 
     // Validate User Profile Username Exist for my team
+    public function validateNewUsernameForUserprofileExist($UserName) {
+        $this->db->select('UserProfileId');
+        $this->db->from($this->userProfileTbl);
+        $this->db->where('ProfileUserName', $UserName);
+        $this->db->where('ProfileStatus !=', -1);
+        $this->db->limit(1);
+        $query = $this->db->get();
+        $result = $query->row_array();
+        if ($query->num_rows() > 0) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+
+    // Validate User Profile Username Exist for my team
     public function validateUsernameForUserprofileExist($UserName, $UserProfileId) {
         $this->db->select('UserProfileId');
         $this->db->from($this->userProfileTbl);
         $this->db->where('ProfileUserName', $UserName);
         $this->db->where('UserProfileId !=', $UserProfileId);
+        $this->db->where('ProfileStatus !=', -1);
         $this->db->limit(1);
         $query = $this->db->get();
         $result = $query->row_array();

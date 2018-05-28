@@ -30,6 +30,7 @@ class Explore extends CI_Controller {
         $json_encode = post_curl(API_CALL_PATH.'leader/getAllHomePageData', $this->input->post(), $this->curl);
 
         // echo '<pre>';
+        // print_r($_POST);
         // print_r($json_encode);
         // echo '</pre>';
 

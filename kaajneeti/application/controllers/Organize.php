@@ -28,7 +28,6 @@ class Organize extends CI_Controller {
         $this->load->view('organize/organize',$data);
     }
 
-
     public function documentfolder() {
         $data = array();
 
@@ -58,24 +57,29 @@ class Organize extends CI_Controller {
         $this->load->view('organize/documentfolder', $data);
     }
 
-
-    public function documents() {
+    public function document() {
         $data = array();
 
            
         if($this->input->method(TRUE) == "POST") {
             $_POST['user_profile_id'] = $this->session->userdata('UserProfileId');
 
-
             $post_data = $this->input->post();
 
-            for($i = 0; $i < count($_FILES['file']['name']); $i++) {
+            /*for($i = 0; $i < count($_FILES['file']['name']); $i++) {
                 if($_FILES['file']['name'][$i] != '') {
 
                     //$post_data = array_merge($post_data, array('file['.$i.']' => '@'.($_FILES['file']['tmp_name'][$i]).''));
                     $post_data = array_merge($post_data, array('file['.$i.']' => getCurlValue($_FILES['file']['tmp_name'][$i], $_FILES['file']['type'][$i], $_FILES['file']['name'][$i])));
                 }
+            }*/
+
+            if($_FILES['file']['name'] != '') {
+
+                //$post_data = array_merge($post_data, array('file['.$i.']' => '@'.($_FILES['file']['tmp_name'][$i]).''));
+                $post_data = array_merge($post_data, array('file' => getCurlValue($_FILES['file']['tmp_name'], $_FILES['file']['type'], $_FILES['file']['name'])));
             }
+
             $json_decode = post_curl_with_files(API_CALL_PATH.'document/saveMyDocument', $post_data, $this->curl);
 
             header('Content-type: application/json');
@@ -102,9 +106,68 @@ class Organize extends CI_Controller {
             $data['Document'] = $json_decode;
         }
 
-        $this->load->view('organize/documents', $data);
+        $this->load->view('organize/document', $data);
     }
 
+    public function newDocument() {
+        $data = array();
+      
+        if (!$this->input->is_ajax_request()) {
+           exit('Error');
+        }
+        $_POST['user_profile_id'] = $this->session->userdata('UserProfileId');
+
+        $json_encode = post_curl(API_CALL_PATH.'document/getMyAllDocumentFolder', $this->input->post(), $this->curl);
+
+        $json_decode = json_decode($json_encode);
+        if(count($json_decode->result) > 0) {
+            $data['DocumentFolder'] = $json_decode;
+        }
+        
+        $this->load->view('organize/newDocument',$data);
+    }
+
+    public function deleteDocument() {
+        $data = array();
+      
+        if (!$this->input->is_ajax_request()) {
+           exit('Error');
+        }
+        $_POST['user_id']                   = $this->session->userdata('UserId');
+        $_POST['user_profile_id']           = $this->session->userdata('UserProfileId');
+        $_POST['document_id']               = $this->uri->segment(3);
+        $_POST['friend_user_profile_id']    = $this->uri->segment(4);
+
+        $json_encode = post_curl(API_CALL_PATH.'document/deleteDocument', $this->input->post(), $this->curl);
+
+        header('Content-type: application/json');
+
+        echo $json_encode;
+
+        return false;
+    }
+
+    public function newFolder() {
+        $data = array();
+      
+        if (!$this->input->is_ajax_request()) {
+           exit('Error');
+        }
+        $_POST['user_profile_id'] = $this->session->userdata('UserProfileId');
+
+        if($this->input->post('folder_name') != '') {
+            $json_encode = post_curl(API_CALL_PATH.'document/saveMyDocumentFolder', $this->input->post(), $this->curl);
+
+            header('Content-type: application/json');
+
+            echo $json_encode;
+
+            return false;
+        }
+
+        
+        $this->load->view('organize/newFolder',$data);
+    }
 
     public function fleet() {
         $data = array();
@@ -151,8 +214,6 @@ class Organize extends CI_Controller {
         $this->load->view('organize/fleet', $data);
     }
 
-
-
     public function newTeam() {
         $data = array();
       
@@ -178,7 +239,6 @@ class Organize extends CI_Controller {
         $this->load->view('organize/newTeam',$data);
     }
 
-
     public function newRole() {
         $data = array();
       
@@ -201,8 +261,6 @@ class Organize extends CI_Controller {
         $this->load->view('organize/newRole',$data);
     }
 
-
-
     public function newFleet() {
         $data = array();
       
@@ -215,37 +273,23 @@ class Organize extends CI_Controller {
         $this->load->view('organize/newFleet',$data);
     }
 
-
-    public function newDocument() {
+    public function deleteFleet() {
         $data = array();
       
         if (!$this->input->is_ajax_request()) {
            exit('Error');
         }
-        $_POST['user_profile_id'] = $this->session->userdata('UserProfileId');
+        $_POST['user_id']           = $this->session->userdata('UserId');
+        $_POST['user_profile_id']   = $this->session->userdata('UserProfileId');
+        $_POST['fleet_id']          = $this->uri->segment(3);
 
-        
-        $this->load->view('organize/newDocument',$data);
-    }
+        $json_encode = post_curl(API_CALL_PATH.'fleet/deleteFleet', $this->input->post(), $this->curl);
 
+        header('Content-type: application/json');
 
-    public function newGroup() {
-        $data = array();
-      
-        if (!$this->input->is_ajax_request()) {
-           exit('Error');
-        }
+        echo $json_encode;
 
-        $_POST['user_id'] = $this->session->userdata('UserId');
-        $_POST['user_profile_id'] = $this->session->userdata('UserProfileId');
-
-        $json_encode = post_curl(API_CALL_PATH.'userconnect/getMyAllConnections', $this->input->post(), $this->curl);
-        $json_decode = json_decode($json_encode);
-
-        $data['Connections'] = $json_decode;
-
-        
-        $this->load->view('organize/newGroup',$data);
+        return false;
     }
 
 
@@ -260,7 +304,6 @@ class Organize extends CI_Controller {
         
         $this->load->view('organize/showUserDetail',$data);
     }
-
 
     public function editTeam() {
         $data = array();
@@ -297,6 +340,25 @@ class Organize extends CI_Controller {
         $this->load->view('organize/editTeam',$data);
     }
 
+    public function deleteTeam() {
+        $data = array();
+      
+        if (!$this->input->is_ajax_request()) {
+           exit('Error');
+        }
+        $_POST['user_id']                   = $this->session->userdata('UserId');
+        $_POST['user_profile_id']           = $this->session->userdata('UserProfileId');
+        $_POST['unique_profile_id']         = $this->uri->segment(3);
+        $_POST['friend_user_profile_id']    = $this->uri->segment(4);
+
+        $json_encode = post_curl(API_CALL_PATH.'userprofile/deleteProfile', $this->input->post(), $this->curl);
+
+        header('Content-type: application/json');
+
+        echo $json_encode;
+
+        return false;
+    }
 
     public function team() {
         $data = array();
@@ -380,6 +442,195 @@ class Organize extends CI_Controller {
         }
 
         $this->load->view('organize/team', $data);
+    }
+
+    public function newGroup() {
+        $data = array();
+      
+        if (!$this->input->is_ajax_request()) {
+           exit('Error');
+        }
+
+        $_POST['user_id'] = $this->session->userdata('UserId');
+        $_POST['user_profile_id'] = $this->session->userdata('UserProfileId');
+
+        $json_encode = post_curl(API_CALL_PATH.'userconnect/getMyAllConnections', $this->input->post(), $this->curl);
+        $json_decode = json_decode($json_encode);
+
+        $data['Connections'] = $json_decode;
+
+        
+        $this->load->view('organize/newGroup',$data);
+    }
+
+    public function group() {
+        $data = array();
+
+        $_POST['user_id'] = $this->session->userdata('UserId');
+        $_POST['user_profile_id'] = $this->session->userdata('UserProfileId');
+        
+        $json_encode = post_curl(API_CALL_PATH.'friendgroup/getMyAllFriendgroup', $this->input->post(), $this->curl);
+
+        $json_decode = json_decode($json_encode);
+        if(count($json_decode->result) > 0) {
+            $data['MyGroup'] = $json_decode;
+        }
+
+        $this->load->view('organize/group', $data);
+    }
+
+    public function deleteGroup() {
+        $data = array();
+      
+        if (!$this->input->is_ajax_request()) {
+           exit('Error');
+        }
+        $_POST['user_id']           = $this->session->userdata('UserId');
+        $_POST['user_profile_id']   = $this->session->userdata('UserProfileId');
+        $_POST['group_id']          = $this->uri->segment(3);
+
+        $json_encode = post_curl(API_CALL_PATH.'friendgroup/deleteMyGroup', $this->input->post(), $this->curl);
+
+        header('Content-type: application/json');
+
+        echo $json_encode;
+
+        return false;
+    }
+
+    public function event() {
+        $data = array();
+      
+        $_POST['user_profile_id'] = $this->session->userdata('UserProfileId');
+        $_POST['friend_profile_id'] = $this->session->userdata('UserProfileId');
+
+        if($this->input->method(TRUE) == "POST" && $_POST['save_event'] == "Y") {
+            $_POST['user_profile_id'] = $this->session->userdata('UserProfileId');
+
+
+            $post_data = $this->input->post();
+            $attendee = array();
+            if($post_data['event_attendee'] != '') {
+                $exp_attendee = explode(',', $post_data['event_attendee']);
+                for($i = 0; $i < count($exp_attendee); $i++) {
+                    if($exp_attendee[$i] > 0) {
+                        $post_data = array_merge($post_data, array('event_attendee['.$i.']' => $exp_attendee[$i]));
+                    }
+                }
+            }
+
+            for($i = 0; $i < count($_FILES['file']['name']); $i++) {
+                if($_FILES['file']['name'][$i] != '') {
+
+                    //$post_data = array_merge($post_data, array('file['.$i.']' => '@'.($_FILES['file']['tmp_name'][$i]).''));
+                    $post_data = array_merge($post_data, array('file['.$i.']' => getCurlValue($_FILES['file']['tmp_name'][$i], $_FILES['file']['type'][$i], $_FILES['file']['name'][$i])));
+                }
+            }
+
+            // echo '<pre>';
+            // print_r($_POST);
+            // echo '</pre>';
+            // die;
+            $json_decode = post_curl_with_files(API_CALL_PATH.'event/saveMyEvent', $post_data, $this->curl);
+
+            header('Content-type: application/json');
+
+            echo $json_decode;
+
+            return false;
+        }
+        $json_encode = post_curl(API_CALL_PATH.'event/getMyAllEvent', $this->input->post(), $this->curl);
+
+        $json_decode = json_decode($json_encode);
+        if(count($json_decode->result) > 0) {
+            $data['Event'] = $json_decode;
+        }
+        
+        $this->load->view('organize/event',$data);
+    }
+
+    public function newevent() {
+        $data = array();
+
+           
+        
+        $this->load->view('organize/newEvent',$data);
+    }
+
+    public function eventdetail() {
+        $data = array();
+      
+        if (!$this->input->is_ajax_request()) {
+           exit('Error');
+        }
+        $_POST['user_profile_id'] = $this->session->userdata('UserProfileId');
+        $_POST['event_id'] = $this->input->post('event_id');
+        $json_encode = post_curl(API_CALL_PATH.'event/getEventDetail', $this->input->post(), $this->curl);
+
+        $json_decode = json_decode($json_encode);
+        if(count($json_decode->result) > 0) {
+            $data = $json_decode;
+        }
+        
+        $this->load->view('organize/eventDetail',$data);
+    }
+
+
+     public function poll() {
+        $data = array();
+      
+        $_POST['user_profile_id']   = $this->session->userdata('UserProfileId');
+        $_POST['friend_profile_id'] = $this->session->userdata('UserProfileId');
+
+        if($this->input->method(TRUE) == "POST" && $this->input->post('save_poll') == "Y") {
+            $_POST['user_profile_id'] = $this->session->userdata('UserProfileId');
+
+
+
+            $json_decode = post_curl(API_CALL_PATH.'poll/saveMyPoll', $this->input->post(), $this->curl);
+
+            header('Content-type: application/json');
+
+            echo $json_decode;
+
+            return false;
+        }
+
+        $json_encode = post_curl(API_CALL_PATH.'poll/getMyAllPoll', $this->input->post(), $this->curl);
+
+        $json_decode = json_decode($json_encode);
+        if(count($json_decode->result) > 0) {
+            $data['Poll'] = $json_decode;
+        }
+        
+        $this->load->view('organize/poll',$data);
+    }
+
+
+    public function pollDetail() {
+        $data = array();
+      
+        if (!$this->input->is_ajax_request()) {
+           exit('Error');
+        }
+        $_POST['user_profile_id'] = $this->session->userdata('UserProfileId');
+        $_POST['poll_id'] = $this->input->post('poll_id');
+
+        $json_encode = post_curl(API_CALL_PATH.'poll/getPollDetail', $this->input->post(), $this->curl);
+
+        $json_decode = json_decode($json_encode);
+        if(count($json_decode->result) > 0) {
+            $data = $json_decode;
+        }
+        
+        $this->load->view('organize/pollDetail',$data);
+    }
+
+
+    public function newpoll() {
+        $data = array();
+
+        $this->load->view('organize/newPoll',$data);
     }
 
 }

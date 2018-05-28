@@ -21,23 +21,27 @@ class Document_Model extends CI_Model {
     }
 
 
-    public function saveDocument($DocumentFolderId, $UserProfileId, $doc_attachment) {
+    public function saveDocument($DocumentFolderId, $UserProfileId, $DocumentName, $doc_attachment) {
         $j = 0;
 
-        for($i = 0; $i < count($doc_attachment['name']); $i++) {
+        /*if($doc_attachment['name'][0] != '') {
+            for($i = 0; $i < count($doc_attachment['name']); $i++) {
 
-            $DocumentName = $doc_attachment['name'][$i];
+                $DocumentFile = basename($doc_attachment['name'][$i]);
 
-            if($DocumentName != '') {
+                $AttachmentFile = '';
+                if($DocumentFile != '') {
 
-                $AttachmentFile = date('YmdHisA').'-'.time().'-DOCUMENT-'.mt_rand().'.'.end(explode('.', $DocumentName));
+                    $AttachmentFile = date('YmdHisA').'-'.time().'-DOCUMENT-'.mt_rand().'.'.end(explode('.', $DocumentFile));
 
-                $path = DOC_DIR;
+                    $path = DOC_DIR;
 
-                $path = $path.$AttachmentFile;
-                $source = $doc_attachment['tmp_name'][$i];
+                    $path = $path.$AttachmentFile;
+                    $source = $doc_attachment['tmp_name'][$i];
 
-                $upload_result = uploadFileOnServer($source, $path);
+                    $upload_result = uploadFileOnServer($source, $path);
+                } else {
+                }
 
                 $insertData = array(
                                     'DocumentFolderId'      => $DocumentFolderId,
@@ -51,8 +55,45 @@ class Document_Model extends CI_Model {
                                     );
                 $this->db->insert($this->DocumentTbl, $insertData);
             }
-        }
+        } else {*/
+            $DocumentFile = basename($doc_attachment['name']);
+            $AttachmentFile = '';
+            if($DocumentFile != '') {
+
+                $AttachmentFile = date('YmdHisA').'-'.time().'-DOCUMENT-'.mt_rand().'.'.end(explode('.', $DocumentFile));
+
+                $path = DOC_DIR;
+
+                $path = $path.$AttachmentFile;
+                $source = $doc_attachment['tmp_name'];
+
+                $upload_result = uploadFileOnServer($source, $path);
+            } else {
+
+            }
+
+            $insertData = array(
+                                'DocumentFolderId'      => $DocumentFolderId,
+                                'DocumentName'          => $DocumentName,
+                                'DocumentPath'          => $AttachmentFile,
+                                'DocumentStatus'        => 1,
+                                'AddedBy'               => $UserProfileId,
+                                'UpdatedBy'             => $UserProfileId,
+                                'AddedOn'               => date('Y-m-d H:i:s'),
+                                'UpdatedOn'             => date('Y-m-d H:i:s'),
+                                );
+            $this->db->insert($this->DocumentTbl, $insertData);
+        //}
         return true;
+    }
+
+
+    public function updateMyDocument($whereData, $updateData) {
+        $this->db->where($whereData);
+        $this->db->update($this->DocumentTbl, $updateData);
+
+        return $this->db->last_query();
+        return $this->db->affected_rows();
     }
 
 
@@ -63,7 +104,8 @@ class Document_Model extends CI_Model {
             $this->db->select('DocumentId');
             $this->db->from($this->DocumentTbl);
             $this->db->where('AddedBy', $UserProfileId);
-            $this->db->order_by('AddedOn','DESC');
+            $this->db->where('DocumentStatus !=', -1);
+            $this->db->order_by('UpdatedOn','DESC');
             $query = $this->db->get();
 
             $res = $query->result_array();
@@ -107,7 +149,7 @@ class Document_Model extends CI_Model {
         $DocumentFolderId       = $res['DocumentFolderId'];
         $DocumentFolderName     = $res['DocumentFolderName'];
         $DocumentName           = (($res['DocumentName'] != NULL) ? $res['DocumentName'] : "");
-        $DocumentPath           = (($res['DocumentPath'] != NULL) ? $res['DocumentPath'] : "");
+        $DocumentPath           = (($res['DocumentPath'] != NULL) ? DOC_URL.$res['DocumentPath'] : "");
         $DocumentStatus         = (($res['DocumentStatus'] != NULL) ? $res['DocumentStatus'] : "");
 
         $AddedBy            = $res['AddedBy'];
@@ -115,14 +157,14 @@ class Document_Model extends CI_Model {
         $AddedOn            = return_time_ago($res['AddedOn']);
         $UpdatedOn          = return_time_ago($res['UpdatedOn']);
 
-        $DocumentProfile       = $this->User_Model->getUserProfileWithUserInformation($AddedBy);
+        $DocumentProfile       = $this->User_Model->getUserProfileInformation($AddedBy, $UserProfileId);
 
         $doc_folder_data_array = array(
                                     "DocumentId"            => $DocumentId,
                                     "DocumentFolderId"      => $DocumentFolderId,
                                     "DocumentFolderName"    => $DocumentFolderName,
                                     "DocumentName"          => $DocumentName,
-                                    "DocumentPath"          => DOC_URL.$DocumentPath,
+                                    "DocumentPath"          => $DocumentPath,
                                     "DocumentStatus"        => $DocumentStatus,
                                     "AddedOn"               => $AddedOn,
                                     "AddedOnTime"           => $res['AddedOn'],
@@ -142,6 +184,7 @@ class Document_Model extends CI_Model {
             $this->db->select('DocumentFolderId');
             $this->db->from($this->DocumentFolderTbl);
             $this->db->where('AddedBy', $UserProfileId);
+            $this->db->where('DocumentFolderStatus !=', -1);
             $this->db->order_by('DocumentFolderName','ASC');
             $query = $this->db->get();
 
@@ -186,7 +229,7 @@ class Document_Model extends CI_Model {
         $AddedOn            = return_time_ago($res['AddedOn']);
         $UpdatedOn          = return_time_ago($res['UpdatedOn']);
 
-        $DocumentFolderProfile       = $this->User_Model->getUserProfileWithUserInformation($AddedBy);
+        $DocumentFolderProfile       = $this->User_Model->getUserProfileInformation($AddedBy, $UserProfileId);
 
         $doc_folder_data_array = array(
                                     "DocumentFolderId"          => $DocumentFolderId,

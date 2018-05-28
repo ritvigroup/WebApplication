@@ -98,7 +98,7 @@
                     } else { 
                         if (data.status === "success") {
                             $('.save_user').html('Saved');
-                            window.location.href="team";
+                            window.location.href="group";
                         }
                     }
                 }

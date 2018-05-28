@@ -208,12 +208,14 @@ class Event_Model extends CI_Model {
                 $this->db->select('EventId');
                 $this->db->from($this->eventTbl);
                 $this->db->where('AddedBy', $FriendProfileId);
+                $this->db->where('EventStatus', '1');
                 $this->db->where('EventPrivacy', '1');
                 $this->db->order_by('AddedOn','DESC');
             } else {
                 $this->db->select('EventId');
                 $this->db->from($this->eventTbl);
                 $this->db->where('AddedBy', $FriendProfileId);
+                $this->db->where('EventStatus !=', -1);
                 $this->db->order_by('AddedOn','DESC');
             }
 

@@ -335,8 +335,8 @@ class Connect extends CI_Controller {
         if($this->input->method(TRUE) == "POST" && $this->input->post('save_group') == 'Y') {
 
             $member = $this->input->post('member_id');
-            //$member .= ','.$_POST['user_profile_id'];
-            //$member_exp = explode(',', $member);
+            $member .= ','.$_POST['user_profile_id'];
+            $member_exp = explode(',', $member);
             $post_data = array(
                                 'user_profile_id'           => $this->input->post('user_profile_id'),
                                 'group_name'                => $this->input->post('group_name'),
@@ -350,19 +350,7 @@ class Connect extends CI_Controller {
                 $post_data = array_merge($post_data, array('file' => getCurlValue($_FILES['file']['tmp_name'], $_FILES['file']['type'], $_FILES['file']['name'])));
             }
 
-
-            // echo '<pre>';
-            // print_r($member_id);
-            // print_r($post_data);
-            // print_r($_FILES);
-            // die;
-
-
             $json_decode = post_curl_with_files(API_CALL_PATH.'friendgroup/saveFriendgroup', $post_data, $this->curl);
-
-            echo '<pre>';
-            print_r($json_decode);
-            die;
 
             header('Content-type: application/json');
 

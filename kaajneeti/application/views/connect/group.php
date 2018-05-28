@@ -123,7 +123,7 @@
                                                                     <button class="btn aqua btn-outline btn-sm dropdown-toggle" type="button" id="connection-featuresMenu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fa fa-check"></i> Joined</button>
                                                                     <ul class="dropdown-menu dropdown-menu-left" aria-labelledby="connection-featuresMenu">
                                                                         <li><a href="javascript:void(0);" onClick="return getGroupNotificationOnOff(<?php echo $group->FriendGroupId; ?>);" id="group_notification_id_<?php echo $group->FriendGroupId; ?>"><?php if($group->GroupMemeberDetail->GetNotification > 0) { echo '<i class="fa fa-check"></i>'; } ?> Get Notification</a></li>
-                                                                        <li><a href="javascript:void(0);" onClick="return exitMeFromFriendgroupConfirm(<?php echo $group->FriendGroupId; ?>);">Leave Group</a></li>
+                                                                        <li><a href="javascript:void(0);" onClick="return exitMeFromFriendgroup(<?php echo $group->FriendGroupId; ?>);">Leave Group</a></li>
                                                                     </ul>
                                                                 </div>
                                                             </div>    

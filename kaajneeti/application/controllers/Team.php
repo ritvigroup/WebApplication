@@ -96,6 +96,7 @@ class Team extends CI_Controller {
                 $UserTypeId = $json_decode->result->UserTypeId;
                 $FirstName = $json_decode->result->FirstName;
                 $LastName = $json_decode->result->LastName;
+                $UserUniqueId = $json_decode->result->UserUniqueId;
 
                 $Name = $FirstName.' '.$LastName;
                 $UserProfilePic = ($json_decode->result->ProfilePhotoPath != '') ? $json_decode->result->ProfilePhotoPath : base_url().'assets/images/default-user.png';
@@ -106,6 +107,7 @@ class Team extends CI_Controller {
                     $this->session->set_userdata('UserTypeId', $UserTypeId);
                     $this->session->set_userdata('UserProfilePic', $UserProfilePic);
                     $this->session->set_userdata('UserProfileId', $UserProfileId);
+                    $this->session->set_userdata('UserUniqueId', $UserUniqueId);
                 }
             } else {
                 

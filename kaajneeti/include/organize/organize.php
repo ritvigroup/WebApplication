@@ -7,10 +7,17 @@
     </div>
 </div>
 
-
 <div id="modal-stackable-role" tabindex="-1" role="dialog" aria-labelledby="modal-stackable-label" aria-hidden="true" class="modal fade" style="display: none;">
     <div class="modal-dialog">
         <div class="modal-content modal-content-ajax-role">
+
+        </div>
+    </div>
+</div>
+
+<div id="modal-stackable-folder" tabindex="-1" role="dialog" aria-labelledby="modal-stackable-label" aria-hidden="true" class="modal fade" style="display: none;">
+    <div class="modal-dialog">
+        <div class="modal-content modal-content-ajax-folder">
 
         </div>
     </div>
@@ -50,7 +57,6 @@
         $('#display_user_detail').html('');
     }
     
-
     function newTeam() {
 
         $.post("<?php echo base_url(); ?>organize/newTeam", {'display': 'Y'},
@@ -75,6 +81,29 @@
             });
     }
 
+    function deleteTeam(unique_profile_id, friend_user_profile_id) {
+
+        var ans = confirm("Are you sure to delete this team member?");
+        if(!ans) {
+            return false;
+        }
+
+        $('#new_loader_div').show();
+        $.post("<?php echo base_url(); ?>organize/deleteTeam/"+unique_profile_id+'/'+friend_user_profile_id, {'display': 'Y'},
+            function (data, status) {
+                
+                if (data.status === "failed") {
+                    sweetAlert("Oops...", data.message, "error");
+                    
+                } else { 
+                    if (data.status === "success") {
+                        window.location.href="team";
+                    }
+                }
+                $('#new_loader_div').hide();
+                return false;
+            });
+    }
 
     function addNewUserRole() {
         $.post("<?php echo base_url(); ?>organize/newRole", {'display': 'Y'},
@@ -99,6 +128,31 @@
             });
     }
 
+    function deleteFleet(id) {
+
+        var ans = confirm("Are you sure to delete this fleet?");
+        if(!ans) {
+            return false;
+        }
+
+        $('#new_loader_div').show();
+        $.post("<?php echo base_url(); ?>organize/deleteFleet/"+id, {'display': 'Y'},
+            function (data, status) {
+                
+                if (data.status === "failed") {
+                    sweetAlert("Oops...", data.message, "error");
+                    
+                } else { 
+                    if (data.status === "success") {
+                        window.location.href="fleet";
+                    }
+                }
+                $('#new_loader_div').hide();
+                return false;
+            });
+    }
+
+
     function newDocument() {
 
         $.post("<?php echo base_url(); ?>organize/newDocument", {'display': 'Y'},
@@ -107,6 +161,43 @@
                     $('.modal-content-ajax').html(data);
                 } else {
                     $('.modal-content-ajax').html(data);
+                }
+            });
+    }
+
+    function deleteDocument(document_id, user_profile_id) {
+
+        var ans = confirm("Are you sure to delete this document?");
+        if(!ans) {
+            return false;
+        }
+
+        $('#new_loader_div').show();
+        $.post("<?php echo base_url(); ?>organize/deleteDocument/"+document_id+'/'+user_profile_id, {'display': 'Y'},
+            function (data, status) {
+                
+                if (data.status === "failed") {
+                    sweetAlert("Oops...", data.message, "error");
+                    
+                } else { 
+                    if (data.status === "success") {
+                        window.location.href="document";
+                    }
+                }
+                $('#new_loader_div').hide();
+                return false;
+            });
+    }
+
+
+    function newFolder() {
+
+        $.post("<?php echo base_url(); ?>organize/newFolder", {'display': 'Y'},
+            function (data, status) {
+                if(data != '') {
+                    $('.modal-content-ajax-folder').html(data);
+                } else {
+                    $('.modal-content-ajax-folder').html(data);
                 }
             });
     }
@@ -123,4 +214,234 @@
             });
     }
 
+    function deleteGroup(id) {
+
+        var ans = confirm("Are you sure to delete this group?");
+        if(!ans) {
+            return false;
+        }
+
+        $('#new_loader_div').show();
+        $.post("<?php echo base_url(); ?>organize/deleteGroup/"+id, {'display': 'Y'},
+            function (data, status) {
+                
+                if (data.status === "failed") {
+                    sweetAlert("Oops...", data.message, "error");
+                    
+                } else { 
+                    if (data.status === "success") {
+                        window.location.href="group";
+                    }
+                }
+                $('#new_loader_div').hide();
+                return false;
+            });
+    }
+
+    function getGroupNotificationOnOff(id) {
+        if (id > 0) {
+            $('#new_loader_div').show();
+            $.post("<?php echo base_url(); ?>connect/getNotificationFromGroupOnOff", {id: id},
+                function (data, status) {
+
+                   if (data.status === "failed") {
+                        
+                        sweetAlert("Oops...", data.message, "error");
+                        
+                    } else {
+                        if(data.result === 1) {
+                            $('#group_notification_id_'+id).html('<i class="fa fa-check"></i> Get Notification');
+                        } else {
+                            $('#group_notification_id_'+id).html(' Get Notification');
+                        }
+                    }
+                    $('#new_loader_div').hide();
+                    return false;
+                });
+        } else {
+            sweetAlert("Oops...", "Please select group to update notification", "error");
+            return false;
+        }
+    }
+
+    function exitMeFromFriendgroup(id) {
+        var ans = confirm("Are you sure to leave this group?");
+        if(!ans) {
+            return false;
+        } 
+        if (id > 0) {
+            $('#new_loader_div').show();
+            $.post("<?php echo base_url(); ?>connect/exitMeFromFriendgroup", {id: id},
+                function (data, status) {
+
+                   if (data.status === "failed") {
+                        
+                        sweetAlert("Oops...", data.message, "error");
+                        
+                    } else {
+                        if (data.status === "success") {
+                            window.location.href="group";
+                        }
+                    }
+                    $('#new_loader_div').hide();
+                    return false;
+                });
+        } else {
+            sweetAlert("Oops...", "Please select group to leave", "error");
+            return false;
+        }
+    }
+
+    function newEvent() {
+        $('#new_loader_div').show();
+        $.post("<?php echo base_url(); ?>organize/newEvent", {'display': 'Y'},
+            function (data, status) {
+                if(data != '') {
+                    $('.modal-content-ajax').html(data);
+                } else {
+                    $('.modal-content-ajax').html(data);
+                }
+                $('.form_datetime').datetimepicker();
+                $('#new_loader_div').hide();
+            });
+    }
+
+    function openEventDetail(event_id) {
+
+        if (event_id > 0) {
+            $.post("<?php echo base_url(); ?>organize/eventDetail", {event_id: event_id},
+                function (data, status) {
+                    if(data != '') {
+                        $('.modal-content-ajax').html(data);
+                    } else {
+                        $('.modal-content-ajax').html(data);
+                    }
+                });
+        } else {
+            sweetAlert("Oops...", "Please select event to open detail", "error");
+            return false;
+        }
+    }
+
+    function newPoll() {
+        $('#new_loader_div').show();
+        $.post("<?php echo base_url(); ?>organize/newPoll", {'display': 'Y'},
+            function (data, status) {
+                if(data != '') {
+                    $('.modal-content-ajax').html(data);
+                } else {
+                    $('.modal-content-ajax').html(data);
+                }
+                //$('.form_datetime').datetimepicker();
+                $('#new_loader_div').hide();
+            });
+
+        $('#new_loader_div').hide();
+    }
+
+    function openPollDetail(poll_id) {
+
+        if(poll_id > 0) {
+            $.post("<?php echo base_url(); ?>organize/pollDetail/"+poll_id, {'display': 'Y', 'poll_id': poll_id},
+                function (data, status) {
+                    if(data != '') {
+                        $('.modal-content-ajax').html(data);
+                    } else {
+                        $('.modal-content-ajax').html(data);
+                    }
+                });
+        } else {
+            sweetAlert("Oops...", "Please select poll to open detail", "error");
+            return false;
+        }
+    }
+
+</script>
+
+
+<script>
+    $(document).ready(function(){
+
+        $("#all_user_div").click(function(){
+            $(".activate_user_div").show();
+            $(".inactivate_user_div").show();
+            $(".not_accepted_user_div").show();
+        });
+        $("#activate_user_div").click(function(){
+            $(".activate_user_div").show();
+            $(".inactivate_user_div").hide();
+            $(".not_accepted_user_div").hide();
+        });
+        $("#inactivate_user_div").click(function(){
+            $(".activate_user_div").hide();
+            $(".inactivate_user_div").show();
+            $(".not_accepted_user_div").hide();
+        });
+        $("#not_accepted_user_div").click(function(){
+            $(".activate_user_div").hide();
+            $(".inactivate_user_div").hide();
+            $(".not_accepted_user_div").show();
+        });
+
+        $(".bootstrap-table .dropdown-menu li").addClass('ui-state-default');
+
+        //$( ".bootstrap-table .dropdown-menu" ).sortable();
+
+    });
+</script>
+
+<script type="text/javascript">
+
+    $(document).ready(function(){
+
+        $('#organize-active ul li').click(function(){
+
+            var innerVAL =$(this).text();
+
+            $('#active-id').text(innerVAL)
+        })
+
+
+        $('#organize-active2 ul li').click(function(){
+
+            var innerVAL =$(this).text();
+
+            $('#active-id2').text(innerVAL)
+        })
+
+
+
+        $('#organize-active3 ul li').click(function(){
+
+            var innerVAL =$(this).text();
+
+            $('#active-id3').text(innerVAL)
+        })
+
+
+
+        $('#organize-active4 ul li').click(function(){
+
+            var innerVAL =$(this).text();
+
+            $('#active-id4').text(innerVAL)
+        })
+
+
+        $('#organize-active5 ul li').click(function(){
+
+            var innerVAL =$(this).text();
+
+            $('#active-id5').text(innerVAL)
+        })
+
+
+        $('#organize-active6 ul li').click(function(){
+
+            var innerVAL =$(this).text();
+
+            $('#active-id6').text(innerVAL)
+        })
+
+    });
 </script>

@@ -180,9 +180,9 @@ class Poll_Model extends CI_Model {
         if($FriendProfileId > 0) {
 
             if($UserProfileId != $FriendProfileId) {
-                $query = $this->db->query("SELECT PollId FROM $this->pollTbl WHERE `AddedBy` = '".$FriendProfileId."' AND `PollPrivacy` = '1' ORDER BY AddedOn DESC");
+                $query = $this->db->query("SELECT PollId FROM $this->pollTbl WHERE `AddedBy` = '".$FriendProfileId."' AND `PollPrivacy` = '1' AND `PollStatus` != -1 ORDER BY AddedOn DESC");
             } else {
-                $query = $this->db->query("SELECT PollId FROM $this->pollTbl WHERE `AddedBy` = '".$FriendProfileId."' ORDER BY AddedOn DESC");
+                $query = $this->db->query("SELECT PollId FROM $this->pollTbl WHERE `AddedBy` = '".$FriendProfileId."' AND `PollStatus` != -1 ORDER BY AddedOn DESC");
             }
 
             $res = $query->result_array();

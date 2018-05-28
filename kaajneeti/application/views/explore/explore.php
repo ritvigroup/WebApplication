@@ -71,29 +71,284 @@
                                     <!-- </a> -->
                                 </div>
                             </div>
+                            
                             <div class="tabs-container post-container">
+                                <?php
+                                    // echo '<pre>';
+                                    // print_r($result);
+                                    // echo '</pre>';
+
+                                    /*foreach($result AS $result_data) { ?>
+                                    <div class="col-lg-4">
+                                        
+                                        <?php if($result_data->feedtype == 'post') { ?>
+                                            <?php
+                                            $PostTitle          = $result_data->postdata->PostTitle;
+                                            $PostDescription    = $result_data->postdata->PostDescription;
+                                            $PostBy             = $result_data->postdata->PostProfile->FirstName. ' '.$result_data->postdata->PostProfile->LastName;
+                                            $PostOn             = $result_data->postdata->AddedOn;
+
+                                            $PostTag = $result_data->postdata->PostTag;
+
+                                            $PostTagDisplay = '';
+                                            if(count($PostTag) > 0) {
+                                                $pt = 0;
+                                                foreach($PostTag AS $post_tag) {
+
+                                                    $post_tag_name = $post_tag->FirstName. ' '.$post_tag->LastName;
+                                                    $PostTagDisplay .= '<button type="button" class="btn green btn-outline sbold btn-xs">'.$post_tag_name.'</button>';
+                                                    $pt++;
+                                                    //if($PostTag == $pt)
+                                                }
+                                            }
+                                            ?>
+                                            <div class="ibox"> 
+                                                <!-- <img alt="" class="full-width" src="assets/images/blogs/1.jpg"> -->
+                                                <div class="widgets-container padding-top10"> 
+                                                    <a class="btn-link" href="#">Post
+                                                        <h2 class="hed"> <?php echo $PostTitle; ?> </h2>
+                                                    </a>
+                                                    <div class="small bottom5"> <strong><?php echo $PostBy; ?></strong> <span class="text-muted right"><i class="fa fa-clock-o"></i> <?php echo $PostOn; ?></span> </div>
+                                                    <?php if($PostDescription != '') { ?>
+                                                    <p> <?php echo $PostDescription; ?> </p>
+                                                    <?php } ?>
+                                                    <div class="row">
+                                                        <div class="col-md-4">
+                                                            <?php if($PostTagDisplay != '') { ?>
+                                                            <h5>Tags:</h5>
+                                                                <?php echo $PostTagDisplay; ?>
+                                                            <?php } ?>
+                                                        </div>
+                                                        <div class="col-md-8">
+                                                            <div class="small text-right">
+                                                                <h5>&nbsp;</h5>
+                                                                <div> 
+                                                                    <i class="fa fa-comments-o"> </i> 80 &nbsp;
+                                                                    <i class="fa fa-eye"> </i> 200 views 
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        <?php } ?>
+
+                                        <?php if($result_data->feedtype == 'suggestion') { ?>
+                                            <?php
+                                            $SuggestionSubject      = $result_data->suggestiondata->SuggestionSubject;
+                                            $SuggestionDescription  = $result_data->suggestiondata->SuggestionDescription;
+                                            $PostBy                 = $result_data->suggestiondata->SuggestionProfile->FirstName. ' '.$result_data->suggestiondata->SuggestionProfile->LastName;
+                                            $PostOn                 = $result_data->suggestiondata->AddedOn;
+
+                                            $PostTag = $result_data->suggestiondata->PostTag;
+
+                                            $PostTagDisplay = '';
+                                            if(count($PostTag) > 0) {
+                                                $pt = 0;
+                                                foreach($PostTag AS $post_tag) {
+
+                                                    $post_tag_name = $post_tag->FirstName. ' '.$post_tag->LastName;
+                                                    $PostTagDisplay .= '<button type="button" class="btn green btn-outline sbold btn-xs">'.$post_tag_name.'</button>';
+                                                    $pt++;
+                                                    //if($PostTag == $pt)
+                                                }
+                                            }
+                                            ?>
+                                            <div class="ibox"> 
+                                                <!-- <img alt="" class="full-width" src="assets/images/blogs/1.jpg"> -->
+                                                <div class="widgets-container padding-top10"> 
+                                                    <a class="btn-link" href="#">Suggestion
+                                                        <h2 class="hed"> <?php echo $SuggestionSubject; ?> </h2>
+                                                    </a>
+                                                    <div class="small bottom5"> <strong><?php echo $PostBy; ?></strong> <span class="text-muted right"><i class="fa fa-clock-o"></i> <?php echo $PostOn; ?></span> </div>
+                                                    <?php if($SuggestionDescription != '') { ?>
+                                                    <p> <?php echo $SuggestionDescription; ?> </p>
+                                                    <?php } ?>
+                                                    <div class="row">
+                                                        <div class="col-md-4">
+                                                            <?php if($PostTagDisplay != '') { ?>
+                                                            <h5>Tags:</h5>
+                                                                <?php echo $PostTagDisplay; ?>
+                                                            <?php } ?>
+                                                        </div>
+                                                        <div class="col-md-8">
+                                                            <div class="small text-right">
+                                                                <h5>&nbsp;</h5>
+                                                                <div> 
+                                                                    <i class="fa fa-comments-o"> </i> 80 &nbsp;
+                                                                    <i class="fa fa-eye"> </i> 200 views 
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        <?php } ?>
+
+                                        <?php if($result_data->feedtype == 'complaint') { ?>
+                                            <?php
+                                            $ComplaintSubject      = $result_data->complaintdata->ComplaintSubject;
+                                            $ComplaintDescription  = $result_data->complaintdata->ComplaintDescription;
+                                            $PostBy                 = $result_data->complaintdata->ComplaintProfile->FirstName. ' '.$result_data->complaintdata->ComplaintProfile->LastName;
+                                            $PostOn                 = $result_data->complaintdata->AddedOn;
+
+                                            $ComplaintMember = $result_data->complaintdata->ComplaintMember;
+
+                                            $ComplaintMemberDisplay = '';
+                                            if(count($ComplaintMember) > 0) {
+                                                $pt = 0;
+                                                foreach($ComplaintMember AS $complaint_tag) {
+
+                                                    $complaint_tag_name = $complaint_tag->FirstName. ' '.$complaint_tag->LastName;
+                                                    $ComplaintMemberDisplay .= '<button type="button" class="btn green btn-outline sbold btn-xs">'.$complaint_tag_name.'</button>';
+                                                    $pt++;
+                                                    //if($PostTag == $pt)
+                                                }
+                                            }
+                                            ?>
+                                            <div class="ibox"> 
+                                                <!-- <img alt="" class="full-width" src="assets/images/blogs/1.jpg"> -->
+                                                <div class="widgets-container padding-top10"> 
+                                                    <a class="btn-link" href="#">Complaint
+                                                        <h2 class="hed"> <?php echo $ComplaintSubject; ?> </h2>
+                                                    </a>
+                                                    <div class="small bottom5"> <strong><?php echo $PostBy; ?></strong> <span class="text-muted right"><i class="fa fa-clock-o"></i> <?php echo $PostOn; ?></span> </div>
+                                                    <?php if($ComplaintDescription != '') { ?>
+                                                    <p> <?php echo $ComplaintDescription; ?> </p>
+                                                    <?php } ?>
+                                                    <div class="row">
+                                                        <div class="col-md-4">
+                                                            <?php if($ComplaintMemberDisplay != '') { ?>
+                                                            <h5>Tags:</h5>
+                                                                <?php echo $ComplaintMemberDisplay; ?>
+                                                            <?php } ?>
+                                                        </div>
+                                                        <div class="col-md-8">
+                                                            <div class="small text-right">
+                                                                <h5>&nbsp;</h5>
+                                                                <div> 
+                                                                    <i class="fa fa-comments-o"> </i> 80 &nbsp;
+                                                                    <i class="fa fa-eye"> </i> 200 views 
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        <?php } ?>
+
+                                    </div>
+                                    <?php }*/ ?>
                                 <div id="demo1" class="ibox-content collapse in">
                                     <div class="widgets-container">
                                         <div>
                                             <div class="feed-activity-list">
-                                                <div class="feed-element">
-                                                    <a href="#" class="pull-left">
-                                                        <img alt="image" class="img-circle" src="../assets/images/teem/a9.jpg">
-                                                    </a>
-                                                    <div class="media-body "> <small class="pull-right text-navy">1m ago</small>  <strong>Sunil Vishvakrma</strong> started following <strong>Pushpender</strong>.
-                                                        <br> <small class="text-muted">Today 9:00 pm - 11.06.2016</small>
+                                                <?php foreach($result AS $result_data) { ?>
+                                                    <?php if($result_data->feedtype == 'complaint') { ?>
+                                                    <?php
+                                                    $ComplaintSubject      = $result_data->complaintdata->ComplaintSubject;
+                                                    $ComplaintDescription  = $result_data->complaintdata->ComplaintDescription;
+                                                    $PostBy                 = $result_data->complaintdata->ComplaintProfile->FirstName. ' '.$result_data->complaintdata->ComplaintProfile->LastName;
+                                                    if($result_data->complaintdata->ComplaintProfile->ProfilePhotoPath != '') {
+                                                        $PostByProfilePic = ($result_data->complaintdata->ComplaintProfile->ProfilePhotoPath != '') ? $result_data->complaintdata->ComplaintProfile->ProfilePhotoPath : base_url().'assets/images/default-user.png';
+                                                    } else {
+                                                        $PostByProfilePic = ($result_data->complaintdata->ComplaintProfile->ProfilePhotoPath != '') ? $result_data->complaintdata->ComplaintProfile->ProfilePhotoPath : base_url().'assets/images/default-user.png';
+                                                    }
 
-                                                    </div>
-                                                    <div class="">
-                                                        <div class="photos">
-                                                            <img alt="image" class="img-responsive" src="../assets/img/concert-3387324_1920.jpg">
+                                                    $PostOn                 = $result_data->complaintdata->AddedOn;
+                                                    $PostOnTime             = $result_data->complaintdata->AddedOnTime;
+                                                    
+                                                    $ApplicantName          = $result_data->complaintdata->ApplicantName;
+                                                    $ComplaintAddress       = $result_data->complaintdata->ComplaintAddress;
+                                                    $ComplaintStatusName    = $result_data->complaintdata->ComplaintStatusName;
+
+                                                    $ComplaintMember = $result_data->complaintdata->ComplaintMember;
+
+                                                    $ComplaintMemberDisplay = '';
+                                                    if(count($ComplaintMember) > 0) {
+                                                        $pt = 0;
+                                                        foreach($ComplaintMember AS $complaint_tag) {
+
+                                                            $complaint_tag_name = $complaint_tag->FirstName. ' '.$complaint_tag->LastName;
+                                                            $ComplaintMemberDisplay .= '<button type="button" class="btn green btn-outline sbold btn-xs">'.$complaint_tag_name.'</button>';
+                                                            $pt++;
+                                                            //if($PostTag == $pt)
+                                                        }
+                                                    }
+
+                                                    $ComplaintAttachment = $result_data->complaintdata->ComplaintAttachment;
+                                                    $ComplaintAttachmentDisplay = '';
+                                                    if(count($ComplaintAttachment) > 0) {
+                                                        $pt = 0;
+                                                        foreach($ComplaintAttachment AS $complaint_attachment) {
+
+                                                            $complaint_tag_name = $complaint_attachment->FirstName. ' '.$complaint_attachment->LastName;
+                                                            $ComplaintAttachmentDisplay .= '<button type="button" class="btn green btn-outline sbold btn-xs" style="margin-right: 3px;"><a href="'.$complaint_attachment->AttachmentFile.'" target="_blank">File '.($pt+1).'</a></button>';
+                                                            $pt++;
+                                                            //if($PostTag == $pt)
+                                                        }
+                                                    }
+                                                    ?>
+
+                                                        <div class="feed-element">
+                                                            <a href="#" class="pull-left">
+                                                                <img alt="image" class="img-circle" src="<?php echo $PostByProfilePic; ?>">
+                                                            </a>
+                                                            <div class="media-body "> <small class="pull-right text-navy"><?php echo $PostOn; ?></small>  <strong><?php echo $PostBy; ?></strong> file a complaint
+                                                                <br> <small class="text-muted"><?php echo date('h:i a - d.m.Y', strtotime($PostOnTime)); ?></small>
+
+                                                            </div>
+                                                            <div class="">
+                                                                <div class="photos">
+                                                                    <p>Complaint Id: <?php echo $result_data->complaintdata->ComplaintUniqueId; ?></p>
+                                                                    <p>Applicant Name: <?php echo $ApplicantName; ?></p>
+                                                                    <p>Address: <?php echo $ComplaintAddress; ?></p>
+                                                                    <p>Current Status: <?php echo $ComplaintStatusName; ?></p>
+                                                                    <?php if($ComplaintMemberDisplay != '') { ?>
+                                                                        <p>Memeber Associated: <?php echo $ComplaintMemberDisplay; ?></p>
+                                                                    <?php } ?>
+                                                                    <?php if($ComplaintAttachmentDisplay != '') { ?>
+                                                                        <p>Attachment: <?php echo $ComplaintAttachmentDisplay; ?></p>
+                                                                    <?php } ?>
+                                                                </div>
+                                                                <div class="actions text-center"> 
+                                                                    <a class="btn btn-xs btn-success pull-left"><i class="fa fa-thumbs-up"></i> Like </a>  <a class="btn btn-xs btn-danger"><i class="fa fa-thumbs-down"></i> Unlike</a>
+                                                                    <a class="btn btn-xs aqua pull-right"><i class="fa fa-pencil"></i> Comments</a> 
+                                                                </div>
+                                                            </div>
                                                         </div>
-                                                        <div class="actions text-center"> 
-                                                            <a class="btn btn-xs btn-success pull-left"><i class="fa fa-thumbs-up"></i> Like </a>  <a class="btn btn-xs btn-danger"><i class="fa fa-thumbs-down"></i> Unlike</a>
-                                                            <a class="btn btn-xs aqua pull-right"><i class="fa fa-pencil"></i> Comments</a> 
-                                                        </div>
-                                                    </div>
-                                                </div>
+
+                                                        <!-- <div class="ibox"> 
+                                                            <div class="widgets-container padding-top10"> 
+                                                                <a class="btn-link" href="#">Post
+                                                                    <h2 class="hed"> <?php echo $PostTitle; ?> </h2>
+                                                                </a>
+                                                                <div class="small bottom5"> <strong><?php echo $PostBy; ?></strong> <span class="text-muted right"><i class="fa fa-clock-o"></i> <?php echo $PostOn; ?></span> </div>
+                                                                <?php if($PostDescription != '') { ?>
+                                                                <p> <?php echo $PostDescription; ?> </p>
+                                                                <?php } ?>
+                                                                <div class="row">
+                                                                    <div class="col-md-4">
+                                                                        <?php if($PostTagDisplay != '') { ?>
+                                                                        <h5>Tags:</h5>
+                                                                            <?php echo $PostTagDisplay; ?>
+                                                                        <?php } ?>
+                                                                    </div>
+                                                                    <div class="col-md-8">
+                                                                        <div class="small text-right">
+                                                                            <h5>&nbsp;</h5>
+                                                                            <div> 
+                                                                                <i class="fa fa-comments-o"> </i> 80 &nbsp;
+                                                                                <i class="fa fa-eye"> </i> 200 views 
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div> -->
+                                                    <?php } ?>
+                                                <?php } ?>
+                                                <?php /*
                                                 <div class="feed-element">
                                                     <a href="#" class="pull-left">
                                                         <img alt="image" class="img-circle" src="../assets/images/teem/a9.jpg">
@@ -192,6 +447,7 @@
                                                         <br> <small class="text-muted">3 days ago at 7:58 pm - 10.06.2016</small> 
                                                     </div>
                                                 </div>
+                                                */ ?>
                                             </div>
                                             <button class="btn aqua btn-block "><i class="fa fa-arrow-down"></i> Show More</button>
                                         </div>
@@ -283,15 +539,13 @@
                     </div>
                 </div>
             </div>
-            <!-- stat timeline and feed  -->
-            <div class="top20">
-                <div class="clearfix"></div>
-                <!-- End projects list -->
-                <?php require_once './include/footer.php';?>
-            </div>
+            
         </div>
     </div>
 </div>
+
+<?php require_once './include/footer.php';?>
+
 <?php require_once './include/scroll_top.php';?>
 <!-- Profile Edit Page -->
 <div class="modal fade" id="edit-profile" tabindex="-1" role="dialog" aria-labelledby="edit-profile-Label">

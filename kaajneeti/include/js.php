@@ -8,14 +8,11 @@
 <script src="<?=base_url();?>assets/js/vendor/bootstrap-table.min.js"></script>
 <script src="<?=base_url();?>assets/js/vendor/datatable.min.js"></script>
 
-
-
 <script type="text/javascript" src="<?=base_url();?>assets/js/vendor/bootstrap-datetimepicker.js" charset="UTF-8"></script>
 <script type="text/javascript" src="<?=base_url();?>assets/js/vendor/locales/bootstrap-datetimepicker.fr.js" charset="UTF-8"></script>
 
 <script src="<?=base_url();?>assets/js/vendor/moment.js"></script>
 <script src="<?=base_url();?>assets/js/vendor/daterangepicker.js"></script>
-
 
 <!--  chartJs js  -->
 <script src="<?=base_url();?>assets/js/vendor/chartJs/Chart.bundle.js"></script>

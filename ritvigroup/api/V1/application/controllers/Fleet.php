@@ -88,6 +88,63 @@ class Fleet extends CI_Controller {
         displayJsonEncode($array);
     }
 
+    public function deleteFleet() {
+        $error_occured = false;
+
+        $UserProfileId  = $this->input->post('user_profile_id');
+        $FleetId        = $this->input->post('fleet_id');
+
+        
+        if($UserProfileId == "") {
+            $msg = "Please select your profile";
+            $error_occured = true;
+        } else if($FleetId == "") {
+            $msg = "Please select vehicle id";
+            $error_occured = true;
+        } else {
+
+            $this->db->query("BEGIN");
+
+            $updateData = array(
+                                'FleetStatus'   => -1,
+                                'UpdatedOn'     => date('Y-m-d H:i:s'),
+                            );
+            $whereData = array(
+                                'UserProfileId' => $UserProfileId,
+                                'FleetId'       => $FleetId,
+                                );
+            $fleet_delete = $this->Fleet_Model->updateMyFleet($whereData, $updateData);
+
+            if($fleet_delete == true) {
+                
+                $fleet_detail = $this->Fleet_Model->getFleetDetail($FleetId, $UserProfileId);
+
+                $this->db->query("COMMIT");
+
+                $msg = "Fleet deleted successfully";
+
+            } else {
+                $this->db->query("ROLLBACK");
+                $msg = "Fleet not deleted. Not authorised to delete this fleet.";
+                $error_occured = true;
+            }
+        }
+
+        if($error_occured == true) {
+            $array = array(
+                            "status"        => 'failed',
+                            "message"       => $msg,
+                        );
+        } else {
+
+            $array = array(
+                           "status"         => 'success',
+                           "result"         => $fleet_detail,
+                           "message"        => $msg,
+                           );
+        }
+        displayJsonEncode($array);
+    }
 
     public function getAllVehicle() {
         $error_occured = false;
@@ -123,8 +180,6 @@ class Fleet extends CI_Controller {
         }
         displayJsonEncode($array);
     }
-
-
 
     public function getFleetDetail() {
         $error_occured = false;
@@ -165,7 +220,6 @@ class Fleet extends CI_Controller {
         }
         displayJsonEncode($array);
     }
-
 
     public function getMyAllFleet() {
         $error_occured = false;

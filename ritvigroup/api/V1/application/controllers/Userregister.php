@@ -486,7 +486,7 @@ class Userregister extends CI_Controller {
                                         'UserId'                    => $UserId,
                                         'UserTypeId'                => 1,
                                         'ParentUserProfileId'              => 0,
-                                        'FirstName'                 => '',
+                                        'FirstName'                 => $UserName,
                                         'UserProfileDeviceToken'    => $this->device_token,
                                         'Mobile'                    => $mobile,
                                         'ProfileStatus'             => 1,
@@ -509,7 +509,7 @@ class Userregister extends CI_Controller {
                                         'UserId'                    => $UserId,
                                         'UserTypeId'                => 2,
                                         'ParentUserProfileId'              => 0,
-                                        'FirstName'                 => '',
+                                        'FirstName'                 => $UserName,
                                         'UserProfileDeviceToken'    => $this->device_token,
                                         'Mobile'                    => $mobile,
                                         'ProfileStatus'             => 0,
@@ -773,59 +773,68 @@ class Userregister extends CI_Controller {
             $error_occured = true;*/
         } else {
 
-            $user_detail = $this->User_Model->getUserProfileInformation($user_profile_id);
-            $friend_user_detail = $this->User_Model->getUserProfileInformation($friend_profile);
+            $is_exist = $this->User_Model->validateNewUsernameForUserprofileExist($user_name, $friend_profile);
 
-            if($friend_user_detail['UserId'] > 0) {
-                $UserId = $friend_user_detail['UserId'];
+            if($is_exist == true) {
+                $this->db->query("ROLLBACK");
+                $msg = "This username already exist. Please choose another";
+                $error_occured = true;
+            } else {
 
-                $insertData = array(
-                                    'UserId'                    => $UserId,
-                                    'UserTypeId'                => 3,
-                                    'ParentUserProfileId'       => $friend_profile,
-                                    'FirstName'                 => $first_name,
-                                    'LastName'                  => $last_name,
-                                    'Email'                     => $email,
-                                    'UserDepartment'            => $department,
-                                    'ProfileUserName'           => $user_name,
-                                    'ProfileUserPassword'       => md5($password),
-                                    'UserRoleId'                => $role,
-                                    'UserProfileDeviceToken'    => '',
-                                    'Mobile'                    => '',
-                                    'ProfileStatus'             => 1,
-                                    'AddedBy'                   => $user_profile_id,
-                                    'UpdatedBy'                 => $user_profile_id,
-                                    'AddedOn'                   => date('Y-m-d H:i:s'),
-                                    'UpdatedOn'                 => date('Y-m-d H:i:s'),
-                                );
+                $user_detail = $this->User_Model->getUserProfileInformation($user_profile_id);
+                $friend_user_detail = $this->User_Model->getUserProfileInformation($friend_profile);
 
-                $ProfileId = $this->User_Model->insertUserProfile($insertData);
+                if($friend_user_detail['UserId'] > 0) {
+                    $UserId = $friend_user_detail['UserId'];
 
-                if($ProfileId > 0) {
+                    $insertData = array(
+                                        'UserId'                    => $UserId,
+                                        'UserTypeId'                => 3,
+                                        'ParentUserProfileId'       => $friend_profile,
+                                        'FirstName'                 => $first_name,
+                                        'LastName'                  => $last_name,
+                                        'Email'                     => $email,
+                                        'UserDepartment'            => $department,
+                                        'ProfileUserName'           => $user_name,
+                                        'ProfileUserPassword'       => md5($password),
+                                        'UserRoleId'                => $role,
+                                        'UserProfileDeviceToken'    => '',
+                                        'Mobile'                    => '',
+                                        'ProfileStatus'             => 1,
+                                        'AddedBy'                   => $user_profile_id,
+                                        'UpdatedBy'                 => $user_profile_id,
+                                        'AddedOn'                   => date('Y-m-d H:i:s'),
+                                        'UpdatedOn'                 => date('Y-m-d H:i:s'),
+                                    );
 
-                    $this->User_Model->saveUserProfilePhoto('photo', $user_detail['UserId'], $ProfileId, 1);
+                    $ProfileId = $this->User_Model->insertUserProfile($insertData);
 
-                    $to      = 'rajesh1may@gmail.com';
-                    $subject = 'the subject';
-                    $message = 'hello';
-                    $headers = 'From: webmaster@example.com' . "\r\n" .
-                        'Reply-To: webmaster@example.com' . "\r\n" .
-                        'X-Mailer: PHP/' . phpversion();
+                    if($ProfileId > 0) {
 
-                    @mail($to, $subject, $message, $headers);
+                        $this->User_Model->saveUserProfilePhoto('photo', $user_detail['UserId'], $ProfileId, 1);
 
-                    $this->db->query("COMMIT");
-                    $msg = "User saved successfully";
+                        $to      = 'rajesh1may@gmail.com';
+                        $subject = 'the subject';
+                        $message = 'hello';
+                        $headers = 'From: webmaster@example.com' . "\r\n" .
+                            'Reply-To: webmaster@example.com' . "\r\n" .
+                            'X-Mailer: PHP/' . phpversion();
+
+                        @mail($to, $subject, $message, $headers);
+
+                        $this->db->query("COMMIT");
+                        $msg = "User saved successfully";
+                    } else {
+                        $this->db->query("ROLLBACK");
+                        $msg = "Error: Problem to save user";
+                        $error_occured = true;
+                    }
+
                 } else {
                     $this->db->query("ROLLBACK");
-                    $msg = "Error: Problem to save user";
+                    $msg = "Error: User not saved.";
                     $error_occured = true;
                 }
-
-            } else {
-                $this->db->query("ROLLBACK");
-                $msg = "Error: User not saved.";
-                $error_occured = true;
             }
         }
 
