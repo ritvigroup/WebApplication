@@ -7,6 +7,7 @@ class Post_Model extends CI_Model {
         $this->userProfileTbl       = 'UserProfile';
         $this->postTbl              = 'Post';
         $this->postTagTbl           = 'PostTag';
+        $this->PostLikeTbl          = 'PostLike';
         $this->postAttachmentTbl    = 'PostAttachment';
         $this->attachmentTypeTbl    = 'AttachmentType';
     }
@@ -26,6 +27,63 @@ class Post_Model extends CI_Model {
         $this->db->update($this->postTbl, $updateData);
 
         return $this->db->affected_rows();
+    }
+
+
+    public function likePost($UserProfileId, $PostId) {
+        $res = $this->db->select('*')->from($this->PostLikeTbl)->where(array('PostId'=> $PostId, 'UserProfileId' => $UserProfileId))->get()->result_array();
+        if($res[0]['PostLikeId'] > 0) {
+            $updateData = array(
+                                'PostLike'      => 1,
+                                'PostUnlike'    => 0,
+                                'LikedOn'       => date('Y-m-d H:i:s'),
+                                );
+            $whereData = array(
+                                'PostId'        => $PostId,
+                                'UserProfileId' => $UserProfileId,
+                                );
+            $this->db->where($whereData);
+            $this->db->update($this->PostLikeTbl, $updateData);
+        } else {
+            $insertData = array(
+                                'PostLike'      => 1,
+                                'PostUnlike'    => 0,
+                                'PostId'        => $PostId,
+                                'UserProfileId' => $UserProfileId,
+                                'LikedOn'       => date('Y-m-d H:i:s'),
+                                );
+            $this->db->insert($this->PostLikeTbl, $insertData);
+        }
+        $res = $this->db->select('COUNT(PostLikeId) AS TotalLike')->from($this->PostLikeTbl)->where(array('PostId'=> $PostId, 'PostLike' => 1))->get()->row_array();
+        return $res['TotalLike'];
+    }
+
+    public function unlikePost($UserProfileId, $PostId) {
+        $res = $this->db->select('*')->from($this->PostLikeTbl)->where(array('PostId'=> $PostId, 'UserProfileId' => $UserProfileId))->get()->result_array();
+        if($res[0]['PostLikeId'] > 0) {
+            $updateData = array(
+                                'PostLike'      => 0,
+                                'PostUnlike'    => 1,
+                                'LikedOn'       => date('Y-m-d H:i:s'),
+                                );
+            $whereData = array(
+                                'PostId'        => $PostId,
+                                'UserProfileId' => $UserProfileId,
+                                );
+            $this->db->where($whereData);
+            $this->db->update($this->PostLikeTbl, $updateData);
+        } else {
+            $insertData = array(
+                                'PostLike'      => 0,
+                                'PostUnlike'    => 1,
+                                'PostId'        => $PostId,
+                                'UserProfileId' => $UserProfileId,
+                                'LikedOn'       => date('Y-m-d H:i:s'),
+                                );
+            $this->db->insert($this->PostLikeTbl, $insertData);
+        }
+        $res = $this->db->select('COUNT(PostLikeId) AS TotalLike')->from($this->PostLikeTbl)->where(array('PostId'=> $PostId, 'PostUnlike' => 1))->get()->row_array();
+        return $res['TotalLike'];
     }
 
 

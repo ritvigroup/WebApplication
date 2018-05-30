@@ -78,217 +78,57 @@
                                     // print_r($result);
                                     // echo '</pre>';
 
-                                    /*foreach($result AS $result_data) { ?>
-                                    <div class="col-lg-4">
-                                        
-                                        <?php if($result_data->feedtype == 'post') { ?>
-                                            <?php
-                                            $PostTitle          = $result_data->postdata->PostTitle;
-                                            $PostDescription    = $result_data->postdata->PostDescription;
-                                            $PostBy             = $result_data->postdata->PostProfile->FirstName. ' '.$result_data->postdata->PostProfile->LastName;
-                                            $PostOn             = $result_data->postdata->AddedOn;
-
-                                            $PostTag = $result_data->postdata->PostTag;
-
-                                            $PostTagDisplay = '';
-                                            if(count($PostTag) > 0) {
-                                                $pt = 0;
-                                                foreach($PostTag AS $post_tag) {
-
-                                                    $post_tag_name = $post_tag->FirstName. ' '.$post_tag->LastName;
-                                                    $PostTagDisplay .= '<button type="button" class="btn green btn-outline sbold btn-xs">'.$post_tag_name.'</button>';
-                                                    $pt++;
-                                                    //if($PostTag == $pt)
-                                                }
-                                            }
-                                            ?>
-                                            <div class="ibox"> 
-                                                <!-- <img alt="" class="full-width" src="assets/images/blogs/1.jpg"> -->
-                                                <div class="widgets-container padding-top10"> 
-                                                    <a class="btn-link" href="#">Post
-                                                        <h2 class="hed"> <?php echo $PostTitle; ?> </h2>
-                                                    </a>
-                                                    <div class="small bottom5"> <strong><?php echo $PostBy; ?></strong> <span class="text-muted right"><i class="fa fa-clock-o"></i> <?php echo $PostOn; ?></span> </div>
-                                                    <?php if($PostDescription != '') { ?>
-                                                    <p> <?php echo $PostDescription; ?> </p>
-                                                    <?php } ?>
-                                                    <div class="row">
-                                                        <div class="col-md-4">
-                                                            <?php if($PostTagDisplay != '') { ?>
-                                                            <h5>Tags:</h5>
-                                                                <?php echo $PostTagDisplay; ?>
-                                                            <?php } ?>
-                                                        </div>
-                                                        <div class="col-md-8">
-                                                            <div class="small text-right">
-                                                                <h5>&nbsp;</h5>
-                                                                <div> 
-                                                                    <i class="fa fa-comments-o"> </i> 80 &nbsp;
-                                                                    <i class="fa fa-eye"> </i> 200 views 
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        <?php } ?>
-
-                                        <?php if($result_data->feedtype == 'suggestion') { ?>
-                                            <?php
-                                            $SuggestionSubject      = $result_data->suggestiondata->SuggestionSubject;
-                                            $SuggestionDescription  = $result_data->suggestiondata->SuggestionDescription;
-                                            $PostBy                 = $result_data->suggestiondata->SuggestionProfile->FirstName. ' '.$result_data->suggestiondata->SuggestionProfile->LastName;
-                                            $PostOn                 = $result_data->suggestiondata->AddedOn;
-
-                                            $PostTag = $result_data->suggestiondata->PostTag;
-
-                                            $PostTagDisplay = '';
-                                            if(count($PostTag) > 0) {
-                                                $pt = 0;
-                                                foreach($PostTag AS $post_tag) {
-
-                                                    $post_tag_name = $post_tag->FirstName. ' '.$post_tag->LastName;
-                                                    $PostTagDisplay .= '<button type="button" class="btn green btn-outline sbold btn-xs">'.$post_tag_name.'</button>';
-                                                    $pt++;
-                                                    //if($PostTag == $pt)
-                                                }
-                                            }
-                                            ?>
-                                            <div class="ibox"> 
-                                                <!-- <img alt="" class="full-width" src="assets/images/blogs/1.jpg"> -->
-                                                <div class="widgets-container padding-top10"> 
-                                                    <a class="btn-link" href="#">Suggestion
-                                                        <h2 class="hed"> <?php echo $SuggestionSubject; ?> </h2>
-                                                    </a>
-                                                    <div class="small bottom5"> <strong><?php echo $PostBy; ?></strong> <span class="text-muted right"><i class="fa fa-clock-o"></i> <?php echo $PostOn; ?></span> </div>
-                                                    <?php if($SuggestionDescription != '') { ?>
-                                                    <p> <?php echo $SuggestionDescription; ?> </p>
-                                                    <?php } ?>
-                                                    <div class="row">
-                                                        <div class="col-md-4">
-                                                            <?php if($PostTagDisplay != '') { ?>
-                                                            <h5>Tags:</h5>
-                                                                <?php echo $PostTagDisplay; ?>
-                                                            <?php } ?>
-                                                        </div>
-                                                        <div class="col-md-8">
-                                                            <div class="small text-right">
-                                                                <h5>&nbsp;</h5>
-                                                                <div> 
-                                                                    <i class="fa fa-comments-o"> </i> 80 &nbsp;
-                                                                    <i class="fa fa-eye"> </i> 200 views 
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        <?php } ?>
-
-                                        <?php if($result_data->feedtype == 'complaint') { ?>
-                                            <?php
-                                            $ComplaintSubject      = $result_data->complaintdata->ComplaintSubject;
-                                            $ComplaintDescription  = $result_data->complaintdata->ComplaintDescription;
-                                            $PostBy                 = $result_data->complaintdata->ComplaintProfile->FirstName. ' '.$result_data->complaintdata->ComplaintProfile->LastName;
-                                            $PostOn                 = $result_data->complaintdata->AddedOn;
-
-                                            $ComplaintMember = $result_data->complaintdata->ComplaintMember;
-
-                                            $ComplaintMemberDisplay = '';
-                                            if(count($ComplaintMember) > 0) {
-                                                $pt = 0;
-                                                foreach($ComplaintMember AS $complaint_tag) {
-
-                                                    $complaint_tag_name = $complaint_tag->FirstName. ' '.$complaint_tag->LastName;
-                                                    $ComplaintMemberDisplay .= '<button type="button" class="btn green btn-outline sbold btn-xs">'.$complaint_tag_name.'</button>';
-                                                    $pt++;
-                                                    //if($PostTag == $pt)
-                                                }
-                                            }
-                                            ?>
-                                            <div class="ibox"> 
-                                                <!-- <img alt="" class="full-width" src="assets/images/blogs/1.jpg"> -->
-                                                <div class="widgets-container padding-top10"> 
-                                                    <a class="btn-link" href="#">Complaint
-                                                        <h2 class="hed"> <?php echo $ComplaintSubject; ?> </h2>
-                                                    </a>
-                                                    <div class="small bottom5"> <strong><?php echo $PostBy; ?></strong> <span class="text-muted right"><i class="fa fa-clock-o"></i> <?php echo $PostOn; ?></span> </div>
-                                                    <?php if($ComplaintDescription != '') { ?>
-                                                    <p> <?php echo $ComplaintDescription; ?> </p>
-                                                    <?php } ?>
-                                                    <div class="row">
-                                                        <div class="col-md-4">
-                                                            <?php if($ComplaintMemberDisplay != '') { ?>
-                                                            <h5>Tags:</h5>
-                                                                <?php echo $ComplaintMemberDisplay; ?>
-                                                            <?php } ?>
-                                                        </div>
-                                                        <div class="col-md-8">
-                                                            <div class="small text-right">
-                                                                <h5>&nbsp;</h5>
-                                                                <div> 
-                                                                    <i class="fa fa-comments-o"> </i> 80 &nbsp;
-                                                                    <i class="fa fa-eye"> </i> 200 views 
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        <?php } ?>
-
-                                    </div>
-                                    <?php }*/ ?>
+                                ?>
                                 <div id="demo1" class="ibox-content collapse in">
                                     <div class="widgets-container">
                                         <div>
                                             <div class="feed-activity-list">
                                                 <?php foreach($result AS $result_data) { ?>
-                                                    <?php if($result_data->feedtype == 'complaint') { ?>
-                                                    <?php
-                                                    $ComplaintSubject      = $result_data->complaintdata->ComplaintSubject;
-                                                    $ComplaintDescription  = $result_data->complaintdata->ComplaintDescription;
-                                                    $PostBy                 = $result_data->complaintdata->ComplaintProfile->FirstName. ' '.$result_data->complaintdata->ComplaintProfile->LastName;
-                                                    if($result_data->complaintdata->ComplaintProfile->ProfilePhotoPath != '') {
-                                                        $PostByProfilePic = ($result_data->complaintdata->ComplaintProfile->ProfilePhotoPath != '') ? $result_data->complaintdata->ComplaintProfile->ProfilePhotoPath : base_url().'assets/images/default-user.png';
-                                                    } else {
-                                                        $PostByProfilePic = ($result_data->complaintdata->ComplaintProfile->ProfilePhotoPath != '') ? $result_data->complaintdata->ComplaintProfile->ProfilePhotoPath : base_url().'assets/images/default-user.png';
-                                                    }
-
-                                                    $PostOn                 = $result_data->complaintdata->AddedOn;
-                                                    $PostOnTime             = $result_data->complaintdata->AddedOnTime;
-                                                    
-                                                    $ApplicantName          = $result_data->complaintdata->ApplicantName;
-                                                    $ComplaintAddress       = $result_data->complaintdata->ComplaintAddress;
-                                                    $ComplaintStatusName    = $result_data->complaintdata->ComplaintStatusName;
-
-                                                    $ComplaintMember = $result_data->complaintdata->ComplaintMember;
-
-                                                    $ComplaintMemberDisplay = '';
-                                                    if(count($ComplaintMember) > 0) {
-                                                        $pt = 0;
-                                                        foreach($ComplaintMember AS $complaint_tag) {
-
-                                                            $complaint_tag_name = $complaint_tag->FirstName. ' '.$complaint_tag->LastName;
-                                                            $ComplaintMemberDisplay .= '<button type="button" class="btn green btn-outline sbold btn-xs">'.$complaint_tag_name.'</button>';
-                                                            $pt++;
-                                                            //if($PostTag == $pt)
+                                                    <?php if($result_data->feedtype == 'complaint') {
+                                                        
+                                                        $ComplaintSubject      = $result_data->complaintdata->ComplaintSubject;
+                                                        $ComplaintDescription  = $result_data->complaintdata->ComplaintDescription;
+                                                        $PostBy                 = $result_data->complaintdata->ComplaintProfile->FirstName. ' '.$result_data->complaintdata->ComplaintProfile->LastName;
+                                                        if($result_data->complaintdata->ComplaintProfile->ProfilePhotoPath != '') {
+                                                            $PostByProfilePic = ($result_data->complaintdata->ComplaintProfile->ProfilePhotoPath != '') ? $result_data->complaintdata->ComplaintProfile->ProfilePhotoPath : base_url().'assets/images/default-user.png';
+                                                        } else {
+                                                            $PostByProfilePic = ($result_data->complaintdata->ComplaintProfile->ProfilePhotoPath != '') ? $result_data->complaintdata->ComplaintProfile->ProfilePhotoPath : base_url().'assets/images/default-user.png';
                                                         }
-                                                    }
 
-                                                    $ComplaintAttachment = $result_data->complaintdata->ComplaintAttachment;
-                                                    $ComplaintAttachmentDisplay = '';
-                                                    if(count($ComplaintAttachment) > 0) {
-                                                        $pt = 0;
-                                                        foreach($ComplaintAttachment AS $complaint_attachment) {
+                                                        $PostOn                 = $result_data->complaintdata->AddedOn;
+                                                        $PostOnTime             = $result_data->complaintdata->AddedOnTime;
+                                                        
+                                                        $ApplicantName          = $result_data->complaintdata->ApplicantName;
+                                                        $ComplaintAddress       = $result_data->complaintdata->ComplaintAddress;
+                                                        $ComplaintStatusName    = $result_data->complaintdata->ComplaintStatusName;
 
-                                                            $complaint_tag_name = $complaint_attachment->FirstName. ' '.$complaint_attachment->LastName;
-                                                            $ComplaintAttachmentDisplay .= '<button type="button" class="btn green btn-outline sbold btn-xs" style="margin-right: 3px;"><a href="'.$complaint_attachment->AttachmentFile.'" target="_blank">File '.($pt+1).'</a></button>';
-                                                            $pt++;
-                                                            //if($PostTag == $pt)
+                                                        $ComplaintMember = $result_data->complaintdata->ComplaintMember;
+
+                                                        $ComplaintMemberDisplay = '';
+                                                        if(count($ComplaintMember) > 0) {
+                                                            $pt = 0;
+                                                            foreach($ComplaintMember AS $complaint_tag) {
+
+                                                                $complaint_tag_name = $complaint_tag->FirstName. ' '.$complaint_tag->LastName;
+                                                                $ComplaintMemberDisplay .= '<button type="button" class="btn green btn-outline sbold btn-xs">'.$complaint_tag_name.'</button>';
+                                                                $pt++;
+                                                                //if($PostTag == $pt)
+                                                            }
                                                         }
-                                                    }
-                                                    ?>
+
+                                                        $ComplaintAttachment = $result_data->complaintdata->ComplaintAttachment;
+                                                        $ComplaintAttachmentDisplay = '';
+                                                        if(count($ComplaintAttachment) > 0) {
+                                                            $pt = 0;
+                                                            foreach($ComplaintAttachment AS $complaint_attachment) {
+
+                                                                $complaint_tag_name = $complaint_attachment->FirstName. ' '.$complaint_attachment->LastName;
+                                                                $ComplaintAttachmentDisplay .= '<button type="button" class="btn green btn-outline sbold btn-xs" style="margin-right: 3px;"><a href="'.$complaint_attachment->AttachmentFile.'" target="_blank">File '.($pt+1).'</a></button>';
+                                                                $pt++;
+                                                                //if($PostTag == $pt)
+                                                            }
+                                                        }
+                                                        ?>
 
                                                         <div class="feed-element">
                                                             <a href="#" class="pull-left">
@@ -317,139 +157,234 @@
                                                                 </div>
                                                             </div>
                                                         </div>
+                                                    <?php } else if($result_data->feedtype == 'poll') {
+                                                        
+                                                        $PollId         = $result_data->polldata->PollId;
+                                                        $PollUniqueId   = $result_data->polldata->PollUniqueId;
+                                                        $PollQuestion   = $result_data->polldata->PollQuestion;
+                                                        $ValidFromDate  = $result_data->polldata->ValidFromDate;
+                                                        $ValidEndDate   = $result_data->polldata->ValidEndDate;
+                                                        $PollLocation   = $result_data->polldata->PollLocation;
+                                                        $PollPrivacy    = $result_data->polldata->PollPrivacy;
+                                                        $PollStatus     = $result_data->polldata->PollStatus;
+                                                        $AddedOn        = $result_data->polldata->AddedOn;
+                                                        $AddedOnTime    = $result_data->polldata->AddedOnTime;
+                                                        $PollProfile    = $result_data->polldata->PollProfile;
+                                                        $PollImage      = ($result_data->polldata->PollImage != '') ? '<img src="'.$result_data->polldata->PollImage.'" style="width: 100%;">' : '';
+                                                        $PollTotalParticipation  = $result_data->polldata->PollTotalParticipation;
+                                                        $PollAnswerWithTotalParticipation  = $result_data->polldata->PollAnswerWithTotalParticipation;
+                                                        $MeParticipated = $result_data->polldata->MeParticipated;
 
-                                                        <!-- <div class="ibox"> 
-                                                            <div class="widgets-container padding-top10"> 
-                                                                <a class="btn-link" href="#">Post
-                                                                    <h2 class="hed"> <?php echo $PostTitle; ?> </h2>
-                                                                </a>
-                                                                <div class="small bottom5"> <strong><?php echo $PostBy; ?></strong> <span class="text-muted right"><i class="fa fa-clock-o"></i> <?php echo $PostOn; ?></span> </div>
-                                                                <?php if($PostDescription != '') { ?>
-                                                                <p> <?php echo $PostDescription; ?> </p>
-                                                                <?php } ?>
-                                                                <div class="row">
-                                                                    <div class="col-md-4">
-                                                                        <?php if($PostTagDisplay != '') { ?>
-                                                                        <h5>Tags:</h5>
-                                                                            <?php echo $PostTagDisplay; ?>
-                                                                        <?php } ?>
-                                                                    </div>
-                                                                    <div class="col-md-8">
-                                                                        <div class="small text-right">
-                                                                            <h5>&nbsp;</h5>
-                                                                            <div> 
-                                                                                <i class="fa fa-comments-o"> </i> 80 &nbsp;
-                                                                                <i class="fa fa-eye"> </i> 200 views 
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
+                                                        $TotalLikes     = $result_data->polldata->TotalLikes;
+                                                        $TotalUnLikes   = $result_data->polldata->TotalUnLikes;
+                                                        $MeLike         = $result_data->polldata->MeLike;
+                                                        $MeUnLike       = $result_data->polldata->MeUnLike;
+                                                        $TotalComment   = $result_data->polldata->TotalComment;
+
+
+
+                                                        $PostBy = $result_data->polldata->PollProfile->FirstName. ' '.$result_data->polldata->PollProfile->LastName;
+                                                        if($result_data->polldata->PollProfile->ProfilePhotoPath != '') {
+                                                            $PostByProfilePic = ($result_data->polldata->PollProfile->ProfilePhotoPath != '') ? $result_data->polldata->PollProfile->ProfilePhotoPath : base_url().'assets/images/default-user.png';
+                                                        } else {
+                                                            $PostByProfilePic = ($result_data->polldata->PollProfile->ProfilePhotoPath != '') ? $result_data->polldata->PollProfile : base_url().'assets/images/default-user.png';
+                                                        }
+                                                        ?>
+
+                                                        <div class="feed-element">
+                                                            <a href="#" class="pull-left">
+                                                                <img alt="image" class="img-circle" src="<?php echo $PostByProfilePic; ?>">
+                                                            </a>
+                                                            <div class="media-body "> <small class="pull-right text-navy"><?php echo $PostOn; ?></small>  <strong><?php echo $PostBy; ?></strong> created poll
+                                                                <br> <small class="text-muted"><?php echo date('h:i a - d.m.Y', strtotime($AddedOnTime)); ?></small>
+
+                                                            </div>
+                                                            <div class="">
+                                                                <div class="photos">
+                                                                    <p><?php echo $PollQuestion.$PollImage; ?></p>
+                                                                    <ul>
+                                                                        <?php
+                                                                        foreach($PollAnswerWithTotalParticipation AS $answers) {
+                                                                            $PollAnswerImage = ($answers->PollAnswerImage != '') ? '<img src="'.$answers->PollAnswerImage.'" style="width: 200px; height: 120px;">' : '';
+                                                                            echo '<li style="overflow: hidden; max-height: 300px;">'.$PollAnswerImage.'<br>'.$answers->PollAnswer.' : <input type="button" value="'.$answers->TotalAnswerdMe.'"></li>';
+                                                                        }
+                                                                        ?>
+                                                                    </ul>
+                                                                </div>
+                                                                
+                                                                <div class="actions text-center"> 
+                                                                    <a class="btn btn-xs btn-success pull-left" id="express_poll_like_<?php echo $PollId; ?>" onClick="return likePoll(<?php echo $PollId; ?>);"><i class="fa fa-thumbs-up"></i> Like </a>
+
+                                                                    <span class=" pull-left express_poll_like_<?php echo $PollId; ?>"><?php echo $TotalLikes; ?></span>  
+                                                                    <a class="btn btn-xs btn-danger" id="express_poll_unlike_<?php echo $PollId; ?>" onClick="return unlikePoll(<?php echo $PollId; ?>);"><i class="fa fa-thumbs-down"></i> Unlike</a>
+                                                                    
+                                                                    <span class="express_poll_unlike_<?php echo $PollId; ?>"><?php echo $TotalUnLikes; ?></span>
+                                                                    <a class="btn btn-xs aqua pull-right"><i class="fa fa-pencil"></i> Comments</a> 
+                                                                    
+                                                                    <span class=" pull-right express_poll_comment_<?php echo $PollId; ?>"><?php echo $TotalComment; ?></span>
                                                                 </div>
                                                             </div>
-                                                        </div> -->
-                                                    <?php } ?>
-                                                <?php } ?>
-                                                <?php /*
-                                                <div class="feed-element">
-                                                    <a href="#" class="pull-left">
-                                                        <img alt="image" class="img-circle" src="../assets/images/teem/a9.jpg">
-                                                    </a>
-                                                    <div class="media-body "> <small class="pull-right text-navy">1m ago</small>  <strong>Mitch Buchannon</strong> started following <strong>Olivia Wenscombe</strong>.
-                                                        <br> <small class="text-muted">Today 9:00 pm - 11.06.2016</small>
-                                                        <div class="actions"> <a class="btn btn-xs btn-white"><i class="fa fa-thumbs-up"></i> Like </a>  <a class="btn btn-xs btn-danger"><i class="fa fa-thumbs-down"></i> Unlike</a> 
                                                         </div>
-                                                    </div>
-                                                </div>
-                                                <div class="feed-element">
-                                                    <a href="#" class="pull-left">
-                                                        <img alt="image" class="img-circle" src="../assets/images/teem/a9.jpg">
-                                                    </a>
-                                                    <div class="media-body "> <small class="pull-right text-navy">1m ago</small>  <strong>Sunil Vishvakrma</strong> started following <strong>Pushpender</strong>.
-                                                        <br> <small class="text-muted">Today 9:00 pm - 11.06.2016</small>
+                                                    <?php } else if($result_data->feedtype == 'event') {
+                                                        
+                                                        $EventId   = $result_data->eventdata->EventId;
+                                                        $EventUniqueId   = $result_data->eventdata->EventUniqueId;
+                                                        $EventName   = $result_data->eventdata->EventName;
+                                                        $EventDescription  = $result_data->eventdata->EventDescription;
+                                                        $EventLocation   = $result_data->eventdata->EventLocation;
+                                                        $StartDate   = $result_data->eventdata->StartDate;
+                                                        $EndDate    = $result_data->eventdata->EndDate;
+                                                        $EventStatus     = $result_data->eventdata->EventStatus;
+                                                        $EventPrivacy        = $result_data->eventdata->EventPrivacy;
+                                                        $AddedOn    = $result_data->eventdata->AddedOn;
+                                                        $AddedOnTime    = $result_data->eventdata->AddedOnTime;
+                                                        $EventProfile    = $result_data->eventdata->EventProfile;
+                                                        
+                                                        $EventAttendee  = $result_data->eventdata->EventAttendee;
+                                                        $EventAttachment  = $result_data->eventdata->EventAttachment;
+                                                        $TotalEventLike  = $result_data->eventdata->TotalEventLike;
+                                                        $EventLikedByMe  = $result_data->eventdata->EventLikedByMe;
+                                                        $TotalEventInterest  = $result_data->eventdata->TotalEventInterest;
+                                                        $EventInterestTotal  = $result_data->eventdata->EventInterestTotal;
+                                                        $MeInterested  = $result_data->eventdata->MeInterested;
 
-                                                    </div>
-                                                    <div class="">
-                                                        <div class="photos">
-                                                            <img alt="image" class="img-responsive" src="../assets/img/concert-3387324_1920.jpg">
+                                                        $TotalLikes     = $result_data->eventdata->TotalLikes;
+                                                        $TotalUnLikes   = $result_data->eventdata->TotalUnLikes;
+                                                        $MeLike         = $result_data->eventdata->MeLike;
+                                                        $MeUnLike       = $result_data->eventdata->MeUnLike;
+                                                        $TotalComment   = $result_data->eventdata->TotalComment;
+
+                                                        
+                                                        $PostBy = $result_data->eventdata->EventProfile->FirstName. ' '.$result_data->eventdata->EventProfile->LastName;
+                                                        if($result_data->eventdata->EventProfile->ProfilePhotoPath != '') {
+                                                            $PostByProfilePic = ($result_data->eventdata->EventProfile->ProfilePhotoPath != '') ? $result_data->eventdata->EventProfile->ProfilePhotoPath : base_url().'assets/images/default-user.png';
+                                                        } else {
+                                                            $PostByProfilePic = ($result_data->eventdata->EventProfile->ProfilePhotoPath != '') ? $result_data->eventdata->EventProfile : base_url().'assets/images/default-user.png';
+                                                        }
+
+                                                        $i = 0;
+                                                        $event_main_image = '';
+                                                        foreach($EventAttachment AS $event_attachment) {
+                                                            if($i == 0) {
+                                                                $event_main_image = $event_attachment->AttachmentFile;
+                                                            }
+                                                            $i++;
+                                                        }
+                                                        ?>
+
+                                                        <div class="feed-element">
+                                                            <a href="#" class="pull-left">
+                                                                <img alt="image" class="img-circle" src="<?php echo $PostByProfilePic; ?>">
+                                                            </a>
+                                                            <div class="media-body "> <small class="pull-right text-navy"><?php echo $PostOn; ?></small>  <strong><?php echo $PostBy; ?></strong> created an event
+                                                                <br> <small class="text-muted"><?php echo date('h:i a - d.m.Y', strtotime($AddedOnTime)); ?></small>
+
+                                                            </div>
+                                                            <div class="">
+                                                                <div class="photos">
+                                                                    <p><?php if($event_main_image != '') {
+                                                                        echo '<img src="'.$event_main_image.'" style="width: 100%; height: 300px;">';
+                                                                    }?></p>
+                                                                    <p><?php echo $EventName; ?></p>
+                                                                    <p>
+                                                                        <?php foreach($TotalEventInterest AS $event_interest) { ?>
+                                                                            <?php echo $event_interest->EventInterestTypeName .' : '.$event_interest->TotalCount; ?>, 
+                                                                        <?php } ?>
+                                                                    </p>
+                                                                    <p>Start Date: <?php echo date('d-M, Y', strtotime($StartDate)); ?></p>
+                                                                    <p>End Date: <?php echo date('d-M, Y', strtotime($EndDate)); ?></p>
+                                                                    <p>
+                                                                        <?php
+                                                                        foreach($EventAttachment AS $event_attachment) {
+                                                                            echo '<img src="'.$event_attachment->AttachmentFile.'" style="width: 200px; height: 120px; margin-left: 10px;">';
+                                                                        }
+                                                                        ?>
+                                                                    </p>
+                                                                </div>
+                                                                <div class="actions text-center"> 
+                                                                    <a class="btn btn-xs btn-success pull-left" id="express_event_like_<?php echo $EventId; ?>" onClick="return likeEvent(<?php echo $EventId; ?>);"><i class="fa fa-thumbs-up"></i> Like </a>
+
+                                                                    <span class=" pull-left express_event_like_<?php echo $EventId; ?>"><?php echo $TotalLikes; ?></span>  
+                                                                    <a class="btn btn-xs btn-danger" id="express_event_unlike_<?php echo $EventId; ?>" onClick="return unlikeEvent(<?php echo $EventId; ?>);"><i class="fa fa-thumbs-down"></i> Unlike</a>
+                                                                    
+                                                                    <span class="express_event_unlike_<?php echo $EventId; ?>"><?php echo $TotalUnLikes; ?></span>
+                                                                    <a class="btn btn-xs aqua pull-right"><i class="fa fa-pencil"></i> Comments</a> 
+                                                                    
+                                                                    <span class=" pull-right express_event_comment_<?php echo $EventId; ?>"><?php echo $TotalComment; ?></span>
+                                                                </div>
+                                                            </div>
                                                         </div>
-                                                        <div class="actions text-center"> 
-                                                            <a class="btn btn-xs btn-success pull-left"><i class="fa fa-thumbs-up"></i> Like </a>  <a class="btn btn-xs btn-danger"><i class="fa fa-thumbs-down"></i> Unlike</a>
-                                                            <a class="btn btn-xs aqua pull-right"><i class="fa fa-pencil"></i> Comments</a> 
+                                                    <?php } else if($result_data->feedtype == 'post') {
+                                                        
+                                                        $PostId             = $result_data->postdata->PostId;
+                                                        $UserProfileId      = $result_data->postdata->UserProfileId;
+                                                        $PostTitle          = $result_data->postdata->PostTitle;
+                                                        $PostStatus         = $result_data->postdata->PostStatus;
+                                                        $PostLocation       = $result_data->postdata->PostLocation;
+                                                        $PostDescription    = $result_data->postdata->PostDescription;
+                                                        $PostURL        = $result_data->postdata->PostURL;
+                                                        $PostPrivacy    = $result_data->postdata->PostPrivacy;
+                                                        $AddedOn        = $result_data->postdata->AddedOn;
+                                                        $AddedOnTime    = $result_data->postdata->AddedOnTime;
+                                                        $PostTag        = $result_data->postdata->PostTag;
+                                                        $PostAttachment = $result_data->postdata->PostAttachment;                                                        
+                                                        
+                                                        $PostBy = $result_data->postdata->PostProfile->FirstName. ' '.$result_data->postdata->PostProfile->LastName;
+                                                        if($result_data->postdata->PostProfile->ProfilePhotoPath != '') {
+                                                            $PostByProfilePic = ($result_data->postdata->PostProfile->ProfilePhotoPath != '') ? $result_data->postdata->PostProfile->ProfilePhotoPath : base_url().'assets/images/default-user.png';
+                                                        } else {
+                                                            $PostByProfilePic = ($result_data->postdata->PostProfile->ProfilePhotoPath != '') ? $result_data->postdata->PostProfile : base_url().'assets/images/default-user.png';
+                                                        }
+                                                        ?>
+
+                                                        <div class="feed-element">
+                                                            <a href="#" class="pull-left">
+                                                                <img alt="image" class="img-circle" src="<?php echo $PostByProfilePic; ?>">
+                                                            </a>
+                                                            <div class="media-body "> <small class="pull-right text-navy"><?php echo $PostOn; ?></small>  <strong><?php echo $PostBy; ?></strong> post status
+                                                                <br> <small class="text-muted"><?php echo date('h:i a - d.m.Y', strtotime($AddedOnTime)); ?></small>
+
+                                                            </div>
+                                                            <div class="">
+                                                                <div class="photos">
+                                                                    <p><?php echo $PostTitle; ?></p>
+                                                                    <p>
+                                                                    <?php 
+                                                                        foreach($PostAttachment AS $post_attachment) {
+                                                                            if($post_attachment->AttachmentType == "video") {
+                                                                                echo '<video controls style="width: 100%">
+                                                                                    <source src="'.$post_attachment->AttachmentFile.'" type="video/mp4">
+                                                                                    Your browser does not support the video tag.
+                                                                                    </video>';
+                                                                            } else if($post_attachment->AttachmentType == "video") {
+                                                                                echo '<img src="'.$post_attachment->AttachmentFile.'" style="width: 200px; height: 120px;">';
+                                                                            } else {
+
+                                                                            }
+                                                                        }
+                                                                    ?></p>                                                              
+                                                                </div>
+                                                                <div class="actions text-center"> 
+                                                                    <a class="btn btn-xs btn-success pull-left" id="express_post_like_<?php echo $PostId; ?>" onClick="return likePost(<?php echo $PostId; ?>);"><i class="fa fa-thumbs-up"></i> Like </a>
+
+                                                                    <span class=" pull-left express_post_like_<?php echo $PostId; ?>">0</span>  
+                                                                    <a class="btn btn-xs btn-danger" id="express_post_unlike_<?php echo $PostId; ?>" onClick="return unlikePost(<?php echo $PostId; ?>);"><i class="fa fa-thumbs-down"></i> Unlike</a>
+                                                                    
+                                                                    <span class="express_post_unlike_<?php echo $PostId; ?>">0</span>
+                                                                    <a class="btn btn-xs aqua pull-right"><i class="fa fa-pencil"></i> Comments</a> 
+                                                                    
+                                                                    <span class=" pull-right express_post_comment_<?php echo $PostId; ?>">0</span>
+                                                                </div>
+                                                            </div>
                                                         </div>
-                                                    </div>
-                                                </div>
-                                                <div class="feed-element">
-                                                    <a href="#" class="pull-left">
-                                                        <img alt="image" class="img-circle" src="../assets/images/teem/a3.jpg">
-                                                    </a>
-                                                    <div class="media-body "> <small class="pull-right">5m ago</small>  <strong>Olivia Wenscombe</strong> posted a new blog.
-                                                        <br> <small class="text-muted">Today 5:60 pm - 12.06.2016</small> 
-                                                    </div>
-                                                </div>
-                                                <div class="feed-element">
-                                                    <a href="#" class="pull-left">
-                                                        <img alt="image" class="img-circle" src="../assets/images/teem/a2.jpg">
-                                                    </a>
-                                                    <div class="media-body "> <small class="pull-right">2h ago</small>  <strong>Robert Angier</strong> posted message on <strong>Olivia Wenscombe</strong> site.
-                                                        <br> <small class="text-muted">Today 2:10 pm - 12.06.2016</small>
-                                                        <div class="well">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s. Over the years, sometimes by accident, sometimes on purpose (injected humour and the like).</div>
-                                                        <div class="pull-right"> <a class="btn btn-xs btn-success"><i class="fa fa-thumbs-up"></i> Like </a>  <a class="btn btn-xs btn-white"><i class="fa fa-heart"></i> Love</a>  <a class="btn btn-xs aqua"><i class="fa fa-pencil"></i> Comments</a> 
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="feed-element">
-                                                    <a href="#" class="pull-left">
-                                                        <img alt="image" class="img-circle" src="../assets/images/teem/a5.jpg">
-                                                    </a>
-                                                    <div class="media-body "> <small class="pull-right">2h ago</small>  <strong>Ariadne</strong> add 1 photo on <strong>Olivia Wenscombe</strong>.
-                                                        <br> <small class="text-muted">2 days ago at 8:30am</small>
-                                                        <div class="photos">
-                                                            <img alt="image" class="feed-photo" src="../assets/images/profile_big2.jpg">
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="feed-element">
-                                                    <a href="#" class="pull-left">
-                                                        <img alt="image" class="img-circle" src="../assets/images/teem/a4.jpg">
-                                                    </a>
-                                                    <div class="media-body "> <small class="pull-right text-navy">5h ago</small>  <strong> Alex Smith </strong> started following <strong>Olivia Wenscombe</strong>.
-                                                        <br> <small class="text-muted">Yesterday 1:21 pm - 11.06.2016</small>
-                                                        <div class="actions"> <a class="btn btn-xs btn-white"><i class="fa fa-thumbs-up"></i> Like </a>  <a class="btn btn-xs btn-white"><i class="fa fa-heart"></i> Love</a> 
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="feed-element">
-                                                    <a href="#" class="pull-left">
-                                                        <img alt="image" class="img-circle" src="../assets/images/teem/a10.jpg">
-                                                    </a>
-                                                    <div class="media-body "> <small class="pull-right">2h ago</small>  <strong>Susan Wenscombe </strong> posted message on <strong>Olivia Wenscombe</strong> site.
-                                                        <br> <small class="text-muted">Yesterday 5:20 pm - 12.06.2016</small>
-                                                        <div class="well">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s. Over the years, sometimes by accident, sometimes on purpose (injected humour and the like).</div>
-                                                        <div class="pull-right"> <a class="btn btn-xs btn-white"><i class="fa fa-thumbs-up"></i> Like </a> 
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="feed-element">
-                                                    <a href="#" class="pull-left">
-                                                        <img alt="image" class="img-circle" src="../assets/images/teem/a3.jpg">
-                                                    </a>
-                                                    <div class="media-body "> <small class="pull-right">23h ago</small>  <strong>Olivia Wenscombe</strong> love <strong>Sophie </strong>.
-                                                        <br> <small class="text-muted">2 days ago at 2:30 am - 11.06.2016</small>
-                                                        <div class="photos">
-                                                            <img alt="image" class="feed-photo" src="../assets/images/profile_big3.jpg">
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="feed-element">
-                                                    <a href="#" class="pull-left">
-                                                        <img alt="image" class="img-circle" src="../assets/images/teem/a7.jpg">
-                                                    </a>
-                                                    <div class="media-body "> <small class="pull-right">46h ago</small>  <strong>Mike Loreipsum</strong> started following <strong>Olivia Wenscombe</strong>.
-                                                        <br> <small class="text-muted">3 days ago at 7:58 pm - 10.06.2016</small> 
-                                                    </div>
-                                                </div>
-                                                */ ?>
+                                                    <?php } ?>
+
+
+                                                <?php } ?>
+                                                
                                             </div>
                                             <button class="btn aqua btn-block "><i class="fa fa-arrow-down"></i> Show More</button>
+                                            <div class="new_loader_div" id="new_loader_div"><img src="<?=base_url();?>assets/images/new-loader.gif"></div>
                                         </div>
                                     </div>
                                 </div>
@@ -767,6 +702,8 @@
     </div>
 </body>
 <?php require_once './include/js.php';?>
-<!-- </body> -->
+
+<?php require_once './include/explore/explore.php';?>
+
 
 </html>

@@ -9,6 +9,7 @@ class Poll_Model extends CI_Model {
 
         $this->pollTbl                  = 'Poll';
         $this->pollAnswerTbl            = 'PollAnswer';
+        $this->PollLikeTbl              = 'PollLike';
         $this->pollParticipationTbl     = 'PollParticipation';
     }
 
@@ -42,6 +43,91 @@ class Poll_Model extends CI_Model {
         return $this->db->affected_rows();
     }
 
+
+    public function likePoll($UserProfileId, $PollId) {
+        $res = $this->db->select('*')->from($this->PollLikeTbl)->where(array('PollId'=> $PollId, 'UserProfileId' => $UserProfileId))->get()->result_array();
+        if($res[0]['PollLikeId'] > 0) {
+            $updateData = array(
+                                'PollLike'      => 1,
+                                'PollUnlike'    => 0,
+                                'LikedOn'       => date('Y-m-d H:i:s'),
+                                );
+            $whereData = array(
+                                'PollId'        => $PollId,
+                                'UserProfileId' => $UserProfileId,
+                                );
+            $this->db->where($whereData);
+            $this->db->update($this->PollLikeTbl, $updateData);
+        } else {
+            $insertData = array(
+                                'PollLike'      => 1,
+                                'PollUnlike'    => 0,
+                                'PollId'        => $PollId,
+                                'UserProfileId' => $UserProfileId,
+                                'LikedOn'       => date('Y-m-d H:i:s'),
+                                );
+            $this->db->insert($this->PollLikeTbl, $insertData);
+        }
+        return $this->getTotalLikePoll($PollId);
+    }
+
+
+    public function unlikePoll($UserProfileId, $PollId) {
+        $res = $this->db->select('*')->from($this->PollLikeTbl)->where(array('PollId'=> $PollId, 'UserProfileId' => $UserProfileId))->get()->result_array();
+        if($res[0]['PollLikeId'] > 0) {
+            $updateData = array(
+                                'PollLike'      => 0,
+                                'PollUnlike'    => 1,
+                                'LikedOn'       => date('Y-m-d H:i:s'),
+                                );
+            $whereData = array(
+                                'PollId'        => $PollId,
+                                'UserProfileId' => $UserProfileId,
+                                );
+            $this->db->where($whereData);
+            $this->db->update($this->PollLikeTbl, $updateData);
+        } else {
+            $insertData = array(
+                                'PollLike'      => 0,
+                                'PollUnlike'    => 1,
+                                'PollId'        => $PollId,
+                                'UserProfileId' => $UserProfileId,
+                                'LikedOn'       => date('Y-m-d H:i:s'),
+                                );
+            $this->db->insert($this->PollLikeTbl, $insertData);
+        }
+        return $this->getTotalUnLikePoll($PollId);
+    }
+
+    public function getMeLikePoll($UserProfileId, $PollId) {
+        $res = $this->db->select('PollLike')->from($this->PollLikeTbl)->where(array('PollId'=> $PollId, 'UserProfileId' => $UserProfileId))->get()->result_array();
+        if($res[0]['PollLike'] > 0) {
+            return 1;
+        } else {
+            return 0;
+        }
+    }
+
+    public function getTotalLikePoll($PollId) {
+        $res = $this->db->select('COUNT(PollLikeId) AS TotalLike')->from($this->PollLikeTbl)->where(array('PollId'=> $PollId, 'PollLike' => 1))->get()->row_array();
+        return $res['TotalLike'];
+    }
+
+
+    public function getMeUnLikePoll($UserProfileId, $PollId) {
+        $res = $this->db->select('PollUnlike')->from($this->PollLikeTbl)->where(array('PollId'=> $PollId, 'UserProfileId' => $UserProfileId))->get()->result_array();
+        if($res[0]['PollUnlike'] > 0) {
+            return 1;
+        } else {
+            return 0;
+        }
+    }
+
+
+    public function getTotalUnLikePoll($PollId) {
+        $res = $this->db->select('COUNT(PollLikeId) AS TotalUnLike')->from($this->PollLikeTbl)->where(array('PollId'=> $PollId, 'PollUnlike' => 1))->get()->row_array();
+        return $res['TotalUnLike'];
+    }
 
     public function saveMyPollImage($PollId, $poll_image) {
 
@@ -258,6 +344,12 @@ class Poll_Model extends CI_Model {
 
         $validate_poll_already = $this->validateUserProfileAlreadyPolled($PollId, $UserProfileId);
 
+        $total_poll_like = $this->getTotalLikePoll($PollId);
+        $total_poll_unlike = $this->getTotalUnLikePoll($PollId);
+
+        $me_like_poll = $this->getMeLikePoll($UserProfileId, $PollId);
+        $me_unlike_poll = $this->getMeUnLikePoll($UserProfileId, $PollId);
+
         $user_data_array = array(
                                 "PollId"                    => $PollId,
                                 "PollUniqueId"              => $PollUniqueId,
@@ -277,6 +369,12 @@ class Poll_Model extends CI_Model {
                                 "PollTotalParticipation"    => $PollTotalParticipation,
                                 "PollAnswerWithTotalParticipation"    => $PollAnswerWithTotalParticipation,
                                 
+                                "TotalLikes"                => $total_poll_like,
+                                "TotalUnLikes"              => $total_poll_unlike,
+                                "MeLike"                    => $me_like_poll,
+                                "MeUnLike"                  => $me_unlike_poll,
+                                "TotalComment"              => 0,
+
                                 "MeParticipated"            => $validate_poll_already,
                                 );
         return $user_data_array;

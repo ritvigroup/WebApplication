@@ -373,5 +373,87 @@ class Poll extends CI_Controller {
         displayJsonEncode($array);
     }
 
+
+    public function likePoll() {
+        $error_occured = false;
+
+        $UserProfileId      = $this->input->post('user_profile_id');
+        $PollId             = $this->input->post('poll_id');
+
+        
+        if($UserProfileId == "") {
+            $msg = "Please select your profile";
+            $error_occured = true;
+        } else if($PollId == "") {
+            $msg = "Please select poll to like";
+            $error_occured = true;
+        } else {
+
+            $poll_like = $this->Poll_Model->likePoll($UserProfileId, $PollId);
+
+            if($poll_like > 0) {
+                $msg = "Poll liked successfully";
+            } else {
+                $msg = "Poll not like. Not authorised to like this poll.";
+                $error_occured = true;
+            }
+        }
+
+        if($error_occured == true) {
+            $array = array(
+                            "status"        => 'failed',
+                            "message"       => $msg,
+                        );
+        } else {
+
+            $array = array(
+                           "status"         => 'success',
+                           "result"         => $poll_like,
+                           "message"        => $msg,
+                           );
+        }
+        displayJsonEncode($array);
+    }
+
+    public function unlikePoll() {
+        $error_occured = false;
+
+        $UserProfileId      = $this->input->post('user_profile_id');
+        $PollId             = $this->input->post('poll_id');
+        
+        if($UserProfileId == "") {
+            $msg = "Please select your profile";
+            $error_occured = true;
+        } else if($PollId == "") {
+            $msg = "Please select poll to like";
+            $error_occured = true;
+        } else {
+
+            $poll_unlike = $this->Poll_Model->unlikePoll($UserProfileId, $PollId);
+
+            if($poll_unlike > 0) {
+                $msg = "Poll unliked successfully";
+            } else {
+                $msg = "Poll not unlike. Not authorised to unlike this poll.";
+                $error_occured = true;
+            }
+        }
+
+        if($error_occured == true) {
+            $array = array(
+                            "status"        => 'failed',
+                            "message"       => $msg,
+                        );
+        } else {
+
+            $array = array(
+                           "status"         => 'success',
+                           "result"         => $poll_unlike,
+                           "message"        => $msg,
+                           );
+        }
+        displayJsonEncode($array);
+    }
+
 }
 

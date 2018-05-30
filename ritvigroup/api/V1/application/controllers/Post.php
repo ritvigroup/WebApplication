@@ -49,7 +49,6 @@ class Post extends CI_Controller {
         displayJsonEncode($array);
     }
 
-
     public function postMyStatus() {
 		$error_occured = false;
 
@@ -250,6 +249,86 @@ class Post extends CI_Controller {
                            "status"       => 'success',
                            "result"   => $posts,
                            "message"      => $msg,
+                           );
+        }
+        displayJsonEncode($array);
+    }
+
+    public function likePost() {
+        $error_occured = false;
+
+        $UserProfileId      = $this->input->post('user_profile_id');
+        $PostId             = $this->input->post('post_id');
+        
+        if($UserProfileId == "") {
+            $msg = "Please select your profile";
+            $error_occured = true;
+        } else if($PostId == "") {
+            $msg = "Please select post to like";
+            $error_occured = true;
+        } else {
+
+            $post_like = $this->Post_Model->likePost($UserProfileId, $PostId);
+
+            if($post_like > 0) {
+                $msg = "Post liked successfully";
+            } else {
+                $msg = "Post not like. Not authorised to like this post.";
+                $error_occured = true;
+            }
+        }
+
+        if($error_occured == true) {
+            $array = array(
+                            "status"        => 'failed',
+                            "message"       => $msg,
+                        );
+        } else {
+
+            $array = array(
+                           "status"         => 'success',
+                           "result"         => $post_like,
+                           "message"        => $msg,
+                           );
+        }
+        displayJsonEncode($array);
+    }
+
+    public function unlikePost() {
+        $error_occured = false;
+
+        $UserProfileId      = $this->input->post('user_profile_id');
+        $PostId             = $this->input->post('post_id');
+        
+        if($UserProfileId == "") {
+            $msg = "Please select your profile";
+            $error_occured = true;
+        } else if($PostId == "") {
+            $msg = "Please select post to like";
+            $error_occured = true;
+        } else {
+
+            $post_unlike = $this->Post_Model->unlikePost($UserProfileId, $PostId);
+
+            if($post_unlike > 0) {
+                $msg = "Post unliked successfully";
+            } else {
+                $msg = "Post not unlike. Not authorised to unlike this post.";
+                $error_occured = true;
+            }
+        }
+
+        if($error_occured == true) {
+            $array = array(
+                            "status"        => 'failed',
+                            "message"       => $msg,
+                        );
+        } else {
+
+            $array = array(
+                           "status"         => 'success',
+                           "result"         => $post_unlike,
+                           "message"        => $msg,
                            );
         }
         displayJsonEncode($array);

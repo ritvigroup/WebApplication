@@ -51,7 +51,7 @@ class Citizen extends CI_Controller {
         } else {
         
 
-            $friend_user_profile_id = $this->User_Model->getMyAllFriends($UserProfileId, 1);
+            $friend_user_profile_id = $this->User_Model->getMyFriendFollowerAndFollowingUserProfileId($UserProfileId, 1);
 
             $friend_user_profile_id = array_merge($friend_user_profile_id, array($UserProfileId));
 

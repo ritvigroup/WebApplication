@@ -32,6 +32,79 @@ class Search extends CI_Controller {
     }
 
 
+    // Get All Search Data Added By Users
+    public function getAllSearchDataAddedByAnyUsers() {
+        $UserProfileId  = $this->input->post('user_profile_id');
+        $search_type     = $this->input->post('search_type'); 
+        
+        if($UserProfileId == "") {
+            $msg = "Please select user profile";
+            $error_occured = true;
+        } else {
+            $search_data = $this->User_Model->getAllSearchDataAddedByAnyUsers($UserProfileId, $search_type, $this->search);
+
+            if(count($search_data) > 0) {
+                $msg = "Search list found";
+            } else {
+                $msg = "No any search found";
+                $error_occured = true;
+            }
+        }
+
+        if($error_occured == true) {
+            $array = array(
+                            "status"        => 'failed',
+                            "message"       => $msg,
+                        );
+        } else {
+
+            $array = array(
+                           "status"   => 'success',
+                           "result"   => $search_data,
+                           "message"  => $msg,
+                           );
+        }
+        displayJsonEncode($array);
+    }
+
+
+    // Get All Search Data Added By Users
+    public function searchAndSaveDataForSearchOfUser() {
+        $UserProfileId  = $this->input->post('user_profile_id');
+        $search_type    = $this->input->post('search_type'); 
+        $save_search    = $this->input->post('save_search'); 
+        
+        if($UserProfileId == "") {
+            $msg = "Please select user profile";
+            $error_occured = true;
+        } else {
+            $save_data = $this->User_Model->searchAndSaveDataForSearchOfUser($UserProfileId, $search_type, $save_search);
+
+            if($save_data == true) {
+                $msg = "Search data saved successfully";
+            } else {
+                $msg = "Not able to save";
+                $error_occured = true;
+            }
+        }
+
+        if($error_occured == true) {
+            $array = array(
+                            "status"        => 'failed',
+                            "message"       => $msg,
+                        );
+        } else {
+
+            $array = array(
+                           "status"   => 'success',
+                           "result"   => $save_data,
+                           "message"  => $msg,
+                           );
+        }
+        displayJsonEncode($array);
+    }
+
+
     // Get All Educations of Users
     public function getAllEducactionsAddedByAnyUser() {
         $UserProfileId  = $this->input->post('user_profile_id');
@@ -318,7 +391,7 @@ class Search extends CI_Controller {
                         $people_search_condition .= " AND upe.Qualification = '".$education."'";
                     }
                     if($work != '') {
-                        $people_search_condition .= " AND upw.WorkPosition = '".$work."'";
+                        $people_search_condition .= " AND upw.WorkCompany = '".$work."'";
                     }
                 }
                 $sql = "SELECT up.UserProfileId AS Id, 'Profile' AS DataType, up.AddedOn AS DateAdded 
@@ -434,7 +507,7 @@ class Search extends CI_Controller {
                 }
             }
 
-            $sql = "SELECT WorkPosition, WorkLocation FROM `UserProfileWork` WHERE `UserProfileId` = '".$UserProfileId."' AND `Status` = '1' GROUP BY WorkPosition, WorkLocation ORDER BY UserProfileWorkId DESC";
+            $sql = "SELECT WorkCompany, WorkLocation FROM `UserProfileWork` WHERE `UserProfileId` = '".$UserProfileId."' AND `Status` = '1' GROUP BY WorkCompany, WorkLocation ORDER BY UserProfileWorkId DESC";
 
             $query = $this->db->query($sql);
             $res = $query->result_array();

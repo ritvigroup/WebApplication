@@ -25,6 +25,8 @@ class User_Model extends CI_Model {
         $this->politicalPartyTbl    = 'PoliticalParty';
         $this->DepartmentTbl        = 'Department';
 
+        $this->SearchDataTbl        = 'SearchData';
+
 
         $this->AdminTbl             = 'Admin';
     }
@@ -2099,6 +2101,10 @@ class User_Model extends CI_Model {
                 $this->db->where('UserProfileAddressId', $address_id[$i]);
                 $this->db->update($this->UserProfileAddressTbl, $update_address);
 
+                $this->searchAndSaveDataForSearchOfUser($UserProfileId, 'Address', $address[$i]);
+                $this->searchAndSaveDataForSearchOfUser($UserProfileId, 'City', $city[$i]);
+                $this->searchAndSaveDataForSearchOfUser($UserProfileId, 'State', $state[$i]);
+
                 $j++;
             } else {
                 $update_address = array(
@@ -2117,6 +2123,11 @@ class User_Model extends CI_Model {
                                         'UpdatedOn'         => date('Y-m-d H:i:s'),
                                         );
                  $this->db->insert($this->UserProfileAddressTbl, $update_address);
+
+                 $this->searchAndSaveDataForSearchOfUser($UserProfileId, 'Address', $address[$i]);
+                $this->searchAndSaveDataForSearchOfUser($UserProfileId, 'City', $city[$i]);
+                $this->searchAndSaveDataForSearchOfUser($UserProfileId, 'State', $state[$i]);
+
                  $j++;
             }
         }
@@ -2211,6 +2222,9 @@ class User_Model extends CI_Model {
                 $this->db->where('UserProfileEducationId', $education_id[$i]);
                 $this->db->update($this->UserProfileEducationTbl, $update_education);
 
+                $this->searchAndSaveDataForSearchOfUser($UserProfileId, 'Qualification', $qualification[$i]);
+                $this->searchAndSaveDataForSearchOfUser($UserProfileId, 'College', $university[$i]);
+
                 $j++;
             } else {
                 $update_education = array(
@@ -2227,6 +2241,9 @@ class User_Model extends CI_Model {
                                         'UpdatedOn'                 => date('Y-m-d H:i:s'),
                                         );
                  $this->db->insert($this->UserProfileEducationTbl, $update_education);
+
+                 $this->searchAndSaveDataForSearchOfUser($UserProfileId, 'Qualification', $qualification[$i]);
+                 $this->searchAndSaveDataForSearchOfUser($UserProfileId, 'College', $university[$i]);
                  $j++;
             }
         }
@@ -2307,8 +2324,8 @@ class User_Model extends CI_Model {
             if($work_id[$i] > 0) {
                 $update_work = array(
                                     'UserProfileId'     => $UserProfileId,
-                                    'WorkPosition'      => $work[$i],
-                                    'WorkPlace'         => $place[$i],
+                                    'WorkCompany'      => $work[$i],
+                                    'WorkPosition'         => $place[$i],
                                     'WorkLocation'      => $location[$i],
                                     'WorkFrom'          => $from[$i],
                                     'WorkTo'            => $to[$i],
@@ -2319,12 +2336,15 @@ class User_Model extends CI_Model {
                 $this->db->where('UserProfileWorkId', $work_id[$i]);
                 $this->db->update($this->UserProfileWorkTbl, $update_work);
 
+                $this->searchAndSaveDataForSearchOfUser($UserProfileId, 'Company', $work[$i]);
+                $this->searchAndSaveDataForSearchOfUser($UserProfileId, 'WorkPosition', $place[$i]);
+
                 $j++;
             } else {
                 $update_work = array(
                                     'UserProfileId'     => $UserProfileId,
-                                    'WorkPosition'      => $work[$i],
-                                    'WorkPlace'         => $place[$i],
+                                    'WorkCompany'      => $work[$i],
+                                    'WorkPosition'         => $place[$i],
                                     'WorkLocation'      => $location[$i],
                                     'WorkFrom'          => $from[$i],
                                     'WorkTo'            => $to[$i],
@@ -2333,7 +2353,10 @@ class User_Model extends CI_Model {
                                     'AddedOn'           => date('Y-m-d H:i:s'),
                                     'UpdatedOn'         => date('Y-m-d H:i:s'),
                                     );
-                 $this->db->insert($this->UserProfileWorkTbl, $update_work);
+                $this->db->insert($this->UserProfileWorkTbl, $update_work);
+                $this->searchAndSaveDataForSearchOfUser($UserProfileId, 'Company', $work[$i]);
+                $this->searchAndSaveDataForSearchOfUser($UserProfileId, 'WorkPosition', $place[$i]);
+
                  $j++;
             }
         }
@@ -2379,8 +2402,8 @@ class User_Model extends CI_Model {
         $detail = array(
                         'UserProfileWorkId'         => $result['UserProfileWorkId'],
                         'UserProfileId'             => $result['UserProfileId'],
+                        'WorkCompany'               => $result['WorkCompany'],
                         'WorkPosition'              => $result['WorkPosition'],
-                        'WorkPlace'                 => $result['WorkPlace'],
                         'WorkLocation'              => $result['WorkLocation'],
                         'WorkFrom'                  => $result['WorkFrom'],
                         'WorkTo'                    => $result['WorkTo'],
@@ -2443,7 +2466,8 @@ class User_Model extends CI_Model {
                                         FROM ".$this->UserFollowTbl." AS ufu 
                                         LEFT JOIN ".$this->userProfileTbl." up ON ufu.UserProfileId = up.UserProfileId
                                         WHERE 
-                                            ufu.`FollowUserProfileId` = '".$UserProfileId."'";
+                                            ufu.`FollowUserProfileId` = '".$UserProfileId."' 
+                                        AND up.ProfileStatus = 1";
 
 
         //echo $sql.'<br>';
@@ -2462,7 +2486,8 @@ class User_Model extends CI_Model {
                                         FROM ".$this->UserFollowTbl." AS ufu 
                                         LEFT JOIN ".$this->userProfileTbl." up ON ufu.FollowUserProfileId = up.UserProfileId
                                         WHERE 
-                                            ufu.`UserProfileId` = '".$UserProfileId."'";
+                                            ufu.`UserProfileId` = '".$UserProfileId."'
+                                        AND up.ProfileStatus = 1";
 
         
         //echo $sql.'<br>';
@@ -2481,8 +2506,9 @@ class User_Model extends CI_Model {
                                         FROM ".$this->UserFriendTbl." AS uf  
                                         LEFT JOIN ".$this->userProfileTbl." up ON uf.FriendUserProfileId = up.UserProfileId 
                                         WHERE 
-                                            uf.`UserProfileId` = '".$UserProfileId."'
-                                        AND uf.RequestAccepted = '1'"; 
+                                            uf.`UserProfileId` = '".$UserProfileId."' 
+                                        AND uf.RequestAccepted = '1' 
+                                        AND up.ProfileStatus = 1"; 
 
         $sql .= " ORDER BY uf.RequestAcceptedOn DESC";
         //echo $sql.'<br>';
@@ -2715,6 +2741,21 @@ class User_Model extends CI_Model {
         $result = array();
         if($search_for == 'work') {
 
+            $sql = "SELECT WorkCompany FROM `UserProfileWork` WHERE `Status` = '1' AND `WorkCompany` LIKE '%".$search."%' GROUP BY WorkCompany ORDER BY WorkCompany LIMIT 0, 20";
+
+            $query = $this->db->query($sql);
+            $res = $query->result_array();
+
+            if(count($res) > 0) {
+                foreach($res AS $key => $val) {
+                    $result[] = $val['WorkCompany'];
+                }
+            }
+            return $result;
+        }
+
+
+        if($search_for == 'place') {
             $sql = "SELECT WorkPosition FROM `UserProfileWork` WHERE `Status` = '1' AND `WorkPosition` LIKE '%".$search."%' GROUP BY WorkPosition ORDER BY WorkPosition LIMIT 0, 20";
 
             $query = $this->db->query($sql);
@@ -2723,21 +2764,6 @@ class User_Model extends CI_Model {
             if(count($res) > 0) {
                 foreach($res AS $key => $val) {
                     $result[] = $val['WorkPosition'];
-                }
-            }
-            return $result;
-        }
-
-
-        if($search_for == 'place') {
-            $sql = "SELECT WorkPlace FROM `UserProfileWork` WHERE `Status` = '1' AND `WorkPlace` LIKE '%".$search."%' GROUP BY WorkPlace ORDER BY WorkPlace LIMIT 0, 20";
-
-            $query = $this->db->query($sql);
-            $res = $query->result_array();
-
-            if(count($res) > 0) {
-                foreach($res AS $key => $val) {
-                    $result[] = $val['WorkPlace'];
                 }
             }
             return $result;
@@ -2792,6 +2818,71 @@ class User_Model extends CI_Model {
             return true;
         } else {
             return false;
+        }
+    }
+
+
+    public function getAllSearchDataAddedByAnyUsers($UserProfileId, $search_type, $search_text) {
+        $this->db->select('SearchData');
+        $this->db->from($this->SearchDataTbl);
+        $this->db->where('SearchDataType', $search_type);
+        $this->db->like('lower(SearchData)', strtolower($search_text));
+        $this->db->limit(10);
+        $query = $this->db->get();
+        if ($query->num_rows() > 0) {
+             $res = $query->result_array();
+
+            if(count($res) > 0) {
+                foreach($res AS $key => $val) {
+                    $result[] = array('data' => $val['SearchData']);
+                }
+            }
+            return $result;
+        } else {
+            return false;
+        }
+    }
+
+
+    public function getAllSearchDataAddedByMyself($UserProfileId, $search_type, $search_text) {
+        $this->db->select('SearchData');
+        $this->db->from($this->SearchDataTbl);
+        $this->db->where('SearchDataType', $search_type);
+        $this->db->where('AddedBy', $UserProfileId);
+        $this->db->like('SearchData', $search_text);
+        $this->db->limit(10);
+        $query = $this->db->get();
+        if ($query->num_rows() > 0) {
+             $res = $query->result_array();
+
+            if(count($res) > 0) {
+                foreach($res AS $key => $val) {
+                    $result[] = $val['SearchData'];
+                }
+            }
+            return $result;
+        } else {
+            return false;
+        }
+    }
+
+
+
+    public function searchAndSaveDataForSearchOfUser($UserProfileId, $search_type, $save_data) {
+        $this->db->select('SearchData');
+        $this->db->from($this->SearchDataTbl);
+        $this->db->where('SearchDataType', $search_type);
+        $this->db->where('lower(SearchData)', strtolower($save_data));
+        $query = $this->db->get();
+        if ($query->num_rows() > 0) {
+        } else {
+            $insertData = array(
+                                'SearchData'        => ucwords($save_data),
+                                'SearchDataType'    => $search_type,
+                                'AddedBy'           => $UserProfileId,
+                                'AddedOn'           => date('Y-m-d H:i:s'),
+                                );
+            $this->db->insert($this->SearchDataTbl, $insertData);
         }
     }
 
