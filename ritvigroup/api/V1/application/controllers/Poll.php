@@ -379,7 +379,6 @@ class Poll extends CI_Controller {
 
         $UserProfileId      = $this->input->post('user_profile_id');
         $PollId             = $this->input->post('poll_id');
-
         
         if($UserProfileId == "") {
             $msg = "Please select your profile";

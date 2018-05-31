@@ -68,9 +68,8 @@ class Poll_Model extends CI_Model {
                                 );
             $this->db->insert($this->PollLikeTbl, $insertData);
         }
-        return $this->getTotalLikePoll($PollId);
+        return $this->getTotalLike($PollId);
     }
-
 
     public function unlikePoll($UserProfileId, $PollId) {
         $res = $this->db->select('*')->from($this->PollLikeTbl)->where(array('PollId'=> $PollId, 'UserProfileId' => $UserProfileId))->get()->result_array();
@@ -96,10 +95,10 @@ class Poll_Model extends CI_Model {
                                 );
             $this->db->insert($this->PollLikeTbl, $insertData);
         }
-        return $this->getTotalUnLikePoll($PollId);
+        return $this->getTotalUnLike($PollId);
     }
 
-    public function getMeLikePoll($UserProfileId, $PollId) {
+    public function getMeLike($UserProfileId, $PollId) {
         $res = $this->db->select('PollLike')->from($this->PollLikeTbl)->where(array('PollId'=> $PollId, 'UserProfileId' => $UserProfileId))->get()->result_array();
         if($res[0]['PollLike'] > 0) {
             return 1;
@@ -108,13 +107,12 @@ class Poll_Model extends CI_Model {
         }
     }
 
-    public function getTotalLikePoll($PollId) {
+    public function getTotalLike($PollId) {
         $res = $this->db->select('COUNT(PollLikeId) AS TotalLike')->from($this->PollLikeTbl)->where(array('PollId'=> $PollId, 'PollLike' => 1))->get()->row_array();
         return $res['TotalLike'];
     }
 
-
-    public function getMeUnLikePoll($UserProfileId, $PollId) {
+    public function getMeUnLike($UserProfileId, $PollId) {
         $res = $this->db->select('PollUnlike')->from($this->PollLikeTbl)->where(array('PollId'=> $PollId, 'UserProfileId' => $UserProfileId))->get()->result_array();
         if($res[0]['PollUnlike'] > 0) {
             return 1;
@@ -123,8 +121,7 @@ class Poll_Model extends CI_Model {
         }
     }
 
-
-    public function getTotalUnLikePoll($PollId) {
+    public function getTotalUnLike($PollId) {
         $res = $this->db->select('COUNT(PollLikeId) AS TotalUnLike')->from($this->PollLikeTbl)->where(array('PollId'=> $PollId, 'PollUnlike' => 1))->get()->row_array();
         return $res['TotalUnLike'];
     }
@@ -344,11 +341,11 @@ class Poll_Model extends CI_Model {
 
         $validate_poll_already = $this->validateUserProfileAlreadyPolled($PollId, $UserProfileId);
 
-        $total_poll_like = $this->getTotalLikePoll($PollId);
-        $total_poll_unlike = $this->getTotalUnLikePoll($PollId);
-
-        $me_like_poll = $this->getMeLikePoll($UserProfileId, $PollId);
-        $me_unlike_poll = $this->getMeUnLikePoll($UserProfileId, $PollId);
+        $TotalLikes     = $this->getTotalLike($PollId);
+        $TotalUnLikes   = $this->getTotalUnLike($PollId);
+        $MeLike         = $this->getMeLike($UserProfileId, $PollId);
+        $MeUnLike       = $this->getMeUnLike($UserProfileId, $PollId);
+        $TotalComment   = 0;
 
         $user_data_array = array(
                                 "PollId"                    => $PollId,
@@ -369,11 +366,11 @@ class Poll_Model extends CI_Model {
                                 "PollTotalParticipation"    => $PollTotalParticipation,
                                 "PollAnswerWithTotalParticipation"    => $PollAnswerWithTotalParticipation,
                                 
-                                "TotalLikes"                => $total_poll_like,
-                                "TotalUnLikes"              => $total_poll_unlike,
-                                "MeLike"                    => $me_like_poll,
-                                "MeUnLike"                  => $me_unlike_poll,
-                                "TotalComment"              => 0,
+                                "TotalLikes"                => $TotalLikes,
+                                "TotalUnLikes"              => $TotalUnLikes,
+                                "MeLike"                    => $MeLike,
+                                "MeUnLike"                  => $MeUnLike,
+                                "TotalComment"              => $TotalComment,
 
                                 "MeParticipated"            => $validate_poll_already,
                                 );

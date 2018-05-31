@@ -86,6 +86,8 @@
                                                 <?php foreach($result AS $result_data) { ?>
                                                     <?php if($result_data->feedtype == 'complaint') {
                                                         
+                                                        $ComplaintId        = $result_data->complaintdata->ComplaintId;
+                                                        $ComplaintUniqueId      = $result_data->complaintdata->ComplaintUniqueId;
                                                         $ComplaintSubject      = $result_data->complaintdata->ComplaintSubject;
                                                         $ComplaintDescription  = $result_data->complaintdata->ComplaintDescription;
                                                         $PostBy                 = $result_data->complaintdata->ComplaintProfile->FirstName. ' '.$result_data->complaintdata->ComplaintProfile->LastName;
@@ -103,6 +105,12 @@
                                                         $ComplaintStatusName    = $result_data->complaintdata->ComplaintStatusName;
 
                                                         $ComplaintMember = $result_data->complaintdata->ComplaintMember;
+
+                                                        $TotalLikes     = $result_data->complaintdata->TotalLikes;
+                                                        $TotalUnLikes   = $result_data->complaintdata->TotalUnLikes;
+                                                        $MeLike         = $result_data->complaintdata->MeLike;
+                                                        $MeUnLike       = $result_data->complaintdata->MeUnLike;
+                                                        $TotalComment   = $result_data->complaintdata->TotalComment;
 
                                                         $ComplaintMemberDisplay = '';
                                                         if(count($ComplaintMember) > 0) {
@@ -140,7 +148,7 @@
                                                             </div>
                                                             <div class="">
                                                                 <div class="photos">
-                                                                    <p>Complaint Id: <?php echo $result_data->complaintdata->ComplaintUniqueId; ?></p>
+                                                                    <p>Complaint Id: <?php echo $ComplaintUniqueId; ?></p>
                                                                     <p>Applicant Name: <?php echo $ApplicantName; ?></p>
                                                                     <p>Address: <?php echo $ComplaintAddress; ?></p>
                                                                     <p>Current Status: <?php echo $ComplaintStatusName; ?></p>
@@ -152,8 +160,15 @@
                                                                     <?php } ?>
                                                                 </div>
                                                                 <div class="actions text-center"> 
-                                                                    <a class="btn btn-xs btn-success pull-left"><i class="fa fa-thumbs-up"></i> Like </a>  <a class="btn btn-xs btn-danger"><i class="fa fa-thumbs-down"></i> Unlike</a>
+                                                                    <a class="btn btn-xs btn-success pull-left" id="express_complaint_like_<?php echo $ComplaintId; ?>" onClick="return likeComplaint(<?php echo $ComplaintId; ?>);"><i class="fa fa-thumbs-up"></i> Like </a>
+
+                                                                    <span class=" pull-left express_complaint_like_<?php echo $ComplaintId; ?>"><?php echo $TotalLikes; ?></span>  
+                                                                    <a class="btn btn-xs btn-danger" id="express_complaint_unlike_<?php echo $ComplaintId; ?>" onClick="return unlikeComplaint(<?php echo $ComplaintId; ?>);"><i class="fa fa-thumbs-down"></i> Unlike</a>
+                                                                    
+                                                                    <span class="express_complaint_unlike_<?php echo $ComplaintId; ?>"><?php echo $TotalUnLikes; ?></span>
                                                                     <a class="btn btn-xs aqua pull-right"><i class="fa fa-pencil"></i> Comments</a> 
+                                                                    
+                                                                    <span class=" pull-right express_complaint_comment_<?php echo $ComplaintId; ?>"><?php echo $TotalComment; ?></span>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -327,7 +342,13 @@
                                                         $AddedOn        = $result_data->postdata->AddedOn;
                                                         $AddedOnTime    = $result_data->postdata->AddedOnTime;
                                                         $PostTag        = $result_data->postdata->PostTag;
-                                                        $PostAttachment = $result_data->postdata->PostAttachment;                                                        
+                                                        $PostAttachment = $result_data->postdata->PostAttachment;
+
+                                                        $TotalLikes     = $result_data->postdata->TotalLikes;
+                                                        $TotalUnLikes   = $result_data->postdata->TotalUnLikes;
+                                                        $MeLike         = $result_data->postdata->MeLike;
+                                                        $MeUnLike       = $result_data->postdata->MeUnLike;
+                                                        $TotalComment   = $result_data->postdata->TotalComment;                                                        
                                                         
                                                         $PostBy = $result_data->postdata->PostProfile->FirstName. ' '.$result_data->postdata->PostProfile->LastName;
                                                         if($result_data->postdata->PostProfile->ProfilePhotoPath != '') {
@@ -367,13 +388,13 @@
                                                                 <div class="actions text-center"> 
                                                                     <a class="btn btn-xs btn-success pull-left" id="express_post_like_<?php echo $PostId; ?>" onClick="return likePost(<?php echo $PostId; ?>);"><i class="fa fa-thumbs-up"></i> Like </a>
 
-                                                                    <span class=" pull-left express_post_like_<?php echo $PostId; ?>">0</span>  
+                                                                    <span class=" pull-left express_post_like_<?php echo $PostId; ?>"><?php echo $TotalLikes; ?></span>  
                                                                     <a class="btn btn-xs btn-danger" id="express_post_unlike_<?php echo $PostId; ?>" onClick="return unlikePost(<?php echo $PostId; ?>);"><i class="fa fa-thumbs-down"></i> Unlike</a>
                                                                     
-                                                                    <span class="express_post_unlike_<?php echo $PostId; ?>">0</span>
+                                                                    <span class="express_post_unlike_<?php echo $PostId; ?>"><?php echo $TotalUnLikes; ?></span>
                                                                     <a class="btn btn-xs aqua pull-right"><i class="fa fa-pencil"></i> Comments</a> 
                                                                     
-                                                                    <span class=" pull-right express_post_comment_<?php echo $PostId; ?>">0</span>
+                                                                    <span class=" pull-right express_post_comment_<?php echo $PostId; ?>"><?php echo $TotalComment; ?></span>
                                                                 </div>
                                                             </div>
                                                         </div>

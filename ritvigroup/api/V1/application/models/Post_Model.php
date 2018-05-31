@@ -54,8 +54,7 @@ class Post_Model extends CI_Model {
                                 );
             $this->db->insert($this->PostLikeTbl, $insertData);
         }
-        $res = $this->db->select('COUNT(PostLikeId) AS TotalLike')->from($this->PostLikeTbl)->where(array('PostId'=> $PostId, 'PostLike' => 1))->get()->row_array();
-        return $res['TotalLike'];
+        return $this->getTotalLike($PostId);
     }
 
     public function unlikePost($UserProfileId, $PostId) {
@@ -82,8 +81,35 @@ class Post_Model extends CI_Model {
                                 );
             $this->db->insert($this->PostLikeTbl, $insertData);
         }
-        $res = $this->db->select('COUNT(PostLikeId) AS TotalLike')->from($this->PostLikeTbl)->where(array('PostId'=> $PostId, 'PostUnlike' => 1))->get()->row_array();
+        return $this->getTotalUnLike($PostId);
+    }
+
+    public function getMeLike($UserProfileId, $PostId) {
+        $res = $this->db->select('PostLike')->from($this->PostLikeTbl)->where(array('PostId'=> $PostId, 'UserProfileId' => $UserProfileId))->get()->result_array();
+        if($res[0]['PostLike'] > 0) {
+            return 1;
+        } else {
+            return 0;
+        }
+    }
+
+    public function getTotalLike($PostId) {
+        $res = $this->db->select('COUNT(PostLikeId) AS TotalLike')->from($this->PostLikeTbl)->where(array('PostId'=> $PostId, 'PostLike' => 1))->get()->row_array();
         return $res['TotalLike'];
+    }
+
+    public function getMeUnLike($UserProfileId, $PostId) {
+        $res = $this->db->select('PostUnlike')->from($this->PostLikeTbl)->where(array('PostId'=> $PostId, 'UserProfileId' => $UserProfileId))->get()->result_array();
+        if($res[0]['PostUnlike'] > 0) {
+            return 1;
+        } else {
+            return 0;
+        }
+    }
+
+    public function getTotalUnLike($PostId) {
+        $res = $this->db->select('COUNT(PostLikeId) AS TotalUnLike')->from($this->PostLikeTbl)->where(array('PostId'=> $PostId, 'PostUnlike' => 1))->get()->row_array();
+        return $res['TotalUnLike'];
     }
 
 
@@ -257,6 +283,13 @@ class Post_Model extends CI_Model {
         $PostTag = $this->getPostTag($PostId);
         $PostAttachment = $this->getPostAttachment($PostId);
 
+        $TotalLikes     = $this->getTotalLike($PostId);
+        $TotalUnLikes   = $this->getTotalUnLike($PostId);
+        $MeLike         = $this->getMeLike($UserProfileId, $PostId);
+        $MeUnLike       = $this->getMeUnLike($UserProfileId, $PostId);
+        $TotalComment   = 0;
+
+
         $user_data_array = array(
                                 "PostId"                => $PostId,
                                 "UserProfileId"         => $AddedBy,
@@ -265,6 +298,12 @@ class Post_Model extends CI_Model {
                                 "PostLocation"          => $PostLocation,
                                 "PostDescription"       => $PostDescription,
                                 "PostURL"               => $PostURL,
+
+                                "TotalLikes"            => $TotalLikes,
+                                "TotalUnLikes"          => $TotalUnLikes,
+                                "MeLike"                => $MeLike,
+                                "MeUnLike"              => $MeUnLike,
+                                "TotalComment"          => $TotalComment,
                                 
                                 "PostPrivacy"           => $PostPrivacy,
                                 

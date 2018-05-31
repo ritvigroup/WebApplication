@@ -164,98 +164,6 @@ class Event extends CI_Controller {
         displayJsonEncode($array);
     }
 
-
-    public function saveLikeUnlikeEvent() {
-        $error_occured = false;
-
-        $UserProfileId  = $this->input->post('user_profile_id');
-        $EventId        = $this->input->post('event_id');
-        
-        if($UserProfileId == "") {
-            $msg = "Please select your profile";
-            $error_occured = true;
-        } else if($EventId == "") {
-            $msg = "Please select event";
-            $error_occured = true;
-        } else {
-
-            $event_like = 0;
-            $EventLikeDetail = $this->Event_Model->getEventLikeByUserProfileId($EventId, $UserProfileId);
-            if($EventLikeDetail['EventLikeId'] > 0) {
-                $this->Event_Model->deleteEventLike($EventId, $UserProfileId);
-
-                $msg = "Event unliked successfully";
-            } else {
-
-                $insertData = array(
-                                    'EventId'           => $EventId,
-                                    'UserProfileId'     => $UserProfileId,
-                                    'LikedOn'           => date('Y-m-d H:i:s'),
-                                );
-                $this->Event_Model->saveEventLike($insertData);
-
-                $msg = "Event liked successfully";
-                $event_like = 1;
-            }
-        }
-
-        if($error_occured == true) {
-            $array = array(
-                            "status"        => 'failed',
-                            "message"       => $msg,
-                        );
-        } else {
-
-            $array = array(
-                           "status"       => 'success',
-                           "result"       => $event_like,
-                           "message"      => $msg,
-                           );
-        }
-        displayJsonEncode($array);
-    }
-
-
-    public function getEventLikeDetail() {
-        $error_occured = false;
-
-        $UserProfileId   = $this->input->post('user_profile_id');
-        $EventId          = $this->input->post('event_id');
-        
-        if($UserProfileId == "") {
-            $msg = "Please select your profile";
-            $error_occured = true;
-        } else if($EventId == "") {
-            $msg = "Please select event";
-            $error_occured = true;
-        } else {
-
-            $event_like_detail = $this->Event_Model->getEventLikeDetail($EventId, $UserProfileId);
-            
-            if(count($event_like_detail) > 0) {
-                $msg = "Event likes fetched successfully";
-            } else {
-                $msg = "Event likes not found";
-                $error_occured = true;
-            }
-        }
-
-        if($error_occured == true) {
-            $array = array(
-                            "status"        => 'failed',
-                            "message"       => $msg,
-                        );
-        } else {
-
-            $array = array(
-                           "status"             => 'success',
-                           "result"   => $event_like_detail,
-                           "message"            => $msg,
-                           );
-        }
-        displayJsonEncode($array);
-    }
-
         
     public function getEventDetail() {
         $error_occured = false;
@@ -390,37 +298,37 @@ class Event extends CI_Controller {
 
             $this->db->query("BEGIN");
 
-            $validate_poll_already = $this->Event_Model->validateUserProfileAlreadyPolled($PollId, $UserProfileId);
+            $validate_event_already = $this->Event_Model->validateUserProfileAlreadyEvented($EventId, $UserProfileId);
 
-            if($validate_poll_already > 0) { 
+            if($validate_event_already > 0) { 
                 $this->db->query("ROLLBACK");
-                $msg = "You had already participated in this poll.";
+                $msg = "You had already participated in this event.";
                 $error_occured = true;
             } else {
 
                 $insertData = array(
-                                    'PollId'            => $PollId,
-                                    'PollAnswerId'      => $PollAnswerId,
-                                    'PollParticipationDescription'       => '',
+                                    'EventId'            => $EventId,
+                                    'EventAnswerId'      => $EventAnswerId,
+                                    'EventParticipationDescription'       => '',
                                     'AddedBy'           => $UserProfileId,
                                     'UpdatedBy'         => $UserProfileId,
                                     'AddedOn'           => date('Y-m-d H:i:s'),
                                     'UpdatedOn'         => date('Y-m-d H:i:s'),
                                 );
-                $PollParticipationId = $this->Poll_Model->participatePollWithAnswer($insertData);
+                $EventParticipationId = $this->Event_Model->participateEventWithAnswer($insertData);
 
-                if($PollParticipationId > 0) {
+                if($EventParticipationId > 0) {
 
                     $this->db->query("COMMIT");
                     
-                    $poll_detail = $this->Poll_Model->getPollDetail($PollId);
+                    $event_detail = $this->Event_Model->getEventDetail($EventId);
 
 
-                    $msg = "Poll answer submitted successfully";
+                    $msg = "Event answer submitted successfully";
 
                 } else {
                     $this->db->query("ROLLBACK");
-                    $msg = "Poll answer not participated. Error occured";
+                    $msg = "Event answer not participated. Error occured";
                     $error_occured = true;
                 }
             }
@@ -435,7 +343,7 @@ class Event extends CI_Controller {
 
             $array = array(
                            "status"             => 'success',
-                           "result"       => $poll_detail,
+                           "result"       => $event_detail,
                            "message"            => $msg,
                            );
         }
@@ -526,6 +434,88 @@ class Event extends CI_Controller {
                            "status"       => 'success',
                            "result"       => $event_detail,
                            "message"      => $msg,
+                           );
+        }
+        displayJsonEncode($array);
+    }
+
+
+    public function likeEvent() {
+        $error_occured = false;
+
+        $UserProfileId  = $this->input->post('user_profile_id');
+        $EventId        = $this->input->post('event_id');
+        
+        if($UserProfileId == "") {
+            $msg = "Please select your profile";
+            $error_occured = true;
+        } else if($EventId == "") {
+            $msg = "Please select event to like";
+            $error_occured = true;
+        } else {
+
+            $event_like = $this->Event_Model->likeEvent($UserProfileId, $EventId);
+
+            if($event_like > 0) {
+                $msg = "Event liked successfully";
+            } else {
+                $msg = "Event not like. Not authorised to like this event.";
+                $error_occured = true;
+            }
+        }
+
+        if($error_occured == true) {
+            $array = array(
+                            "status"        => 'failed',
+                            "message"       => $msg,
+                        );
+        } else {
+
+            $array = array(
+                           "status"         => 'success',
+                           "result"         => $event_like,
+                           "message"        => $msg,
+                           );
+        }
+        displayJsonEncode($array);
+    }
+
+    
+    public function unlikeEvent() {
+        $error_occured = false;
+
+        $UserProfileId      = $this->input->post('user_profile_id');
+        $EventId             = $this->input->post('event_id');
+        
+        if($UserProfileId == "") {
+            $msg = "Please select your profile";
+            $error_occured = true;
+        } else if($EventId == "") {
+            $msg = "Please select event to like";
+            $error_occured = true;
+        } else {
+
+            $event_unlike = $this->Event_Model->unlikeEvent($UserProfileId, $EventId);
+
+            if($event_unlike > 0) {
+                $msg = "Event unliked successfully";
+            } else {
+                $msg = "Event not unlike. Not authorised to unlike this event.";
+                $error_occured = true;
+            }
+        }
+
+        if($error_occured == true) {
+            $array = array(
+                            "status"        => 'failed',
+                            "message"       => $msg,
+                        );
+        } else {
+
+            $array = array(
+                           "status"         => 'success',
+                           "result"         => $event_unlike,
+                           "message"        => $msg,
                            );
         }
         displayJsonEncode($array);

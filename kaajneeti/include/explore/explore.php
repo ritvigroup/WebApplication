@@ -65,6 +65,66 @@
                 $('#new_loader_div').hide();
             });       
     }
+
+    function likeEvent(EventId) {
+
+        $('#new_loader_div').show();
+
+        $.post("<?php echo base_url(); ?>explore/likeEvent", {'display': 'Y', 'event_id' : EventId},
+            function (data, status) {
+                if(data != '') {
+                    $('.express_event_like_'+EventId).html(data);
+                } else {
+                    //$('#display_user_detail').html(data);
+                }
+                $('#new_loader_div').hide();
+            });       
+    }
+
+    function unlikeEvent(EventId) {
+
+        $('#new_loader_div').show();
+
+        $.post("<?php echo base_url(); ?>explore/unlikeEvent", {'display': 'Y', 'event_id' : EventId},
+            function (data, status) {
+                if(data != '') {
+                    $('.express_event_unlike_'+EventId).html(data);
+                } else {
+                    //$('#display_user_detail').html(data);
+                }
+                $('#new_loader_div').hide();
+            });       
+    }
+
+    function likeComplaint(ComplaintId) {
+
+        $('#new_loader_div').show();
+
+        $.post("<?php echo base_url(); ?>explore/likeComplaint", {'display': 'Y', 'complaint_id' : ComplaintId},
+            function (data, status) {
+                if(data != '') {
+                    $('.express_complaint_like_'+ComplaintId).html(data);
+                } else {
+                    //$('#display_user_detail').html(data);
+                }
+                $('#new_loader_div').hide();
+            });       
+    }
+
+    function unlikeComplaint(ComplaintId) {
+
+        $('#new_loader_div').show();
+
+        $.post("<?php echo base_url(); ?>explore/unlikeComplaint", {'display': 'Y', 'complaint_id' : ComplaintId},
+            function (data, status) {
+                if(data != '') {
+                    $('.express_complaint_unlike_'+ComplaintId).html(data);
+                } else {
+                    //$('#display_user_detail').html(data);
+                }
+                $('#new_loader_div').hide();
+            });       
+    }
  
 
 </script>

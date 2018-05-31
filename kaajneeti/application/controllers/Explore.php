@@ -99,6 +99,63 @@ class Explore extends CI_Controller {
     }
 
 
-    
+    public function likeEvent() {
+        $data = array();
+
+        $_POST['user_id'] = $this->session->userdata('UserId');
+        $_POST['user_profile_id'] = $this->session->userdata('UserProfileId');
+        $_POST['event_id'] = $this->input->post('event_id');
+        $json_encode = post_curl(API_CALL_PATH.'event/likeEvent', $this->input->post(), $this->curl);
+
+        // echo '<pre>';
+        // print_r($_POST);
+        // print_r($json_encode);
+        // die;
+        $json_decode = json_decode($json_encode);
+        echo $json_decode->result;
+    }
+
+
+    public function unlikeEvent() {
+        $data = array();
+
+        $_POST['user_id'] = $this->session->userdata('UserId');
+        $_POST['user_profile_id'] = $this->session->userdata('UserProfileId');
+        $_POST['event_id'] = $this->input->post('event_id');
+        $json_encode = post_curl(API_CALL_PATH.'event/unlikeEvent', $this->input->post(), $this->curl);
+
+        $json_decode = json_decode($json_encode);
+        echo $json_decode->result;
+    }
+
+
+    public function likeComplaint() {
+        $data = array();
+
+        $_POST['user_id'] = $this->session->userdata('UserId');
+        $_POST['user_profile_id'] = $this->session->userdata('UserProfileId');
+        $_POST['complaint_id'] = $this->input->post('complaint_id');
+        $json_encode = post_curl(API_CALL_PATH.'complaint/likeComplaint', $this->input->post(), $this->curl);
+
+        // echo '<pre>';
+        // print_r($_POST);
+        // print_r($json_encode);
+        // die;
+        $json_decode = json_decode($json_encode);
+        echo $json_decode->result;
+    }
+
+
+    public function unlikeComplaint() {
+        $data = array();
+
+        $_POST['user_id'] = $this->session->userdata('UserId');
+        $_POST['user_profile_id'] = $this->session->userdata('UserProfileId');
+        $_POST['complaint_id'] = $this->input->post('complaint_id');
+        $json_encode = post_curl(API_CALL_PATH.'complaint/unlikeComplaint', $this->input->post(), $this->curl);
+
+        $json_decode = json_decode($json_encode);
+        echo $json_decode->result;
+    }
 
 }

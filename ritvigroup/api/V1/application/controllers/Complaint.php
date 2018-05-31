@@ -896,5 +896,86 @@ class Complaint extends CI_Controller {
         }
         displayJsonEncode($array);
     }
+
+
+    public function likeComplaint() {
+        $error_occured = false;
+
+        $UserProfileId      = $this->input->post('user_profile_id');
+        $ComplaintId             = $this->input->post('complaint_id');
+        
+        if($UserProfileId == "") {
+            $msg = "Please select your profile";
+            $error_occured = true;
+        } else if($ComplaintId == "") {
+            $msg = "Please select complaint to like";
+            $error_occured = true;
+        } else {
+
+            $complaint_like = $this->Complaint_Model->likeComplaint($UserProfileId, $ComplaintId);
+
+            if($complaint_like > 0) {
+                $msg = "Complaint liked successfully";
+            } else {
+                $msg = "Complaint not like. Not authorised to like this complaint.";
+                $error_occured = true;
+            }
+        }
+
+        if($error_occured == true) {
+            $array = array(
+                            "status"        => 'failed',
+                            "message"       => $msg,
+                        );
+        } else {
+
+            $array = array(
+                           "status"         => 'success',
+                           "result"         => $complaint_like,
+                           "message"        => $msg,
+                           );
+        }
+        displayJsonEncode($array);
+    }
+
+    public function unlikeComplaint() {
+        $error_occured = false;
+
+        $UserProfileId      = $this->input->post('user_profile_id');
+        $ComplaintId             = $this->input->post('complaint_id');
+        
+        if($UserProfileId == "") {
+            $msg = "Please select your profile";
+            $error_occured = true;
+        } else if($ComplaintId == "") {
+            $msg = "Please select complaint to like";
+            $error_occured = true;
+        } else {
+
+            $complaint_unlike = $this->Complaint_Model->unlikeComplaint($UserProfileId, $ComplaintId);
+
+            if($complaint_unlike > 0) {
+                $msg = "Complaint unliked successfully";
+            } else {
+                $msg = "Complaint not unlike. Not authorised to unlike this complaint.";
+                $error_occured = true;
+            }
+        }
+
+        if($error_occured == true) {
+            $array = array(
+                            "status"        => 'failed',
+                            "message"       => $msg,
+                        );
+        } else {
+
+            $array = array(
+                           "status"         => 'success',
+                           "result"         => $complaint_unlike,
+                           "message"        => $msg,
+                           );
+        }
+        displayJsonEncode($array);
+    }
 }
 

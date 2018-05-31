@@ -17,6 +17,8 @@ class Complaint_Model extends CI_Model {
         $this->complaintTypeTbl         = 'ComplaintType';
         $this->complaintHistoryTbl      = 'ComplaintHistory';
         $this->complaintHistoryAttachmentTbl   = 'ComplaintHistoryAttachment';
+
+        $this->ComplaintLikeTbl         = 'ComplaintLike';
     }
 
 
@@ -618,6 +620,12 @@ class Complaint_Model extends CI_Model {
         $ComplaintAttachment    = $this->getComplaintAttachment($ComplaintId, $UserProfileId);
         //$ComplaintHistory       = $this->getComplaintHistory($ComplaintId);
 
+        $TotalLikes     = $this->getTotalLike($ComplaintId);
+        $TotalUnLikes   = $this->getTotalUnLike($ComplaintId);
+        $MeLike         = $this->getMeLike($UserProfileId, $ComplaintId);
+        $MeUnLike       = $this->getMeUnLike($UserProfileId, $ComplaintId);
+        $TotalComment   = 0;
+
         $user_data_array = array(
                                 "ComplaintId"               => $ComplaintId,
                                 "ComplaintUniqueId"         => $ComplaintUniqueId,
@@ -651,6 +659,12 @@ class Complaint_Model extends CI_Model {
                                 "ComplaintAddress"          => $ComplaintAddress,
                                 "ComplaintLatitude"         => $ComplaintLatitude,
                                 "ComplaintLongitude"        => $ComplaintLongitude,
+
+                                "TotalLikes"                => $TotalLikes,
+                                "TotalUnLikes"              => $TotalUnLikes,
+                                "MeLike"                    => $MeLike,
+                                "MeUnLike"                  => $MeUnLike,
+                                "TotalComment"              => $TotalComment,
 
                                 "AddedOn"                   => $AddedOn,
                                 "AddedOnTime"               => $res['AddedOn'],
@@ -885,5 +899,88 @@ class Complaint_Model extends CI_Model {
         return $ComplaintHistoryAttachment;
     }
     
+
+
+    public function likeComplaint($UserProfileId, $ComplaintId) {
+        $res = $this->db->select('*')->from($this->ComplaintLikeTbl)->where(array('ComplaintId'=> $ComplaintId, 'UserProfileId' => $UserProfileId))->get()->result_array();
+        if($res[0]['ComplaintLikeId'] > 0) {
+            $updateData = array(
+                                'ComplaintLike'      => 1,
+                                'ComplaintUnlike'    => 0,
+                                'LikedOn'       => date('Y-m-d H:i:s'),
+                                );
+            $whereData = array(
+                                'ComplaintId'        => $ComplaintId,
+                                'UserProfileId' => $UserProfileId,
+                                );
+            $this->db->where($whereData);
+            $this->db->update($this->ComplaintLikeTbl, $updateData);
+        } else {
+            $insertData = array(
+                                'ComplaintLike'      => 1,
+                                'ComplaintUnlike'    => 0,
+                                'ComplaintId'        => $ComplaintId,
+                                'UserProfileId' => $UserProfileId,
+                                'LikedOn'       => date('Y-m-d H:i:s'),
+                                );
+            $this->db->insert($this->ComplaintLikeTbl, $insertData);
+        }
+        return $this->getTotalLike($ComplaintId);
+    }
+
+    public function unlikeComplaint($UserProfileId, $ComplaintId) {
+        $res = $this->db->select('*')->from($this->ComplaintLikeTbl)->where(array('ComplaintId'=> $ComplaintId, 'UserProfileId' => $UserProfileId))->get()->result_array();
+        if($res[0]['ComplaintLikeId'] > 0) {
+            $updateData = array(
+                                'ComplaintLike'      => 0,
+                                'ComplaintUnlike'    => 1,
+                                'LikedOn'       => date('Y-m-d H:i:s'),
+                                );
+            $whereData = array(
+                                'ComplaintId'        => $ComplaintId,
+                                'UserProfileId' => $UserProfileId,
+                                );
+            $this->db->where($whereData);
+            $this->db->update($this->ComplaintLikeTbl, $updateData);
+        } else {
+            $insertData = array(
+                                'ComplaintLike'      => 0,
+                                'ComplaintUnlike'    => 1,
+                                'ComplaintId'        => $ComplaintId,
+                                'UserProfileId' => $UserProfileId,
+                                'LikedOn'       => date('Y-m-d H:i:s'),
+                                );
+            $this->db->insert($this->ComplaintLikeTbl, $insertData);
+        }
+        return $this->getTotalUnLike($ComplaintId);
+    }
+
+    public function getMeLike($UserProfileId, $ComplaintId) {
+        $res = $this->db->select('ComplaintLike')->from($this->ComplaintLikeTbl)->where(array('ComplaintId'=> $ComplaintId, 'UserProfileId' => $UserProfileId))->get()->result_array();
+        if($res[0]['ComplaintLike'] > 0) {
+            return 1;
+        } else {
+            return 0;
+        }
+    }
+
+    public function getTotalLike($ComplaintId) {
+        $res = $this->db->select('COUNT(ComplaintLikeId) AS TotalLike')->from($this->ComplaintLikeTbl)->where(array('ComplaintId'=> $ComplaintId, 'ComplaintLike' => 1))->get()->row_array();
+        return $res['TotalLike'];
+    }
+
+    public function getMeUnLike($UserProfileId, $ComplaintId) {
+        $res = $this->db->select('ComplaintUnlike')->from($this->ComplaintLikeTbl)->where(array('ComplaintId'=> $ComplaintId, 'UserProfileId' => $UserProfileId))->get()->result_array();
+        if($res[0]['ComplaintUnlike'] > 0) {
+            return 1;
+        } else {
+            return 0;
+        }
+    }
+
+    public function getTotalUnLike($ComplaintId) {
+        $res = $this->db->select('COUNT(ComplaintLikeId) AS TotalUnLike')->from($this->ComplaintLikeTbl)->where(array('ComplaintId'=> $ComplaintId, 'ComplaintUnlike' => 1))->get()->row_array();
+        return $res['TotalUnLike'];
+    }
 
 }
