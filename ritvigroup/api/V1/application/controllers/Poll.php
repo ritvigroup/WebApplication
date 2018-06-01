@@ -402,6 +402,7 @@ class Poll extends CI_Controller {
             $array = array(
                             "status"        => 'failed',
                             "message"       => $msg,
+                            "result"       => $poll_like,
                         );
         } else {
 
@@ -459,62 +460,49 @@ class Poll extends CI_Controller {
         $error_occured = false;
 
         $UserProfileId      = $this->input->post('user_profile_id');
-        $PollQuestion       = $this->input->post('poll_question');
-        $PollPrivacy        = $this->input->post('privacy'); // 1 = Public, 0 = Private
-        $ValidFromDate      = $this->input->post('valid_from_date');
-        $ValidEndDate       = $this->input->post('valid_end_date');
-
-        $PollLocation       = $this->input->post('location');
-
-        $poll_answer = $this->input->post('poll_answer'); // Should be multiple answers in array
+        $PollId             = $this->input->post('poll_id');
+        $CommentText        = $this->input->post('your_comment');
 
 
-        $PollUniqueId = $this->Poll_Model->generatePollUniqueId();
-
-
-        
         if($UserProfileId == "") {
             $msg = "Please select your profile";
             $error_occured = true;
-        } else if($PollQuestion == "") {
-            $msg = "Please enter your poll question";
+        } else if($PollId == "") {
+            $msg = "Please select poll";
+            $error_occured = true;
+        } else if($CommentText == "") {
+            $msg = "Please enter your comment";
             $error_occured = true;
         } else {
 
             $this->db->query("BEGIN");
 
             $insertData = array(
-                                'PollUniqueId'      => $PollUniqueId,
-                                'PollQuestion'      => $PollQuestion,
-                                'PollPrivacy'       => $PollPrivacy,
-                                'PollLocation'      => $PollLocation,
-                                'ValidFromDate'     => date('Y-m-d', strtotime($ValidFromDate)),
-                                'ValidEndDate'      => date('Y-m-d', strtotime($ValidEndDate)),
-                                'PollStatus'        => 1,
-                                'AddedBy'           => $UserProfileId,
-                                'UpdatedBy'         => $UserProfileId,
-                                'AddedOn'           => date('Y-m-d H:i:s'),
-                                'UpdatedOn'         => date('Y-m-d H:i:s'),
+                                'PollId'        => $PollId,
+                                'UserProfileId' => $UserProfileId,
+                                'CommentText'   => $CommentText,
+                                'CommentPhoto'  => '',
+                                'ParentId'      => '0',
+                                'CommentStatus' => '1',
+                                'CommentOn'     => date('Y-m-d H:i:s'),
                             );
 
-            $PollId = $this->Poll_Model->saveMyPoll($insertData);
+            $CommentId = $this->Poll_Model->savePollComment($insertData);
 
-            if($PollId > 0) {
+            if($CommentId > 0) {
 
                 
-                $this->Poll_Model->saveMyPollImage($PollId, $_FILES['question']);
-
-                $this->Poll_Model->saveMyPollAnswer($PollId, $UserProfileId, $poll_answer, $_FILES['file']);
-                
+                //$this->Poll_Model->savePollCommentImage($PollId, $_FILES['commment_file']);
+               
                 $this->db->query("COMMIT");
 
-                $poll_detail = $this->Poll_Model->getPollDetail($PollId, $UserProfileId);
+                $comment_detail = $this->Poll_Model->getPollCommentDetail($PollId, $CommentId, $UserProfileId);
 
-                $msg = "Poll created successfully";
+                $msg = "Comment added successfully";
 
             } else {
                 $this->db->query("ROLLBACK");
-                $msg = "Poll not saved. Error occured";
+                $msg = "Comment not saved. Error occured";
                 $error_occured = true;
             }
         }
@@ -527,9 +515,89 @@ class Poll extends CI_Controller {
         } else {
 
             $array = array(
-                           "status"             => 'success',
-                           "result"       => $poll_detail,
-                           "message"            => $msg,
+                           "status"         => 'success',
+                           "result"         => $comment_detail,
+                           "message"        => $msg,
+                           );
+        }
+        displayJsonEncode($array);
+    }
+
+    public function getAllPollComment() {
+        $error_occured = false;
+
+        $UserProfileId  = $this->input->post('user_profile_id');
+        $PollId         = $this->input->post('poll_id');
+        $Start          = $this->input->post('start');
+        
+        if($UserProfileId == "") {
+            $msg = "Please select your profile";
+            $error_occured = true;
+        } else if($PollId == "") {
+            $msg = "Please select poll";
+            $error_occured = true;
+        } else {
+
+            $comments = $this->Poll_Model->getAllPollComment($PollId, $UserProfileId, $total_list = 0);
+            if(count($comments) > 0) {
+                $msg = "Poll comments fetched successfully";
+            } else {
+                $msg = "No poll comment found";
+                $error_occured = true;
+            }
+        }
+
+        if($error_occured == true) {
+            $array = array(
+                            "status"        => 'failed',
+                            "message"       => $msg,
+                        );
+        } else {
+
+            $array = array(
+                           "status"     => 'success',
+                           "result"     => $comments,
+                           "message"    => $msg,
+                           );
+        }
+        displayJsonEncode($array);
+    }
+
+    public function deletePollComment() {
+        $error_occured = false;
+
+        $UserProfileId      = $this->input->post('user_profile_id');
+        $PollCommentId      = $this->input->post('comment_id');
+        
+        if($UserProfileId == "") {
+            $msg = "Please select your profile";
+            $error_occured = true;
+        } else if($PollCommentId == "") {
+            $msg = "Please select poll comment to delete";
+            $error_occured = true;
+        } else {
+
+            $poll_comment_delete = $this->Poll_Model->deletePollComment($UserProfileId, $PollCommentId);
+
+            if($poll_comment_delete > 0) {
+                $msg = "Poll comment deleted successfully";
+            } else {
+                $msg = "Poll comment not able to delete. Not authorised to delete this poll comment.";
+                $error_occured = true;
+            }
+        }
+
+        if($error_occured == true) {
+            $array = array(
+                            "status"        => 'failed',
+                            "message"       => $msg,
+                        );
+        } else {
+
+            $array = array(
+                           "status"         => 'success',
+                           "result"         => $poll_comment_delete,
+                           "message"        => $msg,
                            );
         }
         displayJsonEncode($array);

@@ -11,6 +11,7 @@ class Poll_Model extends CI_Model {
         $this->pollAnswerTbl            = 'PollAnswer';
         $this->PollLikeTbl              = 'PollLike';
         $this->pollParticipationTbl     = 'PollParticipation';
+        $this->PollCommentTbl           = 'PollComment';
     }
 
 
@@ -47,9 +48,11 @@ class Poll_Model extends CI_Model {
     public function likePoll($UserProfileId, $PollId) {
         $res = $this->db->select('*')->from($this->PollLikeTbl)->where(array('PollId'=> $PollId, 'UserProfileId' => $UserProfileId))->get()->result_array();
         if($res[0]['PollLikeId'] > 0) {
+            $PollLike   = (($res[0]['PollLike'] > 0) ? 0 : 1);
+            $PollUnlike = (($res[0]['PollUnlike'] > 0) ? 0 : 1);
             $updateData = array(
-                                'PollLike'      => 1,
-                                'PollUnlike'    => 0,
+                                'PollLike'      => $PollLike,
+                                'PollUnlike'    => $PollUnlike,
                                 'LikedOn'       => date('Y-m-d H:i:s'),
                                 );
             $whereData = array(
@@ -109,7 +112,7 @@ class Poll_Model extends CI_Model {
 
     public function getTotalLike($PollId) {
         $res = $this->db->select('COUNT(PollLikeId) AS TotalLike')->from($this->PollLikeTbl)->where(array('PollId'=> $PollId, 'PollLike' => 1))->get()->row_array();
-        return $res['TotalLike'];
+        return (($res['TotalLike'] > 0) ? $res['TotalLike'] : 0);
     }
 
     public function getMeUnLike($UserProfileId, $PollId) {
@@ -123,7 +126,7 @@ class Poll_Model extends CI_Model {
 
     public function getTotalUnLike($PollId) {
         $res = $this->db->select('COUNT(PollLikeId) AS TotalUnLike')->from($this->PollLikeTbl)->where(array('PollId'=> $PollId, 'PollUnlike' => 1))->get()->row_array();
-        return $res['TotalUnLike'];
+        return (($res['TotalUnLike'] > 0) ? $res['TotalUnLike'] : 0);
     }
 
     public function saveMyPollImage($PollId, $poll_image) {
@@ -345,7 +348,7 @@ class Poll_Model extends CI_Model {
         $TotalUnLikes   = $this->getTotalUnLike($PollId);
         $MeLike         = $this->getMeLike($UserProfileId, $PollId);
         $MeUnLike       = $this->getMeUnLike($UserProfileId, $PollId);
-        $TotalComment   = 0;
+        $TotalComment   = $this->getAllPollComment($PollId, $UserProfileId, 1);
 
         $user_data_array = array(
                                 "PollId"                    => $PollId,
@@ -482,6 +485,88 @@ class Poll_Model extends CI_Model {
         }
     }
 
+
+    public function savePollComment($insertData) {
+        $this->db->insert($this->PollCommentTbl, $insertData);
+
+        $PollCommentId = $this->db->insert_id();
+
+        return $PollCommentId;
+    }
+
+    public function getAllPollComment($PollId, $UserProfileId, $total_list = 0) {
+        $comments = array();
+        $query = $this->db->query("SELECT PollCommentId FROM ".$this->PollCommentTbl." WHERE `PollId` = '".$PollId."' AND `CommentStatus` = '1' ORDER BY CommentOn DESC");
+        $res = $query->result_array();
+
+        if($total_list > 0) {
+            return $query->num_rows();
+        }
+        if($query->num_rows() > 0) {
+            foreach($res AS $comment) {
+                if($comment['PollCommentId'] > 0) {
+                    $comments[] = $this->getPollCommentDetail($PollId, $comment['PollCommentId'], $UserProfileId);
+                }
+            }
+        }
+        return $comments;
+    }
+
+    public function getPollCommentDetail($PollId, $CommentId, $UserProfileId) {
+        $comment_detail = array();
+        $query = $this->db->query("SELECT * FROM ".$this->PollCommentTbl." WHERE `PollId` = '".$PollId."' AND `PollCommentId` = '".$CommentId."'");
+        $res = $query->row_array();
+        if($res['PollCommentId'] > 0) {
+            $comment_detail = $this->returnPollCommentDetail($res, $UserProfileId);
+        }
+        return $comment_detail;
+    }
+
+    public function returnPollCommentDetail($res, $UserProfileId) {
+        $PollCommentId      = $res['PollCommentId'];
+        $PollId             = $res['PollId'];
+        $AddedBy            = $res['UserProfileId'];
+        $CommentText        = (($res['CommentText'] != NULL) ? $res['CommentText'] : "");
+        $CommentPhoto       = (($res['CommentPhoto'] != NULL) ? $res['CommentPhoto'] : "");
+        $ParentId           = $res['ParentId'];
+        $CommentStatus      = $res['CommentStatus'];
+
+        $CommentOn          = return_time_ago($res['CommentOn']);
+
+        $CommentProfile        = $this->User_Model->getUserProfileInformation($AddedBy);
+
+        $data_array = array(
+                                "PollCommentId"     => $PollCommentId,
+                                "PollId"            => $PollId,
+                                "AddedBy"           => $AddedBy,
+                                "CommentText"       => $CommentText,
+                                "CommentPhoto"      => $CommentPhoto,
+                                "ParentId"          => $ParentId,
+                                "CommentStatus"     => $CommentStatus,
+                                "CommentOn"         => $CommentOn,
+                                "CommentOnTime"     => $res['CommentOn'],
+                                "CommentProfile"    => $CommentProfile,
+                                );
+        return $data_array;
+    }
+
+    public function deletePollComment($UserProfileId, $PollCommentId) {
+        $res = $this->db->select('*')->from($this->PollCommentTbl)->where(array('PollCommentId'=> $PollCommentId, 'UserProfileId' => $UserProfileId))->get()->result_array();
+        if($res[0]['PollCommentId'] > 0) {
+            $updateData = array(
+                                'CommentStatus' => -1,
+                                );
+            $whereData = array(
+                                'PollCommentId'        => $PollCommentId,
+                                'UserProfileId'        => $UserProfileId,
+                                );
+            $this->db->where($whereData);
+            $this->db->update($this->PollCommentTbl, $updateData);
+            return 1;
+        } else {
+            return 0;
+        }
+    }
     
 
 }

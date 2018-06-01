@@ -926,6 +926,7 @@ class Complaint extends CI_Controller {
             $array = array(
                             "status"        => 'failed',
                             "message"       => $msg,
+                            "result"         => $complaint_like,
                         );
         } else {
 
@@ -972,6 +973,154 @@ class Complaint extends CI_Controller {
             $array = array(
                            "status"         => 'success',
                            "result"         => $complaint_unlike,
+                           "message"        => $msg,
+                           );
+        }
+        displayJsonEncode($array);
+    }
+
+
+    public function saveComplaintComment() {
+        $error_occured = false;
+
+        $UserProfileId      = $this->input->post('user_profile_id');
+        $ComplaintId             = $this->input->post('complaint_id');
+        $CommentText        = $this->input->post('your_comment');
+
+
+        if($UserProfileId == "") {
+            $msg = "Please select your profile";
+            $error_occured = true;
+        } else if($ComplaintId == "") {
+            $msg = "Please select complaint";
+            $error_occured = true;
+        } else if($CommentText == "") {
+            $msg = "Please enter your comment";
+            $error_occured = true;
+        } else {
+
+            $this->db->query("BEGIN");
+
+            $insertData = array(
+                                'ComplaintId'        => $ComplaintId,
+                                'UserProfileId' => $UserProfileId,
+                                'CommentText'   => $CommentText,
+                                'CommentPhoto'  => '',
+                                'ParentId'      => '0',
+                                'CommentStatus' => '1',
+                                'CommentOn'     => date('Y-m-d H:i:s'),
+                            );
+
+            $CommentId = $this->Complaint_Model->saveComplaintComment($insertData);
+
+            if($CommentId > 0) {
+
+                
+                //$this->Complaint_Model->saveComplaintCommentImage($ComplaintId, $_FILES['commment_file']);
+               
+                $this->db->query("COMMIT");
+
+                $comment_detail = $this->Complaint_Model->getComplaintCommentDetail($ComplaintId, $CommentId, $UserProfileId);
+
+                $msg = "Comment added successfully";
+
+            } else {
+                $this->db->query("ROLLBACK");
+                $msg = "Comment not saved. Error occured";
+                $error_occured = true;
+            }
+        }
+
+        if($error_occured == true) {
+            $array = array(
+                            "status"        => 'failed',
+                            "message"       => $msg,
+                        );
+        } else {
+
+            $array = array(
+                           "status"         => 'success',
+                           "result"         => $comment_detail,
+                           "message"        => $msg,
+                           );
+        }
+        displayJsonEncode($array);
+    }
+
+    public function getAllComplaintComment() {
+        $error_occured = false;
+
+        $UserProfileId  = $this->input->post('user_profile_id');
+        $ComplaintId         = $this->input->post('complaint_id');
+        $Start          = $this->input->post('start');
+        
+        if($UserProfileId == "") {
+            $msg = "Please select your profile";
+            $error_occured = true;
+        } else if($ComplaintId == "") {
+            $msg = "Please select complaint";
+            $error_occured = true;
+        } else {
+
+            $comments = $this->Complaint_Model->getAllComplaintComment($ComplaintId, $UserProfileId, $total_list = 0);
+            if(count($comments) > 0) {
+                $msg = "Complaint comments fetched successfully";
+            } else {
+                $msg = "No complaint comment found";
+                $error_occured = true;
+            }
+        }
+
+        if($error_occured == true) {
+            $array = array(
+                            "status"        => 'failed',
+                            "message"       => $msg,
+                        );
+        } else {
+
+            $array = array(
+                           "status"     => 'success',
+                           "result"     => $comments,
+                           "message"    => $msg,
+                           );
+        }
+        displayJsonEncode($array);
+    }
+
+    public function deleteComplaintComment() {
+        $error_occured = false;
+
+        $UserProfileId      = $this->input->post('user_profile_id');
+        $ComplaintCommentId      = $this->input->post('comment_id');
+        
+        if($UserProfileId == "") {
+            $msg = "Please select your profile";
+            $error_occured = true;
+        } else if($ComplaintCommentId == "") {
+            $msg = "Please select complaint comment to delete";
+            $error_occured = true;
+        } else {
+
+            $complaint_comment_delete = $this->Complaint_Model->deleteComplaintComment($UserProfileId, $ComplaintCommentId);
+
+            if($complaint_comment_delete > 0) {
+                $msg = "Complaint comment deleted successfully";
+            } else {
+                $msg = "Complaint comment not able to delete. Not authorised to delete this complaint comment.";
+                $error_occured = true;
+            }
+        }
+
+        if($error_occured == true) {
+            $array = array(
+                            "status"        => 'failed',
+                            "message"       => $msg,
+                        );
+        } else {
+
+            $array = array(
+                           "status"         => 'success',
+                           "result"         => $complaint_comment_delete,
                            "message"        => $msg,
                            );
         }

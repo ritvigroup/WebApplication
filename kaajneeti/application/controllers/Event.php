@@ -64,10 +64,7 @@ class Event extends CI_Controller {
                 }
             }
 
-            echo '<pre>';
-            print_r($_POST);
-            echo '</pre>';
-            die;
+            
             $json_decode = post_curl_with_files(API_CALL_PATH.'event/saveMyEvent', $post_data, $this->curl);
 
             header('Content-type: application/json');

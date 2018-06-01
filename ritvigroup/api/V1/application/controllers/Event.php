@@ -468,6 +468,7 @@ class Event extends CI_Controller {
             $array = array(
                             "status"        => 'failed',
                             "message"       => $msg,
+                            "result"       => $event_like,
                         );
         } else {
 
@@ -515,6 +516,154 @@ class Event extends CI_Controller {
             $array = array(
                            "status"         => 'success',
                            "result"         => $event_unlike,
+                           "message"        => $msg,
+                           );
+        }
+        displayJsonEncode($array);
+    }
+
+
+    public function saveEventComment() {
+        $error_occured = false;
+
+        $UserProfileId      = $this->input->post('user_profile_id');
+        $EventId             = $this->input->post('event_id');
+        $CommentText        = $this->input->post('your_comment');
+
+
+        if($UserProfileId == "") {
+            $msg = "Please select your profile";
+            $error_occured = true;
+        } else if($EventId == "") {
+            $msg = "Please select event";
+            $error_occured = true;
+        } else if($CommentText == "") {
+            $msg = "Please enter your comment";
+            $error_occured = true;
+        } else {
+
+            $this->db->query("BEGIN");
+
+            $insertData = array(
+                                'EventId'        => $EventId,
+                                'UserProfileId' => $UserProfileId,
+                                'CommentText'   => $CommentText,
+                                'CommentPhoto'  => '',
+                                'ParentId'      => '0',
+                                'CommentStatus' => '1',
+                                'CommentOn'     => date('Y-m-d H:i:s'),
+                            );
+
+            $CommentId = $this->Event_Model->saveEventComment($insertData);
+
+            if($CommentId > 0) {
+
+                
+                //$this->Event_Model->saveEventCommentImage($EventId, $_FILES['commment_file']);
+               
+                $this->db->query("COMMIT");
+
+                $comment_detail = $this->Event_Model->getEventCommentDetail($EventId, $CommentId, $UserProfileId);
+
+                $msg = "Comment added successfully";
+
+            } else {
+                $this->db->query("ROLLBACK");
+                $msg = "Comment not saved. Error occured";
+                $error_occured = true;
+            }
+        }
+
+        if($error_occured == true) {
+            $array = array(
+                            "status"        => 'failed',
+                            "message"       => $msg,
+                        );
+        } else {
+
+            $array = array(
+                           "status"         => 'success',
+                           "result"         => $comment_detail,
+                           "message"        => $msg,
+                           );
+        }
+        displayJsonEncode($array);
+    }
+
+    public function getAllEventComment() {
+        $error_occured = false;
+
+        $UserProfileId  = $this->input->post('user_profile_id');
+        $EventId         = $this->input->post('event_id');
+        $Start          = $this->input->post('start');
+        
+        if($UserProfileId == "") {
+            $msg = "Please select your profile";
+            $error_occured = true;
+        } else if($EventId == "") {
+            $msg = "Please select event";
+            $error_occured = true;
+        } else {
+
+            $comments = $this->Event_Model->getAllEventComment($EventId, $UserProfileId, $total_list = 0);
+            if(count($comments) > 0) {
+                $msg = "Event comments fetched successfully";
+            } else {
+                $msg = "No event comment found";
+                $error_occured = true;
+            }
+        }
+
+        if($error_occured == true) {
+            $array = array(
+                            "status"        => 'failed',
+                            "message"       => $msg,
+                        );
+        } else {
+
+            $array = array(
+                           "status"     => 'success',
+                           "result"     => $comments,
+                           "message"    => $msg,
+                           );
+        }
+        displayJsonEncode($array);
+    }
+
+    public function deleteEventComment() {
+        $error_occured = false;
+
+        $UserProfileId      = $this->input->post('user_profile_id');
+        $EventCommentId      = $this->input->post('comment_id');
+        
+        if($UserProfileId == "") {
+            $msg = "Please select your profile";
+            $error_occured = true;
+        } else if($EventCommentId == "") {
+            $msg = "Please select event comment to delete";
+            $error_occured = true;
+        } else {
+
+            $event_comment_delete = $this->Event_Model->deleteEventComment($UserProfileId, $EventCommentId);
+
+            if($event_comment_delete > 0) {
+                $msg = "Event comment deleted successfully";
+            } else {
+                $msg = "Event comment not able to delete. Not authorised to delete this event comment.";
+                $error_occured = true;
+            }
+        }
+
+        if($error_occured == true) {
+            $array = array(
+                            "status"        => 'failed',
+                            "message"       => $msg,
+                        );
+        } else {
+
+            $array = array(
+                           "status"         => 'success',
+                           "result"         => $event_comment_delete,
                            "message"        => $msg,
                            );
         }

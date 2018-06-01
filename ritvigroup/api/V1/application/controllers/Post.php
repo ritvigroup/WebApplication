@@ -288,6 +288,7 @@ class Post extends CI_Controller {
             $array = array(
                             "status"        => 'failed',
                             "message"       => $msg,
+                            "result"        => $post_like,
                         );
         } else {
 
@@ -334,6 +335,154 @@ class Post extends CI_Controller {
             $array = array(
                            "status"         => 'success',
                            "result"         => $post_unlike,
+                           "message"        => $msg,
+                           );
+        }
+        displayJsonEncode($array);
+    }
+
+
+    public function savePostComment() {
+        $error_occured = false;
+
+        $UserProfileId      = $this->input->post('user_profile_id');
+        $PostId             = $this->input->post('post_id');
+        $CommentText        = $this->input->post('your_comment');
+
+
+        if($UserProfileId == "") {
+            $msg = "Please select your profile";
+            $error_occured = true;
+        } else if($PostId == "") {
+            $msg = "Please select post";
+            $error_occured = true;
+        } else if($CommentText == "") {
+            $msg = "Please enter your comment";
+            $error_occured = true;
+        } else {
+
+            $this->db->query("BEGIN");
+
+            $insertData = array(
+                                'PostId'        => $PostId,
+                                'UserProfileId' => $UserProfileId,
+                                'CommentText'   => $CommentText,
+                                'CommentPhoto'  => '',
+                                'ParentId'      => '0',
+                                'CommentStatus' => '1',
+                                'CommentOn'     => date('Y-m-d H:i:s'),
+                            );
+
+            $CommentId = $this->Post_Model->savePostComment($insertData);
+
+            if($CommentId > 0) {
+
+                
+                //$this->Post_Model->savePostCommentImage($PostId, $_FILES['commment_file']);
+               
+                $this->db->query("COMMIT");
+
+                $comment_detail = $this->Post_Model->getPostCommentDetail($PostId, $CommentId, $UserProfileId);
+
+                $msg = "Comment added successfully";
+
+            } else {
+                $this->db->query("ROLLBACK");
+                $msg = "Comment not saved. Error occured";
+                $error_occured = true;
+            }
+        }
+
+        if($error_occured == true) {
+            $array = array(
+                            "status"        => 'failed',
+                            "message"       => $msg,
+                        );
+        } else {
+
+            $array = array(
+                           "status"         => 'success',
+                           "result"         => $comment_detail,
+                           "message"        => $msg,
+                           );
+        }
+        displayJsonEncode($array);
+    }
+
+    public function getAllPostComment() {
+        $error_occured = false;
+
+        $UserProfileId  = $this->input->post('user_profile_id');
+        $PostId         = $this->input->post('post_id');
+        $Start          = $this->input->post('start');
+        
+        if($UserProfileId == "") {
+            $msg = "Please select your profile";
+            $error_occured = true;
+        } else if($PostId == "") {
+            $msg = "Please select post";
+            $error_occured = true;
+        } else {
+
+            $comments = $this->Post_Model->getAllPostComment($PostId, $UserProfileId, $total_list = 0);
+            if(count($comments) > 0) {
+                $msg = "Post comments fetched successfully";
+            } else {
+                $msg = "No post comment found";
+                $error_occured = true;
+            }
+        }
+
+        if($error_occured == true) {
+            $array = array(
+                            "status"        => 'failed',
+                            "message"       => $msg,
+                        );
+        } else {
+
+            $array = array(
+                           "status"     => 'success',
+                           "result"     => $comments,
+                           "message"    => $msg,
+                           );
+        }
+        displayJsonEncode($array);
+    }
+
+    public function deletePostComment() {
+        $error_occured = false;
+
+        $UserProfileId      = $this->input->post('user_profile_id');
+        $PostCommentId      = $this->input->post('comment_id');
+        
+        if($UserProfileId == "") {
+            $msg = "Please select your profile";
+            $error_occured = true;
+        } else if($PostCommentId == "") {
+            $msg = "Please select post comment to delete";
+            $error_occured = true;
+        } else {
+
+            $post_comment_delete = $this->Post_Model->deletePostComment($UserProfileId, $PostCommentId);
+
+            if($post_comment_delete > 0) {
+                $msg = "Post comment deleted successfully";
+            } else {
+                $msg = "Post comment not able to delete. Not authorised to delete this post comment.";
+                $error_occured = true;
+            }
+        }
+
+        if($error_occured == true) {
+            $array = array(
+                            "status"        => 'failed',
+                            "message"       => $msg,
+                        );
+        } else {
+
+            $array = array(
+                           "status"         => 'success',
+                           "result"         => $post_comment_delete,
                            "message"        => $msg,
                            );
         }

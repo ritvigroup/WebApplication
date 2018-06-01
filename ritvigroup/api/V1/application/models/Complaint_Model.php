@@ -19,6 +19,7 @@ class Complaint_Model extends CI_Model {
         $this->complaintHistoryAttachmentTbl   = 'ComplaintHistoryAttachment';
 
         $this->ComplaintLikeTbl         = 'ComplaintLike';
+        $this->ComplaintCommentTbl         = 'ComplaintComment';
     }
 
 
@@ -904,14 +905,16 @@ class Complaint_Model extends CI_Model {
     public function likeComplaint($UserProfileId, $ComplaintId) {
         $res = $this->db->select('*')->from($this->ComplaintLikeTbl)->where(array('ComplaintId'=> $ComplaintId, 'UserProfileId' => $UserProfileId))->get()->result_array();
         if($res[0]['ComplaintLikeId'] > 0) {
+            $ComplaintLike   = (($res[0]['ComplaintLike'] > 0) ? 0 : 1);
+            $ComplaintUnlike = (($res[0]['ComplaintUnlike'] > 0) ? 0 : 1);
             $updateData = array(
-                                'ComplaintLike'      => 1,
-                                'ComplaintUnlike'    => 0,
-                                'LikedOn'       => date('Y-m-d H:i:s'),
+                                'ComplaintLike'      => $ComplaintLike,
+                                'ComplaintUnlike'    => $ComplaintUnlike,
+                                'LikedOn'            => date('Y-m-d H:i:s'),
                                 );
             $whereData = array(
                                 'ComplaintId'        => $ComplaintId,
-                                'UserProfileId' => $UserProfileId,
+                                'UserProfileId'      => $UserProfileId,
                                 );
             $this->db->where($whereData);
             $this->db->update($this->ComplaintLikeTbl, $updateData);
@@ -966,7 +969,7 @@ class Complaint_Model extends CI_Model {
 
     public function getTotalLike($ComplaintId) {
         $res = $this->db->select('COUNT(ComplaintLikeId) AS TotalLike')->from($this->ComplaintLikeTbl)->where(array('ComplaintId'=> $ComplaintId, 'ComplaintLike' => 1))->get()->row_array();
-        return $res['TotalLike'];
+        return (($res['TotalLike'] > 0) ? $res['TotalLike'] : 0);
     }
 
     public function getMeUnLike($UserProfileId, $ComplaintId) {
@@ -980,7 +983,90 @@ class Complaint_Model extends CI_Model {
 
     public function getTotalUnLike($ComplaintId) {
         $res = $this->db->select('COUNT(ComplaintLikeId) AS TotalUnLike')->from($this->ComplaintLikeTbl)->where(array('ComplaintId'=> $ComplaintId, 'ComplaintUnlike' => 1))->get()->row_array();
-        return $res['TotalUnLike'];
+        return (($res['TotalUnLike'] > 0) ? $res['TotalUnLike'] : 0);
+    }
+
+
+    public function saveComplaintComment($insertData) {
+        $this->db->insert($this->ComplaintCommentTbl, $insertData);
+
+        $ComplaintCommentId = $this->db->insert_id();
+
+        return $ComplaintCommentId;
+    }
+
+    public function getAllComplaintComment($ComplaintId, $UserProfileId, $total_list = 0) {
+        $comments = array();
+        $query = $this->db->query("SELECT ComplaintCommentId FROM ".$this->ComplaintCommentTbl." WHERE `ComplaintId` = '".$ComplaintId."' AND `CommentStatus` = '1' ORDER BY CommentOn DESC");
+        $res = $query->result_array();
+
+        if($total_list > 0) {
+            return $query->num_rows();
+        }
+        if($query->num_rows() > 0) {
+            foreach($res AS $comment) {
+                if($comment['ComplaintCommentId'] > 0) {
+                    $comments[] = $this->getComplaintCommentDetail($ComplaintId, $comment['ComplaintCommentId'], $UserProfileId);
+                }
+            }
+        }
+        return $comments;
+    }
+
+    public function getComplaintCommentDetail($ComplaintId, $CommentId, $UserProfileId) {
+        $comment_detail = array();
+        $query = $this->db->query("SELECT * FROM ".$this->ComplaintCommentTbl." WHERE `ComplaintId` = '".$ComplaintId."' AND `ComplaintCommentId` = '".$CommentId."'");
+        $res = $query->row_array();
+        if($res['ComplaintCommentId'] > 0) {
+            $comment_detail = $this->returnComplaintCommentDetail($res, $UserProfileId);
+        }
+        return $comment_detail;
+    }
+
+    public function returnComplaintCommentDetail($res, $UserProfileId) {
+        $ComplaintCommentId      = $res['ComplaintCommentId'];
+        $ComplaintId             = $res['ComplaintId'];
+        $AddedBy            = $res['UserProfileId'];
+        $CommentText        = (($res['CommentText'] != NULL) ? $res['CommentText'] : "");
+        $CommentPhoto       = (($res['CommentPhoto'] != NULL) ? $res['CommentPhoto'] : "");
+        $ParentId           = $res['ParentId'];
+        $CommentStatus      = $res['CommentStatus'];
+
+        $CommentOn          = return_time_ago($res['CommentOn']);
+
+        $CommentProfile        = $this->User_Model->getUserProfileInformation($AddedBy);
+
+        $data_array = array(
+                                "ComplaintCommentId"     => $ComplaintCommentId,
+                                "ComplaintId"            => $ComplaintId,
+                                "AddedBy"           => $AddedBy,
+                                "CommentText"       => $CommentText,
+                                "CommentPhoto"      => $CommentPhoto,
+                                "ParentId"          => $ParentId,
+                                "CommentStatus"     => $CommentStatus,
+                                "CommentOn"         => $CommentOn,
+                                "CommentOnTime"     => $res['CommentOn'],
+                                "CommentProfile"    => $CommentProfile,
+                                );
+        return $data_array;
+    }
+
+    public function deleteComplaintComment($UserProfileId, $ComplaintCommentId) {
+        $res = $this->db->select('*')->from($this->ComplaintCommentTbl)->where(array('ComplaintCommentId'=> $ComplaintCommentId, 'UserProfileId' => $UserProfileId))->get()->result_array();
+        if($res[0]['ComplaintCommentId'] > 0) {
+            $updateData = array(
+                                'CommentStatus' => -1,
+                                );
+            $whereData = array(
+                                'ComplaintCommentId'        => $ComplaintCommentId,
+                                'UserProfileId'        => $UserProfileId,
+                                );
+            $this->db->where($whereData);
+            $this->db->update($this->ComplaintCommentTbl, $updateData);
+            return 1;
+        } else {
+            return 0;
+        }
     }
 
 }

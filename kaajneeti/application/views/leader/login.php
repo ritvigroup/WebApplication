@@ -84,6 +84,7 @@
             //var pattern = /^\b[A-Z0-9._%-]+@[A-Z0-9.-]+\.[A-Z]{2,4}\b$/i;
 
             $('.signin_up_button').html('Authenticating...');
+            $('.signin_up_button').prop('disabled', true);
 
             $.post("<?php echo base_url(); ?>leader/login", {username: signin_username, password: signin_password},
                 function (data, status) {
@@ -91,6 +92,7 @@
                     if (data.status === "failed") {
                         sweetAlert("Error", data.message, "error");
                         $('.signin_up_button').html('Login');
+                        $('.signin_up_button').prop('disabled', false);
                         return false;
                     } else { 
                         if (data.status === "success") {

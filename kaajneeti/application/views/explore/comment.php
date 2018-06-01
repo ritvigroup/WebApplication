@@ -1,3 +1,8 @@
+<?php
+$comment_for = ($FOR != '') ? $FOR : 'post';
+$for_id = $value_id;
+?>
+
 <form name="comment_form" method="post" action="<?php echo base_url(); ?>" onSubmit="return false;" enctype="multipart/form-data">
     <div class="modal-header">
         <button type="button" data-dismiss="modal" aria-hidden="true" class="close">×</button>
@@ -10,6 +15,8 @@
     </div>
     <div class="modal-footer">
         <input type="file" style="display: none;">
+        <input type="hidden" id="comment_for" value="<?php echo $comment_for; ?>">
+        <input type="hidden" id="for_id" value="<?php echo $for_id; ?>">
         <div class="col-sm-10"><input type="text" id="enter_your_comment" name="enter_your_comment" type="text" placeholder="Enter your comment" class="form-control"/></div>
         <div class="col-sm-2"><button type="submit" class="btn btn-success comment_button">Submit&nbsp;<i class="fa fa-chevron-circle-right"></i></button></div>
     </div>

@@ -68,6 +68,7 @@
 <!-- start theme config -->
 
 
+
 <script type="text/javascript">
     $('.form_datetime').datetimepicker({
         //language:  'fr',
@@ -118,7 +119,6 @@
 	    });
 
     });
-
 
 
     function openExpressPopup() {
@@ -318,7 +318,182 @@
             });
     }
 
+    function savePollComment(poll_id) {
 
+        var enter_your_comment = $("#poll_comment_"+poll_id).val();
+
+        if (enter_your_comment.length > 0) {
+
+            $('.btn_poll_comment_'+poll_id).html('Saving...&nbsp;<i class="fa fa-chevron-circle-right"></i>');
+            $('.btn_poll_comment_'+poll_id).prop('disabled', true);
+
+            $.post("<?php echo base_url(); ?>explore/commentPoll", {poll_id: poll_id, your_comment: enter_your_comment, save_comment: 'Y'},
+                function (data, status) {
+                   
+                    if (data.status === "failed") {
+                        sweetAlert("Oops...", data.message, "error");
+                    } else { 
+                        if (data.status === "success") {
+                        	var new_total = parseInt($('.express_poll_comment_'+poll_id).html());
+                            $('.express_poll_comment_'+poll_id).html(new_total+1);
+                            $('#poll_comment_'+poll_id).val('');
+                        }
+                    }
+                    $('.btn_poll_comment_'+poll_id).prop('disabled', false);
+                    $('.btn_poll_comment_'+poll_id).html('Submit&nbsp;<i class="fa fa-chevron-circle-right"></i>');
+                    return false;
+                    
+                });
+
+        } else {
+            sweetAlert("Oops...", "Please enter your comment", "error");
+            return false;
+        }
+    }
+
+    function commentPost(post_id) {
+    	$.post("<?php echo base_url(); ?>explore/commentPost", {
+                                                            post_id: post_id, 
+                                                            },
+            function (data, status) {
+
+            	if(data != '') {
+                    $('.modal-content-express').html(data);
+                } else {
+                    $('.modal-content-express').html(data);
+                }
+            });
+    }
+
+    function savePostComment(post_id) {
+
+        var enter_your_comment = $("#post_comment_"+post_id).val();
+
+        if (enter_your_comment.length > 0) {
+
+            $('.btn_post_comment_'+post_id).html('Saving...&nbsp;<i class="fa fa-chevron-circle-right"></i>');
+            $('.btn_post_comment_'+post_id).prop('disabled', true);
+
+            $.post("<?php echo base_url(); ?>explore/commentPost", {post_id: post_id, your_comment: enter_your_comment, save_comment: 'Y'},
+                function (data, status) {
+                   
+                    if (data.status === "failed") {
+                        sweetAlert("Oops...", data.message, "error");
+                    } else { 
+                        if (data.status === "success") {
+                        	var new_total = parseInt($('.express_post_comment_'+post_id).html());
+                            $('.express_post_comment_'+post_id).html(new_total+1);
+                            $('#post_comment_'+post_id).val('');
+                        }
+                    }
+                    $('.btn_post_comment_'+post_id).prop('disabled', false);
+                    $('.btn_post_comment_'+post_id).html('Submit&nbsp;<i class="fa fa-chevron-circle-right"></i>');
+                    return false;
+                    
+                });
+
+        } else {
+            sweetAlert("Oops...", "Please enter your comment", "error");
+            return false;
+        }
+    }
+
+    function commentEvent(event_id) {
+    	$.post("<?php echo base_url(); ?>explore/commentEvent", {
+                                                            event_id: event_id, 
+                                                            },
+            function (data, status) {
+
+            	if(data != '') {
+                    $('.modal-content-express').html(data);
+                } else {
+                    $('.modal-content-express').html(data);
+                }
+            });
+    }
+
+    function saveEventComment(event_id) {
+
+        var enter_your_comment = $("#event_comment_"+event_id).val();
+
+        if (enter_your_comment.length > 0) {
+
+            $('.btn_event_comment_'+event_id).html('Saving...&nbsp;<i class="fa fa-chevron-circle-right"></i>');
+            $('.btn_event_comment_'+event_id).prop('disabled', true);
+
+            $.post("<?php echo base_url(); ?>explore/commentEvent", {event_id: event_id, your_comment: enter_your_comment, save_comment: 'Y'},
+                function (data, status) {
+                   
+                    if (data.status === "failed") {
+                        sweetAlert("Oops...", data.message, "error");
+                    } else { 
+                        if (data.status === "success") {
+                        	var new_total = parseInt($('.express_event_comment_'+event_id).html());
+                            $('.express_event_comment_'+event_id).html(new_total+1);
+                            $('#event_comment_'+event_id).val('');
+                        }
+                    }
+                    $('.btn_event_comment_'+event_id).prop('disabled', false);
+                    $('.btn_event_comment_'+event_id).html('Submit&nbsp;<i class="fa fa-chevron-circle-right"></i>');
+                    return false;
+                    
+                });
+
+        } else {
+            sweetAlert("Oops...", "Please enter your comment", "error");
+            return false;
+        }
+    }
+
+    function commentComplaint(complaint_id) {
+    	$.post("<?php echo base_url(); ?>explore/commentComplaint", {
+                                                            complaint_id: complaint_id, 
+                                                            },
+            function (data, status) {
+
+            	if(data != '') {
+                    $('.modal-content-express').html(data);
+                } else {
+                    $('.modal-content-express').html(data);
+                }
+            });
+    }
+
+    function saveComplaintComment(complaint_id) {
+
+        var enter_your_comment = $("#complaint_comment_"+complaint_id).val();
+
+        if (enter_your_comment.length > 0) {
+
+            $('.btn_complaint_comment_'+complaint_id).html('Saving...&nbsp;<i class="fa fa-chevron-circle-right"></i>');
+            $('.btn_complaint_comment_'+complaint_id).prop('disabled', true);
+
+            $.post("<?php echo base_url(); ?>explore/commentComplaint", {complaint_id: complaint_id, your_comment: enter_your_comment, save_comment: 'Y'},
+                function (data, status) {
+                   
+                    if (data.status === "failed") {
+                        sweetAlert("Oops...", data.message, "error");
+                    } else { 
+                        if (data.status === "success") {
+                        	var new_total = parseInt($('.express_complaint_comment_'+complaint_id).html());
+                            $('.express_complaint_comment_'+complaint_id).html(new_total+1);
+                            $('#complaint_comment_'+complaint_id).val('');
+                        }
+                    }
+                    $('.btn_complaint_comment_'+complaint_id).prop('disabled', false);
+                    $('.btn_complaint_comment_'+complaint_id).html('Submit&nbsp;<i class="fa fa-chevron-circle-right"></i>');
+                    return false;
+                    
+                });
+
+        } else {
+            sweetAlert("Oops...", "Please enter your comment", "error");
+            return false;
+        }
+    }
+
+
+    // Explore Save Post
     function saveExplorePost() {
 
         var express_yourself_text 	= $("#express_yourself_text").val();

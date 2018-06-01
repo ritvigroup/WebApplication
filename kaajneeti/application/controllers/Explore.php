@@ -198,22 +198,176 @@ class Explore extends CI_Controller {
 
 
         $data = array();
+        $_POST['user_id'] = $this->session->userdata('UserId');
+        $_POST['user_profile_id'] = $this->session->userdata('UserProfileId');          
 
-        if($this->input->post('save_poll') == 'Y') {
-            $_POST['user_id'] = $this->session->userdata('UserId');
-            $_POST['user_profile_id'] = $this->session->userdata('UserProfileId');          
+        $_POST['poll_id'] = $this->input->post('poll_id');
 
-            $_POST['poll_id'] = $this->input->post('poll_id');
-            $_POST['poll_id'] = $this->input->post('enter_your_comment');
-            $json_encode = post_curl(API_CALL_PATH.'leader/getAllHomePageData', $this->input->post(), $this->curl);
+        if($this->input->post('save_comment') == 'Y') {
+            
+            $_POST['your_comment'] = $this->input->post('your_comment');
 
-            $json_decode = json_decode($json_encode);
-            if(count($json_decode->result) > 0) {
-                $data = $json_decode;
-            }
+            $json_encode = post_curl_with_files(API_CALL_PATH.'poll/savePollComment', $this->input->post(), $this->curl);
+
+            header('Content-type: application/json');
+            echo $json_encode;
+            die;
+        } else if($this->input->post('delete_comment') == 'Y') {
+            
+            $_POST['comment_id'] = $this->input->post('comment_id');
+
+            $json_encode = post_curl_with_files(API_CALL_PATH.'poll/deletePollComment', $this->input->post(), $this->curl);
+
+            header('Content-type: application/json');
+            echo $json_encode;
+            die;
         }
 
-        $this->load->view('explore/comment', $data);
+        
+        $json_encode = post_curl(API_CALL_PATH.'poll/getAllPollComment', $this->input->post(), $this->curl);
+
+        $json_decode = json_decode($json_encode);
+        if(count($json_decode->result) > 0) {
+            $data['result'] = $json_decode->result;
+        }
+        $data['poll_id'] = $this->input->post('poll_id');
+
+        $this->load->view('explore/commentPoll', $data);
+    }
+
+    public function commentPost() {
+
+        if (!$this->input->is_ajax_request()) {
+            exit();
+        }
+
+
+        $data = array();
+        $_POST['user_id'] = $this->session->userdata('UserId');
+        $_POST['user_profile_id'] = $this->session->userdata('UserProfileId');          
+
+        $_POST['post_id'] = $this->input->post('post_id');
+
+        if($this->input->post('save_comment') == 'Y') {
+            
+            $_POST['your_comment'] = $this->input->post('your_comment');
+
+            $json_encode = post_curl_with_files(API_CALL_PATH.'post/savePostComment', $this->input->post(), $this->curl);
+
+            header('Content-type: application/json');
+            echo $json_encode;
+            die;
+        } else if($this->input->post('delete_comment') == 'Y') {
+            
+            $_POST['comment_id'] = $this->input->post('comment_id');
+
+            $json_encode = post_curl_with_files(API_CALL_PATH.'post/deletePostComment', $this->input->post(), $this->curl);
+
+            header('Content-type: application/json');
+            echo $json_encode;
+            die;
+        }
+
+        
+        $json_encode = post_curl(API_CALL_PATH.'post/getAllPostComment', $this->input->post(), $this->curl);
+
+        $json_decode = json_decode($json_encode);
+        if(count($json_decode->result) > 0) {
+            $data['result'] = $json_decode->result;
+        }
+        $data['post_id'] = $this->input->post('post_id');
+
+        $this->load->view('explore/commentPost', $data);
+    }
+
+    public function commentEvent() {
+
+        if (!$this->input->is_ajax_request()) {
+            exit();
+        }
+
+
+        $data = array();
+        $_POST['user_id'] = $this->session->userdata('UserId');
+        $_POST['user_profile_id'] = $this->session->userdata('UserProfileId');          
+
+        $_POST['event_id'] = $this->input->post('event_id');
+
+        if($this->input->post('save_comment') == 'Y') {
+            
+            $_POST['your_comment'] = $this->input->post('your_comment');
+
+            $json_encode = post_curl_with_files(API_CALL_PATH.'event/saveEventComment', $this->input->post(), $this->curl);
+
+            header('Content-type: application/json');
+            echo $json_encode;
+            die;
+        } else if($this->input->post('delete_comment') == 'Y') {
+            
+            $_POST['comment_id'] = $this->input->post('comment_id');
+
+            $json_encode = post_curl_with_files(API_CALL_PATH.'event/deleteEventComment', $this->input->post(), $this->curl);
+
+            header('Content-type: application/json');
+            echo $json_encode;
+            die;
+        }
+
+        
+        $json_encode = post_curl(API_CALL_PATH.'event/getAllEventComment', $this->input->post(), $this->curl);
+
+        $json_decode = json_decode($json_encode);
+        if(count($json_decode->result) > 0) {
+            $data['result'] = $json_decode->result;
+        }
+        $data['event_id'] = $this->input->post('event_id');
+
+        $this->load->view('explore/commentEvent', $data);
+    }
+
+    public function commentComplaint() {
+
+        if (!$this->input->is_ajax_request()) {
+            exit();
+        }
+
+
+        $data = array();
+        $_POST['user_id'] = $this->session->userdata('UserId');
+        $_POST['user_profile_id'] = $this->session->userdata('UserProfileId');          
+
+        $_POST['complaint_id'] = $this->input->post('complaint_id');
+
+        if($this->input->post('save_comment') == 'Y') {
+            
+            $_POST['your_comment'] = $this->input->post('your_comment');
+
+            $json_encode = post_curl_with_files(API_CALL_PATH.'complaint/saveComplaintComment', $this->input->post(), $this->curl);
+
+            header('Content-type: application/json');
+            echo $json_encode;
+            die;
+        } else if($this->input->post('delete_comment') == 'Y') {
+            
+            $_POST['comment_id'] = $this->input->post('comment_id');
+
+            $json_encode = post_curl_with_files(API_CALL_PATH.'complaint/deleteComplaintComment', $this->input->post(), $this->curl);
+
+            header('Content-type: application/json');
+            echo $json_encode;
+            die;
+        }
+
+        
+        $json_encode = post_curl(API_CALL_PATH.'complaint/getAllComplaintComment', $this->input->post(), $this->curl);
+
+        $json_decode = json_decode($json_encode);
+        if(count($json_decode->result) > 0) {
+            $data['result'] = $json_decode->result;
+        }
+        $data['complaint_id'] = $this->input->post('complaint_id');
+
+        $this->load->view('explore/commentPoll', $data);
     }
 
 }

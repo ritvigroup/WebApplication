@@ -10,6 +10,8 @@ class Post_Model extends CI_Model {
         $this->PostLikeTbl          = 'PostLike';
         $this->postAttachmentTbl    = 'PostAttachment';
         $this->attachmentTypeTbl    = 'AttachmentType';
+
+        $this->PostCommentTbl           = 'PostComment';
     }
 
 
@@ -33,9 +35,12 @@ class Post_Model extends CI_Model {
     public function likePost($UserProfileId, $PostId) {
         $res = $this->db->select('*')->from($this->PostLikeTbl)->where(array('PostId'=> $PostId, 'UserProfileId' => $UserProfileId))->get()->result_array();
         if($res[0]['PostLikeId'] > 0) {
+
+            $PostLike   = (($res[0]['PostLike'] > 0) ? 0 : 1);
+            $PostUnlike = (($res[0]['PostUnlike'] > 0) ? 0 : 1);
             $updateData = array(
-                                'PostLike'      => 1,
-                                'PostUnlike'    => 0,
+                                'PostLike'      => $PostLike,
+                                'PostUnlike'    => $PostUnlike,
                                 'LikedOn'       => date('Y-m-d H:i:s'),
                                 );
             $whereData = array(
@@ -95,7 +100,7 @@ class Post_Model extends CI_Model {
 
     public function getTotalLike($PostId) {
         $res = $this->db->select('COUNT(PostLikeId) AS TotalLike')->from($this->PostLikeTbl)->where(array('PostId'=> $PostId, 'PostLike' => 1))->get()->row_array();
-        return $res['TotalLike'];
+        return (($res['TotalLike'] > 0) ? $res['TotalLike'] : 0);
     }
 
     public function getMeUnLike($UserProfileId, $PostId) {
@@ -109,7 +114,7 @@ class Post_Model extends CI_Model {
 
     public function getTotalUnLike($PostId) {
         $res = $this->db->select('COUNT(PostLikeId) AS TotalUnLike')->from($this->PostLikeTbl)->where(array('PostId'=> $PostId, 'PostUnlike' => 1))->get()->row_array();
-        return $res['TotalUnLike'];
+        return (($res['TotalUnLike'] > 0) ? $res['TotalUnLike'] : 0);
     }
 
 
@@ -390,6 +395,89 @@ class Post_Model extends CI_Model {
         }
 
         return $PostAttachment;
+    }
+
+
+    public function savePostComment($insertData) {
+        $this->db->insert($this->PostCommentTbl, $insertData);
+
+        $PostCommentId = $this->db->insert_id();
+
+        return $PostCommentId;
+    }
+
+    public function getAllPostComment($PostId, $UserProfileId, $total_list = 0) {
+        $comments = array();
+        $query = $this->db->query("SELECT PostCommentId FROM ".$this->PostCommentTbl." WHERE `PostId` = '".$PostId."' AND `CommentStatus` = '1' ORDER BY CommentOn DESC");
+        $res = $query->result_array();
+
+        if($total_list > 0) {
+            return $query->num_rows();
+        }
+        if($query->num_rows() > 0) {
+            foreach($res AS $comment) {
+                if($comment['PostCommentId'] > 0) {
+                    $comments[] = $this->getPostCommentDetail($PostId, $comment['PostCommentId'], $UserProfileId);
+                }
+            }
+        }
+        return $comments;
+    }
+
+    public function getPostCommentDetail($PostId, $CommentId, $UserProfileId) {
+        $comment_detail = array();
+        $query = $this->db->query("SELECT * FROM ".$this->PostCommentTbl." WHERE `PostId` = '".$PostId."' AND `PostCommentId` = '".$CommentId."'");
+        $res = $query->row_array();
+        if($res['PostCommentId'] > 0) {
+            $comment_detail = $this->returnPostCommentDetail($res, $UserProfileId);
+        }
+        return $comment_detail;
+    }
+
+    public function returnPostCommentDetail($res, $UserProfileId) {
+        $PostCommentId      = $res['PostCommentId'];
+        $PostId             = $res['PostId'];
+        $AddedBy            = $res['UserProfileId'];
+        $CommentText        = (($res['CommentText'] != NULL) ? $res['CommentText'] : "");
+        $CommentPhoto       = (($res['CommentPhoto'] != NULL) ? $res['CommentPhoto'] : "");
+        $ParentId           = $res['ParentId'];
+        $CommentStatus      = $res['CommentStatus'];
+
+        $CommentOn          = return_time_ago($res['CommentOn']);
+
+        $CommentProfile        = $this->User_Model->getUserProfileInformation($AddedBy);
+
+        $data_array = array(
+                                "PostCommentId"     => $PostCommentId,
+                                "PostId"            => $PostId,
+                                "AddedBy"           => $AddedBy,
+                                "CommentText"       => $CommentText,
+                                "CommentPhoto"      => $CommentPhoto,
+                                "ParentId"          => $ParentId,
+                                "CommentStatus"     => $CommentStatus,
+                                "CommentOn"         => $CommentOn,
+                                "CommentOnTime"     => $res['CommentOn'],
+                                "CommentProfile"    => $CommentProfile,
+                                );
+        return $data_array;
+    }
+
+    public function deletePostComment($UserProfileId, $PostCommentId) {
+        $res = $this->db->select('*')->from($this->PostCommentTbl)->where(array('PostCommentId'=> $PostCommentId, 'UserProfileId' => $UserProfileId))->get()->result_array();
+        if($res[0]['PostCommentId'] > 0) {
+            $updateData = array(
+                                'CommentStatus' => -1,
+                                );
+            $whereData = array(
+                                'PostCommentId'        => $PostCommentId,
+                                'UserProfileId'        => $UserProfileId,
+                                );
+            $this->db->where($whereData);
+            $this->db->update($this->PostCommentTbl, $updateData);
+            return 1;
+        } else {
+            return 0;
+        }
     }
     
 

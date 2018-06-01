@@ -66,8 +66,10 @@
             <a href="#" class="pull-left">
                 <img alt="image" class="img-circle" src="<?php echo $PostByProfilePic; ?>">
             </a>
-            <div class="media-body "> <small class="pull-right text-navy"><?php echo $PostOn; ?></small>  <strong><?php echo $PostBy; ?></strong> file a complaint
-                <br> <small class="text-muted"><?php echo date('h:i a - d.m.Y', strtotime($PostOnTime)); ?></small>
+            <div class="media-body "> 
+                <small class="pull-right text-navy"><?php echo $PostOn; ?></small>  
+                <strong><?php echo $PostBy; ?></strong> file a complaint <br> 
+                <small class="text-muted"><?php echo date('h:i a - d.m.Y', strtotime($PostOnTime)); ?></small>
 
             </div>
             <div class="">
@@ -98,20 +100,28 @@
                     <a class="btn btn-xs btn-success pull-left" id="express_complaint_like_<?php echo $ComplaintId; ?>" onClick="return likeComplaint(<?php echo $ComplaintId; ?>);"><i class="fa fa-thumbs-up"></i> Like </a>
 
                     <span class=" pull-left express_complaint_like_<?php echo $ComplaintId; ?>"><?php echo $TotalLikes; ?></span>  
+                    <?php /*
                     <a class="btn btn-xs btn-danger" id="express_complaint_unlike_<?php echo $ComplaintId; ?>" onClick="return unlikeComplaint(<?php echo $ComplaintId; ?>);"><i class="fa fa-thumbs-down"></i> Unlike</a>
                     
-                    <?php /*
                     <span class="express_complaint_unlike_<?php echo $ComplaintId; ?>"><?php echo $TotalUnLikes; ?></span>
-                    <a class="btn btn-xs aqua pull-right"><i class="fa fa-pencil"></i> Comments</a> 
+                    */ ?>
+                    <a class="btn btn-xs aqua pull-right" data-target="#express-popup" data-toggle="modal" onClick="return commentComplaint(<?php echo $ComplaintId; ?>);"><i class="fa fa-pencil"></i> Comments</a> 
                     
                     <span class=" pull-right express_complaint_comment_<?php echo $ComplaintId; ?>"><?php echo $TotalComment; ?></span>
-                    */ ?>
                     
+                </div>
+                <div class="row">
+                    <div class="col-sm-10"><input type="text" id="complaint_comment_<?php echo $ComplaintId; ?>" type="text" placeholder="Enter your comment" class="form-control"/></div>
+                    <div class="col-sm-2"><button type="submit" class="btn btn-success btn_complaint_comment_<?php echo $ComplaintId; ?>" onClick="return saveComplaintComment(<?php echo $ComplaintId; ?>);">Submit&nbsp;<i class="fa fa-chevron-circle-right"></i></button></div>
                 </div>
             </div>
         </div>
     <?php } else if($result_data->feedtype == 'poll') {
         
+        // echo '<pre>';
+        // print_r($result_data);
+        // echo '</pre>';
+
         $PollId         = $result_data->polldata->PollId;
         $PollUniqueId   = $result_data->polldata->PollUniqueId;
         $PollQuestion   = $result_data->polldata->PollQuestion;
@@ -179,12 +189,19 @@
                     <a class="btn btn-xs btn-success pull-left" id="express_poll_like_<?php echo $PollId; ?>" onClick="return likePoll(<?php echo $PollId; ?>);"><i class="fa fa-thumbs-up"></i> Like </a>
 
                     <span class=" pull-left express_poll_like_<?php echo $PollId; ?>"><?php echo $TotalLikes; ?></span>  
+                    <?php /*
                     <a class="btn btn-xs btn-danger" id="express_poll_unlike_<?php echo $PollId; ?>" onClick="return unlikePoll(<?php echo $PollId; ?>);"><i class="fa fa-thumbs-down"></i> Unlike</a>
                     
                     <span class="express_poll_unlike_<?php echo $PollId; ?>"><?php echo $TotalUnLikes; ?></span>
+                    */ ?>
                     <a class="btn btn-xs aqua pull-right" data-target="#express-popup" data-toggle="modal" onClick="return commentPoll(<?php echo $PollId; ?>);"><i class="fa fa-pencil"></i> Comments</a> 
                     
                     <span class=" pull-right express_poll_comment_<?php echo $PollId; ?>"><?php echo $TotalComment; ?></span>
+                </div>
+                <hr>
+                <div class="row">
+                    <div class="col-sm-10"><input type="text" id="poll_comment_<?php echo $PollId; ?>" type="text" placeholder="Enter your comment" class="form-control"/></div>
+                    <div class="col-sm-2"><button type="submit" class="btn btn-success btn_poll_comment_<?php echo $PollId; ?>" onClick="return savePollComment(<?php echo $PollId; ?>);">Submit&nbsp;<i class="fa fa-chevron-circle-right"></i></button></div>
                 </div>
             </div>
         </div>
@@ -275,12 +292,18 @@
                     <a class="btn btn-xs btn-success pull-left" id="express_event_like_<?php echo $EventId; ?>" onClick="return likeEvent(<?php echo $EventId; ?>);"><i class="fa fa-thumbs-up"></i> Like </a>
 
                     <span class=" pull-left express_event_like_<?php echo $EventId; ?>"><?php echo $TotalLikes; ?></span>  
+                    <?php /*
                     <a class="btn btn-xs btn-danger" id="express_event_unlike_<?php echo $EventId; ?>" onClick="return unlikeEvent(<?php echo $EventId; ?>);"><i class="fa fa-thumbs-down"></i> Unlike</a>
                     
                     <span class="express_event_unlike_<?php echo $EventId; ?>"><?php echo $TotalUnLikes; ?></span>
-                    <a class="btn btn-xs aqua pull-right"><i class="fa fa-pencil"></i> Comments</a> 
+                    */ ?>
+                    <a class="btn btn-xs aqua pull-right" data-target="#express-popup" data-toggle="modal" onClick="return commentEvent(<?php echo $EventId; ?>);"><i class="fa fa-pencil"></i> Comments</a> 
                     
                     <span class=" pull-right express_event_comment_<?php echo $EventId; ?>"><?php echo $TotalComment; ?></span>
+                </div>
+                <div class="row">
+                    <div class="col-sm-10"><input type="text" id="event_comment_<?php echo $EventId; ?>" type="text" placeholder="Enter your comment" class="form-control"/></div>
+                    <div class="col-sm-2"><button type="submit" class="btn btn-success btn_event_comment_<?php echo $EventId; ?>" onClick="return saveEventComment(<?php echo $EventId; ?>);">Submit&nbsp;<i class="fa fa-chevron-circle-right"></i></button></div>
                 </div>
             </div>
         </div>
@@ -357,12 +380,18 @@
                     <a class="btn btn-xs btn-success pull-left" id="express_post_like_<?php echo $PostId; ?>" onClick="return likePost(<?php echo $PostId; ?>);"><i class="fa fa-thumbs-up"></i> Like </a>
 
                     <span class=" pull-left express_post_like_<?php echo $PostId; ?>"><?php echo $TotalLikes; ?></span>  
+                    <?php /*
                     <a class="btn btn-xs btn-danger" id="express_post_unlike_<?php echo $PostId; ?>" onClick="return unlikePost(<?php echo $PostId; ?>);"><i class="fa fa-thumbs-down"></i> Unlike</a>
                     
                     <span class="express_post_unlike_<?php echo $PostId; ?>"><?php echo $TotalUnLikes; ?></span>
-                    <a class="btn btn-xs aqua pull-right"><i class="fa fa-pencil"></i> Comments</a> 
+                    */ ?>
+                    <a class="btn btn-xs aqua pull-right" data-target="#express-popup" data-toggle="modal" onClick="return commentPost(<?php echo $PostId; ?>);"><i class="fa fa-pencil"></i> Comments</a> 
                     
                     <span class=" pull-right express_post_comment_<?php echo $PostId; ?>"><?php echo $TotalComment; ?></span>
+                </div>
+                <div class="row">
+                    <div class="col-sm-10"><input type="text" id="post_comment_<?php echo $PostId; ?>" type="text" placeholder="Enter your comment" class="form-control"/></div>
+                    <div class="col-sm-2"><button type="submit" class="btn btn-success btn_post_comment_<?php echo $PostId; ?>" onClick="return savePostComment(<?php echo $PostId; ?>);">Submit&nbsp;<i class="fa fa-chevron-circle-right"></i></button></div>
                 </div>
             </div>
         </div>

@@ -14,6 +14,8 @@ class Event_Model extends CI_Model {
         $this->EventLikeTbl         = 'EventLike';
         $this->EventInterestTbl     = 'EventInterest';
         $this->EventInterestTypeTbl = 'EventInterestType';
+
+        $this->EventCommentTbl           = 'EventComment';
     }
 
 
@@ -147,9 +149,11 @@ class Event_Model extends CI_Model {
     public function likeEvent($UserProfileId, $EventId) {
         $res = $this->db->select('*')->from($this->EventLikeTbl)->where(array('EventId'=> $EventId, 'UserProfileId' => $UserProfileId))->get()->result_array();
         if($res[0]['EventLikeId'] > 0) {
+            $EventLike   = (($res[0]['EventLike'] > 0) ? 0 : 1);
+            $EventUnlike = (($res[0]['EventUnlike'] > 0) ? 0 : 1);
             $updateData = array(
-                                'EventLike'      => 1,
-                                'EventUnlike'    => 0,
+                                'EventLike'      => $EventLike,
+                                'EventUnlike'    => $EventUnlike,
                                 'LikedOn'       => date('Y-m-d H:i:s'),
                                 );
             $whereData = array(
@@ -209,7 +213,7 @@ class Event_Model extends CI_Model {
 
     public function getTotalLike($EventId) {
         $res = $this->db->select('COUNT(EventLikeId) AS TotalLike')->from($this->EventLikeTbl)->where(array('EventId'=> $EventId, 'EventLike' => 1))->get()->row_array();
-        return $res['TotalLike'];
+        return (($res['TotalLike'] > 0) ? $res['TotalLike'] : 0);
     }
 
     public function getMeUnLike($UserProfileId, $EventId) {
@@ -223,7 +227,7 @@ class Event_Model extends CI_Model {
 
     public function getTotalUnLike($EventId) {
         $res = $this->db->select('COUNT(EventLikeId) AS TotalUnLike')->from($this->EventLikeTbl)->where(array('EventId'=> $EventId, 'EventUnlike' => 1))->get()->row_array();
-        return $res['TotalUnLike'];
+        return (($res['TotalUnLike'] > 0) ? $res['TotalUnLike'] : 0);
     }
 
 
@@ -557,6 +561,89 @@ class Event_Model extends CI_Model {
         }
 
         return $EventAttachment;
+    }
+
+
+    public function saveEventComment($insertData) {
+        $this->db->insert($this->EventCommentTbl, $insertData);
+
+        $EventCommentId = $this->db->insert_id();
+
+        return $EventCommentId;
+    }
+
+    public function getAllEventComment($EventId, $UserProfileId, $total_list = 0) {
+        $comments = array();
+        $query = $this->db->query("SELECT EventCommentId FROM ".$this->EventCommentTbl." WHERE `EventId` = '".$EventId."' AND `CommentStatus` = '1' ORDER BY CommentOn DESC");
+        $res = $query->result_array();
+
+        if($total_list > 0) {
+            return $query->num_rows();
+        }
+        if($query->num_rows() > 0) {
+            foreach($res AS $comment) {
+                if($comment['EventCommentId'] > 0) {
+                    $comments[] = $this->getEventCommentDetail($EventId, $comment['EventCommentId'], $UserProfileId);
+                }
+            }
+        }
+        return $comments;
+    }
+
+    public function getEventCommentDetail($EventId, $CommentId, $UserProfileId) {
+        $comment_detail = array();
+        $query = $this->db->query("SELECT * FROM ".$this->EventCommentTbl." WHERE `EventId` = '".$EventId."' AND `EventCommentId` = '".$CommentId."'");
+        $res = $query->row_array();
+        if($res['EventCommentId'] > 0) {
+            $comment_detail = $this->returnEventCommentDetail($res, $UserProfileId);
+        }
+        return $comment_detail;
+    }
+
+    public function returnEventCommentDetail($res, $UserProfileId) {
+        $EventCommentId      = $res['EventCommentId'];
+        $EventId             = $res['EventId'];
+        $AddedBy            = $res['UserProfileId'];
+        $CommentText        = (($res['CommentText'] != NULL) ? $res['CommentText'] : "");
+        $CommentPhoto       = (($res['CommentPhoto'] != NULL) ? $res['CommentPhoto'] : "");
+        $ParentId           = $res['ParentId'];
+        $CommentStatus      = $res['CommentStatus'];
+
+        $CommentOn          = return_time_ago($res['CommentOn']);
+
+        $CommentProfile        = $this->User_Model->getUserProfileInformation($AddedBy);
+
+        $data_array = array(
+                                "EventCommentId"     => $EventCommentId,
+                                "EventId"            => $EventId,
+                                "AddedBy"           => $AddedBy,
+                                "CommentText"       => $CommentText,
+                                "CommentPhoto"      => $CommentPhoto,
+                                "ParentId"          => $ParentId,
+                                "CommentStatus"     => $CommentStatus,
+                                "CommentOn"         => $CommentOn,
+                                "CommentOnTime"     => $res['CommentOn'],
+                                "CommentProfile"    => $CommentProfile,
+                                );
+        return $data_array;
+    }
+
+    public function deleteEventComment($UserProfileId, $EventCommentId) {
+        $res = $this->db->select('*')->from($this->EventCommentTbl)->where(array('EventCommentId'=> $EventCommentId, 'UserProfileId' => $UserProfileId))->get()->result_array();
+        if($res[0]['EventCommentId'] > 0) {
+            $updateData = array(
+                                'CommentStatus' => -1,
+                                );
+            $whereData = array(
+                                'EventCommentId'        => $EventCommentId,
+                                'UserProfileId'        => $UserProfileId,
+                                );
+            $this->db->where($whereData);
+            $this->db->update($this->EventCommentTbl, $updateData);
+            return 1;
+        } else {
+            return 0;
+        }
     }
     
 
