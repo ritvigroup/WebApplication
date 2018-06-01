@@ -100,9 +100,8 @@
                         sweetAlert("Oops...", data.message, "error");
                         return false;
                     } else { 
-                        $this.button('Submit');
                         if (data.status === "success") {
-                            window.location.href="poll";
+                            window.location.href=window.location.href;
                         }
                     }
                 });

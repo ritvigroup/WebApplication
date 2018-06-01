@@ -60,7 +60,7 @@
                                                     <li><a href="#">Activate Users</a></li> -->
                                                 </ul>
                                             </div>
-
+                                            <?php /*
                                             <div class="dropdown  ractive-user">
                                                 <div class="dropdown  organize-user ">
                                                     <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown"> <i class="fa fa-plus" aria-hidden="true"></i>
@@ -86,6 +86,7 @@
                                                     <li><a href="#" id="">export to excel</a></li>
                                                 </ul>
                                             </div>
+                                            */ ?>
 
                                         </div>
                                     </div>
@@ -146,7 +147,7 @@
                                                         <tr class="<?php echo $TrRowStatus; ?>">
                                                             <td><input type="checkbox" name="check_list[]" value="<?php echo $my_team->UserProfileId; ?>" /></td>
                                                             <td><img src="<?php echo $profile_pic; ?>" style="border: 1px solid #fff; box-shadow: 0 2px 3px rgba(0,0,0,0.25);width: 50px; height: 50px;" class="img-circle"/></td>
-                                                            <td><a href="<?php echo $UserProfileHrefLink; ?>" onClick="return showUserDetail();"><?php echo $my_team->FirstName.' '.$my_team->LastName; ?></a></td>
+                                                            <td><a href="<?php echo $UserProfileHrefLink; ?>" onClick="return showUserDetail(<?php echo $my_team->UserProfileId; ?>);"><?php echo $my_team->FirstName.' '.$my_team->LastName; ?></a></td>
                                                             <td><?php echo $my_team->Email; ?></td>
                                                             <td><?php echo $my_team->ProfileUserName; ?></td>
                                                             <td><?php echo $my_team->RoleName; ?></td>

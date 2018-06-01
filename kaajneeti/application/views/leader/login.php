@@ -38,13 +38,15 @@
 
 
 <body class="aqua-bg login">
-    <div class="middle-box text-center loginscreen ">
-        <div class="widgets-container">
-            <div>
-                <h1 class="logo-name" id="simple_arc">KaajNeeti</h1>
-            </div>
+    <div class="middle-box text-center loginscreen " style="margin-top: -10px;">
+        <div>
+            <h1 class="logo-name" id="simple_arc">KaajNeeti</h1>
+        </div>
+        
+        <p id="tag_line" style="margin-top: -13px;">Ab Raajneeti nahi Kaajneeti chalegi</p>
+        
+        <div class="widgets-container" style="margin-top: 150px;">
             
-            <p id="tag_line">Ab Raajneeti nahi Kaajneeti chalegi</p>
             <p>Login in. To see it in action.</p>
             	<form method="post" onsubmit="return false;">
 	                <div class="form-group">
@@ -56,7 +58,7 @@
 	                <button class="btn aqua block full-width bottom15 signin_up_button" type="submit">Login</button>
 	                <a href="<?=base_url();?>leader/forgot"><small>Forgot password?</small></a>
 	                <p class="text-muted text-center"><small>Do not have an account?</small></p>
-	                <a href="<?=base_url();?>leader/register" class="btn btn-sm btn-white btn-block">Create an account</a>
+	                <a href="<?=base_url();?>leader/register" class="btn btn-sm btn-white btn-block">Register with us</a>
                 </form>
             <p class="top15"> <small>Developed at: <a href="http://www.ritvigroup.com" target="_blank">Ritvi Innovation Pvt. Ltd.</a> &copy; 2016-2017</small> </p>
         </div>
@@ -122,8 +124,8 @@ try {
 
   function renderDemo() {
    
-    //new CircleType(document.getElementById('simple_arc')).radius(900);
-    new CircleType(document.getElementById('tag_line')).radius(90);
+    new CircleType(document.getElementById('simple_arc')).radius(800);
+    new CircleType(document.getElementById('tag_line')).radius(2000);
     
   }
     </script>

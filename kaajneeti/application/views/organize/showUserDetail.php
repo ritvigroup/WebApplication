@@ -1,14 +1,26 @@
+<?php
+// echo '<pre>';
+// print_r($UserProfile);
+// echo '</pre>';
+
+if($UserProfile->result->ProfilePhotoPath != '') {
+    $profile_pic = ($UserProfile->result->ProfilePhotoPath != '') ? $UserProfile->result->ProfilePhotoPath : base_url().'assets/images/default-user.png';
+} else {
+    $profile_pic = ($UserProfile->result->ProfilePhotoPath != '') ? $UserProfile->result->ProfilePhotoPath : base_url().'assets/images/default-user.png';
+}
+?>
+
 <div class="profile-card">
     <div class="profile-avetar">
-        <img class="profile-avetar-img" src="../assets/images/teem/a5.jpg" alt="Teddy Wilson" width="128" height="128">
+        <img class="profile-avetar-img" src="<?php echo $profile_pic; ?>" alt="<?php echo $UserProfile->result->FirstName. ' '.$UserProfile->result->LastName; ?>" width="128" height="128">
     </div>
     <div class="profile-overview">
-        <h1 class="profile-name"> Ariadne </h1>
-         <span class="badge badge-info badge-roundless" style="margin-top: 8px;"> Administrator </span>
-        <p>Developer</p>
-        <p><i class="fa fa-envelope-open-o"></i> pushepndra@ritvigroup.com</p>
-        <p><i class="fa fa-phone"></i> 558-211-4215</p>
-        <p><i class="fa fa-home"></i> 602, Noida</p>
+        <h1 class="profile-name"> <?php echo $UserProfile->result->FirstName. ' '.$UserProfile->result->LastName; ?> </h1>
+         <span class="badge badge-info badge-roundless" style="margin-top: 8px;"> Team Member </span>
+        <p><?php echo $UserProfile->result->FirstName; ?></p>
+        <p><i class="fa fa-envelope-open-o"></i> <?php echo $UserProfile->result->Email; ?></p>
+        <p><i class="fa fa-phone"></i> <?php echo $UserProfile->result->Mobile; ?></p>
+        <p><i class="fa fa-home"></i> <?php echo $UserProfile->result->Address; ?></p>
     </div>
 </div>
 
@@ -17,14 +29,15 @@
         <dl>
             <dt>User Information </dt>
             <dd class="row">
-                <span class="col-md-4">First Name</span><span class="col-md-8"><a href="#">Pushpendra</a></span>
+                <span class="col-md-4">First Name</span><span class="col-md-8"><a href="#"><?php echo $UserProfile->result->FirstName; ?></a></span>
             </dd>
             <dd class="row">
-                <span class="col-md-4">Last Name</span><span class="col-md-8"><a href="#">Dwivedi</a></span>
+                <span class="col-md-4">Last Name</span><span class="col-md-8"><a href="#"><?php echo $UserProfile->result->LastName; ?></a></span>
             </dd>
             <dd class="row">
-                <span class="col-md-4">Email</span><span class="col-md-8"><a href="#">pushpendr@ritvi.com</a></span>
+                <span class="col-md-4">Email</span><span class="col-md-8"><a href="#"><?php echo $UserProfile->result->Email; ?></a></span>
             </dd>
+            <?php /*
             <dd class="row">
                 <span class="col-md-4">Role</span><span class="col-md-8"><a href="#">CEO</a></span>
             </dd>
@@ -49,10 +62,12 @@
             <dd class="row">
                 <span class="col-md-4">Date of Birth</span><span class="col-md-8"><a href="#">26-feb-1800</a></span>
             </dd>
+            */ ?>
         </dl>
     </div>
 </div>
 
+<?php /* 
 <div class="row">
     <div class="col-md-12">
         <dl>
@@ -88,3 +103,4 @@
         </dl>
     </div>
 </div>
+*/ ?>

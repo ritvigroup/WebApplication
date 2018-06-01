@@ -73,14 +73,14 @@ class Leader extends CI_Controller {
 
             UNION 
 
-            SELECT ComplaintId AS Id, 'Complaint' AS DataType, AddedOn AS DateAdded FROM `Complaint` WHERE `ComplaintStatus` = '1' AND `AddedBy` = '".$UserProfileId."' 
+            SELECT ComplaintId AS Id, 'Complaint' AS DataType, AddedOn AS DateAdded FROM `Complaint` WHERE `ComplaintStatus` != -1 AND `AddedBy` = '".$UserProfileId."' 
 
             UNION 
 
             SELECT c.ComplaintId AS Id, 'Complaint' AS DataType, c.AddedOn AS DateAdded FROM `Complaint` AS c 
                     LEFT JOIN `ComplaintAssigned` AS ca ON ca.ComplaintId = c.ComplaintId 
                     WHERE 
-                        c.`ComplaintStatus` = '1' 
+                        (c.`ComplaintStatus` != -1 && c.`ComplaintStatus` != 3)
                     AND ca.`AssignedTo` = '".$UserProfileId."' 
 
             UNION 

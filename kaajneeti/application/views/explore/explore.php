@@ -9,6 +9,7 @@
     <meta http-equiv="cache-control" content="no-cache">
     <meta http-equiv="expires" content="Thu, 19 Nov 1900 08:52:00 GMT">
     <?php require_once './include/css.php';?>
+
 </head>
 
 <body class="page-header-fixed ">
@@ -18,7 +19,7 @@
         <?php require_once './include/left.php';?>
         <div class="page-content-wrapper animated fadeInRight">
             <div class="page-content">
-                <div class="row  border-bottom aqua-bg-color dashboard-header">
+                <div class="row  border-bottom" style="padding: 7px 50px; 10px 50px; background: #dadcdf;">
                     <div class="col-md-12">
 
                         <?php
@@ -28,51 +29,33 @@
 
                         ?>
                         <div class="row">
-                            <div class="col-sm-6">
+                            
+                            <div class="col-sm-8">
                                 <div class="row">
-                                    <div class="col-sm-12"> <a href="javascript:void(0);" data-toggle="modal" class="post-model-box" data-target="#express-popup" onClick="return openExpressPopup();">
-                                        &nbsp;
-                                    </a>
-                                    <div class="ibox post-box">
-                                        <div class="feed-list">
-                                            <ul>
-                                                <li><a href="javascript:void(0);" data-toggle="modal" data-target="#express-popup" onClick="return openExpressPopup();"><i class="fa fa-edit"></i> Make Post</a>
-                                                </li>
-                                                <li><a href="javascript:void(0);" data-toggle="modal" data-target="#express-popup" onClick="return openExpressPopup();"><i class="fa fa-camera"></i> Photo/Video</a>
-                                                </li>
-                                                <li><a href="javascript:void(0);" data-toggle="modal" data-target="#exampleModalCenter"><i class="fa fa-camera"></i> Live Video</a>
-                                                </li>
-                                                <li><a href="javascript:void(0);" data-toggle="modal" data-target="#express-popup" onClick="return openExpressPopup();"><i class="fa fa-flag"></i> LIfe Event</a>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                        <div class="feed-element post-element">
-                                            <div class="media-body ">
-                                                <a href="#" class="pull-left">
-                                                    <img alt="image" class="img-circle" src="../assets/images/teem/a9.jpg">
-                                                </a>
-                                                <p>What's on your mind?</p>
+                                    <div class="col-sm-12" style="margin-bottom: -23px; margin-top: -6px;"> 
+                                        
+                                        <div class="ibox post-box" data-toggle="modal" class="post-model-box" data-target="#express-popup" onClick="return openExpressPopup();">
+                                            <div class="feed-element post-element" style="background: #dadcdf;">
+                                                <div class="media-body  box_desgin_shadow" style="background: #FFFFFF; height: 90px;">
+                                                    <a href="#" class="pull-left">
+                                                        <img alt="image" class="img-circle" src="<?php echo $this->session->userdata('UserProfilePic'); ?>">
+                                                    </a>
+                                                    <div class="media-body "> 
+                                                        <strong><?php echo $this->session->userdata('Name'); ?></strong>
 
-                                            </div>
-                                            <div class="clearfix"></div>
-                                            <div class="media-footer">
-                                                <p class="activity-btn">
-                                                    <button class="btn btn-default" type="button"><i class="fa fa-camera"></i> Video/Photos</button>
-                                                    <button class="btn btn-success" type="button"><i class="fa fa-camera"></i> feeling/Activity</button>
-                                                    <button class="btn btn-default" type="button"><i class="fa fa-ellipsis-h"></i>
-                                                    </button>
-                                                    <!-- </p> --> <span class="pull-right media-footer-btn">
-                                                    <button class="btn btn-default" type="button"><i class="fa fa-user"></i> Public</button>
-                                                    <button class="btn btn-info" type="button"><i class="fa fa-envelope"></i> post</button></span> 
-                                                </p>
+                                                    </div>
+
+                                                    
+                                                    <p>What is happening?</p>
+
+                                                </div>
+                                                <div class="clearfix"></div>
                                             </div>
                                         </div>
                                     </div>
-                                    <!-- </a> -->
                                 </div>
-                            </div>
-                            
-                            <div class="tabs-container post-container">
+                                
+                                <div class="tabs-container post-container">
                                 <?php
                                     // echo '<pre>';
                                     // print_r($result);
@@ -83,7 +66,7 @@
                                     <div class="widgets-container">
                                         <div>
                                             <div class="feed-activity-list">
-                                                <?php foreach($result AS $result_data) { ?>
+                                                <?php /*foreach($result AS $result_data) { ?>
                                                     <?php if($result_data->feedtype == 'complaint') {
                                                         
                                                         $ComplaintId        = $result_data->complaintdata->ComplaintId;
@@ -138,7 +121,7 @@
                                                         }
                                                         ?>
 
-                                                        <div class="feed-element">
+                                                        <div class="feed-element box_desgin_shadow">
                                                             <a href="#" class="pull-left">
                                                                 <img alt="image" class="img-circle" src="<?php echo $PostByProfilePic; ?>">
                                                             </a>
@@ -206,7 +189,7 @@
                                                         }
                                                         ?>
 
-                                                        <div class="feed-element">
+                                                        <div class="feed-element box_desgin_shadow">
                                                             <a href="#" class="pull-left">
                                                                 <img alt="image" class="img-circle" src="<?php echo $PostByProfilePic; ?>">
                                                             </a>
@@ -287,7 +270,7 @@
                                                         }
                                                         ?>
 
-                                                        <div class="feed-element">
+                                                        <div class="feed-element box_desgin_shadow">
                                                             <a href="#" class="pull-left">
                                                                 <img alt="image" class="img-circle" src="<?php echo $PostByProfilePic; ?>">
                                                             </a>
@@ -358,12 +341,20 @@
                                                         }
                                                         ?>
 
-                                                        <div class="feed-element">
+                                                        <div class="feed-element box_desgin_shadow" id="explore_post_<?php echo $PostId; ?>">
                                                             <a href="#" class="pull-left">
                                                                 <img alt="image" class="img-circle" src="<?php echo $PostByProfilePic; ?>">
                                                             </a>
-                                                            <div class="media-body "> <small class="pull-right text-navy"><?php echo $PostOn; ?></small>  <strong><?php echo $PostBy; ?></strong> post status
-                                                                <br> <small class="text-muted"><?php echo date('h:i a - d.m.Y', strtotime($AddedOnTime)); ?></small>
+                                                            <div class="media-body "> 
+                                                                <?php
+                                                                if($this->session->userdata('UserProfileId') == $result_data->postdata->PostProfile->UserProfileId) {
+                                                                ?>
+                                                                <div style="float: right;"><a class="btn btn-xs btn-danger" onClick="return deleteMyPostStatus(<?php echo $PostId; ?>);"><i class="glyphicon glyphicon-remove " aria-hidden="true"></i> Delete</a></div>
+                                                                <?php } ?>
+                                                                <small class="pull-right text-navy"><?php echo $PostOn; ?></small>  
+                                                                <strong><?php echo $PostBy; ?></strong> post status
+                                                                <br> 
+                                                                <small class="text-muted"><?php echo date('h:i a - d.m.Y', strtotime($AddedOnTime)); ?></small>
 
                                                             </div>
                                                             <div class="">
@@ -371,14 +362,19 @@
                                                                     <p><?php echo $PostTitle; ?></p>
                                                                     <p>
                                                                     <?php 
+                                                                        if(count($PostAttachment) > 1) {
+                                                                            $style_post = "width: 200px; height: 120px;";
+                                                                        } else {
+                                                                            $style_post = "width: 100%;";
+                                                                        }
                                                                         foreach($PostAttachment AS $post_attachment) {
                                                                             if($post_attachment->AttachmentType == "video") {
-                                                                                echo '<video controls style="width: 100%">
+                                                                                echo '<video controls style="'.$style_post.'">
                                                                                     <source src="'.$post_attachment->AttachmentFile.'" type="video/mp4">
                                                                                     Your browser does not support the video tag.
                                                                                     </video>';
-                                                                            } else if($post_attachment->AttachmentType == "video") {
-                                                                                echo '<img src="'.$post_attachment->AttachmentFile.'" style="width: 200px; height: 120px;">';
+                                                                            } else if($post_attachment->AttachmentType == "photo") {
+                                                                                echo '<img src="'.$post_attachment->AttachmentFile.'" style="'.$style_post.'">';
                                                                             } else {
 
                                                                             }
@@ -399,21 +395,21 @@
                                                             </div>
                                                         </div>
                                                     <?php } ?>
-
-
-                                                <?php } ?>
-                                                
+                                                <?php }*/ ?>
+                                                <?php $this->load->view('explore/explorefeed.php'); ?>
                                             </div>
-                                            <button class="btn aqua btn-block "><i class="fa fa-arrow-down"></i> Show More</button>
+                                            <?php if(count($result) > 0) { ?>
+                                            <button class="btn aqua btn-block show_next_explore" onClick="return showNextExplore();"><i class="fa fa-arrow-down"></i> Show More</button>
+                                            <?php } ?>
                                             <div class="new_loader_div" id="new_loader_div"><img src="<?=base_url();?>assets/images/new-loader.gif"></div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="col-sm-3">
-                            <div class="ibox">
-                                <div class="widgets-container">
+                        <div class="col-sm-4" style="padding: 10px 50px; 10px 50px;">
+                            <div class="ibox box_desgin_shadow" style="background: #FFFFFF;">
+                                <div class="widgets-container" style="background: #FFFFFF;">
                                     <div class="feed-element">
                                         <a href="#" class="pull-left">
                                             <img alt="image" class="img-circle" src="../assets/images/teem/a3.jpg">
@@ -433,8 +429,8 @@
                                 </div>
                             </div>
 
-                            <div class="ibox">
-                                <div class="widgets-container">
+                            <div class="ibox box_desgin_shadow" style="background: #FFFFFF;">
+                                <div class="widgets-container" style="background: #FFFFFF;">
                                     <h3>Private message</h3>
                                     <p class="small">Send private message to Olivia Wenscombe</p>
                                     <div class="form-group">
@@ -450,46 +446,7 @@
                             </div>
                         </div>
 
-                        <div class="col-sm-3">
-                            <div class="ibox">
-                                <div class="widgets-container">
-                                    <h3>Private message</h3>
-                                    <p class="small">Send private message to Olivia Wenscombe</p>
-                                    <div class="form-group">
-                                        <label>Subject</label>
-                                        <input placeholder="Message subject" class="form-control" type="email">
-                                    </div>
-                                    <div class="form-group">
-                                        <label>Message</label>
-                                        <textarea rows="3" placeholder="Your message" class="form-control"></textarea>
-                                    </div>
-                                    <button class="btn aqua btn-block">Send</button>
-                                </div>
-                            </div>
-                            
-                            <div class="ibox">
-                                <div class="widgets-container">
-                                    <div class="feed-element">
-                                        <a href="#" class="pull-left">
-                                            <img alt="image" class="img-circle" src="../assets/images/teem/a3.jpg">
-                                        </a>
-                                        <div class="media-body "> <strong>Olivia Wenscombe </strong>send Friend Requests to you .
-                                            <br> <small class="text-muted">Today 9:00 pm - 11.06.2016</small>
-                                            <div class="actions"> <a class="btn btn-xs aqua"><i class="glyphicon glyphicon-ok"></i> Confirm</a>  <a class="btn btn-xs btn-danger"><i class="glyphicon glyphicon-remove " aria-hidden="true"></i> Delete</a> 
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <h3>About Olivia Wenscombe</h3>
-                                    <p class="small">There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don't.
-                                    <br>
-                                    <br>If you are going to use a passage of Lorem Ipsum, you need to be sure there isn't anything embarrassing</p>
-                                    <p class="small font-bold"> <span><i class="fa fa-circle text-navy"></i> Online status</span> 
-                                    </p>
-                                </div>
-                            </div>
-
-                            
-                        </div>
+                        
 
                         
                     </div>

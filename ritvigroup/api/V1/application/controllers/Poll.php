@@ -454,5 +454,86 @@ class Poll extends CI_Controller {
         displayJsonEncode($array);
     }
 
+
+    public function savePollComment() {
+        $error_occured = false;
+
+        $UserProfileId      = $this->input->post('user_profile_id');
+        $PollQuestion       = $this->input->post('poll_question');
+        $PollPrivacy        = $this->input->post('privacy'); // 1 = Public, 0 = Private
+        $ValidFromDate      = $this->input->post('valid_from_date');
+        $ValidEndDate       = $this->input->post('valid_end_date');
+
+        $PollLocation       = $this->input->post('location');
+
+        $poll_answer = $this->input->post('poll_answer'); // Should be multiple answers in array
+
+
+        $PollUniqueId = $this->Poll_Model->generatePollUniqueId();
+
+
+        
+        if($UserProfileId == "") {
+            $msg = "Please select your profile";
+            $error_occured = true;
+        } else if($PollQuestion == "") {
+            $msg = "Please enter your poll question";
+            $error_occured = true;
+        } else {
+
+            $this->db->query("BEGIN");
+
+            $insertData = array(
+                                'PollUniqueId'      => $PollUniqueId,
+                                'PollQuestion'      => $PollQuestion,
+                                'PollPrivacy'       => $PollPrivacy,
+                                'PollLocation'      => $PollLocation,
+                                'ValidFromDate'     => date('Y-m-d', strtotime($ValidFromDate)),
+                                'ValidEndDate'      => date('Y-m-d', strtotime($ValidEndDate)),
+                                'PollStatus'        => 1,
+                                'AddedBy'           => $UserProfileId,
+                                'UpdatedBy'         => $UserProfileId,
+                                'AddedOn'           => date('Y-m-d H:i:s'),
+                                'UpdatedOn'         => date('Y-m-d H:i:s'),
+                            );
+
+            $PollId = $this->Poll_Model->saveMyPoll($insertData);
+
+            if($PollId > 0) {
+
+                
+                $this->Poll_Model->saveMyPollImage($PollId, $_FILES['question']);
+
+                $this->Poll_Model->saveMyPollAnswer($PollId, $UserProfileId, $poll_answer, $_FILES['file']);
+                
+                $this->db->query("COMMIT");
+
+                $poll_detail = $this->Poll_Model->getPollDetail($PollId, $UserProfileId);
+
+                $msg = "Poll created successfully";
+
+            } else {
+                $this->db->query("ROLLBACK");
+                $msg = "Poll not saved. Error occured";
+                $error_occured = true;
+            }
+        }
+
+        if($error_occured == true) {
+            $array = array(
+                            "status"        => 'failed',
+                            "message"       => $msg,
+                        );
+        } else {
+
+            $array = array(
+                           "status"             => 'success',
+                           "result"       => $poll_detail,
+                           "message"            => $msg,
+                           );
+        }
+        displayJsonEncode($array);
+    }
+
 }
 

@@ -132,12 +132,250 @@
                 }
             });
     }
+
+
+
+
+    function newExpressPopupEvent() {
+        $.post("<?php echo base_url(); ?>organize/newEvent", {'display': 'Y'},
+            function (data, status) {
+                if(data != '') {
+                    $('.modal-content-express').html(data);
+                } else {
+                    $('.modal-content-express').html(data);
+                }
+                $('.form_datetime').datetimepicker();
+            });
+    }
+
+    function newExpressPopupPoll() {
+        $.post("<?php echo base_url(); ?>organize/newPoll", {'display': 'Y'},
+            function (data, status) {
+                if(data != '') {
+                    $('.modal-content-express').html(data);
+                } else {
+                    $('.modal-content-express').html(data);
+                }
+            });
+
+    }
+
+
+    function deleteMyPostStatus(post_id) {
+        
+        var ans = confirm("Are you sure to delete this post?");
+        if(!ans) {
+        	return false;
+        }
+
+        $.post("<?php echo base_url(); ?>organize/deleteMyPostStatus", {
+                                                            post_id: post_id, 
+                                                            },
+            function (data, status) {
+               
+                if (data.status === "failed") {
+                    sweetAlert("Oops...", data.message, "error");
+                    return false;
+                } else { 
+                    if (data.status === "success") {
+                        $('#explore_post_'+post_id).html('');
+                        $('#explore_post_'+post_id).hide();
+                        //sweetAlert("Success", data.message, "success");
+                    }
+                }
+            });
+    }
+
+
+    function deleteMyEvent(event_id) {
+        
+        var ans = confirm("Are you sure to delete this event?");
+        if(!ans) {
+        	return false;
+        }
+
+        $.post("<?php echo base_url(); ?>organize/deleteMyEvent", {
+                                                            event_id: event_id, 
+                                                            },
+            function (data, status) {
+               
+                if (data.status === "failed") {
+                    sweetAlert("Oops...", data.message, "error");
+                    return false;
+                } else { 
+                    if (data.status === "success") {
+                        $('#explore_event_'+event_id).html('');
+                        $('#explore_event_'+event_id).hide();
+                        //sweetAlert("Success", data.message, "success");
+                    }
+                }
+            });
+    }
+
+
+    function deleteMyPoll(poll_id) {
+        
+        var ans = confirm("Are you sure to delete this poll?");
+        if(!ans) {
+        	return false;
+        }
+
+        $.post("<?php echo base_url(); ?>organize/deleteMyPoll", {
+                                                            poll_id: poll_id, 
+                                                            },
+            function (data, status) {
+               
+                if (data.status === "failed") {
+                    sweetAlert("Oops...", data.message, "error");
+                    return false;
+                } else { 
+                    if (data.status === "success") {
+                        $('#explore_poll_'+poll_id).html('');
+                        $('#explore_poll_'+poll_id).hide();
+                        //sweetAlert("Success", data.message, "success");
+                    }
+                }
+            });
+    }
+
+
+    function confirmRequestComplaint(complaint_id) {
+        
+        $.post("<?php echo base_url(); ?>organize/confirmRequestComplaint", {
+                                                            complaint_id: complaint_id, 
+                                                            },
+            function (data, status) {
+               
+                if (data.status === "failed") {
+                    sweetAlert("Oops...", data.message, "error");
+                    return false;
+                } else { 
+                    if (data.status === "success") {
+                        $('#confirm_delete_complaint_'+complaint_id).html('');
+                        $('#confirm_delete_complaint_'+complaint_id).hide();
+                        //sweetAlert("Success", data.message, "success");
+                    }
+                }
+            });
+    }
+
+
+    function cancelRequestComplaint(complaint_id) {
+        
+        $.post("<?php echo base_url(); ?>organize/cancelRequestComplaint", {
+                                                            complaint_id: complaint_id, 
+                                                            },
+            function (data, status) {
+               
+                if (data.status === "failed") {
+                    sweetAlert("Oops...", data.message, "error");
+                    return false;
+                } else { 
+                    if (data.status === "success") {
+                        $('#confirm_delete_complaint_'+complaint_id).html('');
+                        $('#confirm_delete_complaint_'+complaint_id).hide();
+                        //sweetAlert("Success", data.message, "success");
+                    }
+                }
+            });
+    }
+
+
+    function showNextExplore() {
+    	$.post("<?php echo base_url(); ?>explore/explorefeed", {
+                                                            next: 'Y', 
+                                                            },
+            function (data, status) {
+
+            	if(data != '') {
+            		$('.feed-activity-list').append(data);
+            	} else {
+            		$('.show_next_explore').hide();
+            	}
+                /*if (data.status === "failed") {
+                    sweetAlert("Oops...", data.message, "error");
+                    return false;
+                } else { 
+                    if (data.status === "success") {
+                        $('.feed-activity-list').append(data);
+                    }
+                }*/
+            });
+    }
+
+
+    function commentPoll(poll_id) {
+    	$.post("<?php echo base_url(); ?>explore/commentPoll", {
+                                                            poll_id: poll_id, 
+                                                            },
+            function (data, status) {
+
+            	if(data != '') {
+                    $('.modal-content-express').html(data);
+                } else {
+                    $('.modal-content-express').html(data);
+                }
+            });
+    }
+
+
+    function saveExplorePost() {
+
+        var express_yourself_text 	= $("#express_yourself_text").val();
+        var express_public_private  = $("#express_public_private").val();
+
+        $('.save_explore_post').html('Uploading your post');
+        $('.save_explore_post').prop('disabled', true);
+        //if (express_yourself_text.length > 1 || ) {
+
+            
+            var form_data = new FormData($('input[name^="file"]'));
+
+            jQuery.each($('input[name^="file[]"]')[0].files, function(i, file) {
+                form_data.append('file[]', file);
+            });
+
+            form_data.append('title', express_yourself_text);
+            form_data.append('privacy', express_public_private);
+            form_data.append('save_post', 'Y');
+
+
+            jQuery.ajax({
+                type: 'POST',
+                cache: false,
+                processData: false,
+                contentType: false,
+                data: form_data,
+                url: "<?php echo base_url(); ?>organize/post",
+
+                success: function(data) {
+                    if (data.status === "failed") {
+                        sweetAlert("Oops...", data.message, "error");
+                        
+                    } else { 
+
+                        if (data.status === "success") {
+                            window.location.href="explore";
+                        }
+                    }
+                    $('#new_loader_div').hide();
+                    $('.save_explore_post').prop('disabled', false);
+                    return false;
+                }
+            });
+
+        /*} else {
+            sweetAlert("Oops...", "Please enter something to what is happening", "error");
+            $('.save_explore_post').prop('disabled', false);
+            return false;
+        }*/
+    };
 </script>
 
 
 <script>
 // When the user clicks on the button, goggle between hiding and showing the dropdown content
-function myFunction() {
+/*function myFunction() {
     document.getElementById("myDropdown").classList.toggle("show");
 }
 
@@ -151,7 +389,7 @@ window.onclick = function(e) {
         myDropdown.classList.remove('show');
       }
   }
-} 
+} */
 </script>
 
 <script>

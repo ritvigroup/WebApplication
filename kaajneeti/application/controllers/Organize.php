@@ -300,6 +300,14 @@ class Organize extends CI_Controller {
            exit('Error');
         }
         $_POST['user_profile_id'] = $this->session->userdata('UserProfileId');
+        $_POST['friend_user_profile_id'] = $this->input->post('friend_user_profile_id');
+
+        $json_encode = post_curl(API_CALL_PATH.'userprofile/getUserprofileFriendsprofileInformation', $this->input->post(), $this->curl);
+
+        $json_decode = json_decode($json_encode);
+        if(count($json_decode->result) > 0) {
+            $data['UserProfile'] = $json_decode;
+        }
 
         
         $this->load->view('organize/showUserDetail',$data);
@@ -631,6 +639,141 @@ class Organize extends CI_Controller {
         $data = array();
 
         $this->load->view('organize/newPoll',$data);
+    }
+
+
+    public function post() {
+        $data = array();
+        if($this->input->method(TRUE) == "POST") {
+            $_POST['user_profile_id'] = $this->session->userdata('UserProfileId');
+
+
+            $post_data = $this->input->post();
+            $post_tag = array();
+            if($post_data['post_tag'] != '') {
+                $exp_post_tag = explode(',', $post_data['post_tag']);
+                for($i = 0; $i < count($exp_post_tag); $i++) {
+                    if($exp_post_tag[$i] > 0) {
+                        $post_data = array_merge($post_data, array('post_tag['.$i.']' => $exp_post_tag[$i]));
+                    }
+                }
+            }
+
+            for($i = 0; $i < count($_FILES['file']['name']); $i++) {
+                if($_FILES['file']['name'][$i] != '') {
+
+                    $post_data = array_merge($post_data, array('file['.$i.']' => getCurlValue($_FILES['file']['tmp_name'][$i], $_FILES['file']['type'][$i], $_FILES['file']['name'][$i])));
+                }
+            }
+
+            // echo '<pre>';
+            // print_r($_POST);
+            // print_r($_FILES);
+            // print_r($post_data);
+            // die;
+            $json_decode = post_curl_with_files(API_CALL_PATH.'post/postMyStatus', $post_data, $this->curl);
+
+            header('Content-type: application/json');
+
+            echo $json_decode;
+
+            return false;
+        }
+    }
+
+    public function deleteMyPostStatus() {
+        $data = array();
+      
+        if (!$this->input->is_ajax_request()) {
+           exit('Error');
+        }
+        $_POST['user_profile_id'] = $this->session->userdata('UserProfileId');
+        $_POST['post_id'] = $this->input->post('post_id');
+
+        $json_encode = post_curl(API_CALL_PATH.'post/deleteMyPostStatus', $this->input->post(), $this->curl);
+
+        header('Content-type: application/json');
+
+        echo $json_encode;
+
+        return false;
+    }
+
+    public function deleteMyPoll() {
+        $data = array();
+      
+        if (!$this->input->is_ajax_request()) {
+           exit('Error');
+        }
+        $_POST['user_profile_id'] = $this->session->userdata('UserProfileId');
+        $_POST['poll_id'] = $this->input->post('poll_id');
+
+        $json_encode = post_curl(API_CALL_PATH.'poll/deleteMyPoll', $this->input->post(), $this->curl);
+
+        header('Content-type: application/json');
+
+        echo $json_encode;
+
+        return false;
+    }
+
+
+    public function deleteMyEvent() {
+        $data = array();
+      
+        if (!$this->input->is_ajax_request()) {
+           exit('Error');
+        }
+        $_POST['user_profile_id'] = $this->session->userdata('UserProfileId');
+        $_POST['event_id'] = $this->input->post('event_id');
+
+        $json_encode = post_curl(API_CALL_PATH.'event/deleteMyEvent', $this->input->post(), $this->curl);
+
+        header('Content-type: application/json');
+
+        echo $json_encode;
+
+        return false;
+    }
+
+
+    public function confirmRequestComplaint() {
+        $data = array();
+      
+        if (!$this->input->is_ajax_request()) {
+           exit('Error');
+        }
+        $_POST['user_profile_id'] = $this->session->userdata('UserProfileId');
+        $_POST['complaint_id'] = $this->input->post('complaint_id');
+        $_POST['current_status'] = 2;
+
+        $json_encode = post_curl(API_CALL_PATH.'complaint/saveAcceptRejectComplaintFromLeader', $this->input->post(), $this->curl);
+
+        header('Content-type: application/json');
+
+        echo $json_encode;
+
+        return false;
+    }
+
+
+    public function cancelRequestComplaint() {
+        $data = array();
+      
+        if (!$this->input->is_ajax_request()) {
+           exit('Error');
+        }
+        $_POST['user_profile_id'] = $this->session->userdata('UserProfileId');
+        $_POST['complaint_id'] = $this->input->post('complaint_id');
+        $_POST['current_status'] = 3;
+
+        $json_encode = post_curl(API_CALL_PATH.'complaint/saveAcceptRejectComplaintFromLeader', $this->input->post(), $this->curl);
+
+        header('Content-type: application/json');
+
+        echo $json_encode;
+
+        return false;
     }
 
 }

@@ -168,7 +168,7 @@
                     } else { 
 
                         if (data.status === "success") {
-                            window.location.href="event";
+                            window.location.href=window.location.href;
                         }
                     }
                     $('#new_loader_div').hide();

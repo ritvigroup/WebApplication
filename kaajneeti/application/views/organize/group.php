@@ -58,6 +58,7 @@
                                                 </ul>
                                             </div>
 
+                                            <?php /*
                                             <div class="dropdown  ractive-user">
                                                 <div class="dropdown  organize-user ">
                                                     <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown"> <i class="fa fa-plus" aria-hidden="true"></i>
@@ -83,6 +84,7 @@
                                                     <li><a href="#" id="">export to excel</a></li>
                                                 </ul>
                                             </div>
+                                            */ ?>
 
                                         </div>
                                     </div>

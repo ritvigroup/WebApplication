@@ -35,11 +35,11 @@
 
     });
 
-    function showUserDetail() {
+    function showUserDetail(friend_user_profile_id) {
 
         $('#display_user_detail').html('Loading....');
 
-        $.post("<?php echo base_url(); ?>organize/showUserDetail", {'display': 'Y'},
+        $.post("<?php echo base_url(); ?>organize/showUserDetail", {'friend_user_profile_id': friend_user_profile_id, 'display': 'Y'},
             function (data, status) {
                 if(data != '') {
                     $('#display_user_detail').html(data);

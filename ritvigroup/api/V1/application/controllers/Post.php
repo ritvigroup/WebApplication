@@ -64,6 +64,12 @@ class Post extends CI_Controller {
         $PostPrivacy = ($PostPrivacy == 1) ? $PostPrivacy : 0;
 
         $post_tag = $this->input->post('post_tag');
+
+
+        // echo '<pre>';
+        // print_r($_POST);
+        // print_r($_FILES);
+        // die;
         
         if($UserProfileId == "") {
 			$msg = "Please select your profile";

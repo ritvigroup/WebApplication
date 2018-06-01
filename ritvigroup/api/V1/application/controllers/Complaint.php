@@ -594,7 +594,7 @@ class Complaint extends CI_Controller {
 
         $UserProfileId     = $this->input->post('user_profile_id');
         $ComplaintId       = $this->input->post('complaint_id');   
-        $current_status    = $this->input->post('current_status'); // -1 = Declined, 2 = Accepted
+        $current_status    = $this->input->post('current_status'); // 3 = Declined, 2 = Accepted
 
 
         if($UserProfileId == "") {

@@ -27,8 +27,13 @@ class Explore extends CI_Controller {
 
         $_POST['user_id'] = $this->session->userdata('UserId');
         $_POST['user_profile_id'] = $this->session->userdata('UserProfileId');
+
+        $this->session->set_userdata('explore_start', 0);
+
+        $_POST['start'] = $this->session->userdata('explore_start');
         $json_encode = post_curl(API_CALL_PATH.'leader/getAllHomePageData', $this->input->post(), $this->curl);
 
+        
         // echo '<pre>';
         // print_r($_POST);
         // print_r($json_encode);
@@ -40,6 +45,32 @@ class Explore extends CI_Controller {
         }
         
         $this->load->view('explore/explore',$data);
+    }
+
+
+    public function explorefeed() {
+
+        if (!$this->input->is_ajax_request()) {
+            exit();
+        }
+
+        $data = array();
+
+        $_POST['user_id'] = $this->session->userdata('UserId');
+        $_POST['user_profile_id'] = $this->session->userdata('UserProfileId');
+        
+        $this->session->set_userdata('explore_start', ($this->session->userdata('explore_start') + 10));
+        
+
+        $_POST['start'] = (($this->session->userdata('explore_start') > 0) ? $this->session->userdata('explore_start') : 0);
+        $json_encode = post_curl(API_CALL_PATH.'leader/getAllHomePageData', $this->input->post(), $this->curl);
+
+        $json_decode = json_decode($json_encode);
+        if(count($json_decode->result) > 0) {
+            $data = $json_decode;
+        }
+
+        $this->load->view('explore/explorefeed', $data);
     }
 
 
@@ -156,6 +187,33 @@ class Explore extends CI_Controller {
 
         $json_decode = json_decode($json_encode);
         echo $json_decode->result;
+    }
+
+
+    public function commentPoll() {
+
+        if (!$this->input->is_ajax_request()) {
+            exit();
+        }
+
+
+        $data = array();
+
+        if($this->input->post('save_poll') == 'Y') {
+            $_POST['user_id'] = $this->session->userdata('UserId');
+            $_POST['user_profile_id'] = $this->session->userdata('UserProfileId');          
+
+            $_POST['poll_id'] = $this->input->post('poll_id');
+            $_POST['poll_id'] = $this->input->post('enter_your_comment');
+            $json_encode = post_curl(API_CALL_PATH.'leader/getAllHomePageData', $this->input->post(), $this->curl);
+
+            $json_decode = json_decode($json_encode);
+            if(count($json_decode->result) > 0) {
+                $data = $json_decode;
+            }
+        }
+
+        $this->load->view('explore/comment', $data);
     }
 
 }

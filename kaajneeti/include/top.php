@@ -42,7 +42,7 @@ if($_SESSION['AdminId'] > 0) {
                         <!-- <span>
                             Sunil Vishwakarma
                         </span> -->
-                        <div class="feed-element"> <a href="<?=base_url();?>profile/subprofile"> <img alt="image" class="img-circle" src="../assets/images/teem/a9.jpg" style=" margin: 5px 20px 0; "> </a></div>
+                        <div class="feed-element"> <a href="<?=base_url();?>profile/subprofile"> <img alt="image" class="img-circle" src="<?php echo $this->session->userdata('UserProfilePic'); ?>" style=" margin: 5px 20px 0; "> </a></div>
                     </li>
 
                     <li style=" margin-left: 11px; margin-top: 7px; ">

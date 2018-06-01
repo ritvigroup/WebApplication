@@ -37,18 +37,14 @@
         <div class="brand"> <h1 class="logo-name">KaajNeeti</h1> </div>
         <p class="font-size-20">Ab Raajneeti nahi Kaajneeti chalegi</p>
         </div>
-        <div class="loginColumns ">
-        <div>
+        <div class="loginColumns " style="width: 400px">
         
-        </div>
         <h3>Register to KaajNeeti</h3>
         <p>Create account to see it in action.</p>
-        <div class="form-group"><input type="text" required="" placeholder="Email" name="email" class="form-control signup_email" maxlength="100"></div>
-        <div class="form-group"><input type="text" required="" placeholder="Mobile" name="mobile" class="form-control signup_mobile" maxlength="20"></div>
-        <div class="form-group"><input type="text" placeholder="Username" name="username" class="form-control signup_username" maxlength="20"></div>
-        <div class="form-group"><input type="password" required="" placeholder="Password" class="form-control signup_password"></div>
         <div class="form-group"><input type="text" placeholder="First Name" name="firstname" class="form-control signup_firstname" maxlength="30"></div>
         <div class="form-group"><input type="text" placeholder="Last Name" name="lastname" class="form-control signup_lastname" maxlength="30"></div>
+        <div class="form-group"><input type="text" required="" placeholder="Email" name="email" class="form-control signup_email" maxlength="100"></div>
+        <div class="form-group"><input type="text" required="" placeholder="Mobile" name="mobile" class="form-control signup_mobile" maxlength="20"></div>
         <div class="form-group">
             <select name="gender" class="form-control signup_gender">
                 <option value="0" selected disabled>Gender</option>
@@ -57,6 +53,11 @@
                 <option value="3">Other</option>
             </select>
         </div>
+        <p class="top15"><hr></p>
+        <div class="form-group"><input type="text" placeholder="Username" name="username" class="form-control signup_username" maxlength="20"></div>
+        <div class="form-group"><input type="password" required="" placeholder="Password" class="form-control signup_password"></div>
+        
+        
         <div class="form-group">
             <div class="1i-checks">
                 <input type="checkbox" id="terms" name="terms" class="iCheck" indeterminate="true">
