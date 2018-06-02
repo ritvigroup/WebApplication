@@ -239,6 +239,52 @@
     }
 
 
+    function participatePollWithAnswer(poll_id, poll_answer_id) {
+        
+        $.post("<?php echo base_url(); ?>explore/participatePollWithAnswer", {
+                                                            poll_id: poll_id, 
+                                                            poll_answer_id: poll_answer_id, 
+                                                            participate: 'Y', 
+                                                            },
+            function (data, status) {
+               
+                if (data.status === "failed") {
+                    sweetAlert("Oops...", data.message, "error");
+                    return false;
+                } else { 
+                    if (data.status === "success") {
+                        $('#participate_poll_'+poll_id).html('Thanks for your participation.');
+                        //$('#participate_poll_'+poll_id).hide();
+                        sweetAlert("Success", data.message, "success");
+                    }
+                }
+            });
+    }
+
+
+    function saveMyEventInterest(event_id, interest_type) {
+        
+        $.post("<?php echo base_url(); ?>explore/saveMyEventInterest", {
+                                                            event_id: event_id, 
+                                                            interest_type: interest_type, 
+                                                            participate: 'Y', 
+                                                            },
+            function (data, status) {
+               
+                if (data.status === "failed") {
+                    sweetAlert("Oops...", data.message, "error");
+                    return false;
+                } else { 
+                    if (data.status === "success") {
+                        $('#participate_event_'+event_id).html('Thanks for your interest in this event.');
+                        //$('#participate_poll_'+poll_id).hide();
+                        sweetAlert("Success", data.message, "success");
+                    }
+                }
+            });
+    }
+
+
     function confirmRequestComplaint(complaint_id) {
         
         $.post("<?php echo base_url(); ?>organize/confirmRequestComplaint", {
@@ -492,17 +538,40 @@
         }
     }
 
+    function location_box_display() {
+        if(document.getElementById('post_location').style.display == 'none') {
+            document.getElementById('post_location').style.display = "block";
+        } else {
+            document.getElementById('post_location').style.display = "none";
+            document.getElementById('post_location').value = "";
+        }
+    }
+
+    function tag_box_display() {
+        if(document.getElementById('post_attendee').style.display == 'none') {
+            document.getElementById('post_attendee').style.display = "block";
+        } else {
+            document.getElementById('post_attendee').style.display = "none";
+            //document.getElementById('post_attendee').value = "";
+        }
+    }
+
 
     // Explore Save Post
     function saveExplorePost() {
 
         var express_yourself_text 	= $("#express_yourself_text").val();
         var express_public_private  = $("#express_public_private").val();
+        var post_location           = $("#post_location").val();
 
         $('.save_explore_post').html('Uploading your post');
         $('.save_explore_post').prop('disabled', true);
         //if (express_yourself_text.length > 1 || ) {
 
+            var post_attendeea = '';
+            $('#post_attendee :selected').each(function(i, selected) {
+                post_attendeea += $(selected).val()+',';
+            });
             
             var form_data = new FormData($('input[name^="file"]'));
 
@@ -511,6 +580,8 @@
             });
 
             form_data.append('title', express_yourself_text);
+            form_data.append('location', post_location);
+            form_data.append('post_tag', post_attendeea);
             form_data.append('privacy', express_public_private);
             form_data.append('save_post', 'Y');
 

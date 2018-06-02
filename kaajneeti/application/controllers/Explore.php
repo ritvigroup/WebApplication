@@ -370,4 +370,46 @@ class Explore extends CI_Controller {
         $this->load->view('explore/commentPoll', $data);
     }
 
+
+    public function participatePollWithAnswer() {
+        $data = array();
+
+        if (!$this->input->is_ajax_request()) {
+            exit();
+        }
+
+        $_POST['user_id'] = $this->session->userdata('UserId');
+        $_POST['user_profile_id'] = $this->session->userdata('UserProfileId');
+        $_POST['poll_id'] = $this->input->post('poll_id');
+        $_POST['answer_id'] = $this->input->post('poll_answer_id');
+        $json_encode = post_curl(API_CALL_PATH.'poll/participatePollWithAnswer', $this->input->post(), $this->curl);
+
+        
+        header('Content-type: application/json');
+        echo $json_encode;
+        die;
+    }
+
+
+    public function saveMyEventInterest() {
+        $data = array();
+
+        if (!$this->input->is_ajax_request()) {
+            exit();
+        }
+
+        if($this->input->post('participate') == 'Y') {
+            $_POST['user_id'] = $this->session->userdata('UserId');
+            $_POST['user_profile_id'] = $this->session->userdata('UserProfileId');
+            $_POST['event_id'] = $this->input->post('event_id');
+            $_POST['interest_type'] = $this->input->post('interest_type');
+            $json_encode = post_curl(API_CALL_PATH.'event/saveMyEventInterest', $this->input->post(), $this->curl);
+
+            
+            header('Content-type: application/json');
+            echo $json_encode;
+            die;
+        }
+    }
+
 }

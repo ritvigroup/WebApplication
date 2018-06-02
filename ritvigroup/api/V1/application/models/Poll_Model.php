@@ -166,49 +166,53 @@ class Poll_Model extends CI_Model {
     public function saveMyPollAnswer($PollId, $UserProfileId, $poll_answer, $poll_answer_image) {
         $i = 0;
         foreach($poll_answer AS $answer) {
-            $insertData = array(
-                                'PollId'             => $PollId,
-                                'PollAnswer'         => $answer,
-                                'PollAnswerStatus'   => 1,
-                                'AddedBy'            => $UserProfileId,
-                                'UpdatedBy'          => $UserProfileId,
-                                'AddedOn'            => date('Y-m-d H:i:s'),
-                                'UpdatedOn'          => date('Y-m-d H:i:s'),
-                                );
-            $this->db->insert($this->pollAnswerTbl, $insertData);
 
-            $PollAnswerId = $this->db->insert_id();
-
-            $upload_file_name = $poll_answer_image['name'][$i];
-        
-            if($upload_file_name != '') {
-
-                $AttachmentTypeId = $this->getAttachmentTypeId($upload_file_name);
-
-                $AttachmentFile = date('YmdHisA').'-'.time().'-POLL-ANSWER-'.mt_rand().'.'.end(explode('.', $upload_file_name));
-
-                if($AttachmentTypeId == 1) {
-                    $path = POLL_IMAGE_DIR;
-                } else if($AttachmentTypeId == 2) {
-                    $path = POLL_VIDEO_DIR;
-                } else if($AttachmentTypeId == 4) {
-                    $path = POLL_AUDIO_DIR;
-                } else {
-                    $path = POLL_DOC_DIR;
-                }
-                $path = $path.$AttachmentFile;
-                $source = $poll_answer_image['tmp_name'][$i];
-
-                $upload_result = uploadFileOnServer($source, $path);
-
-                $updateData = array(
-                                    'PollAnswerImage'   => $AttachmentFile,
-                                    'UpdatedOn'         => date('Y-m-d H:i:s'),
+            if($answer != '' || $poll_answer_image['name'][$i] != '') {
+                $insertData = array(
+                                    'PollId'             => $PollId,
+                                    'PollAnswer'         => $answer,
+                                    'PollAnswerStatus'   => 1,
+                                    'AddedBy'            => $UserProfileId,
+                                    'UpdatedBy'          => $UserProfileId,
+                                    'AddedOn'            => date('Y-m-d H:i:s'),
+                                    'UpdatedOn'          => date('Y-m-d H:i:s'),
                                     );
-                $this->db->where('PollAnswerId', $PollAnswerId);
-                $this->db->update($this->pollAnswerTbl, $updateData);
+                $this->db->insert($this->pollAnswerTbl, $insertData);
+
+                $PollAnswerId = $this->db->insert_id();
+
+                $upload_file_name = $poll_answer_image['name'][$i];
+            
+                if($upload_file_name != '') {
+
+                    $AttachmentTypeId = $this->getAttachmentTypeId($upload_file_name);
+
+                    $AttachmentFile = date('YmdHisA').'-'.time().'-POLL-ANSWER-'.mt_rand().'.'.end(explode('.', $upload_file_name));
+
+                    if($AttachmentTypeId == 1) {
+                        $path = POLL_IMAGE_DIR;
+                    } else if($AttachmentTypeId == 2) {
+                        $path = POLL_VIDEO_DIR;
+                    } else if($AttachmentTypeId == 4) {
+                        $path = POLL_AUDIO_DIR;
+                    } else {
+                        $path = POLL_DOC_DIR;
+                    }
+                    $path = $path.$AttachmentFile;
+                    $source = $poll_answer_image['tmp_name'][$i];
+
+                    $upload_result = uploadFileOnServer($source, $path);
+
+                    $updateData = array(
+                                        'PollAnswerImage'   => $AttachmentFile,
+                                        'UpdatedOn'         => date('Y-m-d H:i:s'),
+                                        );
+                    $this->db->where('PollAnswerId', $PollAnswerId);
+                    $this->db->update($this->pollAnswerTbl, $updateData);
+                }
             }
             $i++;
+            
         }
         return true;
     }

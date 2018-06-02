@@ -24,15 +24,15 @@
                 <div class="row  border-bottom white-bg dashboard-header">
                     <div class="col-md-12">
                         <div class="portlet box ">
-                            <div class="portlet-header">
+                            <!-- <div class="portlet-header">
                                 <ol class="breadcrumb">
                                     <li> <a class="text-capitalize" href="<?=base_url();?>leader/dashboard">Kaajneeti</a> </li>
                                     <li> <a class="text-capitalize" href="<?=base_url(); ?>organize/team">Organize</a> </li>
                                     <li class="active"><strong><a class="text-capitalize" href="<?=base_url(); ?>organize/poll">Poll</a> </strong> </li>
                                 </ol>
-                            </div>
+                            </div> -->
 
-                            <?php  require_once './include/organize/organize_top.php';?>
+                            <?php  //require_once './include/organize/organize_top.php';?>
 
                             <div class="portlet-body">
                                 <div id="team" class="active">

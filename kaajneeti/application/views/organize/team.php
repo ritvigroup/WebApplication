@@ -21,7 +21,7 @@
 
         <div class="page-content-wrapper animated fadeInRight">
             <div class="page-content">
-                <div class="row  border-bottom white-bg dashboard-header">
+                <div class="row white-bg dashboard-header">
                     <div class="col-md-12">
                         <div class="portlet box ">
                             <div class="portlet-header">
@@ -109,7 +109,7 @@
                                                                                        data-show-pagination-switch="true">
                                                     <thead>
                                                         <tr>
-                                                            <th><input type="checkbox" name="checkall" /></th>
+                                                            <!-- <th><input type="checkbox" name="checkall" /></th> -->
                                                             <th data-field="img" data-sortable="true" data-visible="true">IMG</th>
                                                             <th data-field="name" data-sortable="true" data-visible="true">NAME</th>
                                                             <th data-field="email" data-sortable="true" data-visible="true">EMAIL</th>
@@ -145,8 +145,8 @@
 
                                                         ?>
                                                         <tr class="<?php echo $TrRowStatus; ?>">
-                                                            <td><input type="checkbox" name="check_list[]" value="<?php echo $my_team->UserProfileId; ?>" /></td>
-                                                            <td><img src="<?php echo $profile_pic; ?>" style="border: 1px solid #fff; box-shadow: 0 2px 3px rgba(0,0,0,0.25);width: 50px; height: 50px;" class="img-circle"/></td>
+                                                            <!-- <td><input type="checkbox" name="check_list[]" value="<?php echo $my_team->UserProfileId; ?>" /></td> -->
+                                                            <td><img src="<?php echo $profile_pic; ?>" style="border: 1px solid #fff; box-shadow: 0 2px 3px rgba(0,0,0,0.25);width: 30px; height: 30px;" class="img-circle"/></td>
                                                             <td><a href="<?php echo $UserProfileHrefLink; ?>" onClick="return showUserDetail(<?php echo $my_team->UserProfileId; ?>);"><?php echo $my_team->FirstName.' '.$my_team->LastName; ?></a></td>
                                                             <td><?php echo $my_team->Email; ?></td>
                                                             <td><?php echo $my_team->ProfileUserName; ?></td>

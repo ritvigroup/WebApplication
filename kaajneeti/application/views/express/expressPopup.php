@@ -48,7 +48,23 @@
                     <option value="0">Private</option>
                 </select>
                 <textarea class="form-control placeholder" id="express_yourself_text"  placeholder="What is happening?" rows="2"></textarea>
+                <?php
+                // echo '<pre>';
+                // print_r($Connections);
+                // echo '</pre>';
+                ?>
+                <input type="text" id="post_location" name="post_location" placeholder="Enter Your Location" class="form-control" style="display: none;">
+                <select id="post_attendee" name="post_attendee" multiple class="form-control" style="display: none;">
+                    <?php
+                    foreach($Connections->result AS $my_connect) {
+                        echo '<option value="'.$my_connect->UserProfileId.'">'.$my_connect->FirstName.' '.$my_connect->LastName.'</option>';
+                    }
+                    ?>
+                </select>
                 <input type="file" name="file[]">
+
+                <img src="<?php echo base_url()?>assets/images/location.png" class="location_express" id="location_express" onclick="return location_box_display();">
+                <img src="<?php echo base_url()?>assets/images/tag.png" class="tag_express" id="tag_express" onclick="return tag_box_display();">
             </div>
         </div>
     </div>

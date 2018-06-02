@@ -9,8 +9,11 @@
                             <li <?php if($this->uri->segment(2) == 'fleet') { ?> class="active"<?php } ?>><a href="<?=base_url();?>organize/fleet">Fleet</a></li>
                             <li <?php if($this->uri->segment(2) == 'document') { ?> class="active"<?php } ?>><a href="<?=base_url();?>organize/document">Document</a></li>
                             <li <?php if($this->uri->segment(2) == 'group') { ?> class="active"<?php } ?>><a href="<?=base_url();?>organize/group">Group</a></li>
+                            
+                            <?php /*
                             <li <?php if($this->uri->segment(2) == 'event') { ?> class="active"<?php } ?>><a href="<?=base_url();?>organize/event">Event</a></li>
                             <li <?php if($this->uri->segment(2) == 'poll') { ?> class="active"<?php } ?>><a href="<?=base_url();?>organize/poll">Poll</a></li>
+                            */ ?>
                         </ul>
                     </div>
                 </div>

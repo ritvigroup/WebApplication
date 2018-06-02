@@ -33,9 +33,10 @@ class Document extends CI_Controller {
     public function saveMyDocumentFolder() {
         $error_occured = false;
 
-        $UserProfileId          = $this->input->post('user_profile_id');
-        $DocumentFolderName     = $this->input->post('folder_name');
-        $DocumentFolderDescription     = $this->input->post('folder_description');
+        $UserProfileId              = $this->input->post('user_profile_id');
+        $DocumentFolderName         = $this->input->post('folder_name');
+        $DocumentFolderDescription  = $this->input->post('folder_description');
+        $ParentDocumentFolderId     = (($this->input->post('parent_folder_id') > 0) ? $this->input->post('parent_folder_id') : 0);
         
         if($UserProfileId == "") {
             $msg = "Please select your profile";

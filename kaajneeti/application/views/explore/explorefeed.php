@@ -66,7 +66,7 @@
             <a href="#" class="pull-left">
                 <img alt="image" class="img-circle" src="<?php echo $PostByProfilePic; ?>">
             </a>
-            <div class="media-body "> 
+            <div class="media-body1 "> 
                 <small class="pull-right text-navy"><?php echo $PostOn; ?></small>  
                 <strong><?php echo $PostBy; ?></strong> file a complaint <br> 
                 <small class="text-muted"><?php echo date('h:i a - d.m.Y', strtotime($PostOnTime)); ?></small>
@@ -158,11 +158,20 @@
             <a href="#" class="pull-left">
                 <img alt="image" class="img-circle" src="<?php echo $PostByProfilePic; ?>">
             </a>
-            <div class="media-body ">
+            <div class="media-body1 ">
                 <?php
                 if($this->session->userdata('UserProfileId') == $result_data->polldata->PollProfile->UserProfileId) {
                 ?>
-                <div style="float: right;"><a class="btn btn-xs btn-danger" onClick="return deleteMyPoll(<?php echo $PollId; ?>);"><i class="glyphicon glyphicon-remove " aria-hidden="true"></i> Delete</a></div>
+                <div style="float: right;">
+                    <div class="dropdown">
+                        <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown"> <i class="fa fa-ellipsis-h" aria-hidden="true"></i>
+                        </button>
+                        <ul class="dropdown-menu organize-user">
+                            <li><a href="javascript:void(0);">Edit</a></li>
+                            <li><a href="javascript:void(0);" onClick="return deleteMyPoll(<?php echo $PollId; ?>);">Delete</a></li>
+                        </ul>
+                    </div>
+                </div>
                 <?php } ?>
 
              <small class="pull-right text-navy"><?php echo $PostOn; ?></small>  <strong><?php echo $PostBy; ?></strong> created poll
@@ -172,17 +181,28 @@
             <div class="">
                 <div class="photos">
                     <p><?php echo $PollQuestion.$PollImage; ?></p>
-                    <ul>
-                        <?php
-                        foreach($PollAnswerWithTotalParticipation AS $answers) {
+                    <div id="participate_poll_<?php echo $PollId; ?>">
+                        <ul>
+                            <?php
+                            foreach($PollAnswerWithTotalParticipation AS $answers) {
 
-                            $PollAnswerImage = ($answers->PollAnswerImage != '') ? '<img src="'.$answers->PollAnswerImage.'" style="width: 200px; height: 120px;">' : '';
-                            if($answers->PollAnswer != '') {
-                                echo '<li style="overflow: hidden; max-height: 300px;">'.$PollAnswerImage.'<br>'.$answers->PollAnswer.' : <input type="button" value="'.$answers->TotalAnswerdMe.'"></li>';
+                                $PollAnswerImage = ($answers->PollAnswerImage != '') ? '<img src="'.$answers->PollAnswerImage.'" style="width: 200px; height: 120px;">' : '';
+                                echo '<li style="overflow: hidden; max-height: 300px;">'.$PollAnswerImage.'<br>';
+                                
+
+                                if($MeParticipated > 0) {
+                                    if($answers->PollAnswer != '') {
+                                        echo $answers->PollAnswer;
+                                    }
+                                } else {
+                                    echo '<input type="button" value="'.$answers->PollAnswer.'" onClick="return participatePollWithAnswer('.$PollId.', '.$answers->PollAnswerId.');">';
+                                }
+                                //echo '<input type="button" value="'.$answers->TotalAnswerdMe.'">';
+                                echo '</li>';
                             }
-                        }
-                        ?>
-                    </ul>
+                            ?>
+                        </ul>
+                    </div>
                 </div>
                 
                 <div class="actions text-center"> 
@@ -206,6 +226,10 @@
             </div>
         </div>
     <?php } else if($result_data->feedtype == 'event') {
+        
+        // echo '<pre>';
+        // print_r($result_data->eventdata);
+        // echo '</pre>';
         
         $EventId   = $result_data->eventdata->EventId;
         $EventUniqueId   = $result_data->eventdata->EventUniqueId;
@@ -256,11 +280,20 @@
             <a href="#" class="pull-left">
                 <img alt="image" class="img-circle" src="<?php echo $PostByProfilePic; ?>">
             </a>
-            <div class="media-body "> 
+            <div class="media-body1 "> 
                 <?php
                 if($this->session->userdata('UserProfileId') == $result_data->eventdata->EventProfile->UserProfileId) {
                 ?>
-                <div style="float: right;"><a class="btn btn-xs btn-danger" onClick="return deleteMyEvent(<?php echo $EventId; ?>);"><i class="glyphicon glyphicon-remove " aria-hidden="true"></i> Delete</a></div>
+                <div style="float: right;">
+                    <div class="dropdown">
+                        <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown"> <i class="fa fa-ellipsis-h" aria-hidden="true"></i>
+                        </button>
+                        <ul class="dropdown-menu organize-user">
+                            <li><a href="javascript:void(0);">Edit</a></li>
+                            <li><a href="javascript:void(0);" onClick="return deleteMyEvent(<?php echo $EventId; ?>);">Delete</a></li>
+                        </ul>
+                    </div>
+                </div>
                 <?php } ?>
 
                 <small class="pull-right text-navy"><?php echo $PostOn; ?></small>  <strong><?php echo $PostBy; ?></strong> created an event
@@ -273,17 +306,30 @@
                         echo '<img src="'.$event_main_image.'" style="max-width: 100%;">';
                     }?></p>
                     <p><?php echo $EventName; ?></p>
-                    <p>
-                        <?php foreach($TotalEventInterest AS $event_interest) { ?>
-                            <?php echo $event_interest->EventInterestTypeName .' : '.$event_interest->TotalCount; ?>, 
-                        <?php } ?>
-                    </p>
                     <p>Start Date: <?php echo date('d-M, Y', strtotime($StartDate)); ?></p>
                     <p>End Date: <?php echo date('d-M, Y', strtotime($EndDate)); ?></p>
+                    <?php if($MeInterested > 0) { ?>
+                    <p>
+                        <?php foreach($TotalEventInterest AS $event_interest) { ?>
+                            <?php echo $event_interest->EventInterestTypeName .' : '.$event_interest->TotalCount; ?><br>
+                        <?php } ?>
+                        <br><br>
+                        You have shown interest with this event.
+                    </p>
+                    <?php } else { ?>
+                        <p id="participate_event_<?php echo $EventId; ?>">
+                            <?php foreach($TotalEventInterest AS $event_interest) { ?>
+                                <input type="button" onClick="return saveMyEventInterest(<?php echo $EventId; ?>, <?php echo $event_interest->EventInterestTypeId;?>);" value="<?php echo $event_interest->EventInterestTypeName; ?>">&nbsp;&nbsp;&nbsp;&nbsp;
+                            <?php } ?>
+                        </p>
+                    <?php } ?>
+                    
                     <p>
                         <?php
-                        foreach($EventAttachment AS $event_attachment) {
-                            echo '<img src="'.$event_attachment->AttachmentFile.'" style="width: 200px; height: 120px; margin-left: 10px;">';
+                        if(count($EventAttachment) > 1) {
+                            foreach($EventAttachment AS $event_attachment) {
+                                echo '<img src="'.$event_attachment->AttachmentFile.'" style="width: 200px; height: 120px; margin-left: 10px;">';
+                            }
                         }
                         ?>
                     </p>
@@ -309,6 +355,10 @@
         </div>
     <?php } else if($result_data->feedtype == 'post') {
         
+        // echo '<pre>';
+        // print_r($result_data->postdata);
+        // echo '</pre>';
+
         $PostId             = $result_data->postdata->PostId;
         $UserProfileId      = $result_data->postdata->UserProfileId;
         $PostTitle          = $result_data->postdata->PostTitle;
@@ -334,20 +384,49 @@
         } else {
             $PostByProfilePic = ($result_data->postdata->PostProfile->ProfilePhotoPath != '') ? $result_data->postdata->PostProfile : base_url().'assets/images/default-user.png';
         }
+
+        $post_status_string = 'post status';
+        if($PostLocation != '') {
+            $post_status_string .= ' at <b>'.$PostLocation.'</b>';
+        }
+        if(count($PostTag) > 0) {
+            $post_status_string .= ' with ';
+            $total_tag = count($PostTag);
+            $i = 1;
+            foreach($PostTag AS $tag_people) {
+                $post_status_string .= '<b>'.$tag_people->FirstName.' '.$tag_people->LastName.'</b>';
+                $i++;
+                if($i == $total_tag) {
+                    $post_status_string .= ' and ';
+                } else if($i < $total_tag) {
+                    $post_status_string .= ', ';
+                }
+            }
+        }
         ?>
 
         <div class="feed-element box_desgin_shadow" id="explore_post_<?php echo $PostId; ?>">
             <a href="#" class="pull-left">
                 <img alt="image" class="img-circle" src="<?php echo $PostByProfilePic; ?>">
             </a>
-            <div class="media-body "> 
+            <div class="media-body1 "> 
                 <?php
                 if($this->session->userdata('UserProfileId') == $result_data->postdata->PostProfile->UserProfileId) {
                 ?>
-                <div style="float: right;"><a class="btn btn-xs btn-danger" onClick="return deleteMyPostStatus(<?php echo $PostId; ?>);"><i class="glyphicon glyphicon-remove " aria-hidden="true"></i> Delete</a></div>
+
+                <div style="float: right;">
+                    <div class="dropdown">
+                        <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown"> <i class="fa fa-ellipsis-h" aria-hidden="true"></i>
+                        </button>
+                        <ul class="dropdown-menu organize-user">
+                            <li><a href="javascript:void(0);">Edit</a></li>
+                            <li><a href="javascript:void(0);" onClick="return deleteMyPostStatus(<?php echo $PostId; ?>);">Delete</a></li>
+                        </ul>
+                    </div>
+                </div>
                 <?php } ?>
                 <small class="pull-right text-navy"><?php echo $PostOn; ?></small>  
-                <strong><?php echo $PostBy; ?></strong> post status
+                <strong><?php echo $PostBy; ?></strong> <?php echo $post_status_string; ?>
                 <br> 
                 <small class="text-muted"><?php echo date('h:i a - d.m.Y', strtotime($AddedOnTime)); ?></small>
 
