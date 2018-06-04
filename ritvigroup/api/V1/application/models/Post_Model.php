@@ -292,7 +292,7 @@ class Post_Model extends CI_Model {
         $TotalUnLikes   = $this->getTotalUnLike($PostId);
         $MeLike         = $this->getMeLike($UserProfileId, $PostId);
         $MeUnLike       = $this->getMeUnLike($UserProfileId, $PostId);
-        $TotalComment   = 0;
+        $TotalComment   = $this->getAllPostComment($PostId, $UserProfileId, 1);;
 
 
         $user_data_array = array(

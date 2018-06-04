@@ -11,11 +11,11 @@
                     <div class="col-md-12">
                         <div class="form-group">
                             <label>Folder Name: <span class="error">*</span></label>
-                            <input type="text" class="form-control" id="folder_name" name="folder_name" placeholder="Folder Name" required>
+                            <input type="text" class="form-control" id="folder_name" name="folder_name" placeholder="Folder Name" autocomplete="off" required>
                         </div>
                     </div>
                 </div>
-                <div class="row">
+                <div class="row" style="display: none;">
                     <div class="col-md-12">
                         <div class="form-group">
                             <label>Folder Description: </label>
@@ -27,8 +27,9 @@
         </div>
     </div>
     <div class="modal-footer">
-        <button type="submit" class="btn btn-success save_folder">Save</button>
+        <input type="hidden" id="parent_folder_id" value="<?php echo $parent_folder_id; ?>">
         <button type="reset" data-dismiss="modal" class="btn btn-default">Cancel</button>
+        <button type="submit" class="btn btn-success save_folder">Save</button>
     </div>
 </form>
 
@@ -40,6 +41,7 @@
         var $this = $(this);
         var folder_name           = $("#folder_name").val();
         var folder_description    = $("#folder_description").val();
+        var parent_folder_id      = $("#parent_folder_id").val();
 
         
 
@@ -49,6 +51,7 @@
             $.post("<?php echo base_url(); ?>organize/newFolder", {
                                                             folder_name: folder_name, 
                                                             folder_description: folder_description,
+                                                            parent_folder_id: parent_folder_id,
                                                             },
             function (data, status) {
                
@@ -60,9 +63,11 @@
                     $('.save_folder').html('Save');
                     if (data.status === "success") {
                         
+                        window.location.href=window.location.href;
+                        return false;
                         swal(data.message, "This folder is added in your folder list to", "success");
-
-                        $('#folder_id').append('<option value="'+data.result.DocumentFolderId+'">'+data.result.DocumentFolderName+'</option>');
+                        $('.modal').modal(toggle);
+                        //$('#folder_id').append('<option value="'+data.result.DocumentFolderId+'">'+data.result.DocumentFolderName+'</option>');
                         return false;
                     }
                 }

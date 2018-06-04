@@ -68,59 +68,11 @@
 <!-- start theme config -->
 
 
+<script src="<?=base_url();?>assets/js/select2.js"></script>
+
+
 
 <script type="text/javascript">
-    $('.form_datetime').datetimepicker({
-        //language:  'fr',
-        weekStart: 1,
-        todayBtn:  1,
-	    autoclose: 1,
-	    todayHighlight: 1,
-	    startView: 2,
-	    forceParse: 0,
-        showMeridian: 1
-    });
-  	$('.form_date').datetimepicker({
-        language:  'fr',
-        weekStart: 1,
-        todayBtn:  1,
-	    autoclose: 1,
-	    todayHighlight: 1,
-	    startView: 2,
-	    minView: 2,
-	    forceParse: 0
-	});
-  	$('.form_time').datetimepicker({
-        language:  'fr',
-        weekStart: 1,
-        todayBtn:  1,
-	    autoclose: 1,
-	    todayHighlight: 1,
-	    startView: 1,
-	    minView: 0,
-	    maxView: 1,
-	    forceParse: 0
-    });
-
-	$(function () {
-		$('#datetimepicker12').datetimepicker({
-	    	inline: true,
-	   		sideBySide: true
-		});
-      
-       	$('input[name="daterange"]').daterangepicker();       
-
-        $('input[name="dateTimeRange"]').daterangepicker({
-	        timePicker: true,
-	        timePickerIncrement: 30,
-	        locale: {
-	            format: 'MM/DD/YYYY h:mm A'
-	        }
-	    });
-
-    });
-
-
     function openExpressPopup() {
 
         $.post("<?php echo base_url(); ?>express/expressPopup", {'display': 'Y'},
@@ -130,10 +82,39 @@
                 } else {
                     $('.modal-content-express').html(data);
                 }
+                $('.js-example-basic-single').select2();
+                $('.explore_popup_photo').click(function(){
+                      $('.upload-file').click();
+                      $('.upload-file').change(function(){
+
+                            var file = this.files[0];
+                            var name = file.name;
+                            // $('.status').html(name);
+                      });
+                });
+
+                 $("#imgUpload").change(function(){
+                    readURL(this);
+                });
+
+
             });
     }
 
+    function readURL(input) {
+     for(var i =0; i< input.files.length; i++){
+         if (input.files[i]) {
+            var reader = new FileReader();
 
+            reader.onload = function (e) {
+               var img = $('<img id="dynamic">');
+               img.attr('src', e.target.result);
+               img.appendTo('#form1');  
+            }
+            reader.readAsDataURL(input.files[i]);
+           }
+        }
+    }
 
 
     function newExpressPopupEvent() {
@@ -618,6 +599,29 @@
     };
 </script>
 
+<script>
+    function readURL(input) {
+
+     for(var i =0; i< input.files.length; i++){
+         if (input.files[i]) {
+            var reader = new FileReader();
+
+            reader.onload = function (e) {
+               var img = $('<img id="dynamic" style="height: 100px; width: 100px; margin: 5px;">');
+               img.attr('src', e.target.result);
+               img.appendTo('#image_selected');  
+            }
+            reader.readAsDataURL(input.files[i]);
+           }
+        }
+    }
+
+    $("#imgUpload").change(function(){
+        alert(input.files.length);
+        readURL(this);
+    });
+</script>
+
 
 <script>
 // When the user clicks on the button, goggle between hiding and showing the dropdown content
@@ -641,6 +645,8 @@ window.onclick = function(e) {
 <script>
 	$(document).ready(function() {
 
+        $('.js-example-basic-single').select2();
+
 		$("#activate_user").click(function(){
 	    	$("#activate").show();
 		});
@@ -656,23 +662,6 @@ window.onclick = function(e) {
 		$(".nav-tabs li a").click(function(){
 		    $('#user2').css("display","none");
 		});
-
-	      var calendar = $('#calendar').fullCalendar({
-	      defaultView: 'agendaWeek',
-	      editable: true,
-	        selectable: true,
-	      //header and other values
-	      select: function(start, end, allDay) {
-	          endtime = $.fullCalendar.formatDate(end,'h:mm tt');
-	          starttime = $.fullCalendar.formatDate(start,'ddd, MMM d, h:mm tt');
-	          var mywhen = starttime + ' - ' + endtime;
-	          $('#createEventModal #apptStartTime').val(start);
-	          $('#createEventModal #apptEndTime').val(end);
-	          $('#createEventModal #apptAllDay').val(allDay);
-	          $('#createEventModal #when').text(mywhen);
-	          $('#createEventModal').modal('show');
-	       }
-	    });
 
 	  $('#submitButton').on('click', function(e){
 	    // We don't want this to act as a link so cancel the link action
@@ -711,4 +700,14 @@ window.onclick = function(e) {
 	    $(".add .menuBig .row .add-item").toggleClass("col-sm-3");
 	    $("#expand").toggleClass("hide");
 	});
+
+    
 </script>
+
+
+
+
+
+
+
+

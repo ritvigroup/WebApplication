@@ -221,7 +221,10 @@ class Suggestion_Model extends CI_Model {
             $res = $query->result_array();
 
             foreach($res AS $key => $result) {
-                $suggestions[] = $this->getSuggestionDetail($result['SuggestionId'], $UserProfileId);
+                $suggestions[] = array(
+                                        'feedtype'          => 'suggestion',
+                                        'suggestiondata'    => $this->getSuggestionDetail($result['SuggestionId'], $UserProfileId),
+                                        );
             }
         } else {
             $suggestions = array();

@@ -18,6 +18,13 @@
             $PostByProfilePic = ($result_data->complaintdata->ComplaintProfile->ProfilePhotoPath != '') ? $result_data->complaintdata->ComplaintProfile->ProfilePhotoPath : base_url().'assets/images/default-user.png';
         }
 
+        if($result_data->complaintdata->ComplaintProfile->UserProfileId == $this->session->userdata('UserProfileId')){
+            $PostByUrl = base_url()."profile/profile";
+        } else {
+            $PostByUrl = base_url()."profile/friendprofile/".$result_data->complaintdata->ComplaintProfile->UserProfileId;
+        }
+        
+
         $PostOn                 = $result_data->complaintdata->AddedOn;
         $PostOnTime             = $result_data->complaintdata->AddedOnTime;
         
@@ -41,8 +48,14 @@
             $pt = 0;
             foreach($ComplaintMember AS $complaint_tag) {
 
+                if($complaint_tag->UserProfileId == $this->session->userdata('UserProfileId')){
+                    $PostTagByUrl = base_url()."profile/profile";
+                } else {
+                    $PostTagByUrl = base_url()."profile/friendprofile/".$complaint_tag->UserProfileId;
+                }
+
                 $complaint_tag_name = $complaint_tag->FirstName. ' '.$complaint_tag->LastName;
-                $ComplaintMemberDisplay .= '<button type="button" class="btn green btn-outline sbold btn-xs">'.$complaint_tag_name.'</button>';
+                $ComplaintMemberDisplay .= '<button type="button" class="btn green btn-outline sbold btn-xs"><a href="'.$PostTagByUrl.'">'.$complaint_tag_name.'</a></button>';
                 $pt++;
                 //if($PostTag == $pt)
             }
@@ -63,12 +76,12 @@
         ?>
 
         <div class="feed-element box_desgin_shadow">
-            <a href="#" class="pull-left">
+            <a href="<?php echo $PostByUrl; ?>" class="pull-left">
                 <img alt="image" class="img-circle" src="<?php echo $PostByProfilePic; ?>">
             </a>
             <div class="media-body1 "> 
                 <small class="pull-right text-navy"><?php echo $PostOn; ?></small>  
-                <strong><?php echo $PostBy; ?></strong> file a complaint <br> 
+                <strong><a href="<?php echo $PostByUrl; ?>"><?php echo $PostBy; ?></a></strong> file a complaint <br> 
                 <small class="text-muted"><?php echo date('h:i a - d.m.Y', strtotime($PostOnTime)); ?></small>
 
             </div>
@@ -97,7 +110,7 @@
 
                 </div>
                 <div class="actions text-center"> 
-                    <a class="btn btn-xs btn-success pull-left" id="express_complaint_like_<?php echo $ComplaintId; ?>" onClick="return likeComplaint(<?php echo $ComplaintId; ?>);"><i class="fa fa-thumbs-up"></i> Like </a>
+                    <a class="pull-left" id="express_complaint_like_<?php echo $ComplaintId; ?>" onClick="return likeComplaint(<?php echo $ComplaintId; ?>);"><img  class="like_img" src="<?php echo base_url(); ?>assets/images/thumbs-up.png" border="0"></a>
 
                     <span class=" pull-left express_complaint_like_<?php echo $ComplaintId; ?>"><?php echo $TotalLikes; ?></span>  
                     <?php /*
@@ -105,14 +118,15 @@
                     
                     <span class="express_complaint_unlike_<?php echo $ComplaintId; ?>"><?php echo $TotalUnLikes; ?></span>
                     */ ?>
-                    <a class="btn btn-xs aqua pull-right" data-target="#express-popup" data-toggle="modal" onClick="return commentComplaint(<?php echo $ComplaintId; ?>);"><i class="fa fa-pencil"></i> Comments</a> 
+                    <a class="pull-right" data-target="#express-popup" data-toggle="modal" onClick="return commentComplaint(<?php echo $ComplaintId; ?>);"><img  class="comment_img" src="<?php echo base_url(); ?>assets/images/comment.png" border="0"></a> 
                     
                     <span class=" pull-right express_complaint_comment_<?php echo $ComplaintId; ?>"><?php echo $TotalComment; ?></span>
                     
                 </div>
+                <div class="clearfix"></div>
                 <div class="row">
-                    <div class="col-sm-10"><input type="text" id="complaint_comment_<?php echo $ComplaintId; ?>" type="text" placeholder="Enter your comment" class="form-control"/></div>
-                    <div class="col-sm-2"><button type="submit" class="btn btn-success btn_complaint_comment_<?php echo $ComplaintId; ?>" onClick="return saveComplaintComment(<?php echo $ComplaintId; ?>);">Submit&nbsp;<i class="fa fa-chevron-circle-right"></i></button></div>
+                    <div class="col-sm-12"><input type="text" id="complaint_comment_<?php echo $ComplaintId; ?>" type="text" placeholder="Enter your comment" class="form-control"/></div>
+                    <div class="col-sm-2" style="display: none;"><button type="submit" class="btn btn-success btn_complaint_comment_<?php echo $ComplaintId; ?>" onClick="return saveComplaintComment(<?php echo $ComplaintId; ?>);">Submit&nbsp;<i class="fa fa-chevron-circle-right"></i></button></div>
                 </div>
             </div>
         </div>
@@ -152,10 +166,17 @@
         } else {
             $PostByProfilePic = ($result_data->polldata->PollProfile->ProfilePhotoPath != '') ? $result_data->polldata->PollProfile : base_url().'assets/images/default-user.png';
         }
+
+        if($result_data->polldata->PollProfile->UserProfileId == $this->session->userdata('UserProfileId')){
+            $PostByUrl = base_url()."profile/profile";
+        } else {
+            $PostByUrl = base_url()."profile/friendprofile/".$result_data->polldata->PollProfile->UserProfileId;
+        }
+
         ?>
 
         <div class="feed-element box_desgin_shadow" id="explore_poll_<?php echo $PollId; ?>">
-            <a href="#" class="pull-left">
+            <a href="<?php echo $PostByUrl; ?>" class="pull-left">
                 <img alt="image" class="img-circle" src="<?php echo $PostByProfilePic; ?>">
             </a>
             <div class="media-body1 ">
@@ -174,7 +195,7 @@
                 </div>
                 <?php } ?>
 
-             <small class="pull-right text-navy"><?php echo $PostOn; ?></small>  <strong><?php echo $PostBy; ?></strong> created poll
+             <small class="pull-right text-navy"><?php echo $PostOn; ?></small>  <strong><a href="<?php echo $PostByUrl; ?>"><?php echo $PostBy; ?></a></strong> created poll
                 <br> <small class="text-muted"><?php echo date('h:i a - d.m.Y', strtotime($AddedOnTime)); ?></small>
 
             </div>
@@ -206,7 +227,7 @@
                 </div>
                 
                 <div class="actions text-center"> 
-                    <a class="btn btn-xs btn-success pull-left" id="express_poll_like_<?php echo $PollId; ?>" onClick="return likePoll(<?php echo $PollId; ?>);"><i class="fa fa-thumbs-up"></i> Like </a>
+                    <a class="pull-left" id="express_poll_like_<?php echo $PollId; ?>" onClick="return likePoll(<?php echo $PollId; ?>);"><img  class="like_img" src="<?php echo base_url(); ?>assets/images/thumbs-up.png" border="0"></a>
 
                     <span class=" pull-left express_poll_like_<?php echo $PollId; ?>"><?php echo $TotalLikes; ?></span>  
                     <?php /*
@@ -214,14 +235,14 @@
                     
                     <span class="express_poll_unlike_<?php echo $PollId; ?>"><?php echo $TotalUnLikes; ?></span>
                     */ ?>
-                    <a class="btn btn-xs aqua pull-right" data-target="#express-popup" data-toggle="modal" onClick="return commentPoll(<?php echo $PollId; ?>);"><i class="fa fa-pencil"></i> Comments</a> 
+                    <a class="pull-right" data-target="#express-popup" data-toggle="modal" onClick="return commentPoll(<?php echo $PollId; ?>);"><img  class="comment_img" src="<?php echo base_url(); ?>assets/images/comment.png" border="0"></a> 
                     
                     <span class=" pull-right express_poll_comment_<?php echo $PollId; ?>"><?php echo $TotalComment; ?></span>
                 </div>
-                <hr>
+                <div class="clearfix"></div>
                 <div class="row">
-                    <div class="col-sm-10"><input type="text" id="poll_comment_<?php echo $PollId; ?>" type="text" placeholder="Enter your comment" class="form-control"/></div>
-                    <div class="col-sm-2"><button type="submit" class="btn btn-success btn_poll_comment_<?php echo $PollId; ?>" onClick="return savePollComment(<?php echo $PollId; ?>);">Submit&nbsp;<i class="fa fa-chevron-circle-right"></i></button></div>
+                    <div class="col-sm-12"><input type="text" id="poll_comment_<?php echo $PollId; ?>" type="text" placeholder="Enter your comment" class="form-control"/></div>
+                    <div class="col-sm-2" style="display: none;"><button type="submit" class="btn btn-success btn_poll_comment_<?php echo $PollId; ?>" onClick="return savePollComment(<?php echo $PollId; ?>);">Submit&nbsp;<i class="fa fa-chevron-circle-right"></i></button></div>
                 </div>
             </div>
         </div>
@@ -266,6 +287,12 @@
             $PostByProfilePic = ($result_data->eventdata->EventProfile->ProfilePhotoPath != '') ? $result_data->eventdata->EventProfile : base_url().'assets/images/default-user.png';
         }
 
+        if($result_data->eventdata->EventProfile->UserProfileId == $this->session->userdata('UserProfileId')){
+            $PostByUrl = base_url()."profile/profile";
+        } else {
+            $PostByUrl = base_url()."profile/friendprofile/".$result_data->eventdata->EventProfile->UserProfileId;
+        }
+
         $i = 0;
         $event_main_image = '';
         foreach($EventAttachment AS $event_attachment) {
@@ -277,7 +304,7 @@
         ?>
 
         <div class="feed-element box_desgin_shadow" id="explore_event_<?php echo $EventId; ?>">
-            <a href="#" class="pull-left">
+            <a href="<?php echo $PostByUrl; ?>" class="pull-left">
                 <img alt="image" class="img-circle" src="<?php echo $PostByProfilePic; ?>">
             </a>
             <div class="media-body1 "> 
@@ -296,7 +323,7 @@
                 </div>
                 <?php } ?>
 
-                <small class="pull-right text-navy"><?php echo $PostOn; ?></small>  <strong><?php echo $PostBy; ?></strong> created an event
+                <small class="pull-right text-navy"><?php echo $PostOn; ?></small>  <strong><a href="<?php echo $PostByUrl; ?>"><?php echo $PostBy; ?></a></strong> created an event
                 <br> <small class="text-muted"><?php echo date('h:i a - d.m.Y', strtotime($AddedOnTime)); ?></small>
 
             </div>
@@ -335,7 +362,7 @@
                     </p>
                 </div>
                 <div class="actions text-center"> 
-                    <a class="btn btn-xs btn-success pull-left" id="express_event_like_<?php echo $EventId; ?>" onClick="return likeEvent(<?php echo $EventId; ?>);"><i class="fa fa-thumbs-up"></i> Like </a>
+                    <a class="pull-left" id="express_event_like_<?php echo $EventId; ?>" onClick="return likeEvent(<?php echo $EventId; ?>);"><img class="like_img" src="<?php echo base_url(); ?>assets/images/thumbs-up.png" border="0"></a>
 
                     <span class=" pull-left express_event_like_<?php echo $EventId; ?>"><?php echo $TotalLikes; ?></span>  
                     <?php /*
@@ -343,13 +370,14 @@
                     
                     <span class="express_event_unlike_<?php echo $EventId; ?>"><?php echo $TotalUnLikes; ?></span>
                     */ ?>
-                    <a class="btn btn-xs aqua pull-right" data-target="#express-popup" data-toggle="modal" onClick="return commentEvent(<?php echo $EventId; ?>);"><i class="fa fa-pencil"></i> Comments</a> 
+                    <a class="pull-right" data-target="#express-popup" data-toggle="modal" onClick="return commentEvent(<?php echo $EventId; ?>);"><img  class="comment_img" src="<?php echo base_url(); ?>assets/images/comment.png" border="0"></a> 
                     
                     <span class=" pull-right express_event_comment_<?php echo $EventId; ?>"><?php echo $TotalComment; ?></span>
                 </div>
+                <div class="clearfix"></div>
                 <div class="row">
-                    <div class="col-sm-10"><input type="text" id="event_comment_<?php echo $EventId; ?>" type="text" placeholder="Enter your comment" class="form-control"/></div>
-                    <div class="col-sm-2"><button type="submit" class="btn btn-success btn_event_comment_<?php echo $EventId; ?>" onClick="return saveEventComment(<?php echo $EventId; ?>);">Submit&nbsp;<i class="fa fa-chevron-circle-right"></i></button></div>
+                    <div class="col-sm-12"><input type="text" id="event_comment_<?php echo $EventId; ?>" type="text" placeholder="Enter your comment" class="form-control"/></div>
+                    <div class="col-sm-2" style="display: none;"><button type="submit" class="btn btn-success btn_event_comment_<?php echo $EventId; ?>" onClick="return saveEventComment(<?php echo $EventId; ?>);">Submit&nbsp;<i class="fa fa-chevron-circle-right"></i></button></div>
                 </div>
             </div>
         </div>
@@ -385,6 +413,12 @@
             $PostByProfilePic = ($result_data->postdata->PostProfile->ProfilePhotoPath != '') ? $result_data->postdata->PostProfile : base_url().'assets/images/default-user.png';
         }
 
+        if($result_data->postdata->PostProfile->UserProfileId == $this->session->userdata('UserProfileId')){
+            $PostByUrl = base_url()."profile/profile";
+        } else {
+            $PostByUrl = base_url()."profile/friendprofile/".$result_data->postdata->PostProfile->UserProfileId;
+        }
+
         $post_status_string = 'post status';
         if($PostLocation != '') {
             $post_status_string .= ' at <b>'.$PostLocation.'</b>';
@@ -394,7 +428,14 @@
             $total_tag = count($PostTag);
             $i = 1;
             foreach($PostTag AS $tag_people) {
-                $post_status_string .= '<b>'.$tag_people->FirstName.' '.$tag_people->LastName.'</b>';
+
+                if($tag_people->UserProfileId == $this->session->userdata('UserProfileId')){
+                    $PostTagByUrl = base_url()."profile/profile";
+                } else {
+                    $PostTagByUrl = base_url()."profile/friendprofile/".$tag_people->UserProfileId;
+                }
+
+                $post_status_string .= '<b><a href="'.$PostTagByUrl.'">'.$tag_people->FirstName.' '.$tag_people->LastName.'</a></b>';
                 $i++;
                 if($i == $total_tag) {
                     $post_status_string .= ' and ';
@@ -406,7 +447,7 @@
         ?>
 
         <div class="feed-element box_desgin_shadow" id="explore_post_<?php echo $PostId; ?>">
-            <a href="#" class="pull-left">
+            <a href="<?php echo $PostByUrl; ?>" class="pull-left">
                 <img alt="image" class="img-circle" src="<?php echo $PostByProfilePic; ?>">
             </a>
             <div class="media-body1 "> 
@@ -426,7 +467,7 @@
                 </div>
                 <?php } ?>
                 <small class="pull-right text-navy"><?php echo $PostOn; ?></small>  
-                <strong><?php echo $PostBy; ?></strong> <?php echo $post_status_string; ?>
+                <strong><a href="<?php echo $PostByUrl; ?>"><?php echo $PostBy; ?></a></strong> <?php echo $post_status_string; ?>
                 <br> 
                 <small class="text-muted"><?php echo date('h:i a - d.m.Y', strtotime($AddedOnTime)); ?></small>
 
@@ -456,7 +497,7 @@
                     ?></p>                                                              
                 </div>
                 <div class="actions text-center"> 
-                    <a class="btn btn-xs btn-success pull-left" id="express_post_like_<?php echo $PostId; ?>" onClick="return likePost(<?php echo $PostId; ?>);"><i class="fa fa-thumbs-up"></i> Like </a>
+                    <a class="pull-left" id="express_post_like_<?php echo $PostId; ?>" onClick="return likePost(<?php echo $PostId; ?>);"><img class="like_img" src="<?php echo base_url(); ?>assets/images/thumbs-up.png" border="0"></a>
 
                     <span class=" pull-left express_post_like_<?php echo $PostId; ?>"><?php echo $TotalLikes; ?></span>  
                     <?php /*
@@ -464,13 +505,14 @@
                     
                     <span class="express_post_unlike_<?php echo $PostId; ?>"><?php echo $TotalUnLikes; ?></span>
                     */ ?>
-                    <a class="btn btn-xs aqua pull-right" data-target="#express-popup" data-toggle="modal" onClick="return commentPost(<?php echo $PostId; ?>);"><i class="fa fa-pencil"></i> Comments</a> 
+                    <a class="pull-right" data-target="#express-popup" data-toggle="modal" onClick="return commentPost(<?php echo $PostId; ?>);"><img  class="comment_img" src="<?php echo base_url(); ?>assets/images/comment.png" border="0"></a> 
                     
                     <span class=" pull-right express_post_comment_<?php echo $PostId; ?>"><?php echo $TotalComment; ?></span>
                 </div>
+                <div class="clearfix"></div>
                 <div class="row">
-                    <div class="col-sm-10"><input type="text" id="post_comment_<?php echo $PostId; ?>" type="text" placeholder="Enter your comment" class="form-control"/></div>
-                    <div class="col-sm-2"><button type="submit" class="btn btn-success btn_post_comment_<?php echo $PostId; ?>" onClick="return savePostComment(<?php echo $PostId; ?>);">Submit&nbsp;<i class="fa fa-chevron-circle-right"></i></button></div>
+                    <div class="col-sm-12"><input type="text" id="post_comment_<?php echo $PostId; ?>" type="text" placeholder="Enter your comment" class="form-control"/></div>
+                    <div class="col-sm-2" style="display: none;"><button type="submit" class="btn btn-success btn_post_comment_<?php echo $PostId; ?>" onClick="return savePostComment(<?php echo $PostId; ?>);">Submit&nbsp;<i class="fa fa-chevron-circle-right"></i></button></div>
                 </div>
             </div>
         </div>

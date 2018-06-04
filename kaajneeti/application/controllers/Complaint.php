@@ -226,9 +226,9 @@ class Complaint extends CI_Controller {
             return false;
         }
 
-        echo '<pre>';
-        print_r($data);
-        echo '</pre>';
+        // echo '<pre>';
+        // print_r($data);
+        // echo '</pre>';
         
         $this->load->view('complaint/complaintTimeline', $data);
     }

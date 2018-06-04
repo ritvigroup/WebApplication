@@ -9,47 +9,23 @@
                 <div class="row">
                     <div class="col-md-12">
                         <div class="form-group">
-                            <?php
-                            // echo '<pre>';
-                            // print_r($DocumentFolder);
-                            // echo '</pre>';
-                            ?>
-                            <div style="float: right;"><a data-target="#modal-stackable-folder" data-toggle="modal" href="javascript:void(0);" onClick="return newFolder();">Add New</a></div>
-                            <label>Choose Folder: </label>
-                            <select class="form-control" id="folder_id" name="folder_id">
-                                <?php
-                                foreach($DocumentFolder->result AS $folder_value) {
-                                    echo '<option value="'.$folder_value->DocumentFolderId.'">'.$folder_value->DocumentFolderName.'</option>';
-                                }
-                                ?>
-                            </select>
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="form-group">
-                            <label>Document Name: </label>
-                            <input type="text" class="form-control document_name" id="document_name" name="document_name" placeholder="Document Name" required>
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="form-group">
-                            <label>Image: </label>
-                            <input type="file" name="file" class="form-control fileUploadForm" />
+                            <lable>Upload Documents: </lable>
+                            <button type="button" class="btn btn-default round-border blue_bg">
+                                <img src="<?php echo base_url(); ?>assets/images/ic_event_white.png" class="document_popup_photo" style="width: 35px; height: 35px;">
+                                <input type="file" name="file[]" id="documentUpload" multiple class="upload-file documentUploadForm" style="display: none;">
+                            </button>
                         </div>
                     </div>
                 </div>
                 
-                <div class="row">
+                <div class="row" id="document_selected">
                     
                 </div>
             </div>
         </div>
     </div>
     <div class="modal-footer">
+        <input type="hidden" id="document_parent_folder_id" value="<?php echo $parent_folder_id; ?>">
         <button type="submit" class="btn btn-success save_document">Save</button>
         <button type="reset" data-dismiss="modal" class="btn btn-default">Cancel</button>
     </div>
@@ -58,62 +34,63 @@
 
 
 <script>
+    
 
     document.querySelector('.save_document').onclick = function () {
 
-        $('.save_document').prop('disabled', true);
         
-        var folder_id  = $("#folder_id").val();
-        var document_name  = $("#document_name").val();
+        
+        var document_name       = $("#document_name").val();
+        var parent_folder_id    = $("#document_parent_folder_id").val();
+           
+        var form_data = new FormData($('input[name^="file"]'));
 
-        if (folder_id > 0) {
-            
-            var form_data = new FormData($('input[name^="file"]'));
+        var files_selected = 0;
+        jQuery.each($('input[name^="file"]')[0].files, function(i, file) {
+            form_data.append('file[]', file);
+            files_selected++;
+        });
 
-            var files_selected = 0;
-            jQuery.each($('input[name^="file"]')[0].files, function(i, file) {
-                form_data.append('file', file);
-                files_selected++;
-            });
+        if($('#document_selected').html() == "") {
+            sweetAlert("Oops...", "Please select atleast one file", "error");
+            return false;
+        }
+
+        
 
 
-            if(files_selected > 0) {
+        if(files_selected > 0) {
 
-                $('.save_document').html('Saving your document...');
+            //$('.save_document').html('Saving your document...');
+            //$('.save_document').prop('disabled', true);
 
-                form_data.append('folder_id', folder_id);
-                form_data.append('document_name', document_name);
-                form_data.append('save_document', 'Y');
+            form_data.append('parent_folder_id', parent_folder_id);
+            form_data.append('document_name', '');
+            form_data.append('save_document', 'Y');
 
-                jQuery.ajax({
-                    type: 'POST',
-                    cache: false,
-                    processData: false,
-                    contentType: false,
-                    data: form_data,
-                    url: "<?php echo base_url(); ?>organize/document",
+            jQuery.ajax({
+                type: 'POST',
+                cache: false,
+                processData: false,
+                contentType: false,
+                data: form_data,
+                url: "<?php echo base_url(); ?>organize/document",
 
-                    success: function(data) {
-                        if (data.status === "failed") {
-                            sweetAlert("Oops...", data.message, "error");
-                            $('.save_document').prop('disabled', false);
-                            $('.save_document').html('Save');
-                            return false;
-                        } else { 
-                            if (data.status === "success") {
-                                window.location.href="document";
-                            }
+                success: function(data) {
+                    if (data.status === "failed") {
+                        sweetAlert("Oops...", data.message, "error");
+                        $('.save_document').prop('disabled', false);
+                        $('.save_document').html('Save');
+                        return false;
+                    } else { 
+                        if (data.status === "success") {
+                            window.location.href=window.location.href;
                         }
                     }
-                });
-            } else {
-                sweetAlert("Oops...", "Please select atleast one file", "error");
-                $('.save_document').prop('disabled', false);
-                return false;
-            }
-
+                }
+            });
         } else {
-            sweetAlert("Oops...", "Please select any folder", "error");
+            sweetAlert("Oops...", "Please select atleast one file", "error");
             $('.save_document').prop('disabled', false);
             return false;
         }

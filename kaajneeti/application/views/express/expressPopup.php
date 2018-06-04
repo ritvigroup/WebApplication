@@ -4,40 +4,6 @@
 </div>
 <div class="modal-body">
     <div class="row">
-        <div class="col-md-12">
-            <?php /*
-            <ul class="nav navbar-nav">
-                <li><a href="javascript:void(0);"> <i class="fa fa-pencil" aria-hidden="true"></i> Compose Post</a></li>
-                <li><a href="javascript:void(0);"> <i class="fa fa-picture-o" aria-hidden="true"></i> Photo/Video Album</a></li>
-                <li><a href="javascript:void(0);" data-toggle="modal" data-target="#exampleModalCenter"> <i class="fa fa-video-camera" aria-hidden="true"></i> Live Video</a></li>
-            </ul>
-
-            
-            <div class="actions action-right">
-
-                <div class="dropdown">
-                    <button onclick="myFunction()" class="dropbtn btn">&nbsp;Manage <span class="caret"></span></button>&nbsp;
-                    <div id="myDropdown" class="dropdown-content">
-                        <a href="#home"> Post</a>
-                        <a href="#about"> Poll</a>
-                        <a href="#home"> Event</a>
-                        <a href="#about">Task</a>
-                        <a href="#about">Calender</a>
-                        <a href="#about">Social Post</a>
-                        <a  data-target="#modal-stackable" data-toggle="modal" href="javascript:void(0);" onClick="return newTeam();"  href="#contact"> New Documents</a>
-                        <a href="#about"> New Group</a>
-                    </div>
-                </div>
-            </div>
-            */ ?>
-
-        </div>
-    </div>
-
-
-    
-
-    <div class="row">
         <div class="col-xs-12">
             <div class="textarea-img">
                 <img src="<?php echo $this->session->userdata('UserProfilePic'); ?>"  width="50"  height="50" class="img-circle">
@@ -53,21 +19,29 @@
                 // print_r($Connections);
                 // echo '</pre>';
                 ?>
-                <input type="text" id="post_location" name="post_location" placeholder="Enter Your Location" class="form-control" style="display: none;">
-                <select id="post_attendee" name="post_attendee" multiple class="form-control" style="display: none;">
+                <input type="text" id="1post_location" name="post_location" placeholder="Enter Your Location" class="form-control controls" style="display: none;">
+
+                <input id="autocomplete" placeholder="Enter your address" onFocus="geolocate()" type="text">
+                
+
+                <select class="js-example-basic-single" name="post_attendee[]" multiple id="post_attendee" class="form-control" style="display: none;">
                     <?php
                     foreach($Connections->result AS $my_connect) {
                         echo '<option value="'.$my_connect->UserProfileId.'">'.$my_connect->FirstName.' '.$my_connect->LastName.'</option>';
                     }
                     ?>
                 </select>
-                <input type="file" name="file[]">
+                
 
                 <img src="<?php echo base_url()?>assets/images/location.png" class="location_express" id="location_express" onclick="return location_box_display();">
-                <img src="<?php echo base_url()?>assets/images/tag.png" class="tag_express" id="tag_express" onclick="return tag_box_display();">
+                <img src="<?php echo base_url()?>assets/images/tag-connect.png" class="tag_express" id="tag_express" onclick="return tag_box_display();">
             </div>
+            <div id="image_selected"></div>
+
+            
         </div>
     </div>
+
 
     <div class="row" style="max-height: 100px; overflow-y: auto; overflow-x: none; max-width: 100%;">
 
@@ -85,7 +59,8 @@
         </div>
         <div class="col-md-3" style="text-align:center;">
             <button type="button" class="btn btn-default round-border blue_bg">
-                <img src="<?php echo base_url(); ?>/assets/images/ic_event_white.png" style="width: 35px; height: 35px;">
+                <img src="<?php echo base_url(); ?>/assets/images/ic_event_white.png" class="explore_popup_photo" style="width: 35px; height: 35px;" aria-hidden="true">
+                <input type="file" id="imgUpload" multiple class="upload-file" style="display: none;">
             </button><br>
             <span>Photo/Video</span>
         </div>
@@ -127,5 +102,73 @@
        
     </div>
 </div>
+<script>
+      // This example displays an address form, using the autocomplete feature
+  // of the Google Places API to help users fill in the information.
 
+  // This example requires the Places library. Include the libraries=places
+  // parameter when you first load the API. For example:
+  // <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&libraries=places">
 
+  var placeSearch, autocomplete;
+  var componentForm = {
+    street_number: 'short_name',
+    route: 'long_name',
+    locality: 'long_name',
+    administrative_area_level_1: 'short_name',
+    country: 'long_name',
+    postal_code: 'short_name'
+  };
+
+  function initAutocomplete() {
+    // Create the autocomplete object, restricting the search to geographical
+    // location types.
+    autocomplete = new google.maps.places.Autocomplete(
+        /** @type {!HTMLInputElement} */(document.getElementById('autocomplete')),
+        {types: ['geocode']});
+
+    // When the user selects an address from the dropdown, populate the address
+    // fields in the form.
+    //autocomplete.addListener('place_changed', fillInAddress);
+  }
+
+  function fillInAddress() {
+    // Get the place details from the autocomplete object.
+    var place = autocomplete.getPlace();
+
+    for (var component in componentForm) {
+      document.getElementById(component).value = '';
+      document.getElementById(component).disabled = false;
+    }
+
+    // Get each component of the address from the place details
+    // and fill the corresponding field on the form.
+    for (var i = 0; i < place.address_components.length; i++) {
+      var addressType = place.address_components[i].types[0];
+      if (componentForm[addressType]) {
+        var val = place.address_components[i][componentForm[addressType]];
+        document.getElementById(addressType).value = val;
+      }
+    }
+  }
+
+  // Bias the autocomplete object to the user's geographical location,
+  // as supplied by the browser's 'navigator.geolocation' object.
+  function geolocate() {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(function(position) {
+        var geolocation = {
+          lat: position.coords.latitude,
+          lng: position.coords.longitude
+        };
+        var circle = new google.maps.Circle({
+          center: geolocation,
+          radius: position.coords.accuracy
+        });
+        autocomplete.setBounds(circle.getBounds());
+      });
+    }
+  }
+</script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDUB9PGavJl7oOlE-30gtTyY1pf-uN75iU&libraries=places&callback=initAutocomplete"
+        async defer></script>

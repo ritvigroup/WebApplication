@@ -11,15 +11,6 @@ class Document extends CI_Controller {
         parent::__construct();
 
         $this->load->model('User_Model');
-        $this->load->model('Event_Model');
-        $this->load->model('Information_Model');
-        $this->load->model('Poll_Model');
-        $this->load->model('Post_Model');
-        $this->load->model('Suggestion_Model');
-        $this->load->model('Leader_Model');
-        $this->load->model('Feeling_Model');
-        $this->load->model('Politicalparty_Model');
-        $this->load->model('Suggestion_Model');
         $this->load->model('Document_Model');
 
         $this->device_token 	= $this->input->post('device_token');
@@ -48,7 +39,7 @@ class Document extends CI_Controller {
 
             $this->db->query("BEGIN");
 
-            $folder_res = $this->Document_Model->getDocumentFolderExist($DocumentFolderName, $UserProfileId);
+            $folder_res = $this->Document_Model->getDocumentFolderExist($DocumentFolderName, $UserProfileId, $ParentDocumentFolderId);
             if($folder_res['DocumentFolderId'] > 0) { 
                 $this->db->query("ROLLBACK");
                 $msg = "Folder already exist. Error occured";
@@ -58,6 +49,7 @@ class Document extends CI_Controller {
                 $insertData = array(
                                     'DocumentFolderName'        => $DocumentFolderName,
                                     'DocumentFolderDescription' => $DocumentFolderDescription,
+                                    'ParentDocumentFolderId'    => $ParentDocumentFolderId,
                                     'DocumentFolderStatus'      => 1,
                                     'AddedBy'                   => $UserProfileId,
                                     'UpdatedBy'                 => $UserProfileId,
@@ -94,7 +86,6 @@ class Document extends CI_Controller {
         }
         displayJsonEncode($array);
     }
-
 
     public function getDocumentFolderDetail() {
         $error_occured = false;
@@ -136,18 +127,26 @@ class Document extends CI_Controller {
         displayJsonEncode($array);
     }
 
+    public function getFolders() {
+        $folders = $this->Document_Model->getFolders();
+
+        echo '<pre>';
+        print_r($folders);
+        die;
+    }
 
     public function getMyAllDocumentFolder() {
         $error_occured = false;
 
-        $UserProfileId   = $this->input->post('user_profile_id');
+        $UserProfileId          = $this->input->post('user_profile_id');
+        $ParentDocumentFolderId = $this->input->post('parent_folder_id');
         
         if($UserProfileId == "") {
             $msg = "Please select your profile";
             $error_occured = true;
         } else {
 
-            $folders = $this->Document_Model->getMyAllDocumentFolder($UserProfileId);
+            $folders = $this->Document_Model->getMyAllDocumentFolder($UserProfileId, $ParentDocumentFolderId);
             if(count($folders) > 0) {
                 $msg = "Document folder fetched successfully";
             } else {
@@ -172,13 +171,11 @@ class Document extends CI_Controller {
         displayJsonEncode($array);
     }
 
-
     public function saveMyDocument() {
         $error_occured = false;
 
         $UserProfileId      = $this->input->post('user_profile_id');
         $DocumentFolderId   = $this->input->post('folder_id');
-        $DocumentName       = $this->input->post('document_name');
 
       
         if($UserProfileId == "") {
@@ -214,22 +211,72 @@ class Document extends CI_Controller {
         displayJsonEncode($array);
     }
 
-
-    public function deleteDocument() {
+    public function deleteFolder() {
         $error_occured = false;
 
-        $UserProfileId          = $this->input->post('user_profile_id');
-        $DocumentId             = $this->input->post('document_id');
-        $FriendUserProfileId    = $this->input->post('friend_user_profile_id');
+        $UserProfileId      = $this->input->post('user_profile_id');
+        $DocumentFolderId   = $this->input->post('folder_id');
 
         if($UserProfileId == "") {
             $msg = "Please select your profile";
             $error_occured = true;
-        } else if($DocumentId == "") {
-            $msg = "Please select your document";
+        } else if($DocumentFolderId == "") {
+            $msg = "Please select your folder";
             $error_occured = true;
-        } else if($FriendUserProfileId == "") {
-            $msg = "Please select your team";
+        } else {
+
+            $this->db->query("BEGIN");
+
+            $updateData = array(
+                                'DocumentFolderStatus'  => -1,
+                                'UpdatedOn'             => date('Y-m-d H:i:s'),
+                            );
+            $whereData = array(
+                                'DocumentFolderId'  => $DocumentFolderId,
+                                'AddedBy'           => $UserProfileId,
+                                );
+            $doc_delete = $this->Document_Model->updateMyFolder($whereData, $updateData);
+            $folder_doc_delete = $this->Document_Model->deleteMyFolderAndDocuments($DocumentFolderId, $UserProfileId);
+
+            if($doc_delete == true) {
+                
+                $this->db->query("COMMIT");
+
+                $msg = "Folder and its documents deleted successfully";
+
+            } else {
+                $this->db->query("ROLLBACK");
+                $msg = "Folder not deleted. Not authorised to delete this folder.";
+                $error_occured = true;
+            }
+        }
+
+        if($error_occured == true) {
+            $array = array(
+                            "status"        => 'failed',
+                            "message"       => $msg,
+                        );
+        } else {
+
+            $array = array(
+                           "status"         => 'success',
+                           "message"        => $msg,
+                           );
+        }
+        displayJsonEncode($array);
+    }
+
+    public function deleteDocument() {
+        $error_occured = false;
+
+        $UserProfileId  = $this->input->post('user_profile_id');
+        $DocumentId     = $this->input->post('document_id');
+
+        if($UserProfileId == "") {
+            $msg = "Please select your profile";
+            $error_occured = true;
+        } else if($DocumentId == "" || count($DocumentId) == 0) {
+            $msg = "Please select your document";
             $error_occured = true;
         } else {
 
@@ -241,7 +288,7 @@ class Document extends CI_Controller {
                             );
             $whereData = array(
                                 'DocumentId'        => $DocumentId,
-                                'AddedBy'           => $FriendUserProfileId,
+                                'AddedBy'           => $UserProfileId,
                                 );
             $doc_delete = $this->Document_Model->updateMyDocument($whereData, $updateData);
 
@@ -272,7 +319,6 @@ class Document extends CI_Controller {
         }
         displayJsonEncode($array);
     }
-
 
     public function getDocumentDetail() {
         $error_occured = false;
@@ -314,18 +360,18 @@ class Document extends CI_Controller {
         displayJsonEncode($array);
     }
 
-
     public function getMyAllDocument() {
         $error_occured = false;
 
         $UserProfileId   = $this->input->post('user_profile_id');
+        $ParentDocumentFolderId = $this->input->post('parent_folder_id');
         
         if($UserProfileId == "") {
             $msg = "Please select your profile";
             $error_occured = true;
         } else {
 
-            $docs = $this->Document_Model->getMyAllDocument($UserProfileId);
+            $docs = $this->Document_Model->getMyAllDocument($UserProfileId, $ParentDocumentFolderId);
             if(count($docs) > 0) {
                 $msg = "Document fetched successfully";
             } else {

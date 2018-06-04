@@ -513,6 +513,83 @@ class User_Model extends CI_Model {
     }
 
 
+    public function getMyConnectionWithIncomingRequest($UserProfileId) {
+
+        $this->db->select('uf.UserProfileId');
+        $this->db->from($this->UserFriendTbl. ' AS uf');
+        $this->db->join($this->userProfileTbl .' AS up' , 'uf.UserProfileId = up.UserProfileId', 'LEFT');
+        $this->db->where('uf.FriendUserProfileId', $UserProfileId);
+        $this->db->where('uf.RequestAccepted', 0);
+        $this->db->order_by('uf.RequestSentOn', 'DESC');
+        $query = $this->db->get();
+
+        $res_u = $query->result_array();
+        $connection_array = array();
+        if(count($res_u) > 0) {
+            $i = 0;
+            foreach($res_u AS $connections) {
+                $connection_array['RequestConnection'][] = array(
+                                                                'feedtype' => 'profile',
+                                                                'profiledata' => $this->getUserProfileInformation($connections['UserProfileId'], $UserProfileId),
+                                                                );
+
+                $i++;
+                if($i == $this->show_only_limit) {
+                    break;
+                }
+            }
+            $connection_array['TotalRequest'] = count($res_u);
+        } else {
+            $connection_array['RequestConnection'] = array();
+            $connection_array['TotalRequest'] = 0;
+        }
+
+
+
+        $this->db->select('uf.FriendUserProfileId');
+        $this->db->from($this->UserFriendTbl. ' AS uf');
+        $this->db->join($this->userProfileTbl .' AS up' , 'uf.FriendUserProfileId = up.UserProfileId', 'LEFT');
+        $this->db->where('uf.UserProfileId', $UserProfileId);
+        $this->db->where('uf.RequestAccepted', 1);
+        $this->db->order_by('uf.RequestAcceptedOn', 'DESC');
+
+        $query = $this->db->get();
+        
+        $res_u = $query->result_array();
+
+        $i = 0;
+        if(count($res_u) > 0) {
+            foreach($res_u AS $connections) {
+                $connection_array['Connection'][] = array(
+                                                                'feedtype' => 'profile',
+                                                                'profiledata' => $this->getUserProfileInformation($connections['FriendUserProfileId'], $UserProfileId),
+                                                                );
+                $i++;
+                if($connection_array['TotalRequest'] == 0) {
+                    if($i == 10) {
+                        break;
+                    }
+                } else {
+                    if($connection_array['TotalRequest'] >= 3) {
+                        if($i == 3) {
+                            break;
+                        }
+                    } else {
+                        if($i == 10) {
+                            break;
+                        }
+                    }
+                }
+            }
+            $connection_array['TotalConnection'] = count($res_u);
+        } else {
+            $connection_array['Connection'] = array();
+            $connection_array['TotalConnection'] = 0;
+        }
+        return $connection_array;
+    }
+
+
     public function getMyTotalConnections($UserProfileId, $for_type = 1, $total_or_list = 0, $RequestAccepted = 1) {
 
         if($total_or_list == 0) {
@@ -1976,7 +2053,13 @@ class User_Model extends CI_Model {
             if($only_total == 0) {
                 $friend_profile = $this->getUserProfileInformation($result['FriendUserProfileId'], $UserProfileId);
                 $friend_profile = array_merge($friend_profile, array('RequestSentOn' => $result['RequestSentOn']));
-                $request_friends[] = $friend_profile;
+
+                $request_friends[] = array(
+                                            'feedtype' => 'profile',
+                                            'profiledata' => $friend_profile,
+                                            );
+
+                //$request_friends[] = $friend_profile;
             } else {
                 $total++;
             }
@@ -2004,7 +2087,10 @@ class User_Model extends CI_Model {
         $fiends_profile_id = array();
 
         foreach($res_u AS $key => $result) {
-            $friends[] = $this->getUserProfileInformation($result['FriendUserProfileId'], $UserProfileId);
+            $friends[] = array(
+                                'feedtype'      => 'profile',
+                                'profiledata'   => $this->getUserProfileInformation($result['FriendUserProfileId'], $UserProfileId),
+                                );
 
             if($onlyUserProfileId == 1) {
                 $fiends_profile_id[] = $result['FriendUserProfileId'];

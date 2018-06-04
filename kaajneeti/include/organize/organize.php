@@ -152,20 +152,66 @@
             });
     }
 
-
-    function newDocument() {
-
-        $.post("<?php echo base_url(); ?>organize/newDocument", {'display': 'Y'},
+    function newDocument(parent_folder_id) {
+        var parent_folder_id = (parent_folder_id > 0) ? parent_folder_id : 0;
+        
+        $.post("<?php echo base_url(); ?>organize/newDocument", {'display': 'Y', parent_folder_id: parent_folder_id},
             function (data, status) {
                 if(data != '') {
                     $('.modal-content-ajax').html(data);
                 } else {
                     $('.modal-content-ajax').html(data);
                 }
+
+                $('.document_popup_photo').click(function(){
+                      $('.documentUploadForm').click();
+                      $('.documentUploadForm').change(function(){
+
+                            var file = this.files[0];
+                            var name = file.name;
+                            // $('.status').html(name);
+                      });
+                });
+
+                $(".documentUploadForm").change(function(){
+                    $('#document_selected').html('');
+                    readDocumentURL(this);
+                });
+
+                
             });
     }
 
-    function deleteDocument(document_id, user_profile_id) {
+    function readDocumentURL(input) {
+        var file_selected = input.files.length;
+        if(file_selected > 5) {
+            sweetAlert("Oops...", "Please select files not more than 5 at a time", "error");
+            return false;
+        }
+        for(var i =0; i < file_selected; i++) {
+            if (input.files[i]) {
+
+                //console.log(input.files[i].name);
+
+                var file_name = (parseInt(i)+1)+': '+input.files[i].name+'<br>';
+                $('#document_selected').append(file_name);
+
+                /*var reader = new FileReader();
+
+                reader.onload = function (e) {
+
+                    var file_name = (parseInt(i)+1)+': '+input.files[i].name+'<br>';
+                    //$('#document_selected').append(file_name);
+                    //var img = $('<img id="dynamic" style="width: 80px; height: 80px;">');
+                    //img.attr('src', e.target.result);
+                    //img.appendTo('#document_selected');  
+                }
+                reader.readAsDataURL(input.files[i]);*/
+            }
+        }
+    }
+
+    function deleteDocument(document_id) {
 
         var ans = confirm("Are you sure to delete this document?");
         if(!ans) {
@@ -173,7 +219,7 @@
         }
 
         $('#new_loader_div').show();
-        $.post("<?php echo base_url(); ?>organize/deleteDocument/"+document_id+'/'+user_profile_id, {'display': 'Y'},
+        $.post("<?php echo base_url(); ?>organize/deleteDocument/"+document_id, {'display': 'Y'},
             function (data, status) {
                 
                 if (data.status === "failed") {
@@ -181,7 +227,7 @@
                     
                 } else { 
                     if (data.status === "success") {
-                        window.location.href="document";
+                        window.location.href=window.location.href;
                     }
                 }
                 $('#new_loader_div').hide();
@@ -189,16 +235,40 @@
             });
     }
 
+    function newFolder(parent_folder_id) {
 
-    function newFolder() {
-
-        $.post("<?php echo base_url(); ?>organize/newFolder", {'display': 'Y'},
+        var parent_folder_id = (parent_folder_id > 0) ? parent_folder_id : 0;
+        $.post("<?php echo base_url(); ?>organize/newFolder", {'display': 'Y', parent_folder_id: parent_folder_id},
             function (data, status) {
                 if(data != '') {
                     $('.modal-content-ajax-folder').html(data);
                 } else {
                     $('.modal-content-ajax-folder').html(data);
                 }
+            });
+    }
+
+    function deleteFolder(folder_id) {
+
+        var ans = confirm("Are you sure to delete this folder and its documents?");
+        if(!ans) {
+            return false;
+        }
+
+        $('#new_loader_div').show();
+        $.post("<?php echo base_url(); ?>organize/deleteFolder/"+folder_id, {'display': 'Y'},
+            function (data, status) {
+                
+                if (data.status === "failed") {
+                    sweetAlert("Oops...", data.message, "error");
+                    
+                } else { 
+                    if (data.status === "success") {
+                        window.location.href=window.location.href;
+                    }
+                }
+                $('#new_loader_div').hide();
+                return false;
             });
     }
 

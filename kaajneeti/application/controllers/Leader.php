@@ -213,7 +213,6 @@ class Leader extends CI_Controller {
 		redirect('leader/login');
 	}
 
-
 	public function fblogout() {
         // Remove local Facebook session
         $this->facebook->destroy_session();

@@ -64,21 +64,23 @@ class Organize extends CI_Controller {
         if($this->input->method(TRUE) == "POST") {
             $_POST['user_profile_id'] = $this->session->userdata('UserProfileId');
 
+            $_POST['folder_id'] = $this->input->post('parent_folder_id');
             $post_data = $this->input->post();
 
-            /*for($i = 0; $i < count($_FILES['file']['name']); $i++) {
+            for($i = 0; $i < count($_FILES['file']['name']); $i++) {
                 if($_FILES['file']['name'][$i] != '') {
 
                     //$post_data = array_merge($post_data, array('file['.$i.']' => '@'.($_FILES['file']['tmp_name'][$i]).''));
                     $post_data = array_merge($post_data, array('file['.$i.']' => getCurlValue($_FILES['file']['tmp_name'][$i], $_FILES['file']['type'][$i], $_FILES['file']['name'][$i])));
                 }
-            }*/
+            }
 
-            if($_FILES['file']['name'] != '') {
+            /*if($_FILES['file']['name'] != '') {
 
                 //$post_data = array_merge($post_data, array('file['.$i.']' => '@'.($_FILES['file']['tmp_name'][$i]).''));
                 $post_data = array_merge($post_data, array('file' => getCurlValue($_FILES['file']['tmp_name'], $_FILES['file']['type'], $_FILES['file']['name'])));
-            }
+            }*/
+
 
             $json_decode = post_curl_with_files(API_CALL_PATH.'document/saveMyDocument', $post_data, $this->curl);
 
@@ -88,7 +90,24 @@ class Organize extends CI_Controller {
 
             return false;
         }
-        $_POST['user_profile_id'] = $this->session->userdata('UserProfileId');
+
+        $ParentDocumentFolderId = (($this->uri->segment(3) > 0) ? $this->uri->segment(3) : 0);
+        $folder_path = '';
+        if($ParentDocumentFolderId > 0) {
+            $folder_path = '/'.$ParentDocumentFolderId;
+        }
+
+        $_POST['user_profile_id']   = $this->session->userdata('UserProfileId');
+        $data['parent_folder_id'] = $_POST['parent_folder_id']  = $ParentDocumentFolderId;
+        $_POST['folder_id']         = $ParentDocumentFolderId;
+        
+
+        $json_encode = post_curl(API_CALL_PATH.'document/getDocumentFolderDetail', $this->input->post(), $this->curl);
+
+        $json_decode = json_decode($json_encode);
+        if(count($json_decode->result) > 0) {
+            $data['ParentFolder'] = $json_decode;
+        }
 
         $json_encode = post_curl(API_CALL_PATH.'document/getMyAllDocumentFolder', $this->input->post(), $this->curl);
 
@@ -116,6 +135,13 @@ class Organize extends CI_Controller {
            exit('Error');
         }
         $_POST['user_profile_id'] = $this->session->userdata('UserProfileId');
+        $parent_folder_id = $this->input->post('parent_folder_id');
+        
+        if($parent_folder_id > 0) {
+            $_POST['parent_folder_id'] = $parent_folder_id;
+        } else {
+            $parent_folder_id = $_POST['parent_folder_id'] = 0;
+        }
 
         $json_encode = post_curl(API_CALL_PATH.'document/getMyAllDocumentFolder', $this->input->post(), $this->curl);
 
@@ -124,6 +150,8 @@ class Organize extends CI_Controller {
             $data['DocumentFolder'] = $json_decode;
         }
         
+        $data['parent_folder_id'] = $parent_folder_id;
+
         $this->load->view('organize/newDocument',$data);
     }
 
@@ -136,7 +164,6 @@ class Organize extends CI_Controller {
         $_POST['user_id']                   = $this->session->userdata('UserId');
         $_POST['user_profile_id']           = $this->session->userdata('UserProfileId');
         $_POST['document_id']               = $this->uri->segment(3);
-        $_POST['friend_user_profile_id']    = $this->uri->segment(4);
 
         $json_encode = post_curl(API_CALL_PATH.'document/deleteDocument', $this->input->post(), $this->curl);
 
@@ -154,6 +181,13 @@ class Organize extends CI_Controller {
            exit('Error');
         }
         $_POST['user_profile_id'] = $this->session->userdata('UserProfileId');
+        $parent_folder_id = $this->input->post('parent_folder_id');
+        
+        if($parent_folder_id > 0) {
+            $_POST['parent_folder_id'] = $parent_folder_id;
+        } else {
+            $parent_folder_id = $_POST['parent_folder_id'] = 0;
+        }
 
         if($this->input->post('folder_name') != '') {
             $json_encode = post_curl(API_CALL_PATH.'document/saveMyDocumentFolder', $this->input->post(), $this->curl);
@@ -165,8 +199,36 @@ class Organize extends CI_Controller {
             return false;
         }
 
+        $json_encode = post_curl(API_CALL_PATH.'document/getMyAllDocumentFolder', $this->input->post(), $this->curl);
+
+        $json_decode = json_decode($json_encode);
+        if(count($json_decode->result) > 0) {
+            $data['DocumentFolder'] = $json_decode;
+        }
+
+        $data['parent_folder_id'] = $parent_folder_id;
+
         
         $this->load->view('organize/newFolder',$data);
+    }
+
+    public function deleteFolder() {
+        $data = array();
+      
+        if (!$this->input->is_ajax_request()) {
+           exit('Error');
+        }
+        $_POST['user_id']                   = $this->session->userdata('UserId');
+        $_POST['user_profile_id']           = $this->session->userdata('UserProfileId');
+        $_POST['folder_id']                 = $this->uri->segment(3);
+
+        $json_encode = post_curl(API_CALL_PATH.'document/deleteFolder', $this->input->post(), $this->curl);
+
+        header('Content-type: application/json');
+
+        echo $json_encode;
+
+        return false;
     }
 
     public function fleet() {
@@ -584,7 +646,7 @@ class Organize extends CI_Controller {
     }
 
 
-     public function poll() {
+    public function poll() {
         $data = array();
       
         $_POST['user_profile_id']   = $this->session->userdata('UserProfileId');

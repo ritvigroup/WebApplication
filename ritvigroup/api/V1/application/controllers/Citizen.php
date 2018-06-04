@@ -157,6 +157,14 @@ class Citizen extends CI_Controller {
                 $sql .= " SELECT SuggestionId AS Id, 'Suggestion' AS DataType, AddedOn AS DateAdded FROM `Suggestion` WHERE `SuggestionStatus` != -1 AND `AddedBy` = '".$UserProfileId."' ";
             }
 
+            if($DataType == "ALL") {
+                $sql .= " UNION "; 
+            }
+
+            if($DataType == "ALL" || $DataType == "information") {
+                $sql .= " SELECT InformationId AS Id, 'Information' AS DataType, AddedOn AS DateAdded FROM `Information` WHERE `InformationStatus` != -1 AND `AddedBy` = '".$UserProfileId."' ";
+            }
+
             $sql .= " ORDER BY DateAdded DESC LIMIT $start,$end";
 
 
@@ -191,6 +199,11 @@ class Citizen extends CI_Controller {
                         $Data[] = array(
                                         'feedtype' => 'suggestion',
                                         'suggestiondata' => $this->Suggestion_Model->getSuggestionDetail($val['Id'], $UserProfileId),
+                                        );
+                    } else if($val['DataType'] == "Information") {
+                        $Data[] = array(
+                                        'feedtype' => 'information',
+                                        'informationdata' => $this->Information_Model->getInformationDetail($val['Id'], $UserProfileId),
                                         );
                     } else {
                         $Data = array();

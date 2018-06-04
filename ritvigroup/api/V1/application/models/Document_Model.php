@@ -21,10 +21,24 @@ class Document_Model extends CI_Model {
     }
 
 
+    public function updateMyFolder($whereData, $updateData) {
+        $this->db->where($whereData);
+        $this->db->update($this->DocumentFolderTbl, $updateData);
+
+        return $this->db->affected_rows();
+    }
+
+    public function deleteMyFolderAndDocuments($DocumentFolderId, $UserProfileId) {
+        $this->db->select('*');
+        $this->db->from($this->DocumentFolderTbl);
+        $this->db->where('DocumentFolderId', $DocumentFolderId);
+    }
+
+
     public function saveDocument($DocumentFolderId, $UserProfileId, $DocumentName, $doc_attachment) {
         $j = 0;
 
-        /*if($doc_attachment['name'][0] != '') {
+        if(basename($doc_attachment['name'][0]) != '') {
             for($i = 0; $i < count($doc_attachment['name']); $i++) {
 
                 $DocumentFile = basename($doc_attachment['name'][$i]);
@@ -43,6 +57,8 @@ class Document_Model extends CI_Model {
                 } else {
                 }
 
+                $DocumentName = $DocumentFile;
+
                 $insertData = array(
                                     'DocumentFolderId'      => $DocumentFolderId,
                                     'DocumentName'          => $DocumentName,
@@ -55,7 +71,7 @@ class Document_Model extends CI_Model {
                                     );
                 $this->db->insert($this->DocumentTbl, $insertData);
             }
-        } else {*/
+        } else {
             $DocumentFile = basename($doc_attachment['name']);
             $AttachmentFile = '';
             if($DocumentFile != '') {
@@ -68,10 +84,8 @@ class Document_Model extends CI_Model {
                 $source = $doc_attachment['tmp_name'];
 
                 $upload_result = uploadFileOnServer($source, $path);
-            } else {
-
             }
-
+            $DocumentName = $DocumentFile;
             $insertData = array(
                                 'DocumentFolderId'      => $DocumentFolderId,
                                 'DocumentName'          => $DocumentName,
@@ -83,7 +97,7 @@ class Document_Model extends CI_Model {
                                 'UpdatedOn'             => date('Y-m-d H:i:s'),
                                 );
             $this->db->insert($this->DocumentTbl, $insertData);
-        //}
+        }
         return true;
     }
 
@@ -92,17 +106,18 @@ class Document_Model extends CI_Model {
         $this->db->where($whereData);
         $this->db->update($this->DocumentTbl, $updateData);
 
-        return $this->db->last_query();
         return $this->db->affected_rows();
     }
 
 
-    public function getMyAllDocument($UserProfileId) {
+    public function getMyAllDocument($UserProfileId, $parent_folder_id = 0) {
         $docs = array();
         if(isset($UserProfileId) && $UserProfileId > 0) {
 
+            $parent_folder_id = ($parent_folder_id > 0) ? $parent_folder_id : 0;
             $this->db->select('DocumentId');
             $this->db->from($this->DocumentTbl);
+            $this->db->where('DocumentFolderId', $parent_folder_id);
             $this->db->where('AddedBy', $UserProfileId);
             $this->db->where('DocumentStatus !=', -1);
             $this->db->order_by('UpdatedOn','DESC');
@@ -157,7 +172,7 @@ class Document_Model extends CI_Model {
         $AddedOn            = return_time_ago($res['AddedOn']);
         $UpdatedOn          = return_time_ago($res['UpdatedOn']);
 
-        $DocumentProfile       = $this->User_Model->getUserProfileInformation($AddedBy, $UserProfileId);
+        //$DocumentProfile       = $this->User_Model->getUserProfileInformation($AddedBy, $UserProfileId);
 
         $doc_folder_data_array = array(
                                     "DocumentId"            => $DocumentId,
@@ -170,20 +185,103 @@ class Document_Model extends CI_Model {
                                     "AddedOnTime"           => $res['AddedOn'],
                                     "UpdatedOn"             => $UpdatedOn,
                                     "UpdatedOnTime"         => $res['UpdatedOn'],
-                                    "DocumentProfile"     => $DocumentProfile,
+                                    //"DocumentProfile"     => $DocumentProfile,
                                     );
         return $doc_folder_data_array;
     }
 
-    
+    public function getFolders() {
+        $this->db->select('*');
+        $this->db->from($this->DocumentFolderTbl);
+        $this->db->where('ParentDocumentFolderId', 0);
 
-    public function getMyAllDocumentFolder($UserProfileId) {
-        $doc_folders = array();
+        $parent = $this->db->get();
+        
+        $categories = $parent->result();
+        $i=0;
+        $dir = array();
+        foreach($categories as $p_cat){
+            $dir[$i] = $p_cat;
+            $dir[$i]->SubFolder = $this->getSubFolders($p_cat->DocumentFolderId);
+            $i++;
+        }
+        return $categories;
+    }
+
+    public function getSubFolders($id){
+
+        $this->db->select('*');
+        $this->db->from($this->DocumentFolderTbl);
+        $this->db->where('ParentDocumentFolderId', $id);
+
+        $child = $this->db->get();
+        $categories = $child->result();
+        $i=0;
+        $sub_cat = array();
+        foreach($categories as $p_cat){
+            $sub_cat[$i] = $p_cat;
+            $sub_cat[$i]->SubFolder = $this->getSubFolders($p_cat->DocumentFolderId);
+            $i++;
+        }
+        return $sub_cat;       
+    }
+
+    public function getMyAllDocumentFolderOld($UserProfileId, $parent_folder_id = 0) {
         if(isset($UserProfileId) && $UserProfileId > 0) {
 
             $this->db->select('DocumentFolderId');
             $this->db->from($this->DocumentFolderTbl);
             $this->db->where('AddedBy', $UserProfileId);
+            $this->db->where('ParentDocumentFolderId', $parent_folder_id);
+            $this->db->where('DocumentFolderStatus !=', -1);
+            $this->db->order_by('DocumentFolderName','ASC');
+            $query = $this->db->get();
+
+            $res = $query->result_array();
+
+            $i = 0;
+            foreach($res AS $key => $result) {
+                $doc_folders[$i] = $this->getDocumentFolderDetail($result['DocumentFolderId'], $UserProfileId);
+                $doc_folders[$i]['SubFolder'][] = $this->getMyAllSubDocumentFolder($result['DocumentFolderId'], $UserProfileId);
+                $i++;
+            }
+        }
+        return $doc_folders;
+    }
+
+    public function getMyAllSubDocumentFolder($parent_folder_id, $UserProfileId) {
+        $this->db->select('DocumentFolderId');
+        $this->db->from($this->DocumentFolderTbl);
+        $this->db->where('ParentDocumentFolderId', $parent_folder_id);
+        $this->db->where('DocumentFolderStatus !=', -1);
+        $this->db->order_by('DocumentFolderName','ASC');
+        $child = $this->db->get();
+
+        $res = $child->result_array();
+
+
+        $i = 0;
+        $sub_doc_folders = array();
+        foreach($res AS $key => $result) {
+
+            $sub_doc_folders[$i] = $this->getDocumentFolderDetail($result['DocumentFolderId'], $UserProfileId);
+            $sub_doc_folders[$i]['SubFolder'][] = $this->getMyAllSubDocumentFolder($result['DocumentFolderId'], $UserProfileId);
+
+            $i++;
+        }
+        return $sub_doc_folders;
+    }
+
+
+    public function getMyAllDocumentFolder($UserProfileId, $parent_folder_id = 0) {
+        if(isset($UserProfileId) && $UserProfileId > 0) {
+
+            $parent_folder_id = ($parent_folder_id > 0) ? $parent_folder_id : 0;
+
+            $this->db->select('DocumentFolderId');
+            $this->db->from($this->DocumentFolderTbl);
+            $this->db->where('AddedBy', $UserProfileId);
+            $this->db->where('ParentDocumentFolderId', $parent_folder_id);
             $this->db->where('DocumentFolderStatus !=', -1);
             $this->db->order_by('DocumentFolderName','ASC');
             $query = $this->db->get();
@@ -193,8 +291,6 @@ class Document_Model extends CI_Model {
             foreach($res AS $key => $result) {
                 $doc_folders[] = $this->getDocumentFolderDetail($result['DocumentFolderId'], $UserProfileId);
             }
-        } else {
-            $doc_folders = array();
         }
         return $doc_folders;
     }
@@ -222,6 +318,7 @@ class Document_Model extends CI_Model {
         $DocumentFolderId           = $res['DocumentFolderId'];
         $DocumentFolderName         = $res['DocumentFolderName'];
         $DocumentFolderDescription  = (($res['DocumentFolderDescription'] != NULL) ? $res['DocumentFolderDescription'] : "");
+        $ParentDocumentFolderId     = $res['ParentDocumentFolderId'];
         $DocumentFolderStatus       = (($res['DocumentFolderStatus'] != NULL) ? $res['DocumentFolderStatus'] : "");
 
         $AddedBy            = $res['AddedBy'];
@@ -229,29 +326,30 @@ class Document_Model extends CI_Model {
         $AddedOn            = return_time_ago($res['AddedOn']);
         $UpdatedOn          = return_time_ago($res['UpdatedOn']);
 
-        $DocumentFolderProfile       = $this->User_Model->getUserProfileInformation($AddedBy, $UserProfileId);
+        //$DocumentFolderProfile       = $this->User_Model->getUserProfileInformation($AddedBy, $UserProfileId);
 
         $doc_folder_data_array = array(
                                     "DocumentFolderId"          => $DocumentFolderId,
                                     "DocumentFolderName"        => $DocumentFolderName,
                                     "DocumentFolderDescription" => $DocumentFolderDescription,
+                                    "ParentDocumentFolderId"    => $ParentDocumentFolderId,
                                     "DocumentFolderStatus"      => $DocumentFolderStatus,
                                     "AddedOn"                   => $AddedOn,
                                     "AddedOnTime"               => $res['AddedOn'],
                                     "UpdatedOn"                 => $UpdatedOn,
                                     "UpdatedOnTime"             => $res['UpdatedOn'],
-                                    "DocumentFolderProfile"     => $DocumentFolderProfile,
+                                    //"DocumentFolderProfile"     => $DocumentFolderProfile,
                                     );
         return $doc_folder_data_array;
     }
 
 
 
-    public function getDocumentFolderExist($DocumentFolderName, $UserProfileId = 0) {
+    public function getDocumentFolderExist($DocumentFolderName, $UserProfileId, $ParentDocumentFolderId) {
         $folder_res = array();
         if(isset($DocumentFolderName) && $DocumentFolderName != '') {
 
-            $query = $this->db->query("SELECT * FROM $this->DocumentFolderTbl WHERE lower(DocumentFolderName) = '".strtolower($DocumentFolderName)."'");
+            $query = $this->db->query("SELECT * FROM $this->DocumentFolderTbl WHERE lower(DocumentFolderName) = '".strtolower($DocumentFolderName)."' AND `AddedBy` = '".$UserProfileId."' AND `ParentDocumentFolderId` = '".$ParentDocumentFolderId."'");
 
             $folder_res = $query->row_array();
 

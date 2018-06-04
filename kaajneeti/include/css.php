@@ -55,3 +55,6 @@
 <![endif]-->
 
 <link type="text/css" rel="stylesheet" href="<?php echo base_url(); ?>assets/css/sweetalert.css?ver=1.04">
+
+
+<link href="<?=base_url();?>assets/css/select2.css" rel="stylesheet">

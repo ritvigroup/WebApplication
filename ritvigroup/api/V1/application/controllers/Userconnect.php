@@ -17,6 +17,8 @@ class Userconnect extends CI_Controller {
         $this->location_long 	= $this->input->post('location_long');
         $this->device_name 		= $this->input->post('device_name');
         $this->device_os 		= $this->input->post('device_os');
+
+        $this->show_only_limit = $this->input->post('show_only_limit');
     }
 
     // Add leader in your favourite List
@@ -763,6 +765,44 @@ class Userconnect extends CI_Controller {
                            "status"      => 'success',
                            "message"     => $msg,
                            "result"     => $friends,
+                           );
+        }
+        displayJsonEncode($array);
+    }
+
+
+    public function getMyConnectionWithIncomingRequest($UserProfileId) {
+        $UserId                 = $this->input->post('user_id');
+        $UserProfileId          = $this->input->post('user_profile_id');
+        
+        if($UserId == "") {
+            $msg = "Please select user";
+            $error_occured = true;
+        } else if($UserProfileId == "") {
+            $msg = "Please select user profile";
+            $error_occured = true;
+        } else {
+            $connections = $this->User_Model->getMyConnectionWithIncomingRequest($UserProfileId);
+
+            if(count($connections) > 0) {
+                $msg = "connect found";
+            } else {
+                $msg = "No connect found";
+                $error_occured = false;
+            }
+        }
+
+        if($error_occured == true) {
+            $array = array(
+                            "status"        => 'failed',
+                            "message"       => $msg,
+                        );
+        } else {
+
+            $array = array(
+                           "status"         => 'success',
+                           "message"        => $msg,
+                           "result"         => $connections,
                            );
         }
         displayJsonEncode($array);

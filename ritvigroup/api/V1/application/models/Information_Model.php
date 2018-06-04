@@ -128,7 +128,10 @@ class Information_Model extends CI_Model {
             $res = $query->result_array();
 
             foreach($res AS $key => $result) {
-                $information[] = $this->getInformationDetail($result['InformationId'], $UserProfileId);
+                $information[] = array(
+                                        'feedtype'          => 'information',
+                                        'informationdata'   => $this->getInformationDetail($result['InformationId'], $UserProfileId),
+                                        );
             }
         } else {
             $information = array();
@@ -218,13 +221,13 @@ class Information_Model extends CI_Model {
             $AttachmentTypeId = $result['AttachmentTypeId'];
 
             if($AttachmentTypeId == 1) {
-                $path = INFORMATION_IMAGE_DIR;
+                $path = INFORMATION_IMAGE_URL;
             } else if($AttachmentTypeId == 2) {
-                $path = INFORMATION_VIDEO_DIR;
+                $path = INFORMATION_VIDEO_URL;
             } else if($AttachmentTypeId == 4) {
-                $path = INFORMATION_AUDIO_DIR;
+                $path = INFORMATION_AUDIO_URL;
             } else {
-                $path = INFORMATION_DOC_DIR;
+                $path = INFORMATION_DOC_URL;
             }
 
             $InformationAttachment[] = array(

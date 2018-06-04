@@ -61,7 +61,7 @@
         <div class="form-group">
             <div class="1i-checks">
                 <input type="checkbox" id="terms" name="terms" class="iCheck" indeterminate="true">
-                Agree the terms and policy 
+                <a  data-target="#modal-stackable" data-toggle="modal" href="javascript:void(0);" onClick="return acceptTerms();">Agree the terms and policy </a>
             </div>
         </div>
         <button class="btn aqua block full-width m-b signup_button" type="submit">Register</button>
@@ -70,6 +70,45 @@
         <p class=" copyR"> <small>Developed at: <a href="http://www.ritvigroup.com" target="_blank">Ritvi Innovation Pvt. Ltd.</a> &copy; 2016-2017</small> </p>
     </div>
 </body>
+
+
+
+<div id="modal-stackable" tabindex="-1" role="dialog" aria-labelledby="modal-stackable-label" aria-hidden="true" class="modal fade" style="display: none;">
+    <div class="modal-dialog">
+        <div class="modal-content modal-content-ajax">
+            <div class="modal-header">
+                <button type="button" data-dismiss="modal" aria-hidden="true" class="close">×</button>
+                <h4 id="modal-stackable-label" class="modal-title">Terms and Policy</h4>
+            </div>
+            <div class="modal-body">
+                <div class="panel panel-white">
+                
+                    <p>We're updating our Terms, Data Policy and Cookie Policy to make sure that you know how your data is used so you can make the choices that are right for you.<p>
+
+                    <br>
+
+                    <p>These updates don't give us any new rights to collect, use or share your data on Kaajneeti. The updated Terms better explain our service and what we ask of everyone using Kaajneeti. The updated Data Policy and Cookie Policy reflect the new features that we've been working on, and explain more about how we create a personalised experience for you. Updates include:
+                        <ul>
+                            <li>Adding information about features such as Marketplace, camera effects and accessibility tools</li>
+                            <li>More details about how our systems process things that you share, such as text, photos and videos</li>
+                            <li>More about how we share information, systems and technology across the Kaajneeti Company Products, including WhatsApp, Instagram and Oculus</li>
+                            <li>Adding Instagram, a service provided by Kaajneeti Inc., to the Data Policy</li>
+                        </ul>
+                    </p>
+                    <br>
+
+                    <p>Protecting your data is a big responsibility and we take it very seriously. In addition to these updates, you'll soon see new ways of controlling your privacy and information on Kaajneeti.</p>
+                    <br>
+
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="reset" data-dismiss="modal" class="btn btn-default">I Agree</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script src="<?php echo base_url(); ?>assets/js/sweetalert-dev.js"></script> 
 <script src="<?php echo base_url(); ?>assets/js/sweetalert.min.js"></script> 
 
@@ -92,6 +131,10 @@
 </script>
 
 <script>
+    function acceptTerms() {
+        
+        $('#terms').prop('checked', true);
+    }
     document.querySelector('.signup_button').onclick = function () {
         var $this = $(this);
         var signup_email = $(".signup_email").val();
