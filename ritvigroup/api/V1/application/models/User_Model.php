@@ -737,6 +737,115 @@ class User_Model extends CI_Model {
         return $this->db->affected_rows();
     }
 
+    // Get User Profile Information Minimum
+    public function getMinimumUserProfileInformation($FriendUserProfileId, $UserProfileId = 0) {
+
+        $query = $this->db->query("SELECT up.*, ur.RoleName, 
+                                            uph.PhotoPath AS UserProfilePhoto, 
+                                            uch.PhotoPath AS UserCoverPhoto,
+                                            u.UserUniqueId  
+                                        FROM ".$this->userProfileTbl." AS up 
+                                        LEFT JOIN ".$this->userPhotoTbl." uph ON up.ProfilePhotoId = uph.UserPhotoId
+                                        LEFT JOIN ".$this->userPhotoTbl." uch ON up.CoverPhotoId = uch.UserPhotoId
+                                        LEFT JOIN ".$this->UserRoleTbl." ur ON up.UserRoleId = ur.UserRoleId
+                                        LEFT JOIN ".$this->userTbl." u ON up.UserId = u.UserId
+                                        WHERE 
+                                            up.`UserProfileId` = '".$FriendUserProfileId."'");
+
+        $res_u = $query->row_array();
+
+        $MyTotalConnections         = $this->getMyTotalConnections($FriendUserProfileId, 0, 0, 1);
+
+        $MyTotalFollowers           = $this->getMyTotalFollowers($FriendUserProfileId, 0);
+        $MyTotalFollowings          = $this->getMyTotalFollowings($FriendUserProfileId, 0);
+        
+        $MyTotalGroupWithAssociated = $this->getMyTotalFriendGroup($FriendUserProfileId, 0);
+
+
+        $user_data_array = array(
+                                "UserProfileId"                 => (($res_u['UserProfileId'] != NULL) ? $res_u['UserProfileId'] : ""),
+                                "UserUniqueId"                  => (($res_u['UserUniqueId'] != NULL) ? $res_u['UserUniqueId'] : ""),
+                                "UserId"                        => (($res_u['UserId'] != NULL) ? $res_u['UserId'] : ""),
+                                "FirstName"                     => (($res_u['FirstName'] != NULL) ? $res_u['FirstName'] : ""),
+                                "MiddleName"                    => (($res_u['MiddleName'] != NULL) ? $res_u['MiddleName'] : ""),
+                                "LastName"                      => (($res_u['LastName'] != NULL) ? $res_u['LastName'] : ""),
+                                "UserTypeId"                    => (($res_u['UserTypeId'] != NULL) ? $res_u['UserTypeId'] : ""),
+                                "Email"                         => (($res_u['Email'] != NULL) ? $res_u['Email'] : ""),
+                                "ProfileUserName"               => (($res_u['ProfileUserName'] != NULL) ? $res_u['ProfileUserName'] : ""),
+                                
+                                "ProfilePhotoPath"              => (($res_u['UserProfilePhoto'] != NULL) ? PROFILE_IMAGE_URL.$res_u['UserProfilePhoto'] : ""),
+                                "CoverPhotoPath"                => (($res_u['UserCoverPhoto'] != NULL) ? PROFILE_IMAGE_URL.$res_u['UserCoverPhoto'] : ""),
+                                
+                                "MyTotalConnections"            => $MyTotalConnections,
+                                "MyTotalFollowers"              => $MyTotalFollowers,
+                                "MyTotalFollowings"             => $MyTotalFollowings,
+
+                                "MyTotalGroupWithAssociated"    => $MyTotalGroupWithAssociated,
+
+                                "AddedOn"                       => return_time_ago($res_u['AddedOn']),
+                                "AddedOnTime"                   => ($res_u['AddedOn']),
+                                "UpdatedOn"                     => return_time_ago($res_u['UpdatedOn']),
+                                "UpdatedOnTime"                 => ($res_u['UpdatedOn']),
+                                );
+
+        if($UserProfileId > 0) {
+            $friend_response = $this->checkUserFriendRequest($UserProfileId, $FriendUserProfileId);
+
+            if($friend_response['RequestAccepted'] != '') {
+                if($friend_response['RequestAccepted'] == 0) {
+                    $user_data_array = array_merge($user_data_array, array('MyFriend' => 1)); // Send Request
+                } else if($friend_response['RequestAccepted'] == 1) {
+                    $user_data_array = array_merge($user_data_array, array('MyFriend' => 3)); // Accepted Friend Request
+                } else if($friend_response['RequestAccepted'] == 2) {
+                    $user_data_array = array_merge($user_data_array, array('MyFriend' => 4)); // Not to Send Request
+                } else {
+                    $user_data_array = array_merge($user_data_array, array('MyFriend' => 0)); // Fresh
+                }
+
+                $GetNotification = ($friend_response['GetNotification'] != '') ? $friend_response['GetNotification'] : 0;
+                $user_data_array = array_merge($user_data_array, array('GetNotification' => $GetNotification)); // Get Notification
+            } else {
+                $friend_response = $this->checkUserFriendRequest($FriendUserProfileId, $UserProfileId);
+
+                if($friend_response['RequestAccepted'] != '') {
+                    if($friend_response['RequestAccepted'] == 0) {
+                        $user_data_array = array_merge($user_data_array, array('MyFriend' => 2)); // Incoming Request
+                    } else if($friend_response['RequestAccepted'] == 1) {
+                        $user_data_array = array_merge($user_data_array, array('MyFriend' => 3)); // Accepted Friend Request
+                    } else if($friend_response['RequestAccepted'] == 2) {
+                        $user_data_array = array_merge($user_data_array, array('MyFriend' => 4)); // Not to Send Request
+                    } else {
+                        $user_data_array = array_merge($user_data_array, array('MyFriend' => 0)); // Fresh
+                    }
+
+                } else {
+                    $user_data_array = array_merge($user_data_array, array('MyFriend' => 0)); // Fresh
+                }
+                $GetNotification = ($friend_response['GetNotification'] != '') ? $friend_response['GetNotification'] : 0;
+                $user_data_array = array_merge($user_data_array, array('GetNotification' => $GetNotification)); // Get Notification
+            }
+
+
+
+            // Following and Follower
+            $follow_response = $this->checkUserFollow($UserProfileId, $FriendUserProfileId);
+            if($follow_response['UserProfileId'] > 0) {
+                $user_data_array = array_merge($user_data_array, array('Following' => 1)); // Following
+            } else {
+                $user_data_array = array_merge($user_data_array, array('Following' => 0)); // Following
+            }
+            $follow_response = $this->checkUserFollow($FriendUserProfileId, $UserProfileId);
+            if($follow_response['UserProfileId'] > 0) {
+                $user_data_array = array_merge($user_data_array, array('Follower' => 1)); // Follower
+            } else {
+                $user_data_array = array_merge($user_data_array, array('Follower' => 0)); // Follower
+            }
+
+        } else {
+            $user_data_array = array_merge($user_data_array, array('MyFriend' => -1)); // Self Profile
+        }
+        return $user_data_array;
+    }
 
     // Get User Profile Information
     public function getUserProfileInformation($FriendUserProfileId, $UserProfileId = 0) {

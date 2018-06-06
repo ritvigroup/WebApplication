@@ -123,8 +123,30 @@ class Information_Model extends CI_Model {
         $information = array();
         if(isset($UserProfileId) && $UserProfileId > 0) {
 
-            $query = $this->db->query("SELECT InformationId FROM $this->informationTbl WHERE `AddedBy` = '".$UserProfileId."' ORDER BY AddedOn DESC");
+            $this->db->select('InformationId');
+            $this->db->from($this->informationTbl);
+            $this->db->where('AddedBy', $UserProfileId);
 
+            $search_in = $this->input->post('search_in');
+            
+            if($search_in == "information") {
+                
+                $date_from          = $this->input->post('date_from');
+                $date_to            = $this->input->post('date_to');
+
+                if($date_from != '' && $date_to != '') {
+                    if($date_from == $date_to) {
+                        $this->db->where("AddedOn BETWEEN '".$date_from." 00:00:00' AND '".$date_to." 23:59:59'");
+                    } else {
+                        $this->db->where("AddedOn BETWEEN '".$date_from." 00:00:00' AND '".$date_to." 23:59:59'");
+                    }
+                }
+            }
+
+            $this->db->where('InformationStatus != ', -1);
+            $this->db->order_by('AddedOn','DESC');
+
+            $query = $this->db->get();
             $res = $query->result_array();
 
             foreach($res AS $key => $result) {
@@ -176,7 +198,7 @@ class Information_Model extends CI_Model {
         $AddedOn            = return_time_ago($res['AddedOn']);
         $UpdatedOn          = return_time_ago($res['UpdatedOn']);
 
-        $InformationProfile       = $this->User_Model->getUserProfileInformation($AddedBy, $UserProfileId);
+        $InformationProfile       = $this->User_Model->getMinimumUserProfileInformation($AddedBy, $UserProfileId);
         $InformationAttachment    = $this->getInformationAttachment($InformationId);
 
         $user_data_array = array(

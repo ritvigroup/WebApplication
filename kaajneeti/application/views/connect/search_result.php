@@ -10,15 +10,17 @@ foreach($Connections->result AS $users) {
     } else {
         $profile_pic = ($users->ProfilePhotoPath != '') ? $users->ProfilePhotoPath : base_url().'assets/images/default-user.png';
     } 
+
+    $profile_link = ($this->session->userdata('UserProfileId') == $users->UserProfileId) ? base_url().'profile/profile' : base_url().'profile/profile/'.$users->UserProfileId;
     ?>
     <div class="grid-list-view grid col-md-6 col-sm-6" data-name="<?php echo $Name; ?>" id="connection_id_<?php echo $users->UserProfileId; ?>">
         <div class="contact-box">
             <div class="col-sm-12">
                 <?php if($users->UserTypeId == 2) {?><i class="fa fa-certificate" style="position: absolute;top: 5px; left: 20px;"></i><?php } ?>
-                <a href="<?=base_url();?>profile/profile"">
+                <a href="<?php echo $profile_link; ?>">
                     <img src="<?php echo $profile_pic; ?>" class="img-responsive" alt="image">
                 </a>
-                <h3><strong><?php echo $Name; ?></strong></h3>
+                <h3><strong><a href="<?php echo $profile_link; ?>"><?php echo $Name; ?></a></strong></h3>
                 <p><i class="fa fa-star"></i> <?php echo $users->MyTotalConnections; ?> connections</p>
                 <div class="connection-features">
                 	<?php if($users->MyFriend != -1) {?>

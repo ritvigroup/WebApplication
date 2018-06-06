@@ -357,19 +357,68 @@ class Complaint_Model extends CI_Model {
         $complaints = array();
         
         if($FriendProfileId > 0) {
+            
+            $search_in = $this->input->post('search_in');
+            
+            $complaint_search_condition = '';
+            if($search_in == "complaint") {
+                
+                $posted_by_me   = $this->input->post('posted_by_me'); // By Me
+                $me_associated  = $this->input->post('me_associated'); // You / YourFriend / Group
+                $date_from      = $this->input->post('date_from');
+                $date_to        = $this->input->post('date_to');
 
-            /*$sql = "(SELECT ComplaintId FROM ".$this->complaintTbl." WHERE `AddedBy` = '".$UserProfileId."' ORDER BY AddedOn DESC) 
-                    UNION 
-                    (SELECT cm.ComplaintId FROM ".$this->complaintMemberTbl." cm 
-                     LEFT JOIN ".$this->complaintTbl." AS c ON cm.ComplaintId = c.ComplaintId WHERE cm.`UserProfileId` = '".$UserProfileId."' ORDER BY c.AddedOn DESC) 
-                    ";*/
+                
+                if($posted_by_me == '1') {
+                    $complaint_search_condition .= " AND c.`AddedBy` = '".$FriendProfileId."'";
+                }
+                if($me_associated == '1') {
+                    
+                } else {
+                    $complaint_search_condition .= " AND c.`AddedBy` = '".$FriendProfileId."'";
+                }
+                
+                if($date_from != '' && $date_to != '') {
+                    if($date_from == $date_to) {
+                        $complaint_search_condition .= " AND c.AddedOn LIKE '%".$date_from."%' ";
+                    } else {
+                        $complaint_search_condition .= " AND c.AddedOn BETWEEN '".$date_from." 00:00:00' AND '".$date_to." 23:59:59'";
+                    }
+                }
+            } else {
+                $complaint_search_condition .= " AND c.`AddedBy` = '".$FriendProfileId."'";
+            }
 
 
             if($UserProfileId != $FriendProfileId) {
-                $sql = $this->db->query("SELECT ComplaintId FROM $this->complaintTbl WHERE `AddedBy` = '".$FriendProfileId."' AND `ComplaintPrivacy` = '1' ORDER BY AddedOn DESC");
+                $sql = "SELECT c.ComplaintId AS ComplaintId, c.AddedOn AS AddedOn FROM ".$this->complaintTbl." AS c WHERE c.`ComplaintPrivacy` = '1' AND c.`ComplaintStatus` != -1 ".$complaint_search_condition;
             } else {
-                $sql = $this->db->query("SELECT ComplaintId FROM $this->complaintTbl WHERE `AddedBy` = '".$FriendProfileId."' ORDER BY AddedOn DESC");
+                $sql = "(SELECT c.ComplaintId, c.AddedOn AS AddedOn FROM ".$this->complaintTbl." AS c WHERE c.`ComplaintStatus` != -1 ".$complaint_search_condition.')';
+                $sql .= " UNION (SELECT c.ComplaintId AS ComplaintId, c.AddedOn AS AddedOn FROM `Complaint` AS c 
+                            LEFT JOIN `ComplaintMember` AS cm ON cm.ComplaintId = c.ComplaintId 
+                            WHERE 
+                                c.`ComplaintStatus`     != -1  
+                            AND cm.`UserProfileId`      = '".$FriendProfileId."' 
+                            AND cm.AcceptedYesNo        != '2' ";
+                if($search_in == "complaint") {
+                    if($me_associated == '1') {
+                        $sql .= " AND cm.`UserProfileId` = '".$FriendProfileId."' ";
+                    }
+                    if($date_from != '' && $date_to != '') {
+                        if($date_from == $date_to) {
+                            $sql .= " AND c.AddedOn LIKE '%".$date_from."%' ";
+                        } else {
+                            $sql .= " AND c.AddedOn BETWEEN '".$date_from." 00:00:00' AND '".$date_to." 23:59:59'";
+                        }
+                    }
+                }
+                $sql .= ')';
+
             }
+            
+            $sql .= " ORDER BY AddedOn DESC";
+
+            //echo $sql;
 
             $query = $this->db->query($sql);
 
@@ -377,7 +426,7 @@ class Complaint_Model extends CI_Model {
 
             $complaint_array = array();
             foreach($res AS $key => $result) {
-                if(!@in_array($result['complaint_array'], $complaint_array)) {
+                if(!@in_array($result['ComplaintId'], $complaint_array)) {
                     $complaints[] = $this->getComplaintDetail($result['ComplaintId'], $UserProfileId);
                     $complaint_array[] = $result['ComplaintId'];
                 }
@@ -398,6 +447,7 @@ class Complaint_Model extends CI_Model {
                 $this->db->join($this->complaintTbl.' AS c', 'cm.ComplaintId = c.ComplaintId', 'LEFT');
                 $this->db->where('cm.UserProfileId', $FriendProfileId);
                 $this->db->where('c.ComplaintPrivacy', 1);
+                $this->db->where('c.ComplaintStatus !=', -1);
                 $this->db->where('cm.AcceptedYesNo !=', -1); // Declined
                 $this->db->order_by('c.AddedOn', 'DESC');
 
@@ -407,6 +457,7 @@ class Complaint_Model extends CI_Model {
                 $this->db->join($this->complaintTbl.' AS c', 'cm.ComplaintId = c.ComplaintId', 'LEFT');
                 $this->db->where('cm.UserProfileId', $FriendProfileId);
                 $this->db->where('cm.AcceptedYesNo !=', -1); // Declined
+                $this->db->where('c.ComplaintStatus !=', -1);
                 $this->db->order_by('c.AddedOn', 'DESC');
             }
 
@@ -434,7 +485,7 @@ class Complaint_Model extends CI_Model {
                                             LEFT JOIN ".$this->complaintTbl." AS c ON ca.ComplaintId = c.ComplaintId 
                                             WHERE 
                                                 ca.`AssignedTo` = '".$UserProfileId."' 
-                                            AND c.ComplaintStatus > 0 
+                                            AND c.ComplaintStatus != -1  
                                             ORDER BY c.AddedOn DESC";
             $query = $this->db->query($sql);
 
@@ -615,7 +666,7 @@ class Complaint_Model extends CI_Model {
         $AddedOn            = return_time_ago($res['AddedOn']);
         $UpdatedOn          = return_time_ago($res['UpdatedOn']);
 
-        $ComplaintProfile       = $this->User_Model->getUserProfileInformation($AddedBy, $UserProfileId);
+        $ComplaintProfile       = $this->User_Model->getMinimumUserProfileInformation($AddedBy, $UserProfileId);
         $ComplaintAssigned      = $this->getComplaintAssigned($ComplaintId, $UserProfileId);
         $ComplaintMember        = $this->getComplaintMember($ComplaintId, $UserProfileId);
         $ComplaintAttachment    = $this->getComplaintAttachment($ComplaintId, $UserProfileId);
@@ -694,7 +745,7 @@ class Complaint_Model extends CI_Model {
         $res = $query->result_array();
 
         foreach($res AS $key => $result) {
-            $user_detail = $this->User_Model->getUserProfileInformation($result['AssignedTo'], $UserProfileId);
+            $user_detail = $this->User_Model->getMinimumUserProfileInformation($result['AssignedTo'], $UserProfileId);
             $ComplaintAssigned[] = $user_detail;
         }
 
@@ -717,7 +768,7 @@ class Complaint_Model extends CI_Model {
         $res = $query->result_array();
 
         foreach($res AS $key => $result) {
-            $user_detail = $this->User_Model->getUserProfileInformation($result['UserProfileId'], $UserProfileId);
+            $user_detail = $this->User_Model->getMinimumUserProfileInformation($result['UserProfileId'], $UserProfileId);
             $user_detail = array_merge($user_detail, array('AcceptedYesNo' => $result['AcceptedYesNo']));
             $user_detail = array_merge($user_detail, array('AcceptedOn' => $result['AcceptedOn']));
 
@@ -749,7 +800,7 @@ class Complaint_Model extends CI_Model {
             $AttachmentTypeId = $result['AttachmentTypeId'];
 
             $AddedBy = $result['AddedBy'];
-            $AttachmentProfile = $this->User_Model->getUserProfileInformation($AddedBy, $UserProfileId);
+            $AttachmentProfile = $this->User_Model->getMinimumUserProfileInformation($AddedBy, $UserProfileId);
 
             if($AttachmentTypeId == 1) {
                 $path = COMPLAINT_IMAGE_URL;
@@ -827,7 +878,7 @@ class Complaint_Model extends CI_Model {
 
         $AddedOn                = return_time_ago($res['AddedOn']);
 
-        $ComplaintHistoryProfile       = $this->User_Model->getUserProfileInformation($AddedBy, $UserProfileId);
+        $ComplaintHistoryProfile       = $this->User_Model->getMinimumUserProfileInformation($AddedBy, $UserProfileId);
         $ComplaintHistoryAttachment    = $this->getComplaintHistoryAttachment($ComplaintHistoryId, $UserProfileId);
 
         $ComplaintHistoryHistory       = $this->getComplaintHistoryDetail($ParentComplaintHistoryId, $UserProfileId);
@@ -867,7 +918,7 @@ class Complaint_Model extends CI_Model {
             $AttachmentTypeId = $result['AttachmentTypeId'];
 
             $AddedBy = $result['AddedBy'];
-            $AttachmentProfile = $this->User_Model->getUserProfileInformation($AddedBy, $UserProfileId);
+            $AttachmentProfile = $this->User_Model->getMinimumUserProfileInformation($AddedBy, $UserProfileId);
 
             if($AttachmentTypeId == 1) {
                 $path = COMPLAINT_IMAGE_URL;
@@ -1034,7 +1085,7 @@ class Complaint_Model extends CI_Model {
 
         $CommentOn          = return_time_ago($res['CommentOn']);
 
-        $CommentProfile        = $this->User_Model->getUserProfileInformation($AddedBy);
+        $CommentProfile        = $this->User_Model->getMinimumUserProfileInformation($AddedBy);
 
         $data_array = array(
                                 "ComplaintCommentId"     => $ComplaintCommentId,

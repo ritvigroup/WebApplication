@@ -270,11 +270,63 @@ class Poll_Model extends CI_Model {
         if($FriendProfileId > 0) {
 
             if($UserProfileId != $FriendProfileId) {
-                $query = $this->db->query("SELECT PollId FROM $this->pollTbl WHERE `AddedBy` = '".$FriendProfileId."' AND `PollPrivacy` = '1' AND `PollStatus` != -1 ORDER BY AddedOn DESC");
-            } else {
-                $query = $this->db->query("SELECT PollId FROM $this->pollTbl WHERE `AddedBy` = '".$FriendProfileId."' AND `PollStatus` != -1 ORDER BY AddedOn DESC");
-            }
 
+                $this->db->select('PollId');
+                $this->db->from($this->pollTbl);
+                $this->db->where('AddedBy', $FriendProfileId);
+                $this->db->where('PollStatus', '1');
+                $this->db->where('PollPrivacy', '1');
+                $this->db->order_by('AddedOn','DESC');
+
+            } else {
+                $this->db->select('PollId');
+                $this->db->from($this->pollTbl);
+
+                $search_in = $this->input->post('search_in');
+            
+                $post_search_condition = '';
+                if($search_in == "poll") {
+                    
+                    $posted_by_me       = $this->input->post('posted_by_me'); // By Me
+                    $date_from          = $this->input->post('date_from');
+                    $date_to            = $this->input->post('date_to');
+                    $location           = $this->input->post('location');
+                    $participated       = $this->input->post('participated');
+
+                    
+                    if($posted_by_me == '1') {
+                        $this->db->where('AddedBy', $FriendProfileId);
+                    }
+                    if($location != '') {
+                        $this->db->like('PollLocation', $location);
+                    }
+                    if($participated > 0) {
+                        $this->db->where($FriendProfileId." IN (SELECT pp.AddedBy FROM `PollParticipation` AS pp WHERE pp.PollId = ".$this->pollTbl.".PollId AND pp.PollAnswerId > 0 AND pp.AddedBy = '".$FriendProfileId."')");
+                    }
+                    
+                    if($date_from != '' && $date_to != '') {
+                        if($date_from == $date_to) {
+                            $this->db->group_start();
+                            $this->db->where("(ValidFromDate BETWEEN '".$date_from."' AND '".$date_to."')");
+                            $this->db->where("(ValidEndDate BETWEEN '".$date_from."' AND '".$date_to."')");
+                            $this->db->group_end();
+                        } else {
+                            $this->db->group_start();
+                            $this->db->where("(ValidFromDate BETWEEN '".$date_from."' AND '".$date_to."')");
+                            $this->db->where("(ValidEndDate BETWEEN '".$date_from."' AND '".$date_to."')");
+                            $this->db->group_end();
+                        }
+                    }
+                } else {
+                    $this->db->where('AddedBy', $FriendProfileId);
+                }
+
+                $this->db->where('PollStatus != ', -1);
+                $this->db->order_by('AddedOn','DESC');
+            }
+            $query = $this->db->get();
+
+            //echo $this->db->last_query();
             $res = $query->result_array();
 
             foreach($res AS $key => $result) {
@@ -340,7 +392,7 @@ class Poll_Model extends CI_Model {
         $AddedOn            = return_time_ago($res['AddedOn']);
         $UpdatedOn          = return_time_ago($res['UpdatedOn']);
 
-        $PollProfile        = $this->User_Model->getUserProfileInformation($AddedBy);
+        $PollProfile        = $this->User_Model->getMinimumUserProfileInformation($AddedBy);
         //$PollAnswer         = $this->getPollAnswer($PollId);
         
         $PollTotalParticipation = $this->getPollTotalParticipation($PollId);
@@ -537,7 +589,7 @@ class Poll_Model extends CI_Model {
 
         $CommentOn          = return_time_ago($res['CommentOn']);
 
-        $CommentProfile        = $this->User_Model->getUserProfileInformation($AddedBy);
+        $CommentProfile        = $this->User_Model->getMinimumUserProfileInformation($AddedBy);
 
         $data_array = array(
                                 "PollCommentId"     => $PollCommentId,

@@ -280,14 +280,60 @@ class Event_Model extends CI_Model {
                 $this->db->where('EventPrivacy', '1');
                 $this->db->order_by('AddedOn','DESC');
             } else {
+
                 $this->db->select('EventId');
                 $this->db->from($this->eventTbl);
-                $this->db->where('AddedBy', $FriendProfileId);
+
+                $search_in = $this->input->post('search_in');
+            
+                $post_search_condition = '';
+                if($search_in == "event") {
+                    
+                    $posted_by_me       = $this->input->post('posted_by_me'); // By Me
+                    $myself_tagged      = $this->input->post('myself_tagged'); // My self tagged
+                    $date_from          = $this->input->post('date_from');
+                    $date_to            = $this->input->post('date_to');
+                    $location           = $this->input->post('location');
+                    $participated       = $this->input->post('participated');
+
+                    
+                    if($posted_by_me == '1') {
+                        $this->db->where('AddedBy', $FriendProfileId);
+                    }
+                    if($myself_tagged == '1') {
+                        $this->db->where($FriendProfileId." IN (SELECT ea.UserProfileId FROM `EventAttendee` AS ea WHERE ea.EventId = Event.EventId AND ea.EventApprovedStatus != -1)");
+                    }
+                    if($location != '') {
+                        $this->db->like('EventLocation', $location);
+                    }
+                    if($participated > 0) {
+                        $this->db->where($FriendProfileId." IN (SELECT ei.UserProfileId FROM `EventInterest` AS ei WHERE ei.EventId = Event.EventId AND ei.InterestType = '".$participated."')");
+                    }
+                    
+                    if($date_from != '' && $date_to != '') {
+                        if($date_from == $date_to) {
+                            $this->db->group_start();
+                            $this->db->where("(StartDate BETWEEN '".$date_from." 00:00:00' AND '".$date_to." 23:59:59')");
+                            $this->db->where("(EndDate BETWEEN '".$date_from." 00:00:00' AND '".$date_to." 23:59:59')");
+                            $this->db->group_end();
+                        } else {
+                            $this->db->group_start();
+                            $this->db->where("(StartDate BETWEEN '".$date_from." 00:00:00' AND '".$date_to." 23:59:59')");
+                            $this->db->where("(EndDate BETWEEN '".$date_from." 00:00:00' AND '".$date_to." 23:59:59')");
+                            $this->db->group_end();
+                        }
+                    }
+                } else {
+                    $this->db->where('AddedBy', $FriendProfileId);
+                }
+
+               
                 $this->db->where('EventStatus !=', -1);
                 $this->db->order_by('AddedOn','DESC');
             }
-
             $query = $this->db->get();
+
+            //echo $this->db->last_query();
 
             $res = $query->result_array();
 
@@ -389,7 +435,7 @@ class Event_Model extends CI_Model {
         $AddedOn            = return_time_ago($res['AddedOn']);
         $UpdatedOn          = return_time_ago($res['UpdatedOn']);
 
-        $EventProfile       = $this->User_Model->getUserProfileInformation($AddedBy);
+        $EventProfile       = $this->User_Model->getMinimumUserProfileInformation($AddedBy);
         $EventAttendee      = $this->getEventAttendee($EventId);
         $EventAttachment    = $this->getEventAttachment($EventId);
         $TotalEventInterest = $this->getTotalEventInterest($EventId, 0);
@@ -453,7 +499,7 @@ class Event_Model extends CI_Model {
         $res = $query->result_array();
 
         foreach($res AS $key => $result) {
-            $EventAttendee[] = $this->User_Model->getUserProfileInformation($result['UserProfileId']);
+            $EventAttendee[] = $this->User_Model->getMinimumUserProfileInformation($result['UserProfileId']);
         }
 
         return $EventAttendee;
@@ -554,7 +600,7 @@ class Event_Model extends CI_Model {
                                 'AttachmentThumb'       => $AttachmentThumb,
                                 'AttachmentOrder'       => $result['AttachmentOrder'],
                                 'AttachmentStatus'      => $result['AttachmentStatus'],
-                                'AddedBy'               => $this->User_Model->getUserProfileInformation($result['AddedBy']),
+                                'AddedBy'               => $this->User_Model->getMinimumUserProfileInformation($result['AddedBy']),
                                 'AddedOn'               => return_time_ago($result['AddedOn']),
                                 'AddedOnTime'           => $result['AddedOn'],
                                 );
@@ -611,7 +657,7 @@ class Event_Model extends CI_Model {
 
         $CommentOn          = return_time_ago($res['CommentOn']);
 
-        $CommentProfile        = $this->User_Model->getUserProfileInformation($AddedBy);
+        $CommentProfile        = $this->User_Model->getMinimumUserProfileInformation($AddedBy);
 
         $data_array = array(
                                 "EventCommentId"     => $EventCommentId,

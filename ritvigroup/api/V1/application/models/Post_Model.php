@@ -231,10 +231,64 @@ class Post_Model extends CI_Model {
         if($FriendProfileId > 0) {
 
             if($UserProfileId != $FriendProfileId) {
-                $query = $this->db->query("SELECT PostId FROM $this->postTbl WHERE `UserProfileId` = '".$FriendProfileId."' AND `PostStatus` = '1' AND `PostPrivacy` = '1' ORDER BY AddedOn DESC");
+                $sql = "SELECT PostId FROM $this->postTbl WHERE `PostStatus` = '1' AND `PostPrivacy` = '1' ";
+                $sql .= " AND `UserProfileId` = '".$FriendProfileId."'";
             } else {
-                $query = $this->db->query("SELECT PostId FROM $this->postTbl WHERE `UserProfileId` = '".$FriendProfileId."' AND `PostStatus` != -1 ORDER BY AddedOn DESC");
+                $search_in = $this->input->post('search_in');
+            
+                $post_search_condition = '';
+                if($search_in == "post") {
+                    
+                    $posted_by_me       = $this->input->post('posted_by_me'); // By Me
+                    $posted_by_friend   = $this->input->post('posted_by_friend'); // By Your Friend
+                    $myself_tagged      = $this->input->post('myself_tagged'); // My self tagged
+                    $date_from          = $this->input->post('date_from');
+                    $date_to            = $this->input->post('date_to');
+                    $location           = $this->input->post('location');
+                    $me_liked           = $this->input->post('me_liked');
+                    $me_commented       = $this->input->post('me_commented');
+
+                    
+                    if($posted_by_me == '1') {
+                        $post_search_condition .= " AND `UserProfileId` = '".$FriendProfileId."'";
+                    }
+                    if($posted_by_friend == '1') {
+                        $my_friend_user_profile_id = $this->User_Model->getMyFriendFollowerAndFollowingUserProfileId($UserProfileId);
+                        $post_search_condition .= " AND `PostPrivacy` = '1' AND `UserProfileId` IN (".$FriendProfileId.")";
+                    } else {
+                        $post_search_condition .= " AND `UserProfileId` = '".$FriendProfileId."'";
+                    }
+                    if($myself_tagged == '1') {
+                        $post_search_condition .= " AND ".$FriendProfileId." IN (SELECT pt.UserProfileId FROM `PostTag` AS pt WHERE pt.PostId = Post.PostId)";
+                    }
+                    if($location != '') {
+                        $post_search_condition .= " AND `PostLocation` LIKE '%".$location."%'";
+                    }
+                    if($me_liked == '1') {
+                        $post_search_condition .= " AND 1 <= (SELECT COUNT(pl.UserProfileId) FROM `PostLike` AS pl WHERE pl.PostId = Post.PostId AND pl.PostLike = '1')";
+                    }
+                    if($me_commented == '1') {
+                        $post_search_condition .= " AND 1 <= (SELECT COUNT(pc.UserProfileId) FROM `PostComment` AS pc WHERE pc.PostId = Post.PostId AND pc.CommentStatus = '1')";
+                    }
+                    
+                    if($date_from != '' && $date_to != '') {
+                        if($date_from == $date_to) {
+                            $post_search_condition .= " AND AddedOn LIKE '%".$date_from."%' ";
+                        } else {
+                            $post_search_condition .= " AND AddedOn BETWEEN '".$date_from." 00:00:00' AND '".$date_to." 23:59:59'";
+                        }
+                    }
+                } else {
+                    $post_search_condition .= " AND `UserProfileId` = '".$FriendProfileId."'";
+                }
+
+                $sql = "SELECT PostId FROM $this->postTbl WHERE `PostStatus` != -1 ";
+                $sql .= $post_search_condition;
             }
+
+            $sql .= " ORDER BY AddedOn DESC";
+
+            $query = $this->db->query($sql);
 
             $res = $query->result_array();
 
@@ -284,7 +338,7 @@ class Post_Model extends CI_Model {
         $AddedOn            = return_time_ago($res['AddedOn']);
         $UpdatedOn          = return_time_ago($res['UpdatedOn']);
 
-        $PostProfile = $this->User_Model->getUserProfileInformation($AddedBy, $UserProfileId);
+        $PostProfile = $this->User_Model->getMinimumUserProfileInformation($AddedBy, $UserProfileId);
         $PostTag = $this->getPostTag($PostId);
         $PostAttachment = $this->getPostAttachment($PostId);
 
@@ -340,7 +394,7 @@ class Post_Model extends CI_Model {
         $res = $query->result_array();
 
         foreach($res AS $key => $result) {
-            $PostTag[] = $this->User_Model->getUserProfileInformation($result['UserProfileId']);
+            $PostTag[] = $this->User_Model->getMinimumUserProfileInformation($result['UserProfileId']);
             //$PostTag[] = $result['UserProfileId'];
         }
 
@@ -445,7 +499,7 @@ class Post_Model extends CI_Model {
 
         $CommentOn          = return_time_ago($res['CommentOn']);
 
-        $CommentProfile        = $this->User_Model->getUserProfileInformation($AddedBy);
+        $CommentProfile        = $this->User_Model->getMinimumUserProfileInformation($AddedBy);
 
         $data_array = array(
                                 "PostCommentId"     => $PostCommentId,

@@ -36,7 +36,7 @@
                                     <div class="row">
                                         <div class="col-lg-12">
                                             <div class="connect_list" id="search_result_show">
-                                                <?php $this->load->view('connect/search_result'); ?>
+                                                <?php //$this->load->view('connect/search_result'); ?>
                                             </div>
                                             <div class="new_loader_div" id="loader_div"><img src="<?=base_url();?>assets/images/new-loader.gif"></div>
                                         </div>

@@ -50,7 +50,7 @@ if($_SESSION['AdminId'] > 0) {
                     </li>
                     
                     <li class="dropdown switch-account">
-                        <a href="#" data-toggle="dropdown" class="dropdown-toggle count-info"> <img src="../assets/images/switch_icon.png"> <span class="badge badge-info"></span> </a>
+                        <a href="#" data-toggle="dropdown" class="dropdown-toggle count-info"> <img src="<?=base_url();?>assets/images/switch_icon.png"> <span class="badge badge-info"></span> </a>
                         <div class="dropdown-menu dropdown-messages menuBig">
                             <div class="row">
                                 <div class="col-md-12">
@@ -58,7 +58,7 @@ if($_SESSION['AdminId'] > 0) {
                                     <div class="row">
                                         <div class="col-sm-4">
                                             <div class="contact-box">
-                                                <a href="profile.html"> <img src="../assets/images/teem/a10.jpg" class="img-circle" alt="image">
+                                                <a href="profile.html"> <img src="<?=base_url();?>assets/images/teem/a10.jpg" class="img-circle" alt="image">
                                                     <p>Susan Wenscombe</p>                                          
                                                 </a>
                                                 
@@ -66,7 +66,7 @@ if($_SESSION['AdminId'] > 0) {
                                         </div>
                                         <div class="col-sm-4">
                                             <div class="contact-box">
-                                                <a href="profile.html"> <img src="../assets/images/teem/a10.jpg" class="img-circle" alt="image">
+                                                <a href="profile.html"> <img src="<?=base_url();?>assets/images/teem/a10.jpg" class="img-circle" alt="image">
                                                     <p>Susan Wenscombe</p>                                          
                                                 </a>
                                                 
@@ -74,7 +74,7 @@ if($_SESSION['AdminId'] > 0) {
                                         </div>
                                         <div class="col-sm-4">
                                             <div class="contact-box">
-                                                <a href="profile.html"> <img src="../assets/images/teem/a10.jpg" class="img-circle" alt="image">
+                                                <a href="profile.html"> <img src="<?=base_url();?>assets/images/teem/a10.jpg" class="img-circle" alt="image">
                                                     <p>Add New Account</p>                                          
                                                 </a>
                                                 
@@ -184,8 +184,8 @@ if($_SESSION['AdminId'] > 0) {
                         <a data-close-others="true" data-hover="dropdown" data-toggle="dropdown" class="dropdown-toggle" href="javascript:;"><i class="fa fa-ellipsis-v setting-usr"></i> <span class="username username-hide-on-mobile">  </span>
                          </a>
                         <ul class="dropdown-menu dropdown-menu-default">
-                            <li><h3 class="text-uppercase"><?php echo $this->session->userdata('Name'); ?></h3></li>
-                            <li><h6><strong class="text-capitalize">User id:</strong> <?php echo $this->session->userdata('UserUniqueId'); ?></h6></li>
+                            <li><h3 class="text-uppercase" style="cursor: pointer;" onClick="window.location.href='<?=base_url();?>profile/profile';"><?php echo $this->session->userdata('Name'); ?></h3></li>
+                            <li><h6><strong class="text-capitalize">ID:</strong> <?php echo $this->session->userdata('UserUniqueId'); ?></h6></li>
                             <li class="divider"> </li>
 
                             <li><h6><strong class="text-uppercase">Subscription</strong></h6></li>

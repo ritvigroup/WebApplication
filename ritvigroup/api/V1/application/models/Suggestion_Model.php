@@ -216,8 +216,30 @@ class Suggestion_Model extends CI_Model {
         $suggestions = array();
         if(isset($UserProfileId) && $UserProfileId > 0) {
 
-            $query = $this->db->query("SELECT SuggestionId FROM $this->suggestionTbl WHERE `AddedBy` = '".$UserProfileId."' ORDER BY `AddedOn` DESC");
+            $this->db->select('SuggestionId');
+            $this->db->from($this->suggestionTbl);
+            $this->db->where('AddedBy', $UserProfileId);
 
+            $search_in = $this->input->post('search_in');
+            
+            if($search_in == "suggestion") {
+                
+                $date_from          = $this->input->post('date_from');
+                $date_to            = $this->input->post('date_to');
+
+                if($date_from != '' && $date_to != '') {
+                    if($date_from == $date_to) {
+                        $this->db->where("AddedOn BETWEEN '".$date_from." 00:00:00' AND '".$date_to." 23:59:59'");
+                    } else {
+                        $this->db->where("AddedOn BETWEEN '".$date_from." 00:00:00' AND '".$date_to." 23:59:59'");
+                    }
+                }
+            }
+
+            $this->db->where('SuggestionStatus != ', -1);
+            $this->db->order_by('AddedOn','DESC');
+
+            $query = $this->db->get();
             $res = $query->result_array();
 
             foreach($res AS $key => $result) {
@@ -311,7 +333,7 @@ class Suggestion_Model extends CI_Model {
         $UpdatedOn          = return_time_ago($res['UpdatedOn']);
 
         $SuggestionAssigned      = $this->getSuggestionAssigned($SuggestionId, $UserProfileId);
-        $SuggestionProfile       = $this->User_Model->getUserProfileInformation($AddedBy, $UserProfileId);
+        $SuggestionProfile       = $this->User_Model->getMinimumUserProfileInformation($AddedBy, $UserProfileId);
         $SuggestionAttachment    = $this->getSuggestionAttachment($SuggestionId, $UserProfileId);
         $CountSuggestionHistory  = $this->getCountSuggestionHistory($SuggestionId, $UserProfileId);
 
@@ -357,7 +379,7 @@ class Suggestion_Model extends CI_Model {
         $res = $query->result_array();
 
         foreach($res AS $key => $result) {
-            $user_detail = $this->User_Model->getUserProfileInformation($result['AssignedTo'], $UserProfileId);
+            $user_detail = $this->User_Model->getMinimumUserProfileInformation($result['AssignedTo'], $UserProfileId);
             $SuggestionAssigned[] = $user_detail;
         }
 
@@ -478,7 +500,7 @@ class Suggestion_Model extends CI_Model {
 
         $AddedOn                = return_time_ago($res['AddedOn']);
 
-        $SuggestionHistoryProfile       = $this->User_Model->getUserProfileInformation($AddedBy, $UserProfileId);
+        $SuggestionHistoryProfile       = $this->User_Model->getMinimumUserProfileInformation($AddedBy, $UserProfileId);
         $SuggestionHistoryAttachment    = $this->getSuggestionHistoryAttachment($SuggestionHistoryId, $UserProfileId);
 
         $SuggestionHistoryHistory       = $this->getSuggestionHistoryDetail($ParentSuggestionHistoryId, $UserProfileId);
@@ -517,7 +539,7 @@ class Suggestion_Model extends CI_Model {
             $AttachmentTypeId = $result['AttachmentTypeId'];
 
             $AddedBy = $result['AddedBy'];
-            $AttachmentProfile = $this->User_Model->getUserProfileInformation($AddedBy, $UserProfileId);
+            $AttachmentProfile = $this->User_Model->getMinimumUserProfileInformation($AddedBy, $UserProfileId);
 
             if($AttachmentTypeId == 1) {
                 $path = SUGGESTION_IMAGE_URL;

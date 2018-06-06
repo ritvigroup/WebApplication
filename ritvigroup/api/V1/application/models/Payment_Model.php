@@ -240,8 +240,8 @@ class Payment_Model extends CI_Model {
 
         $AddedOn         = return_time_ago($res['AddedOn']);
 
-        $PaymentBy       = $this->User_Model->getUserProfileInformation($res['PaymentBy']);
-        $PaymentTo       = $this->User_Model->getUserProfileInformation($res['PaymentTo']);
+        $PaymentBy       = $this->User_Model->getMinimumUserProfileInformation($res['PaymentBy']);
+        $PaymentTo       = $this->User_Model->getMinimumUserProfileInformation($res['PaymentTo']);
 
         $data_array = array(
                             "PaymentTransactionLogId"       => $PaymentTransactionLogId,
@@ -341,8 +341,8 @@ class Payment_Model extends CI_Model {
 
         $AddedOn         = return_time_ago($res['AddedOn']);
 
-        $PaymentBy       = $this->User_Model->getUserProfileInformation($res['PaymentBy']);
-        $PaymentTo       = $this->User_Model->getUserProfileInformation($res['PaymentTo']);
+        $PaymentBy       = $this->User_Model->getMinimumUserProfileInformation($res['PaymentBy']);
+        $PaymentTo       = $this->User_Model->getMinimumUserProfileInformation($res['PaymentTo']);
 
         $data_array = array(
                             "PointTransactionLogId"         => $PointTransactionLogId,

@@ -347,6 +347,7 @@ class Citizen extends CI_Controller {
                 $privacy_condition = " = '1' ";
             }
 
+            $date_time_start = time();
             $sql = "
             
             SELECT EventId AS Id, 'Event' AS DataType, AddedOn AS DateAdded FROM `Event` WHERE `StartDate` <= '".date('Y-m-d H:i:s')."' AND `EndDate` >= '".date('Y-m-d H:i:s')."' AND `EventPrivacy` ".$privacy_condition." AND `EventStatus` ".$status_condition." AND `AddedBy` = '".$FriendUserProfileId."'

@@ -133,6 +133,7 @@ class Profile extends CI_Controller {
         } else {
             $_POST['user_id'] = $this->session->userdata('UserId');
             $_POST['user_profile_id'] = $this->session->userdata('UserProfileId');
+            $_POST['friend_user_profile_id'] = $this->session->userdata('UserProfileId');
 
 
             if($this->input->method(TRUE) == "POST" && $this->input->post('first_name') != '') {
@@ -185,19 +186,31 @@ class Profile extends CI_Controller {
                 return false;
             }
 
-            $json_encode = post_curl(API_CALL_PATH.'userprofile/getUserAllProfileInformation', $this->input->post(), $this->curl);
+            $json_encode = post_curl(API_CALL_PATH.'userprofile/getUserprofileFriendsprofileInformation', $this->input->post(), $this->curl);
 
             $json_decode = json_decode($json_encode);
             if(count($json_decode->result) > 0) {
                 $data = $json_decode;
             }
 
-            /*$json_encode = post_curl(API_CALL_PATH.'leader/getAllHomePageData', $this->input->post(), $this->curl);
+            // echo '<pre>';
+            // print_r($_POST);
+            // print_r($data);
+            // echo '</pre>';
+
+            $json_encode = post_curl(API_CALL_PATH.'leader/getAllHomePageData', $this->input->post(), $this->curl);
 
             $json_decode = json_decode($json_encode);
             if(count($json_decode->result) > 0) {
-                $data = $json_decode;
-            }*/
+                $data['HomePageData'] = $json_decode;
+            }
+
+            $json_encode = post_curl(API_CALL_PATH.'userconnect/getMyAllFriends', $this->input->post(), $this->curl);
+
+            $json_decode = json_decode($json_encode);
+            if(count($json_decode->result) > 0) {
+                $data['Connections'] = $json_decode;
+            }
 
             $this->load->view('profile/profile',$data);
         }

@@ -206,11 +206,57 @@ class Search extends CI_Controller {
             
             $result['Event'] = array();
             if($search_in == 'all' || $search_in == 'event') {
+                
+                $this->db->select("EventId AS Id, 'Event' AS DataType, AddedOn AS DateAdded");
+                $this->db->from($this->eventTbl);
+                if($search_in == "event") {
+                    
+                    $posted_by_me       = $this->input->post('posted_by_me'); // By Me
+                    $myself_tagged      = $this->input->post('myself_tagged'); // My self tagged
+                    $date_from          = $this->input->post('date_from');
+                    $date_to            = $this->input->post('date_to');
+                    $location           = $this->input->post('location');
+                    $participated       = $this->input->post('participated');
+
+                    
+                    if($posted_by_me == '1') {
+                        $this->db->where('AddedBy', $FriendProfileId);
+                    }
+                    if($myself_tagged == '1') {
+                        $this->db->where($FriendProfileId." IN (SELECT ea.UserProfileId FROM `EventAttendee` AS ea WHERE ea.EventId = Event.EventId AND ea.EventApprovedStatus != -1)");
+                    }
+                    if($location != '') {
+                        $this->db->like('EventLocation', $location);
+                    }
+                    if($participated > 0) {
+                        $this->db->where($FriendProfileId." IN (SELECT ei.UserProfileId FROM `EventInterest` AS ei WHERE ei.EventId = Event.EventId AND ei.InterestType = '".$participated."')");
+                    }
+                    
+                    if($date_from != '' && $date_to != '') {
+                        if($date_from == $date_to) {
+                            $this->db->group_start();
+                            $this->db->where("(StartDate BETWEEN '".$date_from." 00:00:00' AND '".$date_to." 23:59:59')");
+                            $this->db->where("(EndDate BETWEEN '".$date_from." 00:00:00' AND '".$date_to." 23:59:59')");
+                            $this->db->group_end();
+                        } else {
+                            $this->db->group_start();
+                            $this->db->where("(StartDate BETWEEN '".$date_from." 00:00:00' AND '".$date_to." 23:59:59')");
+                            $this->db->where("(EndDate BETWEEN '".$date_from." 00:00:00' AND '".$date_to." 23:59:59')");
+                            $this->db->group_end();
+                        }
+                    }
+                }
+
                 $sql = "SELECT EventId AS Id, 'Event' AS DataType, AddedOn AS DateAdded FROM `Event` WHERE `EventStatus` = '1' AND (`EventName` LIKE '%".$this->search."%' OR `EventDescription` LIKE '%".$this->search."%') AND `AddedBy` = '".$UserProfileId."' ";
                 if(count($my_friend_user_profile_id) > 0) {
                     $sql .= " UNION SELECT EventId AS Id, 'Event' AS DataType, AddedOn AS DateAdded FROM `Event` WHERE `EventStatus` = '1' AND (`EventName` LIKE '%".$this->search."%' OR `EventDescription` LIKE '%".$this->search."%') AND `AddedBy` IN (".implode(',', $my_friend_user_profile_id).") ";
                 }
-                $sql .= " ORDER BY DateAdded DESC LIMIT $start,$end";
+
+                $this->db->where('AddedBy', $UserProfileId);
+                $this->db->where('EventStatus !=', -1);
+                $this->db->order_by('DateAdded','DESC');
+                $this->db->limit($start, $end);
+
                 $query = $this->db->query($sql);
                 $res = $query->result_array();
                 foreach($res AS $key => $val) {
@@ -339,9 +385,55 @@ class Search extends CI_Controller {
 
             $result['Complaint'] = array();
             if($search_in == 'all' || $search_in == 'complaint') {
-                $sql = "SELECT ComplaintId AS Id, 'Complaint' AS DataType, AddedOn AS DateAdded FROM `Complaint` WHERE `ComplaintStatus` = '1' AND (`ComplaintSubject` LIKE '%".$this->search."%' OR `ComplaintDescription` LIKE '%".$this->search."%') AND `AddedBy` = '".$UserProfileId."'  ";
+                
+                $complaint_search_condition = '';
+                if($search_in == "complaint") {
+                    $posted_by_me   = $this->input->post('posted_by_me'); // By Me
+                    $me_associated  = $this->input->post('me_associated'); // You / YourFriend / Group
+                    $date_from   = $this->input->post('date_from');
+                    $date_to     = $this->input->post('date_to');
+
+                    
+                    if($posted_by_me == '1') {
+                        $complaint_search_condition .= " AND `AddedBy` = '".$UserProfileId."'";
+                    }
+                    
+                    if($date_from != '' && $date_to != '') {
+                        if($date_from == $date_to) {
+                            $complaint_search_condition .= " AND AddedOn LIKE '%".$date_from."%' ";
+                        } else {
+                            $complaint_search_condition .= " AND AddedOn BETWEEN '".$date_from." 00:00:00' AND '".$date_to." 23:59:59'";
+                        }
+                    }
+                } else {
+                    $complaint_search_condition .= " AND `AddedBy` = '".$UserProfileId."'";
+                }
+
+
+                $sql = "SELECT ComplaintId AS Id, 'Complaint' AS DataType, AddedOn AS DateAdded FROM `Complaint` WHERE `ComplaintStatus` != -1 AND (`ComplaintSubject` LIKE '%".$this->search."%' OR `ComplaintDescription` LIKE '%".$this->search."%') ".$complaint_search_condition;
+
+                $sql .= " UNION SELECT c.ComplaintId AS Id, 'Complaint' AS DataType, c.AddedOn AS DateAdded FROM `Complaint` AS c 
+                        LEFT JOIN `ComplaintMember` AS cm ON cm.ComplaintId = c.ComplaintId 
+                        WHERE 
+                            c.`ComplaintStatus`     != -1  
+                        AND cm.`UserProfileId`      = '".$UserProfileId."' 
+                        AND cm.AcceptedYesNo        != '2' 
+                        AND (c.`ComplaintSubject` LIKE '%".$this->search."%' OR c.`ComplaintDescription` LIKE '%".$this->search."%') ";
+                if($search_in == "complaint") {
+                    if($me_associated == '1') {
+                        $sql .= " AND cm.`UserProfileId` = '".$UserProfileId."' ";
+                    }
+                    if($date_from != '' && $date_to != '') {
+                        if($date_from == $date_to) {
+                            $sql .= " AND c.AddedOn LIKE '%".$date_from."%' ";
+                        } else {
+                            $sql .= " AND c.AddedOn BETWEEN '".$date_from." 00:00:00' AND '".$date_to." 23:59:59'";
+                        }
+                    }
+                }
+
                 if(count($my_friend_user_profile_id) > 0) {
-                    $sql .= " UNION SELECT ComplaintId AS Id, 'Complaint' AS DataType, AddedOn AS DateAdded FROM `Complaint` WHERE `ComplaintStatus` = '1' AND (`ComplaintSubject` LIKE '%".$this->search."%' OR `ComplaintDescription` LIKE '%".$this->search."%') AND `AddedBy` IN (".implode(',', $my_friend_user_profile_id).")  ";
+                    $sql .= " UNION SELECT ComplaintId AS Id, 'Complaint' AS DataType, AddedOn AS DateAdded FROM `Complaint` WHERE `ComplaintStatus` != -1 AND (`ComplaintSubject` LIKE '%".$this->search."%' OR `ComplaintDescription` LIKE '%".$this->search."%') AND `AddedBy` IN (".implode(',', $my_friend_user_profile_id).")  ";
                 }
                 $sql .= " ORDER BY DateAdded DESC LIMIT $start,$end";
                 $query = $this->db->query($sql);
