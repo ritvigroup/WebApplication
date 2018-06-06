@@ -610,7 +610,7 @@ class Payment_Model extends CI_Model {
                 $sql = $sql_payment.$sql_union.$sql_poll;
             } else if($Payment_Point == 'Payment') {
                 $sql = $sql_payment;
-            } else if($Payment_Point == 'Poll'){
+            } else if($Payment_Point == 'Point'){
                 $sql = $sql_poll;
             }
 

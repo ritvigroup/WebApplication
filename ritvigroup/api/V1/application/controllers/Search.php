@@ -186,11 +186,8 @@ class Search extends CI_Controller {
         $search_in          = $this->input->post('search_in');
         $start              = (($this->input->post('start') > 0) ? $this->input->post('start') : 0);
         $end                = (($this->input->post('end') > 0) ? $this->input->post('end') : 10);
-
-
         
         $my_friend_user_profile_id = $this->User_Model->getMyFriendFollowerAndFollowingUserProfileId($UserProfileId);
-
       
         if($UserId == "") {
             $msg = "Please select user";
@@ -204,11 +201,16 @@ class Search extends CI_Controller {
 
             $i = 0;
             
-            $result['Event'] = array();
+            $result['Event'] = array(); // Done CI code
             if($search_in == 'all' || $search_in == 'event') {
                 
                 $this->db->select("EventId AS Id, 'Event' AS DataType, AddedOn AS DateAdded");
-                $this->db->from($this->eventTbl);
+                $this->db->from('Event');
+                $this->db->where('AddedBy', $UserProfileId);
+                $this->db->group_start();
+                $this->db->like('EventName', $this->search);
+                $this->db->or_like('EventDescription', $this->search);
+                $this->db->group_end();
                 if($search_in == "event") {
                     
                     $posted_by_me       = $this->input->post('posted_by_me'); // By Me
@@ -220,16 +222,16 @@ class Search extends CI_Controller {
 
                     
                     if($posted_by_me == '1') {
-                        $this->db->where('AddedBy', $FriendProfileId);
+                        $this->db->where('AddedBy', $UserProfileId);
                     }
                     if($myself_tagged == '1') {
-                        $this->db->where($FriendProfileId." IN (SELECT ea.UserProfileId FROM `EventAttendee` AS ea WHERE ea.EventId = Event.EventId AND ea.EventApprovedStatus != -1)");
+                        $this->db->where($UserProfileId." IN (SELECT ea.UserProfileId FROM `EventAttendee` AS ea WHERE ea.EventId = Event.EventId AND ea.EventApprovedStatus != -1)");
                     }
                     if($location != '') {
                         $this->db->like('EventLocation', $location);
                     }
                     if($participated > 0) {
-                        $this->db->where($FriendProfileId." IN (SELECT ei.UserProfileId FROM `EventInterest` AS ei WHERE ei.EventId = Event.EventId AND ei.InterestType = '".$participated."')");
+                        $this->db->where($UserProfileId." IN (SELECT ei.UserProfileId FROM `EventInterest` AS ei WHERE ei.EventId = Event.EventId AND ei.InterestType = '".$participated."')");
                     }
                     
                     if($date_from != '' && $date_to != '') {
@@ -246,18 +248,74 @@ class Search extends CI_Controller {
                         }
                     }
                 }
+                
+                $this->db->where('EventStatus !=', -1);
 
-                $sql = "SELECT EventId AS Id, 'Event' AS DataType, AddedOn AS DateAdded FROM `Event` WHERE `EventStatus` = '1' AND (`EventName` LIKE '%".$this->search."%' OR `EventDescription` LIKE '%".$this->search."%') AND `AddedBy` = '".$UserProfileId."' ";
                 if(count($my_friend_user_profile_id) > 0) {
-                    $sql .= " UNION SELECT EventId AS Id, 'Event' AS DataType, AddedOn AS DateAdded FROM `Event` WHERE `EventStatus` = '1' AND (`EventName` LIKE '%".$this->search."%' OR `EventDescription` LIKE '%".$this->search."%') AND `AddedBy` IN (".implode(',', $my_friend_user_profile_id).") ";
+
+                    $query1 = $this->db->get_compiled_select();
+
+                    $this->db->select("EventId AS Id, 'Event' AS DataType, AddedOn AS DateAdded");
+                    $this->db->from('Event');
+                    $this->db->group_start();
+                    $this->db->like('EventName', $this->search);
+                    $this->db->or_like('EventDescription', $this->search);
+                    $this->db->group_end();
+
+                    if($search_in == "event") {
+                        
+                        if($posted_by_me == '1') {
+                            $this->db->where('AddedBy', $UserProfileId);
+                        }
+                        if($myself_tagged == '1') {
+                            $this->db->where($UserProfileId." IN (SELECT ea.UserProfileId FROM `EventAttendee` AS ea WHERE ea.EventId = Event.EventId AND ea.EventApprovedStatus != -1)");
+                        }
+                        if($location != '') {
+                            $this->db->like('EventLocation', $location);
+                        }
+                        if($participated > 0) {
+                            $this->db->where($UserProfileId." IN (SELECT ei.UserProfileId FROM `EventInterest` AS ei WHERE ei.EventId = Event.EventId AND ei.InterestType = '".$participated."')");
+                        }
+                        
+                        if($date_from != '' && $date_to != '') {
+                            if($date_from == $date_to) {
+                                $this->db->group_start();
+                                $this->db->where("(StartDate BETWEEN '".$date_from." 00:00:00' AND '".$date_to." 23:59:59')");
+                                $this->db->where("(EndDate BETWEEN '".$date_from." 00:00:00' AND '".$date_to." 23:59:59')");
+                                $this->db->group_end();
+                            } else {
+                                $this->db->group_start();
+                                $this->db->where("(StartDate BETWEEN '".$date_from." 00:00:00' AND '".$date_to." 23:59:59')");
+                                $this->db->where("(EndDate BETWEEN '".$date_from." 00:00:00' AND '".$date_to." 23:59:59')");
+                                $this->db->group_end();
+                            }
+                        }
+                    }
+                    $this->db->where("AddedBy IN (".implode(',', $my_friend_user_profile_id).")" );
+                    
+
+                    $this->db->where('EventStatus', 1);
+                    $this->db->where('EventPrivacy', 1);
+                    
+
+                    $query2 = $this->db->get_compiled_select();
+
+                    $sql = '(' . $query1 . ') UNION (' . $query2 . ')';
+
+                    $sql .= " ORDER BY DateAdded DESC ";
+                    $sql .= " LIMIT $start,$end";
+
+                    $query = $this->db->query($sql);
+
+                } else {
+                    $this->db->order_by('DateAdded','DESC');
+                    $this->db->limit($end, $start);
+
+                    $query = $this->db->get();
                 }
 
-                $this->db->where('AddedBy', $UserProfileId);
-                $this->db->where('EventStatus !=', -1);
-                $this->db->order_by('DateAdded','DESC');
-                $this->db->limit($start, $end);
-
-                $query = $this->db->query($sql);
+                //echo $this->db->last_query();
+                
                 $res = $query->result_array();
                 foreach($res AS $key => $val) {
                     $result['Event'][] = array(
@@ -269,52 +327,108 @@ class Search extends CI_Controller {
             }
 
             
-            $result['Poll'] = array();
+            $result['Poll'] = array(); // Done CI Code
             if($search_in == 'all' || $search_in == 'poll') {
 
-                $poll_search_condition = '';
-
-                $participated   = $this->input->post('participated'); // 1 / 0
-                $posted_by      = $this->input->post('posted_by'); // You / YourFriend / Group
-                $post_type      = $this->input->post('post_type');
-                $date_from      = $this->input->post('date_from');
-                $date_to        = $this->input->post('date_to');
-                $location       = $this->input->post('location');
-
+                $this->db->select("PollId AS Id, 'Poll' AS DataType, AddedOn AS DateAdded");
+                $this->db->from('Poll');
+                $this->db->where('AddedBy', $UserProfileId);
+                $this->db->like('PollQuestion', $this->search);
                 if($search_in == "poll") {
+                    
+                    $posted_by_me       = $this->input->post('posted_by_me'); // By Me
+                    $date_from          = $this->input->post('date_from');
+                    $date_to            = $this->input->post('date_to');
+                    $location           = $this->input->post('location');
+                    $participated       = $this->input->post('participated');
 
-                    if($posted_by != '') {
-                        if($posted_by == "You") {
-                            $poll_search_condition .= " AND `UserProfileId` = '".$UserProfileId."'";
-                        }
-                        if($posted_by == "YourFriend") {
-                            $poll_search_condition .= " AND `UserProfileId` IN (".implode(',', $my_friend_user_profile_id).")";
-                        }
-                        if($posted_by == "Group") {
-                            //$poll_search_condition .= " AND `UserProfileId` = '".$UserProfileId."'";
-                        }
-                    } 
+                    
+                    if($posted_by_me == '1') {
+                        $this->db->where('AddedBy', $UserProfileId);
+                    }
                     if($location != '') {
-                        $poll_search_condition .= " AND `PollLocation` LIKE '%".$location."%'";
+                        $this->db->like('PollLocation', $location);
                     }
+                    if($participated > 0) {
+                        $this->db->where($UserProfileId." IN (SELECT pp.AddedBy FROM `PollParticipation` AS pp WHERE pp.PollId = Poll.PollId AND pp.PollAnswerId > 0 AND pp.AddedBy = '".$UserProfileId."')");
+                    }
+                    
                     if($date_from != '' && $date_to != '') {
-                        $poll_search_condition .= " AND `AddedOn` BETWEEN '".$date_from." 00:00:00' AND '".$date_to." 23:59:59'";
+                        if($date_from == $date_to) {
+                            $this->db->group_start();
+                            $this->db->where("(ValidFromDate BETWEEN '".$date_from."' AND '".$date_to."')");
+                            $this->db->where("(ValidEndDate BETWEEN '".$date_from."' AND '".$date_to."')");
+                            $this->db->group_end();
+                        } else {
+                            $this->db->group_start();
+                            $this->db->where("(ValidFromDate BETWEEN '".$date_from."' AND '".$date_to."')");
+                            $this->db->where("(ValidEndDate BETWEEN '".$date_from."' AND '".$date_to."')");
+                            $this->db->group_end();
+                        }
                     }
-                } else {
-                    $poll_search_condition .= " AND `AddedBy` = '".$UserProfileId."'";
                 }
+                
+                $this->db->where('PollStatus !=', -1);
 
-                if($this->search != '') {
-                    $poll_search_condition .= " AND `PollQuestion` LIKE '%".$this->search."%' ";
-                }
-
-                $sql = "SELECT PollId AS Id, 'Poll' AS DataType, AddedOn AS DateAdded FROM `Poll` WHERE `ValidFromDate` <= '".date('Y-m-d')."' AND `ValidEndDate` >= '".date('Y-m-d')."' AND `PollStatus` = '1' ".$poll_search_condition; 
                 if(count($my_friend_user_profile_id) > 0) {
-                    $sql .= " UNION SELECT PollId AS Id, 'Poll' AS DataType, AddedOn AS DateAdded FROM `Poll` WHERE `ValidFromDate` <= '".date('Y-m-d')."' AND `ValidEndDate` >= '".date('Y-m-d')."' AND `PollStatus` = '1' AND `PollQuestion` LIKE '%".$this->search."%' AND `AddedBy` IN (".implode(',', $my_friend_user_profile_id).") ";
-                }
-                $sql .= " ORDER BY DateAdded DESC LIMIT $start,$end";
 
-                $query = $this->db->query($sql);
+                    $query1 = $this->db->get_compiled_select();
+
+                    $this->db->select("PollId AS Id, 'Poll' AS DataType, AddedOn AS DateAdded");
+                    $this->db->from('Poll');
+                    $this->db->like('PollQuestion', $this->search);
+
+                    if($search_in == "poll") {
+                        
+                        if($posted_by_me == '1') {
+                            $this->db->where('AddedBy', $UserProfileId);
+                        }
+                        if($location != '') {
+                            $this->db->like('PollLocation', $location);
+                        }
+                        if($participated > 0) {
+                            $this->db->where($UserProfileId." IN (SELECT pp.AddedBy FROM `PollParticipation` AS pp WHERE pp.PollId = Poll.PollId AND pp.PollAnswerId > 0 AND pp.AddedBy = '".$UserProfileId."')");
+                        }
+                        
+                        if($date_from != '' && $date_to != '') {
+                            if($date_from == $date_to) {
+                                $this->db->group_start();
+                                $this->db->where("(ValidFromDate BETWEEN '".$date_from."' AND '".$date_to."')");
+                                $this->db->where("(ValidEndDate BETWEEN '".$date_from."' AND '".$date_to."')");
+                                $this->db->group_end();
+                            } else {
+                                $this->db->group_start();
+                                $this->db->where("(ValidFromDate BETWEEN '".$date_from."' AND '".$date_to."')");
+                                $this->db->where("(ValidEndDate BETWEEN '".$date_from."' AND '".$date_to."')");
+                                $this->db->group_end();
+                            }
+                        }
+                    }
+                    $this->db->where("AddedBy IN (".implode(',', $my_friend_user_profile_id).")" );
+                    
+
+                    $this->db->where('PollStatus', 1);
+                    $this->db->where('PollPrivacy', 1);
+                    
+
+                    $query2 = $this->db->get_compiled_select();
+
+                    $sql = '(' . $query1 . ') UNION (' . $query2 . ')';
+
+                    $sql .= " ORDER BY DateAdded DESC ";
+                    $sql .= " LIMIT $start,$end";
+
+                    $query = $this->db->query($sql);
+
+                } else {
+                    $this->db->order_by('DateAdded','DESC');
+                    $this->db->limit($end, $start);
+
+                    $query = $this->db->get();
+                }
+
+                //echo $this->db->last_query();
+
                 $res = $query->result_array();
                 foreach($res AS $key => $val) {
                     $result['Poll'][] = array(
@@ -330,43 +444,65 @@ class Search extends CI_Controller {
             if($search_in == 'all' || $search_in == 'post') {
                 $post_search_condition = '';
                 if($search_in == "post") {
-                    $posted_by   = $this->input->post('posted_by'); // You / YourFriend / Group
-                    $post_type   = $this->input->post('post_type'); // Trending / Most Viewed
-                    $date_from   = $this->input->post('date_from');
-                    $date_to     = $this->input->post('date_to');
-                    $location    = $this->input->post('location');
+                    
+                    $posted_by_me       = $this->input->post('posted_by_me'); // By Me
+                    $posted_by_friend   = $this->input->post('posted_by_friend'); // By Your Friend
+                    $myself_tagged      = $this->input->post('myself_tagged'); // My self tagged
+                    $date_from          = $this->input->post('date_from');
+                    $date_to            = $this->input->post('date_to');
+                    $location           = $this->input->post('location');
+                    $me_liked           = $this->input->post('me_liked');
+                    $me_commented       = $this->input->post('me_commented');
+
 
                     
-                    if($posted_by != '') {
-                        if($posted_by == "You") {
-                            $post_search_condition .= " AND `UserProfileId` = '".$UserProfileId."'";
-                        }
-                        if($posted_by == "YourFriend") {
-                            $post_search_condition .= " AND `UserProfileId` IN (".implode(',', $my_friend_user_profile_id).")";
-                        }
-                        if($posted_by == "Group") {
-                            //$post_search_condition .= " AND `UserProfileId` = '".$UserProfileId."'";
-                        }
+                    if($posted_by_me == '1') {
+                        $post_search_condition .= " AND `UserProfileId` = '".$UserProfileId."'";
+                    }
+                    if($posted_by_friend == '1') {
+                        $my_friend_user_profile_id = $this->User_Model->getMyFriendFollowerAndFollowingUserProfileId($UserProfileId);
+                        $post_search_condition .= " AND `PostPrivacy` = '1' AND `UserProfileId` IN (".$UserProfileId.")";
+                    } else {
+                        $post_search_condition .= " AND `UserProfileId` = '".$UserProfileId."'";
+                    }
+                    if($myself_tagged == '1') {
+                        $post_search_condition .= " AND ".$UserProfileId." IN (SELECT pt.UserProfileId FROM `PostTag` AS pt WHERE pt.PostId = Post.PostId)";
                     }
                     if($location != '') {
-                        $post_search_condition .= " AND ApplicantAddress LIKE '%".$location."%'";
+                        $post_search_condition .= " AND `PostLocation` LIKE '%".$location."%'";
                     }
+                    if($me_liked == '1') {
+                        $post_search_condition .= " AND 1 <= (SELECT COUNT(pl.UserProfileId) FROM `PostLike` AS pl WHERE pl.PostId = Post.PostId AND pl.PostLike = '1')";
+                    }
+                    if($me_commented == '1') {
+                        $post_search_condition .= " AND 1 <= (SELECT COUNT(pc.UserProfileId) FROM `PostComment` AS pc WHERE pc.PostId = Post.PostId AND pc.CommentStatus = '1')";
+                    }
+                    
                     if($date_from != '' && $date_to != '') {
-                        $post_search_condition .= " AND AddedOn BETWEEN '".$date_from." 00:00:00' AND '".$date_to." 23:59:59'";
+                        if($date_from == $date_to) {
+                            $post_search_condition .= " AND AddedOn LIKE '%".$date_from."%' ";
+                        } else {
+                            $post_search_condition .= " AND AddedOn BETWEEN '".$date_from." 00:00:00' AND '".$date_to." 23:59:59'";
+                        }
                     }
                 } else {
                     $post_search_condition .= " AND `UserProfileId` = '".$UserProfileId."'";
                 }
 
+                $sql = "SELECT PostId AS Id, 'Post' AS DataType, AddedOn AS DateAdded FROM `Post` WHERE `PostStatus` != -1 AND `PostTitle` LIKE '%".$this->search."%' ". $post_search_condition;
 
-                $sql = "SELECT PostId AS Id, 'Post' AS DataType, AddedOn AS DateAdded FROM `Post` WHERE `PostStatus` = '1' AND `PostTitle` LIKE '%".$this->search."%' ".$post_search_condition; 
                 if(count($my_friend_user_profile_id) > 0) {
-                    $sql .= " UNION SELECT PostId AS Id, 'Post' AS DataType, AddedOn AS DateAdded FROM `Post` WHERE `PostStatus` = '1' AND `PostTitle` LIKE '%".$this->search."%' AND `UserProfileId`  IN (".implode(',', $my_friend_user_profile_id).") ";
+                    if($posted_by_me != '1' || $posted_by_friend == 1) {
+                        $sql .= " UNION SELECT PostId AS Id, 'Post' AS DataType, AddedOn AS DateAdded FROM `Post` WHERE `PostStatus` = '1' AND `PostPrivacy` = '1' AND `PostTitle` LIKE '%".$this->search."%' AND `UserProfileId` IN (".implode(',', $my_friend_user_profile_id).") ";
+                    }
                 }
 
 
                 $sql .= " ORDER BY DateAdded DESC LIMIT $start, $end";
                 $query = $this->db->query($sql);
+
+                //echo $this->db->last_query();
+
                 $res = $query->result_array();
 
                 $post_array = array();
@@ -433,7 +569,7 @@ class Search extends CI_Controller {
                 }
 
                 if(count($my_friend_user_profile_id) > 0) {
-                    $sql .= " UNION SELECT ComplaintId AS Id, 'Complaint' AS DataType, AddedOn AS DateAdded FROM `Complaint` WHERE `ComplaintStatus` != -1 AND (`ComplaintSubject` LIKE '%".$this->search."%' OR `ComplaintDescription` LIKE '%".$this->search."%') AND `AddedBy` IN (".implode(',', $my_friend_user_profile_id).")  ";
+                    $sql .= " UNION SELECT ComplaintId AS Id, 'Complaint' AS DataType, AddedOn AS DateAdded FROM `Complaint` WHERE `ComplaintStatus` != -1 AND ComplaintPrivacy = 1 AND (`ComplaintSubject` LIKE '%".$this->search."%' OR `ComplaintDescription` LIKE '%".$this->search."%') AND `AddedBy` IN (".implode(',', $my_friend_user_profile_id).")  ";
                 }
                 $sql .= " ORDER BY DateAdded DESC LIMIT $start,$end";
                 $query = $this->db->query($sql);
@@ -450,12 +586,43 @@ class Search extends CI_Controller {
 
             $result['Suggestion'] = array();
             if($search_in == 'all' || $search_in == 'suggestion') {
-                $sql = "SELECT SuggestionId AS Id, 'Suggestion' AS DataType, AddedOn AS DateAdded FROM `Suggestion` WHERE `SuggestionStatus` = '1' AND (`SuggestionSubject` LIKE '%".$search."%' OR `SuggestionDescription` LIKE '%".$this->search."%') AND `AddedBy` = '".$UserProfileId."'  ";
-                if(count($my_friend_user_profile_id) > 0) {
-                    $sql .= " UNION SELECT SuggestionId AS Id, 'Suggestion' AS DataType, AddedOn AS DateAdded FROM `Suggestion` WHERE `SuggestionStatus` = '1' AND (`SuggestionSubject` LIKE '%".$this->search."%' OR `SuggestionDescription` LIKE '%".$this->search."%') AND `AddedBy`  IN (".implode(',', $my_friend_user_profile_id).") ";
+
+                $suggestion_where_condition = "";            
+                if($search_in == "suggestion") {
+                    
+                    $date_from          = $this->input->post('date_from');
+                    $date_to            = $this->input->post('date_to');
+
+                    if($date_from != '' && $date_to != '') {
+                        if($date_from == $date_to) {
+                            $suggestion_where_condition = " AND AddedOn BETWEEN '".$date_from." 00:00:00' AND '".$date_to." 23:59:59' ";
+                        } else {
+                            $suggestion_where_condition = " AND AddedOn BETWEEN '".$date_from." 00:00:00' AND '".$date_to." 23:59:59' ";
+                        }
+                    }
                 }
+
+                $sql = "SELECT SuggestionId AS Id, 'Suggestion' AS DataType, AddedOn AS DateAdded FROM `Suggestion` WHERE `SuggestionStatus` = '1' AND (`SuggestionSubject` LIKE '%".$this->search."%' OR `SuggestionDescription` LIKE '%".$this->search."%') AND `AddedBy` = '".$UserProfileId."'  ";
+                $sql .= $suggestion_where_condition;
+
+                /*if(count($my_friend_user_profile_id) > 0) {
+                    $sql .= " UNION SELECT SuggestionId AS Id, 'Suggestion' AS DataType, AddedOn AS DateAdded FROM `Suggestion` WHERE `SuggestionStatus` = '1' AND (`SuggestionSubject` LIKE '%".$this->search."%' OR `SuggestionDescription` LIKE '%".$this->search."%') AND `AddedBy`  IN (".implode(',', $my_friend_user_profile_id).") ";
+                    $sql .= $suggestion_where_condition;
+                }*/
+                $sql .= " UNION SELECT SuggestionId AS Id, 'Suggestion' AS DataType, AddedOn AS DateAdded 
+                                            FROM 
+                                                `Suggestion` 
+                                            WHERE 
+                                                `SuggestionStatus` = '1' 
+                                            AND (`SuggestionSubject` LIKE '%".$this->search."%' OR `SuggestionDescription` LIKE '%".$this->search."%') 
+                                            AND `SuggestionId` IN (SELECT SuggestionId FROM `SuggestionAssigned` AS sa WHERE sa.AssignedTo = '".$UserProfileId."' AND sa.SuggestionId = Suggestion.SuggestionId) ";
+                $sql .= $suggestion_where_condition;
+
                 $sql .= " ORDER BY DateAdded DESC LIMIT $start,$end";
                 $query = $this->db->query($sql);
+
+                //echo $this->db->last_query();
+
                 $res = $query->result_array();
                 foreach($res AS $key => $val) {
                     $result['Suggestion'][] = array(
@@ -465,6 +632,45 @@ class Search extends CI_Controller {
                     $i++;
                 }
             }
+
+
+            $result['Information'] = array();
+            if($search_in == 'all' || $search_in == 'information') {
+
+                $information_where_condition = "";            
+                if($search_in == "information") {
+                    
+                    $date_from          = $this->input->post('date_from');
+                    $date_to            = $this->input->post('date_to');
+
+                    if($date_from != '' && $date_to != '') {
+                        if($date_from == $date_to) {
+                            $information_where_condition = " AND AddedOn BETWEEN '".$date_from." 00:00:00' AND '".$date_to." 23:59:59' ";
+                        } else {
+                            $information_where_condition = " AND AddedOn BETWEEN '".$date_from." 00:00:00' AND '".$date_to." 23:59:59' ";
+                        }
+                    }
+                }
+
+                $sql = "SELECT InformationId AS Id, 'Information' AS DataType, AddedOn AS DateAdded FROM `Information` WHERE `InformationStatus` = '1' AND (`InformationSubject` LIKE '%".$this->search."%' OR `InformationDescription` LIKE '%".$this->search."%') AND `AddedBy` = '".$UserProfileId."'  ";
+                $sql .= $information_where_condition;
+
+
+                $sql .= " ORDER BY DateAdded DESC LIMIT $start,$end";
+                $query = $this->db->query($sql);
+
+                //echo $this->db->last_query();
+                
+                $res = $query->result_array();
+                foreach($res AS $key => $val) {
+                    $result['Information'][] = array(
+                                                'feedtype' => 'information',
+                                                'informationdata' => $this->Information_Model->getInformationDetail($val['Id'], $UserProfileId),
+                                                );
+                    $i++;
+                }
+            }
+
 
             $result['Profile'] = array();
             if($search_in == 'all' || $search_in == 'people') {

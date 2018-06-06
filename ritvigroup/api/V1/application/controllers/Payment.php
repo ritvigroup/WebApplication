@@ -144,6 +144,8 @@ class Payment extends CI_Controller {
         $Payment_Point   = $this->input->post('payment_point'); // All / Payment / Point
         $debit_credit    = $this->input->post('debit_credit'); // All / 0 / 1
         $ContributeYesNo = $this->input->post('contribute'); // 0 / 1
+ 
+        $Payment_Point = ($Payment_Point != '') ? $Payment_Point : 'All';
         
         if($UserProfileId == "") {
             $msg = "Please select your profile";

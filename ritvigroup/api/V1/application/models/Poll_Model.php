@@ -284,7 +284,6 @@ class Poll_Model extends CI_Model {
 
                 $search_in = $this->input->post('search_in');
             
-                $post_search_condition = '';
                 if($search_in == "poll") {
                     
                     $posted_by_me       = $this->input->post('posted_by_me'); // By Me
