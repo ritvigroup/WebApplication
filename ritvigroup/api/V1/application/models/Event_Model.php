@@ -33,6 +33,20 @@ class Event_Model extends CI_Model {
     }
 
 
+    public function validateEventAddedByMe($EventId, $UserProfileId) {
+        $this->db->select('EventId');
+        $this->db->from($this->eventTbl);
+        $this->db->where('EventId', $EventId);
+        $this->db->where('AddedBy', $UserProfileId);
+        $query = $this->db->get();
+        if ($query->num_rows() > 0) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+
     public function saveMyEvent($insertData) {
         $this->db->insert($this->eventTbl, $insertData);
 
@@ -96,9 +110,7 @@ class Event_Model extends CI_Model {
         for($i = 0; $i < count($event_attachment['name']); $i++) {
 
             $upload_file_name = $event_attachment['name'][$i];
-
-
-            
+           
             if($upload_file_name != '') {
 
                 $AttachmentTypeId = $this->getAttachmentTypeId($upload_file_name);
@@ -140,6 +152,23 @@ class Event_Model extends CI_Model {
                                     'AddedOn'               => date('Y-m-d H:i:s'),
                                     );
                 $this->db->insert($this->eventAttachmentTbl, $insertData);
+
+                $EventPhotoId = $this->db->insert_id();
+
+                if($i == 0) {
+                    $EventCoverPhotoId = $EventPhotoId;
+
+                    $updateData = array(
+                                        'EventCoverPhotoId' => $EventCoverPhotoId,
+                                        'UpdatedOn'         => date('Y-m-d H:i:s'),
+                                    );
+
+                    $whereData = array(
+                                        'EventId'       => $EventId,
+                                        );
+
+                    $event_update = $this->updateMyEvent($whereData, $updateData);
+                }
             }
         }
         return true;
@@ -400,7 +429,7 @@ class Event_Model extends CI_Model {
         $event_detail = array();
         if(isset($EventId) && $EventId > 0) {
 
-            $query = $this->db->query("SELECT * FROM $this->eventTbl WHERE EventId = '".$EventId."'");
+            $query = $this->db->query("SELECT e.*, ea.AttachmentFile FROM ".$this->eventTbl." AS e LEFT JOIN ".$this->eventAttachmentTbl." AS ea ON (e.EventId = ea.EventId AND e.EventCoverPhotoId = ea.EventAttachmentId) WHERE e.EventId = '".$EventId."'");
 
             $res = $query->row_array();
 
@@ -431,6 +460,8 @@ class Event_Model extends CI_Model {
         $EventPrivacy       = (($res['EventPrivacy'] != NULL) ? $res['EventPrivacy'] : ""); // 1 = Public , 0 = Private
         
         $EventStatus        = $res['EventStatus'];
+        $EventCoverPhotoId  = $res['EventCoverPhotoId'];
+        $EventCoverPhoto    = (($res['EventCoverPhotoId'] > 0) ? EVENT_IMAGE_URL.$res['AttachmentFile'] : "");
 
         $AddedOn            = return_time_ago($res['AddedOn']);
         $UpdatedOn          = return_time_ago($res['UpdatedOn']);
@@ -447,7 +478,7 @@ class Event_Model extends CI_Model {
         $TotalUnLikes   = $this->getTotalUnLike($EventId);
         $MeLike         = $this->getMeLike($UserProfileId, $EventId);
         $MeUnLike       = $this->getMeUnLike($UserProfileId, $EventId);
-        $TotalComment   = 0;
+        $TotalComment   = $this->getAllEventComment($EventId, $UserProfileId, 1);
 
 
         $user_data_array = array(
@@ -458,8 +489,8 @@ class Event_Model extends CI_Model {
                                 "EventLocation"      => $EventLocation,
                                 "StartDate"          => $StartDate,
                                 "EndDate"            => $EndDate,
-                                "EveryYear"          => $EveryYear,
-                                "EveryMonth"         => $EveryMonth,
+                                "EventCoverPhotoId"  => $EventCoverPhotoId,
+                                "EventCoverPhoto"    => $EventCoverPhoto,
                                 "EventStatus"        => $EventStatus,
                                 "EventPrivacy"       => $EventPrivacy,
                                 "AddedOn"            => $AddedOn,
@@ -600,7 +631,7 @@ class Event_Model extends CI_Model {
                                 'AttachmentThumb'       => $AttachmentThumb,
                                 'AttachmentOrder'       => $result['AttachmentOrder'],
                                 'AttachmentStatus'      => $result['AttachmentStatus'],
-                                'AddedBy'               => $this->User_Model->getMinimumUserProfileInformation($result['AddedBy']),
+                                //'AddedBy'               => $this->User_Model->getMinimumUserProfileInformation($result['AddedBy']),
                                 'AddedOn'               => return_time_ago($result['AddedOn']),
                                 'AddedOnTime'           => $result['AddedOn'],
                                 );

@@ -37,6 +37,20 @@ class Complaint_Model extends CI_Model {
     }
 
 
+    public function validateComplaintAddedByMe($ComplaintId, $UserProfileId) {
+        $this->db->select('ComplaintId');
+        $this->db->from($this->complaintTbl);
+        $this->db->where('ComplaintId', $ComplaintId);
+        $this->db->where('AddedBy', $UserProfileId);
+        $query = $this->db->get();
+        if ($query->num_rows() > 0) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+
     public function getAllDepartment() {
         $result = array();
         $this->db->select('*');
@@ -676,7 +690,7 @@ class Complaint_Model extends CI_Model {
         $TotalUnLikes   = $this->getTotalUnLike($ComplaintId);
         $MeLike         = $this->getMeLike($UserProfileId, $ComplaintId);
         $MeUnLike       = $this->getMeUnLike($UserProfileId, $ComplaintId);
-        $TotalComment   = 0;
+        $TotalComment   = $this->getAllComplaintComment($ComplaintId, $UserProfileId, 1);
 
         $user_data_array = array(
                                 "ComplaintId"               => $ComplaintId,

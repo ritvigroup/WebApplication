@@ -130,6 +130,92 @@ class Post extends CI_Controller {
         displayJsonEncode($array);
     }
 
+
+    public function updateMyPostStatus() {
+        $error_occured = false;
+
+        $UserProfileId      = $this->input->post('user_profile_id');
+        $PostId             = $this->input->post('post_id');
+        $PostTitle          = $this->input->post('title');
+        $feeling            = $this->input->post('feeling');
+        $feeling            = ($feeling > 0) ? $feeling : 0;
+        $PostLocation       = $this->input->post('location');
+        $PostDescription    = $this->input->post('description');
+        $PostURL            = $this->input->post('url');
+        $PostPrivacy        = $this->input->post('privacy'); // 1 = Public, 0 = Private
+        $PostStatus         = $this->input->post('status'); // 1 = Active, 0 = InActive/Hide, -1= Delete
+
+        $PostPrivacy = ($PostPrivacy == 1) ? $PostPrivacy : 0;
+        
+        if($UserProfileId == "") {
+            $msg = "Please select your profile";
+            $error_occured = true;
+        } else if($PostId == "") {
+            $msg = "Please select post";
+            $error_occured = true;
+        } else {
+
+            $this->db->query("BEGIN");
+
+            $my_post = $this->Post_Model->validatePostAddedByMe($PostId, $UserProfileId);
+
+            if($my_post == true) {
+                $updateData = array(
+                                    'PostTitle'         => $PostTitle,
+                                    'PostFeelingId'     => $feeling,
+                                    'PostStatus'        => $PostStatus,
+                                    'PostLocation'      => $PostLocation,
+                                    'PostDescription'   => $PostDescription,
+                                    'PostURL'           => $PostURL,
+                                    'PostPrivacy'       => $PostPrivacy,
+                                    'UpdatedOn'         => date('Y-m-d H:i:s'),
+                                );
+                $whereData = array(
+                                    'UserProfileId'     => $UserProfileId,
+                                    'PostId'            => $PostId,
+                                    );
+
+                $post_update = $this->Post_Model->updateMyPost($whereData, $updateData);
+
+                if($PostId > 0) {
+                    
+                    $this->Post_Model->saveMyPostAttachment($PostId, $UserProfileId, $_FILES['file']);
+
+                    $post_detail = $this->Post_Model->getPostDetail($PostId, $UserProfileId);
+
+                    $this->db->query("COMMIT");
+
+                    $msg = "Post updated successfully";
+
+                } else {
+                    $this->db->query("ROLLBACK");
+                    $msg = "Post not updated. Error occured";
+                    $error_occured = true;
+                }
+            } else {
+                $this->db->query("ROLLBACK");
+                $msg = "This post not belongs to you. You are not authorised to update this post";
+                $error_occured = true;
+            }
+        }
+
+        if($error_occured == true) {
+            $array = array(
+                            "status"    => 'failed',
+                            "message"   => $msg,
+                        );
+        } else {
+
+            $array = array(
+                           "status"     => 'success',
+                           "result"     => $post_detail,
+                           "message"    => $msg,
+                           );
+        }
+        displayJsonEncode($array);
+    }
+
+
     public function deleteMyPostStatus() {
         $error_occured = false;
 

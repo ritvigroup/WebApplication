@@ -72,14 +72,14 @@ class Citizen extends CI_Controller {
             $result = array();
 
             if($DataType == "ALL" || $DataType == "event") {
-                $sql = "SELECT EventId AS Id, 'Event' AS DataType, AddedOn AS DateAdded FROM `Event` WHERE `StartDate` <= '".date('Y-m-d H:i:s')."' AND `EndDate` >= '".date('Y-m-d H:i:s')."' AND `EventStatus` != -1 AND `AddedBy` = '".$UserProfileId."' ";
+                $sql = "SELECT EventId AS Id, 'Event' AS DataType, AddedOn AS DateAdded FROM `Event` WHERE `EventStatus` != -1 AND `AddedBy` = '".$UserProfileId."' ";
             }
             if($DataType == "ALL" || $DataType == "event") {
                 $sql .= " UNION "; 
             }
 
             if($DataType == "ALL" || $DataType == "event") {
-                $sql .= " SELECT EventId AS Id, 'Event' AS DataType, AddedOn AS DateAdded FROM `Event` WHERE `StartDate` <= '".date('Y-m-d H:i:s')."' AND `EndDate` >= '".date('Y-m-d H:i:s')."' AND `EventStatus` = '1' AND `EventPrivacy` = '1' ".$event_condition." ";
+                $sql .= " SELECT EventId AS Id, 'Event' AS DataType, AddedOn AS DateAdded FROM `Event` WHERE `EventStatus` = '1' AND `EventPrivacy` = '1' ".$event_condition." ";
             }
 
             if($DataType == "ALL") {
@@ -87,7 +87,7 @@ class Citizen extends CI_Controller {
             }
 
             if($DataType == "ALL" || $DataType == "poll") {
-                $sql .= " SELECT PollId AS Id, 'Poll' AS DataType, AddedOn AS DateAdded FROM `Poll` WHERE `ValidFromDate` <= '".date('Y-m-d')."' AND `ValidEndDate` >= '".date('Y-m-d')."' AND `PollStatus` != -1 AND `AddedBy` = '".$UserProfileId."' ";
+                $sql .= " SELECT PollId AS Id, 'Poll' AS DataType, AddedOn AS DateAdded FROM `Poll` WHERE `PollStatus` != -1 AND `AddedBy` = '".$UserProfileId."' ";
             }
             
             if($DataType == "ALL" || $DataType == "poll") {
@@ -95,7 +95,7 @@ class Citizen extends CI_Controller {
             }
 
             if($DataType == "ALL" || $DataType == "poll") {
-                $sql .= " SELECT PollId AS Id, 'Poll' AS DataType, AddedOn AS DateAdded FROM `Poll` WHERE `ValidFromDate` <= '".date('Y-m-d')."' AND `ValidEndDate` >= '".date('Y-m-d')."' AND `PollStatus` = '1' AND `PollPrivacy` = '1' ".$poll_condition." ";
+                $sql .= " SELECT PollId AS Id, 'Poll' AS DataType, AddedOn AS DateAdded FROM `Poll` WHERE `PollStatus` = '1' AND `PollPrivacy` = '1' ".$poll_condition." ";
             }
             
             if($DataType == "ALL") {
@@ -286,6 +286,21 @@ class Citizen extends CI_Controller {
             $res = $query->row_array();
             $TotalFriends = ($res['TotalFriends'] > 0) ? $res['TotalFriends'] : 0; 
 
+            $sql = "SELECT COUNT(FriendUserProfileId) AS TotalFavLeader FROM `UserFavUser` WHERE `UserProfileId` = '".$UserProfileId."'";
+            $query = $this->db->query($sql);
+            $res = $query->row_array();
+            $TotalFavLeader = ($res['TotalFavLeader'] > 0) ? $res['TotalFavLeader'] : 0; 
+
+            $sql = "SELECT COUNT(FollowUserProfileId) AS TotalFollowing FROM `UserFollow` WHERE `UserProfileId` = '".$UserProfileId."'";
+            $query = $this->db->query($sql);
+            $res = $query->row_array();
+            $TotalFollowing = ($res['TotalFollowing'] > 0) ? $res['TotalFollowing'] : 0; 
+
+            $sql = "SELECT COUNT(UserProfileId) AS TotalFollower FROM `UserFollow` WHERE `FollowUserProfileId` = '".$UserProfileId."'";
+            $query = $this->db->query($sql);
+            $res = $query->row_array();
+            $TotalFollower = ($res['TotalFollower'] > 0) ? $res['TotalFollower'] : 0; 
+
             $result = array(
                         'TotalEvent'        => $TotalEvent,
                         'TotalPoll'         => $TotalPoll,
@@ -293,7 +308,11 @@ class Citizen extends CI_Controller {
                         'TotalSuggestion'   => $TotalSuggestion,
                         'TotalInformation'  => $TotalInformation,
                         'TotalComplaint'    => $TotalComplaint,
+
                         'TotalConnect'      => $TotalFriends,
+                        'TotalFavLeader'    => $TotalFavLeader,
+                        'TotalFollower'     => $TotalFollower,
+                        'TotalFollowing'    => $TotalFollowing,
                         );
 
             $msg = "User summary data found";
@@ -350,11 +369,11 @@ class Citizen extends CI_Controller {
             $date_time_start = time();
             $sql = "
             
-            SELECT EventId AS Id, 'Event' AS DataType, AddedOn AS DateAdded FROM `Event` WHERE `StartDate` <= '".date('Y-m-d H:i:s')."' AND `EndDate` >= '".date('Y-m-d H:i:s')."' AND `EventPrivacy` ".$privacy_condition." AND `EventStatus` ".$status_condition." AND `AddedBy` = '".$FriendUserProfileId."'
+            SELECT EventId AS Id, 'Event' AS DataType, AddedOn AS DateAdded FROM `Event` WHERE `EventPrivacy` ".$privacy_condition." AND `EventStatus` ".$status_condition." AND `AddedBy` = '".$FriendUserProfileId."'
 
             UNION 
 
-            SELECT PollId AS Id, 'Poll' AS DataType, AddedOn AS DateAdded FROM `Poll` WHERE `ValidFromDate` <= '".date('Y-m-d')."' AND `ValidEndDate` >= '".date('Y-m-d')."' AND `PollPrivacy` ".$privacy_condition." AND `PollStatus` ".$status_condition." AND `AddedBy` = '".$FriendUserProfileId."'
+            SELECT PollId AS Id, 'Poll' AS DataType, AddedOn AS DateAdded FROM `Poll` WHERE `PollPrivacy` ".$privacy_condition." AND `PollStatus` ".$status_condition." AND `AddedBy` = '".$FriendUserProfileId."'
             UNION 
 
             SELECT PostId AS Id, 'Post' AS DataType, AddedOn AS DateAdded FROM `Post` WHERE `PostStatus` ".$status_condition." AND `PostPrivacy` ".$privacy_condition." AND `UserProfileId` = '".$FriendUserProfileId."'

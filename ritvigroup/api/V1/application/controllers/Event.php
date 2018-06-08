@@ -105,6 +105,97 @@ class Event extends CI_Controller {
         displayJsonEncode($array);
     }
 
+    public function updateMyEvent() {
+        $error_occured = false;
+
+        $UserProfileId      = $this->input->post('user_profile_id');
+        $EventId            = $this->input->post('event_id');
+        $EventName          = $this->input->post('event_name');
+        $EventDescription   = $this->input->post('event_description');
+        $EventLocation      = $this->input->post('event_location');
+        $StartDate          = $this->input->post('start_date');
+        $EndDate            = $this->input->post('end_date');
+        $EventPrivacy       = $this->input->post('privacy'); // 1= Public , 0 = Private
+        $EventStatus        = $this->input->post('status'); // 1 = Active , 0 = Hide
+
+        $EventPrivacy = ($EventPrivacy > 0) ? $EventPrivacy : 0;
+
+        $event_attendee = $this->input->post('event_attendee'); // Should be multiple profiles in array
+
+        
+        if($UserProfileId == "") {
+            $msg = "Please select your profile";
+            $error_occured = true;
+        } else if($EventId == "") {
+            $msg = "Please select an event";
+            $error_occured = true;
+        } else if($EventName == "") {
+            $msg = "Please enter some text to name of event";
+            $error_occured = true;
+        } else {
+
+            $this->db->query("BEGIN");
+
+            $my_event = $this->Event_Model->validateEventAddedByMe($EventId, $UserProfileId);
+
+            if($my_event == true) {
+                $updateData = array(
+                                    'EventName'         => $EventName,
+                                    'EventDescription'  => $EventDescription,
+                                    'EventLocation'     => $EventLocation,
+                                    'StartDate'         => date('Y-m-d H:i:s', strtotime($StartDate)),
+                                    'EndDate'           => date('Y-m-d H:i:s', strtotime($EndDate)),
+                                    'EventPrivacy'      => $EventPrivacy,
+                                    'EventStatus'       => $EventStatus,
+                                    'UpdatedBy'         => $UserProfileId,
+                                    'UpdatedOn'         => date('Y-m-d H:i:s'),
+                                );
+
+                $whereData = array(
+                                    'AddedBy'       => $UserProfileId,
+                                    'EventId'       => $EventId,
+                                    );
+
+                $event_update = $this->Event_Model->updateMyEvent($whereData, $updateData);
+
+                if($EventId > 0) {
+                                    
+                    $this->Event_Model->saveMyEventAttachment($EventId, $UserProfileId, $_FILES['file']);
+
+                    $this->db->query("COMMIT");
+
+                    $event_detail = $this->Event_Model->getEventDetail($EventId, $UserProfileId);
+
+                    $msg = "Event updated successfully";
+
+                } else {
+                    $this->db->query("ROLLBACK");
+                    $msg = "Event not updated. Error occured";
+                    $error_occured = true;
+                }
+            } else {
+                $this->db->query("ROLLBACK");
+                $msg = "This event not belongs to you. You are not authorised to update this event";
+                $error_occured = true;
+            }
+        }
+
+        if($error_occured == true) {
+            $array = array(
+                            "status"        => 'failed',
+                            "message"       => $msg,
+                        );
+        } else {
+
+            $array = array(
+                           "status"         => 'success',
+                           "result"         => $event_detail,
+                           "message"        => $msg,
+                           );
+        }
+        displayJsonEncode($array);
+    }
+
 
     public function deleteMyEvent() {
         $error_occured = false;

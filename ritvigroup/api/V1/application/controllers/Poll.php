@@ -102,6 +102,92 @@ class Poll extends CI_Controller {
     }
 
 
+    public function updateMyPoll() {
+        $error_occured = false;
+
+        $UserProfileId      = $this->input->post('user_profile_id');
+        $PollId             = $this->input->post('poll_id');
+        $PollQuestion       = $this->input->post('poll_question');
+        $PollPrivacy        = $this->input->post('privacy'); // 1 = Public, 0 = Private
+        $ValidFromDate      = $this->input->post('valid_from_date');
+        $ValidEndDate       = $this->input->post('valid_end_date');
+        $PollStatus         = $this->input->post('status');
+
+        $PollLocation       = $this->input->post('location');
+
+        $poll_answer        = $this->input->post('poll_answer'); // Should be multiple answers in array
+        
+        if($UserProfileId == "") {
+            $msg = "Please select your profile";
+            $error_occured = true;
+        } else if($PollId == "") {
+            $msg = "Please select poll";
+            $error_occured = true;
+        } else {
+
+            $this->db->query("BEGIN");
+
+            $my_poll = $this->Poll_Model->validatePollAddedByMe($PollId, $UserProfileId);
+
+            if($my_poll == true) {
+                $updateData = array(
+                                    'PollQuestion'      => $PollQuestion,
+                                    'PollPrivacy'       => $PollPrivacy,
+                                    'PollLocation'      => $PollLocation,
+                                    'ValidFromDate'     => date('Y-m-d', strtotime($ValidFromDate)),
+                                    'ValidEndDate'      => date('Y-m-d', strtotime($ValidEndDate)),
+                                    'PollStatus'        => $PollStatus,
+                                    'UpdatedBy'         => $UserProfileId,
+                                    'UpdatedOn'         => date('Y-m-d H:i:s'),
+                                );
+                $whereData = array(
+                                    'AddedBy'     => $UserProfileId,
+                                    'PollId'            => $PollId,
+                                    );
+
+                $update_poll = $this->Poll_Model->updateMyPoll($whereData, $updateData);
+
+                if($PollId > 0) {
+
+                    $this->Poll_Model->updateMyPollImage($PollId, $_FILES['question']);
+
+                    $this->Poll_Model->updateMyPollAnswer($PollId, $UserProfileId, $poll_answer, $_FILES['file']);
+                    
+                    $this->db->query("COMMIT");
+
+                    $poll_detail = $this->Poll_Model->getPollDetail($PollId, $UserProfileId);
+
+                    $msg = "Poll updated successfully";
+
+                } else {
+                    $this->db->query("ROLLBACK");
+                    $msg = "Poll not updated. Error occured";
+                    $error_occured = true;
+                }
+            } else {
+                $this->db->query("ROLLBACK");
+                $msg = "This poll not belongs to you. You are not authorised to update this poll";
+                $error_occured = true;
+            }
+        }
+
+        if($error_occured == true) {
+            $array = array(
+                            "status"    => 'failed',
+                            "message"   => $msg,
+                        );
+        } else {
+
+            $array = array(
+                           "status"     => 'success',
+                           "result"     => $poll_detail,
+                           "message"    => $msg,
+                           );
+        }
+        displayJsonEncode($array);
+    }
+
+
     public function deleteMyPoll() {
         $error_occured = false;
 

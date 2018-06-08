@@ -204,6 +204,129 @@ class Complaint extends CI_Controller {
         displayJsonEncode($array);
     }
 
+
+    // Update My Complaint
+    public function updateMyComplaint() {
+        $error_occured = false;
+
+        $UserProfileId          = $this->input->post('user_profile_id');
+        $ComplaintId            = $this->input->post('complaint_id');
+        $ComplaintTypeId        = $this->input->post('complaint_type_id');
+        $ComplaintSubject       = $this->input->post('complaint_subject');
+        $ComplaintDescription   = $this->input->post('complaint_description');
+        $ApplicantName          = $this->input->post('applicant_name');
+        $ApplicantFatherName    = $this->input->post('applicant_father_name');
+        $ApplicantMobile        = $this->input->post('applicant_mobile');
+        $department             = ($this->input->post('department') > 0) ? $this->input->post('department') : 0;
+
+        $address                = $this->input->post('address');
+        $place                  = $this->input->post('place');
+        $latitude               = $this->input->post('latitude');
+        $longitude              = $this->input->post('longitude');
+        
+        // 1 = Public, 0 = Private
+        $ComplaintPrivacy       = ($this->input->post('privacy') != '') ? $this->input->post('privacy') : 1; 
+        $schedule_date          = $this->input->post('schedule_date');
+        $ComplaintStatus        = $this->input->post('status');
+
+        
+        $ScheduleOn = date('Y-m-d 00:00:00', strtotime($schedule_date));
+
+        // Assign to Favourite Leader/Sub-Leader
+        $AssignedTo             = $this->input->post('assign_to_profile_id'); 
+
+        $complaint_member = $this->input->post('add_more_complaint_member'); // Should be multiple in array
+
+
+        
+        if($UserProfileId == "") {
+            $msg = "Please select user profile";
+            $error_occured = true;
+        } else if($ComplaintId == "") {
+            $msg = "Please select complaint";
+            $error_occured = true;
+        } else if($ComplaintSubject == "") {
+            $msg = "Please enter some text to subject";
+            $error_occured = true;
+        } else {
+
+            $this->db->query("BEGIN");
+
+            $my_complaint = $this->Complaint_Model->validateComplaintAddedByMe($ComplaintId, $UserProfileId);
+
+            if($my_complaint == true) {
+
+                $updateData = array(
+                                    'ComplaintTypeId'           => $ComplaintTypeId,
+                                    'ComplaintSubject'          => $ComplaintSubject,
+                                    'ComplaintDescription'      => $ComplaintDescription,
+                                    'ApplicantName'             => $ApplicantName,
+                                    'ApplicantFatherName'       => $ApplicantFatherName,
+                                    'ApplicantMobile'           => $ApplicantMobile,
+                                    'ComplaintStatus'           => $ComplaintStatus,
+                                    'ComplaintDepartment'       => $department,
+                                    
+                                    'ComplaintPrivacy'          => $ComplaintPrivacy,
+
+                                    'ComplaintPlace'            => $place,
+                                    'ComplaintAddress'          => $address,
+                                    'ComplaintLatitude'         => $latitude,
+                                    'ComplaintLongitude'        => $longitude,
+                                    
+                                    'ScheduleOn'                => $ScheduleOn,
+                                    'UpdatedBy'                 => $UserProfileId,
+                                    'UpdatedOn'                 => date('Y-m-d H:i:s'),
+                                );
+
+                $whereData = array(
+                                    'ComplaintId' => $ComplaintId,
+                                    'AddedBy' => $UserProfileId,
+                                    );
+                $update_complaint = $this->Complaint_Model->updateMyComplaint($whereData, $updateData);
+
+                if($ComplaintId > 0) {
+                    
+                    $this->Complaint_Model->assignComplaintToLeaderSubLeader($ComplaintId, $UserProfileId, $AssignedTo);
+
+                    $this->Complaint_Model->saveMyComplaintMembers($ComplaintId, $UserProfileId, $complaint_member);
+                    
+                    $this->Complaint_Model->saveMyComplaintAttachment($ComplaintId, $UserProfileId, $_FILES['file']);
+
+                    $complaint_detail = $this->Complaint_Model->getComplaintDetail($ComplaintId, $UserProfileId);
+
+                    $this->db->query("COMMIT");
+
+                    $msg = "Complaint px_update_record(pxdoc, data, num) successfully";
+
+                } else {
+                    $this->db->query("ROLLBACK");
+                    $msg = "Complaint not updated. Error occured";
+                    $error_occured = true;
+                }
+            } else {
+                $this->db->query("ROLLBACK");
+                $msg = "This complaint is not posted by you. You are not authorised to update this complaint";
+                $error_occured = true;
+            }
+        }
+
+        if($error_occured == true) {
+            $array = array(
+                            "status"        => 'failed',
+                            "message"       => $msg,
+                        );
+        } else {
+
+            $array = array(
+                           "status"             => 'success',
+                           "result"   => $complaint_detail,
+                           "message"            => $msg,
+                           );
+        }
+        displayJsonEncode($array);
+    }
+
+
     // Delete Complaint
     public function deleteMyComplaint() {
 		$error_occured = false;
