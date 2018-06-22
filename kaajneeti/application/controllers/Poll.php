@@ -25,6 +25,7 @@ class Poll extends CI_Controller {
         $data = array();
       
         $_POST['user_profile_id'] = $this->session->userdata('UserProfileId');
+        $_POST['friend_profile_id'] = $this->session->userdata('UserProfileId');
         $json_encode = post_curl(API_CALL_PATH.'poll/getMyAllPoll', $this->input->post(), $this->curl);
 
         $json_decode = json_decode($json_encode);

@@ -12,6 +12,7 @@ class Complaint extends CI_Controller {
 
         $this->load->model('User_Model');
         $this->load->model('Complaint_Model');
+        $this->load->model('Notification_Model');
 
         $this->device_token 	= $this->input->post('device_token');
         $this->location_lant 	= $this->input->post('location_lant');
@@ -117,7 +118,7 @@ class Complaint extends CI_Controller {
         if($schedule_date != '') {
             $ScheduleOn = date('Y-m-d 00:00:00', strtotime($schedule_date));
             if(strtotime($ScheduleOn) != strtotime(date('Y-m-d 00:00:00'))) {
-                $ComplaintStatus = 0;
+                //$ComplaintStatus = 0;
             }
         } else {
             $ScheduleOn = date('Y-m-d H:i:s');
@@ -126,6 +127,8 @@ class Complaint extends CI_Controller {
         $AssignedTo             = $this->input->post('assign_to_profile_id'); // Assign to Favourite Leader/Sub-Leader
 
         $complaint_member = $this->input->post('complaint_member'); // Should be multiple in array
+
+        $LocationArray      = $this->input->post('location_detail'); // Location Array Detail
 
 
         
@@ -175,11 +178,71 @@ class Complaint extends CI_Controller {
                 
                 $this->Complaint_Model->saveMyComplaintAttachment($ComplaintId, $UserProfileId, $_FILES['file']);
 
+                $this->Complaint_Model->saveMyComplaintLocation($ComplaintId, $UserProfileId, $LocationArray);
+
                 $complaint_detail = $this->Complaint_Model->getComplaintDetail($ComplaintId, $UserProfileId);
 
                 $this->db->query("COMMIT");
 
-                $msg = "Complaint added successfully";
+                // Notification Start
+                $insertData = array(
+                                    'NotificationFeedId'    => $ComplaintId,
+                                    'NotificationStatus'    => 1,
+                                    'NotificationAddedOn'   => date('Y-m-d H:i:s'),
+                                    );
+                $notification_id = $this->Notification_Model->saveNotification($insertData);
+
+                // Nofification to user
+                $insertData = array(
+                                    'NotificationId'            => $notification_id,
+                                    'NotificationFrom'          => $UserProfileId,
+                                    'NotificationTo'            => $AssignedTo,
+                                    'NotificationType'          => 'complaint-generated',
+                                    'NotificationDescription'   => 'Assigned to you ',
+                                    'NotificationSentYesNo'     => 0,
+                                    'NotificationReceivedYesNo' => 0,
+                                    'NotificationFromToStatus'  => 1,
+                                    );
+
+                $this->Notification_Model->saveNotificationFromTo($insertData);
+
+                // Notification Tagged
+                foreach($complaint_member AS $member_user_profile_id) {
+                    $insertData = array(
+                                        'NotificationId'            => $notification_id,
+                                        'NotificationFrom'          => $UserProfileId,
+                                        'NotificationTo'            => $member_user_profile_id,
+                                        'NotificationType'          => 'complaint-tagged',
+                                        'NotificationDescription'   => 'Tagged you in a complaint ',
+                                        'NotificationSentYesNo'     => 0,
+                                        'NotificationReceivedYesNo' => 0,
+                                        'NotificationFromToStatus'  => 1,
+                                        );
+
+                    $this->Notification_Model->saveNotificationFromTo($insertData);
+                }
+
+                // Notification User Friends and Followers
+                $user_friend_followers = $this->User_Model->getMyFriendFollowerList($UserProfileId);
+
+                foreach($user_friend_followers AS $user_friend_follower) {
+
+                    $insertData = array(
+                                    'NotificationId'            => $notification_id,
+                                    'NotificationFrom'          => $UserProfileId,
+                                    'NotificationTo'            => $user_friend_follower['UserProfileId'],
+                                    'NotificationType'          => 'complaint-generated',
+                                    'NotificationDescription'   => 'Generated a complaint ',
+                                    'NotificationSentYesNo'     => 0,
+                                    'NotificationReceivedYesNo' => 0,
+                                    'NotificationFromToStatus'  => 1,
+                                    );
+
+                    $this->Notification_Model->saveNotificationFromTo($insertData);
+                }
+                // Notification End
+
+                $msg = "Complaint generated successfully";
 
             } else {
                 $this->db->query("ROLLBACK");
@@ -223,6 +286,9 @@ class Complaint extends CI_Controller {
         $place                  = $this->input->post('place');
         $latitude               = $this->input->post('latitude');
         $longitude              = $this->input->post('longitude');
+
+        $delete_image       = $this->input->post('delete_image');
+        $LocationArray      = $this->input->post('location_detail'); // Location Array Detail
         
         // 1 = Public, 0 = Private
         $ComplaintPrivacy       = ($this->input->post('privacy') != '') ? $this->input->post('privacy') : 1; 
@@ -235,7 +301,7 @@ class Complaint extends CI_Controller {
         // Assign to Favourite Leader/Sub-Leader
         $AssignedTo             = $this->input->post('assign_to_profile_id'); 
 
-        $complaint_member = $this->input->post('add_more_complaint_member'); // Should be multiple in array
+        $complaint_member = $this->input->post('complaint_member'); // Should be multiple in array
 
 
         
@@ -286,6 +352,12 @@ class Complaint extends CI_Controller {
 
                 if($ComplaintId > 0) {
                     
+                    $this->Complaint_Model->removeMyComplaintLocation($ComplaintId, $UserProfileId);
+                    $this->Complaint_Model->removeMyComplaintAttachment($ComplaintId, $delete_image);
+                    $this->Complaint_Model->saveMyComplaintLocation($ComplaintId, $UserProfileId, $LocationArray);
+
+                    $this->Complaint_Model->deleteMyComplaintMembers($ComplaintId, $UserProfileId);
+
                     $this->Complaint_Model->assignComplaintToLeaderSubLeader($ComplaintId, $UserProfileId, $AssignedTo);
 
                     $this->Complaint_Model->saveMyComplaintMembers($ComplaintId, $UserProfileId, $complaint_member);
@@ -296,7 +368,7 @@ class Complaint extends CI_Controller {
 
                     $this->db->query("COMMIT");
 
-                    $msg = "Complaint px_update_record(pxdoc, data, num) successfully";
+                    $msg = "Complaint updated successfully";
 
                 } else {
                     $this->db->query("ROLLBACK");
@@ -410,6 +482,30 @@ class Complaint extends CI_Controller {
 
                 $this->db->query("COMMIT");
 
+                // Notification Start
+                $insertData = array(
+                                    'NotificationFeedId'    => $ComplaintId,
+                                    'NotificationStatus'    => 1,
+                                    'NotificationAddedOn'   => date('Y-m-d H:i:s'),
+                                    );
+                $notification_id = $this->Notification_Model->saveNotification($insertData);
+
+                // Nofification to user
+                $insertData = array(
+                                    'NotificationId'            => $notification_id,
+                                    'NotificationFrom'          => $UserProfileId,
+                                    'NotificationTo'            => $complaint_detail['ComplaintProfile']['UserProfileId'],
+                                    'NotificationType'          => 'complaint-invitation-accepted',
+                                    'NotificationDescription'   => 'Complaint tagged invitation accepted ',
+                                    'NotificationSentYesNo'     => 0,
+                                    'NotificationReceivedYesNo' => 0,
+                                    'NotificationFromToStatus'  => 1,
+                                    );
+
+                $this->Notification_Model->saveNotificationFromTo($insertData);
+                // Notification End
+
+
                 $msg = "Complaint invitation accepted successfully";
 
             } else {
@@ -460,6 +556,29 @@ class Complaint extends CI_Controller {
                 $complaint_detail = $this->Complaint_Model->getComplaintDetail($ComplaintId, $UserProfileId);
 
                 $this->db->query("COMMIT");
+
+                // Notification Start
+                $insertData = array(
+                                    'NotificationFeedId'    => $ComplaintId,
+                                    'NotificationStatus'    => 1,
+                                    'NotificationAddedOn'   => date('Y-m-d H:i:s'),
+                                    );
+                $notification_id = $this->Notification_Model->saveNotification($insertData);
+
+                // Nofification to user
+                $insertData = array(
+                                    'NotificationId'            => $notification_id,
+                                    'NotificationFrom'          => $UserProfileId,
+                                    'NotificationTo'            => $complaint_detail['ComplaintProfile']['UserProfileId'],
+                                    'NotificationType'          => 'complaint-invitation-rejected',
+                                    'NotificationDescription'   => 'Complaint tagged invitation rejected ',
+                                    'NotificationSentYesNo'     => 0,
+                                    'NotificationReceivedYesNo' => 0,
+                                    'NotificationFromToStatus'  => 1,
+                                    );
+
+                $this->Notification_Model->saveNotificationFromTo($insertData);
+                // Notification End
 
                 $msg = "Complaint invitation rejected successfully";
 
@@ -731,22 +850,28 @@ class Complaint extends CI_Controller {
             $error_occured = true;
         } else {
 
-            $this->db->query("BEGIN");
-
             if($current_status == 2) {
                 $complaint_status = $this->Complaint_Model->getComplaintStatusDetail($current_status);
 
                 if($complaint_status['StatusName'] != '') {
                     $HistoryTitle = $complaint_status['StatusName'];
                     $HistoryDescription = $complaint_status['StatusName']. ' your complaint';
+
+                    $notification_type = "complaint-accepted";
                 } else {
                     $HistoryTitle = 'Declined';
                     $HistoryDescription = $HistoryTitle. ' your complaint';
+
+                    $notification_type = "complaint-declined";
                 }
             } else {
                 $HistoryTitle = 'Declined';
                 $HistoryDescription = $HistoryTitle. ' your complaint';
+
+                $notification_type = "complaint-declined";
             }
+
+            $this->db->query("BEGIN");
 
             $insertData = array(
                                 'ComplaintId'               => $ComplaintId,
@@ -767,15 +892,46 @@ class Complaint extends CI_Controller {
                 
                 $this->db->query("COMMIT");
 
-                // Sending Notification to Users Start
-                $user_profile_id_array = $this->Complaint_Model->getActiveUserProfileIdAssociatedWithComplaint($ComplaintId, $UserProfileId);
 
-                $device_tokens = $this->User_Model->getUserProfileDeviceTokenFromUserProfileIds($user_profile_id_array);
+                // For Notification Start
+                $complaint_detail = $this->Complaint_Model->getComplaintDetail($ComplaintId, $UserProfileId);
 
-                foreach($device_tokens AS $device_token) {
-                    //sendAndroidNotification($device_token, 'ComplaintReply', $HistoryTitle, $HistoryDescription, $complaint_history_detail);
+                $insertData = array(
+                                    'NotificationFeedId'    => $ComplaintId,
+                                    'NotificationStatus'    => 1,
+                                    'NotificationAddedOn'   => date('Y-m-d H:i:s'),
+                                    );
+                $notification_id = $this->Notification_Model->saveNotification($insertData);
+
+                // Nofification to user generated complaint
+                $insertData = array(
+                                    'NotificationId'            => $notification_id,
+                                    'NotificationFrom'          => $UserProfileId,
+                                    'NotificationTo'            => $complaint_detail['ComplaintProfile']['UserProfileId'],
+                                    'NotificationType'          => $notification_type,
+                                    'NotificationDescription'   => $HistoryDescription,
+                                    'NotificationSentYesNo'     => 0,
+                                    'NotificationReceivedYesNo' => 0,
+                                    'NotificationFromToStatus'  => 1,
+                                    );
+
+                $this->Notification_Model->saveNotificationFromTo($insertData);
+
+                // Notification Tagged
+                foreach($complaint_detail['ComplaintMember'] AS $member_user_profile_id) {
+                    $insertData = array(
+                                        'NotificationId'            => $notification_id,
+                                        'NotificationFrom'          => $UserProfileId,
+                                        'NotificationTo'            => $member_user_profile_id,
+                                        'NotificationType'          => $notification_type,
+                                        'NotificationDescription'   => $HistoryDescription,
+                                        'NotificationSentYesNo'     => 0,
+                                        'NotificationReceivedYesNo' => 0,
+                                        'NotificationFromToStatus'  => 1,
+                                        );
+
+                    $this->Notification_Model->saveNotificationFromTo($insertData);
                 }
-                // Send Notification to Users End
 
                 $msg = "Complaint history saved successfully";
 
@@ -855,15 +1011,40 @@ class Complaint extends CI_Controller {
                 
                 $this->db->query("COMMIT");
 
-                // Sending Notification to Users Start
-                $user_profile_id_array = $this->Complaint_Model->getActiveUserProfileIdAssociatedWithComplaint($ComplaintId, $UserProfileId);
+                // Notification Start
+                $complaint_detail = $this->Complaint_Model->getComplaintDetail($ComplaintId, $UserProfileId);
+                if($complaint_detail['ComplaintProfile']['UserProfileId'] != $UserProfileId) {
 
-                $device_tokens = $this->User_Model->getUserProfileDeviceTokenFromUserProfileIds($user_profile_id_array);
+                    $insertData = array(
+                                        'NotificationFeedId'    => $ComplaintId,
+                                        'NotificationStatus'    => 1,
+                                        'NotificationAddedOn'   => date('Y-m-d H:i:s'),
+                                        );
+                    $notification_id = $this->Notification_Model->saveNotification($insertData);
 
-                foreach($device_tokens AS $device_token) {
-                    //sendAndroidNotification($device_token, 'ComplaintReply', $HistoryTitle, $HistoryDescription, $complaint_history_detail);
+                    if($current_status == 3) {
+                        $notification_type = "complaint-rejected";
+                        $notification_description = "Rejected your complaint ";
+                    } else {
+                        $notification_type = "complaint-status-updated";
+                        $notification_description = "Complaint status updated ";
+                    }
+
+                    // Nofification to user
+                    $insertData = array(
+                                        'NotificationId'            => $notification_id,
+                                        'NotificationFrom'          => $UserProfileId,
+                                        'NotificationTo'            => $complaint_detail['ComplaintProfile']['UserProfileId'],
+                                        'NotificationType'          => $notification_type,
+                                        'NotificationDescription'   => $notification_description,
+                                        'NotificationSentYesNo'     => 0,
+                                        'NotificationReceivedYesNo' => 0,
+                                        'NotificationFromToStatus'  => 1,
+                                        );
+
+                    $this->Notification_Model->saveNotificationFromTo($insertData);
                 }
-                // Send Notification to Users End
+                // Notification End
 
                 $msg = "Complaint history saved successfully";
 
@@ -1020,7 +1201,7 @@ class Complaint extends CI_Controller {
         displayJsonEncode($array);
     }
 
-
+    // Like Complaint
     public function likeComplaint() {
         $error_occured = false;
 
@@ -1039,6 +1220,33 @@ class Complaint extends CI_Controller {
 
             if($complaint_like > 0) {
                 $msg = "Complaint liked successfully";
+
+                $complaint_detail = $this->Complaint_Model->getComplaintDetail($ComplaintId, $UserProfileId);
+
+                // Notification Start
+                if($complaint_detail['ComplaintProfile']['UserProfileId'] != $UserProfileId) {
+                    $insertData = array(
+                                        'NotificationFeedId'    => $ComplaintId,
+                                        'NotificationStatus'    => 1,
+                                        'NotificationAddedOn'   => date('Y-m-d H:i:s'),
+                                        );
+                    $notification_id = $this->Notification_Model->saveNotification($insertData);
+
+                    $insertData = array(
+                                        'NotificationId'            => $notification_id,
+                                        'NotificationFrom'          => $UserProfileId,
+                                        'NotificationTo'            => $complaint_detail['ComplaintProfile']['UserProfileId'],
+                                        'NotificationType'          => 'complaint-liked',
+                                        'NotificationDescription'   => 'liked your complaint',
+                                        'NotificationSentYesNo'     => 0,
+                                        'NotificationReceivedYesNo' => 0,
+                                        'NotificationFromToStatus'  => 1,
+                                        );
+
+                    $this->Notification_Model->saveNotificationFromTo($insertData);
+                }
+                // Notification End
+
             } else {
                 $msg = "Complaint not like. Not authorised to like this complaint.";
                 $error_occured = true;
@@ -1062,6 +1270,7 @@ class Complaint extends CI_Controller {
         displayJsonEncode($array);
     }
 
+    // Dislike Complaint
     public function unlikeComplaint() {
         $error_occured = false;
 
@@ -1102,7 +1311,7 @@ class Complaint extends CI_Controller {
         displayJsonEncode($array);
     }
 
-
+    // Save Complaint Comment
     public function saveComplaintComment() {
         $error_occured = false;
 
@@ -1145,6 +1354,32 @@ class Complaint extends CI_Controller {
 
                 $comment_detail = $this->Complaint_Model->getComplaintCommentDetail($ComplaintId, $CommentId, $UserProfileId);
 
+                $complaint_detail = $this->Complaint_Model->getComplaintDetail($ComplaintId, $UserProfileId);
+
+                // Notification Start
+                if($complaint_detail['ComplaintProfile']['UserProfileId'] != $UserProfileId) {
+                    $insertData = array(
+                                        'NotificationFeedId'    => $ComplaintId,
+                                        'NotificationStatus'    => 1,
+                                        'NotificationAddedOn'   => date('Y-m-d H:i:s'),
+                                        );
+                    $notification_id = $this->Notification_Model->saveNotification($insertData);
+
+                    $insertData = array(
+                                        'NotificationId'            => $notification_id,
+                                        'NotificationFrom'          => $UserProfileId,
+                                        'NotificationTo'            => $complaint_detail['ComplaintProfile']['UserProfileId'],
+                                        'NotificationType'          => 'complaint-commented',
+                                        'NotificationDescription'   => 'commented on your complaint',
+                                        'NotificationSentYesNo'     => 0,
+                                        'NotificationReceivedYesNo' => 0,
+                                        'NotificationFromToStatus'  => 1,
+                                        );
+
+                    $this->Notification_Model->saveNotificationFromTo($insertData);
+                }
+                // Notification End
+
                 $msg = "Comment added successfully";
 
             } else {
@@ -1170,6 +1405,7 @@ class Complaint extends CI_Controller {
         displayJsonEncode($array);
     }
 
+    // Get All Complaint Comments
     public function getAllComplaintComment() {
         $error_occured = false;
 
@@ -1210,6 +1446,7 @@ class Complaint extends CI_Controller {
         displayJsonEncode($array);
     }
 
+    // Delete comment on complaint
     public function deleteComplaintComment() {
         $error_occured = false;
 

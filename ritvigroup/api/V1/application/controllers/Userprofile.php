@@ -706,14 +706,10 @@ class Userprofile extends CI_Controller {
     // Update User Profile Bio
     public function updateUserProfileBio() {
         $error_occured = false;
-        $UserId = $this->input->post('user_id');
         $UserProfileId = $this->input->post('user_profile_id');
         $UserBio = $this->input->post('user_bio');
         
-        if($UserId == "") {
-            $msg = "Please select user";
-            $error_occured = true;
-        } else if($UserProfileId == "") {
+        if($UserProfileId == "") {
             $msg = "Please select user profile";
             $error_occured = true;
         } else {

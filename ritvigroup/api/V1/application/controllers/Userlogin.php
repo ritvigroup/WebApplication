@@ -298,41 +298,100 @@ class Userlogin extends CI_Controller {
             $error_occured = true;
         } else {
 
-            $res_u = $this->User_Model->verifyUsernamePassword($username, $password);
+            if(strlen($password) > 4) {
+                $res_u = $this->User_Model->verifyUsernamePassword($username, $password);
 
-            if($res_u['UserStatus'] == '1') {
-                
-                $UserId = $res_u['UserId'];
+                if($res_u['UserStatus'] == '1') {
+                    
+                    $UserId = $res_u['UserId'];
 
-                $updateData = array(
-                    'LoginStatus' => 1,
-                );
-                
-                $this->User_Model->updateLoginStatus($UserId, $updateData);
+                    $updateData = array(
+                        'LoginStatus' => 1,
+                    );
+                    
+                    $this->User_Model->updateLoginStatus($UserId, $updateData);
 
-                if($login_type == '' || $login_type == 1) {
-                    $user_profile = $this->User_Model->getCitizenProfileInformation($UserId);
-                } else if($login_type == 2) {
-                    $user_profile = $this->User_Model->getLeaderProfileInformation($UserId);
+                    if($login_type == '' || $login_type == 1) {
+                        $user_profile = $this->User_Model->getCitizenProfileInformation($UserId);
+                    } else if($login_type == 2) {
+                        $user_profile = $this->User_Model->getLeaderProfileInformation($UserId);
+                    }
+
+                    $insertData = array(
+                                'UserId'        => $UserId,
+                                'UserProfileId' => $user_profile['UserProfileId'],
+                                'DeviceTokenId' => $this->device_token,
+                                'DeviceName'    => $this->device_name,
+                                'DeviceOs'      => $this->device_os,
+                                'Longitude'     => $this->location_long,
+                                'Lantitude'     => $this->location_lant,
+                                'LoggedIn'      => date('Y-m-d H:i:s'),
+                            );
+
+                    $this->User_Model->insertUserLog($insertData);
+
+                    $msg = "User logged in successfully";
+                } else {
+                    $msg = "Error: Either username or password incorrect";
+                    $error_occured = true;
                 }
-
-                $insertData = array(
-                            'UserId'        => $UserId,
-                            'UserProfileId' => $user_profile['UserProfileId'],
-                            'DeviceTokenId' => $this->device_token,
-                            'DeviceName'    => $this->device_name,
-                            'DeviceOs'      => $this->device_os,
-                            'Longitude'     => $this->location_long,
-                            'Lantitude'     => $this->location_lant,
-                            'LoggedIn'      => date('Y-m-d H:i:s'),
-                        );
-
-                $this->User_Model->insertUserLog($insertData);
-
-                $msg = "User logged in successfully";
             } else {
-                $msg = "Error: Either username or password incorrect";
-                $error_occured = true;
+
+                $mobile = $username;
+                $mpin   = $password;
+
+                $res_u = $this->User_Model->verifyMobileMpin($mobile, $mpin);
+
+                if($res_u['UserStatus'] != '2' && $res_u != false) {
+                    
+                    $UserId = $res_u['UserId'];
+
+                    $updateData = array(
+                        'LoginStatus' => 1,
+                    );
+                    
+                    $this->User_Model->updateLoginStatus($UserId, $updateData);
+
+                    if($login_type == '' || $login_type == 1) {
+
+                        $user_profile = $this->User_Model->getCitizenProfileInformation($UserId);
+
+                        $updateData = array(
+                            'UserProfileDeviceToken' => $this->device_token,
+                        );
+                        $this->User_Model->updateUserProfileData($user_profile['UserProfileId'], $updateData);
+
+                    } else if($login_type == 2) {
+                        $user_profile = $this->User_Model->getLeaderProfileInformation($UserId);
+
+                        $updateData = array(
+                            'UserProfileDeviceToken' => $this->device_token,
+                        );
+                        $this->User_Model->updateUserProfileData($user_profile['UserProfileId'], $updateData);
+                    }
+
+                    $insertData = array(
+                                'UserId'        => $UserId,
+                                'UserProfileId' => $user_profile['UserProfileId'],
+                                'DeviceTokenId' => $this->device_token,
+                                'DeviceName'    => $this->device_name,
+                                'DeviceOs'      => $this->device_os,
+                                'Longitude'     => $this->location_long,
+                                'Lantitude'     => $this->location_lant,
+                                'LoggedIn'      => date('Y-m-d H:i:s'),
+                            );
+
+                    $this->User_Model->insertUserLog($insertData);
+
+
+                    $msg = "User logged in successfully";
+                } else if($res_u['UserStatus'] == '2') {
+                    $msg = "Error: Your account is disabled";
+                    $error_occured = true;
+                } else {
+                    $msg = "Error: Either mobile number or mpin incorrect";
+                    $error_occured = true;
+                }
             }
         }
 
@@ -352,6 +411,7 @@ class Userlogin extends CI_Controller {
         displayJsonEncode($array);
     }
 
+    
     public function loginTeamUsernamePassword() {
         $error_occured = false;
         $username       = $this->input->post('username');

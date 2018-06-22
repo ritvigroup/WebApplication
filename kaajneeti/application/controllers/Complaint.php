@@ -25,7 +25,22 @@ class Complaint extends CI_Controller {
             <li><a href="'.base_url().'complaint/newcomplaint">New Complaint</a>&nbsp;&nbsp;</li>
         ';
 
-    }  
+    }
+
+
+    public function complaintRejectForm() {
+        $data = array();
+      
+        if (!$this->input->is_ajax_request()) {
+           exit('Error');
+        }
+        $_POST['user_profile_id'] = $this->session->userdata('UserProfileId');
+        $data['complaint_id'] = $this->uri->segment(3);
+        $data['complaint_unique_id'] = $this->uri->segment(4);
+        
+        $this->load->view('complaint/complaintRejectForm',$data);
+    }
+
     
     public function complaintHistoryForm() {
         $data = array();
@@ -205,7 +220,7 @@ class Complaint extends CI_Controller {
         }
 
         // Save Complaint History
-        if($this->input->post('title') != '') {
+        if($this->input->post('description') != '') {
 
             $post_data = $this->input->post();
 

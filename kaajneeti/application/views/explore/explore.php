@@ -74,9 +74,9 @@
                                             <div class="feed-activity-list">
                                                 <?php $this->load->view('explore/explorefeed.php'); ?>
                                             </div>
-                                            <?php if(count($result) > 0) { ?>
+                                            <?php //if(count($result) > 0) { ?>
                                             <button class="btn aqua btn-block show_next_explore" onClick="return showNextExplore();"><i class="fa fa-arrow-down"></i> Show More</button>
-                                            <?php } ?>
+                                            <?php //} ?>
                                             <div class="new_loader_div" id="new_loader_div"><img src="<?=base_url();?>assets/images/new-loader.gif"></div>
                                         </div>
                                     </div>
@@ -84,26 +84,51 @@
                             </div>
                         </div>
                         <div class="col-sm-4" style="padding: 10px 50px; 10px 50px;">
+                            
+                            <?php
+                            // echo '<pre>';
+                            // print_r($Connections);
+                            // echo '</pre>';
+
+                            if(count($Connections->result) > 0) {
+                            ?>
+
                             <div class="ibox box_desgin_shadow" style="background: #FFFFFF;">
-                                <div class="widgets-container" style="background: #FFFFFF;">
+                                <?php 
+                                $i = 0;
+                                foreach($Connections->result AS $profile_data) {
+                                    if($i == 5) { break; }
+                                    $users = $profile_data;
+                                    $Name = $users->FirstName.' '.$users->LastName;
+
+                                    if($users->ProfilePhotoPath != '') {
+                                        $profile_pic = ($users->ProfilePhotoPath != '') ? $users->ProfilePhotoPath : base_url().'assets/images/default-user.png';
+                                    } else {
+                                        $profile_pic = ($users->ProfilePhotoPath != '') ? $users->ProfilePhotoPath : base_url().'assets/images/default-user.png';
+                                    } 
+                                    ?>
+                                <div class="widgets-container" style="background: #FFFFFF;" id="connection_id_<?php echo $users->UserProfileId; ?>">
                                     <div class="feed-element">
                                         <a href="#" class="pull-left">
-                                            <img alt="image" class="img-circle" src="../assets/images/teem/a3.jpg">
+                                            <img alt="image" class="img-circle" src="<?php echo $profile_pic; ?>">
                                         </a>
-                                        <div class="media-body "> <strong>Olivia Wenscombe </strong>send Friend Requests to you .
-                                            <br> <small class="text-muted">Today 9:00 pm - 11.06.2016</small>
-                                            <div class="actions"> <a class="btn btn-xs aqua"><i class="glyphicon glyphicon-ok"></i> Confirm</a>  <a class="btn btn-xs btn-danger"><i class="glyphicon glyphicon-remove " aria-hidden="true"></i> Delete</a> 
+                                        <div class="media-body "> <strong><?php echo $Name; ?> </strong>send Connect Requests to you .
+                                            <br> <small class="text-muted"><?php echo $users->RequestSentOn;?></small>
+                                            <div class="actions" id="dropdown_and_button_<?php echo $users->UserProfileId; ?>"> 
+
+                                                <a class="btn btn-xs aqua" onClick="return acceptRequest(<?php echo $users->UserProfileId; ?>);"><i class="glyphicon glyphicon-ok"></i> Confirm</a>  
+                                                <a class="btn btn-xs btn-danger" onClick="return deleteRequest(<?php echo $users->UserProfileId; ?>);"><i class="glyphicon glyphicon-remove " aria-hidden="true"></i> Delete</a> 
                                             </div>
                                         </div>
                                     </div>
-                                    <h3>About Olivia Wenscombe</h3>
-                                    <p class="small">There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don't.
-                                    <br>
-                                    <br>If you are going to use a passage of Lorem Ipsum, you need to be sure there isn't anything embarrassing</p>
-                                    <p class="small font-bold"> <span><i class="fa fa-circle text-navy"></i> Online status</span> 
+                                    <h3>About <?php echo $Name; ?></h3>
+                                    <p class="small"><?php echo $users->UserBio; ?></p>
+                                    <!-- <p class="small font-bold"> <span><i class="fa fa-circle text-navy"></i> Online status</span>  -->
                                     </p>
                                 </div>
+                                <?php $i++; } ?>
                             </div>
+                            <?php } ?>
 
                             <div class="ibox box_desgin_shadow" style="background: #FFFFFF;">
                                 <div class="widgets-container" style="background: #FFFFFF;">
@@ -358,6 +383,7 @@
 <?php require_once './include/js.php';?>
 
 <?php require_once './include/explore/explore.php';?>
+<?php require_once './include/connect/connect.php';?>
 
 
 </html>

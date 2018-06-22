@@ -1,78 +1,72 @@
 <?php
-echo '<pre>';
-print_r($result);
+// echo '<pre>';
+// print_r($result);
+// echo '</pre>';
 ?>
 
 <div class="modal-header">
     <button type="button" data-dismiss="modal" aria-hidden="true" class="close">×</button>
-    <h4 id="modal-stackable-label" class="modal-title"><?php echo $result->PostTitle; ?></h4>
+    <h4 id="modal-stackable-label" class="modal-title"><?php echo $result->PollQuestion; ?></h4>
 </div>
 <div class="modal-body">
-    <div class="note note-success">;
-        <h3><?php echo $result->PostTitle; ?></h3>
-        <p><?php echo $result->PostDescription; ?></p>
-    </div>
-    <div class="panel panel-white">
-        <div class="panel-heading"><?php echo $result->PostLocation; ?></div>
-        
-    </div>
-    <?php if(count($result->PostTag) > 0) { ?>
-        <h3>Attendees</h3>
+    <div class="note note-success">
+        <h3><?php echo $result->PollQuestion; ?></h3>
         <?php
-        $color = array('red', 'orange', 'green', 'yellow', 'blue', 'violet', 'pink', 'grey', 'dark');
-
-        $badge_or_label = array('badge badge', 'label label');
-        $rand = rand(0,1);
-        $i = 0;
-        foreach($result->PostTag AS $PostTag) {
-
-            $color_id = rand(0, (count($color)-1));
-            $FirstName = $PostTag->user_profile_detail->profile->FirstName;
-            $LastName = $PostTag->user_profile_detail->profile->LastName;
-            if($PostTag->user_profile_detail->profile->FirstName != '') {
-                echo '<span class="'.$badge_or_label[$rand].'-'.$color[$color_id].'">'.$FirstName.' '.$LastName.'</span>&nbsp;';
-                $i++;
-            }
+        if($result->PollImage != '') {
+            echo '<img src="'.$result->PollImage.'" style="width: 100%;">';
         }
         ?>
-    <?php } ?>
-    <?php if(count($result->PostAttachment) > 0) { ?>
-        <h3>Attachments</h3>
+    </div>
+    <div class="panel panel-white">
+        <div class="panel-heading"><?php echo $result->PollLocation; ?></div>
+        
+    </div>
+    
+    <h3>Answers</h3>
 
-        <div class="portlet-body">
-            <div class="gallery-pages">
-                <div class="clearfix"></div>
-                <div class="row mix-grid" id="MixItUp3CD102">
-                    
+    <div class="portlet-body">
+        <div class="gallery-pages">
+            <div class="clearfix"></div>
+            <div class="row mix-grid" id="MixItUp3CD102">
+                
+                <ul>
                     <?php
-                    $i = 1;
-                    foreach($result->PostAttachment AS $PostAttachment) {
-                    ?>
-                    <div class="col-md-3 mix photography" style="display: inline-block;">
-                        <div class="hover-effect">
-                            <div class="img"><img src="<?php echo $PostAttachment->AttachmentFile;?>" alt="" class="img-responsive"></div>
-                            <div class="info">
-                                <a href="<?php echo $PostAttachment->AttachmentFile;?>" data-lightbox="image-<?php echo $i; ?>" data-title="Image <?php echo $i; ?>" class="mix-zoom" target="_blank"><i class="glyphicon glyphicon-search"></i></a>
-                            </div>
-                        </div>
-                    </div>
-                    <?php
-                    $i++;
+                    foreach($result->PollAnswerWithTotalParticipation AS $answers) {
+
+                        $PollAnswerImage = ($answers->PollAnswerImage != '') ? '<img src="'.$answers->PollAnswerImage.'" style="width: 200px; height: 120px;">' : '';
+                        echo '<li style="overflow: hidden; max-height: 300px;">'.$PollAnswerImage.'<br>';
+                        
+
+                        if($MeParticipated > 0) {
+                            if($answers->PollAnswer != '') {
+                                echo $answers->PollAnswer;
+                            }
+                        } else {
+                            echo '<input type="button" value="'.$answers->PollAnswer.'" onClick="return participatePollWithAnswer('.$PollId.', '.$answers->PollAnswerId.');">';
+                        }
+                        //echo '<input type="button" value="'.$answers->TotalAnswerdMe.'">';
+                        echo '</li>';
                     }
                     ?>
-                </div>
+                </ul>
             </div>
         </div>
+    </div>
+    <div>
+        <p>From Date: <?php echo $result->ValidFromDate; ?></p>
+        <p>End Date: <?php echo $result->ValidEndDate; ?></p>
+    </div>
 
-        
-     <?php } ?>
+    <div>
+        <p>Total Participation: <?php echo $result->PollTotalParticipation; ?></p>
+    </div>
 
-    <?php 
-    // echo '<pre>';
-    // print_r($result);
+    <?php if($result->MeParticipated > 0) { ?>
+    <div><p>You had already participated this poll.</p></div>
+    <?php } else { ?>
+    <div><p>You had not participated this poll.</p></div>
+    <?php } ?>
 
-    // echo '</pre>';
-    ?>
 </div>
 <div class="modal-footer">
     <button type="button" data-dismiss="modal" class="btn btn-default">Close</button>

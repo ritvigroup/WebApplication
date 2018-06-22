@@ -148,6 +148,91 @@ class Post_Model extends CI_Model {
     }
 
 
+    public function deleteMyPostTags($PostId, $UserProfileId) {
+        $this->db->where('PostId', $PostId);
+        $this->db->delete($this->postTagTbl);
+    }
+
+    public function saveMyPostLocation($PostId, $UserProfileId, $LocationArray) {
+
+        $PlaceId            = $LocationArray['place_id'];
+        $LocationName       = $LocationArray['location_name'];
+        $LocationLattitude  = $LocationArray['location_lant'];
+        $LocationLongitude  = $LocationArray['location_long'];
+        $LocationUrl        = $LocationArray['location_url'];
+        $LocationAddress    = $LocationArray['location_address'];
+        $LocationVicinity   = $LocationArray['location_vicinity'];
+
+        if($PlaceId != '') {
+
+            $sql = "SELECT LocationId FROM `Location` WHERE `PlaceId` = '".$PlaceId."'";
+            $query = $this->db->query($sql);
+
+            $res = $query->row_array();
+            if($res['LocationId'] > 0) {
+
+                $query_lr = $this->db->query("SELECT LocationRelationId FROM `LocationRelation` WHERE `LocationId` = '".$res['LocationId']."'");
+
+                $res_lr = $query_lr->row_array();
+
+                $LocationRelationId = $res_lr['LocationRelationId'];
+            } else {
+                $insertData = array(
+                                    'PlaceId'               => $PlaceId,
+                                    'LocationName'          => $LocationName,
+                                    'LocationLattitude'     => $LocationLattitude,
+                                    'LocationLongitude'     => $LocationLongitude,
+                                    'LocationUrl'           => $LocationUrl,
+                                    'LocationAddress'       => $LocationAddress,
+                                    'LocationVicinity'      => $LocationVicinity,
+                                    );
+                $this->db->insert('Location', $insertData);
+
+                $location_id = $this->db->insert_id();
+
+                $insertData = array(
+                                    'LocationId'    => $location_id,
+                                    'PostId'        => 0,
+                                    'EventId'       => 0,
+                                    'PollId'        => 0,
+                                    'ComplaintId'   => 0,
+                                    );
+                $this->db->insert('LocationRelation', $insertData);
+
+                $LocationRelationId = $this->db->insert_id();
+            }
+            $whereData = array(
+                                'LocationRelationId' => $LocationRelationId,
+                                );
+            $updateData = array(
+                                'PostId' => $PostId,
+                                );
+            $this->db->where($whereData);
+            $this->db->update('LocationRelation', $updateData);
+        }
+        return true;
+    }
+
+    public function removeMyPostLocation($PostId, $UserProfileId) {
+        $whereData = array(
+                            'PostId' => $PostId,
+                            );
+        $updateData = array(
+                            'PostId' => 0,
+                            );
+        $this->db->where($whereData);
+        $this->db->update('LocationRelation', $updateData);
+    }
+
+    public function removeMyPostAttachment($PostId, $delete_image) {
+        foreach($delete_image AS $del_img) {
+
+            $this->db->where('PostAttachmentId', $del_img);
+            $this->db->delete($this->postAttachmentTbl);
+        }
+    }
+
+
     public function saveMyPostAttachment($PostId, $UserProfileId, $post_attachment) {
         $j = 0;
         for($i = 0; $i < count($post_attachment['name']); $i++) {
@@ -360,7 +445,8 @@ class Post_Model extends CI_Model {
         $TotalUnLikes   = $this->getTotalUnLike($PostId);
         $MeLike         = $this->getMeLike($UserProfileId, $PostId);
         $MeUnLike       = $this->getMeUnLike($UserProfileId, $PostId);
-        $TotalComment   = $this->getAllPostComment($PostId, $UserProfileId, 1);;
+        $TotalComment   = $this->getAllPostComment($PostId, $UserProfileId, 1);
+        $LocationDetail   = $this->getPostLocation($PostId, $UserProfileId);
 
 
         $user_data_array = array(
@@ -369,6 +455,7 @@ class Post_Model extends CI_Model {
                                 "PostTitle"             => $PostTitle,
                                 "PostStatus"            => $PostStatus,
                                 "PostLocation"          => $PostLocation,
+                                "LocationDetail"        => $LocationDetail,
                                 "PostDescription"       => $PostDescription,
                                 "PostURL"               => $PostURL,
 
@@ -413,6 +500,29 @@ class Post_Model extends CI_Model {
         }
 
         return $PostTag;
+    }
+
+    function getPostLocation($PostId, $UserProfileId) {
+
+        $location = array();
+
+        $query_lr = $this->db->query("SELECT l.* FROM `LocationRelation` AS lr LEFT JOIN `Location` AS l ON lr.LocationId = l.LocationId WHERE lr.`PostId` = '".$PostId."'");
+
+        $res_lr = $query_lr->row_array();
+        if($res_lr['LocationId'] > 0) {
+            $location = array(
+                            'LocationId'            => $res_lr['LocationId'],
+                            'PlaceId'               => $res_lr['PlaceId'],
+                            'LocationLattitude'     => $res_lr['LocationLattitude'],
+                            'LocationLongitude'     => $res_lr['LocationLongitude'],
+                            'LocationUrl'           => $res_lr['LocationUrl'],
+                            'LocationAddress'       => $res_lr['LocationAddress'],
+                            'LocationVicinity'      => $res_lr['LocationVicinity'],
+                            );
+        } else {
+            $location = NULL;
+        }
+        return $location;
     }
 
 

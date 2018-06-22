@@ -257,8 +257,20 @@ class Leader extends CI_Controller {
             redirect('leader/login');
         }
         
-
         $data = array();
+
+        $_POST['user_id'] = $this->session->userdata('UserId');
+        $_POST['user_profile_id'] = $this->session->userdata('UserProfileId');
+
+        $_POST['start'] = 0;
+        $json_encode = post_curl(API_CALL_PATH.'leader/getMyDashboard', $this->input->post(), $this->curl);
+
+    
+        $json_decode = json_decode($json_encode);
+        if(count($json_decode->result) > 0) {
+            $data['Dashboard'] = $json_decode;
+        }
+
         $this->load->view('leader/dashboard',$data);
     }
 

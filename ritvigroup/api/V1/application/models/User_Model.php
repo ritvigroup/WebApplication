@@ -97,7 +97,8 @@ class User_Model extends CI_Model {
         $this->db->from($this->userProfileTbl);
         $this->db->where('ProfileUserName', $username);
         $this->db->where('ProfileUserPassword', md5($password));
-        //$this->db->where('UserTypeId', $login_type);
+        $this->db->where('UserTypeId', $login_type);
+        $this->db->where('ProfileStatus !=', -1);
         $this->db->limit(1);
         $query = $this->db->get();
 
@@ -775,6 +776,8 @@ class User_Model extends CI_Model {
                                 
                                 "ProfilePhotoPath"              => (($res_u['UserProfilePhoto'] != NULL) ? PROFILE_IMAGE_URL.$res_u['UserProfilePhoto'] : ""),
                                 "CoverPhotoPath"                => (($res_u['UserCoverPhoto'] != NULL) ? PROFILE_IMAGE_URL.$res_u['UserCoverPhoto'] : ""),
+
+                                "UserProfileDeviceToken"        => (($res_u['UserProfileDeviceToken'] != NULL) ? $res_u['UserProfileDeviceToken'] : ""),
                                 
                                 "MyTotalConnections"            => $MyTotalConnections,
                                 "MyTotalFollowers"              => $MyTotalFollowers,
@@ -802,7 +805,7 @@ class User_Model extends CI_Model {
                     $user_data_array = array_merge($user_data_array, array('MyFriend' => 0)); // Fresh
                 }
 
-                $GetNotification = ($friend_response['GetNotification'] != '') ? $friend_response['GetNotification'] : 0;
+                $GetNotification = ($friend_response['GetNotification'] != '') ? $friend_response['GetNotification'] : 1;
                 $user_data_array = array_merge($user_data_array, array('GetNotification' => $GetNotification)); // Get Notification
             } else {
                 $friend_response = $this->checkUserFriendRequest($FriendUserProfileId, $UserProfileId);
@@ -821,7 +824,7 @@ class User_Model extends CI_Model {
                 } else {
                     $user_data_array = array_merge($user_data_array, array('MyFriend' => 0)); // Fresh
                 }
-                $GetNotification = ($friend_response['GetNotification'] != '') ? $friend_response['GetNotification'] : 0;
+                $GetNotification = ($friend_response['GetNotification'] != '') ? $friend_response['GetNotification'] : 1;
                 $user_data_array = array_merge($user_data_array, array('GetNotification' => $GetNotification)); // Get Notification
             }
 
@@ -953,7 +956,8 @@ class User_Model extends CI_Model {
                                 "UpdatedOnTime"                 => ($res_u['UpdatedOn']),
                                 );
 
-        if($UserProfileId > 0) {
+        if($UserProfileId != $FriendUserProfileId && $UserProfileId > 0) {
+            
             $friend_response = $this->checkUserFriendRequest($UserProfileId, $FriendUserProfileId);
 
             if($friend_response['RequestAccepted'] != '') {
@@ -967,9 +971,10 @@ class User_Model extends CI_Model {
                     $user_data_array = array_merge($user_data_array, array('MyFriend' => 0)); // Fresh
                 }
 
-                $GetNotification = ($friend_response['GetNotification'] != '') ? $friend_response['GetNotification'] : 0;
+                $GetNotification = ($friend_response['GetNotification'] != '') ? $friend_response['GetNotification'] : 1;
                 $user_data_array = array_merge($user_data_array, array('GetNotification' => $GetNotification)); // Get Notification
             } else {
+
                 $friend_response = $this->checkUserFriendRequest($FriendUserProfileId, $UserProfileId);
 
                 if($friend_response['RequestAccepted'] != '') {
@@ -986,11 +991,9 @@ class User_Model extends CI_Model {
                 } else {
                     $user_data_array = array_merge($user_data_array, array('MyFriend' => 0)); // Fresh
                 }
-                $GetNotification = ($friend_response['GetNotification'] != '') ? $friend_response['GetNotification'] : 0;
+                $GetNotification = ($friend_response['GetNotification'] != '') ? $friend_response['GetNotification'] : 1;
                 $user_data_array = array_merge($user_data_array, array('GetNotification' => $GetNotification)); // Get Notification
             }
-
-
 
             // Following and Follower
             $follow_response = $this->checkUserFollow($UserProfileId, $FriendUserProfileId);
@@ -2006,6 +2009,16 @@ class User_Model extends CI_Model {
         $this->db->where('FriendUserProfileId', $UserProfileId);
         $this->db->update($this->UserFriendTbl, $updateData);
 
+        $insertData = array(
+                            'UserProfileId'         => $UserProfileId,
+                            'FriendUserProfileId'   => $FriendUserProfileId,
+                            'RequestSentOn'         => date('Y-m-d H:i:s'),
+                            'RequestAccepted'       => '4',
+                            'GetNotification'       => '0',
+                            'RequestAcceptedOn'     => date('Y-m-d H:i:s'),
+                            );
+        $this->db->insert($this->UserFriendTbl, $insertData);
+
         return true;
     }
 
@@ -2087,7 +2100,7 @@ class User_Model extends CI_Model {
     }
 
     // Get My All Favourite Leader
-    public function getMyAllFavouriteLeader($UserId, $UserProfileId, $search_text = '') {
+    public function getMyAllFavouriteLeader($UserId, $UserProfileId, $search_text = '', $list_or_id = 0) {
 
         $sql = "SELECT ufu.*, up.UserId 
                                         FROM ".$this->userFavUserTbl." AS ufu 
@@ -2108,7 +2121,12 @@ class User_Model extends CI_Model {
         $fav_leader = array();
 
         foreach($res_u AS $key => $result) {
-            $fav_leader[] = $this->getUserProfileInformation($result['FriendUserProfileId'], $UserProfileId);
+            if($list_or_id > 0) {
+                $fav_leader[] = $result['FriendUserProfileId'];
+            } else {
+                $fav_leader[] = $this->getUserProfileInformation($result['FriendUserProfileId'], $UserProfileId);
+            }
+            
         }
 
         return $fav_leader;
@@ -2229,6 +2247,33 @@ class User_Model extends CI_Model {
 
         foreach($res_u AS $key => $result) {
             $my_team[] = $this->getUserProfileInformation($result['UserProfileId'], $UserProfileId);
+        }
+
+        return $my_team;
+    }
+
+
+    // Get My All Created Team for Leader
+    public function getMyAllActiveCreatedTeam($UserProfileId, $only_id = 0) {
+
+        $my_team = array();
+        $sql = "SELECT up.UserProfileId 
+                                        FROM ".$this->userProfileTbl." AS up 
+                                        WHERE 
+                                            up.`AddedBy` = '".$UserProfileId."'
+                                        AND up.UserTypeId = '3' 
+                                        AND up.ProfileStatus = 1
+                                        ORDER BY up.AddedOn DESC";
+        $query = $this->db->query($sql);
+
+        $res_u = $query->result_array();
+
+        foreach($res_u AS $key => $result) {
+            if($only_id > 0) {
+                $my_team[] = $result['UserProfileId'];
+            } else {
+                $my_team[] = $this->getUserProfileInformation($result['UserProfileId'], $UserProfileId);
+            }
         }
 
         return $my_team;
@@ -2718,9 +2763,80 @@ class User_Model extends CI_Model {
             }
         }
 
+        // Favorite
+        $sql = "SELECT ufu.* 
+                            FROM ".$this->userFavUserTbl." AS ufu 
+                            LEFT JOIN ".$this->userProfileTbl." up ON ufu.FriendUserProfileId = up.UserProfileId
+                            WHERE 
+                                ufu.`UserProfileId` = '".$UserProfileId."'
+                            AND (up.UserTypeId = '2' OR up.UserTypeId = '3')";
+        $query = $this->db->query($sql);
+
+        $res_u = $query->result_array();
+
+        foreach($res_u AS $key => $result) {
+            if(!@in_array($result['FriendUserProfileId'], $user_prifile_id_array)) {
+                $user_prifile_id_array[] = $result['FriendUserProfileId'];
+            }
+        }
+
         return $user_prifile_id_array;
     }
 
+
+    // Get My All Friends, Follower, Followings Id
+    public function getMyFriendFollowerList($UserProfileId) {
+
+        $follow_user = array();
+        $user_prifile_id_array = array();
+
+        $search_text = trim($search_text);
+        // Followers`
+        $sql = "SELECT ufu.*, up.UserId 
+                                        FROM ".$this->UserFollowTbl." AS ufu 
+                                        LEFT JOIN ".$this->userProfileTbl." up ON ufu.UserProfileId = up.UserProfileId
+                                        WHERE 
+                                            ufu.`FollowUserProfileId` = '".$UserProfileId."' 
+                                        AND up.ProfileStatus = 1";
+
+
+        //echo $sql.'<br>';
+        $query = $this->db->query($sql);
+
+        $res_u = $query->result_array();
+
+        foreach($res_u AS $key => $result) {
+            if(!@in_array($result['UserProfileId'], $user_prifile_id_array)) {
+                $user_prifile_id_array[] = $result['UserProfileId'];
+                $user_friends[] = $this->getMinimumUserProfileInformation($result['UserProfileId'], $UserProfileId);
+            }
+        }
+
+        // Friends
+        $sql = "SELECT uf.FriendUserProfileId 
+                                        FROM ".$this->UserFriendTbl." AS uf  
+                                        LEFT JOIN ".$this->userProfileTbl." up ON uf.FriendUserProfileId = up.UserProfileId 
+                                        WHERE 
+                                            uf.`UserProfileId` = '".$UserProfileId."' 
+                                        AND uf.RequestAccepted = '1' 
+                                        AND up.ProfileStatus = 1"; 
+
+        $sql .= " ORDER BY uf.RequestAcceptedOn DESC";
+        //echo $sql.'<br>';
+
+        $query = $this->db->query($sql);
+
+        $res_u = $query->result_array();
+
+        foreach($res_u AS $key => $result) {
+            if(!@in_array($result['FriendUserProfileId'], $user_prifile_id_array)) {
+                $user_prifile_id_array[] = $result['FriendUserProfileId'];
+                $user_friends[] = $this->getMinimumUserProfileInformation($result['FriendUserProfileId'], $UserProfileId);
+            }
+        }
+
+        return $user_friends;
+    }
 
 
     // Get My All Followers Search

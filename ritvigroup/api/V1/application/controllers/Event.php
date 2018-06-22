@@ -12,6 +12,7 @@ class Event extends CI_Controller {
 
         $this->load->model('User_Model');
         $this->load->model('Event_Model');
+        $this->load->model('Notification_Model');
 
         $this->device_token 	= $this->input->post('device_token');
         $this->location_lant 	= $this->input->post('location_lant');
@@ -33,6 +34,8 @@ class Event extends CI_Controller {
         $EveryYear          = $this->input->post('every_year');
         $EveryMonth         = $this->input->post('every_month');
         $EventPrivacy       = $this->input->post('privacy'); // 1= Public , 0 = Private
+
+        $LocationArray      = $this->input->post('location_detail');
 
         $EventPrivacy = ($EventPrivacy > 0) ? $EventPrivacy : 0;
 
@@ -73,12 +76,59 @@ class Event extends CI_Controller {
             if($EventId > 0) {
                 
                 $this->Event_Model->saveMyEventAttendee($EventId, $UserProfileId, $event_attendee);
+
+                $this->Event_Model->saveMyEventLocation($EventId, $UserProfileId, $LocationArray);
                 
                 $this->Event_Model->saveMyEventAttachment($EventId, $UserProfileId, $_FILES['file']);
 
                 $this->db->query("COMMIT");
 
                 $event_detail = $this->Event_Model->getEventDetail($EventId, $UserProfileId);
+
+                // Notification Start
+                $insertData = array(
+                                    'NotificationFeedId'    => $EventId,
+                                    'NotificationStatus'    => 1,
+                                    'NotificationAddedOn'   => date('Y-m-d H:i:s'),
+                                    );
+                $notification_id = $this->Notification_Model->saveNotification($insertData);
+
+
+                // Notification Tagged
+                foreach($event_attendee AS $member_user_profile_id) {
+                    $insertData = array(
+                                        'NotificationId'            => $notification_id,
+                                        'NotificationFrom'          => $UserProfileId,
+                                        'NotificationTo'            => $member_user_profile_id,
+                                        'NotificationType'          => 'event-tagged',
+                                        'NotificationDescription'   => 'Tagged you in a event',
+                                        'NotificationSentYesNo'     => 0,
+                                        'NotificationReceivedYesNo' => 0,
+                                        'NotificationFromToStatus'  => 1,
+                                        );
+
+                    $this->Notification_Model->saveNotificationFromTo($insertData);
+                }
+
+                // Notification User Friends and Followers
+                $user_friend_followers = $this->User_Model->getMyFriendFollowerList($UserProfileId);
+
+                foreach($user_friend_followers AS $user_friend_follower) {
+
+                    $insertData = array(
+                                    'NotificationId'            => $notification_id,
+                                    'NotificationFrom'          => $UserProfileId,
+                                    'NotificationTo'            => $user_friend_follower['UserProfileId'],
+                                    'NotificationType'          => 'event-generated',
+                                    'NotificationDescription'   => 'Created an event ',
+                                    'NotificationSentYesNo'     => 0,
+                                    'NotificationReceivedYesNo' => 0,
+                                    'NotificationFromToStatus'  => 1,
+                                    );
+
+                    $this->Notification_Model->saveNotificationFromTo($insertData);
+                }
+                // Notification End
 
                 $msg = "Event added successfully";
 
@@ -116,7 +166,10 @@ class Event extends CI_Controller {
         $StartDate          = $this->input->post('start_date');
         $EndDate            = $this->input->post('end_date');
         $EventPrivacy       = $this->input->post('privacy'); // 1= Public , 0 = Private
-        $EventStatus        = $this->input->post('status'); // 1 = Active , 0 = Hide
+        $EventStatus        = (($this->input->post('status') != '') ? $this->input->post('status') : 1); // 1 = Active , 0 = Hide
+
+        $delete_image       = $this->input->post('delete_image'); // 1= Yes , 0 = No
+        $LocationArray      = $this->input->post('location_detail'); // Location Array Detail
 
         $EventPrivacy = ($EventPrivacy > 0) ? $EventPrivacy : 0;
 
@@ -159,8 +212,28 @@ class Event extends CI_Controller {
                 $event_update = $this->Event_Model->updateMyEvent($whereData, $updateData);
 
                 if($EventId > 0) {
+
+                    if($delete_image > 0) {
+                        $updateData = array(
+                                            'EventCoverPhotoId' => 0,
+                                            'UpdatedOn'         => date('Y-m-d H:i:s'),
+                                        );
+
+                        $whereData = array(
+                                            'AddedBy'       => $UserProfileId,
+                                            'EventId'       => $EventId,
+                                            );
+
+                        $this->Event_Model->updateMyEvent($whereData, $updateData);
+                    }
                                     
                     $this->Event_Model->saveMyEventAttachment($EventId, $UserProfileId, $_FILES['file']);
+
+                    $this->Event_Model->removeMyEventAttendee($EventId, $UserProfileId);
+                    $this->Event_Model->saveMyEventAttendee($EventId, $UserProfileId, $event_attendee);
+
+                    $this->Event_Model->removeMyEventLocation($EventId, $UserProfileId);
+                    $this->Event_Model->saveMyEventLocation($EventId, $UserProfileId, $LocationArray);
 
                     $this->db->query("COMMIT");
 
@@ -412,7 +485,33 @@ class Event extends CI_Controller {
 
                     $this->db->query("COMMIT");
                     
-                    $event_detail = $this->Event_Model->getEventDetail($EventId);
+                    $event_detail = $this->Event_Model->getEventDetail($EventId, $UserProfileId);
+
+                    // Notification Start
+                    if($event_detail['EventProfile']['UserProfileId'] != $UserProfileId) {
+                        $insertData = array(
+                                            'NotificationFeedId'    => $EventId,
+                                            'NotificationStatus'    => 1,
+                                            'NotificationAddedOn'   => date('Y-m-d H:i:s'),
+                                            );
+                        $notification_id = $this->Notification_Model->saveNotification($insertData);
+
+
+                        // Notification Created bY
+                        $insertData = array(
+                                            'NotificationId'            => $notification_id,
+                                            'NotificationFrom'          => $UserProfileId,
+                                            'NotificationTo'            => $event_detail['EventProfile']['UserProfileId'],
+                                            'NotificationType'          => 'event-interested',
+                                            'NotificationDescription'   => 'Shown interest on event',
+                                            'NotificationSentYesNo'     => 0,
+                                            'NotificationReceivedYesNo' => 0,
+                                            'NotificationFromToStatus'  => 1,
+                                            );
+
+                        $this->Notification_Model->saveNotificationFromTo($insertData);
+                    }
+                    // Notification End
 
 
                     $msg = "Event answer submitted successfully";
@@ -486,6 +585,32 @@ class Event extends CI_Controller {
                     
                 $event_detail = $this->Event_Model->getEventDetail($EventId, $UserProfileId);
 
+                // Notification Start
+                if($event_detail['EventProfile']['UserProfileId'] != $UserProfileId) {
+                    $insertData = array(
+                                        'NotificationFeedId'    => $EventId,
+                                        'NotificationStatus'    => 1,
+                                        'NotificationAddedOn'   => date('Y-m-d H:i:s'),
+                                        );
+                    $notification_id = $this->Notification_Model->saveNotification($insertData);
+
+
+                    // Notification Created bY
+                    $insertData = array(
+                                        'NotificationId'            => $notification_id,
+                                        'NotificationFrom'          => $UserProfileId,
+                                        'NotificationTo'            => $event_detail['EventProfile']['UserProfileId'],
+                                        'NotificationType'          => 'event-interested',
+                                        'NotificationDescription'   => 'Shown interest on event',
+                                        'NotificationSentYesNo'     => 0,
+                                        'NotificationReceivedYesNo' => 0,
+                                        'NotificationFromToStatus'  => 1,
+                                        );
+
+                    $this->Notification_Model->saveNotificationFromTo($insertData);
+                }
+                // Notification End
+
                 $msg = "Event Interest updated successfully";
 
             } else {
@@ -503,6 +628,30 @@ class Event extends CI_Controller {
                     $this->db->query("COMMIT");
                     
                     $event_detail = $this->Event_Model->getEventDetail($EventId, $UserProfileId);
+
+                    // Notification Start
+                    $insertData = array(
+                                        'NotificationFeedId'    => $EventId,
+                                        'NotificationStatus'    => 1,
+                                        'NotificationAddedOn'   => date('Y-m-d H:i:s'),
+                                        );
+                    $notification_id = $this->Notification_Model->saveNotification($insertData);
+
+
+                    // Notification Created bY
+                    $insertData = array(
+                                        'NotificationId'            => $notification_id,
+                                        'NotificationFrom'          => $UserProfileId,
+                                        'NotificationTo'            => $event_detail['EventProfile']['UserProfileId'],
+                                        'NotificationType'          => 'event-interested',
+                                        'NotificationDescription'   => 'Shown interest on event',
+                                        'NotificationSentYesNo'     => 0,
+                                        'NotificationReceivedYesNo' => 0,
+                                        'NotificationFromToStatus'  => 1,
+                                        );
+
+                    $this->Notification_Model->saveNotificationFromTo($insertData);
+                    // Notification End
 
                     $msg = "Event Interest submitted successfully";
 
@@ -549,6 +698,34 @@ class Event extends CI_Controller {
 
             if($event_like > 0) {
                 $msg = "Event liked successfully";
+
+                // Notification Start
+                $event_detail = $this->Event_Model->getEventDetail($EventId, $UserProfileId);
+                if($event_detail['EventProfile']['UserProfileId'] != $UserProfileId) {
+                    $insertData = array(
+                                        'NotificationFeedId'    => $EventId,
+                                        'NotificationStatus'    => 1,
+                                        'NotificationAddedOn'   => date('Y-m-d H:i:s'),
+                                        );
+                    $notification_id = $this->Notification_Model->saveNotification($insertData);
+
+
+                    // Notification Created bY
+                    $insertData = array(
+                                        'NotificationId'            => $notification_id,
+                                        'NotificationFrom'          => $UserProfileId,
+                                        'NotificationTo'            => $event_detail['EventProfile']['UserProfileId'],
+                                        'NotificationType'          => 'event-liked',
+                                        'NotificationDescription'   => 'Liked event',
+                                        'NotificationSentYesNo'     => 0,
+                                        'NotificationReceivedYesNo' => 0,
+                                        'NotificationFromToStatus'  => 1,
+                                        );
+
+                    $this->Notification_Model->saveNotificationFromTo($insertData);
+                }
+                // Notification End
+
             } else {
                 $msg = "Event not like. Not authorised to like this event.";
                 $error_occured = true;
@@ -655,6 +832,33 @@ class Event extends CI_Controller {
                 $this->db->query("COMMIT");
 
                 $comment_detail = $this->Event_Model->getEventCommentDetail($EventId, $CommentId, $UserProfileId);
+
+                // Notification Start
+                $event_detail = $this->Event_Model->getEventDetail($EventId, $UserProfileId);
+                if($event_detail['EventProfile']['UserProfileId'] != $UserProfileId) {               
+                    $insertData = array(
+                                        'NotificationFeedId'    => $EventId,
+                                        'NotificationStatus'    => 1,
+                                        'NotificationAddedOn'   => date('Y-m-d H:i:s'),
+                                        );
+                    $notification_id = $this->Notification_Model->saveNotification($insertData);
+
+
+                    // Notification Created bY
+                    $insertData = array(
+                                        'NotificationId'            => $notification_id,
+                                        'NotificationFrom'          => $UserProfileId,
+                                        'NotificationTo'            => $event_detail['EventProfile']['UserProfileId'],
+                                        'NotificationType'          => 'event-commented',
+                                        'NotificationDescription'   => 'Commented on your event',
+                                        'NotificationSentYesNo'     => 0,
+                                        'NotificationReceivedYesNo' => 0,
+                                        'NotificationFromToStatus'  => 1,
+                                        );
+
+                    $this->Notification_Model->saveNotificationFromTo($insertData);
+                }
+                // Notification End
 
                 $msg = "Comment added successfully";
 

@@ -79,7 +79,7 @@ class Team extends CI_Controller {
 
         if($this->input->method(TRUE) == "POST") {
 
-            $_POST['login_type'] = 0;
+            $_POST['login_type'] = 3;
           
             $json = post_curl(API_CALL_PATH.'userlogin/loginTeamUsernamePassword', $this->input->post(), $this->curl);
 

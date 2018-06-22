@@ -12,6 +12,7 @@ class Suggestion extends CI_Controller {
 
         $this->load->model('User_Model');
         $this->load->model('Suggestion_Model');
+        $this->load->model('Notification_Model');
 
         $this->device_token 	= $this->input->post('device_token');
         $this->location_lant 	= $this->input->post('location_lant');
@@ -79,6 +80,29 @@ class Suggestion extends CI_Controller {
                 $suggestion_detail = $this->Suggestion_Model->getSuggestionDetail($SuggestionId, $UserProfileId);
 
                 $this->db->query("COMMIT");
+
+                // Notification Start
+                $insertData = array(
+                                    'NotificationFeedId'    => $SuggestionId,
+                                    'NotificationStatus'    => 1,
+                                    'NotificationAddedOn'   => date('Y-m-d H:i:s'),
+                                    );
+                $notification_id = $this->Notification_Model->saveNotification($insertData);
+
+
+                $insertData = array(
+                                    'NotificationId'            => $notification_id,
+                                    'NotificationFrom'          => $UserProfileId,
+                                    'NotificationTo'            => $AssignedTo,
+                                    'NotificationType'          => 'suggestion-generated',
+                                    'NotificationDescription'   => 'Sent you a suggestion',
+                                    'NotificationSentYesNo'     => 0,
+                                    'NotificationReceivedYesNo' => 0,
+                                    'NotificationFromToStatus'  => 1,
+                                    );
+
+                $this->Notification_Model->saveNotificationFromTo($insertData);
+                // Notification End
 
                 $msg = "Suggestion added successfully";
 
@@ -367,6 +391,35 @@ class Suggestion extends CI_Controller {
                 $suggestion_history_detail = $this->Suggestion_Model->getSuggestionHistoryDetail($SuggestionHistoryId, $UserProfileId);
                 
                 $this->db->query("COMMIT");
+
+                // Notification Start
+
+                $suggestion_detail = $this->Suggestion_Model->getSuggestionDetail($SuggestionId, $UserProfileId);
+
+                if($suggestion_detail['SuggestionProfile']['UserProfileId'] != $UserProfileId) {
+
+                    $insertData = array(
+                                        'NotificationFeedId'    => $SuggestionId,
+                                        'NotificationStatus'    => 1,
+                                        'NotificationAddedOn'   => date('Y-m-d H:i:s'),
+                                        );
+                    $notification_id = $this->Notification_Model->saveNotification($insertData);
+
+                    // Nofification to user
+                    $insertData = array(
+                                        'NotificationId'            => $notification_id,
+                                        'NotificationFrom'          => $UserProfileId,
+                                        'NotificationTo'            => $suggestion_detail['SuggestionProfile']['UserProfileId'],
+                                        'NotificationType'          => 'suggestion-replied',
+                                        'NotificationDescription'   => 'Your suggestion replied ',
+                                        'NotificationSentYesNo'     => 0,
+                                        'NotificationReceivedYesNo' => 0,
+                                        'NotificationFromToStatus'  => 1,
+                                        );
+
+                    $this->Notification_Model->saveNotificationFromTo($insertData);
+                }
+                // Notification End
 
                 $msg = "Suggestion history saved successfully";
 

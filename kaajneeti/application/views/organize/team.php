@@ -44,50 +44,23 @@
                                             
                                             <div class="dropdown  ractive-user">
                                                 <div class="dropdown  organize-user ">
-                                                    <button class="btn btn-primary" type="button"  data-target="#modal-stackable" data-toggle="modal" href="javascript:void(0);" onClick="return newTeam();"><i class="fa fa-plus" aria-hidden="true"></i>  New User
+                                                    <button class="btn btn-primary" type="button"  data-target="#modal-stackable" data-toggle="modal" href="javascript:void(0);" onClick="return newTeam();"><i class="fa fa-plus" aria-hidden="true"></i>  New Team
                                                     </button>
                                                 </div>
                                             </div>
 
                                             <div class="dropdown" id="organize-active">
-                                                <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" id="active-id"><i class="fa fa-user"></i> Active Users <span class="caret"></span></button>
+                                                <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" id="active-id"><i class="fa fa-user"></i> Active Team <span class="caret"></span></button>
                                                 <ul class="dropdown-menu">
-                                                    <li><a href="#" id="all_user_div"><i class="fa fa-user"></i> All Users</a></li>
-                                                    <li><a href="#" id="activate_user_div"><i class="fa fa-user"></i> Active Users</a></li>
-                                                    <li><a href="#" id="inactivate_user_div"><i class="fa fa-user-slash"></i> Inactive Users</a></li>
-                                                    <li><a href="#" id="not_accepted_user_div">Unconfirmed Users</a></li>
-                                                    <!-- <li><a href="#">Deleted Users</a></li>
-                                                    <li><a href="#">Activate Users</a></li> -->
+                                                    <li><a href="#" id="all_user_div"><i class="fa fa-user"></i> All Team</a></li>
+                                                    <li><a href="#" id="activate_user_div"><i class="fa fa-user"></i> Active Team</a></li>
+                                                    <li><a href="#" id="inactivate_user_div"><i class="fa fa-user-slash"></i> Inactive Team</a></li>
+                                                    <li><a href="#" id="not_accepted_user_div">Unconfirmed Team</a></li>
+                                                    <!-- <li><a href="#">Deleted Team</a></li>
+                                                    <li><a href="#">Activate Team</a></li> -->
                                                 </ul>
                                             </div>
-                                            <?php /*
-                                            <div class="dropdown  ractive-user">
-                                                <div class="dropdown  organize-user ">
-                                                    <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown"> <i class="fa fa-plus" aria-hidden="true"></i>
-                                                    </button>
-                                                    <ul class="dropdown-menu organize-user2 " >
-
-                                                        <li><a href="#">Task</a></li>
-                                                        <li><a href="#">Call</a></li>
-                                                        <li><a href="#">Event</a></li>
-                                                        <li><a href="#" id="">Text</a></li>
-                                                    </ul>
-                                                </div>
-                                            </div>
-
-                                            <div class="dropdown  organize-user active-user">
-                                                <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown"> <i class="fa fa-ellipsis-h" aria-hidden="true"></i>
-                                                </button>
-                                                <ul class="dropdown-menu organize-user">
-
-                                                    <li><a href="#">Text</a></li>
-                                                    <li><a href="#" id="">Print</a></li>
-                                                    <li><a href="#" id=""> export to PDF</a></li>
-                                                    <li><a href="#" id="">export to excel</a></li>
-                                                </ul>
-                                            </div>
-                                            */ ?>
-
+                                            
                                         </div>
                                     </div>
                                     <?php
@@ -115,7 +88,6 @@
                                                             <th data-field="email" data-sortable="true" data-visible="true">EMAIL</th>
                                                             <th data-field="username" data-sortable="true" data-visible="true">USERNAME</th>
                                                             <th data-field="role" data-sortable="true" data-visible="true">ROLE</th>
-                                                            <th data-field="profile" data-sortable="true" data-visible="true">PARENT</th>
                                                             <th data-field="created" data-sortable="true" data-visible="true">CREATED</th>
                                                             <th data-field="status" data-sortable="true" data-visible="true">STATUS</th>
                                                             <th data-field="action" data-sortable="true" data-visible="true">ACTION</th>
@@ -150,7 +122,6 @@
                                                             <td><a href="<?php echo $UserProfileHrefLink; ?>" onClick="return showUserDetail(<?php echo $my_team->UserProfileId; ?>);"><?php echo $my_team->FirstName.' '.$my_team->LastName; ?></a></td>
                                                             <td><?php echo $my_team->Email; ?></td>
                                                             <td><?php echo $my_team->ProfileUserName; ?></td>
-                                                            <td><?php echo $my_team->RoleName; ?></td>
                                                             <td><?php echo $my_team->RoleName; ?></td>
                                                             <td><?php echo $my_team->AddedOn; ?></td>
                                                             <td><?php echo $Status; ?></td>

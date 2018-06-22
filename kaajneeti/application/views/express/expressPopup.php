@@ -60,7 +60,7 @@
         <div class="col-md-3" style="text-align:center;">
             <button type="button" class="btn btn-default round-border blue_bg">
                 <img src="<?php echo base_url(); ?>/assets/images/ic_event_white.png" class="explore_popup_photo" style="width: 35px; height: 35px;" aria-hidden="true">
-                <input type="file" id="imgUpload" multiple class="upload-file" style="display: none;">
+                <input type="file" name="file[]" id="imgUpload" multiple class="upload-file" style="display: none;">
             </button><br>
             <span>Photo/Video</span>
         </div>

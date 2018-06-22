@@ -12,6 +12,7 @@ class Poll extends CI_Controller {
 
         $this->load->model('User_Model');
         $this->load->model('Poll_Model');
+        $this->load->model('Notification_Model');
 
         $this->device_token 	= $this->input->post('device_token');
         $this->location_lant 	= $this->input->post('location_lant');
@@ -31,6 +32,7 @@ class Poll extends CI_Controller {
         $ValidEndDate       = $this->input->post('valid_end_date');
 
         $PollLocation       = $this->input->post('location');
+        $LocationArray      = $this->input->post('location_detail'); // Location Array Detail
 
         $poll_answer = $this->input->post('poll_answer'); // Should be multiple answers in array
 
@@ -67,14 +69,57 @@ class Poll extends CI_Controller {
 
             if($PollId > 0) {
 
-                
                 $this->Poll_Model->saveMyPollImage($PollId, $_FILES['question']);
+
+                $this->Poll_Model->saveMyPollLocation($PollId, $UserProfileId, $LocationArray);
 
                 $this->Poll_Model->saveMyPollAnswer($PollId, $UserProfileId, $poll_answer, $_FILES['file']);
                 
                 $this->db->query("COMMIT");
 
                 $poll_detail = $this->Poll_Model->getPollDetail($PollId, $UserProfileId);
+
+                // Notification Start
+                $insertData = array(
+                                    'NotificationFeedId'    => $PollId,
+                                    'NotificationStatus'    => 1,
+                                    'NotificationAddedOn'   => date('Y-m-d H:i:s'),
+                                    );
+                $notification_id = $this->Notification_Model->saveNotification($insertData);
+
+                foreach($poll_tag AS $tag_user_profile_id) {
+                    $insertData = array(
+                                        'NotificationId'            => $notification_id,
+                                        'NotificationFrom'          => $UserProfileId,
+                                        'NotificationTo'            => $tag_user_profile_id,
+                                        'NotificationType'          => 'poll-tagged',
+                                        'NotificationDescription'   => 'Tagged you in a poll',
+                                        'NotificationSentYesNo'     => 0,
+                                        'NotificationReceivedYesNo' => 0,
+                                        'NotificationFromToStatus'  => 1,
+                                        );
+
+                    $this->Notification_Model->saveNotificationFromTo($insertData);
+                }
+
+                $user_friend_followers = $this->User_Model->getMyFriendFollowerList($UserProfileId);
+
+                foreach($user_friend_followers AS $user_friend_follower) {
+
+                    $insertData = array(
+                                    'NotificationId'            => $notification_id,
+                                    'NotificationFrom'          => $UserProfileId,
+                                    'NotificationTo'            => $user_friend_follower['UserProfileId'],
+                                    'NotificationType'          => 'poll-generated',
+                                    'NotificationDescription'   => 'Generated a new poll',
+                                    'NotificationSentYesNo'     => 0,
+                                    'NotificationReceivedYesNo' => 0,
+                                    'NotificationFromToStatus'  => 1,
+                                    );
+
+                    $this->Notification_Model->saveNotificationFromTo($insertData);
+                }
+                // Notification End
 
                 $msg = "Poll created successfully";
 
@@ -113,6 +158,9 @@ class Poll extends CI_Controller {
         $ValidEndDate       = $this->input->post('valid_end_date');
         $PollStatus         = $this->input->post('status');
 
+        $delete_image       = $this->input->post('delete_image');
+        $LocationArray      = $this->input->post('location_detail'); // Location Array Detail
+
         $PollLocation       = $this->input->post('location');
 
         $poll_answer        = $this->input->post('poll_answer'); // Should be multiple answers in array
@@ -150,6 +198,9 @@ class Poll extends CI_Controller {
                 if($PollId > 0) {
 
                     $this->Poll_Model->updateMyPollImage($PollId, $_FILES['question']);
+
+                    $this->Poll_Model->removeMyPollLocation($PollId, $UserProfileId);
+                    $this->Poll_Model->saveMyPollLocation($PollId, $UserProfileId, $LocationArray);
 
                     $this->Poll_Model->updateMyPollAnswer($PollId, $UserProfileId, $poll_answer, $_FILES['file']);
                     
@@ -435,6 +486,30 @@ class Poll extends CI_Controller {
 
                     $msg = "Poll answer submitted successfully";
 
+                    // Notification Start
+                    if($poll_detail['PollProfile']['UserProfileId'] != $UserProfileId) {
+                        $insertData = array(
+                                            'NotificationFeedId'    => $PollId,
+                                            'NotificationStatus'    => 1,
+                                            'NotificationAddedOn'   => date('Y-m-d H:i:s'),
+                                            );
+                        $notification_id = $this->Notification_Model->saveNotification($insertData);
+
+                        $insertData = array(
+                                            'NotificationId'            => $notification_id,
+                                            'NotificationFrom'          => $UserProfileId,
+                                            'NotificationTo'            => $poll_detail['PollProfile']['UserProfileId'],
+                                            'NotificationType'          => 'poll-answered',
+                                            'NotificationDescription'   => 'Participated in your poll',
+                                            'NotificationSentYesNo'     => 0,
+                                            'NotificationReceivedYesNo' => 0,
+                                            'NotificationFromToStatus'  => 1,
+                                            );
+
+                        $this->Notification_Model->saveNotificationFromTo($insertData);
+                    }
+                    // Notification End
+
                 } else {
                     $this->db->query("ROLLBACK");
                     $msg = "Poll answer not participated. Error occured";
@@ -478,6 +553,33 @@ class Poll extends CI_Controller {
 
             if($poll_like > 0) {
                 $msg = "Poll liked successfully";
+
+                $poll_detail = $this->Poll_Model->getPollDetail($PollId, $UserProfileId);
+
+                // Notification Start
+                if($poll_detail['PollProfile']['UserProfileId'] != $UserProfileId) {
+                    $insertData = array(
+                                        'NotificationFeedId'    => $PollId,
+                                        'NotificationStatus'    => 1,
+                                        'NotificationAddedOn'   => date('Y-m-d H:i:s'),
+                                        );
+                    $notification_id = $this->Notification_Model->saveNotification($insertData);
+
+                    $insertData = array(
+                                        'NotificationId'            => $notification_id,
+                                        'NotificationFrom'          => $UserProfileId,
+                                        'NotificationTo'            => $poll_detail['PollProfile']['UserProfileId'],
+                                        'NotificationType'          => 'poll-liked',
+                                        'NotificationDescription'   => 'Liked your poll',
+                                        'NotificationSentYesNo'     => 0,
+                                        'NotificationReceivedYesNo' => 0,
+                                        'NotificationFromToStatus'  => 1,
+                                        );
+
+                    $this->Notification_Model->saveNotificationFromTo($insertData);
+                }
+                // Notification End
+
             } else {
                 $msg = "Poll not like. Not authorised to like this poll.";
                 $error_occured = true;
@@ -583,6 +685,32 @@ class Poll extends CI_Controller {
                 $this->db->query("COMMIT");
 
                 $comment_detail = $this->Poll_Model->getPollCommentDetail($PollId, $CommentId, $UserProfileId);
+
+                $poll_detail = $this->Poll_Model->getPollDetail($PollId, $UserProfileId);
+
+                // Notification Start
+                if($poll_detail['PollProfile']['UserProfileId'] != $UserProfileId) {
+                    $insertData = array(
+                                        'NotificationFeedId'    => $PollId,
+                                        'NotificationStatus'    => 1,
+                                        'NotificationAddedOn'   => date('Y-m-d H:i:s'),
+                                        );
+                    $notification_id = $this->Notification_Model->saveNotification($insertData);
+
+                    $insertData = array(
+                                        'NotificationId'            => $notification_id,
+                                        'NotificationFrom'          => $UserProfileId,
+                                        'NotificationTo'            => $poll_detail['PollProfile']['UserProfileId'],
+                                        'NotificationType'          => 'poll-commented',
+                                        'NotificationDescription'   => 'Commented on your poll',
+                                        'NotificationSentYesNo'     => 0,
+                                        'NotificationReceivedYesNo' => 0,
+                                        'NotificationFromToStatus'  => 1,
+                                        );
+
+                    $this->Notification_Model->saveNotificationFromTo($insertData);
+                }
+                // Notification End
 
                 $msg = "Comment added successfully";
 

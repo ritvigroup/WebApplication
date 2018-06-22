@@ -24,10 +24,7 @@
                     <div class="col-md-12">
                         <div class="portlet box">
                             <div class="portlet-header">
-                                <h1>My Polls</h1>
-                                <div class="actions">
-                                    <a href="<?=base_url();?>poll/newpoll" class="btn btn-info btn-xs"><i class="fa fa-plus"></i>&nbsp; New Poll</a>
-                                </div>
+                                <h1>Poll</h1>
                             </div>
 
                             <div class="portlet-body">

@@ -24,10 +24,7 @@
                     <div class="col-md-12">
                         <div class="portlet box">
                             <div class="portlet-header">
-                                <h1>Events Tagged</h1>
-                                <div class="actions"><a href="<?=base_url();?>event/newevent" class="btn btn-info btn-xs"><i class="fa fa-plus"></i>&nbsp;
-                                    New Event</a>
-                                </div>
+                                <h1>Events</h1>
                             </div>
                             <div class="portlet-body">
                                 <div class="row mbm">

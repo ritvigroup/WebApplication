@@ -44,6 +44,103 @@ class Poll_Model extends CI_Model {
         return $this->db->affected_rows();
     }
 
+    
+    public function getPollLocation($PollId, $UserProfileId) {
+
+        $location = array();
+
+        $query_lr = $this->db->query("SELECT l.* FROM `LocationRelation` AS lr LEFT JOIN `Location` AS l ON lr.LocationId = l.LocationId WHERE lr.`PollId` = '".$PollId."'");
+
+        $res_lr = $query_lr->row_array();
+        if($res_lr['LocationId'] > 0) {
+            $location = array(
+                            'LocationId'            => $res_lr['LocationId'],
+                            'PlaceId'               => $res_lr['PlaceId'],
+                            'LocationLattitude'     => $res_lr['LocationLattitude'],
+                            'LocationLongitude'     => $res_lr['LocationLongitude'],
+                            'LocationUrl'           => $res_lr['LocationUrl'],
+                            'LocationAddress'       => $res_lr['LocationAddress'],
+                            'LocationVicinity'      => $res_lr['LocationVicinity'],
+                            );
+        } else {
+            $location = NULL;
+        }
+        return $location;
+    }
+
+    
+    public function saveMyPollLocation($PollId, $UserProfileId, $LocationArray) {
+
+        $PlaceId            = $LocationArray['place_id'];
+        $LocationName       = $LocationArray['location_name'];
+        $LocationLattitude  = $LocationArray['location_lant'];
+        $LocationLongitude  = $LocationArray['location_long'];
+        $LocationUrl        = $LocationArray['location_url'];
+        $LocationAddress    = $LocationArray['location_address'];
+        $LocationVicinity   = $LocationArray['location_vicinity'];
+
+        if($PlaceId != '') {
+
+            $sql = "SELECT LocationId FROM `Location` WHERE `PlaceId` = '".$PlaceId."'";
+            $query = $this->db->query($sql);
+
+            $res = $query->row_array();
+            if($res['LocationId'] > 0) {
+
+                $query_lr = $this->db->query("SELECT LocationRelationId FROM `LocationRelation` WHERE `LocationId` = '".$res['LocationId']."'");
+
+                $res_lr = $query_lr->row_array();
+
+                $LocationRelationId = $res_lr['LocationRelationId'];
+            } else {
+                $insertData = array(
+                                    'PlaceId'               => $PlaceId,
+                                    'LocationName'          => $LocationName,
+                                    'LocationLattitude'     => $LocationLattitude,
+                                    'LocationLongitude'     => $LocationLongitude,
+                                    'LocationUrl'           => $LocationUrl,
+                                    'LocationAddress'       => $LocationAddress,
+                                    'LocationVicinity'      => $LocationVicinity,
+                                    );
+                $this->db->insert('Location', $insertData);
+
+                $location_id = $this->db->insert_id();
+
+                $insertData = array(
+                                    'LocationId'    => $location_id,
+                                    'PostId'        => 0,
+                                    'EventId'       => 0,
+                                    'PollId'        => 0,
+                                    'ComplaintId'   => 0,
+                                    );
+                $this->db->insert('LocationRelation', $insertData);
+
+                $LocationRelationId = $this->db->insert_id();
+            }
+            $whereData = array(
+                                'LocationRelationId' => $LocationRelationId,
+                                );
+            $updateData = array(
+                                'PollId' => $PollId,
+                                );
+            $this->db->where($whereData);
+            $this->db->update('LocationRelation', $updateData);
+        }
+        return true;
+    }
+
+    
+    public function removeMyPollLocation($PollId, $UserProfileId) {
+        $whereData = array(
+                            'PollId' => $PollId,
+                            );
+        $updateData = array(
+                            'PollId' => 0,
+                            );
+        $this->db->where($whereData);
+        $this->db->update('LocationRelation', $updateData);
+    }
+
 
     public function validatePollAddedByMe($PollId, $UserProfileId) {
         $this->db->select('PollId');
@@ -502,6 +599,8 @@ class Poll_Model extends CI_Model {
         $MeLike         = $this->getMeLike($UserProfileId, $PollId);
         $MeUnLike       = $this->getMeUnLike($UserProfileId, $PollId);
         $TotalComment   = $this->getAllPollComment($PollId, $UserProfileId, 1);
+        $LocationDetail = $this->getPollLocation($PollId, $UserProfileId);
+
 
         $user_data_array = array(
                                 "PollId"                    => $PollId,
@@ -512,6 +611,7 @@ class Poll_Model extends CI_Model {
                                 "PollLocation"              => $PollLocation,
                                 "PollPrivacy"               => $PollPrivacy,
                                 "PollStatus"                => $PollStatus,
+                                "LocationDetail"            => $LocationDetail,
                                 "AddedOn"                   => $AddedOn,
                                 "AddedOnTime"               => $res['AddedOn'],
                                 "UpdatedOn"                 => $UpdatedOn,

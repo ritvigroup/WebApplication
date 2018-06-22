@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-<head><title>Search</title>
+<head><title>Information</title>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -24,8 +24,12 @@
                     <div class="col-md-12">
                         <div class="portlet box">
                             <div class="portlet-header">
-                                <div class="caption">Post</div>
+                                <h1>Information</h1>
+                                <div class="actions">
+                                    <a href="<?=base_url();?>information/information" class="btn btn-info btn-xs"><i class="fa fa-plus"></i>&nbsp;Information</a>&nbsp;
+                                </div>
                             </div>
+                            
                             <div class="portlet-body">
                                 <div class="row mbm">
                                     <div class="col-lg-12">
@@ -36,24 +40,35 @@
                                                 <tr>
                                                     <th scope="col"><span class="column-sorter"><input type="checkbox"></span></th>
                                                     <th scope="col">Title<span class="column-sorter"></span></th>
-                                                    <th scope="col">Location<span class="column-sorter"></span></th>
                                                     <th scope="col">Description<span class="column-sorter"></span></th>
-                                                    <th scope="col">Added On<span class="column-sorter"></span></th>
+                                                    <th scope="col">Applicant Name<span class="column-sorter"></span></th>
+                                                    <th scope="col">Reply<span class="column-sorter"></span></th>
+                                                    <th scope="col">Posted On<span class="column-sorter"></span></th>
                                                     <th scope="col">Status<span class="column-sorter"></span></th>
                                                 </tr>
+                                                
                                                 <tbody class="media-thumb">
                                                 <?php 
                                                 if(count($result) > 0) { ?>
                                                 
-                                                <?php foreach($result AS $post) { ?>
-                                                    <?php $PostStatus  = (($post->postdata->PostStatus == 1) ? 'Active' : 'In-Active'); ?>
+                                                <?php foreach($result AS $information) { ?>
+                                                    <?php 
+                                                        $InformationStatus  = (($information->InformationStatus == 1) ? 'Active' : 'In-Active'); 
+                                                        $AddedOn    = (($information->AddedOn == '0000-00-00 00:00:00') ? '' : date('d-M-Y h:i A', strtotime($information->AddedOn))); 
+                                                        $CountInformationHistory = $information->CountInformationHistory;
+                                                        $displayCountInformationHistory = 'No';
+                                                        if($CountInformationHistory > 0) {
+                                                            $displayCountInformationHistory = 'Yes ('.$CountInformationHistory.')';
+                                                        }
+                                                    ?>
                                                     <tr>
                                                         <td><input type="checkbox"></td>
-                                                        <td><a data-target="#modal-stackable" data-toggle="modal" onClick="return openPostDetail(<?php echo $post->postdata->PostId; ?>);" href="javascript:void(0);"><?php echo $post->postdata->PostTitle; ?></a></td>
-                                                        <td><?php echo $post->postdata->PostLocation; ?></td>
-                                                        <td><?php echo $post->postdata->PostDescription; ?></td>
-                                                        <td><?php echo date('d-M-Y h:i', strtotime($post->postdata->AddedOnTime)); ?></td>
-                                                        <td><?php echo $PostStatus; ?></td>
+                                                        <td><a data-target="#modal-stackable" data-toggle="modal" href="javascript:void(0);" onClick="return displayInformationDetail('<?php echo $information->InformationUniqueId; ?>');" title="View Information Detail"><?php echo $information->InformationSubject; ?></a></td>
+                                                        <td><?php echo $information->InformationDescription; ?></td>
+                                                        <td><?php echo $information->ApplicantName; ?></td>
+                                                        <td><a href="<?=base_url();?>information/informationTimeline/<?php echo $information->InformationUniqueId; ?>"><?php echo $displayCountInformationHistory; ?></a></td>
+                                                        <td><?php echo $information->AddedOn; ?></td>
+                                                        <td><?php echo $InformationStatus; ?></td>
                                                     </tr>
                                                 <?php }  ?>
                                                 
@@ -80,8 +95,8 @@
             </div>
         </div>
     </div>
-
-<?php  require_once './include/scroll_top.php';?>
+    
+    <?php  require_once './include/scroll_top.php';?>
 <?php  require_once './include/footer.php';?>
 </body>
 
@@ -89,39 +104,32 @@
 
 <div id="modal-stackable" tabindex="-1" role="dialog" aria-labelledby="modal-stackable-label" aria-hidden="true" class="modal fade" style="display: none;">
     <div class="modal-dialog">
-        <div class="modal-content">
+        <div class="modal-content-information">
             
         </div>
     </div>
 </div>
 
 
-<script>
 
-$(document).ready(function() {
+<script>
+    $(document).ready(function() {
         // Flexible table
 
         $('#table_id').DataTable();
 
     });
-    
-function openPostDetail(post_id) {
+    function displayInformationDetail(information_unique_id) {
 
-    if (post_id > 0) {
-        $.post("<?php echo base_url(); ?>post/postdetail", {post_id: post_id},
+        $.post("<?php echo base_url(); ?>information/informationViewDetail/"+information_unique_id, {'display': 'Y'},
             function (data, status) {
                 if(data != '') {
-                    $('.modal-content').html(data);
+                    $('.modal-content-information').html(data);
                 } else {
-                    $('.modal-content').html(data);
+                    $('.modal-content-information').html(data);
                 }
             });
-    } else {
-        sweetAlert("Oops...", "Please click post title to see detail", "error");
-        return false;
     }
-}
 </script>
-
 </body>
 </html>

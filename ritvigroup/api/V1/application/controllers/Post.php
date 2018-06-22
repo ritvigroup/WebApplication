@@ -13,6 +13,7 @@ class Post extends CI_Controller {
         $this->load->model('User_Model');
         $this->load->model('Post_Model');
         $this->load->model('Feeling_Model');
+        $this->load->model('Notification_Model');
 
         $this->device_token 	= $this->input->post('device_token');
         $this->location_lant 	= $this->input->post('location_lant');
@@ -59,17 +60,13 @@ class Post extends CI_Controller {
         $PostLocation       = $this->input->post('location');
         $PostDescription    = $this->input->post('description');
         $PostURL            = $this->input->post('url');
+        $LocationArray      = $this->input->post('location_detail');
         $PostPrivacy        = $this->input->post('privacy'); // 1 = Public, 0 = Private
 
         $PostPrivacy = ($PostPrivacy == 1) ? $PostPrivacy : 0;
 
         $post_tag = $this->input->post('post_tag');
 
-
-        // echo '<pre>';
-        // print_r($_POST);
-        // print_r($_FILES);
-        // die;
         
         if($UserProfileId == "") {
 			$msg = "Please select your profile";
@@ -96,14 +93,59 @@ class Post extends CI_Controller {
 			$PostId = $this->Post_Model->saveMyPost($insertData);
 
             if($PostId > 0) {
-                
+
                 $this->Post_Model->saveMyPostTags($PostId, $UserProfileId, $post_tag);
                 
                 $this->Post_Model->saveMyPostAttachment($PostId, $UserProfileId, $_FILES['file']);
+                
+                $this->Post_Model->saveMyPostLocation($PostId, $UserProfileId, $LocationArray);
 
                 $post_detail = $this->Post_Model->getPostDetail($PostId, $UserProfileId);
 
                 $this->db->query("COMMIT");
+
+
+                // Notification Start
+                $insertData = array(
+                                    'NotificationFeedId'    => $PostId,
+                                    'NotificationStatus'    => 1,
+                                    'NotificationAddedOn'   => date('Y-m-d H:i:s'),
+                                    );
+                $notification_id = $this->Notification_Model->saveNotification($insertData);
+
+                foreach($post_tag AS $tag_user_profile_id) {
+                    $insertData = array(
+                                        'NotificationId'            => $notification_id,
+                                        'NotificationFrom'          => $UserProfileId,
+                                        'NotificationTo'            => $tag_user_profile_id,
+                                        'NotificationType'          => 'post-tagged',
+                                        'NotificationDescription'   => 'Tagged you in a post',
+                                        'NotificationSentYesNo'     => 0,
+                                        'NotificationReceivedYesNo' => 0,
+                                        'NotificationFromToStatus'  => 1,
+                                        );
+
+                    $this->Notification_Model->saveNotificationFromTo($insertData);
+                }
+
+                $user_friend_followers = $this->User_Model->getMyFriendFollowerList($UserProfileId);
+
+                foreach($user_friend_followers AS $user_friend_follower) {
+
+                    $insertData = array(
+                                    'NotificationId'            => $notification_id,
+                                    'NotificationFrom'          => $UserProfileId,
+                                    'NotificationTo'            => $user_friend_follower['UserProfileId'],
+                                    'NotificationType'          => 'post-generated',
+                                    'NotificationDescription'   => 'post a new status',
+                                    'NotificationSentYesNo'     => 0,
+                                    'NotificationReceivedYesNo' => 0,
+                                    'NotificationFromToStatus'  => 1,
+                                    );
+
+                    $this->Notification_Model->saveNotificationFromTo($insertData);
+                }
+                // Notification End
 
                 $msg = "Post added successfully";
 
@@ -142,8 +184,14 @@ class Post extends CI_Controller {
         $PostLocation       = $this->input->post('location');
         $PostDescription    = $this->input->post('description');
         $PostURL            = $this->input->post('url');
+
+        $delete_image       = $this->input->post('delete_image');
+        $LocationArray      = $this->input->post('location_detail'); // Location Array Detail
+
         $PostPrivacy        = $this->input->post('privacy'); // 1 = Public, 0 = Private
         $PostStatus         = $this->input->post('status'); // 1 = Active, 0 = InActive/Hide, -1= Delete
+
+        $post_tag = $this->input->post('post_tag');
 
         $PostPrivacy = ($PostPrivacy == 1) ? $PostPrivacy : 0;
         
@@ -180,6 +228,13 @@ class Post extends CI_Controller {
                 if($PostId > 0) {
                     
                     $this->Post_Model->saveMyPostAttachment($PostId, $UserProfileId, $_FILES['file']);
+
+                    $this->Post_Model->deleteMyPostTags($PostId, $UserProfileId);
+                    $this->Post_Model->saveMyPostTags($PostId, $UserProfileId, $post_tag);
+
+                    $this->Post_Model->removeMyPostLocation($PostId, $UserProfileId);
+                    $this->Post_Model->removeMyPostAttachment($PostId, $delete_image);
+                    $this->Post_Model->saveMyPostLocation($PostId, $UserProfileId, $LocationArray);
 
                     $post_detail = $this->Post_Model->getPostDetail($PostId, $UserProfileId);
 
@@ -364,6 +419,34 @@ class Post extends CI_Controller {
 
             if($post_like > 0) {
                 $msg = "Post liked successfully";
+
+                $post_detail = $this->Post_Model->getPostDetail($PostId, $UserProfileId);
+
+                // Notification Start
+                if($post_detail['UserProfileId'] != $UserProfileId) {
+                    $insertData = array(
+                                        'NotificationFeedId'    => $PostId,
+                                        'NotificationStatus'    => 1,
+                                        'NotificationAddedOn'   => date('Y-m-d H:i:s'),
+                                        );
+                    $notification_id = $this->Notification_Model->saveNotification($insertData);
+
+                
+                    $insertData = array(
+                                        'NotificationId'            => $notification_id,
+                                        'NotificationFrom'          => $UserProfileId,
+                                        'NotificationTo'            => $post_detail['UserProfileId'],
+                                        'NotificationType'          => 'post-liked',
+                                        'NotificationDescription'   => 'liked your post',
+                                        'NotificationSentYesNo'     => 0,
+                                        'NotificationReceivedYesNo' => 0,
+                                        'NotificationFromToStatus'  => 1,
+                                        );
+
+                    $this->Notification_Model->saveNotificationFromTo($insertData);
+                }
+                // Notification End
+
             } else {
                 $msg = "Post not like. Not authorised to like this post.";
                 $error_occured = true;
@@ -469,6 +552,32 @@ class Post extends CI_Controller {
                 $this->db->query("COMMIT");
 
                 $comment_detail = $this->Post_Model->getPostCommentDetail($PostId, $CommentId, $UserProfileId);
+
+                $post_detail = $this->Post_Model->getPostDetail($PostId, $UserProfileId);
+
+                // Notification Start
+                if($post_detail['UserProfileId'] != $UserProfileId) {
+                    $insertData = array(
+                                        'NotificationFeedId'    => $PostId,
+                                        'NotificationStatus'    => 1,
+                                        'NotificationAddedOn'   => date('Y-m-d H:i:s'),
+                                        );
+                    $notification_id = $this->Notification_Model->saveNotification($insertData);
+
+                    $insertData = array(
+                                        'NotificationId'            => $notification_id,
+                                        'NotificationFrom'          => $UserProfileId,
+                                        'NotificationTo'            => $post_detail['UserProfileId'],
+                                        'NotificationType'          => 'post-commented',
+                                        'NotificationDescription'   => 'commented on your post',
+                                        'NotificationSentYesNo'     => 0,
+                                        'NotificationReceivedYesNo' => 0,
+                                        'NotificationFromToStatus'  => 1,
+                                        );
+
+                    $this->Notification_Model->saveNotificationFromTo($insertData);
+                }
+                // Notification End
 
                 $msg = "Comment added successfully";
 

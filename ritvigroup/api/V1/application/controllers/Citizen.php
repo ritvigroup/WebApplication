@@ -251,17 +251,17 @@ class Citizen extends CI_Controller {
         
             $result = array();
             
-            $sql = "SELECT COUNT(EventId) AS TotalEvent FROM `Event` WHERE `AddedBy` = '".$UserProfileId."'";
+            $sql = "SELECT COUNT(EventId) AS TotalEvent FROM `Event` WHERE `AddedBy` = '".$UserProfileId."' AND `EventStatus` != -1 ";
             $query = $this->db->query($sql);
             $res = $query->row_array();
             $TotalEvent = ($res['TotalEvent'] > 0) ? $res['TotalEvent'] : 0; 
 
-            $sql = "SELECT COUNT(PollId) AS TotalPoll FROM `Poll` WHERE `AddedBy` = '".$UserProfileId."'";
+            $sql = "SELECT COUNT(PollId) AS TotalPoll FROM `Poll` WHERE `AddedBy` = '".$UserProfileId."' AND `PollStatus` != -1 ";
             $query = $this->db->query($sql);
             $res = $query->row_array();
             $TotalPoll = ($res['TotalPoll'] > 0) ? $res['TotalPoll'] : 0; 
 
-            $sql = "SELECT COUNT(PostId) AS TotalPost FROM `Post` WHERE `UserProfileId` = '".$UserProfileId."'";
+            $sql = "SELECT COUNT(PostId) AS TotalPost FROM `Post` WHERE `UserProfileId` = '".$UserProfileId."' AND `PostStatus` != -1 ";
             $query = $this->db->query($sql);
             $res = $query->row_array();
             $TotalPost = ($res['TotalPost'] > 0) ? $res['TotalPost'] : 0; 
@@ -276,7 +276,7 @@ class Citizen extends CI_Controller {
             $res = $query->row_array();
             $TotalInformation = ($res['TotalInformation'] > 0) ? $res['TotalInformation'] : 0; 
 
-            $sql = "SELECT COUNT(ComplaintId) AS TotalComplaint FROM `Complaint` WHERE `AddedBy` = '".$UserProfileId."'";
+            $sql = "SELECT COUNT(ComplaintId) AS TotalComplaint FROM `Complaint` WHERE `AddedBy` = '".$UserProfileId."' AND `ComplaintStatus` != -1 ";
             $query = $this->db->query($sql);
             $res = $query->row_array();
             $TotalComplaint = ($res['TotalComplaint'] > 0) ? $res['TotalComplaint'] : 0; 

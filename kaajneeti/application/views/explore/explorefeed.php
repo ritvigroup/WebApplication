@@ -1,11 +1,16 @@
 <?php
-// echo '<pre>';
-// print_r($result);
-// echo '</pre>';
+//echo '<pre>';
+//print_r($Explore->result);
+//print_r($MyProfile->result);
+//echo '</pre>';
+$result = $Explore->result;
+$display_none = "display: block;";
 ?>
-
 <?php foreach($result AS $result_data) { ?>
     <?php if($result_data->feedtype == 'complaint') {
+        // echo '<pre>';
+        // print_r($result_data);
+        // echo '</pre>';
         
         $ComplaintId        = $result_data->complaintdata->ComplaintId;
         $ComplaintUniqueId      = $result_data->complaintdata->ComplaintUniqueId;
@@ -23,6 +28,13 @@
         } else {
             $PostByUrl = base_url()."profile/friendprofile/".$result_data->complaintdata->ComplaintProfile->UserProfileId;
         }
+
+        // echo '<pre>';
+        // print_r($result_data->complaintdata->ComplaintAssigned);
+        // echo '</pre>';
+
+        $AssignedToUrl = base_url()."profile/profile/".$result_data->complaintdata->ComplaintAssigned[0]->UserProfileId;
+        $AssignedTo = $result_data->complaintdata->ComplaintAssigned[0]->FirstName.' '.$result_data->complaintdata->ComplaintAssigned[0]->LastName;
         
 
         $PostOn                 = $result_data->complaintdata->AddedOn;
@@ -81,7 +93,7 @@
             </a>
             <div class="media-body1 "> 
                 <small class="pull-right text-navy"><?php echo $PostOn; ?></small>  
-                <strong><a href="<?php echo $PostByUrl; ?>"><?php echo $PostBy; ?></a></strong> file a complaint <br> 
+                <strong><a href="<?php echo $PostByUrl; ?>"><?php echo $PostBy; ?></a></strong> file a complaint to <a href="<?php echo $AssignedToUrl; ?>"><?php echo $AssignedTo; ?></a><br> 
                 <small class="text-muted"><?php echo date('h:i a - d.m.Y', strtotime($PostOnTime)); ?></small>
 
             </div>
@@ -99,10 +111,12 @@
                     <?php } ?>
                     <p style="text-align: center;">
                     <?php if($ComplaintStatus == 1) { ?>
-                        <?php if($ComplaintAssigned[0]->UserProfileId == $this->session->userdata('UserProfileId')) { ?>
+                        <?php if(($ComplaintAssigned[0]->UserProfileId == $this->session->userdata('UserProfileId')) || ($ComplaintAssigned[0]->UserProfileId == $MyProfile->result->ParentUserProfileId)) { ?>
                             <div class="actions" id="confirm_delete_complaint_<?php echo $ComplaintId; ?>"> 
                                 <a class="btn btn-xs aqua" onClick="return confirmRequestComplaint(<?php echo $ComplaintId; ?>);"><i class="glyphicon glyphicon-ok"></i> Confirm</a>  
-                                <a class="btn btn-xs btn-danger" onClick="return cancelRequestComplaint(<?php echo $ComplaintId; ?>);"><i class="glyphicon glyphicon-remove " aria-hidden="true"></i> Delete</a> 
+                                <a class="btn btn-xs btn-danger" data-target="#express-popup" data-toggle="modal" onClick="return replyYourComplaint(<?php echo $ComplaintId; ?>, '<?php echo $ComplaintUniqueId; ?>');"><i class="glyphicon glyphicon-remove " aria-hidden="true"></i> Reject</a> 
+
+                                <!--  onClick="return cancelRequestComplaint(<?php echo $ComplaintId; ?>);" -->
                             </div>
                         <?php } ?>
                     <?php } ?>
@@ -125,8 +139,8 @@
                 </div>
                 <div class="clearfix"></div>
                 <div class="row">
-                    <div class="col-sm-12"><input type="text" id="complaint_comment_<?php echo $ComplaintId; ?>" type="text" placeholder="Enter your comment" class="form-control"/></div>
-                    <div class="col-sm-2" style="display: none;"><button type="submit" class="btn btn-success btn_complaint_comment_<?php echo $ComplaintId; ?>" onClick="return saveComplaintComment(<?php echo $ComplaintId; ?>);">Submit&nbsp;<i class="fa fa-chevron-circle-right"></i></button></div>
+                    <div class="col-sm-10"><input type="text" id="complaint_comment_<?php echo $ComplaintId; ?>" type="text" placeholder="Enter your comment" class="form-control"/></div>
+                    <div class="col-sm-2" style="<?php echo $display_none; ?>"><button type="submit" class="btn btn-success btn_complaint_comment_<?php echo $ComplaintId; ?>" onClick="return saveComplaintComment(<?php echo $ComplaintId; ?>);">Submit&nbsp;<i class="fa fa-chevron-circle-right"></i></button></div>
                 </div>
             </div>
         </div>
@@ -202,6 +216,7 @@
             <div class="">
                 <div class="photos">
                     <p><?php echo $PollQuestion.$PollImage; ?></p>
+
                     <div id="participate_poll_<?php echo $PollId; ?>">
                         <ul>
                             <?php
@@ -216,9 +231,17 @@
                                         echo $answers->PollAnswer;
                                     }
                                 } else {
-                                    echo '<input type="button" value="'.$answers->PollAnswer.'" onClick="return participatePollWithAnswer('.$PollId.', '.$answers->PollAnswerId.');">';
+                                    if(strtotime($ValidEndDate) > time()) {
+                                        echo '<input type="button" value="'.$answers->PollAnswer.'" onClick="return participatePollWithAnswer('.$PollId.', '.$answers->PollAnswerId.');">';
+                                    } else {
+                                        echo $answers->PollAnswer;
+                                    }
                                 }
                                 //echo '<input type="button" value="'.$answers->TotalAnswerdMe.'">';
+
+                                if(strtotime($ValidEndDate) < time()) {
+                                   echo " = Total Votes : ".$answers->TotalAnswerdMe;
+                                }
                                 echo '</li>';
                             }
                             ?>
@@ -241,8 +264,8 @@
                 </div>
                 <div class="clearfix"></div>
                 <div class="row">
-                    <div class="col-sm-12"><input type="text" id="poll_comment_<?php echo $PollId; ?>" type="text" placeholder="Enter your comment" class="form-control"/></div>
-                    <div class="col-sm-2" style="display: none;"><button type="submit" class="btn btn-success btn_poll_comment_<?php echo $PollId; ?>" onClick="return savePollComment(<?php echo $PollId; ?>);">Submit&nbsp;<i class="fa fa-chevron-circle-right"></i></button></div>
+                    <div class="col-sm-10"><input type="text" id="poll_comment_<?php echo $PollId; ?>" type="text" placeholder="Enter your comment" class="form-control"/></div>
+                    <div class="col-sm-2" style="<?php echo $display_none; ?>"><button type="submit" class="btn btn-success btn_poll_comment_<?php echo $PollId; ?>" onClick="return savePollComment(<?php echo $PollId; ?>);">Submit&nbsp;<i class="fa fa-chevron-circle-right"></i></button></div>
                 </div>
             </div>
         </div>
@@ -335,13 +358,15 @@
                     <p><?php echo $EventName; ?></p>
                     <p>Start Date: <?php echo date('d-M, Y', strtotime($StartDate)); ?></p>
                     <p>End Date: <?php echo date('d-M, Y', strtotime($EndDate)); ?></p>
-                    <?php if($MeInterested > 0) { ?>
+                    <?php if($MeInterested > 0 || ($this->session->userdata('UserProfileId') == $result_data->eventdata->EventProfile->UserProfileId)) { ?>
                     <p>
                         <?php foreach($TotalEventInterest AS $event_interest) { ?>
                             <?php echo $event_interest->EventInterestTypeName .' : '.$event_interest->TotalCount; ?><br>
                         <?php } ?>
                         <br><br>
+                        <?php if($this->session->userdata('UserProfileId') == $result_data->eventdata->EventProfile->UserProfileId) { } else { ?>
                         You have shown interest with this event.
+                    <?php } ?>
                     </p>
                     <?php } else { ?>
                         <p id="participate_event_<?php echo $EventId; ?>">
@@ -376,8 +401,8 @@
                 </div>
                 <div class="clearfix"></div>
                 <div class="row">
-                    <div class="col-sm-12"><input type="text" id="event_comment_<?php echo $EventId; ?>" type="text" placeholder="Enter your comment" class="form-control"/></div>
-                    <div class="col-sm-2" style="display: none;"><button type="submit" class="btn btn-success btn_event_comment_<?php echo $EventId; ?>" onClick="return saveEventComment(<?php echo $EventId; ?>);">Submit&nbsp;<i class="fa fa-chevron-circle-right"></i></button></div>
+                    <div class="col-sm-10"><input type="text" id="event_comment_<?php echo $EventId; ?>" type="text" placeholder="Enter your comment" class="form-control"/></div>
+                    <div class="col-sm-2" style="<?php echo $display_none; ?>"><button type="submit" class="btn btn-success btn_event_comment_<?php echo $EventId; ?>" onClick="return saveEventComment(<?php echo $EventId; ?>);">Submit&nbsp;<i class="fa fa-chevron-circle-right"></i></button></div>
                 </div>
             </div>
         </div>
@@ -511,8 +536,8 @@
                 </div>
                 <div class="clearfix"></div>
                 <div class="row">
-                    <div class="col-sm-12"><input type="text" id="post_comment_<?php echo $PostId; ?>" type="text" placeholder="Enter your comment" class="form-control"/></div>
-                    <div class="col-sm-2" style="display: none;"><button type="submit" class="btn btn-success btn_post_comment_<?php echo $PostId; ?>" onClick="return savePostComment(<?php echo $PostId; ?>);">Submit&nbsp;<i class="fa fa-chevron-circle-right"></i></button></div>
+                    <div class="col-sm-10"><input type="text" id="post_comment_<?php echo $PostId; ?>" type="text" placeholder="Enter your comment" class="form-control"/></div>
+                    <div class="col-sm-2" style="<?php echo $display_none; ?>"><button type="submit" class="btn btn-success btn_post_comment_<?php echo $PostId; ?>" onClick="return savePostComment(<?php echo $PostId; ?>);">Submit&nbsp;<i class="fa fa-chevron-circle-right"></i></button></div>
                 </div>
             </div>
         </div>

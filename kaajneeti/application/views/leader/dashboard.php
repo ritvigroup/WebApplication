@@ -39,19 +39,17 @@
                             </div>
                         </div>
                     </div>
+
+                    <?php
+                    // echo '<pre>';
+                    // print_r($Dashboard);
+                    // echo '</pre>';
+                    ?>
                     <div class="col-sm-9">
                         <div id="chartdiv1"></div>
                     </div>
                 </div>
-                <!-- stat timeline and feed  -->
-                <div class="top20">
-                    
-                    <div class="clearfix"> </div>
-                    <!-- End projects list -->
-                    
-                    
-
-                </div>
+                
             </div>
         </div>
     </div>

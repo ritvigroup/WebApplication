@@ -11,6 +11,7 @@ class Userconnect extends CI_Controller {
         parent::__construct();
 
         $this->load->model('User_Model');
+        $this->load->model('Notification_Model');
 
         $this->device_token 	= $this->input->post('device_token');
         $this->location_lant 	= $this->input->post('location_lant');
@@ -57,6 +58,28 @@ class Userconnect extends CI_Controller {
                 $this->db->query("COMMIT");
                 $msg = "This user is set as favourite";
                 $favourite = 1;
+
+                // Notification Start
+                $insertData = array(
+                                    'NotificationFeedId'    => $UserProfileId,
+                                    'NotificationStatus'    => 1,
+                                    'NotificationAddedOn'   => date('Y-m-d H:i:s'),
+                                    );
+                $notification_id = $this->Notification_Model->saveNotification($insertData);
+
+                $insertData = array(
+                                    'NotificationId'            => $notification_id,
+                                    'NotificationFrom'          => $UserProfileId,
+                                    'NotificationTo'            => $FriendUserProfileId,
+                                    'NotificationType'          => 'user-favourite',
+                                    'NotificationDescription'   => 'Set you as favourite',
+                                    'NotificationSentYesNo'     => 0,
+                                    'NotificationReceivedYesNo' => 0,
+                                    'NotificationFromToStatus'  => 1,
+                                    );
+
+                $this->Notification_Model->saveNotificationFromTo($insertData);
+                // Notification End
             }
         }
 
@@ -138,7 +161,7 @@ class Userconnect extends CI_Controller {
             $error_occured = true;
         } else {
 
-            $fav_leader = $this->User_Model->getMyAllFavouriteLeader($UserId, $UserProfileId, $search_text);
+            $fav_leader = $this->User_Model->getMyAllFavouriteLeader($UserId, $UserProfileId, $search_text, 0);
 
             if(count($fav_leader) > 0) {
                 $msg = "Favourite leader found successfully";
@@ -201,6 +224,28 @@ class Userconnect extends CI_Controller {
                 $this->db->query("COMMIT");
                 $msg = "Follow successfull";
                 $follow = 1;
+
+                // Notification Start
+                $insertData = array(
+                                    'NotificationFeedId'    => $UserProfileId,
+                                    'NotificationStatus'    => 1,
+                                    'NotificationAddedOn'   => date('Y-m-d H:i:s'),
+                                    );
+                $notification_id = $this->Notification_Model->saveNotification($insertData);
+
+                $insertData = array(
+                                    'NotificationId'            => $notification_id,
+                                    'NotificationFrom'          => $UserProfileId,
+                                    'NotificationTo'            => $FollowUserProfileId,
+                                    'NotificationType'          => 'user-follow',
+                                    'NotificationDescription'   => 'Started following you',
+                                    'NotificationSentYesNo'     => 0,
+                                    'NotificationReceivedYesNo' => 0,
+                                    'NotificationFromToStatus'  => 1,
+                                    );
+
+                $this->Notification_Model->saveNotificationFromTo($insertData);
+                // Notification End
             }
         }
 
@@ -463,6 +508,29 @@ class Userconnect extends CI_Controller {
                 $this->db->query("COMMIT");
                 $msg = "Follow successfull";
                 $follow = 1;
+
+
+                // Notification Start
+                $insertData = array(
+                                    'NotificationFeedId'    => $UserProfileId,
+                                    'NotificationStatus'    => 1,
+                                    'NotificationAddedOn'   => date('Y-m-d H:i:s'),
+                                    );
+                $notification_id = $this->Notification_Model->saveNotification($insertData);
+
+                $insertData = array(
+                                    'NotificationId'            => $notification_id,
+                                    'NotificationFrom'          => $UserProfileId,
+                                    'NotificationTo'            => $FollowUserProfileId,
+                                    'NotificationType'          => 'user-follow',
+                                    'NotificationDescription'   => 'Started following you',
+                                    'NotificationSentYesNo'     => 0,
+                                    'NotificationReceivedYesNo' => 0,
+                                    'NotificationFromToStatus'  => 1,
+                                    );
+
+                $this->Notification_Model->saveNotificationFromTo($insertData);
+                // Notification End
             }
         }
 
@@ -511,9 +579,72 @@ class Userconnect extends CI_Controller {
                     $this->db->query("COMMIT");
                     $msg = "You are now connect with this user";
                     $friend = 1;
+
+                    // Notification Start
+                    $insertData = array(
+                                        'NotificationFeedId'    => $UserProfileId,
+                                        'NotificationStatus'    => 1,
+                                        'NotificationAddedOn'   => date('Y-m-d H:i:s'),
+                                        );
+                    $notification_id = $this->Notification_Model->saveNotification($insertData);
+
+                    $insertData = array(
+                                        'NotificationId'            => $notification_id,
+                                        'NotificationFrom'          => $UserProfileId,
+                                        'NotificationTo'            => $FriendUserProfileId,
+                                        'NotificationType'          => 'user-connect',
+                                        'NotificationDescription'   => 'You are now connected',
+                                        'NotificationSentYesNo'     => 0,
+                                        'NotificationReceivedYesNo' => 0,
+                                        'NotificationFromToStatus'  => 1,
+                                        );
+
+                    $this->Notification_Model->saveNotificationFromTo($insertData);
+                    // Notification End
+
                 } else if($UserProfileDetail['RequestAccepted'] == 2) {
-                    $msg = "You cannot send friend request any more";
-                    $error_occured = true;
+
+                    $UserProfileDetail = $this->User_Model->checkUserFriendRequest($UserProfileId, $FriendUserProfileId);
+
+                    if($UserProfileDetail['UserProfileId'] > 0) {
+                        
+                        if($UserProfileDetail['RequestAccepted'] == 4) {
+                            
+                            $this->db->query("BEGIN");
+
+                            $this->User_Model->deleteUserFriendRequest($UserProfileId, $FriendUserProfileId);
+                            $this->User_Model->sendUserFriendRequest($UserProfileId, $FriendUserProfileId);
+
+                            $this->db->query("COMMIT");
+                            $msg = "Sent connection request to user";
+
+                            // Notification Start
+                            $insertData = array(
+                                                'NotificationFeedId'    => $UserProfileId,
+                                                'NotificationStatus'    => 1,
+                                                'NotificationAddedOn'   => date('Y-m-d H:i:s'),
+                                                );
+                            $notification_id = $this->Notification_Model->saveNotification($insertData);
+
+                            $insertData = array(
+                                                'NotificationId'            => $notification_id,
+                                                'NotificationFrom'          => $UserProfileId,
+                                                'NotificationTo'            => $FriendUserProfileId,
+                                                'NotificationType'          => 'user-connect',
+                                                'NotificationDescription'   => 'Sent you request to connect',
+                                                'NotificationSentYesNo'     => 0,
+                                                'NotificationReceivedYesNo' => 0,
+                                                'NotificationFromToStatus'  => 1,
+                                                );
+
+                            $this->Notification_Model->saveNotificationFromTo($insertData);
+                            // Notification End
+                        }
+                    } else {
+
+                        $msg = "You cannot send friend request any more";
+                        $error_occured = true;
+                    }
                 } else if($UserProfileDetail['RequestAccepted'] == 1) {
                     $this->User_Model->deleteUserFriendRequest($UserProfileId, $FriendUserProfileId);
                     $this->db->query("COMMIT");
@@ -538,6 +669,28 @@ class Userconnect extends CI_Controller {
                     $this->User_Model->sendUserFriendRequest($UserProfileId, $FriendUserProfileId);
                     $this->db->query("COMMIT");
                     $msg = "Sent connection request to user";
+
+                    // Notification Start
+                    $insertData = array(
+                                        'NotificationFeedId'    => $UserProfileId,
+                                        'NotificationStatus'    => 1,
+                                        'NotificationAddedOn'   => date('Y-m-d H:i:s'),
+                                        );
+                    $notification_id = $this->Notification_Model->saveNotification($insertData);
+
+                    $insertData = array(
+                                        'NotificationId'            => $notification_id,
+                                        'NotificationFrom'          => $UserProfileId,
+                                        'NotificationTo'            => $FriendUserProfileId,
+                                        'NotificationType'          => 'user-connect',
+                                        'NotificationDescription'   => 'Sent you request to connect',
+                                        'NotificationSentYesNo'     => 0,
+                                        'NotificationReceivedYesNo' => 0,
+                                        'NotificationFromToStatus'  => 1,
+                                        );
+
+                    $this->Notification_Model->saveNotificationFromTo($insertData);
+                    // Notification End
                 }
             }
         }

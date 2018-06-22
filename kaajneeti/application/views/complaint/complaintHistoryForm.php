@@ -6,8 +6,6 @@
     <div class="panel panel-white">
         <div class="panel-heading">Add Complaint Progress</div>
         <div class="panel-body">
-            <label>Title</label>
-            <input type="text" data-tabindex="1" class="form-control mbm" id="progress_title" name="title" placeholder="Title">
             <label>Description</label>
             <input type="text" data-tabindex="2" class="form-control mbm" id="progress_description" name="description" placeholder="Description">
             <label>Progress</label>

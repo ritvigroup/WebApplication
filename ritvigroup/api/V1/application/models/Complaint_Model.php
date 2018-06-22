@@ -623,12 +623,14 @@ class Complaint_Model extends CI_Model {
         $complaint_detail = array();
         if(isset($ComplaintId) && $ComplaintId > 0) {
 
-            $query = $this->db->query("SELECT c.*, cs.StatusName AS ComplaintStatusName, d.DepartmentName AS DepartmentName 
+            $sql = "SELECT c.*, cs.StatusName AS ComplaintStatusName, d.DepartmentName AS DepartmentName 
                                             FROM ".$this->complaintTbl." AS c 
                                             LEFT JOIN ".$this->complaintStatusTbl." AS cs ON c.ComplaintStatus = cs.ComplaintStatusId
                                             LEFT JOIN ".$this->DepartmentTbl." AS d ON c.ComplaintDepartment = d.DepartmentId
                                             WHERE 
-                                                c.ComplaintId = '".$ComplaintId."'");
+                                                c.ComplaintId = '".$ComplaintId."'";
+
+            $query = $this->db->query($sql);
 
             $res = $query->row_array();
 
@@ -675,10 +677,11 @@ class Complaint_Model extends CI_Model {
         $ComplaintSubject       = (($res['ComplaintSubject'] != NULL) ? $res['ComplaintSubject'] : "");
         $ComplaintDescription   = (($res['ComplaintDescription'] != NULL) ? $res['ComplaintDescription'] : "");
         $ComplaintStatus        = $res['ComplaintStatus'];
-        $ComplaintStatusName    = (($res['ComplaintStatusName'] != NULL) ? $res['ComplaintStatusName'] : "Deleted");
+        $ComplaintStatusName    = (($res['ComplaintStatusName'] != NULL) ? $res['ComplaintStatusName'] : "In-Active");
 
-        $AddedOn            = return_time_ago($res['AddedOn']);
-        $UpdatedOn          = return_time_ago($res['UpdatedOn']);
+        $ScheduleOn             = $res['ScheduleOn'];
+        $AddedOn                = return_time_ago($res['AddedOn']);
+        $UpdatedOn              = return_time_ago($res['UpdatedOn']);
 
         $ComplaintProfile       = $this->User_Model->getMinimumUserProfileInformation($AddedBy, $UserProfileId);
         $ComplaintAssigned      = $this->getComplaintAssigned($ComplaintId, $UserProfileId);
@@ -691,6 +694,7 @@ class Complaint_Model extends CI_Model {
         $MeLike         = $this->getMeLike($UserProfileId, $ComplaintId);
         $MeUnLike       = $this->getMeUnLike($UserProfileId, $ComplaintId);
         $TotalComment   = $this->getAllComplaintComment($ComplaintId, $UserProfileId, 1);
+        $LocationDetail = $this->getComplaintLocation($ComplaintId, $UserProfileId);
 
         $user_data_array = array(
                                 "ComplaintId"               => $ComplaintId,
@@ -712,6 +716,8 @@ class Complaint_Model extends CI_Model {
                                 "ApplicantTownArea"         => $ApplicantTownArea,
                                 "ApplicantWard"             => $ApplicantWard,
                                 "ApplicantAddress"          => $ApplicantAddress,
+                                
+                                "LocationDetail"            => $LocationDetail,
 
                                 "ComplaintDepartment"       => $ComplaintDepartment,
                                 "DepartmentName"            => $DepartmentName,
@@ -732,6 +738,7 @@ class Complaint_Model extends CI_Model {
                                 "MeUnLike"                  => $MeUnLike,
                                 "TotalComment"              => $TotalComment,
 
+                                "ScheduleOn"                => $ScheduleOn,
                                 "AddedOn"                   => $AddedOn,
                                 "AddedOnTime"               => $res['AddedOn'],
                                 "UpdatedOn"                 => $UpdatedOn,
@@ -743,6 +750,118 @@ class Complaint_Model extends CI_Model {
                                 //"ComplaintHistory"          => $ComplaintHistory,
                                 );
         return $user_data_array;
+    }
+
+
+    public function deleteMyComplaintMembers($ComplaintId, $UserProfileId) {
+        $this->db->where('ComplaintId', $ComplaintId);
+        $this->db->delete($this->complaintMemberTbl);
+    }
+
+
+    public function getComplaintLocation($ComplaintId, $UserProfileId) {
+
+        $location = array();
+
+        $query_lr = $this->db->query("SELECT l.* FROM `LocationRelation` AS lr LEFT JOIN `Location` AS l ON lr.LocationId = l.LocationId WHERE lr.`ComplaintId` = '".$ComplaintId."'");
+
+        $res_lr = $query_lr->row_array();
+        if($res_lr['LocationId'] > 0) {
+            $location = array(
+                            'LocationId'            => $res_lr['LocationId'],
+                            'PlaceId'               => $res_lr['PlaceId'],
+                            'LocationLattitude'     => $res_lr['LocationLattitude'],
+                            'LocationLongitude'     => $res_lr['LocationLongitude'],
+                            'LocationUrl'           => $res_lr['LocationUrl'],
+                            'LocationAddress'       => $res_lr['LocationAddress'],
+                            'LocationVicinity'      => $res_lr['LocationVicinity'],
+                            );
+        } else {
+            $location = NULL;
+        }
+        return $location;
+    }
+
+
+    public function saveMyComplaintLocation($ComplaintId, $UserProfileId, $LocationArray) {
+
+        $PlaceId            = $LocationArray['place_id'];
+        $LocationName       = $LocationArray['location_name'];
+        $LocationLattitude  = $LocationArray['location_lant'];
+        $LocationLongitude  = $LocationArray['location_long'];
+        $LocationUrl        = $LocationArray['location_url'];
+        $LocationAddress    = $LocationArray['location_address'];
+        $LocationVicinity   = $LocationArray['location_vicinity'];
+
+        if($PlaceId != '') {
+
+            $sql = "SELECT LocationId FROM `Location` WHERE `PlaceId` = '".$PlaceId."'";
+            $query = $this->db->query($sql);
+
+            $res = $query->row_array();
+            if($res['LocationId'] > 0) {
+
+                $query_lr = $this->db->query("SELECT LocationRelationId FROM `LocationRelation` WHERE `LocationId` = '".$res['LocationId']."'");
+
+                $res_lr = $query_lr->row_array();
+
+                $LocationRelationId = $res_lr['LocationRelationId'];
+            } else {
+                $insertData = array(
+                                    'PlaceId'               => $PlaceId,
+                                    'LocationName'          => $LocationName,
+                                    'LocationLattitude'     => $LocationLattitude,
+                                    'LocationLongitude'     => $LocationLongitude,
+                                    'LocationUrl'           => $LocationUrl,
+                                    'LocationAddress'       => $LocationAddress,
+                                    'LocationVicinity'      => $LocationVicinity,
+                                    );
+                $this->db->insert('Location', $insertData);
+
+                $location_id = $this->db->insert_id();
+
+                $insertData = array(
+                                    'LocationId'    => $location_id,
+                                    'PostId'        => 0,
+                                    'EventId'       => 0,
+                                    'PollId'        => 0,
+                                    'ComplaintId'   => 0,
+                                    );
+                $this->db->insert('LocationRelation', $insertData);
+
+                $LocationRelationId = $this->db->insert_id();
+            }
+            $whereData = array(
+                                'LocationRelationId' => $LocationRelationId,
+                                );
+            $updateData = array(
+                                'ComplaintId' => $ComplaintId,
+                                );
+            $this->db->where($whereData);
+            $this->db->update('LocationRelation', $updateData);
+        }
+        return true;
+    }
+
+    
+    public function removeMyComplaintLocation($ComplaintId, $UserProfileId) {
+        $whereData = array(
+                            'ComplaintId' => $ComplaintId,
+                            );
+        $updateData = array(
+                            'ComplaintId' => 0,
+                            );
+        $this->db->where($whereData);
+        $this->db->update('LocationRelation', $updateData);
+    }
+
+
+    public function removeMyComplaintAttachment($ComplaintId, $delete_image) {
+        foreach($delete_image AS $del_img) {
+
+            $this->db->where('ComplaintAttachmentId', $del_img);
+            $this->db->delete($this->complaintAttachmentTbl);
+        }
     }
 
 

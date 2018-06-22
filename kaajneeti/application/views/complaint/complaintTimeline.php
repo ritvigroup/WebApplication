@@ -19,16 +19,17 @@
 
         <?php  require_once './include/left.php';?>
 
-        <!-- Start page content wrapper -->
         <div class="page-content-wrapper animated fadeInRight">
             <div class="page-content">
                 <div class="row  border-bottom white-bg dashboard-header">
                     <div class="col-md-12">
-                        <div class="portlet box">
+                        <div class="portlet box ">
                             <div class="portlet-header">
-                                <ol class="breadcrumb page-breadcrumb">
-                                    <?php echo $this->complaint_links; ?>
-                                    <li class="active"><a href="javascript:void(0);">Timeline</a>&nbsp;&nbsp;</li>
+                                <ol class="breadcrumb">
+                                    <li> <a class="text-capitalize" href="<?=base_url();?>leader/dashboard">Kaajneeti</a> </li>
+                                    <li> <a class="text-capitalize" href="<?=base_url(); ?>listen/listen">Listen</a> </li>
+                                    <li> <a class="text-capitalize" href="<?=base_url(); ?>complaint/complaintReceived">Complaint Received</a> </li>
+                                    <li class="active"><strong><a class="text-capitalize" href="javascript:void(0);">Complaint Timeline</a> </strong> </li>
                                 </ol>
                             </div>
                             <div class="portlet-body">
@@ -177,7 +178,7 @@
 
 <div id="modal-stackable" tabindex="-1" role="dialog" aria-labelledby="modal-stackable-label" aria-hidden="true" class="modal fade" style="display: none;">
     <div class="modal-dialog">
-        <div class="modal-content">
+        <div class="modal-content complaint-reply">
 
         </div>
     </div>
@@ -191,27 +192,28 @@
         $.post("<?php echo base_url(); ?>complaint/complaintHistoryForm", {'display': 'Y'},
             function (data, status) {
                 if(data != '') {
-                    $('.modal-content').html(data);
+                    $('.complaint-reply').html(data);
                 } else {
-                    $('.modal-content').html(data);
+                    $('.complaint-reply').html(data);
                 }
             });
     }
 
     function saveComplaintHistory() {
-        var progress_title          = $("#progress_title").val();
         var progress_description    = $("#progress_description").val();
         var progess_status          = $("#progress_status").val();
 
 
-        if (progress_title.length > 0) {            
+        if (progress_description.length > 0) {
+
+            $('.save_complaint_history').prop('disabled', true);
+            $('.save_complaint_history').html('Saving...');
             var form_data = new FormData($('input[name^="file"]'));
 
             jQuery.each($('input[name^="file[]"]')[0].files, function(i, file) {
                 form_data.append('file[]', file);
             });
 
-            form_data.append('title', progress_title);
             form_data.append('description', progress_description);
             form_data.append('current_status', progess_status);
 
@@ -225,10 +227,13 @@
 
                 success: function(data) {
                     if (data.status === "failed") {
+                        $('.save_complaint_history').prop('disabled', false);
+                        $('.save_complaint_history').html('Save');
                         sweetAlert("Oops...", data.message, "error");
                         return false;
                     } else { 
                         if (data.status === "success") {
+                            $('.save_complaint_history').prop('disabled', false);
                             window.location.href="<?php echo $this->uri->segment(3); ?>";
                         }
                     }
@@ -236,7 +241,7 @@
             });
 
         } else {
-            sweetAlert("Oops...", "Please enter subject or title of history", "error");
+            sweetAlert("Oops...", "Please enter your reply on complaint", "error");
             return false;
         }
     };

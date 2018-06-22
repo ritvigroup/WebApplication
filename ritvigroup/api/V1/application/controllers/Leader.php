@@ -47,13 +47,48 @@ class Leader extends CI_Controller {
             $msg = "Please select user profile";
             $error_occured = true;
         } else {
-        
+            $my_profile_detail = $this->User_Model->getUserProfileInformation($UserProfileId, $UserProfileId);
+
+            $friend_user_profile_id = $this->User_Model->getMyFriendFollowerAndFollowingUserProfileId($UserProfileId, 1);
+            
+            $my_created_team_ids = $this->User_Model->getMyAllActiveCreatedTeam($UserProfileId, 1);
+
+
+
+            $friend_user_profile_id = array_merge($friend_user_profile_id, array($UserProfileId));
+            if(count($my_created_team_ids) > 0) {
+                $friend_user_profile_id = array_merge($friend_user_profile_id, $my_created_team_ids);
+            }
+
+            // echo '<pre>';
+            // print_r($my_created_team_ids);
+            // print_r($friend_user_profile_id);
+            
+
+            if($my_profile_detail['ParentUserProfileId'] > 0) {
+                $AssignedTo = $UserProfileId.','.$my_profile_detail['ParentUserProfileId'];
+            } else {
+                $AssignedTo = $UserProfileId;
+            }
+
+            if(count($friend_user_profile_id) > 1) {
+                $event_condition = " AND `AddedBy` IN (".implode(',', $friend_user_profile_id).")";
+                $post_condition = " AND `UserProfileId` IN (".implode(',', $friend_user_profile_id).")";
+                $poll_condition = " AND `AddedBy` IN (".implode(',', $friend_user_profile_id).")";
+                $complaint_condition = " AND `AddedBy` IN (".implode(',', $friend_user_profile_id).")";
+            } else {
+                $event_condition = " AND `AddedBy` = '0' ";
+                $post_condition = " AND `UserProfileId` = '0' ";
+                $poll_condition = " AND `AddedBy` = '0' ";
+                $complaint_condition = " AND `AddedBy` = '0' ";
+            }
+
             $result = array();
             $sql = "
             
             SELECT EventId AS Id, 'Event' AS DataType, AddedOn AS DateAdded FROM `Event` 
                     WHERE 
-                        `EventStatus` = '1' 
+                        `EventStatus` != -1  
                     AND `AddedBy` = '".$UserProfileId."'
 
             UNION 
@@ -62,14 +97,31 @@ class Leader extends CI_Controller {
                     LEFT JOIN `EventAttendee` AS ea ON e.EventId = ea.EventId 
                     WHERE 
                         e.`EventStatus` = '1' 
+                    AND e.`EventPrivacy` = '1' 
                     AND ea.`UserProfileId` = '".$UserProfileId."'
 
             UNION 
 
-            SELECT PollId AS Id, 'Poll' AS DataType, AddedOn AS DateAdded FROM `Poll` WHERE `ValidFromDate` <= '".date('Y-m-d')."' AND `ValidEndDate` >= '".date('Y-m-d')."' AND `PollStatus` = '1' AND `AddedBy` = '".$UserProfileId."'
+            SELECT EventId AS Id, 'Event' AS DataType, AddedOn AS DateAdded FROM `Event` 
+                    WHERE 
+                        `EventStatus` = '1' 
+                    AND `EventPrivacy` = '1'
+                    ".$event_condition."
+
             UNION 
 
-            SELECT PostId AS Id, 'Post' AS DataType, AddedOn AS DateAdded FROM `Post` WHERE `PostStatus` = '1' AND `UserProfileId` = '".$UserProfileId."'
+            SELECT PollId AS Id, 'Poll' AS DataType, AddedOn AS DateAdded FROM `Poll` WHERE `PollStatus` != -1 AND `AddedBy` = '".$UserProfileId."'
+            UNION 
+
+            SELECT PollId AS Id, 'Poll' AS DataType, AddedOn AS DateAdded FROM `Poll` WHERE `PollStatus` = '1' AND `PollPrivacy` = '1' ".$poll_condition."
+
+            UNION 
+
+            SELECT PostId AS Id, 'Post' AS DataType, AddedOn AS DateAdded FROM `Post` WHERE `PostStatus` != -1 AND `UserProfileId` = '".$UserProfileId."'
+
+            UNION
+
+            SELECT PostId AS Id, 'Post' AS DataType, AddedOn AS DateAdded FROM `Post` WHERE `PostStatus` = '1' AND PostPrivacy = '1'  ".$post_condition."
 
             UNION 
 
@@ -81,7 +133,11 @@ class Leader extends CI_Controller {
                     LEFT JOIN `ComplaintAssigned` AS ca ON ca.ComplaintId = c.ComplaintId 
                     WHERE 
                         (c.`ComplaintStatus` != -1 && c.`ComplaintStatus` != 3)
-                    AND ca.`AssignedTo` = '".$UserProfileId."' 
+                    AND ca.`AssignedTo` IN (".$AssignedTo.") 
+
+            UNION 
+
+            SELECT ComplaintId AS Id, 'Complaint' AS DataType, AddedOn AS DateAdded FROM `Complaint` WHERE `ComplaintStatus` = '1' AND `ComplaintPrivacy` = '1' ".$complaint_condition."
 
             UNION 
 
@@ -128,6 +184,201 @@ class Leader extends CI_Controller {
                     $result = $Data;
                 }
                 $msg = "Home data found";
+            } else {
+                $msg = "No post found";
+                $error_occured = true;
+            }
+        }
+
+        if($error_occured == true) {
+            $array = array(
+                            "status"        => 'failed',
+                            "message"       => $msg,
+                        );
+        } else {
+
+            $array = array(
+                           "status"     => 'success',
+                           "result"     => $result,
+                           "message"    => $msg,
+                           );
+        }
+        displayJsonEncode($array);
+    }
+
+
+    public function getMyDashboard() {
+        $error_occured = false;
+
+        $UserId             = $this->input->post('user_id');
+        $UserProfileId      = $this->input->post('user_profile_id');
+        $start              = (($this->input->post('start') > 0) ? $this->input->post('start') : 0);
+        $end                = (($this->input->post('end') > 0) ? $this->input->post('end') : 10);
+
+       
+        if($UserId == "") {
+            $msg = "Please select user";
+            $error_occured = true;
+        } else if($UserProfileId == "") {
+            $msg = "Please select user profile";
+            $error_occured = true;
+        } else {
+            $my_profile_detail = $this->User_Model->getUserProfileInformation($UserProfileId, $UserProfileId);
+
+            $friend_user_profile_id = $this->User_Model->getMyFriendFollowerAndFollowingUserProfileId($UserProfileId, 1);
+            
+            $my_created_team_ids = $this->User_Model->getMyAllActiveCreatedTeam($UserProfileId, 1);
+
+
+
+            $friend_user_profile_id = array_merge($friend_user_profile_id, array($UserProfileId));
+            if(count($my_created_team_ids) > 0) {
+                $friend_user_profile_id = array_merge($friend_user_profile_id, $my_created_team_ids);
+            }
+
+            // echo '<pre>';
+            // print_r($my_created_team_ids);
+            // print_r($friend_user_profile_id);
+            
+
+            if($my_profile_detail['ParentUserProfileId'] > 0) {
+                $AssignedTo = $UserProfileId.','.$my_profile_detail['ParentUserProfileId'];
+            } else {
+                $AssignedTo = $UserProfileId;
+            }
+
+            if(count($friend_user_profile_id) > 1) {
+                $event_condition = " AND `AddedBy` IN (".implode(',', $friend_user_profile_id).")";
+                $post_condition = " AND `UserProfileId` IN (".implode(',', $friend_user_profile_id).")";
+                $poll_condition = " AND `AddedBy` IN (".implode(',', $friend_user_profile_id).")";
+                $complaint_condition = " AND `AddedBy` IN (".implode(',', $friend_user_profile_id).")";
+            } else {
+                $event_condition = " AND `AddedBy` = '0' ";
+                $post_condition = " AND `UserProfileId` = '0' ";
+                $poll_condition = " AND `AddedBy` = '0' ";
+                $complaint_condition = " AND `AddedBy` = '0' ";
+            }
+
+            $result = array();
+            $sql = "
+            
+            SELECT EventId AS Id, 'Event' AS DataType, AddedOn AS DateAdded FROM `Event` 
+                    WHERE 
+                        `EventStatus` != -1  
+                    AND `AddedBy` = '".$UserProfileId."'
+
+            UNION 
+
+            SELECT e.EventId AS Id, 'Event' AS DataType, e.AddedOn AS DateAdded FROM `Event` AS e 
+                    LEFT JOIN `EventAttendee` AS ea ON e.EventId = ea.EventId 
+                    WHERE 
+                        e.`EventStatus` = '1' 
+                    AND e.`EventPrivacy` = '1' 
+                    AND ea.`UserProfileId` = '".$UserProfileId."'
+
+            UNION 
+
+            SELECT EventId AS Id, 'Event' AS DataType, AddedOn AS DateAdded FROM `Event` 
+                    WHERE 
+                        `EventStatus` = '1' 
+                    AND `EventPrivacy` = '1'
+                    ".$event_condition."
+
+            UNION 
+
+            SELECT PollId AS Id, 'Poll' AS DataType, AddedOn AS DateAdded FROM `Poll` WHERE `PollStatus` != -1 AND `AddedBy` = '".$UserProfileId."'
+            UNION 
+
+            SELECT PollId AS Id, 'Poll' AS DataType, AddedOn AS DateAdded FROM `Poll` WHERE `PollStatus` = '1' AND `PollPrivacy` = '1' ".$poll_condition."
+
+            UNION 
+
+            SELECT PostId AS Id, 'Post' AS DataType, AddedOn AS DateAdded FROM `Post` WHERE `PostStatus` != -1 AND `UserProfileId` = '".$UserProfileId."'
+
+            UNION
+
+            SELECT PostId AS Id, 'Post' AS DataType, AddedOn AS DateAdded FROM `Post` WHERE `PostStatus` = '1' AND PostPrivacy = '1'  ".$post_condition."
+
+            UNION 
+
+            SELECT ComplaintId AS Id, 'Complaint' AS DataType, AddedOn AS DateAdded FROM `Complaint` WHERE `ComplaintStatus` != -1 AND `AddedBy` = '".$UserProfileId."' 
+
+            UNION 
+
+            SELECT c.ComplaintId AS Id, 'Complaint' AS DataType, c.AddedOn AS DateAdded FROM `Complaint` AS c 
+                    LEFT JOIN `ComplaintAssigned` AS ca ON ca.ComplaintId = c.ComplaintId 
+                    WHERE 
+                        (c.`ComplaintStatus` != -1 && c.`ComplaintStatus` != 3)
+                    AND ca.`AssignedTo` IN (".$AssignedTo.") 
+
+            UNION 
+
+            SELECT ComplaintId AS Id, 'Complaint' AS DataType, AddedOn AS DateAdded FROM `Complaint` WHERE `ComplaintStatus` = '1' AND `ComplaintPrivacy` = '1' ".$complaint_condition."
+
+            UNION 
+
+            SELECT SuggestionId AS Id, 'Suggestion' AS DataType, AddedOn AS DateAdded FROM `Suggestion` WHERE `SuggestionStatus` = '1' AND `AddedBy` = '".$UserProfileId."'
+
+            ORDER BY DateAdded DESC LIMIT $start,$end";
+
+
+            //echo $sql;die;
+            $query = $this->db->query($sql);
+            $res = $query->result_array();
+
+            $my_team = $this->User_Model->getMyAllCreatedTeam($UserProfileId);
+
+            //print_r($my_team);
+
+            if(count($res) > 0) {
+                foreach($res AS $key => $val) {
+
+                    if($val['DataType'] == "Post") {
+                        $Data[] = array(
+                                        'feedtype' => 'post',
+                                        'postdata' => $this->Post_Model->getPostDetail($val['Id']),
+                                        );
+                    } else if($val['DataType'] == "Event") {
+                        $Data[] = array(
+                                        'feedtype' => 'event',
+                                        'eventdata' => $this->Event_Model->getEventDetail($val['Id'], $UserProfileId),
+                                        );
+                    } else if($val['DataType'] == "Poll") {
+                        $Data[] = array(
+                                        'feedtype' => 'poll',
+                                        'polldata' => $this->Poll_Model->getPollDetail($val['Id'], $UserProfileId),
+                                        );
+                    } else if($val['DataType'] == "Complaint") {
+                        $Data[] = array(
+                                        'feedtype' => 'complaint',
+                                        'complaintdata' => $this->Complaint_Model->getComplaintDetail($val['Id']),
+                                        );
+                    } else if($val['DataType'] == "Suggestion") {
+                        $Data[] = array(
+                                        'feedtype' => 'suggestion',
+                                        'suggestiondata' => $this->Suggestion_Model->getSuggestionDetail($val['Id']),
+                                        );
+                    } else {
+                        $Data = array();
+                    }
+                    $result = $Data;
+                }
+
+                foreach($my_team AS $team) {
+                    $result[] = array(
+                                    'feedtype' => 'team',
+                                    'teamdata' => $team,
+                                    );
+                }
+
+                $msg = "Home data found";
+            } else if(count($my_team) > 0 ) {
+                foreach($my_team AS $team) {
+                    $result[] = array(
+                                    'feedtype' => 'team',
+                                    'teamdata' => $team,
+                                    );
+                }
             } else {
                 $msg = "No post found";
                 $error_occured = true;

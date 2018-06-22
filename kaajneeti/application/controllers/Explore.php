@@ -41,8 +41,20 @@ class Explore extends CI_Controller {
 
         $json_decode = json_decode($json_encode);
         if(count($json_decode->result) > 0) {
-            $data = $json_decode;
+            $data['Explore'] = $json_decode;
         }
+
+        $_POST['friend_user_profile_id'] = $this->session->userdata('UserProfileId');
+        $json_encode = post_curl(API_CALL_PATH.'userprofile/getUserprofileFriendsprofileInformation', $this->input->post(), $this->curl);
+        $json_decode = json_decode($json_encode);
+        if(count($json_decode->result) > 0) {
+            $data['MyProfile'] = $json_decode;
+        }
+
+        $json_encode = post_curl(API_CALL_PATH.'userconnect/getMyAllFriendRequest', $this->input->post(), $this->curl);
+        $json_decode = json_decode($json_encode);
+
+        $data['Connections'] = $json_decode;
         
         $this->load->view('explore/explore',$data);
     }
@@ -67,10 +79,12 @@ class Explore extends CI_Controller {
 
         $json_decode = json_decode($json_encode);
         if(count($json_decode->result) > 0) {
-            $data = $json_decode;
+            $data['Explore'] = $json_decode;
+            $this->load->view('explore/explorefeed', $data);
+        } else {
+            echo "";
         }
-
-        $this->load->view('explore/explorefeed', $data);
+        
     }
 
 

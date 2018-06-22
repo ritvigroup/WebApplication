@@ -37,15 +37,22 @@
 
             <li class="nav-item <?php if($request_uri['3'] == "connect") {?>active<?php } ?>"><a class="nav-link" href="<?=base_url();?>connect/connect"><i class="fa fa-share-alt-square fa-fw"></i><span class="title">Connect</span></a></li>
 
+            <?php
+            $listen_class = "";
+            if($request_uri['3'] == "listen" || $request_uri['3'] == "complaint" || $request_uri['3'] == "suggestion" || $request_uri['3'] == "information" || $request_uri['3'] == "event" || $request_uri['3'] == "poll" || $request_uri['3'] == "post") 
+            {
+                $listen_class = "active";
+            }
+            ?>
 
-            <li class="nav-item <?php if($request_uri['4'] == "listen") {?>active<?php } ?>"><a class="nav-link" href="<?=base_url();?>listen/listen"><i class="fa fa-headphones fa-fw"></i><span class="title">Listen</span></a></li>
+            <li class="nav-item <?php echo $listen_class; ?>"><a class="nav-link" href="<?=base_url();?>listen/listen"><i class="fa fa-headphones fa-fw"></i><span class="title">Listen</span></a></li>
 
             <li class="nav-item <?php if($request_uri['4'] == "email") {?>active<?php } ?>"><a class="nav-link" href="<?=base_url();?>influence/email"><i class="fa fa-arrows-alt fa-fw"></i><span class="title">Campaign</span></a></li>
 
             <li class="nav-item <?php if($request_uri['4'] == "contribution") {?>active<?php } ?>"><a class="nav-link" href="<?=base_url();?>contribution/contribution"><i class="fa fa-refresh fa-fw"></i><span class="title">Funding</span></a></li>
             <?php } ?>
 
-            <li class="nav-item <?php if($request_uri['4'] == "report" || $request_uri['4'] == "event" || $request_uri['4'] == "poll") {?>active<?php } ?>"><a class="nav-link" href="<?=base_url();?>report/report"><i class="fa fa-file-text-o fa-fw"></i><span class="title">Reports</span></a></li>
+            <li class="nav-item <?php if($request_uri['4'] == "report") {?>active<?php } ?>"><a class="nav-link" href="<?=base_url();?>report/report"><i class="fa fa-file-text-o fa-fw"></i><span class="title">Reports</span></a></li>
         </ul>
     </div>
 

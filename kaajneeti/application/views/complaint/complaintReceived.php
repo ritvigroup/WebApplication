@@ -19,15 +19,16 @@
         
         <?php  require_once './include/left.php';?>
 
-        <!-- Start page content wrapper -->
         <div class="page-content-wrapper animated fadeInRight">
             <div class="page-content">
                 <div class="row  border-bottom white-bg dashboard-header">
                     <div class="col-md-12">
-                        <div class="portlet box">
+                        <div class="portlet box ">
                             <div class="portlet-header">
-                                <ol class="breadcrumb page-breadcrumb">
-                                    <?php echo $this->complaint_links; ?>
+                                <ol class="breadcrumb">
+                                    <li> <a class="text-capitalize" href="<?=base_url();?>leader/dashboard">Kaajneeti</a> </li>
+                                    <li> <a class="text-capitalize" href="<?=base_url(); ?>listen/listen">Listen</a> </li>
+                                    <li class="active"><strong><a class="text-capitalize" href="<?=base_url(); ?>complaint/complaintReceived">Complaint Received</a> </strong> </li>
                                 </ol>
                             </div>
                             <div class="portlet-body">

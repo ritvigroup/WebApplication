@@ -8,7 +8,7 @@
     <h4 id="modal-stackable-label" class="modal-title"><?php echo $result->PostTitle; ?></h4>
 </div>
 <div class="modal-body">
-    <div class="note note-success">;
+    <div class="note note-success">
         <h3><?php echo $result->PostTitle; ?></h3>
         <p><?php echo $result->PostDescription; ?></p>
     </div>

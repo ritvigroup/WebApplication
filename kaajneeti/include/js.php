@@ -66,13 +66,10 @@
 <!-- adminbag demo js-->
 <script src="<?=base_url();?>assets/js/adminbagdemo.js"></script>
 <!-- start theme config -->
-
-
 <script src="<?=base_url();?>assets/js/select2.js"></script>
 
-
-
 <script type="text/javascript">
+    
     function openExpressPopup() {
 
         $.post("<?php echo base_url(); ?>express/expressPopup", {'display': 'Y'},
@@ -116,7 +113,6 @@
         }
     }
 
-
     function newExpressPopupEvent() {
         $.post("<?php echo base_url(); ?>organize/newEvent", {'display': 'Y'},
             function (data, status) {
@@ -138,9 +134,7 @@
                     $('.modal-content-express').html(data);
                 }
             });
-
     }
-
 
     function deleteMyPostStatus(post_id) {
         
@@ -167,7 +161,6 @@
             });
     }
 
-
     function deleteMyEvent(event_id) {
         
         var ans = confirm("Are you sure to delete this event?");
@@ -192,7 +185,6 @@
                 }
             });
     }
-
 
     function deleteMyPoll(poll_id) {
         
@@ -219,7 +211,6 @@
             });
     }
 
-
     function participatePollWithAnswer(poll_id, poll_answer_id) {
         
         $.post("<?php echo base_url(); ?>explore/participatePollWithAnswer", {
@@ -241,7 +232,6 @@
                 }
             });
     }
-
 
     function saveMyEventInterest(event_id, interest_type) {
         
@@ -265,7 +255,6 @@
             });
     }
 
-
     function confirmRequestComplaint(complaint_id) {
         
         $.post("<?php echo base_url(); ?>organize/confirmRequestComplaint", {
@@ -285,7 +274,6 @@
                 }
             });
     }
-
 
     function cancelRequestComplaint(complaint_id) {
         
@@ -307,8 +295,9 @@
             });
     }
 
-
     function showNextExplore() {
+
+        $('.show_next_explore').html('<i class="fa fa-arrow-down"></i> Loading more ....');
     	$.post("<?php echo base_url(); ?>explore/explorefeed", {
                                                             next: 'Y', 
                                                             },
@@ -319,6 +308,8 @@
             	} else {
             		$('.show_next_explore').hide();
             	}
+                $('.show_next_explore').html('<i class="fa fa-arrow-down"></i> Show More');
+                
                 /*if (data.status === "failed") {
                     sweetAlert("Oops...", data.message, "error");
                     return false;
@@ -329,7 +320,6 @@
                 }*/
             });
     }
-
 
     function commentPoll(poll_id) {
     	$.post("<?php echo base_url(); ?>explore/commentPoll", {
@@ -472,6 +462,61 @@
         }
     }
 
+    function replyYourComplaint(complaint_id, complaint_unique_id) {
+
+        $.post("<?php echo base_url(); ?>complaint/complaintRejectForm/"+complaint_id+'/'+complaint_unique_id, {'display': 'Y'},
+            function (data, status) {
+                if(data != '') {
+                    $('.modal-content-express').html(data);
+                } else {
+                    $('.modal-content-express').html(data);
+                }
+            });
+    }
+
+    function replyYourComplaintHistory(complaint_id, complaint_unique_id) {
+        var progress_description    = $("#progress_description").val();
+        var progess_status          = $("#progress_status").val();
+
+        if (progress_description.length > 0) {            
+            var form_data = new FormData($('input[name^="file"]'));
+
+            jQuery.each($('input[name^="file[]"]')[0].files, function(i, file) {
+                form_data.append('file[]', file);
+            });
+
+            form_data.append('description', progress_description);
+            form_data.append('current_status', progess_status);
+
+            jQuery.ajax({
+                type: 'POST',
+                cache: false,
+                processData: false,
+                contentType: false,
+                data: form_data,
+                url: "<?php echo base_url(); ?>complaint/complaintTimeline/"+complaint_unique_id,
+
+                success: function(data) {
+                    if (data.status === "failed") {
+                        sweetAlert("Oops...", data.message, "error");
+                        return false;
+                    } else { 
+                        if (data.status === "success") {
+                            $('#confirm_delete_complaint_'+complaint_id).html('');
+                            $('#confirm_delete_complaint_'+complaint_id).hide();
+
+                            window.location.href=window.location.href;
+                        }
+                    }
+                }
+            });
+
+        } else {
+            sweetAlert("Oops...", "Please enter subject or title of history", "error");
+            return false;
+        }
+    }
+
     function commentComplaint(complaint_id) {
     	$.post("<?php echo base_url(); ?>explore/commentComplaint", {
                                                             complaint_id: complaint_id, 
@@ -537,13 +582,17 @@
         }
     }
 
-
     // Explore Save Post
     function saveExplorePost() {
 
         var express_yourself_text 	= $("#express_yourself_text").val();
         var express_public_private  = $("#express_public_private").val();
         var post_location           = $("#post_location").val();
+
+        if(post_location == 'undefined') {
+            post_location = '';
+        }
+
 
         $('.save_explore_post').html('Uploading your post');
         $('.save_explore_post').prop('disabled', true);
@@ -582,7 +631,7 @@
                     } else { 
 
                         if (data.status === "success") {
-                            window.location.href="explore";
+                            window.location.href=window.location.href;
                         }
                     }
                     $('#new_loader_div').hide();
@@ -596,7 +645,7 @@
             $('.save_explore_post').prop('disabled', false);
             return false;
         }*/
-    };
+    }
 </script>
 
 <script>

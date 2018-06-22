@@ -26,13 +26,17 @@ class Information extends CI_Controller {
         $data = array();
       
         $_POST['user_profile_id'] = $this->session->userdata('UserProfileId');
-        $json_encode = post_curl(API_CALL_PATH.'post/getMyAllPost', $this->input->post(), $this->curl);
+        $json_encode = post_curl(API_CALL_PATH.'information/getMyAllInformation', $this->input->post(), $this->curl);
 
         $json_decode = json_decode($json_encode);
         if(count($json_decode->result) > 0) {
             $data = $json_decode;
         }
+
+        // echo '<pre>';
+        // print_r($data);
+        // echo '</pre>';
         
-        $this->load->view('information/information',$data);
+        $this->load->view('information/information', $data);
     }
 }

@@ -283,6 +283,116 @@ class Event_Model extends CI_Model {
     }
 
 
+    public function getEventLocation($EventId, $UserProfileId) {
+
+        $location = array();
+
+        $query_lr = $this->db->query("SELECT l.* FROM `LocationRelation` AS lr LEFT JOIN `Location` AS l ON lr.LocationId = l.LocationId WHERE lr.`EventId` = '".$EventId."'");
+
+        $res_lr = $query_lr->row_array();
+        if($res_lr['LocationId'] > 0) {
+            $location = array(
+                            'LocationId'            => $res_lr['LocationId'],
+                            'PlaceId'               => $res_lr['PlaceId'],
+                            'LocationLattitude'     => $res_lr['LocationLattitude'],
+                            'LocationLongitude'     => $res_lr['LocationLongitude'],
+                            'LocationUrl'           => $res_lr['LocationUrl'],
+                            'LocationAddress'       => $res_lr['LocationAddress'],
+                            'LocationVicinity'      => $res_lr['LocationVicinity'],
+                            );
+        } else {
+            $location = NULL;
+        }
+        return $location;
+    }
+
+
+    public function saveMyEventLocation($EventId, $UserProfileId, $LocationArray) {
+
+        $PlaceId            = $LocationArray['place_id'];
+        $LocationName       = $LocationArray['location_name'];
+        $LocationLattitude  = $LocationArray['location_lant'];
+        $LocationLongitude  = $LocationArray['location_long'];
+        $LocationUrl        = $LocationArray['location_url'];
+        $LocationAddress    = $LocationArray['location_address'];
+        $LocationVicinity   = $LocationArray['location_vicinity'];
+
+        if($PlaceId != '') {
+
+            $sql = "SELECT LocationId FROM `Location` WHERE `PlaceId` = '".$PlaceId."'";
+            $query = $this->db->query($sql);
+
+            $res = $query->row_array();
+            if($res['LocationId'] > 0) {
+
+                $query_lr = $this->db->query("SELECT LocationRelationId FROM `LocationRelation` WHERE `LocationId` = '".$res['LocationId']."'");
+
+                $res_lr = $query_lr->row_array();
+
+                $LocationRelationId = $res_lr['LocationRelationId'];
+            } else {
+                $insertData = array(
+                                    'PlaceId'               => $PlaceId,
+                                    'LocationName'          => $LocationName,
+                                    'LocationLattitude'     => $LocationLattitude,
+                                    'LocationLongitude'     => $LocationLongitude,
+                                    'LocationUrl'           => $LocationUrl,
+                                    'LocationAddress'       => $LocationAddress,
+                                    'LocationVicinity'      => $LocationVicinity,
+                                    );
+                $this->db->insert('Location', $insertData);
+
+                $location_id = $this->db->insert_id();
+
+                $insertData = array(
+                                    'LocationId'    => $location_id,
+                                    'PostId'        => 0,
+                                    'EventId'       => 0,
+                                    'PollId'        => 0,
+                                    'ComplaintId'   => 0,
+                                    );
+                $this->db->insert('LocationRelation', $insertData);
+
+                $LocationRelationId = $this->db->insert_id();
+            }
+            $whereData = array(
+                                'LocationRelationId' => $LocationRelationId,
+                                );
+            $updateData = array(
+                                'EventId' => $EventId,
+                                );
+            $this->db->where($whereData);
+            $this->db->update('LocationRelation', $updateData);
+        }
+        return true;
+    }
+
+    
+    public function removeMyEventLocation($EventId, $UserProfileId) {
+        $whereData = array(
+                            'EventId' => $EventId,
+                            );
+        $updateData = array(
+                            'EventId' => 0,
+                            );
+        $this->db->where($whereData);
+        $this->db->update('LocationRelation', $updateData);
+    }
+
+    public function removeMyEventAttachment($EventId, $delete_image) {
+        foreach($delete_image AS $del_img) {
+
+            $this->db->where('EventAttachmentId', $del_img);
+            $this->db->delete($this->eventAttachmentTbl);
+        }
+    }
+
+    public function removeMyEventAttendee($EventId, $UserProfileId) {
+        $this->db->where('EventId', $EventId);
+        $this->db->delete($this->eventAttendeeTbl);
+    }
+
+
     public function validateAttachmentExtension($extension) {
         $query = $this->db->query("SELECT AttachmentTypeId FROM ".$this->attachmentTypeTbl." 
                                                         WHERE 
@@ -324,6 +434,7 @@ class Event_Model extends CI_Model {
                     $date_to            = $this->input->post('date_to');
                     $location           = $this->input->post('location');
                     $participated       = $this->input->post('participated');
+                    $participated_type       = $this->input->post('participated_type');
 
                     
                     if($posted_by_me == '1') {
@@ -336,7 +447,10 @@ class Event_Model extends CI_Model {
                         $this->db->like('EventLocation', $location);
                     }
                     if($participated > 0) {
-                        $this->db->where($FriendProfileId." IN (SELECT ei.UserProfileId FROM `EventInterest` AS ei WHERE ei.EventId = Event.EventId AND ei.InterestType = '".$participated."')");
+                        $this->db->where(" Event.EventId IN (SELECT ei.EventId FROM `EventInterest` AS ei WHERE ei.EventId = Event.EventId AND ei.InterestType > 0)");
+                    }
+                    if($participated_type > 0) {
+                        $this->db->where(" Event.EventId IN (SELECT ei.EventId FROM `EventInterest` AS ei WHERE ei.EventId = Event.EventId AND ei.InterestType = '".$participated."')");
                     }
                     
                     if($date_from != '' && $date_to != '') {
@@ -352,6 +466,7 @@ class Event_Model extends CI_Model {
                             $this->db->group_end();
                         }
                     }
+                    $this->db->where('AddedBy', $FriendProfileId);
                 } else {
                     $this->db->where('AddedBy', $FriendProfileId);
                 }
@@ -480,6 +595,8 @@ class Event_Model extends CI_Model {
         $MeUnLike       = $this->getMeUnLike($UserProfileId, $EventId);
         $TotalComment   = $this->getAllEventComment($EventId, $UserProfileId, 1);
 
+        $LocationDetail = $this->getEventLocation($EventId, $UserProfileId);
+
 
         $user_data_array = array(
                                 "EventId"            => $EventId,
@@ -493,6 +610,7 @@ class Event_Model extends CI_Model {
                                 "EventCoverPhoto"    => $EventCoverPhoto,
                                 "EventStatus"        => $EventStatus,
                                 "EventPrivacy"       => $EventPrivacy,
+                                "LocationDetail"     => $LocationDetail,
                                 "AddedOn"            => $AddedOn,
                                 "AddedOnTime"        => $res['AddedOn'],
                                 "UpdatedOn"          => $UpdatedOn,
@@ -513,7 +631,6 @@ class Event_Model extends CI_Model {
                                 );
         return $user_data_array;
     }
-
 
 
     public function getEventAttendee($EventId) {
