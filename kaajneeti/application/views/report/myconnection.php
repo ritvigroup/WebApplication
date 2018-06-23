@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-<head><title>Connect</title>
+<head><title>My Connection</title>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -26,29 +26,18 @@
                             <div class="portlet-header">
                                 <ol class="breadcrumb">
                                     <li> <a class="text-capitalize" href="<?=base_url();?>leader/dashboard">Kaajneeti</a> </li>
-                                    <li> <a class="text-capitalize" href="<?=base_url(); ?>connect/connect">Connect</a> </li>
-                                    <li class="active"><strong><a class="text-capitalize" href="<?=base_url(); ?>connect/connect">All</a> </strong> </li>
+                                    <li> <a class="text-capitalize" href="<?=base_url(); ?>report/report">Report</a> </li>
+                                    <li class="active"><strong><a class="text-capitalize" href="<?=base_url(); ?>report/myconnection">My Connection</a> </strong> </li>
                                 </ol>
                             </div>
 
                             <div class="portlet-body">
                                 <div class="mbm">
-                                    
-                                    <div class="row head">
-                                        <div class="user-heading">
-                                            
-                                            <?php  require_once './include/connect/connect_top.php';?>
-                                            
-                                        </div>
-                                    </div>
-                                    
-                                    <div class="clearfix"></div>
-
                                     <?php
-                                    // echo '<pre>';
-                                    // print_r($Connections);
-                                    // echo '</pre>';
-                                    // die;
+                                    echo '<pre>';
+                                    print_r($Connections);
+                                    echo '</pre>';
+                                    //die;
                                     ?>
                                     
                                     <div class="row margin-left-right-0 connect-menu-contents">

@@ -168,15 +168,9 @@ if($_SESSION['AdminId'] > 0) {
 
                     </li>
 
-                    <li class="dropdown">
-                        <a href="#" data-toggle="dropdown" class="dropdown-toggle"> <i class="icon-calendar"></i></a>
-                        <div class="dropdown-menu dropdown-messages calendar-menu menuBig">
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <div id='calendar'></div>
-                                </div>
-                            </div>
-                        </div>      
+                    <li>
+                        <input id="datepicker" width="1" / class="top-input">
+                    
                     </li>
                     
                     <!-- START USER LOGIN DROPDOWN -->

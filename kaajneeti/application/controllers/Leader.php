@@ -125,16 +125,24 @@ class Leader extends CI_Controller {
             $json = post_curl(API_CALL_PATH.'userregister/registerFromWebsite', $this->input->post(), $this->curl);
 
             $json_decode = json_decode($json);
+            
             if($json_decode->status == "success") {
 
                 $UserId = $json_decode->result->UserId;
-                
-                if($UserId > 0) {
-                    $UserProfileId   = $json_decode->result->UserProfileCitizen->UserProfileId;
+                $UserProfileId = $json_decode->result->UserProfileId;
+                $FirstName = $json_decode->result->FirstName;
+                $LastName = $json_decode->result->LastName;
+                $UserUniqueId = $json_decode->result->UserUniqueId;
 
+                $Name = $FirstName.' '.$LastName;
+                $UserProfilePic = ($json_decode->result->ProfilePhotoPath != '') ? $json_decode->result->ProfilePhotoPath : base_url().'assets/images/default-user.png';
+                
+                if($UserProfileId > 0) {
                     $this->session->set_userdata('UserId', $UserId);
+                    $this->session->set_userdata('Name', $Name);
+                    $this->session->set_userdata('UserProfilePic', $UserProfilePic);
+                    $this->session->set_userdata('UserUniqueId', $UserUniqueId);
                     $this->session->set_userdata('UserProfileId', $UserProfileId);
-                   
                 }
             } else {
                 

@@ -68,30 +68,45 @@
                                 </ul>
                                 <div class="tab-content">
                                     <div class="tab-pane active" id="tab-1">
-                                        <div class="panel-body"> <strong>Lorem ipsum dolor sit amet1</strong>
+                                        <div class="panel-body"> <strong></strong>
                                             <div class="widgets-container">
                                                 <div class="row">
                                                     <div class="col-lg-4">
                                                         <div class="panel panel-default">
-                                                            <div class="panel-heading"> Default Panel </div>
+                                                            <div class="panel-heading"> Active Connections </div>
                                                             <div class="panel-body">
-                                                                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum tincidunt est vitae ultrices accumsan. Aliquam ornare lacus adipiscing, posuere lectus et, fringilla augue.</p>
+                                                                <ul>
+                                                                    <li><a href="<?php echo base_url(); ?>report/myconnection">My Connections</a></li>
+                                                                    <li><a href="<?php echo base_url(); ?>report/myleader">Connected Leader</a></li>
+                                                                    <li><a href="<?php echo base_url(); ?>report/mycitizen">Connected Citizen</a></li>
+                                                                    <li><a href="<?php echo base_url(); ?>report/myother">Connected Others</a></li>
+                                                                </ul>
                                                             </div>
                                                         </div>
                                                     </div>
                                                     <div class="col-lg-4">
                                                         <div class="panel panel-primary">
-                                                            <div class="panel-heading"> Primary Panel </div>
+                                                            <div class="panel-heading"> My Team </div>
                                                             <div class="panel-body">
-                                                                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum tincidunt est vitae ultrices accumsan. Aliquam ornare lacus adipiscing, posuere lectus et, fringilla augue.</p>
+                                                                <ul>
+                                                                    <li><a href="<?php echo base_url(); ?>report/myteam">My Team</a></li>
+                                                                    <li><a href="<?php echo base_url(); ?>report/activeteam">Active Team</a></li>
+                                                                    <li><a href="<?php echo base_url(); ?>report/nonactiveteam">Non Active Team</a></li>
+                                                                    <li><a href="<?php echo base_url(); ?>report/requestedteam">Requested Apporval</a></li>
+                                                                </ul>
                                                             </div>
                                                         </div>
                                                     </div>
                                                     <div class="col-lg-4">
                                                         <div class="panel panel-success">
-                                                            <div class="panel-heading"> Success Panel </div>
+                                                            <div class="panel-heading"> My Group </div>
                                                             <div class="panel-body">
-                                                                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum tincidunt est vitae ultrices accumsan. Aliquam ornare lacus adipiscing, posuere lectus et, fringilla augue.</p>
+                                                                <ul>
+                                                                    <li><a href="<?php echo base_url(); ?>report/mygroup">My Group</a></li>
+                                                                    <li><a href="<?php echo base_url(); ?>report/activegroup">Active Group</a></li>
+                                                                    <li><a href="<?php echo base_url(); ?>report/mostactivemembergroup">Most Active Member Group</a></li>
+                                                                    <li><a href="<?php echo base_url(); ?>report/lowmembergroup">Low member Group</a></li>
+                                                                </ul>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -99,7 +114,7 @@
                                                 <div class="row">
                                                     <div class="col-lg-4">
                                                         <div class="panel panel-info">
-                                                            <div class="panel-heading"> <i class="fa fa-info-circle"></i> Info Panel </div>
+                                                            <div class="panel-heading"> <i class="fa fa-info-circle"></i> Trending Post </div>
                                                             <div class="panel-body">
                                                                 <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum tincidunt est vitae ultrices accumsan. Aliquam ornare lacus adipiscing, posuere lectus et, fringilla augue.</p>
                                                             </div>
@@ -107,7 +122,7 @@
                                                     </div>
                                                     <div class="col-lg-4">
                                                         <div class="panel panel-warning">
-                                                            <div class="panel-heading"> <i class="fa fa-warning"></i> Warning Panel </div>
+                                                            <div class="panel-heading"> <i class="fa fa-warning"></i> Trending Poll </div>
                                                             <div class="panel-body">
                                                                 <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum tincidunt est vitae ultrices accumsan. Aliquam ornare lacus adipiscing, posuere lectus et, fringilla augue.</p>
                                                             </div>
@@ -115,11 +130,11 @@
                                                     </div>
                                                     <div class="col-lg-4">
                                                         <div class="panel panel-danger">
-                                                            <div class="panel-heading"> Danger Panel with Footer </div>
+                                                            <div class="panel-heading"> Upcoming Events </div>
                                                             <div class="panel-body">
                                                                 <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum tincidunt est vitae ultrices accumsan. Aliquam ornare lacus adipiscing, posuere lectus et, fringilla augue.</p>
                                                             </div>
-                                                            <div class="panel-footer"> Panel Footer </div>
+                                                            <!-- <div class="panel-footer"> Panel Footer </div> -->
                                                         </div>
                                                     </div>
                                                 </div>

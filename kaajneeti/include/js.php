@@ -69,7 +69,6 @@
 <script src="<?=base_url();?>assets/js/select2.js"></script>
 
 <script type="text/javascript">
-    
     function openExpressPopup() {
 
         $.post("<?php echo base_url(); ?>express/expressPopup", {'display': 'Y'},
@@ -753,6 +752,21 @@ window.onclick = function(e) {
     
 </script>
 
+    <script type="text/javascript">
+      $(document).ready(function () {
+    $('#datepicker').datepicker({
+      uiLibrary: 'bootstrap'
+    });
+});
+    </script>
+
+    <script type="text/javascript">
+            $(function () {
+                $('#datetimepicker1').datetimepicker();
+            });
+        </script>
+<script src="https://cdn.rawgit.com/atatanasov/gijgo/master/dist/combined/js/gijgo.min.js" type="text/javascript"></script>
+<link href="https://cdn.rawgit.com/atatanasov/gijgo/master/dist/combined/css/gijgo.min.css" rel="stylesheet" type="text/css" />
 
 
 

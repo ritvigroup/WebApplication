@@ -144,7 +144,7 @@ class Userregister extends CI_Controller {
     		            $insertData = array(
     					                    'UserId' 					=> $UserId,
     					                    'UserTypeId' 				=> 1,
-    					                    'ParentUserProfileId' 				=> 0,
+    					                    'ParentUserProfileId' 		=> 0,
     					                    'FirstName' 				=> $name,
     					                    'Email' 					=> $email,
     					                    'UserProfileDeviceToken' 	=> $this->device_token,
@@ -168,7 +168,7 @@ class Userregister extends CI_Controller {
                         $insertData = array(
                                             'UserId'                    => $UserId,
                                             'UserTypeId'                => 2,
-                                            'ParentUserProfileId'              => 0,
+                                            'ParentUserProfileId'       => 0,
                                             'FirstName'                 => $name,
                                             'Email'                     => $email,
                                             'UserProfileDeviceToken'    => $this->device_token,
@@ -485,8 +485,8 @@ class Userregister extends CI_Controller {
                     $insertData = array(
                                         'UserId'                    => $UserId,
                                         'UserTypeId'                => 1,
-                                        'ParentUserProfileId'              => 0,
-                                        'FirstName'                 => 'Enter your name',
+                                        'ParentUserProfileId'       => 0,
+                                        'FirstName'                 => 'Profile name',
                                         'UserProfileDeviceToken'    => $this->device_token,
                                         'Mobile'                    => $mobile,
                                         'ProfileStatus'             => 1,
@@ -508,8 +508,8 @@ class Userregister extends CI_Controller {
                     $insertData = array(
                                         'UserId'                    => $UserId,
                                         'UserTypeId'                => 2,
-                                        'ParentUserProfileId'              => 0,
-                                        'FirstName'                 => 'Enter your name',
+                                        'ParentUserProfileId'       => 0,
+                                        'FirstName'                 => 'Profile name',
                                         'UserProfileDeviceToken'    => $this->device_token,
                                         'Mobile'                    => $mobile,
                                         'ProfileStatus'             => 0,

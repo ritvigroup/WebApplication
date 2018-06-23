@@ -1326,6 +1326,75 @@ Jcrop Image Cropping
 }
 
 
+/* The switch - the box around the slider */
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 60px;
+  height: 34px;
+  float:right;
+}
+
+/* Hide default HTML checkbox */
+.switch input {display:none;}
+
+/* The slider */
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 5px;
+  bottom: 0;
+  background-color: #ccc;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 26px;
+  width: 26px;
+  left: 4px;
+  bottom: 4px;
+  background-color: white;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+
+input.success:checked + .slider {
+  background-color: #49b6d6;
+}
+
+
+input:checked + .slider:before {
+  -webkit-transform: translateX(26px);
+  -ms-transform: translateX(26px);
+  transform: translateX(26px);
+}
+
+/* Rounded sliders */
+.slider.round {
+  border-radius: 34px;
+}
+
+.slider.round:before {
+  border-radius: 50%;
+}
+.top-input{
+    background: none;
+    border: none;
+}
+.input-group-addon{
+    background: none;
+    border: none;
+    color: #fff;
+    padding: 15px;
+
+}
+
 
 /*------------------------------------------------
 
@@ -5537,3 +5606,4 @@ font-size: 28px;
 .like_img {width: 30px; height: 30px; cursor: pointer;}
 .comment_img {width: 30px; height: 30px; cursor: pointer;}
 .actions  span { padding: 2px 8px; background: gray; border-radius: 5px !important; color: white; margin: 0 5px;}
+

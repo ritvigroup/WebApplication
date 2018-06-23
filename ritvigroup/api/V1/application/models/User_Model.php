@@ -1147,12 +1147,18 @@ class User_Model extends CI_Model {
             $this->db->where('UserTypeId', 2);
             $this->db->where('ProfileStatus', 1);
             $this->db->where("UserProfileId != ", $UserProfileId);
-            $this->db->group_start();
-            $this->db->or_like('FirstName', $search);
-            $this->db->or_like('LastName', $search);
-            $this->db->or_like('Email', $search);
-            $this->db->group_end();
-            $this->db->order_by('FirstName');
+
+            if($search != '') {
+                $this->db->group_start();
+                $this->db->or_like('FirstName', $search);
+                $this->db->or_like('LastName', $search);
+                $this->db->or_like('Email', $search);
+                $this->db->group_end();
+                $this->db->order_by('FirstName');
+            } else {
+                $this->db->order_by('RAND()');
+            }
+
             $query = $this->db->get();
             $res_u = $query->result_array();
         }
@@ -1243,7 +1249,8 @@ class User_Model extends CI_Model {
             $sql = "SELECT uf.FriendUserProfileId AS ProfileId, uf.RequestSentOn AS DateSent FROM ".$this->UserFriendTbl." AS uf 
                                     LEFT JOIN ".$this->userProfileTbl." AS up ON uf.FriendUserProfileId = up.UserProfileId
                                     WHERE 
-                                        up.UserProfileId != '".$UserProfileId."'";
+                                        up.UserProfileId != '".$UserProfileId."' 
+                                    AND up.ProfileStatus = 1 ";
             foreach($search AS $search_text) {
                 $sql .= " AND (";
                 $sql .= " up.FirstName LIKE '%".$search_text."%' ";
@@ -1255,7 +1262,8 @@ class User_Model extends CI_Model {
 
             $sql .= "SELECT up.UserProfileId AS ProfileId, up.UpdatedOn AS DateSent FROM ".$this->userProfileTbl." AS up 
                                     WHERE 
-                                        up.UserProfileId != '".$UserProfileId."'";
+                                        up.UserProfileId != '".$UserProfileId."' 
+                                    AND up.ProfileStatus = 1 ";
             foreach($search AS $search_text) {
                 $sql .= " AND (";
                 $sql .= " up.FirstName LIKE '%".$search_text."%' ";
@@ -1287,7 +1295,8 @@ class User_Model extends CI_Model {
                                         ".$this->UserFriendTbl." AS uf 
                                     LEFT JOIN ".$this->userProfileTbl." AS up ON uf.FriendUserProfileId = up.UserProfileId
                                     WHERE 
-                                        up.UserProfileId != '".$UserProfileId."'";
+                                        up.UserProfileId != '".$UserProfileId."' 
+                                    AND up.ProfileStatus = 1 ";
             if($search != '') {
                 $sql .= " AND (";
                 $sql .= " up.FirstName LIKE '%".$search."%' ";
@@ -1301,7 +1310,8 @@ class User_Model extends CI_Model {
                                     FROM 
                                         ".$this->userProfileTbl." AS up 
                                     WHERE 
-                                        up.UserProfileId != '".$UserProfileId."'";
+                                        up.UserProfileId != '".$UserProfileId."' 
+                                    AND up.ProfileStatus = 1 ";
             if($search != '') {
                 $sql .= " AND (";
                 $sql .= " up.FirstName LIKE '%".$search."%' ";
@@ -2120,13 +2130,27 @@ class User_Model extends CI_Model {
 
         $fav_leader = array();
 
-        foreach($res_u AS $key => $result) {
-            if($list_or_id > 0) {
-                $fav_leader[] = $result['FriendUserProfileId'];
-            } else {
-                $fav_leader[] = $this->getUserProfileInformation($result['FriendUserProfileId'], $UserProfileId);
+        if(count($res_u) >= 10) {
+
+            foreach($res_u AS $key => $result) {
+                if($list_or_id > 0) {
+                    $fav_leader[] = $result['FriendUserProfileId'];
+                } else {
+                    $fav_leader[] = $this->getUserProfileInformation($result['FriendUserProfileId'], $UserProfileId);
+                }
+                
             }
-            
+        } else {
+            $leaders = $this->searchLeaderProfiles($UserProfileId, '');
+
+            foreach($leaders['UserProfileLeader'] AS $leader) {
+
+                if($list_or_id > 0) {
+                    $fav_leader[] = $leader['UserProfileId'];
+                } else {
+                    $fav_leader[] = $this->getUserProfileInformation($leader['UserProfileId'], $UserProfileId);
+                }
+            }
         }
 
         return $fav_leader;
