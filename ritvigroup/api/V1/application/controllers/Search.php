@@ -218,7 +218,9 @@ class Search extends CI_Controller {
                     $date_from          = $this->input->post('date_from');
                     $date_to            = $this->input->post('date_to');
                     $location           = $this->input->post('location');
+                    $location_place_id  = $this->input->post('location_place_id');
                     $participated       = $this->input->post('participated');
+                    $participated_type  = $this->input->post('participated_type');
 
                     
                     if($posted_by_me == '1') {

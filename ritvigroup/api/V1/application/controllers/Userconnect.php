@@ -593,7 +593,7 @@ class Userconnect extends CI_Controller {
                                         'NotificationFrom'          => $UserProfileId,
                                         'NotificationTo'            => $FriendUserProfileId,
                                         'NotificationType'          => 'user-connect',
-                                        'NotificationDescription'   => 'You are now connected',
+                                        'NotificationDescription'   => 'and you are now connected',
                                         'NotificationSentYesNo'     => 0,
                                         'NotificationReceivedYesNo' => 0,
                                         'NotificationFromToStatus'  => 1,

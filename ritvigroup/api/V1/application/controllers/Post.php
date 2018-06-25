@@ -132,18 +132,20 @@ class Post extends CI_Controller {
 
                 foreach($user_friend_followers AS $user_friend_follower) {
 
-                    $insertData = array(
-                                    'NotificationId'            => $notification_id,
-                                    'NotificationFrom'          => $UserProfileId,
-                                    'NotificationTo'            => $user_friend_follower['UserProfileId'],
-                                    'NotificationType'          => 'post-generated',
-                                    'NotificationDescription'   => 'post a new status',
-                                    'NotificationSentYesNo'     => 0,
-                                    'NotificationReceivedYesNo' => 0,
-                                    'NotificationFromToStatus'  => 1,
-                                    );
+                    if($UserProfileId != $user_friend_follower['UserProfileId']) {
+                        $insertData = array(
+                                        'NotificationId'            => $notification_id,
+                                        'NotificationFrom'          => $UserProfileId,
+                                        'NotificationTo'            => $user_friend_follower['UserProfileId'],
+                                        'NotificationType'          => 'post-generated',
+                                        'NotificationDescription'   => 'post a new status',
+                                        'NotificationSentYesNo'     => 0,
+                                        'NotificationReceivedYesNo' => 0,
+                                        'NotificationFromToStatus'  => 1,
+                                        );
 
-                    $this->Notification_Model->saveNotificationFromTo($insertData);
+                        $this->Notification_Model->saveNotificationFromTo($insertData);
+                    }
                 }
                 // Notification End
 
@@ -377,6 +379,46 @@ class Post extends CI_Controller {
         } else {
 
             $posts = $this->Post_Model->getMyAllPost($UserProfileId, $FriendProfileId);
+            if(count($posts) > 0) {
+                $msg = "Post fetched successfully";
+            } else {
+                $msg = "No post added by you";
+                $error_occured = true;
+            }
+        }
+
+        if($error_occured == true) {
+            $array = array(
+                            "status"        => 'failed',
+                            "message"       => $msg,
+                        );
+        } else {
+
+            $array = array(
+                           "status"       => 'success',
+                           "result"   => $posts,
+                           "message"      => $msg,
+                           );
+        }
+        displayJsonEncode($array);
+    }
+
+
+    public function getMyAllPostAndWhereITagged() {
+        $error_occured = false;
+
+        $UserProfileId   = $this->input->post('user_profile_id');
+        $FriendProfileId    = $this->input->post('friend_profile_id');
+        
+        if($UserProfileId == "") {
+            $msg = "Please select your profile";
+            $error_occured = true;
+        } else if($FriendProfileId == "") {
+            $msg = "Please select friend profile";
+            $error_occured = true;
+        } else {
+
+            $posts = $this->Post_Model->getMyAllPostAndWhereITagged($UserProfileId, $FriendProfileId);
             if(count($posts) > 0) {
                 $msg = "Post fetched successfully";
             } else {

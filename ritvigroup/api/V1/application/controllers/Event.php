@@ -410,6 +410,46 @@ class Event extends CI_Controller {
     }
 
 
+    public function getMyAllEventAndWhereITagged() {
+        $error_occured = false;
+
+        $UserProfileId   = $this->input->post('user_profile_id');
+        $FriendProfileId    = $this->input->post('friend_profile_id');
+        
+        if($UserProfileId == "") {
+            $msg = "Please select your profile";
+            $error_occured = true;
+        } else if($FriendProfileId == "") {
+            $msg = "Please select friend profile";
+            $error_occured = true;
+        } else {
+
+            $events = $this->Event_Model->getMyAllEventAndWhereITagged($UserProfileId, $FriendProfileId);
+            if(count($events) > 0) {
+                $msg = "Event fetched successfully";
+            } else {
+                $msg = "No event found";
+                $error_occured = true;
+            }
+        }
+
+        if($error_occured == true) {
+            $array = array(
+                            "status"        => 'failed',
+                            "message"       => $msg,
+                        );
+        } else {
+
+            $array = array(
+                           "status"     => 'success',
+                           "result"     => $events,
+                           "message"    => $msg,
+                           );
+        }
+        displayJsonEncode($array);
+    }
+
+
     public function getAllEventWhereMyselfAssociated() {
         $error_occured = false;
 

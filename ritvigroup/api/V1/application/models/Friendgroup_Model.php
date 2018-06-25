@@ -161,9 +161,21 @@ class Friendgroup_Model extends CI_Model {
         $AddedOn            = return_time_ago($res['AddedOn']);
         $UpdatedOn          = return_time_ago($res['UpdatedOn']);
 
-        $GroupProfile       = $this->User_Model->getUserProfileInformation($AddedBy);
+        $GroupProfile       = $this->User_Model->getMinimumUserProfileInformation($AddedBy, $UserProfileId);
         $GroupMembers       = $this->getFriendgroupMember($FriendGroupId, $UserProfileId);
         $GroupMemeberDetail = $this->checkGroupMemberGroupDetail($UserProfileId, $FriendGroupId);
+
+        switch($FriendGroupStatus) {
+            case 1 :
+                $FriendGroupStatusName = 'Active';
+                break;
+            case 0 :
+                $FriendGroupStatusName = 'In-Active';
+                break;
+            case -1 :
+                $FriendGroupStatusName = 'Deleted';
+                break;
+        }
 
         $doc_folder_data_array = array(
                                     "FriendGroupId"         => $FriendGroupId,
@@ -171,6 +183,7 @@ class Friendgroup_Model extends CI_Model {
                                     "FriendGroupDescription"       => $FriendGroupDescription,
                                     "FriendGroupPhoto"      => $FriendGroupPhoto,
                                     "FriendGroupStatus"     => $FriendGroupStatus,
+                                    "FriendGroupStatusName" => $FriendGroupStatusName,
                                     "AddedOn"               => $AddedOn,
                                     "AddedOnTime"           => $res['AddedOn'],
                                     "UpdatedOn"             => $UpdatedOn,
@@ -193,7 +206,7 @@ class Friendgroup_Model extends CI_Model {
             $res = $query->result_array();
 
             foreach($res AS $key => $result) {
-                $group_member_detail[] = $this->User_Model->getUserProfileInformation($result['UserProfileId'], $UserProfileId);
+                $group_member_detail[] = $this->User_Model->getMinimumUserProfileInformation($result['UserProfileId'], $UserProfileId);
             }
         } else {
             $group_member_detail = array();
@@ -203,7 +216,7 @@ class Friendgroup_Model extends CI_Model {
 
     
 
-    public function getMyAllFriendgroup($FriendUserProfileId, $UserProfileId) {
+    public function getMyAllFriendgroup($FriendUserProfileId, $UserProfileId, $status) {
         $friend_group = array();
         if(isset($FriendUserProfileId) && $FriendUserProfileId > 0) {
 
@@ -211,8 +224,39 @@ class Friendgroup_Model extends CI_Model {
             $this->db->from($this->FriendGroupTbl.' AS fg');
             $this->db->join($this->FriendGroupMemberTbl.' AS fgm', 'fgm.FriendGroupId = fg.FriendGroupId', 'LEFT');
             $this->db->where('fgm.UserProfileId', $FriendUserProfileId);
-            $this->db->where('fg.FriendGroupStatus', 1);
-            $this->db->order_by('fgm.AddedOn','ASC');
+
+            if($status == "") {
+                $this->db->where('fg.FriendGroupStatus != -1');
+            } else {
+                $this->db->where('fg.FriendGroupStatus', $status);
+            }
+            $this->db->order_by('fg.AddedOn','DESC');
+            $query = $this->db->get();
+
+            $res = $query->result_array();
+
+            foreach($res AS $key => $result) {
+                $friend_group[] = $this->getFriendgroupDetail($result['FriendGroupId'], $UserProfileId);
+            }
+        }
+        return $friend_group;
+    }
+
+
+    public function getMyAllCreatedFriendgroup($FriendUserProfileId, $UserProfileId, $status) {
+        $friend_group = array();
+        if(isset($FriendUserProfileId) && $FriendUserProfileId > 0) {
+
+            $this->db->select('FriendGroupId');
+            $this->db->from($this->FriendGroupTbl.' AS fg');
+            $this->db->where('AddedBy', $FriendUserProfileId);
+
+            if($status == "") {
+                $this->db->where('FriendGroupStatus != -1');
+            } else {
+                $this->db->where('FriendGroupStatus', $status);
+            }
+            $this->db->order_by('AddedOn','DESC');
             $query = $this->db->get();
 
             $res = $query->result_array();

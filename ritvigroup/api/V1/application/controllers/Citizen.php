@@ -251,22 +251,58 @@ class Citizen extends CI_Controller {
         
             $result = array();
             
-            $sql = "SELECT COUNT(EventId) AS TotalEvent FROM `Event` WHERE `AddedBy` = '".$UserProfileId."' AND `EventStatus` != -1 ";
+            $sql = "SELECT COUNT(e.EventId) AS TotalEvent 
+                                            FROM 
+                                                `Event` AS e 
+                                            LEFT JOIN `EventAttendee` AS ea ON e.EventId = ea.EventId 
+                                            WHERE 
+                                                (
+                                                    e.`AddedBy` = '".$UserProfileId."' 
+                                                    OR ea.`UserProfileId` = '".$UserProfileId."'
+                                                )
+                                            AND e.`EventStatus` != -1 ";
             $query = $this->db->query($sql);
             $res = $query->row_array();
             $TotalEvent = ($res['TotalEvent'] > 0) ? $res['TotalEvent'] : 0; 
 
-            $sql = "SELECT COUNT(PollId) AS TotalPoll FROM `Poll` WHERE `AddedBy` = '".$UserProfileId."' AND `PollStatus` != -1 ";
+            $sql = "SELECT COUNT(p.PollId) AS TotalPoll 
+                                            FROM 
+                                                `Poll` AS p 
+                                            LEFT JOIN `PollTag` AS pt ON p.PollId = pt.PollId 
+                                            WHERE 
+                                                (
+                                                    p.`AddedBy` = '".$UserProfileId."' 
+                                                    OR pt.UserProfileId = '".$UserProfileId."'
+                                                ) 
+                                            AND p.`PollStatus` != -1 ";
             $query = $this->db->query($sql);
             $res = $query->row_array();
             $TotalPoll = ($res['TotalPoll'] > 0) ? $res['TotalPoll'] : 0; 
 
-            $sql = "SELECT COUNT(PostId) AS TotalPost FROM `Post` WHERE `UserProfileId` = '".$UserProfileId."' AND `PostStatus` != -1 ";
+            $sql = "SELECT COUNT(p.PostId) AS TotalPost 
+                                            FROM 
+                                                `Post` AS p 
+                                            LEFT JOIN `PostTag` AS pt ON p.PostId = pt.PostId 
+                                            WHERE 
+                                                (
+                                                    p.`UserProfileId` = '".$UserProfileId."' 
+                                                    OR pt.UserProfileId = '".$UserProfileId."'
+                                                )
+                                            AND p.`PostStatus` != -1 ";
             $query = $this->db->query($sql);
             $res = $query->row_array();
             $TotalPost = ($res['TotalPost'] > 0) ? $res['TotalPost'] : 0; 
 
-            $sql = "SELECT COUNT(SuggestionId) AS TotalSuggestion FROM `Suggestion` WHERE `AddedBy` = '".$UserProfileId."'";
+            $sql = "SELECT COUNT(s.SuggestionId) AS TotalSuggestion 
+                                            FROM 
+                                                `Suggestion` AS s 
+                                            LEFT JOIN `SuggestionAssigned` AS sa ON s.SuggestionId = sa.SuggestionId 
+                                            WHERE 
+                                                (
+                                                    s.`AddedBy` = '".$UserProfileId."' 
+                                                    OR sa.AssignedTo = '".$UserProfileId."'
+                                                )
+                                            AND s.SuggestionStatus != -1";
             $query = $this->db->query($sql);
             $res = $query->row_array();
             $TotalSuggestion = ($res['TotalSuggestion'] > 0) ? $res['TotalSuggestion'] : 0; 
@@ -276,7 +312,18 @@ class Citizen extends CI_Controller {
             $res = $query->row_array();
             $TotalInformation = ($res['TotalInformation'] > 0) ? $res['TotalInformation'] : 0; 
 
-            $sql = "SELECT COUNT(ComplaintId) AS TotalComplaint FROM `Complaint` WHERE `AddedBy` = '".$UserProfileId."' AND `ComplaintStatus` != -1 ";
+            $sql = "SELECT COUNT(c.ComplaintId) AS TotalComplaint 
+                                            FROM 
+                                                `Complaint` AS c 
+                                            LEFT JOIN `ComplaintAssigned` AS ca ON c.ComplaintId = ca.ComplaintId 
+                                            LEFT JOIN `ComplaintMember` AS cm ON (c.ComplaintId = cm.UserProfileId AND cm.AcceptedYesNo != -1)
+                                            WHERE 
+                                                (
+                                                    c.`AddedBy` = '".$UserProfileId."' 
+                                                    OR ca.AssignedTo = '".$UserProfileId."' 
+                                                    OR cm.UserProfileId = '".$UserProfileId."' 
+                                                )
+                                            AND c.`ComplaintStatus` != -1 ";
             $query = $this->db->query($sql);
             $res = $query->row_array();
             $TotalComplaint = ($res['TotalComplaint'] > 0) ? $res['TotalComplaint'] : 0; 

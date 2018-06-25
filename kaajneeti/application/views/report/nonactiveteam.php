@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-<head><title>My Connection</title>
+<head><title>My Non Active Team</title>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -27,7 +27,7 @@
                                 <ol class="breadcrumb">
                                     <li> <a class="text-capitalize" href="<?=base_url();?>leader/dashboard">Kaajneeti</a> </li>
                                     <li> <a class="text-capitalize" href="<?=base_url(); ?>report/report">Report</a> </li>
-                                    <li class="active"><strong><a class="text-capitalize" href="<?=base_url(); ?>report/myconnection">My Connection</a> </strong> </li>
+                                    <li class="active"><strong><a class="text-capitalize" href="<?=base_url(); ?>report/nonactiveteam">My Non Active Team</a> </strong> </li>
                                 </ol>
                             </div>
                             <?php
@@ -46,9 +46,10 @@
                                                         <th scope="col">Pic<span class="column-sorter"></span></th>
                                                         <th scope="col">Name<span class="column-sorter"></span></th>
                                                         <th scope="col">Email<span class="column-sorter"></span></th>
-                                                        <th scope="col">Gender<span class="column-sorter"></span></th>
-                                                        <th scope="col">Type<span class="column-sorter"></span></th>
-                                                        <th scope="col">Connect On<span class="column-sorter"></span></th>
+                                                        <th scope="col">Username<span class="column-sorter"></span></th>
+                                                        <th scope="col">Role<span class="column-sorter"></span></th>
+                                                        <th scope="col">Status<span class="column-sorter"></span></th>
+                                                        <th scope="col">Added On<span class="column-sorter"></span></th>
                                                     </tr>
                                                     <tbody>
                                                     <?php 
@@ -60,14 +61,16 @@
                                                         } else {
                                                             $profile_pic = ($users->ProfilePhotoPath != '') ? $users->ProfilePhotoPath : base_url().'assets/images/default-user.png';
                                                         } 
+
                                                         ?>
                                                         <tr>
                                                             <td><img src="<?php echo $profile_pic; ?>" style="border: 1px solid #fff; box-shadow: 0 2px 3px rgba(0,0,0,0.25);width: 30px; height: 30px;" class="img-circle"/></td>
                                                             <td><?php echo $Name; ?></td>
                                                             <td><?php echo $users->Email; ?></td>
-                                                            <td><?php echo $users->GenderName; ?></td>
-                                                            <td><?php echo $users->UserTypeName; ?></td>
-                                                            <td><?php echo $users->RequestAcceptedOn; ?></td>
+                                                            <td><?php echo $users->ProfileUserName; ?></td>
+                                                            <td><?php echo $users->RoleName; ?></td>
+                                                            <td><?php echo $users->ProfileStatusName; ?></td>
+                                                            <td><?php echo $users->AddedOn; ?></td>
                                                         </tr>
                                                     <?php } ?>
                                                     </tbody>

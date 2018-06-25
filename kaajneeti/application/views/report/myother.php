@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-<head><title>My Connection</title>
+<head><title>My Connected Others</title>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -27,7 +27,7 @@
                                 <ol class="breadcrumb">
                                     <li> <a class="text-capitalize" href="<?=base_url();?>leader/dashboard">Kaajneeti</a> </li>
                                     <li> <a class="text-capitalize" href="<?=base_url(); ?>report/report">Report</a> </li>
-                                    <li class="active"><strong><a class="text-capitalize" href="<?=base_url(); ?>report/myconnection">My Connection</a> </strong> </li>
+                                    <li class="active"><strong><a class="text-capitalize" href="<?=base_url(); ?>report/myother">My Connected Other</a> </strong> </li>
                                 </ol>
                             </div>
                             <?php

@@ -427,13 +427,92 @@ class Friendgroup extends CI_Controller {
         $error_occured = false;
 
         $UserProfileId   = $this->input->post('user_profile_id');
+        $status = $this->input->post('status');
+
+        $status = ($status != '') ? $status : '';
         
         if($UserProfileId == "") {
             $msg = "Please select your profile";
             $error_occured = true;
         } else {
 
-            $groups = $this->Friendgroup_Model->getMyAllFriendgroup($UserProfileId, $UserProfileId);
+            $groups = $this->Friendgroup_Model->getMyAllFriendgroup($UserProfileId, $UserProfileId, $status);
+            if(count($groups) > 0) {
+                $msg = "Groups fetched successfully";
+            } else {
+                $msg = "No group added by you";
+                $error_occured = true;
+            }
+        }
+
+        if($error_occured == true) {
+            $array = array(
+                            "status"    => 'failed',
+                            "message"   => $msg,
+                        );
+        } else {
+
+            $array = array(
+                           "status"     => 'success',
+                           "result"     => $groups,
+                           "message"    => $msg,
+                           );
+        }
+        displayJsonEncode($array);
+    }
+
+
+    // Get My All Friend Group
+    public function getMyAllCreatedFriendgroup() {
+        $error_occured = false;
+
+        $UserProfileId   = $this->input->post('user_profile_id');
+        $status = $this->input->post('status');
+
+        $status = ($status != '') ? $status : '';
+        
+        if($UserProfileId == "") {
+            $msg = "Please select your profile";
+            $error_occured = true;
+        } else {
+
+            $groups = $this->Friendgroup_Model->getMyAllCreatedFriendgroup($UserProfileId, $UserProfileId, $status);
+            if(count($groups) > 0) {
+                $msg = "Groups fetched successfully";
+            } else {
+                $msg = "No group added by you";
+                $error_occured = true;
+            }
+        }
+
+        if($error_occured == true) {
+            $array = array(
+                            "status"    => 'failed',
+                            "message"   => $msg,
+                        );
+        } else {
+
+            $array = array(
+                           "status"     => 'success',
+                           "result"     => $groups,
+                           "message"    => $msg,
+                           );
+        }
+        displayJsonEncode($array);
+    }
+
+    // Get My All Most Active Friend
+    public function getMyAllMostActiveFriendgroup() {
+        $error_occured = false;
+
+        $UserProfileId   = $this->input->post('user_profile_id');
+
+        if($UserProfileId == "") {
+            $msg = "Please select your profile";
+            $error_occured = true;
+        } else {
+
+            $groups = $this->Friendgroup_Model->getMyAllMostActiveFriendgroup($UserProfileId, $UserProfileId);
             if(count($groups) > 0) {
                 $msg = "Groups fetched successfully";
             } else {

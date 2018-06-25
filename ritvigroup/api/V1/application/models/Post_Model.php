@@ -402,6 +402,103 @@ class Post_Model extends CI_Model {
     }
 
 
+    public function getMyAllPostAndWhereITagged($UserProfileId, $FriendProfileId) {
+        $posts = array();
+        
+        if($FriendProfileId > 0) {            
+
+            $search_in = $this->input->post('search_in');
+        
+            $post_search_condition = '';
+            if($search_in == "post") {
+                
+                $posted_by_me       = $this->input->post('posted_by_me'); // By Me
+                $posted_by_friend   = $this->input->post('posted_by_friend'); // By Your Friend
+                $myself_tagged      = $this->input->post('myself_tagged'); // My self tagged
+                $date_from          = $this->input->post('date_from');
+                $date_to            = $this->input->post('date_to');
+                $location           = $this->input->post('location');
+                $location_place_id  = $this->input->post('location_place_id');
+                $me_liked           = $this->input->post('me_liked');
+                $me_commented       = $this->input->post('me_commented');
+
+                
+                if($posted_by_me == '1') {
+                    $post_search_condition .= " AND p.`UserProfileId` = '".$FriendProfileId."'";
+                }
+                if($posted_by_friend == '1') {
+                    $my_friend_user_profile_id = $this->User_Model->getMyFriendFollowerAndFollowingUserProfileId($UserProfileId);
+                    $post_search_condition .= " AND p.`PostPrivacy` = '1' AND p.`UserProfileId` IN (".implode(',', $my_friend_user_profile_id).")";
+                } else {
+
+                    if($posted_by_me == '1') {
+
+                    } else {
+                        $post_search_condition .= " AND (
+                                                            p.`UserProfileId` = '".$FriendProfileId."' 
+                                                            OR pt.UserProfileId = '".$FriendProfileId."'
+                                                        ) ";
+                    }
+                }
+                if($myself_tagged == '1') {
+                    $post_search_condition .= " AND ".$FriendProfileId." IN (SELECT pt.UserProfileId FROM `PostTag` AS pt WHERE pt.PostId = p.PostId)";
+                }
+                if($location != '' || $location_place_id != '') {
+                    $post_search_condition .= " AND '".$location_place_id."' = 
+                                    (
+                                        SELECT l.PlaceId 
+                                        FROM `Location` AS l 
+                                        LEFT JOIN `LocationRelation` AS lr ON l.LocationId = lr.LocationId 
+                                        WHERE 
+                                            lr.PostId = p.PostId
+                                    )";
+                }
+                if($me_liked == '1') {
+                    $post_search_condition .= " AND 1 <= (SELECT COUNT(pl.UserProfileId) FROM `PostLike` AS pl WHERE pl.PostId = p.PostId AND pl.PostLike = '1')";
+                }
+                if($me_commented == '1') {
+                    $post_search_condition .= " AND 1 <= (SELECT COUNT(pc.UserProfileId) FROM `PostComment` AS pc WHERE pc.PostId = p.PostId AND pc.CommentStatus = '1')";
+                }
+                
+                if($date_from != '' && $date_to != '') {
+                    if($date_from == $date_to) {
+                        $post_search_condition .= " AND p.AddedOn LIKE '%".$date_from."%' ";
+                    } else {
+                        $post_search_condition .= " AND p.AddedOn BETWEEN '".$date_from." 00:00:00' AND '".$date_to." 23:59:59'";
+                    }
+                }
+            } else {
+                $post_search_condition .= " AND (
+                                                p.`UserProfileId` = '".$FriendProfileId."' 
+                                                OR pt.UserProfileId = '".$FriendProfileId."'
+                                            ) ";
+            }
+
+            $sql = "SELECT p.PostId 
+                                    FROM 
+                                        `".$this->postTbl."` AS p 
+                                    LEFT JOIN `".$this->postTagTbl."` AS pt ON p.PostId = pt.PostId 
+                                    WHERE p.`PostStatus` != -1 ";
+            $sql .= $post_search_condition;
+
+            $sql .= " ORDER BY p.AddedOn DESC";
+
+            //echo $sql;
+
+            $query = $this->db->query($sql);
+
+            $res = $query->result_array();
+
+            foreach($res AS $key => $result) {
+                $posts[] = array(
+                                'feedtype' => 'post',
+                                'postdata' => $this->getPostDetail($result['PostId']),
+                                );
+            }
+        }
+        return $posts;
+    }
+
     
     public function getPostDetail($PostId, $UserProfileId = 0) {
         if(isset($PostId) && $PostId > 0) {

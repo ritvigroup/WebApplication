@@ -103,7 +103,6 @@
                                                     <tbody>
                                                     <?php foreach($MyTeam->result AS $my_team) { ?>
                                                         <?php
-                                                        $Status = ($my_team->ProfileStatus == 1) ? 'Active' : (($my_team->ProfileStatus == 2) ? 'In-Active' : 'Not Accepted');
                                                         $TrRowStatus = ($my_team->ProfileStatus == 1) ? 'activate_user_div' : (($my_team->ProfileStatus == 2) ? 'inactivate_user_div' : 'not_accepted_user_div');
 
                                                         $UserProfileHrefLink = base_url().'profile/subprofile/'.$my_team->UserUniqueId.'/'.$my_team->UserProfileId;
@@ -124,7 +123,7 @@
                                                             <td><?php echo $my_team->ProfileUserName; ?></td>
                                                             <td><?php echo $my_team->RoleName; ?></td>
                                                             <td><?php echo $my_team->AddedOn; ?></td>
-                                                            <td><?php echo $Status; ?></td>
+                                                            <td><?php echo $my_team->ProfileStatusName; ?></td>
                                                             <td>
                                                                 <button type="button" class="btn btn-info btn-xs" data-target="#modal-stackable" data-toggle="modal" href="javascript:void(0);" onClick="return editTeam('<?php echo $my_team->UserUniqueId; ?>', '<?php echo $my_team->UserProfileId; ?>');"><i class="fa fa-edit"></i>&nbsp;Edit</button>
                                                                 <button type="button" class="btn btn-danger btn-xs" onClick="return deleteTeam('<?php echo $my_team->UserUniqueId; ?>', '<?php echo $my_team->UserProfileId; ?>');"><i class="fa fa-trash"></i>&nbsp;Delete</button>

@@ -7,6 +7,7 @@
         <div class="panel panel-white">
             <?php /*<div class="panel-heading">New Team</div>*/ ?>
             <div class="panel-body">
+                <?php /*
                 <div class="row">
                     <div class="col-md-6">
                         <div class="form-group">
@@ -25,6 +26,7 @@
                         </div>
                     </div>
                 </div>
+                */ ?>
                 <div class="row">
                     <div class="col-md-6">
                         <div class="form-group">
@@ -114,7 +116,7 @@
 
 <script>
 
-    document.querySelector('.search_button').onclick = function () {
+    /*document.querySelector('.search_button').onclick = function () {
         var search_user = $("#search_user").val();
 
         if (search_user.length > 0) {
@@ -135,11 +137,11 @@
             sweetAlert("Oops...", "Please enter something to search leaders", "error");
             return false;
         }
-    };
+    };*/
 
     document.querySelector('.save_user').onclick = function () {
         var $this = $(this);
-        var friend_profile  = $("#friend_profile").val();
+        //var friend_profile  = $("#friend_profile").val();
         var first_name      = $("#first_name").val();
         var last_name       = $("#last_name").val();
         var email           = $("#email").val();
@@ -163,7 +165,7 @@
                     form_data.append('file', file);
                 });
 
-                form_data.append('friend_profile', friend_profile);
+                //form_data.append('friend_profile', friend_profile);
                 form_data.append('first_name', first_name);
                 form_data.append('last_name', last_name);
                 form_data.append('email', email);

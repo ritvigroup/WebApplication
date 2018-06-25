@@ -501,6 +501,9 @@ class Leader extends CI_Controller {
 
         $UserId             = $this->input->post('user_id');
         $UserProfileId      = $this->input->post('user_profile_id');
+        $status             = $this->input->post('status');
+
+        $status = ($status != '') ? $status : '';
 
        
         if($UserId == "") {
@@ -511,7 +514,7 @@ class Leader extends CI_Controller {
             $error_occured = true;
         } else {
         
-            $my_team = $this->User_Model->getMyAllCreatedTeam($UserProfileId);
+            $my_team = $this->User_Model->getMyAllCreatedTeam($UserProfileId, $status);
             if(count($my_team) > 0) {
                 $msg = "My team found";
             } else {

@@ -743,6 +743,57 @@ class Complaint extends CI_Controller {
         displayJsonEncode($array);
     }
 
+
+    // Get My All Complaint
+    public function getMyAllComplaintAndWhereITagged() {
+        $error_occured = false;
+
+        $UserProfileId   = $this->input->post('user_profile_id');
+        $FriendProfileId    = $this->input->post('friend_profile_id');
+        
+        if($UserProfileId == "") {
+            $msg = "Please select your profile";
+            $error_occured = true;
+        } else if($FriendProfileId == "") {
+            $msg = "Please select friend profile";
+            $error_occured = true;
+        } else {
+
+            $complaints = $this->Complaint_Model->getMyAllComplaintAndWhereITagged($UserProfileId, $FriendProfileId);
+
+            if(count($complaints) > 0) {
+
+                $complaint = array();
+
+                foreach($complaints AS $complaint_arr) {
+                    $complaint[] = array(
+                                        'feedtype' => 'complaint',
+                                        'complaintdata' => $complaint_arr,
+                                        );
+                }
+                $msg = "Complaint fetched successfully";
+            } else {
+                $msg = "No complaint found";
+                $error_occured = true;
+            }
+        }
+
+        if($error_occured == true) {
+            $array = array(
+                            "status"    => 'failed',
+                            "message"   => $msg,
+                        );
+        } else {
+
+            $array = array(
+                           "status"     => 'success',
+                           "result"     => $complaint,
+                           "message"    => $msg,
+                           );
+        }
+        displayJsonEncode($array);
+    }
+
     // get All Complaint Where Myself Associated
     public function getAllComplaintWhereMyselfAssociated() {
         $error_occured = false;

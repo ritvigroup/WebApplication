@@ -58,6 +58,213 @@ class Report extends CI_Controller {
         $this->load->view('report/myconnection',$data);
     }
 
+    public function myleader() {
+        $data = array();
+
+        $_POST['user_id'] = $this->session->userdata('UserId');
+        $_POST['user_profile_id'] = $this->session->userdata('UserProfileId');
+        
+        $data = array();
+        $json_encode = post_curl(API_CALL_PATH.'userconnect/getMyAllLeaderConnections', $this->input->post(), $this->curl);
+        $json_decode = json_decode($json_encode);
+
+        $data['Connections'] = $json_decode;
+
+        
+        $this->load->view('report/myleader',$data);
+    }
+
+
+    public function mycitizen() {
+        $data = array();
+
+        $_POST['user_id'] = $this->session->userdata('UserId');
+        $_POST['user_profile_id'] = $this->session->userdata('UserProfileId');
+        
+        $data = array();
+        $json_encode = post_curl(API_CALL_PATH.'userconnect/getMyAllCitizenConnections', $this->input->post(), $this->curl);
+        $json_decode = json_decode($json_encode);
+
+        $data['Connections'] = $json_decode;
+
+        
+        $this->load->view('report/mycitizen',$data);
+    }
+
+    public function myother() {
+        $data = array();
+
+        $_POST['user_id'] = $this->session->userdata('UserId');
+        $_POST['user_profile_id'] = $this->session->userdata('UserProfileId');
+        
+        $data = array();
+        $json_encode = post_curl(API_CALL_PATH.'userconnect/getMyAllOtherConnections', $this->input->post(), $this->curl);
+        $json_decode = json_decode($json_encode);
+
+        $data['Connections'] = $json_decode;
+
+        
+        $this->load->view('report/myother',$data);
+    }
+
+
+    public function myteam() {
+        $data = array();
+
+        $_POST['user_id'] = $this->session->userdata('UserId');
+        $_POST['user_profile_id'] = $this->session->userdata('UserProfileId');
+        
+        $data = array();
+        $json_encode = post_curl(API_CALL_PATH.'leader/getMyAllCreatedTeam', $this->input->post(), $this->curl);
+        $json_decode = json_decode($json_encode);
+
+        $data['Connections'] = $json_decode;
+
+        
+        $this->load->view('report/myteam',$data);
+    }
+
+
+    public function activeteam() {
+        $data = array();
+
+        $_POST['user_id'] = $this->session->userdata('UserId');
+        $_POST['user_profile_id'] = $this->session->userdata('UserProfileId');
+        $_POST['status'] = 1;
+        
+        $data = array();
+        $json_encode = post_curl(API_CALL_PATH.'leader/getMyAllCreatedTeam', $this->input->post(), $this->curl);
+        $json_decode = json_decode($json_encode);
+
+        $data['Connections'] = $json_decode;
+
+        
+        $this->load->view('report/activeteam',$data);
+    }
+
+
+    public function nonactiveteam() {
+        $data = array();
+
+        $_POST['user_id'] = $this->session->userdata('UserId');
+        $_POST['user_profile_id'] = $this->session->userdata('UserProfileId');
+        $_POST['status'] = 2;
+        
+        $data = array();
+        $json_encode = post_curl(API_CALL_PATH.'leader/getMyAllCreatedTeam', $this->input->post(), $this->curl);
+        $json_decode = json_decode($json_encode);
+
+        $data['Connections'] = $json_decode;
+
+        
+        $this->load->view('report/nonactiveteam',$data);
+    }
+
+    public function requestedteam() {
+        $data = array();
+
+        $_POST['user_id'] = $this->session->userdata('UserId');
+        $_POST['user_profile_id'] = $this->session->userdata('UserProfileId');
+        $_POST['status'] = 0;
+        
+        $data = array();
+        $json_encode = post_curl(API_CALL_PATH.'leader/getMyAllCreatedTeam', $this->input->post(), $this->curl);
+        $json_decode = json_decode($json_encode);
+
+        $data['Connections'] = $json_decode;
+
+        
+        $this->load->view('report/requestedteam',$data);
+    }
+
+
+    public function mygroup() {
+        $data = array();
+
+        $_POST['user_id'] = $this->session->userdata('UserId');
+        $_POST['user_profile_id'] = $this->session->userdata('UserProfileId');
+        $_POST['status'] = '';
+        
+        $data = array();
+        $json_encode = post_curl(API_CALL_PATH.'friendgroup/getMyAllFriendgroup', $this->input->post(), $this->curl);
+        $json_decode = json_decode($json_encode);
+
+        $data['MyGroup'] = $json_decode;
+
+        
+        $this->load->view('report/mygroup',$data);
+    }
+
+
+    public function mycreatedgroup() {
+        $data = array();
+
+        $_POST['user_id'] = $this->session->userdata('UserId');
+        $_POST['user_profile_id'] = $this->session->userdata('UserProfileId');
+        
+        $data = array();
+        $json_encode = post_curl(API_CALL_PATH.'friendgroup/getMyAllCreatedFriendgroup', $this->input->post(), $this->curl);
+        $json_decode = json_decode($json_encode);
+
+        $data['MyGroup'] = $json_decode;
+
+        
+        $this->load->view('report/mycreatedgroup',$data);
+    }
+
+
+    public function activegroup() {
+        $data = array();
+
+        $_POST['user_id'] = $this->session->userdata('UserId');
+        $_POST['user_profile_id'] = $this->session->userdata('UserProfileId');
+        $_POST['status'] = 1;
+        
+        $data = array();
+        $json_encode = post_curl(API_CALL_PATH.'friendgroup/getMyAllFriendgroup', $this->input->post(), $this->curl);
+        $json_decode = json_decode($json_encode);
+
+        $data['MyGroup'] = $json_decode;
+
+        
+        $this->load->view('report/activegroup',$data);
+    }
+
+
+    public function nonactivegroup() {
+        $data = array();
+
+        $_POST['user_id'] = $this->session->userdata('UserId');
+        $_POST['user_profile_id'] = $this->session->userdata('UserProfileId');
+        $_POST['status'] = 0;
+        
+        $data = array();
+        $json_encode = post_curl(API_CALL_PATH.'friendgroup/getMyAllFriendgroup', $this->input->post(), $this->curl);
+        $json_decode = json_decode($json_encode);
+
+        $data['MyGroup'] = $json_decode;
+
+        
+        $this->load->view('report/nonactivegroup',$data);
+    }
+
+
+    public function mostactivemembergroup() {
+        $data = array();
+
+        $_POST['user_id'] = $this->session->userdata('UserId');
+        $_POST['user_profile_id'] = $this->session->userdata('UserProfileId');
+        
+        $data = array();
+        $json_encode = post_curl(API_CALL_PATH.'friendgroup/getMyAllMostActiveFriendgroup', $this->input->post(), $this->curl);
+        $json_decode = json_decode($json_encode);
+
+        $data['MyGroup'] = $json_decode;
+
+        
+        $this->load->view('report/mostactivemembergroup',$data);
+    }
+
 
     public function activeProfile() {
     	$_POST['user_id'] = $this->session->userdata('UserId');

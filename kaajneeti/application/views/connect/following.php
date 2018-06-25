@@ -66,7 +66,8 @@
                                         </div>
                                         <div class="connect_list">
                                             <?php 
-                                            foreach($Connections->result AS $users) {
+                                            foreach($Connections->result AS $user) {
+                                                $users = $user->followingdata;
                                                 $Name = $users->FirstName.' '.$users->LastName;
 
                                                 if($users->ProfilePhotoPath != '') {

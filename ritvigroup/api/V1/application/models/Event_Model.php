@@ -434,7 +434,7 @@ class Event_Model extends CI_Model {
                     $date_to            = $this->input->post('date_to');
                     $location           = $this->input->post('location');
                     $participated       = $this->input->post('participated');
-                    $participated_type       = $this->input->post('participated_type');
+                    $participated_type  = $this->input->post('participated_type');
 
                     
                     if($posted_by_me == '1') {
@@ -475,6 +475,107 @@ class Event_Model extends CI_Model {
                 $this->db->where('EventStatus !=', -1);
                 $this->db->order_by('AddedOn','DESC');
             }
+            $query = $this->db->get();
+
+            //echo $this->db->last_query();
+
+            $res = $query->result_array();
+
+            foreach($res AS $key => $result) {
+                $events[] = array(
+                                'feedtype' => 'event',
+                                'eventdata' => $this->getEventDetail($result['EventId'], $UserProfileId),
+                                );
+            }
+        }
+        return $events;
+    }
+
+
+    public function getMyAllEventAndWhereITagged($UserProfileId, $FriendProfileId) {
+        $events = array();
+        if($FriendProfileId > 0) {
+
+            $this->db->select('e.EventId');
+            $this->db->from($this->eventTbl.' AS e');
+            $this->db->join($this->eventAttendeeTbl.' AS ea', 'e.EventId = ea.EventId', 'LEFT');
+
+            $search_in = $this->input->post('search_in');
+        
+            $post_search_condition = '';
+            if($search_in == "event") {
+                
+                $posted_by_me       = $this->input->post('posted_by_me'); // By Me
+                $myself_tagged      = $this->input->post('myself_tagged'); // My self tagged
+                $date_from          = $this->input->post('date_from');
+                $date_to            = $this->input->post('date_to');
+                $location           = $this->input->post('location');
+                $location_place_id  = $this->input->post('location_place_id');
+                $participated       = $this->input->post('participated');
+                $participated_type  = $this->input->post('participated_type');
+
+                
+                if($posted_by_me == '1') {
+                    $this->db->where('e.AddedBy', $FriendProfileId);
+                } else {
+                    $this->db->group_start();
+                    $this->db->where('e.AddedBy', $FriendProfileId);
+                    $this->db->or_where('ea.UserProfileId', $FriendProfileId);
+                    $this->db->group_end();
+                }
+
+                if($myself_tagged == '1') {
+                    $this->db->where($FriendProfileId." IN (SELECT ea.UserProfileId FROM `EventAttendee` AS ea WHERE ea.EventId = e.EventId AND ea.EventApprovedStatus != -1)");
+                }
+                if($location != '') {
+                    //$this->db->like('EventLocation', $location);
+                }
+                if($location != '' || $location_place_id != '') {
+
+                    $this->db->where($location_place_id, "
+                                    (
+                                        SELECT l.PlaceId 
+                                        FROM `Location` AS l 
+                                        LEFT JOIN `LocationRelation` AS lr ON l.LocationId = lr.LocationId 
+                                        WHERE 
+                                            lr.EventId = e.EventId
+                                    )");
+                }
+                if($participated > 0) {
+                    $this->db->where(" e.EventId IN (SELECT ei.EventId FROM `EventInterest` AS ei WHERE ei.EventId = e.EventId AND ei.InterestType > 0)");
+                }
+                if($participated_type > 0) {
+                    $this->db->where(" e.EventId IN (SELECT ei.EventId FROM `EventInterest` AS ei WHERE ei.EventId = e.EventId AND ei.InterestType = '".$participated."')");
+                }
+                
+                if($date_from != '' && $date_to != '') {
+                    // if($date_from == $date_to) {
+                    //     $this->db->group_start();
+                    //     $this->db->where("(StartDate BETWEEN '".$date_from." 00:00:00' AND '".$date_to." 23:59:59')");
+                    //     $this->db->where("(EndDate BETWEEN '".$date_from." 00:00:00' AND '".$date_to." 23:59:59')");
+                    //     $this->db->group_end();
+                    // } else {
+                    //     $this->db->group_start();
+                    //     $this->db->where("(StartDate BETWEEN '".$date_from." 00:00:00' AND '".$date_to." 23:59:59')");
+                    //     $this->db->where("(EndDate BETWEEN '".$date_from." 00:00:00' AND '".$date_to." 23:59:59')");
+                    //     $this->db->group_end();
+                    // }
+                    $this->db->group_start();
+                    $this->db->where("(e.StartDate BETWEEN '".$date_from." 00:00:00' AND '".$date_to." 23:59:59')");
+                    $this->db->or_where("(e.EndDate BETWEEN '".$date_from." 00:00:00' AND '".$date_to." 23:59:59')");
+                    $this->db->group_end();
+                }
+            } else {
+                $this->db->group_start();
+                $this->db->where('e.AddedBy', $FriendProfileId);
+                $this->db->or_where('ea.UserProfileId', $FriendProfileId);
+                $this->db->group_end();
+            }
+
+           
+            $this->db->where('e.EventStatus !=', -1);
+            $this->db->order_by('e.AddedOn','DESC');
+
             $query = $this->db->get();
 
             //echo $this->db->last_query();

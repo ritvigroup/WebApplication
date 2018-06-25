@@ -12,6 +12,7 @@ class Payment extends CI_Controller {
 
         $this->load->model('User_Model');
         $this->load->model('Payment_Model');
+        $this->load->model('Notification_Model');
         $this->load->model('Systemconfig_Model');
 
         $this->device_token 	= $this->input->post('device_token');
@@ -237,6 +238,30 @@ class Payment extends CI_Controller {
                 $this->db->query("COMMIT");
 
                 $log_detail = $this->Payment_Model->getPaymentTransactionLogDetail($PaymentTransactionLogId);
+
+                $NotificationDescription = ($DebitOrCredit > 0) ? ' added '.$TransactionAmount.' in your wallet' : 'deducted '.$TransactionAmount.' from your wallet'; 
+
+                // Notification Start
+                $insertData = array(
+                                    'NotificationFeedId'    => $TransactionId,
+                                    'NotificationStatus'    => 1,
+                                    'NotificationAddedOn'   => date('Y-m-d H:i:s'),
+                                    );
+                $notification_id = $this->Notification_Model->saveNotification($insertData);
+
+                $insertData = array(
+                                    'NotificationId'            => $notification_id,
+                                    'NotificationFrom'          => $UserProfileId,
+                                    'NotificationTo'            => $PaymentTo,
+                                    'NotificationType'          => 'payment-transffered',
+                                    'NotificationDescription'   => $NotificationDescription,
+                                    'NotificationSentYesNo'     => 0,
+                                    'NotificationReceivedYesNo' => 0,
+                                    'NotificationFromToStatus'  => 1,
+                                    );
+
+                $this->Notification_Model->saveNotificationFromTo($insertData);
+                // Notification End
 
                 $msg = "Payment log added successfully";
 
@@ -565,6 +590,28 @@ class Payment extends CI_Controller {
                 $point_log = $this->Payment_Model->getMyTotalPointDetail($UserProfileId);
 
                 $msg = "Point converted to rupee successfully";
+
+                // Notification Start
+                $insertData = array(
+                                    'NotificationFeedId'    => $TransactionId,
+                                    'NotificationStatus'    => 1,
+                                    'NotificationAddedOn'   => date('Y-m-d H:i:s'),
+                                    );
+                $notification_id = $this->Notification_Model->saveNotification($insertData);
+
+                $insertData = array(
+                                    'NotificationId'            => $notification_id,
+                                    'NotificationFrom'          => $UserProfileId,
+                                    'NotificationTo'            => $UserProfileId,
+                                    'NotificationType'          => 'payment-converted-ruppee',
+                                    'NotificationDescription'   => $TransactionComment,
+                                    'NotificationSentYesNo'     => 0,
+                                    'NotificationReceivedYesNo' => 0,
+                                    'NotificationFromToStatus'  => 1,
+                                    );
+
+                $this->Notification_Model->saveNotificationFromTo($insertData);
+                // Notification End
             }
         }
 
@@ -665,6 +712,28 @@ class Payment extends CI_Controller {
                 $wallet_log = $this->Payment_Model->getMyTotalWalletAmount($UserProfileId);
 
                 $msg = "Rupee converted to point successfully";
+
+                // Notification Start
+                $insertData = array(
+                                    'NotificationFeedId'    => $TransactionId,
+                                    'NotificationStatus'    => 1,
+                                    'NotificationAddedOn'   => date('Y-m-d H:i:s'),
+                                    );
+                $notification_id = $this->Notification_Model->saveNotification($insertData);
+
+                $insertData = array(
+                                    'NotificationId'            => $notification_id,
+                                    'NotificationFrom'          => $UserProfileId,
+                                    'NotificationTo'            => $UserProfileId,
+                                    'NotificationType'          => 'payment-converted-point',
+                                    'NotificationDescription'   => $TransactionComment,
+                                    'NotificationSentYesNo'     => 0,
+                                    'NotificationReceivedYesNo' => 0,
+                                    'NotificationFromToStatus'  => 1,
+                                    );
+
+                $this->Notification_Model->saveNotificationFromTo($insertData);
+                // Notification End
             }
         }
 

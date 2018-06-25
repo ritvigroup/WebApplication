@@ -438,12 +438,13 @@ class Organize extends CI_Controller {
            
         if($this->input->method(TRUE) == "POST" && $this->input->post('save_user') == 'Y') {
 
-            $friend_profile = $this->input->post('friend_profile');
-            if($friend_profile > 0) {
+            // $friend_profile = $this->input->post('friend_profile');
+            // if($friend_profile > 0) {
 
-            } else {
-                $friend_profile = $this->input->post('user_profile_id');
-            }
+            // } else {
+            //     $friend_profile = $this->input->post('user_profile_id');
+            // }
+            $friend_profile = $this->input->post('user_profile_id');
 
             $post_data = array(
                                 'user_profile_id'   => $this->input->post('user_profile_id'),

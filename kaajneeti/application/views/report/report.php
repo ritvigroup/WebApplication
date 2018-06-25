@@ -102,10 +102,10 @@
                                                             <div class="panel-heading"> My Group </div>
                                                             <div class="panel-body">
                                                                 <ul>
-                                                                    <li><a href="<?php echo base_url(); ?>report/mygroup">My Group</a></li>
+                                                                    <li><a href="<?php echo base_url(); ?>report/mygroup">All Group</a></li>
+                                                                    <li><a href="<?php echo base_url(); ?>report/mycreatedgroup">My Created Group</a></li>
                                                                     <li><a href="<?php echo base_url(); ?>report/activegroup">Active Group</a></li>
-                                                                    <li><a href="<?php echo base_url(); ?>report/mostactivemembergroup">Most Active Member Group</a></li>
-                                                                    <li><a href="<?php echo base_url(); ?>report/lowmembergroup">Low member Group</a></li>
+                                                                    <li><a href="<?php echo base_url(); ?>report/nonactivegroup">NonActive Group</a></li>
                                                                 </ul>
                                                             </div>
                                                         </div>

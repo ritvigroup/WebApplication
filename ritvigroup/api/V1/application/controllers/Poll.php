@@ -36,6 +36,8 @@ class Poll extends CI_Controller {
 
         $poll_answer = $this->input->post('poll_answer'); // Should be multiple answers in array
 
+        $poll_tag = $this->input->post('poll_tag');
+
 
         $PollUniqueId = $this->Poll_Model->generatePollUniqueId();
 
@@ -70,6 +72,8 @@ class Poll extends CI_Controller {
             if($PollId > 0) {
 
                 $this->Poll_Model->saveMyPollImage($PollId, $_FILES['question']);
+
+                $this->Poll_Model->saveMyPollTags($PollId, $UserProfileId, $poll_tag);
 
                 $this->Poll_Model->saveMyPollLocation($PollId, $UserProfileId, $LocationArray);
 
@@ -164,6 +168,9 @@ class Poll extends CI_Controller {
         $PollLocation       = $this->input->post('location');
 
         $poll_answer        = $this->input->post('poll_answer'); // Should be multiple answers in array
+
+        $poll_tag           = $this->input->post('poll_tag');
+
         
         if($UserProfileId == "") {
             $msg = "Please select your profile";
@@ -189,7 +196,7 @@ class Poll extends CI_Controller {
                                     'UpdatedOn'         => date('Y-m-d H:i:s'),
                                 );
                 $whereData = array(
-                                    'AddedBy'     => $UserProfileId,
+                                    'AddedBy'           => $UserProfileId,
                                     'PollId'            => $PollId,
                                     );
 
@@ -198,6 +205,9 @@ class Poll extends CI_Controller {
                 if($PollId > 0) {
 
                     $this->Poll_Model->updateMyPollImage($PollId, $_FILES['question']);
+
+                    $this->Poll_Model->deleteMyPollTags($PollId, $UserProfileId);
+                    $this->Poll_Model->saveMyPollTags($PollId, $UserProfileId, $poll_tag);
 
                     $this->Poll_Model->removeMyPollLocation($PollId, $UserProfileId);
                     $this->Poll_Model->saveMyPollLocation($PollId, $UserProfileId, $LocationArray);
@@ -217,7 +227,7 @@ class Poll extends CI_Controller {
                 }
             } else {
                 $this->db->query("ROLLBACK");
-                $msg = "This poll not belongs to you. You are not authorised to update this poll";
+                $msg = "This poll is not created by you. You are not authorised to update this poll";
                 $error_occured = true;
             }
         }
@@ -419,6 +429,46 @@ class Poll extends CI_Controller {
     }
 
 
+    public function getMyAllPollAndWhereITagged() {
+        $error_occured = false;
+
+        $UserProfileId      = $this->input->post('user_profile_id');
+        $FriendProfileId    = $this->input->post('friend_profile_id');
+        
+        if($UserProfileId == "") {
+            $msg = "Please select your profile";
+            $error_occured = true;
+        } else if($FriendProfileId == "") {
+            $msg = "Please select friend profile";
+            $error_occured = true;
+        } else {
+
+            $polls = $this->Poll_Model->getMyAllPollAndWhereITagged($UserProfileId, $FriendProfileId);
+            if(count($polls) > 0) {
+                $msg = "Poll fetched successfully";
+            } else {
+                $msg = "No poll found for you";
+                $error_occured = true;
+            }
+        }
+
+        if($error_occured == true) {
+            $array = array(
+                            "status"        => 'failed',
+                            "message"       => $msg,
+                        );
+        } else {
+
+            $array = array(
+                           "status"     => 'success',
+                           "result"     => $polls,
+                           "message"    => $msg,
+                           );
+        }
+        displayJsonEncode($array);
+    }
+
+
     public function participatePollWithAnswer() {
         $error_occured = false;
 
@@ -515,6 +565,121 @@ class Poll extends CI_Controller {
                     $msg = "Poll answer not participated. Error occured";
                     $error_occured = true;
                 }
+            }
+        }
+
+        if($error_occured == true) {
+            $array = array(
+                            "status"        => 'failed',
+                            "message"       => $msg,
+                        );
+        } else {
+
+            $array = array(
+                           "status"       => 'success',
+                           "result"       => $poll_detail,
+                           "message"      => $msg,
+                           );
+        }
+        displayJsonEncode($array);
+    }
+
+
+    public function reParticipatePollWithAnswer() {
+        $error_occured = false;
+
+        $UserProfileId      = $this->input->post('user_profile_id');
+        $PollId             = $this->input->post('poll_id');
+        $PollAnswerId       = $this->input->post('answer_id');
+        
+        if($UserProfileId == "") {
+            $msg = "Please select your profile";
+            $error_occured = true;
+        } else if($PollAnswerId == "") {
+            $msg = "Please select your answer to participate in poll";
+            $error_occured = true;
+        } else {
+
+            
+
+            $poll_detail = $this->Poll_Model->getPollDetail($PollId, $UserProfileId);
+
+            $validate_poll_already = $this->Poll_Model->validateUserProfileAlreadyPolled($PollId, $UserProfileId);
+
+            if($validate_poll_already > 0) { 
+                $this->Poll_Model->deleteMyParticipationOnPoll($PollId, $UserProfileId);
+            }
+
+            $this->db->query("BEGIN");
+
+            $insertData = array(
+                                'PollId'            => $PollId,
+                                'PollAnswerId'      => $PollAnswerId,
+                                'PollParticipationDescription'       => '',
+                                'AddedBy'           => $UserProfileId,
+                                'UpdatedBy'         => $UserProfileId,
+                                'AddedOn'           => date('Y-m-d H:i:s'),
+                                'UpdatedOn'         => date('Y-m-d H:i:s'),
+                            );
+            $PollParticipationId = $this->Poll_Model->participatePollWithAnswer($insertData);
+
+            if($PollParticipationId > 0) {
+
+                // Added Points by Poll
+                if($poll_detail['AddedBy'] != $UserProfileId) {
+                    $insertPointData = array(
+                                            'PointByName'           => 'Poll',
+                                            'PointById'             => $PollId,
+                                            'TransactionId'         => time().mt_rand().rand(),
+                                            'PaymentBy'             => $UserProfileId,
+                                            'PaymentTo'             => $UserProfileId,
+                                            'TransactionDate'       => date('Y-m-d H:i:s'),
+                                            'AddedOn'               => date('Y-m-d H:i:s'),
+                                            'TransactionPoint'      => 200,
+                                            'TransactionChargePoint' => 0,
+                                            'DebitOrCredit'         => 1,
+                                            'TransactionStatus'     => 1,
+                                            'TransactionComment'    => 'Participated in Poll: '.$poll_detail['PollUniqueId'].', Name: '.$poll_detail['PollQuestion'],
+                                            );
+
+                    $this->db->insert('PointTransactionLog', $insertPointData);
+                }
+
+                $this->db->query("COMMIT");
+                
+
+                $poll_detail = $this->Poll_Model->getPollDetail($PollId, $UserProfileId);
+
+                $msg = "Poll answer submitted successfully";
+
+                // Notification Start
+                if($poll_detail['PollProfile']['UserProfileId'] != $UserProfileId) {
+                    $insertData = array(
+                                        'NotificationFeedId'    => $PollId,
+                                        'NotificationStatus'    => 1,
+                                        'NotificationAddedOn'   => date('Y-m-d H:i:s'),
+                                        );
+                    $notification_id = $this->Notification_Model->saveNotification($insertData);
+
+                    $insertData = array(
+                                        'NotificationId'            => $notification_id,
+                                        'NotificationFrom'          => $UserProfileId,
+                                        'NotificationTo'            => $poll_detail['PollProfile']['UserProfileId'],
+                                        'NotificationType'          => 'poll-answered',
+                                        'NotificationDescription'   => 'Participated in your poll',
+                                        'NotificationSentYesNo'     => 0,
+                                        'NotificationReceivedYesNo' => 0,
+                                        'NotificationFromToStatus'  => 1,
+                                        );
+
+                    $this->Notification_Model->saveNotificationFromTo($insertData);
+                }
+                // Notification End
+
+            } else {
+                $this->db->query("ROLLBACK");
+                $msg = "Poll answer not participated. Error occured";
+                $error_occured = true;
             }
         }
 

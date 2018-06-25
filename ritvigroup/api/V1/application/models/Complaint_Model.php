@@ -450,6 +450,84 @@ class Complaint_Model extends CI_Model {
     }
 
 
+    public function getMyAllComplaintAndWhereITagged($UserProfileId, $FriendProfileId) {
+        $complaints = array();
+        
+        if($FriendProfileId > 0) {
+            
+            $search_in = $this->input->post('search_in');
+            
+            $complaint_search_condition = '';
+            if($search_in == "complaint") {
+                
+                $posted_by_me   = $this->input->post('posted_by_me'); // By Me
+                $me_associated  = $this->input->post('me_associated'); // You / YourFriend / Group
+                $date_from      = $this->input->post('date_from');
+                $date_to        = $this->input->post('date_to');
+
+                
+                if($posted_by_me == '1') {
+                    $complaint_search_condition .= " AND c.`AddedBy` = '".$FriendProfileId."'";
+                }
+                if($me_associated == '1') {
+                    
+                } else {
+                    $complaint_search_condition .= " AND c.`AddedBy` = '".$FriendProfileId."'";
+                }
+                
+                if($date_from != '' && $date_to != '') {
+                    if($date_from == $date_to) {
+                        $complaint_search_condition .= " AND c.AddedOn LIKE '%".$date_from."%' ";
+                    } else {
+                        $complaint_search_condition .= " AND c.AddedOn BETWEEN '".$date_from." 00:00:00' AND '".$date_to." 23:59:59'";
+                    }
+                }
+            } else {
+                $complaint_search_condition .= " AND c.`AddedBy` = '".$FriendProfileId."'";
+            }
+
+
+            
+            $sql = "(SELECT c.ComplaintId, c.AddedOn AS AddedOn FROM ".$this->complaintTbl." AS c WHERE c.`ComplaintStatus` != -1 ".$complaint_search_condition.')';
+            $sql .= " UNION (SELECT c.ComplaintId AS ComplaintId, c.AddedOn AS AddedOn FROM `Complaint` AS c 
+                        LEFT JOIN `ComplaintMember` AS cm ON cm.ComplaintId = c.ComplaintId 
+                        WHERE 
+                            c.`ComplaintStatus`     != -1  
+                        AND cm.`UserProfileId`      = '".$FriendProfileId."' 
+                        AND cm.AcceptedYesNo        != '2' ";
+            if($search_in == "complaint") {
+                if($me_associated == '1') {
+                    $sql .= " AND cm.`UserProfileId` = '".$FriendProfileId."' ";
+                }
+                if($date_from != '' && $date_to != '') {
+                    if($date_from == $date_to) {
+                        $sql .= " AND c.AddedOn LIKE '%".$date_from."%' ";
+                    } else {
+                        $sql .= " AND c.AddedOn BETWEEN '".$date_from." 00:00:00' AND '".$date_to." 23:59:59'";
+                    }
+                }
+            }
+            $sql .= ')';           
+            $sql .= " ORDER BY c.AddedOn DESC";
+
+            //echo $sql;
+
+            $query = $this->db->query($sql);
+
+            $res = $query->result_array();
+
+            $complaint_array = array();
+            foreach($res AS $key => $result) {
+                if(!@in_array($result['ComplaintId'], $complaint_array)) {
+                    $complaints[] = $this->getComplaintDetail($result['ComplaintId'], $UserProfileId);
+                    $complaint_array[] = $result['ComplaintId'];
+                }
+            }
+        }
+        return $complaints;
+    }
+
+
     // Get All Complaint Where Myself Associated
     public function getAllComplaintWhereMyselfAssociated($UserProfileId, $FriendProfileId) {
         $complaints = array();

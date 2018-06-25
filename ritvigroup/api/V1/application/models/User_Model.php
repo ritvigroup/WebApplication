@@ -14,6 +14,8 @@ class User_Model extends CI_Model {
         $this->FriendGroupTbl       = 'FriendGroup';
         $this->FriendGroupMemberTbl = 'FriendGroupMember';
 
+        $this->UserTypeTbl          = 'UserType';
+
         $this->UserRoleTbl              = 'UserRole';
         $this->UserRolePermissionTbl    = 'UserRolePermission';
 
@@ -596,7 +598,7 @@ class User_Model extends CI_Model {
         if($total_or_list == 0) {
             $this->db->select('COUNT(uf.UserFriendId) AS TotalConnection');
         } else {
-            $this->db->select('uf.FriendUserProfileId');
+            $this->db->select('uf.FriendUserProfileId, uf.RequestAcceptedOn');
         }
         $this->db->from($this->UserFriendTbl. ' AS uf');
         $this->db->join($this->userProfileTbl .' AS up' , 'uf.FriendUserProfileId = up.UserProfileId', 'LEFT');
@@ -627,7 +629,9 @@ class User_Model extends CI_Model {
             $res_u = $query->result_array();
 
             foreach($res_u AS $connections) {
-                $users[] = $this->getUserProfileInformation($connections['FriendUserProfileId'], $UserProfileId);
+                $user_info = $this->getUserProfileInformation($connections['FriendUserProfileId'], $UserProfileId);
+                $user_info = array_merge($user_info, array('RequestAcceptedOn' => $connections['RequestAcceptedOn']));
+                $users[] = $user_info;
             }
             return $users;
         }
@@ -744,12 +748,16 @@ class User_Model extends CI_Model {
         $query = $this->db->query("SELECT up.*, ur.RoleName, 
                                             uph.PhotoPath AS UserProfilePhoto, 
                                             uch.PhotoPath AS UserCoverPhoto,
+                                            ut.TypeName AS UserTypeName,
+                                            g.GenderName AS GenderName,
                                             u.UserUniqueId  
                                         FROM ".$this->userProfileTbl." AS up 
                                         LEFT JOIN ".$this->userPhotoTbl." uph ON up.ProfilePhotoId = uph.UserPhotoId
                                         LEFT JOIN ".$this->userPhotoTbl." uch ON up.CoverPhotoId = uch.UserPhotoId
                                         LEFT JOIN ".$this->UserRoleTbl." ur ON up.UserRoleId = ur.UserRoleId
-                                        LEFT JOIN ".$this->userTbl." u ON up.UserId = u.UserId
+                                        LEFT JOIN ".$this->userTbl." u ON up.UserId = u.UserId 
+                                        LEFT JOIN ".$this->UserTypeTbl." ut ON up.UserTypeId = ut.UserTypeId 
+                                        LEFT JOIN ".$this->genderTbl." g ON up.Gender = g.GenderId 
                                         WHERE 
                                             up.`UserProfileId` = '".$FriendUserProfileId."'");
 
@@ -771,6 +779,9 @@ class User_Model extends CI_Model {
                                 "MiddleName"                    => (($res_u['MiddleName'] != NULL) ? $res_u['MiddleName'] : ""),
                                 "LastName"                      => (($res_u['LastName'] != NULL) ? $res_u['LastName'] : ""),
                                 "UserTypeId"                    => (($res_u['UserTypeId'] != NULL) ? $res_u['UserTypeId'] : ""),
+                                "UserTypeName"                  => (($res_u['UserTypeName'] != NULL) ? $res_u['UserTypeName'] : ""),
+                                "Gender"                        => (($res_u['Gender'] != NULL) ? $res_u['Gender'] : ""),
+                                "GenderName"                  => (($res_u['GenderName'] != NULL) ? $res_u['GenderName'] : ""),
                                 "Email"                         => (($res_u['Email'] != NULL) ? $res_u['Email'] : ""),
                                 "ProfileUserName"               => (($res_u['ProfileUserName'] != NULL) ? $res_u['ProfileUserName'] : ""),
                                 
@@ -791,7 +802,8 @@ class User_Model extends CI_Model {
                                 "UpdatedOnTime"                 => ($res_u['UpdatedOn']),
                                 );
 
-        if($UserProfileId > 0) {
+        if($UserProfileId != $FriendUserProfileId && $UserProfileId > 0) {
+            
             $friend_response = $this->checkUserFriendRequest($UserProfileId, $FriendUserProfileId);
 
             if($friend_response['RequestAccepted'] != '') {
@@ -808,6 +820,7 @@ class User_Model extends CI_Model {
                 $GetNotification = ($friend_response['GetNotification'] != '') ? $friend_response['GetNotification'] : 1;
                 $user_data_array = array_merge($user_data_array, array('GetNotification' => $GetNotification)); // Get Notification
             } else {
+
                 $friend_response = $this->checkUserFriendRequest($FriendUserProfileId, $UserProfileId);
 
                 if($friend_response['RequestAccepted'] != '') {
@@ -827,8 +840,6 @@ class User_Model extends CI_Model {
                 $GetNotification = ($friend_response['GetNotification'] != '') ? $friend_response['GetNotification'] : 1;
                 $user_data_array = array_merge($user_data_array, array('GetNotification' => $GetNotification)); // Get Notification
             }
-
-
 
             // Following and Follower
             $follow_response = $this->checkUserFollow($UserProfileId, $FriendUserProfileId);
@@ -856,6 +867,8 @@ class User_Model extends CI_Model {
         $query = $this->db->query("SELECT up.*, ur.RoleName, d.DepartmentName, pp.PoliticalPartyName, 
                                             uph.PhotoPath AS UserProfilePhoto, 
                                             uch.PhotoPath AS UserCoverPhoto,
+                                            ut.TypeName AS UserTypeName,
+                                            g.GenderName AS GenderName,
                                             u.UserUniqueId  
                                         FROM ".$this->userProfileTbl." AS up 
                                         LEFT JOIN ".$this->politicalPartyTbl." AS pp ON up.PoliticalPartyId = pp.PoliticalPartyId
@@ -864,6 +877,8 @@ class User_Model extends CI_Model {
                                         LEFT JOIN ".$this->userPhotoTbl." uch ON up.CoverPhotoId = uch.UserPhotoId
                                         LEFT JOIN ".$this->UserRoleTbl." ur ON up.UserRoleId = ur.UserRoleId
                                         LEFT JOIN ".$this->userTbl." u ON up.UserId = u.UserId
+                                        LEFT JOIN ".$this->UserTypeTbl." ut ON up.UserTypeId = ut.UserTypeId 
+                                        LEFT JOIN ".$this->genderTbl." g ON up.Gender = g.GenderId 
                                         WHERE 
                                             up.`UserProfileId` = '".$FriendUserProfileId."'");
 
@@ -888,6 +903,21 @@ class User_Model extends CI_Model {
         
         $MyTotalGroupWithAssociated = $this->getMyTotalFriendGroup($FriendUserProfileId, 0);
 
+        switch($res_u['ProfileStatus']) {
+            case 1 :
+                $ProfileStatusName = 'Active';
+                break;
+            case 2 :
+                $ProfileStatusName = 'In-Active';
+                break;
+            case 0 :
+                $ProfileStatusName = 'Not Accepted';
+                break;
+            case -1 :
+                $ProfileStatusName = 'Deleted';
+                break;
+        }
+
 
         $user_data_array = array(
                                 "UserProfileId"                 => (($res_u['UserProfileId'] != NULL) ? $res_u['UserProfileId'] : ""),
@@ -899,8 +929,10 @@ class User_Model extends CI_Model {
                                 "MiddleName"                    => (($res_u['MiddleName'] != NULL) ? $res_u['MiddleName'] : ""),
                                 "LastName"                      => (($res_u['LastName'] != NULL) ? $res_u['LastName'] : ""),
                                 "UserTypeId"                    => (($res_u['UserTypeId'] != NULL) ? $res_u['UserTypeId'] : ""),
+                                "UserTypeName"                  => (($res_u['UserTypeName'] != NULL) ? $res_u['UserTypeName'] : ""),
                                 "DateOfBirth"                   => (($res_u['DateOfBirth'] != '0000-00-00' && $res_u['DateOfBirth'] != NULL && $res_u['DateOfBirth'] != '') ? $res_u['DateOfBirth'] : ""),
                                 "Gender"                        => (($res_u['Gender'] != NULL) ? $res_u['Gender'] : ""),
+                                "GenderName"                    => (($res_u['GenderName'] != NULL) ? $res_u['GenderName'] : ""),
                                 "MaritalStatus"                 => (($res_u['MaritalStatus'] != NULL) ? $res_u['MaritalStatus'] : ""),
                                 "Email"                         => (($res_u['Email'] != NULL) ? $res_u['Email'] : ""),
                                 "UserDepartment"                => (($res_u['UserDepartment'] != NULL) ? $res_u['UserDepartment'] : "0"),
@@ -923,6 +955,7 @@ class User_Model extends CI_Model {
                                 "AltMobile"                     => (($res_u['AltMobile'] != NULL) ? $res_u['AltMobile'] : ""),
                                 "UserBio"                       => (($res_u['UserBio'] != NULL) ? $res_u['UserBio'] : ""),
                                 "ProfileStatus"                 => (($res_u['ProfileStatus'] != NULL) ? $res_u['ProfileStatus'] : ""),
+                                "ProfileStatusName"             => $ProfileStatusName,
                                 "AddedBy"                       => (($res_u['AddedBy'] != NULL) ? $res_u['AddedBy'] : ""),
                                 "UpdatedBy"                     => (($res_u['UpdatedBy'] != NULL) ? $res_u['UpdatedBy'] : ""),
                                 "ProfilePhotoId"                => (($res_u['ProfilePhotoId'] != NULL) ? $res_u['ProfilePhotoId'] : ""),
@@ -2083,7 +2116,11 @@ class User_Model extends CI_Model {
         $follow_user = array();
 
         foreach($res_u AS $key => $result) {
-            $follow_user[] = $this->getUserProfileInformation($result['UserProfileId'], $UserProfileId);
+            //$follow_user[] = $this->getUserProfileInformation($result['UserProfileId'], $UserProfileId);
+            $follow_user[] = array(
+                                'feedtype' => 'follower',
+                                'followerdata' => $this->getMinimumUserProfileInformation($result['UserProfileId'], $UserProfileId),
+                                );
         }
 
         return $follow_user;
@@ -2100,13 +2137,18 @@ class User_Model extends CI_Model {
 
         $res_u = $query->result_array();
 
-        $follow_user = array();
+        $following_user = array();
 
         foreach($res_u AS $key => $result) {
-            $follow_user[] = $this->getUserProfileInformation($result['FollowUserProfileId'], $UserProfileId);
+            //$follow_user[] = $this->getUserProfileInformation($result['FollowUserProfileId'], $UserProfileId);
+
+            $following_user[] = array(
+                                'feedtype'      => 'following',
+                                'followingdata' => $this->getMinimumUserProfileInformation($result['FollowUserProfileId'], $UserProfileId),
+                                );
         }
 
-        return $follow_user;
+        return $following_user;
     }
 
     // Get My All Favourite Leader
@@ -2255,15 +2297,20 @@ class User_Model extends CI_Model {
     }
 
     // Get My All Created Team for Leader
-    public function getMyAllCreatedTeam($UserProfileId) {
+    public function getMyAllCreatedTeam($UserProfileId, $status = '') {
 
+        if($status == '') {
+            $where_condition = " AND up.ProfileStatus != -1 ";
+        } else {
+            $where_condition = " AND up.ProfileStatus = '".$status."' AND up.ProfileStatus != -1 ";
+        }
         $my_team = array();
         $sql = "SELECT up.UserProfileId 
                                         FROM ".$this->userProfileTbl." AS up 
                                         WHERE 
                                             up.`AddedBy` = '".$UserProfileId."'
                                         AND up.UserTypeId = '3' 
-                                        AND up.ProfileStatus != -1
+                                         ".$where_condition." 
                                         ORDER BY up.AddedOn DESC";
         $query = $this->db->query($sql);
 

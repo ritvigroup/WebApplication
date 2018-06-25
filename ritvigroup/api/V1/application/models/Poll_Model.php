@@ -12,6 +12,8 @@ class Poll_Model extends CI_Model {
         $this->PollLikeTbl              = 'PollLike';
         $this->pollParticipationTbl     = 'PollParticipation';
         $this->PollCommentTbl           = 'PollComment';
+
+        $this->pollTagTbl               = 'PollTag';
     }
 
 
@@ -458,7 +460,13 @@ class Poll_Model extends CI_Model {
         return $PollParticipationId;
     }
 
+    public function deleteMyParticipationOnPoll($PollId, $UserProfileId) {
+        $this->db->where('PollId', $PollId);
+        $this->db->where('AddedBy', $UserProfileId);
+        $this->db->delete($this->pollParticipationTbl);
+    }
 
+    
     public function getMyAllPoll($UserProfileId, $FriendProfileId) {
         $polls = array();
 
@@ -495,7 +503,7 @@ class Poll_Model extends CI_Model {
                         $this->db->like('PollLocation', $location);
                     }
                     if($participated > 0) {
-                        $this->db->where($FriendProfileId." IN (SELECT pp.AddedBy FROM `PollParticipation` AS pp WHERE pp.PollId = ".$this->pollTbl.".PollId AND pp.PollAnswerId > 0 AND pp.AddedBy = '".$FriendProfileId."')");
+                        $this->db->where($FriendProfileId." IN (SELECT pp.AddedBy FROM `PollParticipation` AS pp WHERE pp.PollId = p.PollId AND pp.PollAnswerId > 0 AND pp.AddedBy = '".$FriendProfileId."')");
                     }
                     
                     if($date_from != '' && $date_to != '') {
@@ -518,6 +526,104 @@ class Poll_Model extends CI_Model {
                 $this->db->where('PollStatus != ', -1);
                 $this->db->order_by('AddedOn','DESC');
             }
+            $query = $this->db->get();
+
+            //echo $this->db->last_query();
+            $res = $query->result_array();
+
+            foreach($res AS $key => $result) {
+                $polls[] = array(
+                                'feedtype' => 'poll',
+                                'polldata' => $this->getPollDetail($result['PollId'], $UserProfileId),
+                                );
+            }
+        }
+        return $polls;
+    }
+
+
+    public function getMyAllPollAndWhereITagged($UserProfileId, $FriendProfileId) {
+        $polls = array();
+
+        if($FriendProfileId > 0) {
+
+            $this->db->select('p.PollId');
+            $this->db->from($this->pollTbl.' AS p');
+            $this->db->join($this->pollTagTbl.' AS pt', 'p.PollId = pt.PollId', 'LEFT');
+
+            $search_in = $this->input->post('search_in');
+        
+            if($search_in == "poll") {
+                
+                $posted_by_me       = $this->input->post('posted_by_me'); // By Me
+                $date_from          = $this->input->post('date_from');
+                $date_to            = $this->input->post('date_to');
+                $location           = $this->input->post('location');
+                $location_place_id  = $this->input->post('location_place_id');
+                $tagged_in          = $this->input->post('tagged_in');
+                $participated       = $this->input->post('participated');
+                $poll_ongoing       = $this->input->post('poll_ongoing');
+                $poll_ended         = $this->input->post('poll_ended');
+
+                if($posted_by_me == '1') {
+                    $this->db->where('p.AddedBy', $FriendProfileId);
+                } else {
+                    $this->db->group_start();
+                    $this->db->where('p.AddedBy', $FriendProfileId);
+                    $this->db->or_where('pt.UserProfileId', $FriendProfileId);
+                    $this->db->group_end();
+                }
+                // if($location != '') {
+                //     $this->db->like('p.PollLocation', $location);
+                // }
+                if($location != '' || $location_place_id != '') {
+
+                    $this->db->where($location_place_id, "
+                                    (
+                                        SELECT l.PlaceId 
+                                        FROM `Location` AS l 
+                                        LEFT JOIN `LocationRelation` AS lr ON l.LocationId = lr.LocationId 
+                                        WHERE 
+                                            lr.PollId = p.PollId
+                                    )");
+                }
+                if($participated > 0) {
+                    $this->db->where($FriendProfileId." IN (SELECT pp.AddedBy FROM `PollParticipation` AS pp WHERE pp.PollId = p.PollId AND pp.PollAnswerId > 0 AND pp.AddedBy = '".$FriendProfileId."')");
+                }
+                if($tagged_in > 0) {
+                    $this->db->where("0 < (SELECT COUNT(pt1.PollTagId) FROM `PollTag` AS pt1 WHERE pt1.PollId = p.PollId AND pt1.UserProfileId = '".$FriendProfileId."')");
+                }
+                
+                if($date_from != '' && $date_to != '') {
+
+                    $date_from          = date('Y-m-d', strtotime($date_from));
+                    $date_to            = date('Y-m-d', strtotime($date_to));
+
+                    // if($date_from == $date_to) {
+                    //     $this->db->group_start();
+                    //     $this->db->where("(p.ValidFromDate BETWEEN '".$date_from."' AND '".$date_to."')");
+                    //     $this->db->where("(p.ValidEndDate BETWEEN '".$date_from."' AND '".$date_to."')");
+                    //     $this->db->group_end();
+                    // } else {
+                    //     $this->db->group_start();
+                    //     $this->db->where("(p.ValidFromDate BETWEEN '".$date_from."' AND '".$date_to."')");
+                    //     $this->db->where("(p.ValidEndDate BETWEEN '".$date_from."' AND '".$date_to."')");
+                    //     $this->db->group_end();
+                    // }
+                    $this->db->group_start();
+                    $this->db->where("(p.ValidFromDate BETWEEN '".$date_from."' AND '".$date_to."')");
+                    $this->db->where("(p.ValidEndDate BETWEEN '".$date_from."' AND '".$date_to."')");
+                    $this->db->group_end();
+                }
+            } else {
+                $this->db->group_start();
+                $this->db->where('p.AddedBy', $FriendProfileId);
+                $this->db->or_where('pt.UserProfileId', $FriendProfileId);
+                $this->db->group_end();
+            }
+
+            $this->db->where('p.PollStatus != ', -1);
+            $this->db->order_by('p.AddedOn','DESC');
             $query = $this->db->get();
 
             //echo $this->db->last_query();
@@ -586,7 +692,7 @@ class Poll_Model extends CI_Model {
         $AddedOn            = return_time_ago($res['AddedOn']);
         $UpdatedOn          = return_time_ago($res['UpdatedOn']);
 
-        $PollProfile        = $this->User_Model->getMinimumUserProfileInformation($AddedBy);
+        $PollProfile        = $this->User_Model->getMinimumUserProfileInformation($AddedBy, $UserProfileId);
         //$PollAnswer         = $this->getPollAnswer($PollId);
         
         $PollTotalParticipation = $this->getPollTotalParticipation($PollId);
@@ -600,6 +706,8 @@ class Poll_Model extends CI_Model {
         $MeUnLike       = $this->getMeUnLike($UserProfileId, $PollId);
         $TotalComment   = $this->getAllPollComment($PollId, $UserProfileId, 1);
         $LocationDetail = $this->getPollLocation($PollId, $UserProfileId);
+
+        $PollTag        = $this->getPollTag($PollId);
 
 
         $user_data_array = array(
@@ -618,6 +726,7 @@ class Poll_Model extends CI_Model {
                                 "UpdatedOnTime"             => $res['UpdatedOn'],
                                 "PollProfile"               => $PollProfile,
                                 'PollImage'                 => (($res['PollImage'] != '') ? POLL_IMAGE_URL.$res['PollImage'] : ''),
+                                "PollTag"                   => $PollTag,
                                 //"PollAnswer"                => $PollAnswer,
                                 "PollTotalParticipation"    => $PollTotalParticipation,
                                 "PollAnswerWithTotalParticipation"    => $PollAnswerWithTotalParticipation,
@@ -633,6 +742,49 @@ class Poll_Model extends CI_Model {
         return $user_data_array;
     }
 
+
+    public function saveMyPollTags($PollId, $UserProfileId, $poll_tag) {
+        foreach($post_tag AS $tag_user_profile_id) {
+            $insertData = array(
+                                'PollId'            => $PollId,
+                                'UserProfileId'     => $tag_user_profile_id,
+                                'TagStatus'         => 1,
+                                'TagApproved'       => 1,
+                                'AddedBy'           => $UserProfileId,
+                                'AddedOn'           => date('Y-m-d H:i:s'),
+                                );
+            $this->db->insert($this->pollTagTbl, $insertData);
+        }
+        return true;
+    }
+
+
+    public function deleteMyPollTags($PollId, $UserProfileId) {
+        $this->db->where('PollId', $PollId);
+        $this->db->delete($this->pollTagTbl);
+    }
+
+
+    public function getPollTag($PollId) {
+        
+        $PollTag = array();
+
+        $query = $this->db->query("SELECT up.UserProfileId 
+                                            FROM ".$this->pollTagTbl." AS pt 
+                                            LEFT JOIN ".$this->userProfileTbl." up ON pt.UserProfileId = up.UserProfileId
+                                            WHERE 
+                                                pt.`PollId` = '".$PollId."'");
+
+        
+        $res = $query->result_array();
+
+        foreach($res AS $key => $result) {
+            $PollTag[] = $this->User_Model->getMinimumUserProfileInformation($result['UserProfileId']);
+            //$PostTag[] = $result['UserProfileId'];
+        }
+
+        return $PollTag;
+    }
 
 
     public function getPollAnswer($PollId) {
