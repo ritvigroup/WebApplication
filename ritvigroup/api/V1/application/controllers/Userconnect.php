@@ -574,11 +574,12 @@ class Userconnect extends CI_Controller {
 
             if($UserProfileDetail['UserProfileId'] > 0) {
                 $this->db->query("BEGIN");
+                // Accept Friend Request
                 if($UserProfileDetail['RequestAccepted'] == 0) {
                     $this->User_Model->acceptUserFriendRequest($UserProfileId, $FriendUserProfileId);
                     $this->db->query("COMMIT");
                     $msg = "You are now connect with this user";
-                    $friend = 1;
+                    $friend = 3;
 
                     // Notification Start
                     $insertData = array(
@@ -649,7 +650,7 @@ class Userconnect extends CI_Controller {
                     $this->User_Model->deleteUserFriendRequest($UserProfileId, $FriendUserProfileId);
                     $this->db->query("COMMIT");
                     $msg = "We are sorry that you now no longer connect with this user.";
-                    $friend = -1;
+                    $friend = 0;
                 }
             } else {
 
@@ -691,6 +692,8 @@ class Userconnect extends CI_Controller {
 
                     $this->Notification_Model->saveNotificationFromTo($insertData);
                     // Notification End
+
+                    $friend = 1;
                 }
             }
         }

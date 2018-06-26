@@ -3,7 +3,7 @@
 		<button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">Connection
 		<span class="caret"></span></button>
 		<ul class="dropdown-menu">
-			<li><a href="#<?=base_url();?>connect/connect">All <span class="badge"><?php echo $Profile->result->MyTotalConnections; ?></span></a></li>
+			<li><a href="<?=base_url();?>connect/connect">All <span class="badge"><?php echo $Profile->result->MyTotalConnections; ?></span></a></li>
 			<li><a href="<?=base_url();?>connect/leader">Leader <span class="badge"><?php echo $Profile->result->MyTotalLeaderConnections; ?></span></a></li>
 			<li><a href="<?=base_url();?>connect/citizen">Citizen <span class="badge"><?php echo $Profile->result->MyTotalCitizenConnections; ?></span></a></li>
 			<li><a href="<?=base_url();?>connect/other">Others <span class="badge"><?php echo $Profile->result->MyTotalOtherConnections; ?></span></a></li>

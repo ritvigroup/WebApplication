@@ -1,56 +1,58 @@
 <?php
-echo '<pre>';
-print_r($HomePageData);
-print_r($Connections);
-echo '</pre>';
-if($result->UserId > 0) {
+// echo '<pre>';
+// print_r($Profile);
+// print_r($HomePageData);
+//print_r($Connections);
+//print_r($ConnectWithFollowFollwers);
+//echo '</pre>';
+if($Profile->result->Profile->UserId > 0) {
 
     // echo '<pre>';
     // print_r($result);
     // echo '</pre>';
-    $UserId         = $result->UserId;
-    $UserProfileId  = $result->UserProfileId;
-    $UserUniqueId   = $result->UserUniqueId;
-    $Email      = $result->Email;
-    $FirstName  = $result->FirstName;
-    $LastName   = $result->LastName;
+    $UserId         = $Profile->result->Profile->UserId;
+    $UserProfileId  = $Profile->result->Profile->UserProfileId;
+    $UserUniqueId   = $Profile->result->Profile->UserUniqueId;
+    $Email      = $Profile->result->Profile->Email;
+    $FirstName  = $Profile->result->Profile->FirstName;
+    $LastName   = $Profile->result->Profile->LastName;
     $Name       = $FirstName.' '.$LastName;
-    $Status     = (($result->ProfileStatus == 1) ? 'Active' : 'In-Active');
-    $AddedOn    = $result->AddedOn;
+    $Status     = (($Profile->result->Profile->ProfileStatus == 1) ? 'Active' : 'In-Active');
+    $AddedOn    = $Profile->result->Profile->AddedOn;
 
-    $DateOfBirth    = $result->DateOfBirth;
-    $Gender         = $result->Gender;
-    $MaritalStatus  = $result->MaritalStatus;
-    $Mobile         = $result->UserProfileLeader->Mobile;
+    $DateOfBirth    = $Profile->result->Profile->DateOfBirth;
+    $Gender         = $Profile->result->Profile->Gender;
+    $MaritalStatus  = $Profile->result->Profile->MaritalStatus;
+    $Mobile         = $Profile->result->Profile->UserProfileLeader->Mobile;
 
     $Address = '';
-    if($result->Address != '') {
-        $Address .= $result->Address.', ';
+    if($Profile->result->Profile->Address != '') {
+        $Address .= $Profile->result->Profile->Address.', ';
     }
-    if($result->City != '') {
-        $Address .= $result->City.', ';
+    if($Profile->result->Profile->City != '') {
+        $Address .= $Profile->result->Profile->City.', ';
     }
-    if($result->State != '') {
-        $Address .= $result->State.', ';
+    if($Profile->result->Profile->State != '') {
+        $Address .= $Profile->result->Profile->State.', ';
     }
-    if($result->ZipCode != '') {
-        $Address .= $result->ZipCode.', ';
+    if($Profile->result->Profile->ZipCode != '') {
+        $Address .= $Profile->result->Profile->ZipCode.', ';
     }
-    if($result->Country != '') {
-        $Address .= $result->Country.', ';
+    if($Profile->result->Profile->Country != '') {
+        $Address .= $Profile->result->Profile->Country.', ';
     }
 
     $Address = ($Address != '') ? substr($Address, 0, -2) : '';
 
-    $WebsiteUrl         = $result->WebsiteUrl;
-    $FacebookPageUrl    = $result->FacebookPageUrl;
-    $TwitterPageUrl     = $result->TwitterPageUrl;
-    $GooglePageUrl      = $result->GooglePageUrl;
+    $WebsiteUrl         = $Profile->result->Profile->WebsiteUrl;
+    $FacebookPageUrl    = $Profile->result->Profile->FacebookPageUrl;
+    $TwitterPageUrl     = $Profile->result->Profile->TwitterPageUrl;
+    $GooglePageUrl      = $Profile->result->Profile->GooglePageUrl;
 
-    if($result->ProfilePhotoPath != '') {
-        $profile_pic = ($result->ProfilePhotoPath != '') ? $result->ProfilePhotoPath : base_url().'assets/images/default-user.png';
+    if($Profile->result->Profile->ProfilePhotoPath != '') {
+        $profile_pic = ($Profile->result->Profile->ProfilePhotoPath != '') ? $Profile->result->Profile->ProfilePhotoPath : base_url().'assets/images/default-user.png';
     } else {
-        $profile_pic = ($result->ProfilePhotoPath != '') ? $result->ProfilePhotoPath : base_url().'assets/images/default-user.png';
+        $profile_pic = ($Profile->result->Profile->ProfilePhotoPath != '') ? $Profile->result->Profile->ProfilePhotoPath : base_url().'assets/images/default-user.png';
     }
 
 }
@@ -85,7 +87,7 @@ if($result->UserId > 0) {
                             <div class="col-sm-3">
                                 <div class="ibox float-e-margins">
                                   <div>
-                                    <div class="profile-img-box" style="background: white;"> <img src="<?php echo $profile_pic; ?>" class="full-width" alt="image"> <a href="#" class="pro-like" style="color: black;"> <i class="fa fa-heart-o" aria-hidden="true"></i> 398</a> </div>
+                                    <div class="profile-img-box" style="background: white;"> <img src="<?php echo $profile_pic; ?>" class="full-width" alt="image"> <a href="#" class="pro-like" style="color: black;"> <i class="fa fa-heart-o" aria-hidden="true"></i> <?php echo $Profile->result->Profile->MyTotalConnections; ?></a> </div>
                                     <div class="widgets-container">
                                       <h4><strong><?php echo $Name; ?></strong></h4>
                                       <p><i class="fa fa-map-marker"></i> <?php echo $Address; ?></p>
@@ -114,9 +116,9 @@ if($result->UserId > 0) {
                                             <div class="tab-pane" id="social-profile">
                                                 <div class="panel-body"> 
                                                     <ul class="list-unstyled">
-                                                        <li><a href="<?php echo $result->FacebookPageUrl; ?>" target="_blank">Facebook</a><?php if($result->FacebookPageUrl == '') { echo ' <span>Not Added</span>'; }; ?></li>
-                                                        <li><a href="<?php echo $result->TwitterPageUrl; ?>" target="_blank">Twitter</a><?php if($result->TwitterPageUrl == '') { echo ' <span>Not Added</span>'; }; ?></li>
-                                                        <li><a href="<?php echo $result->GooglePageUrl; ?>" target="_blank">Google</a><?php if($result->GooglePageUrl == '') { echo ' <span>Not Added</span>'; }; ?></li>
+                                                        <li><a href="<?php echo $Profile->result->Profile->FacebookPageUrl; ?>" target="_blank">Facebook</a><?php if($Profile->result->Profile->FacebookPageUrl == '') { echo ' <span>Not Added</span>'; }; ?></li>
+                                                        <li><a href="<?php echo $Profile->result->Profile->TwitterPageUrl; ?>" target="_blank">Twitter</a><?php if($Profile->result->Profile->TwitterPageUrl == '') { echo ' <span>Not Added</span>'; }; ?></li>
+                                                        <li><a href="<?php echo $Profile->result->Profile->GooglePageUrl; ?>" target="_blank">Google</a><?php if($Profile->result->Profile->GooglePageUrl == '') { echo ' <span>Not Added</span>'; }; ?></li>
                                                     </ul>
 
                                                 </div>
@@ -125,8 +127,8 @@ if($result->UserId > 0) {
                                             <div class="tab-pane" id="tab-4">
                                               <div class="panel-body"> 
                                                 <p><?php 
-                                                    if($result->UserBio != '') {
-                                                        echo $result->UserBio; 
+                                                    if($Profile->result->Profile->UserBio != '') {
+                                                        echo $Profile->result->Profile->UserBio; 
                                                     } else {
                                                         echo 'Please update your bio';
                                                     }
@@ -143,7 +145,21 @@ if($result->UserId > 0) {
                                     <div class="widgets-container">
                                       <h3>Followers and friends</h3>
                                       <p class="small"> Your connections and Followers </p>
-                                      <div class="user-friends"> <a href="#"><img src="../assets/images/teem/a1.jpg" class="img-circle" alt="image"></a> <a href="#"><img src="../assets/images/teem/a2.jpg" class="img-circle" alt="image"></a> <a href="#"><img src="../assets/images/teem/a3.jpg" class="img-circle" alt="image"></a> <a href="#"><img src="../assets/images/teem/a4.jpg" class="img-circle" alt="image"></a> <a href="#"><img src="../assets/images/teem/a5.jpg" class="img-circle" alt="image"></a> <a href="#"><img src="../assets/images/teem/a6.jpg" class="img-circle" alt="image"></a> <a href="#"><img src="../assets/images/teem/a7.jpg" class="img-circle" alt="image"></a> <a href="#"><img src="../assets/images/teem/a8.jpg" class="img-circle" alt="image"></a> <a href="#"><img src="../assets/images/teem/a9.jpg" class="img-circle" alt="image"></a> <a href="#"><img src="../assets/images/teem/a11.jpg" class="img-circle" alt="image"></a> </div>
+                                        <div class="user-friends"> 
+                                            <?php 
+                                            foreach($ConnectWithFollowFollwers->result AS $ConnectWithFollowFollwer) { 
+                                                if($ConnectWithFollowFollwer->ProfilePhotoPath != '') {
+                                                    $connect_profile_pic = ($ConnectWithFollowFollwer->ProfilePhotoPath != '') ? $ConnectWithFollowFollwer->ProfilePhotoPath : base_url().'assets/images/default-user.png';
+                                                } else {
+                                                    $connect_profile_pic = ($ConnectWithFollowFollwer->ProfilePhotoPath != '') ? $ConnectWithFollowFollwer->ProfilePhotoPath : base_url().'assets/images/default-user.png';
+                                                }
+                                                $ConnectWithFollowFollwerName = $ConnectWithFollowFollwer->FirstName.' '.$ConnectWithFollowFollwer->LastName;
+                                            ?>
+                                            <a href="<?php echo base_url(); ?>profile/profile/<?php echo $ConnectWithFollowFollwer->UserProfileId; ?>" title="<?php echo $ConnectWithFollowFollwerName; ?>"><img src="<?php echo $connect_profile_pic; ?>" class="img-circle" alt="image"></a>  
+                                            <?php 
+                                            } 
+                                            ?>
+                                        </div>
                                     </div>
                                   </div>
                                 </div>
@@ -154,12 +170,12 @@ if($result->UserId > 0) {
                                     <table class="table small m-b-xs">
                                       <tbody>
                                         <tr>
-                                          <td><strong><?php echo $result->MyTotalConnections; ?></strong> Connections </td>
-                                          <td><strong><?php echo $result->MyTotalFollowers; ?></strong> Followers </td>
+                                          <td><strong><?php echo $Profile->result->Profile->MyTotalConnections; ?></strong> Connections </td>
+                                          <td><strong><?php echo $Profile->result->Profile->MyTotalFollowers; ?></strong> Followers </td>
                                         </tr>
                                         <tr>
-                                          <td><strong><?php echo $result->MyTotalFollowings; ?></strong> Followings </td>
-                                          <td><strong><?php echo $result->MyTotalGroupWithAssociated; ?></strong> Groups </td>
+                                          <td><strong><?php echo $Profile->result->Profile->MyTotalFollowings; ?></strong> Followings </td>
+                                          <td><strong><?php echo $Profile->result->Profile->MyTotalGroupWithAssociated; ?></strong> Groups </td>
                                         </tr>
                                         
                                       </tbody>
@@ -190,7 +206,7 @@ if($result->UserId > 0) {
 
                                             <div class="feed-element post-element"> 
                                                 <a href="#" class="pull-left"> 
-                                                    <img alt="image" class="img-circle" src="../assets/images/teem/a9.jpg"> 
+                                                    <img alt="image" class="img-circle" src="<?php echo $profile_pic; ?>"> 
                                                 </a>
                                                 <div class="media-body "> 
                                                     <p>
@@ -226,6 +242,7 @@ if($result->UserId > 0) {
                                 </div>
 
                                 <div class="tabs-container post-container">
+                                    <?php /*
                                     <ul class="nav nav-tabs">
                                         <li class="active"><a href="#tab-1" data-toggle="tab">Post</a></li>
                                         <li><a href="#tab-2" data-toggle="tab">Poll</a></li>
@@ -238,79 +255,7 @@ if($result->UserId > 0) {
                                     </ul>
                                     <div class="tab-content">
                                         <div class="tab-pane active" id="tab-1">
-                                            <div class="panel-body">
-
-                                               <div class="ibox float-e-margins">
-                                    <!-- <div class="ibox-title">
-                                        <h5>Activites</h5>
-                                        <div class="ibox-tools"> <a data-target="#demo1"  data-toggle="collapse" class="collapse-link"> <i class="fa fa-chevron-up"></i> <i class="fa fa-chevron-down"></i> </a> <a  class="dropdown-toggle" data-toggle="dropdown" href="#"> <i class="fa fa-wrench"></i> </a>
-                                        <ul class="dropdown-menu dropdown-user">
-                                            <li><a href="#">Config option 1</a> </li>
-                                            <li><a href="#">Config option 2</a> </li>
-                                        </ul>
-                                        <!-- /dropdown-menu ->
-                                        <a class="close-link"> <i class="fa fa-times"></i> </a> </div>
-                                          <!-- ibox-tools ->
-                                    </div> -->
-                                  <!-- / ibox-title -->
-                                  <div id="demo1" class="ibox-content collapse in">
-                                    <div class="widgets-container">
-                                      <div>
-                                        <div class="feed-activity-list">
-                                          <div class="feed-element"> <a href="#" class="pull-left"> <img alt="image" class="img-circle" src="../assets/images/teem/a9.jpg"> </a>
-                                            <div class="media-body "> <small class="pull-right text-navy">1m ago</small> <strong>Mitch Buchannon</strong> started following <strong>Olivia Wenscombe</strong>. <br>
-                                              <small class="text-muted">Today 9:00 pm - 11.06.2016</small>
-                                              <div class="actions"> <a class="btn btn-xs btn-white"><i class="fa fa-thumbs-up"></i> Like </a> <a class="btn btn-xs btn-danger"><i class="fa fa-heart"></i> Love</a> </div>
-                                            </div>
-                                          </div>
-                                          <div class="feed-element"> <a href="#" class="pull-left"> <img alt="image" class="img-circle" src="../assets/images/teem/a3.jpg"> </a>
-                                            <div class="media-body "> <small class="pull-right">5m ago</small> <strong>Olivia Wenscombe</strong> posted a new blog. <br>
-                                              <small class="text-muted">Today 5:60 pm - 12.06.2016</small> </div>
-                                          </div>
-                                          <div class="feed-element"> <a href="#" class="pull-left"> <img alt="image" class="img-circle" src="../assets/images/teem/a2.jpg"> </a>
-                                            <div class="media-body "> <small class="pull-right">2h ago</small> <strong>Robert Angier</strong> posted message on <strong>Olivia Wenscombe</strong> site. <br>
-                                              <small class="text-muted">Today 2:10 pm - 12.06.2016</small>
-                                              <div class="well"> Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.
-                                                Over the years, sometimes by accident, sometimes on purpose (injected humour and the like). </div>
-                                              <div class="pull-right"> <a class="btn btn-xs btn-white"><i class="fa fa-thumbs-up"></i> Like </a> <a class="btn btn-xs btn-white"><i class="fa fa-heart"></i> Love</a> <a class="btn btn-xs aqua"><i class="fa fa-pencil"></i> Message</a> </div>
-                                            </div>
-                                          </div>
-                                          <div class="feed-element"> <a href="#" class="pull-left"> <img alt="image" class="img-circle" src="../assets/images/teem/a5.jpg"> </a>
-                                            <div class="media-body "> <small class="pull-right">2h ago</small> <strong>Ariadne</strong> add 1 photo on <strong>Olivia Wenscombe</strong>. <br>
-                                              <small class="text-muted">2 days ago at 8:30am</small>
-                                              <div class="photos"> <img alt="image" class="feed-photo" src="../assets/images/profile_big2.jpg"> </div>
-                                            </div>
-                                          </div>
-                                          <div class="feed-element"> <a href="#" class="pull-left"> <img alt="image" class="img-circle" src="../assets/images/teem/a4.jpg"> </a>
-                                            <div class="media-body "> <small class="pull-right text-navy">5h ago</small> <strong> Alex Smith </strong> started following <strong>Olivia Wenscombe</strong>. <br>
-                                              <small class="text-muted">Yesterday 1:21 pm - 11.06.2016</small>
-                                              <div class="actions"> <a class="btn btn-xs btn-white"><i class="fa fa-thumbs-up"></i> Like </a> <a class="btn btn-xs btn-white"><i class="fa fa-heart"></i> Love</a> </div>
-                                            </div>
-                                          </div>
-                                          <div class="feed-element"> <a href="#" class="pull-left"> <img alt="image" class="img-circle" src="../assets/images/teem/a10.jpg"> </a>
-                                            <div class="media-body "> <small class="pull-right">2h ago</small> <strong>Susan Wenscombe </strong> posted message on <strong>Olivia Wenscombe</strong> site. <br>
-                                              <small class="text-muted">Yesterday 5:20 pm - 12.06.2016</small>
-                                              <div class="well"> Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.
-                                                Over the years, sometimes by accident, sometimes on purpose (injected humour and the like). </div>
-                                              <div class="pull-right"> <a class="btn btn-xs btn-white"><i class="fa fa-thumbs-up"></i> Like </a> </div>
-                                            </div>
-                                          </div>
-                                          <div class="feed-element"> <a href="#" class="pull-left"> <img alt="image" class="img-circle" src="../assets/images/teem/a3.jpg"> </a>
-                                            <div class="media-body "> <small class="pull-right">23h ago</small> <strong>Olivia Wenscombe</strong> love <strong>Sophie </strong>. <br>
-                                              <small class="text-muted">2 days ago at 2:30 am - 11.06.2016</small>
-                                              <div class="photos"><img alt="image" class="feed-photo" src="../assets/images/profile_big3.jpg"></div>
-                                            </div>
-                                          </div>
-                                          <div class="feed-element"> <a href="#" class="pull-left"> <img alt="image" class="img-circle" src="../assets/images/teem/a7.jpg"> </a>
-                                            <div class="media-body "> <small class="pull-right">46h ago</small> <strong>Mike Loreipsum</strong> started following <strong>Olivia Wenscombe</strong>. <br>
-                                              <small class="text-muted">3 days ago at 7:58 pm - 10.06.2016</small> </div>
-                                          </div>
-                                        </div>
-                                        <button class="btn aqua btn-block "><i class="fa fa-arrow-down"></i> Show More</button>
-                                      </div>
-                                    </div>
-                                  </div>
-                                </div> 
+                                            <div class="panel-body">                                                
 
                                             </div>
                                         </div>
@@ -327,50 +272,17 @@ if($result->UserId > 0) {
                                             </div>
                                         </div>
                                     </div>
+                                    */ ?>
+                                    <div class="feed-activity-list">
+                                        <?php $this->load->view('explore/explorefeed.php'); ?>
+                                    </div>
                                 </div>
 
                                 
                             </div>
 
                             <div class="col-sm-3">
-                                <div class="ibox">
-                                  <div class="widgets-container">
-                                    <div class="feed-element"> <a href="#" class="pull-left"> <img alt="image" class="img-circle" src="../assets/images/teem/a3.jpg"> </a>
-                                      <div class="media-body "> <strong>Olivia Wenscombe </strong>send Friend Requests to you . <br>
-                                        <small class="text-muted">Today 9:00 pm - 11.06.2016</small>
-                                        <div class="actions"> <a class="btn btn-xs aqua"><i class="glyphicon glyphicon-ok"></i> Confirm</a> <a class="btn btn-xs btn-danger"><i class="glyphicon glyphicon-remove " aria-hidden="true"></i> Delete</a> </div>
-                                      </div>
-                                    </div>
-                                    <h3>About Olivia Wenscombe</h3>
-                                    <p class="small"> There are many variations of passages of Lorem Ipsum available, but the majority have
-                                      suffered alteration in some form, by injected humour, or randomised words which don't. <br>
-                                      <br>
-                                      If you are going to use a passage of Lorem Ipsum, you need to be sure there isn't
-                                      anything embarrassing </p>
-                                    <p class="small font-bold"> <span><i class="fa fa-circle text-navy"></i> Online status</span> </p>
-                                  </div>
-                                </div>
-                                <!-- <div class="ibox">
-                                  <div class="widgets-container">
-                                    <h3>Personal Details </h3>
-                                    <table class="table small m-b-xs">
-                                      <tbody>
-                                        <tr>
-                                          <td><strong>142</strong> Projects </td>
-                                          <td><strong>22</strong> Followers </td>
-                                        </tr>
-                                        <tr>
-                                          <td><strong>61</strong> Comments </td>
-                                          <td><strong>54</strong> Articles </td>
-                                        </tr>
-                                        <tr>
-                                          <td><strong>154</strong> Tags </td>
-                                          <td><strong>32</strong> Friends </td>
-                                        </tr>
-                                      </tbody>
-                                    </table>
-                                  </div>
-                                </div> -->
+                                
                                 <div class="ibox">
                                   <div class="widgets-container">
                                     <h3>Private message</h3>
@@ -389,70 +301,12 @@ if($result->UserId > 0) {
                             </div>
 
 
-                            <?php /* if($UserId > 0) { ?>
-                            <div class="col-md-3">
-                                
-                                <div class="form-group">
-                                    <div class="text-center mbl"><img
-                                            src="<?php echo $profile_pic; ?>"
-                                            style="border: 5px solid #fff; box-shadow: 0 2px 3px rgba(0,0,0,0.25);width: 150px; height: 150px;"
-                                            class="img-circle"/></div>
-                                </div>
-                                <table class="table table-striped table-hover">
-                                    <tbody>
-                                    <tr>
-                                        <td width="50%">Name</td>
-                                        <td><?php echo $Name; ?></td>
-                                    </tr>
-                                    <tr>
-                                        <td width="50%">Email</td>
-                                        <td><?php echo $Email; ?></td>
-                                    </tr>
-                                    <tr>
-                                        <td width="50%">Address</td>
-                                        <td>
-                                            <?php echo $Address; ?>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td width="50%">Status</td>
-                                        <td><span class="label label-success"><?php echo $Status; ?></span></td>
-                                    </tr>
-                                    <tr>
-                                        <td width="50%">Rating</td>
-                                        <td><i class="fa fa-star text-yellow fa-fw"></i><i
-                                                class="fa fa-star text-yellow fa-fw"></i><i
-                                                class="fa fa-star text-yellow fa-fw"></i><i
-                                                class="fa fa-star text-yellow fa-fw"></i><i
-                                                class="fa fa-star text-yellow fa-fw"></i></td>
-                                    </tr>
-                                    <tr>
-                                        <td width="50%">Join Since</td>
-                                        <td><?php echo $AddedOn; ?></td>
-                                    </tr>
-                                    </tbody>
-                                </table>
-                                
-                            </div>
-                            <div class="col-md-9">
-                            </div>
-                            <?php } else { ?>
-                            <h2 style="text-align: center;">Sorry, This user does not exist</h2>
-                            <?php } */ ?>
+                            
                         </div>
                     </div>
                 </div>
             </div>
-            <!-- stat timeline and feed  -->
-                <div class="top20">
-                    
-                    <div class="clearfix"> </div>
-                    <!-- End projects list -->
-                    
-                    <?php  require_once './include/footer.php';?>
-
-                </div>
-            </div>
+            
         </div>
     </div>
     

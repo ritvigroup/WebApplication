@@ -555,7 +555,7 @@ class Citizen extends CI_Controller {
             $res = $query->row_array();
             $TotalComplaint = ($res['TotalComplaint'] > 0) ? $res['TotalComplaint'] : 0; 
 
-            $result[]=array('type' => 'Connect', 'total' =>  $TotalFriends);
+            //$result[]=array('type' => 'Connect', 'total' =>  $TotalFriends);
             $result[]=array('type' => 'Event', 'total' =>  $TotalEvent);
             $result[]=array('type' => 'Poll', 'total' =>  $TotalPoll);
             $result[]=array('type' => 'Post', 'total' =>  $TotalPost);

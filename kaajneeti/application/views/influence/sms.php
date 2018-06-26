@@ -34,7 +34,15 @@
                                 <div class="row mbm">
                                     <div class="col-lg-12">
                                         
-                                        <div style="float: right;"><a data-target="#modal-stackable" data-toggle="modal" href="javascript:void(0);" class="btn btn-success" style="float: right" onClick="return smsCompose();">Compose SMS</a></div>
+                                        <div style="float: right;">
+
+                                         <button class="btn btn-primary"data-target="#modal-stackable" data-toggle="modal" onClick="return importSmsExcel();">Import Excel</button>
+                                        <button class="btn btn-primary"data-target="#modal-stackable" data-toggle="modal" onClick="return importSmsTxt();">Import TXT</button>
+                                        <button class="btn btn-primary" data-target="#modal-stackable" data-toggle="modal" onClick="return importSmsCsv();">Import CSV</button>
+
+                                            <a data-target="#modal-stackable" data-toggle="modal" href="javascript:void(0);" class="btn btn-success" onClick="return smsCompose();">Compose SMS</a>
+
+                                        </div>
                                         <div class="clearfix"> </div>
 
                                         <div class="table-responsive">
@@ -120,6 +128,43 @@
                 }
             });
     }
+
+        function importSmsCsv() {
+
+        $.post("<?php echo base_url(); ?>influence/importSmsCsv", {'display': 'Y'},
+            function (data, status) {
+                if(data != '') {
+                    $('.modal-content').html(data);
+                } else {
+                    $('.modal-content').html(data);
+                }
+            });
+    }
+
+     function importSmsTxt() {
+
+        $.post("<?php echo base_url(); ?>influence/importSmsTxt", {'display': 'Y'},
+            function (data, status) {
+                if(data != '') {
+                    $('.modal-content').html(data);
+                } else {
+                    $('.modal-content').html(data);
+                }
+            });
+    }
+
+         function importSmsExcel() {
+
+        $.post("<?php echo base_url(); ?>influence/importSmsExcel", {'display': 'Y'},
+            function (data, status) {
+                if(data != '') {
+                    $('.modal-content').html(data);
+                } else {
+                    $('.modal-content').html(data);
+                }
+            });
+    }
+
 
 
     function viewSms(sms_unique_id) {

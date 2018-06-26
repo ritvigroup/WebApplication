@@ -31,7 +31,16 @@ class Listen extends CI_Controller {
 
         $json_decode = json_decode($json_encode);
         if(count($json_decode->result) > 0) {
-            $data = $json_decode;
+            $data['Listen'] = $json_decode;
+        }
+
+        $_POST['start'] = 0;
+        $json_encode = post_curl(API_CALL_PATH.'leader/getMyDashboard', $this->input->post(), $this->curl);
+
+    
+        $json_decode = json_decode($json_encode);
+        if(count($json_decode->result) > 0) {
+            $data['Dashboard'] = $json_decode;
         }
         
         $this->load->view('listen/listen', $data);

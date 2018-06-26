@@ -78,7 +78,7 @@
                                                 <div class="grid-list-view grid col-md-4 col-sm-6" data-name="<?php echo $Name; ?>" id="connection_id_<?php echo $users->UserProfileId; ?>">
                                                     <div class="contact-box">
                                                         <div class="col-sm-12">
-                                                            <a href="<?=base_url();?>profile/profile"">
+                                                            <a href="<?=base_url();?>profile/profile/<?php echo $users->UserProfileId; ?>">
                                                                 <img src="<?php echo $profile_pic; ?>" class="img-responsive" alt="image">
                                                             </a>
                                                             <h3><strong><?php echo $Name; ?></strong></h3>

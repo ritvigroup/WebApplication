@@ -80,22 +80,25 @@ class Influence_Model extends CI_Model {
     }
 
 
-    public function saveEmailSentTo($EmailSentId, $UserProfileId, $EmailType) {
+    public function saveEmailSentTo($EmailSentId, $UserProfileId, $email_members) {
 
-        /*$email_member = $EmailType;
+        $email_member = explode(';', $email_members); // Explode email via ';'
         foreach($email_member AS $key => $member_email) {
-            $insertData = array(
-                                'EmailSentId'           => $EmailSentId,
-                                'UserProfileId'         => $member_email['user_profile_id'],
-                                'EmailAddress'          => $member_email['email'],
-                                'SentStatus'            => 1,
-                                'SentOn'                => date('Y-m-d H:i:s'),
-                                'DeliveredStatus'       => 1,
-                                'DeliveredOn'           => date('Y-m-d H:i:s'),
-                                );
-            $this->db->insert($this->EmailSentToTbl, $insertData);
+
+            if($member_email != '') {
+                $insertData = array(
+                                    'EmailSentId'           => $EmailSentId,
+                                    'UserProfileId'         => $UserProfileId,
+                                    'EmailAddress'          => $member_email,
+                                    'SentStatus'            => 1,
+                                    'SentOn'                => date('Y-m-d H:i:s'),
+                                    'DeliveredStatus'       => 1,
+                                    'DeliveredOn'           => date('Y-m-d H:i:s'),
+                                    );
+                $this->db->insert($this->EmailSentToTbl, $insertData);
+            }
         }
-        return true;*/
+        return true;
     }
 
 

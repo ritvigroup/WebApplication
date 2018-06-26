@@ -305,6 +305,13 @@ class Userregister extends CI_Controller {
 
                 $UserUniqueId = $this->User_Model->autoGenerateUserUniqueId();
 
+                $otp = autoGenerateOtp();
+
+                $mobile = str_replace('+91', '', $mobile);
+                $mobile = "+91".$mobile;
+
+                $login_otp_valid_till = date('Y-m-d H:i:s', time() + 60);
+
                 $insertData = array(
                                     'LoginDeviceToken'  => $this->device_token,
                                     'DeviceLongitude'   => $this->location_long,
@@ -313,10 +320,12 @@ class Userregister extends CI_Controller {
                                     'LoginStatus'       => 1,
                                     'Gender'            => $gender,
                                     'UserName'          => $username,
+                                    'LoginOtp'          => $otp,
                                     'UserPassword'      => md5($password),
                                     'UserUniqueId'      => $UserUniqueId,
                                     'UserMobile'        => $mobile,
                                     'UserEmail'         => $email,
+                                    'LoginOtpValidTill' => $login_otp_valid_till,
                                     'AddedOn'           => date('Y-m-d H:i:s'),
                                     'UpdatedOn'         => date('Y-m-d H:i:s'),
                                 );
@@ -409,6 +418,9 @@ class Userregister extends CI_Controller {
                             "message"       => $msg,
                         );
         } else {
+            // otp code
+            $otp_message = $otp." is the OTP verifying your mobile with Kaajneeti as citizen";
+            $otp_sent = sendMessageToPhone($mobile, $otp_message);
 
             $array = array(
                            "status"         => 'success',

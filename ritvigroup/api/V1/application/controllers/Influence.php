@@ -88,6 +88,231 @@ class Influence extends CI_Controller {
         displayJsonEncode($array);
     }
 
+
+    // Email Sent CSV File Selectecd
+    public function saveEmailSentCSV() {
+        $error_occured = false;
+
+        $UserProfileId      = $this->input->post('user_profile_id');
+        $EmailSubject       = $this->input->post('subject_text');
+        $EmailMessage       = $this->input->post('message_text');
+        $EmailType          = $this->input->post('email_type');
+        $email_ids          = $this->input->post('email_ids');
+
+
+        if($UserProfileId == "") {
+            $msg = "Please select your profile";
+            $error_occured = true;
+        } else if($EmailSubject == "") {
+            $msg = "Please enter subject";
+            $error_occured = true;
+        } else if(count($email_ids) <= 0) {
+            $msg = "Please select emails";
+            $error_occured = true;
+        } else {
+
+            $this->db->query("BEGIN");
+
+            $error_occured = true;
+
+            $EmailSentUniqueId = $this->Influence_Model->generateEmailSentUniqueId();
+
+            $insertData = array(
+                                'EmailSentUniqueId' => $EmailSentUniqueId,
+                                'UserProfileId'     => $UserProfileId,
+                                'EmailType'         => $EmailType,
+                                'EmailSubject'      => $EmailSubject,
+                                'EmailMessage'      => $EmailMessage,
+                                'SentOn'            => date('Y-m-d H:i:s'),
+                            );
+
+            $EmailSentId = $this->Influence_Model->saveEmailSent($insertData);
+
+            if($EmailSentId > 0) {
+                
+                $this->Influence_Model->saveEmailSentTo($EmailSentId, $UserProfileId, $email_ids);
+                
+                $this->Influence_Model->saveEmailAttachment($EmailSentId, $UserProfileId, $_FILES['file']);
+
+                $this->db->query("COMMIT");
+
+                $email_sent_detail = $this->Influence_Model->getEmailSent($EmailSentId, $UserProfileId);
+
+                $msg = "Email sent successfully";
+
+            } else {
+                $this->db->query("ROLLBACK");
+                $msg = "Email not saved. Error occured";
+                $error_occured = true;
+            }
+        }
+
+        if($error_occured == true) {
+            $array = array(
+                            "status"    => 'failed',
+                            "message"   => $msg,
+                        );
+        } else {
+
+            $array = array(
+                           "status"     => 'success',
+                           "result"     => $email_sent_detail,
+                           "message"    => $msg,
+                           );
+        }
+        displayJsonEncode($array);
+    }
+
+
+    // Email Sent TXT File Selectecd
+    public function saveEmailSentTXT() {
+        $error_occured = false;
+
+        $UserProfileId      = $this->input->post('user_profile_id');
+        $EmailSubject       = $this->input->post('subject_text');
+        $EmailMessage       = $this->input->post('message_text');
+        $EmailType          = $this->input->post('email_type');
+        $email_ids          = $this->input->post('email_ids');
+
+
+        if($UserProfileId == "") {
+            $msg = "Please select your profile";
+            $error_occured = true;
+        } else if($EmailSubject == "") {
+            $msg = "Please enter subject";
+            $error_occured = true;
+        } else if(count($email_ids) <= 0) {
+            $msg = "Please select emails";
+            $error_occured = true;
+        } else {
+
+            $this->db->query("BEGIN");
+
+            $error_occured = true;
+
+            $EmailSentUniqueId = $this->Influence_Model->generateEmailSentUniqueId();
+
+            $insertData = array(
+                                'EmailSentUniqueId' => $EmailSentUniqueId,
+                                'UserProfileId'     => $UserProfileId,
+                                'EmailType'         => $EmailType,
+                                'EmailSubject'      => $EmailSubject,
+                                'EmailMessage'      => $EmailMessage,
+                                'SentOn'            => date('Y-m-d H:i:s'),
+                            );
+
+            $EmailSentId = $this->Influence_Model->saveEmailSent($insertData);
+
+            if($EmailSentId > 0) {
+                
+                $this->Influence_Model->saveEmailSentTo($EmailSentId, $UserProfileId, $email_ids);
+                
+                $this->Influence_Model->saveEmailAttachment($EmailSentId, $UserProfileId, $_FILES['file']);
+
+                $this->db->query("COMMIT");
+
+                $email_sent_detail = $this->Influence_Model->getEmailSent($EmailSentId, $UserProfileId);
+
+                $msg = "Email sent successfully";
+
+            } else {
+                $this->db->query("ROLLBACK");
+                $msg = "Email not saved. Error occured";
+                $error_occured = true;
+            }
+        }
+
+        if($error_occured == true) {
+            $array = array(
+                            "status"    => 'failed',
+                            "message"   => $msg,
+                        );
+        } else {
+
+            $array = array(
+                           "status"     => 'success',
+                           "result"     => $email_sent_detail,
+                           "message"    => $msg,
+                           );
+        }
+        displayJsonEncode($array);
+    }
+
+
+    // Email Sent XLS File Selectecd
+    public function saveEmailSentXLS() {
+        $error_occured = false;
+
+        $UserProfileId      = $this->input->post('user_profile_id');
+        $EmailSubject       = $this->input->post('subject_text');
+        $EmailMessage       = $this->input->post('message_text');
+        $EmailType          = $this->input->post('email_type');
+        $email_ids          = $this->input->post('email_ids');
+
+
+        if($UserProfileId == "") {
+            $msg = "Please select your profile";
+            $error_occured = true;
+        } else if($EmailSubject == "") {
+            $msg = "Please enter subject";
+            $error_occured = true;
+        } else if(count($email_ids) <= 0) {
+            $msg = "Please select emails";
+            $error_occured = true;
+        } else {
+
+            $this->db->query("BEGIN");
+
+            $error_occured = true;
+
+            $EmailSentUniqueId = $this->Influence_Model->generateEmailSentUniqueId();
+
+            $insertData = array(
+                                'EmailSentUniqueId' => $EmailSentUniqueId,
+                                'UserProfileId'     => $UserProfileId,
+                                'EmailType'         => $EmailType,
+                                'EmailSubject'      => $EmailSubject,
+                                'EmailMessage'      => $EmailMessage,
+                                'SentOn'            => date('Y-m-d H:i:s'),
+                            );
+
+            $EmailSentId = $this->Influence_Model->saveEmailSent($insertData);
+
+            if($EmailSentId > 0) {
+                
+                $this->Influence_Model->saveEmailSentTo($EmailSentId, $UserProfileId, $email_ids);
+                
+                $this->Influence_Model->saveEmailAttachment($EmailSentId, $UserProfileId, $_FILES['file']);
+
+                $this->db->query("COMMIT");
+
+                $email_sent_detail = $this->Influence_Model->getEmailSent($EmailSentId, $UserProfileId);
+
+                $msg = "Email sent successfully";
+
+            } else {
+                $this->db->query("ROLLBACK");
+                $msg = "Email not saved. Error occured";
+                $error_occured = true;
+            }
+        }
+
+        if($error_occured == true) {
+            $array = array(
+                            "status"    => 'failed',
+                            "message"   => $msg,
+                        );
+        } else {
+
+            $array = array(
+                           "status"     => 'success',
+                           "result"     => $email_sent_detail,
+                           "message"    => $msg,
+                           );
+        }
+        displayJsonEncode($array);
+    }
+
     
     public function getEmailSent() {
         $error_occured = false;

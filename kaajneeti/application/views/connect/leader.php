@@ -79,7 +79,7 @@
                                                     <div class="contact-box">
                                                         <div class="col-sm-12">
                                                             <?php if($users->UserTypeId == 2) {?><i class="fa fa-certificate" style="position: absolute;top: 5px; left: 20px;"></i><?php } ?>
-                                                            <a href="<?=base_url();?>profile/profile"">
+                                                            <a href="<?=base_url();?>profile/profile/<?php echo $users->UserProfileId; ?>">
                                                                 <img src="<?php echo $profile_pic; ?>" class="img-responsive" alt="image">
                                                             </a>
                                                             <h3><strong><?php echo $Name; ?></strong></h3>

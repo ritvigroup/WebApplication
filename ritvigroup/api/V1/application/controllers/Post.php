@@ -67,6 +67,8 @@ class Post extends CI_Controller {
 
         $post_tag = $this->input->post('post_tag');
 
+        $PostLocation = ($PostLocation != "undefined") ? $PostLocation : '';
+
         
         if($UserProfileId == "") {
 			$msg = "Please select your profile";

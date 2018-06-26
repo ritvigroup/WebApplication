@@ -118,102 +118,107 @@ class Profile extends CI_Controller {
         
         if($this->uri->segment(3) != '') {
 
+            $user_profile_id = ($this->uri->segment(3) != $this->session->userdata('UserProfileId')) ? $this->uri->segment(3) : $this->session->userdata('UserProfileId');
+
             $_POST['user_id'] = $this->session->userdata('UserId');
-            $_POST['user_profile_id'] = $this->session->userdata('UserProfileId');
-            
-            $_POST['unique_profile_id'] = $this->uri->segment(3);
-            $json_encode = post_curl(API_CALL_PATH.'userprofile/getUserAllProfileInformationByUniqueProfileId', $this->input->post(), $this->curl);
+            $_POST['user_profile_id'] = $user_profile_id;
+            $_POST['friend_user_profile_id'] = $user_profile_id;
 
-            $json_decode = json_decode($json_encode);
-            if(count($json_decode->result) > 0) {
-                $data = $json_decode;
-            }
-
-            $this->load->view('profile/friendprofile',$data);
         } else {
             $_POST['user_id'] = $this->session->userdata('UserId');
             $_POST['user_profile_id'] = $this->session->userdata('UserProfileId');
             $_POST['friend_user_profile_id'] = $this->session->userdata('UserProfileId');
-
-
-            if($this->input->method(TRUE) == "POST" && $this->input->post('first_name') != '') {
-
-                $post_data = $this->input->post();
-
-                if($_FILES['file']['name'] != '') {
-                    $post_data = array_merge($post_data, array('photo' => getCurlValue($_FILES['file']['tmp_name'], $_FILES['file']['type'], $_FILES['file']['name'])));
-                }
-
-                $json = post_curl_with_files(API_CALL_PATH.'userprofile/updateLeaderProfileSetting', $post_data, $this->curl);
-
-                $json_decode = json_decode($json);
-                if($json_decode->status == "success") {
-
-                    $UserProfilePic = ($json_decode->result->ProfilePhotoPath != '') ? $json_decode->result->ProfilePhotoPath : base_url().'assets/images/default-user.png';
-                    
-                    if($json_decode->result->ProfilePhotoPath != '') {
-
-                        $this->session->set_userdata('UserProfilePic', $UserProfilePic);
-                    }
-                }
-
-                header('Content-type: application/json');
-
-                echo $json;
-
-                return false;
-            } else if($this->input->method(TRUE) == "POST" && $this->input->post('update_password') == 'Y') {
-
-                $post_data = $this->input->post();
-
-                $json_decode = post_curl_with_files(API_CALL_PATH.'userprofile/updateLeaderPassword', $post_data, $this->curl);
-
-                header('Content-type: application/json');
-
-                echo $json_decode;
-
-                return false;
-            } else if($this->input->method(TRUE) == "POST" && $this->input->post('update_contact') == 'Y') {
-
-                $post_data = $this->input->post();
-
-                $json_decode = post_curl_with_files(API_CALL_PATH.'userprofile/updateLeaderContact', $post_data, $this->curl);
-
-                header('Content-type: application/json');
-
-                echo $json_decode;
-
-                return false;
-            }
-
-            $json_encode = post_curl(API_CALL_PATH.'userprofile/getUserprofileFriendsprofileInformation', $this->input->post(), $this->curl);
-
-            $json_decode = json_decode($json_encode);
-            if(count($json_decode->result) > 0) {
-                $data = $json_decode;
-            }
-
-            // echo '<pre>';
-            // print_r($_POST);
-            // print_r($data);
-            // echo '</pre>';
-
-            $json_encode = post_curl(API_CALL_PATH.'leader/getAllHomePageData', $this->input->post(), $this->curl);
-
-            $json_decode = json_decode($json_encode);
-            if(count($json_decode->result) > 0) {
-                $data['HomePageData'] = $json_decode;
-            }
-
-            $json_encode = post_curl(API_CALL_PATH.'userconnect/getMyAllFriends', $this->input->post(), $this->curl);
-
-            $json_decode = json_decode($json_encode);
-            if(count($json_decode->result) > 0) {
-                $data['Connections'] = $json_decode;
-            }
-
-            $this->load->view('profile/profile',$data);
         }
+
+        if($this->input->method(TRUE) == "POST" && $this->input->post('first_name') != '') {
+
+            $post_data = $this->input->post();
+
+            if($_FILES['file']['name'] != '') {
+                $post_data = array_merge($post_data, array('photo' => getCurlValue($_FILES['file']['tmp_name'], $_FILES['file']['type'], $_FILES['file']['name'])));
+            }
+
+            $json = post_curl_with_files(API_CALL_PATH.'userprofile/updateLeaderProfileSetting', $post_data, $this->curl);
+
+            $json_decode = json_decode($json);
+            if($json_decode->status == "success") {
+
+                $UserProfilePic = ($json_decode->result->ProfilePhotoPath != '') ? $json_decode->result->ProfilePhotoPath : base_url().'assets/images/default-user.png';
+                
+                if($json_decode->result->ProfilePhotoPath != '') {
+
+                    $this->session->set_userdata('UserProfilePic', $UserProfilePic);
+                }
+            }
+
+            header('Content-type: application/json');
+
+            echo $json;
+
+            return false;
+        } else if($this->input->method(TRUE) == "POST" && $this->input->post('update_password') == 'Y') {
+
+            $post_data = $this->input->post();
+
+            $json_decode = post_curl_with_files(API_CALL_PATH.'userprofile/updateLeaderPassword', $post_data, $this->curl);
+
+            header('Content-type: application/json');
+
+            echo $json_decode;
+
+            return false;
+        } else if($this->input->method(TRUE) == "POST" && $this->input->post('update_contact') == 'Y') {
+
+            $post_data = $this->input->post();
+
+            $json_decode = post_curl_with_files(API_CALL_PATH.'userprofile/updateLeaderContact', $post_data, $this->curl);
+
+            header('Content-type: application/json');
+
+            echo $json_decode;
+
+            return false;
+        }
+
+        $json_encode = post_curl(API_CALL_PATH.'userprofile/getFriendsProfileFullInformation', $this->input->post(), $this->curl);
+
+        $json_decode = json_decode($json_encode);
+        if(count($json_decode->result) > 0) {
+            $data['Profile'] = $json_decode;
+        }
+
+        // echo '<pre>';
+        // print_r($_POST);
+        // print_r($data);
+        // echo '</pre>';
+
+        if($data['Profile']->result->Profile->UserTypeId == 1) {
+            $json_encode = post_curl(API_CALL_PATH.'citizen/getAllFriendHomePageData', $this->input->post(), $this->curl);
+        } else {
+            $json_encode = post_curl(API_CALL_PATH.'leader/getAllHomePageData', $this->input->post(), $this->curl);
+        }        
+
+        $json_decode = json_decode($json_encode);
+        if(count($json_decode->result) > 0) {
+            $data['Explore'] = $json_decode;
+        }
+
+        $json_encode = post_curl(API_CALL_PATH.'userconnect/getMyAllFriends', $this->input->post(), $this->curl);
+
+        $json_decode = json_decode($json_encode);
+        if(count($json_decode->result) > 0) {
+            $data['Connections'] = $json_decode;
+        }
+
+
+        $json_encode = post_curl(API_CALL_PATH.'userconnect/searchMyFriendFollowerAndFollowing', $this->input->post(), $this->curl);
+
+        $json_decode = json_decode($json_encode);
+        if(count($json_decode->result) > 0) {
+            $data['ConnectWithFollowFollwers'] = $json_decode;
+        }
+
+        $this->load->view('profile/profile',$data);
     }
 
     

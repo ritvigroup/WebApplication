@@ -29,9 +29,45 @@ class Influence extends CI_Controller {
            exit('Error');
         }
         $_POST['user_profile_id'] = $this->session->userdata('UserProfileId');
-        
+
         $this->load->view('influence/emailCompose',$data);
     }
+
+
+    public function importEmailCsv() {
+        $data = array();
+      
+        if (!$this->input->is_ajax_request()) {
+           exit('Error');
+        }
+        $_POST['user_profile_id'] = $this->session->userdata('UserProfileId');
+        
+        $this->load->view('influence/importEmailCsv',$data);
+    }
+
+        public function importEmailTxt() {
+        $data = array();
+      
+        if (!$this->input->is_ajax_request()) {
+           exit('Error');
+        }
+        $_POST['user_profile_id'] = $this->session->userdata('UserProfileId');
+        
+        $this->load->view('influence/importEmailTxt',$data);
+    }
+
+    
+    public function importEmailExcel() {
+        $data = array();
+      
+        if (!$this->input->is_ajax_request()) {
+           exit('Error');
+        }
+        $_POST['user_profile_id'] = $this->session->userdata('UserProfileId');
+        
+        $this->load->view('influence/importEmailExcel',$data);
+    }
+
 
 
     public function smsCompose() {
@@ -44,6 +80,43 @@ class Influence extends CI_Controller {
         
         $this->load->view('influence/smsCompose',$data);
     }
+
+    
+    public function importSmsCsv() {
+        $data = array();
+      
+        if (!$this->input->is_ajax_request()) {
+           exit('Error');
+        }
+        $_POST['user_profile_id'] = $this->session->userdata('UserProfileId');
+        
+        $this->load->view('influence/importSmsCsv',$data);
+    }
+
+    
+    public function importSmsTxt() {
+        $data = array();
+      
+        if (!$this->input->is_ajax_request()) {
+           exit('Error');
+        }
+        $_POST['user_profile_id'] = $this->session->userdata('UserProfileId');
+        
+        $this->load->view('influence/importSmsTxt',$data);
+    }
+
+    
+    public function importSmsExcel() {
+        $data = array();
+      
+        if (!$this->input->is_ajax_request()) {
+           exit('Error');
+        }
+        $_POST['user_profile_id'] = $this->session->userdata('UserProfileId');
+        
+        $this->load->view('influence/importSmsExcel',$data);
+    }
+
 
 
     public function socialCompose() {
@@ -138,6 +211,108 @@ class Influence extends CI_Controller {
 
 
             $json_decode = post_curl_with_files(API_CALL_PATH.'influence/saveEmailSent', $post_data, $this->curl);
+
+            header('Content-type: application/json');
+
+            echo $json_decode;
+            exit();
+        }
+
+        if($this->input->post('email_csv') == "Y") {
+
+            $_POST['user_profile_id'] = $this->session->userdata('UserProfileId');
+            $post_data = $this->input->post();
+            $csv_file = $_FILES['csv_file']['tmp_name'];
+
+            $handle = fopen($csv_file, "r");
+            if ($csv_file == NULL) {
+                echo 'No file selected';
+            } else {
+                $i = 0;
+                while(($filesop = fgetcsv($handle, 1000, ",")) !== false)
+                {
+                    $post_data['email_ids'] .= $filesop[0].';';
+                    $i++;
+                }
+
+                for($i = 0; $i < count($_FILES['file']['name']); $i++) {
+                    if($_FILES['file']['name'][$i] != '') {
+
+                        //$post_data = array_merge($post_data, array('file['.$i.']' => '@'.($_FILES['file']['tmp_name'][$i]).''));
+                        $post_data = array_merge($post_data, array('file['.$i.']' => getCurlValue($_FILES['file']['tmp_name'][$i], $_FILES['file']['type'][$i], $_FILES['file']['name'][$i])));
+                    }
+                }
+            }
+
+            $post_data['email_type'] = 'By CSV File';
+
+            $json_decode = post_curl_with_files(API_CALL_PATH.'influence/saveEmailSentCSV', $post_data, $this->curl);
+
+            header('Content-type: application/json');
+
+            echo $json_decode;
+            exit();
+        }
+
+        if($this->input->post('email_txt') == "Y") {
+
+            $_POST['user_profile_id'] = $this->session->userdata('UserProfileId');
+            $post_data = $this->input->post();
+            $txt_file = $_FILES['txt_file']['tmp_name'];
+
+            $txt_file    = file_get_contents($txt_file);
+            $rows        = explode("\n", $txt_file);
+
+            foreach($rows AS $key => $row_email)
+            {
+                $post_data['email_ids'] .= $row_email.';';
+                $i++;
+            }
+
+            for($i = 0; $i < count($_FILES['file']['name']); $i++) {
+                if($_FILES['file']['name'][$i] != '') {
+
+                    //$post_data = array_merge($post_data, array('file['.$i.']' => '@'.($_FILES['file']['tmp_name'][$i]).''));
+                    $post_data = array_merge($post_data, array('file['.$i.']' => getCurlValue($_FILES['file']['tmp_name'][$i], $_FILES['file']['type'][$i], $_FILES['file']['name'][$i])));
+                }
+            }
+
+            $post_data['email_type'] = 'By Text File';
+
+            $json_decode = post_curl_with_files(API_CALL_PATH.'influence/saveEmailSentTXT', $post_data, $this->curl);
+
+            header('Content-type: application/json');
+
+            echo $json_decode;
+            exit();
+        }
+
+        if($this->input->post('email_xls') == "Y") {
+
+            $_POST['user_profile_id'] = $this->session->userdata('UserProfileId');
+            $post_data = $this->input->post();
+            $xls_file = $_FILES['xls_file']['tmp_name'];
+
+            $txt_file    = file_get_contents($txt_file);
+            $rows        = explode("\n", $txt_file);
+
+            foreach($rows AS $key => $row_email)
+            {
+                $post_data['email_ids'] .= $row_email.';';
+                $i++;
+            }
+
+            for($i = 0; $i < count($_FILES['file']['name']); $i++) {
+                if($_FILES['file']['name'][$i] != '') {
+
+                    //$post_data = array_merge($post_data, array('file['.$i.']' => '@'.($_FILES['file']['tmp_name'][$i]).''));
+                    $post_data = array_merge($post_data, array('file['.$i.']' => getCurlValue($_FILES['file']['tmp_name'][$i], $_FILES['file']['type'][$i], $_FILES['file']['name'][$i])));
+                }
+            }
+
+            $post_data['email_type'] = 'By Excel File';
+
+            $json_decode = post_curl_with_files(API_CALL_PATH.'influence/saveEmailSentXLS', $post_data, $this->curl);
 
             header('Content-type: application/json');
 

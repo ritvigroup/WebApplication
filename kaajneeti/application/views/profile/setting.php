@@ -1,38 +1,6 @@
-<?php
-// echo '<pre>';
-// print_r($result);
-// print_r($HomePageData);
-// echo '</pre>';
-$UserDetail = $result;
-
-$UserName   = $UserDetail->UserName;
-$Email      = $UserDetail->UserProfileLeader->Email;
-$FirstName  = $UserDetail->UserProfileLeader->FirstName;
-$LastName   = $UserDetail->UserProfileLeader->LastName;
-$Name       = $FirstName.' '.$LastName;
-$Status     = (($UserDetail->UserProfileLeader->ProfileStatus == 1) ? 'Active' : 'In-Active');
-$AddedOn    = $UserDetail->UserProfileLeader->AddedOn;
-
-$DateOfBirth    = $UserDetail->DateOfBirth;
-$Gender         = $UserDetail->Gender;
-$MaritalStatus  = $UserDetail->MaritalStatus;
-$Mobile         = $UserDetail->UserProfileLeader->Mobile;
-
-$WebsiteUrl         = $UserDetail->UserProfileLeader->WebsiteUrl;
-$FacebookPageUrl    = $UserDetail->UserProfileLeader->FacebookPageUrl;
-$TwitterPageUrl     = $UserDetail->UserProfileLeader->TwitterPageUrl;
-$GooglePageUrl      = $UserDetail->UserProfileLeader->GooglePageUrl;
-
-
-$UserBio = $UserDetail->UserProfileLeader->UserBio;
-
-
-$profile_pic = ($UserDetail->ProfilePhotoPath != '') ? $UserDetail->ProfilePhotoPath : base_url().'assets/images/default-user.png';
-?>
-
 <!DOCTYPE html>
 <html lang="en">
-<head><title><?php echo $Name; ?></title>
+<head><title>Setting</title>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -60,7 +28,7 @@ $profile_pic = ($UserDetail->ProfilePhotoPath != '') ? $UserDetail->ProfilePhoto
                                 <ol class="breadcrumb">
                                     <li> <a class="text-capitalize" href="<?=base_url();?>leader/dashboard">Home</a> </li>
                                     <!-- <li> <a class="text-capitalize" href="</?=base_url(); ?>connect">connect</a> </li> -->
-                                    <li class="active"><strong><a class="text-capitalize" href="<?=base_url(); ?>profile/Setting">Setting</a> </strong> </li>
+                                    <li class="active"><strong><a class="text-capitalize" href="<?=base_url(); ?>profile/setting">Setting</a> </strong> </li>
                                 </ol>
                             </div>
 
@@ -77,11 +45,11 @@ $profile_pic = ($UserDetail->ProfilePhotoPath != '') ? $UserDetail->ProfilePhoto
 
                                     <div class="row profile-setting">
                                        <dl class="col-sm-3">
-                                            <dt class="uppercase">GENERAL</dt>
-                                            <dd><a href="#">Personal Settings</a></dd>
-                                            <dd><a href="#">Personal Settings</a></dd>
-                                            <dd><a href="#">Personal Settings</a></dd>
-                                            <dd><a href="#">Personal Settings</a></dd>
+                                            <dt class="uppercase">ORGNIZE</dt>
+                                            <dd><a href="<?php echo base_url(); ?>organize/team">Team</a></dd>
+                                            <dd><a href="<?php echo base_url(); ?>organize/fleet">Fleet</a></dd>
+                                            <dd><a href="<?php echo base_url(); ?>organize/document">Document</a></dd>
+                                            <dd><a href="<?php echo base_url(); ?>organize/group">Group</a></dd>
                                         </dl>
                                         <dl class="col-sm-3">
                                             <dt class="uppercase">USERS AND CONTROL</dt>

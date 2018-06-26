@@ -34,7 +34,17 @@
                                 <div class="row mbm">
                                     <div class="col-lg-12">
                                         
-                                        <div style="float: right;"><a data-target="#modal-stackable" data-toggle="modal" href="javascript:void(0);" class="btn btn-success" onClick="return emailCompose();">Compose Email</a></div>
+                                        <div style="float: right;">
+                                        <button class="btn btn-primary"data-target="#modal-stackable" data-toggle="modal" onClick="return importEmailExcel();">Import Excel</button>
+                                        <button class="btn btn-primary"data-target="#modal-stackable" data-toggle="modal" onClick="return importEmailTxt();">Import TXT</button>
+                                        <button class="btn btn-primary" data-target="#modal-stackable" data-toggle="modal" onClick="return importEmailCsv();">Import CSV</button>
+
+                                       <a data-target="#modal-stackable" data-toggle="modal" href="javascript:void(0);" class="btn btn-success" onClick="return emailCompose();">Compose Email</a>
+
+
+                                        </div>
+
+
                                         <div class="clearfix"> </div>
 
                                         <div class="table-responsive">
@@ -75,15 +85,6 @@
                     </div>
                 </div>
             
-                <!-- stat timeline and feed  -->
-                <div class="top20">
-                    
-                    <div class="clearfix"> </div>
-                    <!-- End projects list -->
-                    
-                    
-
-                </div>
             </div>
         </div>
     </div>
@@ -97,7 +98,7 @@
 
 <div id="modal-stackable" tabindex="-1" role="dialog" aria-labelledby="modal-stackable-label" aria-hidden="true" class="modal fade" style="display: none;">
     <div class="modal-dialog">
-        <div class="modal-content">
+        <div class="modal-content email_model_content">
         
         </div>
     </div>
@@ -106,24 +107,56 @@
 
 
 <script>
-    $(document).ready(function() {
-        // Flexible table
-
-        $('#table_id').DataTable();
-
-    });
-
+    
     function emailCompose() {
 
         $.post("<?php echo base_url(); ?>influence/emailCompose", {'display': 'Y'},
             function (data, status) {
                 if(data != '') {
-                    $('.modal-content').html(data);
+                    $('.email_model_content').html(data);
                 } else {
-                    $('.modal-content').html(data);
+                    $('.email_model_content').html(data);
                 }
             });
     }
+
+    function importEmailCsv() {
+
+        $.post("<?php echo base_url(); ?>influence/importEmailCsv", {'display': 'Y'},
+            function (data, status) {
+                if(data != '') {
+                    $('.email_model_content').html(data);
+                } else {
+                    $('.email_model_content').html(data);
+                }
+            });
+    }
+
+        function importEmailTxt() {
+
+        $.post("<?php echo base_url(); ?>influence/importEmailTxt", {'display': 'Y'},
+            function (data, status) {
+                if(data != '') {
+                    $('.email_model_content').html(data);
+                } else {
+                    $('.email_model_content').html(data);
+                }
+            });
+    }
+
+    function importEmailExcel() {
+
+        $.post("<?php echo base_url(); ?>influence/importEmailExcel", {'display': 'Y'},
+            function (data, status) {
+                if(data != '') {
+                    $('.email_model_content').html(data);
+                } else {
+                    $('.email_model_content').html(data);
+                }
+            });
+    }
+
+
 
 
     
@@ -133,9 +166,9 @@
         $.post("<?php echo base_url(); ?>influence/viewEmail", {'email_unique_id': email_unique_id},
             function (data, status) {
                 if(data != '') {
-                    $('.modal-content').html(data);
+                    $('.email_model_content').html(data);
                 } else {
-                    $('.modal-content').html(data);
+                    $('.email_model_content').html(data);
                 }
             });
     }

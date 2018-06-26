@@ -23,13 +23,21 @@
                 <div class="page-content page-content2">
                     <div id="tab-general">
                         <div id="sum_box" class="row mbl">
+
+                          <?php
+                          // echo '<pre>';
+                          // print_r($Listen->result);
+                          // echo '</pre>';
+                          ?>
+
+
                         	<h1>Received</h1>
                             <div class="col-sm-6 col-md-2 ">
                                 <div class="panel profit db mbm">
                                     <div class="panel-body" id="complaint">
                                     	
                                     		<p class="icon"><i class="icon fa fa-paper-plane"></i></p>
-	                                    	<h4 class="value"><span data-counter="" data-start="10" data-end="<?php echo $result->TotalComplaintReceived; ?>" data-step="1" data-duration="0"></span><span><?php echo $result->TotalComplaintReceived; ?></span></h4> 
+	                                    	<h4 class="value"><span data-counter="" data-start="10" data-end="<?php echo $Listen->result->TotalComplaintReceived; ?>" data-step="1" data-duration="0"></span><span><?php echo $Listen->result->TotalComplaintReceived; ?></span></h4> 
 
 	                                        <p class="description"><a href="<?=base_url();?>complaint/complaintReceived" class="profit-color">Complaint </a></p>
                                    
@@ -82,7 +90,7 @@
                             <div class="col-sm-6 col-md-2">
                                 <div class="panel profit task db mbm">
                                     <div class="panel-body" id="suggestion-box"><p class="icon"><i class="icon fa fa-lightbulb-o"></i></p><h4
-                                            class="value"><span><?php echo $result->TotalSuggestionReceived; ?></span></h4>
+                                            class="value"><span><?php echo $Listen->result->TotalSuggestionReceived; ?></span></h4>
 
                                         <p class="description"><a href="<?=base_url();?>suggestion/suggestionReceived" class="profit-color">Suggestion </a></p>
 
@@ -131,7 +139,7 @@
 
                                 <div class="panel profit db mbm">
                                     <div class="panel-body" id="information-box"><p class="icon"><i class="icon fa fa-info-circle"></i></p><h4
-                                            class="value"><span><?php echo $result->TotalInformation; ?></span></h4>
+                                            class="value"><span><?php echo $Listen->result->TotalInformation; ?></span></h4>
 
                                         <p class="description"><a href="<?=base_url();?>information/information" class="profit-color">Information</a></p>
 
@@ -180,7 +188,7 @@
                             <div class="col-sm-6 col-md-2">
                                 <div class="panel profit income db mbm">
                                     <div class="panel-body" id="event-box"><p class="icon"><i class="icon fa fa-calendar"></i></p><h4
-                                            class="value"><span><?php echo $result->TotalEvent; ?></span></h4>
+                                            class="value"><span><?php echo $Listen->result->TotalEvent; ?></span></h4>
 
                                         <p class="description"><a href="<?=base_url();?>event/event" class="profit-color">Events</a></p>
 
@@ -230,7 +238,7 @@
                             <div class="col-sm-6 col-md-2">
                                 <div class="panel  profit visit db mbm">
                                     <div class="panel-body" id="poll-box"><p class="icon"><i class="icon fa fa-list-ul"></i></p><h4
-                                            class="value"><span><?php echo $result->TotalPoll; ?></span></h4>
+                                            class="value"><span><?php echo $Listen->result->TotalPoll; ?></span></h4>
 
                                         <p class="description"><a href="<?=base_url();?>poll/poll" class="profit-color">Poll</a></p>
 
@@ -281,7 +289,7 @@
                             <div class="col-sm-6 col-md-2">
                                 <div class="panel profit visit db mbm">
                                     <div class="panel-body" id="post-box"><p class="icon"><i class="icon fa fa-envelope"></i></p><h4
-                                            class="value"><span><?php echo $result->TotalPost; ?></span></h4>
+                                            class="value"><span><?php echo $Listen->result->TotalPost; ?></span></h4>
 
                                         <p class="description"><a href="<?=base_url();?>post/post" class="profit-color">Post</a></p>
 
@@ -331,8 +339,8 @@
                             <div class="col-sm-6 col-md-3">
                                 <div class="panel profit db mbm">
                                     <div class="panel-body"><p class="icon"><i class="icon fa fa-comment"></i></p><h4
-                                            class="value"><span data-counter="" data-start="10" data-end="<?php echo $result->TotalComplaint; ?>" data-step="1"
-                                                                data-duration="0"></span><span><?php echo $result->TotalComplaint; ?></span></h4> 
+                                            class="value"><span data-counter="" data-start="10" data-end="<?php echo $Listen->result->TotalComplaint; ?>" data-step="1"
+                                                                data-duration="0"></span><span><?php echo $Listen->result->TotalComplaint; ?></span></h4> 
 
                                         <p class="description"><a href="<?=base_url();?>complaint/mycomplaint" class="profit-color">My Complaint</a></p>
 
@@ -345,7 +353,7 @@
                             <div class="col-sm-6 col-md-3">
                                 <div class="panel task db mbm">
                                     <div class="panel-body"><p class="icon"><i class="icon fa fa-lightbulb-o"></i></p><h4
-                                            class="value"><span><?php echo $result->TotalSuggestion; ?></span></h4>
+                                            class="value"><span><?php echo $Listen->result->TotalSuggestion; ?></span></h4>
 
                                         <p class="description"><a href="<?=base_url();?>suggestion/suggestion" class="profit-color">My Suggestion</a></p>
 
@@ -361,14 +369,14 @@
 
                         <?php
                         $overall_report = array(
-                                                'Complaint Received' => $result->TotalComplaintReceived,
-                                                'My Complaint' => $result->TotalComplaint,
-                                                'Events' => $result->TotalEvent,
-                                                'Suggestion Received' => $result->TotalSuggestionReceived,
-                                                'Suggestion' => $result->TotalSuggestion,
-                                                'Information' => $result->TotalInformation,
-                                                'Posts' => $result->TotalPost,
-                                                'Poll' => $result->TotalPoll,
+                                                'Complaint Received' => $Listen->result->TotalComplaintReceived,
+                                                'My Complaint' => $Listen->result->TotalComplaint,
+                                                'Events' => $Listen->result->TotalEvent,
+                                                'Suggestion Received' => $Listen->result->TotalSuggestionReceived,
+                                                'Suggestion' => $Listen->result->TotalSuggestion,
+                                                'Information' => $Listen->result->TotalInformation,
+                                                'Posts' => $Listen->result->TotalPost,
+                                                'Poll' => $Listen->result->TotalPoll,
                                                 );
                         ?>
 

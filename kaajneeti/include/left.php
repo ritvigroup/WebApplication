@@ -17,23 +17,21 @@
                 <!-- END RESPONSIVE SEARCH FORM -->
             </li>
             */ ?>
+            <?php if($_SESSION['AdminId'] > 0) { } else { ?>
+            <li class="nav-item <?php if($request_uri['3'] == "explore") {?>active<?php } ?>"><a class="nav-link" href="<?=base_url();?>explore/explore"><i class="fa fa-binoculars fa-fw"></i><span class="title">Home</span></a></li>
+            <?php } ?>
+
             <li class="nav-item <?php if($request_uri['4'] == "dashboard") {?>active<?php } ?>"> <a class="nav-link" href="<?=base_url();?><?php echo $replace_controller; ?>/dashboard"> <i class="fa fa-tachometer fa-fw"></i> <span class="title">Dashboard</span> </a></li>
             
-            <?php if($_SESSION['AdminId'] > 0) { } else { ?>
-            <li class="nav-item <?php if($request_uri['3'] == "explore") {?>active<?php } ?>"><a class="nav-link" href="<?=base_url();?>explore/explore"><i class="fa fa-binoculars fa-fw"></i><span class="title">Explore</span></a></li>
-            <?php } ?>
-            <li class="heading">
-                <h3 class="uppercase">Features</h3>
-            </li>
-
+            
             <?php if($_SESSION['AdminId'] > 0) { ?>
             
             <li class="nav-item <?php if($request_uri['4'] == "user") {?>active<?php } ?>"><a class="nav-link" href="<?=base_url();?>admin/systemuser"><i class="fa fa-pencil-square-o fa-fw"></i><span class="title">User</span></a></li>
 
             <?php } else { ?>
-            <li class="nav-item <?php if($request_uri['3'] == "plan") {?>active<?php } ?>"><a class="nav-link" href="<?=base_url();?>plan/plan"><i class="fa fa-pencil-square-o fa-fw"></i><span class="title">Plan</span></a></li>
+            <?php /*<li class="nav-item <?php if($request_uri['3'] == "plan") {?>active<?php } ?>"><a class="nav-link" href="<?=base_url();?>plan/plan"><i class="fa fa-pencil-square-o fa-fw"></i><span class="title">Plan</span></a></li>
 
-            <li class="nav-item <?php if($request_uri['3'] == "organize" && ($request_uri['4'] != "event" && $request_uri['4'] != "poll")) {?>active<?php } ?>"><a class="nav-link" href="<?=base_url();?>organize/team"><i class="fa fa-sitemap fa-fw"></i><span class="title">Organize</span></a></li>
+            <li class="nav-item <?php if($request_uri['3'] == "organize" && ($request_uri['4'] != "event" && $request_uri['4'] != "poll")) {?>active<?php } ?>"><a class="nav-link" href="<?=base_url();?>organize/team"><i class="fa fa-sitemap fa-fw"></i><span class="title">Organize</span></a></li>*/ ?>
 
             <li class="nav-item <?php if($request_uri['3'] == "connect") {?>active<?php } ?>"><a class="nav-link" href="<?=base_url();?>connect/connect"><i class="fa fa-share-alt-square fa-fw"></i><span class="title">Connect</span></a></li>
 
